@@ -10,8 +10,8 @@ content are displayed.
 
 Currently, the following panels have been written and are working:
 
-- Django version
-- SQL queries including time to execute
+* Django version
+* SQL queries including time to execute
 
 If you have ideas for other panels please let us know.
 
@@ -36,5 +36,10 @@ Installation
 
 TODO
 ====
-- Add more panels
-- Get fancy with CSS and Javascript
+* Add more panels
+
+  - Size of request? — Would need access to response object somehow.
+  - List of important configuration settings in `settings.py`?
+  - Request object info (POST, GET, META)? — Would need access to request object.
+
+* Get fancy with CSS and Javascript
