@@ -36,8 +36,9 @@ Installation
 
 TODO
 ====
+
 * Get fancy with CSS and Javascript
-* Add more panels:
+* Add more panels...
 * Size of request? — Would need access to response object somehow.
 * List of important configuration settings in `settings.py`?
 * Request object info (POST, GET, META)? — Would need access to request object.
