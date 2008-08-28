@@ -15,4 +15,4 @@ class TimerDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        return "%f sec" % (time.time() - self._start_time)
+        return "%0.2f ms" % ((time.time() - self._start_time) * 1000)
