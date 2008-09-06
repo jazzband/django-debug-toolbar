@@ -34,6 +34,9 @@ Installation
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	)
 
+#. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
+   the template files association with the Debug Toolbar.
+
 TODO
 ====
 - Add more panels

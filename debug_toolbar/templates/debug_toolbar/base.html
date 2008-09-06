@@ -1,0 +1,37 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.panelContent').hide();
+	// Actions
+	$('#djDebugButton').click(function() {
+		$('.panelContent').hide();
+	});
+	$('#djDebugPanelList a').click(function() {
+		var panel_id = $(this).attr('class');
+		$('.panelContent').hide();
+		$('#' + panel_id).show();
+		return false;
+	});
+});
+</script>
+<div id="djDebugBlock" style="background:orange; position:absolute; top:0; right:0; height:2em;">
+	<div id="djDebugToolbar">
+		<ul id="djDebugPanelList" style="list-style:none;">
+			<li id="djDebugButton" style="color:red; font-weight:bold; display:inline;">DEBUG</li>
+			{% for panel in panels %}
+				<li style="display:inline;">
+					{% if panel.content %}
+						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">{{ panel.title }}</a>
+					{% else %}
+						{{ panel.title }}
+					{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+		{% for panel in panels %}
+			<div id="{{ panel.dom_id }}" class="panelContent" style="background-color:orange; width:50%; float:right;">
+				<h1>{{ panel.title }}</h1>
+				{{ panel.content|safe }}
+			</div>
+		{% endfor %}
+	</div>
+</div>

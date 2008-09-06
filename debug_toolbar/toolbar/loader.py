@@ -1,6 +1,8 @@
 """
 The main DebugToolbar class that loads and renders the Toolbar.
 """
+from django.template.loader import render_to_string
+
 class DebugToolbar(object):
 
     def __init__(self):
@@ -37,37 +39,8 @@ class DebugToolbar(object):
 
             self.panels.append(panel_instance)
 
-    def render_panels(self):
-        """
-        Renders each panel.
-        """
-        for panel in self.panels:
-            div_id = 'djDebug%sPanel' % (panel.title().replace(' ', ''))
-            self.panel_list.append('<li><a title="%(title)s" href="%(url)s">%(title)s</a></li>' % ({
-                'title': panel.title(),
-                'url': panel.url() or '#',
-            }))
-            self.content_list.append('<div id="%(div_id)s" class="panelContent"><h1>%(title)s</h1>%(content)s</div>' % ({
-                'div_id': div_id,
-                'title': panel.title(),
-                'content': panel.content(),
-            }))
-
     def render_toolbar(self):
         """
         Renders the overall Toolbar with panels inside.
         """
-        self.render_panels()
-        template = """
-            <div id="djDebugToolbar">
-                <ul id="djDebugPanelList">
-                    %(panels)s
-                </ul>
-                %(contents)s
-            </div>
-        """
-        context = {
-            'panels': ''.join(self.panel_list),
-            'contents': ''.join(self.content_list),
-        }
-        return template % context
+        return render_to_string('debug_toolbar/base.html', {'panels': self.panels})
