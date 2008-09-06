@@ -9,10 +9,10 @@ class TimerDebugPanel(DebugPanel):
         self._start_time = time.time()
 
     def title(self):
-        return 'Timer'
+        return 'Time: %0.2fms' % ((time.time() - self._start_time) * 1000)
 
     def url(self):
         return ''
 
     def content(self):
-        return "%0.2f ms" % ((time.time() - self._start_time) * 1000)
+        return ''
