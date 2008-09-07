@@ -5,7 +5,8 @@ from django.template.loader import render_to_string
 
 class DebugToolbar(object):
 
-    def __init__(self):
+    def __init__(self, request):
+        self.request = request
         self.panels = []
         self.panel_list = []
         self.content_list = []
@@ -33,7 +34,7 @@ class DebugToolbar(object):
                 raise exceptions.ImproperlyConfigured, 'Toolbar Panel module "%s" does not define a "%s" class' % (panel_module, panel_classname)
 
             try:
-                panel_instance = panel_class()
+                panel_instance = panel_class(self.request)
             except:
                 continue # Some problem loading panel
 

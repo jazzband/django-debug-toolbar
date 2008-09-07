@@ -7,7 +7,8 @@ class TimerDebugPanel(DebugPanel):
     """
     name = 'Timer'
 
-    def __init__(self):
+    def __init__(self, request):
+        super(TimerDebugPanel, self).__init__(request)
         self._start_time = time.time()
 
     def title(self):
