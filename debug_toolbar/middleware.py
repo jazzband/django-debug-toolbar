@@ -3,7 +3,7 @@ Debug Toolbar middleware
 """
 import re
 from django.conf import settings
-from django.utils.safestring import mark_safe
+from django.utils.encoding import smart_str
 from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
@@ -34,6 +34,7 @@ class DebugToolbarMiddleware(object):
     def process_response(self, request, response):
         if self.show_toolbar(request):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES and not request.is_ajax():
-                #response.content = _END_HEAD_RE.sub(mark_safe(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
-                response.content = _END_BODY_RE.sub(mark_safe(self.debug_toolbar.render_toolbar() + '</body>'), response.content)
+                # Saving this here in case we ever need to inject into <head>
+                #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
+                response.content = _END_BODY_RE.sub(smart_str(self.debug_toolbar.render_toolbar() + '</body>'), response.content)
         return response
