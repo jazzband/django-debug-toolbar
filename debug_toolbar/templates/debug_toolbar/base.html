@@ -28,10 +28,12 @@ $(document).ready(function() {
 			{% endfor %}
 		</ul>
 		{% for panel in panels %}
-			<div id="{{ panel.dom_id }}" class="panelContent" style="background-color:orange; width:50%; float:right;">
-				<h1>{{ panel.title }}</h1>
-				{{ panel.content|safe }}
-			</div>
+			{% if panel.content %}
+				<div id="{{ panel.dom_id }}" class="panelContent" style="background-color:orange; width:50%; float:right;">
+					<h1>{{ panel.title }}</h1>
+					{{ panel.content|safe }}
+				</div>
+			{% endif %}
 		{% endfor %}
 	</div>
 </div>
