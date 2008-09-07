@@ -5,7 +5,7 @@ class DebugPanel(object):
     Base class for debug panels.
     """
     def dom_id(self):
-        return 'djDebug%sPanel' % (self.title().replace(' ', ''))
+        return 'djDebug%sPanel' % (self.name.replace(' ', ''))
 
     def title(self):
         raise NotImplementedError

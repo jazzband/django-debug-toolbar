@@ -5,6 +5,8 @@ class VersionDebugPanel(DebugPanel):
     """
     Panel that displays the Django version.
     """
+    name = 'Version'
+    
     def title(self):
         return 'Version: %s' % (django.get_version())
 

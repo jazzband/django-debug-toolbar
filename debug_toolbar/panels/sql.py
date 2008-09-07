@@ -6,6 +6,8 @@ class SQLDebugPanel(DebugPanel):
     """
     Panel that displays information about the SQL queries run while processing the request.
     """
+    name = 'SQL'
+    
     def title(self):
         return '%d SQL Queries' % (len(connection.queries))
 
