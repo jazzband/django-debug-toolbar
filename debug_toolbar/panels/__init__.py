@@ -4,6 +4,8 @@ class DebugPanel(object):
     """
     Base class for debug panels.
     """
+    # name = Base
+    
     def dom_id(self):
         return 'djDebug%sPanel' % (self.name.replace(' ', ''))
 
