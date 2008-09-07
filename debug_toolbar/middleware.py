@@ -19,7 +19,7 @@ class DebugToolbarMiddleware(object):
         self.debug_toolbar = None
 
     def process_request(self, request):
-        if settings.DEBUG:
+        if settings.DEBUG and request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             self.debug_toolbar = DebugToolbar()
             self.debug_toolbar.load_panels()
         return None
