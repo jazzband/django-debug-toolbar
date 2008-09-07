@@ -12,6 +12,7 @@ Currently, the following panels have been written and are working:
 
 - Django version
 - SQL queries including time to execute
+- Request timer
 
 If you have ideas for other panels please let us know.
 
@@ -24,6 +25,9 @@ Installation
 
 	``'debug_toolbar.middleware.DebugToolbarMiddleware',``
 
+   Tying into middleware allows each panel to be instantiated on request and
+   rendering to happen on response.
+
 #. Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` file that
    specifies the full Python path to the panel that you want included in the 
    Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES` setting.
@@ -32,12 +36,20 @@ Installation
 	DEBUG_TOOLBAR_PANELS = (
 	    'debug_toolbar.panels.version.VersionDebugPanel',
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
+	    'debug_toolbar.panels.timer.TimerDebugPanel',
 	)
 
+   You can change the ordering of this tuple to customize the order of the
+   panels you want to display.
+
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
-   the template files association with the Debug Toolbar.
+   the template files associated with the Debug Toolbar.
 
 TODO
 ====
 - Add more panels
+- Panel idea: Show some commonly used settings from settings.py
+- Panel idea: Show GET and POST variables
+- Panel idea: Show HTTP header information
+- Panel idea: AJAX call to show cprofile data similar to the ?prof idea
 - Get fancy with CSS and Javascript
