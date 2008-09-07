@@ -26,7 +26,7 @@ class DebugToolbarMiddleware(object):
 
     def process_response(self, request, response):
         if settings.DEBUG:
-            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+            if response['Content-Type'].split(';')[0] in _HTML_TYPES and not request.is_ajax():
                 #response.content = _END_HEAD_RE.sub(mark_safe(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
                 response.content = _END_BODY_RE.sub(mark_safe(self.debug_toolbar.render_toolbar() + '</body>'), response.content)
         return response
