@@ -1,5 +1,6 @@
 from debug_toolbar.panels import DebugPanel
 from django.db import connection
+from django.template import Context, Template
 
 class SQLDebugPanel(DebugPanel):
     """
@@ -12,7 +13,13 @@ class SQLDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        query_info = []
-        for q in connection.queries:
-            query_info.append('<dt><strong>%s</strong></dt><dd>%s</dd>' % (q['time'], q['sql']))
-        return '<dl>%s</dl>' % (''.join(query_info))
+        t = Template('''
+            <dl>
+                {% for q in queries %}
+                    <dt><strong>{{ q.time }}</strong></dt>
+                    <dd>{{ q.sql }}</dd>
+                {% endfor %}
+            </dl>
+        ''')
+        c = Context({'queries': connection.queries})
+        return t.render(c)
