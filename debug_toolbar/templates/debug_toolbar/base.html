@@ -7,8 +7,14 @@ $(document).ready(function() {
 	});
 	$('#djDebugPanelList a').click(function() {
 		var panel_id = $(this).attr('class');
+		visible = $('#' + panel_id).is(':visible')
+		
 		$('.panelContent').hide();
-		$('#' + panel_id).show();
+		if(visible){
+			$('#' + panel_id).hide();
+		} else {
+			$('#' + panel_id).show();
+		}
 		return false;
 	});
 });
