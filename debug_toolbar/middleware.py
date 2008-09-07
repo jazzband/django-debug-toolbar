@@ -18,14 +18,21 @@ class DebugToolbarMiddleware(object):
     def __init__(self):
         self.debug_toolbar = None
 
+    def show_toolbar(self, request):
+        if not settings.DEBUG:
+            return False
+        if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+            return False
+        return True
+
     def process_request(self, request):
-        if settings.DEBUG and request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+        if self.show_toolbar(request):
             self.debug_toolbar = DebugToolbar(request)
             self.debug_toolbar.load_panels()
         return None
 
     def process_response(self, request, response):
-        if settings.DEBUG:
+        if self.show_toolbar(request):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES and not request.is_ajax():
                 #response.content = _END_HEAD_RE.sub(mark_safe(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
                 response.content = _END_BODY_RE.sub(mark_safe(self.debug_toolbar.render_toolbar() + '</body>'), response.content)
