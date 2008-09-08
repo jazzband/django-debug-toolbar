@@ -15,6 +15,7 @@ Currently, the following panels have been written and are working:
 - Request timer
 - Common HTTP headers
 - GET/POST variable display
+- Cache stats
 
 If you have ideas for other panels please let us know.
 
@@ -41,10 +42,11 @@ Installation
 
 	DEBUG_TOOLBAR_PANELS = (
 	    'debug_toolbar.panels.version.VersionDebugPanel',
-	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	    'debug_toolbar.panels.timer.TimerDebugPanel',
 	    'debug_toolbar.panels.headers.HeaderDebugPanel',
 	    'debug_toolbar.panels.http_vars.HttpVarsDebugPanel',
+	    'debug_toolbar.panels.sql.SQLDebugPanel',
+	    'debug_toolbar.panels.cache.CacheDebugPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the
