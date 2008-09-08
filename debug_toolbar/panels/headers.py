@@ -1,4 +1,4 @@
-from django.template import Context, Template
+from django.template.loader import render_to_string
 from debug_toolbar.panels import DebugPanel
 
 class HeaderDebugPanel(DebugPanel):
@@ -7,7 +7,7 @@ class HeaderDebugPanel(DebugPanel):
     """
     name = 'Header'
     # List of headers we want to display
-    header_filter = [
+    header_filter = (
         'CONTENT_TYPE',
         'HTTP_ACCEPT',
         'HTTP_ACCEPT_CHARSET',
@@ -28,7 +28,8 @@ class HeaderDebugPanel(DebugPanel):
         'SERVER_PORT',
         'SERVER_PROTOCOL',
         'SERVER_SOFTWARE',
-    ]
+    )
+
     def title(self):
         return 'HTTP Headers'
 
@@ -36,17 +37,7 @@ class HeaderDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        t = Template('''
-            <dl>
-                {% for h in headers %}
-                    <dt><strong>{{ h.key }}</strong></dt>
-                    <dd>{{ h.value }}</dd>
-                {% endfor %}
-            </dl>
-        ''')
-        headers = []
-        for k, v in self.request.META.iteritems():
-            if k in self.header_filter:
-                headers.append({'key': k, 'value': v})
-        c = Context({'headers': headers})
-        return t.render(c)
+        context = {
+            'headers': dict([(k, self.request.META[k]) for k in self.header_filter if k in self.request.META]),
+        }
+        return render_to_string('debug_toolbar/panels/headers.html', context)

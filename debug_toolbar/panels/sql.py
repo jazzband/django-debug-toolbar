@@ -1,6 +1,6 @@
 from debug_toolbar.panels import DebugPanel
 from django.db import connection
-from django.template import Context, Template
+from django.template.loader import render_to_string
 
 class SQLDebugPanel(DebugPanel):
     """
@@ -15,13 +15,5 @@ class SQLDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        t = Template('''
-            <dl>
-                {% for q in queries %}
-                    <dt><strong>{{ q.time }}</strong></dt>
-                    <dd>{{ q.sql }}</dd>
-                {% endfor %}
-            </dl>
-        ''')
-        c = Context({'queries': connection.queries})
-        return t.render(c)
+        context = {'queries': connection.queries}
+        return render_to_string('debug_toolbar/panels/sql.html', context)
