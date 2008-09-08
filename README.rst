@@ -14,6 +14,7 @@ Currently, the following panels have been written and are working:
 - SQL queries including time to execute
 - Request timer
 - Common HTTP headers
+- GET/POST variable display
 
 If you have ideas for other panels please let us know.
 
@@ -43,6 +44,7 @@ Installation
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	    'debug_toolbar.panels.timer.TimerDebugPanel',
 	    'debug_toolbar.panels.headers.HeaderDebugPanel',
+	    'debug_toolbar.panels.http_vars.HttpVarsDebugPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the
@@ -58,9 +60,7 @@ Installation
 
 TODO
 ====
-- Add more panels
 - Panel idea: Show some commonly used settings from settings.py
-- Panel idea: Show GET and POST variables
 - Panel idea: AJAX call to show cprofile data similar to the ?prof idea
 - CSS Stylings
 - Remove dependency on jQuery and come up with a general workable solution.
