@@ -29,6 +29,10 @@ Installation
    Tying into middleware allows each panel to be instantiated on request and
    rendering to happen on response.
 
+   The order of MIDDLEWARE_CLASSES is important: the Debug Toolbar middleware 
+   must come after any other middleware that encodes the response's content 
+   (such as GZipMiddleware).
+
 #. Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` file that
    specifies the full Python path to the panel that you want included in the 
    Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES` setting.
