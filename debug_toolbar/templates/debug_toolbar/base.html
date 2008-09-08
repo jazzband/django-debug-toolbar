@@ -1,45 +1,65 @@
 <script type="text/javascript">
-$(document).ready(function() {
-	$('.panelContent').hide();
-	// Actions
-	$('#djDebugButton').click(function() {
-		$('.panelContent').hide();
-	});
-	$('#djDebugPanelList a').click(function() {
-		var panel_id = $(this).attr('class');
-		visible = $('#' + panel_id).is(':visible')
-		
-		$('.panelContent').hide();
-		if(visible){
-			$('#' + panel_id).hide();
-		} else {
-			$('#' + panel_id).show();
+	var djDebugLastObj = null;
+	function djDebugToggle(obj) {
+		if (djDebugLastObj) djDebugLastObj.style.display = 'none';
+		var obj = document.getElementById(obj);
+		if (!obj) return;
+		if (djDebugLastObj == obj) {
+			djDebugLastObj = null;
+			return;
 		}
-		return false;
-	});
-});
+		if (obj.style.display != 'block') {
+			obj.style.display = 'block';
+			djDebugLastObj = obj;
+		}
+	}
+	function djDebugClose() {
+		if (!djDebugLastObj) return;
+		djDebugLastObj.style.display = 'none';
+		djDebugLastObj = null;
+	}
 </script>
-<div id="djDebugBlock" style="background:orange; position:absolute; top:0; right:0; height:2em;">
+<style type="text/css">
+	#djDebugToolbar {height:30px; background:orange; color:#000; z-index:100000000; border:1px solid #06171D; border-width:1px 0;}
+	#djDebugToolbar ul {margin:0; padding:0 10px; list-style:none;}
+	#djDebugToolbar li {display:inline; width:auto; position:relative; float:none; margin:0 10px 0 0; padding:0; height:20px; line-height:30px; padding:8px 10px 8px 0; border-right: 1px solid #06171D;}
+	#djDebugToolbar #djDebugButton {color:red; font-weight:bold;}
+	#djDebug * {margin:0; padding:0; float:none; position:static; }
+	#djDebug .panelContent {display:none; position:absolute; margin:0; padding:5px; top:35px; width:auto; left:5px; right:5px; bottom:5px; background:white; color:black; border:1px solid black; z-index:1000000; overflow:auto;}
+	#djDebug .panelContent p {padding: 0 5px;}
+	#djDebug .panelContent p, #djDebug .panelContent table, #djDebug .panelContent ul, #djDebug .panelContent dl {margin:5px 0;}
+	#djDebug .close {float:right; font-weight:bold;}
+	#djDebug .panelContent dt, #djDebug .panelContent dd {display: block;}
+	#djDebug .panelContent dd {margin-left:10px;}
+	#djDebug th, #djDebug td {padding: 5px;}
+	#djDebug .row1 td {background:#fff;}
+	#djDebug .row2 td {background:#ddd;}
+</style>
+<div id="djDebug">
 	<div id="djDebugToolbar">
-		<ul id="djDebugPanelList" style="list-style:none;">
-			<li id="djDebugButton" style="color:red; font-weight:bold; display:inline;">DEBUG</li>
+		<ul id="djDebugPanelList">
+			<li id="djDebugButton">DEBUG</li>
 			{% for panel in panels %}
-				<li style="display:inline;">
+				<li>
 					{% if panel.content %}
-						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">{{ panel.title }}</a>
+						<a href="{{ panel.url|default:"#" }}" onclick="djDebugToggle('{{ panel.dom_id }}')" title="{{ panel.title }}" class="{{ panel.dom_id }}">{{ panel.title }}</a>
 					{% else %}
 						{{ panel.title }}
 					{% endif %}
 				</li>
 			{% endfor %}
 		</ul>
-		{% for panel in panels %}
-			{% if panel.content %}
-				<div id="{{ panel.dom_id }}" class="panelContent" style="background-color:orange; width:50%; float:right;">
-					<h1>{{ panel.title }}</h1>
-					{{ panel.content|safe }}
+	</div>
+	{% for panel in panels %}
+		{% with panel.content as content %}
+			{% if content %}
+				<div id="{{ panel.dom_id }}" class="panelContent">
+					<div class="title">
+						<a href="" onclick="djDebugClose()" class="close">Close</a>
+					</div>
+					{{ content|safe }}
 				</div>
 			{% endif %}
-		{% endfor %}
-	</div>
+		{% endwith %}
+	{% endfor %}
 </div>

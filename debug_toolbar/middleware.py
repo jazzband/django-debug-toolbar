@@ -8,7 +8,7 @@ from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 _END_HEAD_RE = re.compile(r'</head>', re.IGNORECASE)
-_END_BODY_RE = re.compile(r'</body>', re.IGNORECASE)
+_END_BODY_RE = re.compile(r'<body([^<]*)>', re.IGNORECASE)
 
 class DebugToolbarMiddleware(object):
     """
@@ -36,5 +36,5 @@ class DebugToolbarMiddleware(object):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES and not request.is_ajax():
                 # Saving this here in case we ever need to inject into <head>
                 #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
-                response.content = _END_BODY_RE.sub(smart_str(self.debug_toolbar.render_toolbar() + '</body>'), response.content)
+                response.content = _END_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
         return response
