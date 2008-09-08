@@ -36,7 +36,7 @@ class DebugToolbar(object):
             try:
                 panel_instance = panel_class(self.request)
             except:
-                continue # Some problem loading panel
+                raise # Bubble up problem loading panel
 
             self.panels.append(panel_instance)
 
