@@ -1,0 +1,16 @@
+<table>
+	<thead>
+		<tr>
+			<th>Time&nbsp;(ms)</th>
+			<th>Query</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for query in queries %}
+			<tr class="{% cycle 'row1' 'row2' %}">
+				<td>{{ query.time|floatformat:"4" }}</td>
+				<td>{{ query.sql|escape }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

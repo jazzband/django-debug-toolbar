@@ -1,0 +1,42 @@
+<div class="title">GET Variables</div>
+{% if get %}
+	<table>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, value in get %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+					<td>{{ key|escape }}</td>
+					<td>{{ value|join:", "|escape }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>None</p>
+{% endif %}
+<div class="title">POST Variables</div>
+{% if post %}
+	<table>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, value in post %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+					<td>{{ key|escape }}</td>
+					<td>{{ value|join:", "|escape }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>None</p>
+{% endif %}
