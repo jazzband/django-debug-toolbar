@@ -41,7 +41,7 @@
 			<li id="djDebugButton">DEBUG</li>
 			{% for panel in panels %}
 				<li>
-					{% if panel.content %}
+					{% if panel.has_content %}
 						<a href="{{ panel.url|default:"#" }}" onclick="djDebugToggle('{{ panel.dom_id }}')" title="{{ panel.title }}" class="{{ panel.dom_id }}">{{ panel.title }}</a>
 					{% else %}
 						{{ panel.title }}
@@ -51,15 +51,13 @@
 		</ul>
 	</div>
 	{% for panel in panels %}
-		{% with panel.content as content %}
-			{% if content %}
-				<div id="{{ panel.dom_id }}" class="panelContent">
-					<div class="title">
-						<a href="" onclick="djDebugClose()" class="close">Close</a>
-					</div>
-					{{ content|safe }}
+		{% if panel.has_content %}
+			<div id="{{ panel.dom_id }}" class="panelContent">
+				<div class="title">
+					<a href="" onclick="djDebugClose()" class="close">Close</a>
 				</div>
-			{% endif %}
-		{% endwith %}
+				{{ panel.content|safe }}
+			</div>
+		{% endif %}
 	{% endfor %}
 </div>

@@ -6,6 +6,7 @@ class RequestVarsDebugPanel(DebugPanel):
     A panel to display request variables (POST/GET, session, cookies).
     """
     name = 'RequestVars'
+    has_content = True
 
     def title(self):
         return 'Request Vars'

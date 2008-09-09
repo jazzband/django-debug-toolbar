@@ -76,6 +76,7 @@ class CacheDebugPanel(DebugPanel):
     Panel that displays the cache statistics.
     """
     name = 'Cache'
+    has_content = True
 
     def __init__(self, request):
         # This is hackish but to prevent threading issues is somewhat needed

@@ -6,6 +6,7 @@ class HeaderDebugPanel(DebugPanel):
     A panel to display HTTP headers.
     """
     name = 'Header'
+    has_content = True
     # List of headers we want to display
     header_filter = (
         'CONTENT_TYPE',

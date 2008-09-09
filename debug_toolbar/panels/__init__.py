@@ -5,6 +5,7 @@ class DebugPanel(object):
     Base class for debug panels.
     """
     # name = Base
+    has_content = False # If content returns something, set to true in subclass
     
     def __init__(self, request):
         self.request = request

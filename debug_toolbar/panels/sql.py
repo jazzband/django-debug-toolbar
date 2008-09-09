@@ -29,6 +29,7 @@ class SQLDebugPanel(DebugPanel):
     Panel that displays information about the SQL queries run while processing the request.
     """
     name = 'SQL'
+    has_content = True
     
     def title(self):
         total_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
