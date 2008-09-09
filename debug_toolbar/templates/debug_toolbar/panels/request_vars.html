@@ -1,0 +1,92 @@
+<h3>COOKIES Variables</h3>
+{% if cookies %}
+	<table>
+		<colgroup>
+			<col style="width:20%"/>
+			<col/>
+		</colgroup>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, value in cookies %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+					<td>{{ key|escape }}</td>
+					<td>{{ value|escape }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>None</p>
+{% endif %}
+<h3>SESSION Variables</h3>
+{% if session %}
+	<table>
+		<colgroup>
+			<col style="width:20%"/>
+			<col/>
+		</colgroup>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, value in session %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+					<td>{{ key|escape }}</td>
+					<td>{{ value|escape }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>None</p>
+{% endif %}
+<h3>GET Variables</h3>
+{% if get %}
+	<table>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, value in get %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+					<td>{{ key|escape }}</td>
+					<td>{{ value|join:", "|escape }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>None</p>
+{% endif %}
+<h3>POST Variables</h3>
+{% if post %}
+	<table>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, value in post %}
+				<tr class="{% cycle 'row1' 'row2' %}">
+					<td>{{ key|escape }}</td>
+					<td>{{ value|join:", "|escape }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>None</p>
+{% endif %}
