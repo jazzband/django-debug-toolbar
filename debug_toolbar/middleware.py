@@ -21,6 +21,8 @@ class DebugToolbarMiddleware(object):
     def show_toolbar(self, request):
         if not settings.DEBUG:
             return False
+        if request.is_ajax():
+            return False
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return False
         return True
@@ -32,8 +34,10 @@ class DebugToolbarMiddleware(object):
         return None
 
     def process_response(self, request, response):
+        if response.status_code != 200:
+            return response
         if self.show_toolbar(request):
-            if response['Content-Type'].split(';')[0] in _HTML_TYPES and not request.is_ajax():
+            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
                 # Saving this here in case we ever need to inject into <head>
                 #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
                 response.content = _END_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
