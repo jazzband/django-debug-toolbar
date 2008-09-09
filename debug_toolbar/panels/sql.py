@@ -1,4 +1,4 @@
-from time import time
+import time
 from debug_toolbar.panels import DebugPanel
 from django.db import connection
 from django.db.backends import util
@@ -10,11 +10,11 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
     in `connection.queries`.
     """
     def execute(self, sql, params=()):
-        start = time()
+        start = time.time()
         try:
             return self.cursor.execute(sql, params)
         finally:
-            stop = time()
+            stop = time.time()
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
@@ -31,13 +31,32 @@ class SQLDebugPanel(DebugPanel):
     name = 'SQL'
     has_content = True
     
+    def __init__(self, request):
+        super(SQLDebugPanel, self).__init__(request)
+        self._offset = len(connection.queries)
+        self._sql_time = 0
+
+    def _reformat_sql(self, sql):
+        sql = sql.replace('`,`', '`, `')
+        sql = sql.replace('` FROM `', '` \n  FROM `')
+        sql = sql.replace('` WHERE ', '` \n  WHERE ')
+        sql = sql.replace(' ORDER BY ', ' \n  ORDER BY ')
+        return sql
+
     def title(self):
-        total_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
-        return '%d SQL Queries (%.2fms)' % (len(connection.queries), total_time)
+        self._sql_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
+        return '%d SQL Queries (%.2fms)' % (len(connection.queries), self._sql_time)
 
     def url(self):
         return ''
 
     def content(self):
-        context = {'queries': connection.queries}
+        sql_queries = connection.queries[self._offset:]
+        for query in sql_queries:
+            query['sql'] = self._reformat_sql(query['sql'])
+
+        context = {
+            'queries': sql_queries,
+            'sql_time': self._sql_time,
+        }
         return render_to_string('debug_toolbar/panels/sql.html', context)
