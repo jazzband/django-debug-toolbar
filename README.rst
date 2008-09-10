@@ -16,6 +16,7 @@ Currently, the following panels have been written and are working:
 - Common HTTP headers
 - GET/POST variable display
 - Cache stats
+- Templates used and template directories
 
 If you have ideas for other panels please let us know.
 
@@ -47,6 +48,7 @@ Installation
 	    'debug_toolbar.panels.http_vars.HttpVarsDebugPanel',
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	    'debug_toolbar.panels.cache.CacheDebugPanel',
+	    'debug_toolbar.panels.template.TemplateDebugPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the
