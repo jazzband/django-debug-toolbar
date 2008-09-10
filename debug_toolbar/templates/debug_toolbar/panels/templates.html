@@ -1,0 +1,21 @@
+<h3>Template path(s):</h3>
+{% if template_dirs %}
+	<ol>
+	{% for template in template_dirs %}
+		<li>{{ template }}</li>
+	{% endfor %}
+	</ol>
+{% else %}
+	None
+{% endif %}
+<h3>Templates Used</h3>
+{% if templates %}
+<dl>
+{% for template in templates %}
+	<dt><strong>{{ template.0 }}</strong></dt>
+	<dd><samp>{{ template.1 }}</samp></dd>
+{% endfor %}
+</dl>
+{% else %}
+	None
+{% endif %}
