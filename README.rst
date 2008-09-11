@@ -36,6 +36,11 @@ Installation
    must come after any other middleware that encodes the response's content 
    (such as GZipMiddleware).
 
+#. Make sure your IP is listed in the `INTERNAL_IPS` setting.  If you are
+   working locally this will be:
+
+	INTERNAL_IPS = ('127.0.0.1',)
+
 #. Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` file that
    specifies the full Python path to the panel that you want included in the 
    Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES` setting.
