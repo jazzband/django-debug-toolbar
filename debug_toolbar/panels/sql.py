@@ -1,3 +1,4 @@
+import simplejson
 import time
 from debug_toolbar.panels import DebugPanel
 from django.db import connection
@@ -20,7 +21,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'time': stop - start,
                 'raw_sql': sql,
-                'params': params,
+                'params': simplejson.dumps(params),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 

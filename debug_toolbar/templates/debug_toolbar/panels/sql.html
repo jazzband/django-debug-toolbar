@@ -4,13 +4,15 @@
 		<tr>
 			<th>Time&nbsp;(ms)</th>
 			<th>Query</th>
+			<th>Action</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for query in queries %}
 			<tr class="{% cycle 'row1' 'row2' %}">
 				<td>{{ query.time|floatformat:"4" }}</td>
-				<td><pre>{{ query.sql|escape }}</pre></td>
+				<td><pre>{{ query.sql|wordwrap:80|escape }}</pre></td>
+				<td><a href="{% url explain_sql %}?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"4"|urlencode }}">EXPLAIN</a></td>
 			</tr>
 		{% endfor %}
 	</tbody>
