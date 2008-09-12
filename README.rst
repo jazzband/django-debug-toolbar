@@ -41,10 +41,13 @@ Installation
 
 	INTERNAL_IPS = ('127.0.0.1',)
 
-#. Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` file that
-   specifies the full Python path to the panel that you want included in the 
-   Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES` setting.
-   For example::
+#. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
+   the template files associated with the Debug Toolbar.
+
+#. Optional: Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` 
+   file that specifies the full Python path to the panel that you want included 
+   in the Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES` 
+   setting.  For example::
 
 	DEBUG_TOOLBAR_PANELS = (
 	    'debug_toolbar.panels.version.VersionDebugPanel',
@@ -57,10 +60,8 @@ Installation
 	)
 
    You can change the ordering of this tuple to customize the order of the
-   panels you want to display.
-
-#. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
-   the template files associated with the Debug Toolbar.
+   panels you want to display.  And you can include panels that you have created
+   or that are specific to your project.
 
 TODO
 ====
