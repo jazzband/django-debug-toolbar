@@ -12,8 +12,8 @@
 {% if templates %}
 <dl>
 {% for template in templates %}
-	<dt><strong>{{ template.0 }}</strong></dt>
-	<dd><samp>{{ template.1 }}</samp></dd>
+	<dt><strong>{{ template.0|addslashes }}</strong></dt>
+	<dd><samp>{{ template.1|addslashes }}</samp></dd>
 {% endfor %}
 </dl>
 {% else %}
