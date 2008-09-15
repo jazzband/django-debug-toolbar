@@ -1,0 +1,14 @@
+#djDebugToolbar {height:30px; background:orange; color:#000; z-index:100000000; border:1px solid #06171D; border-width:1px 0;}
+#djDebugToolbar ul {margin:0; padding:0 10px; list-style:none;}
+#djDebugToolbar li {display:inline; width:auto; position:relative; float:none; margin:0 10px 0 0; padding:0; height:20px; line-height:30px; padding:8px 10px 8px 0; border-right: 1px solid #06171D;}
+#djDebugToolbar #djDebugButton {color:red; font-weight:bold;}
+#djDebug * {margin:0; padding:0; float:none; position:static; }
+#djDebug .panelContent {display:none; position:absolute; margin:0; padding:5px; top:35px; width:auto; left:5px; right:5px; bottom:5px; background:white; color:black; border:1px solid black; z-index:1000000; overflow:auto;}
+#djDebug .panelContent p {padding: 0 5px;}
+#djDebug .panelContent p, #djDebug .panelContent table, #djDebug .panelContent ul, #djDebug .panelContent dl {margin:5px 0;}
+#djDebug .close {float:right; font-weight:bold;}
+#djDebug .panelContent dt, #djDebug .panelContent dd {display: block;}
+#djDebug .panelContent dd {margin-left:10px;}
+#djDebug th, #djDebug td {padding: 5px;}
+#djDebug .row1 td {background:#fff;}
+#djDebug .row2 td {background:#ddd;}

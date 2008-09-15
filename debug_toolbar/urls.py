@@ -9,5 +9,5 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 
 urlpatterns = patterns('', 
-    url('^__debug__/m/(.*)$', 'debug_toolbar.views.debug_media', name='debug_toolbar_media'),
+    url('^__debug__/m/(.*)$', 'debug_toolbar.views.debug_media'),
 )
