@@ -4,6 +4,8 @@ Debug Toolbar middleware
 import re
 from django.conf import settings
 from django.utils.encoding import smart_str
+from django.conf.urls.defaults import include, patterns
+import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
@@ -31,6 +33,18 @@ class DebugToolbarMiddleware(object):
         if self.show_toolbar(request):
             self.debug_toolbar = DebugToolbar(request)
             self.debug_toolbar.load_panels()
+            
+            # Monkeypatch in the URLpatterns for the debug toolbar. The last item
+            # in the URLpatterns needs to be ```('', include(ROOT_URLCONF))``` so
+            # that the existing URLs load *after* the ones we patch in. However,
+            # this is difficult to get right: a previous middleware might have
+            # changed request.urlconf, so we need to pick that up instead.
+            original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+            debug_toolbar.urls.urlpatterns += patterns('',
+                ('', include(original_urlconf)),
+            )
+            request.urlconf = 'debug_toolbar.urls'
+            
         return None
 
     def process_response(self, request, response):
