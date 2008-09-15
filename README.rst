@@ -43,6 +43,9 @@ Installation
 
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
    the template files associated with the Debug Toolbar.
+   
+   Alternatively, add the path to the debug toolbar templates
+   (``'path/to/debug_toolbar/templates'`` to your ``TEMPLATE_DIRS`` setting.)
 
 #. Optional: Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` 
    file that specifies the full Python path to the panel that you want included 
