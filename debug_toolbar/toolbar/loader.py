@@ -10,15 +10,29 @@ class DebugToolbar(object):
         self.panels = []
         self.panel_list = []
         self.content_list = []
+        # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
+        self.default_panels = (
+            'debug_toolbar.panels.version.VersionDebugPanel',
+            'debug_toolbar.panels.timer.TimerDebugPanel',
+            'debug_toolbar.panels.headers.HeaderDebugPanel',
+            'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+            'debug_toolbar.panels.sql.SQLDebugPanel',
+            'debug_toolbar.panels.cache.CacheDebugPanel',
+            'debug_toolbar.panels.template.TemplateDebugPanel',
+        )
     
     def load_panels(self):
         """
-        Populate debug panel lists from settings.DEBUG_TOOLBAR_PANELS.
+        Populate debug panels
         """
         from django.conf import settings
         from django.core import exceptions
 
-        for panel_path in settings.DEBUG_TOOLBAR_PANELS:
+        # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
+        if hasattr(settings, 'DEBUG_TOOLBAR_PANELS'):
+            self.default_panels = settings.DEBUG_TOOLBAR_PANELS
+
+        for panel_path in self.default_panels:
             try:
                 dot = panel_path.rindex('.')
             except ValueError:
