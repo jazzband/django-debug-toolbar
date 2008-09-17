@@ -58,4 +58,7 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
-        return render_to_string('debug_toolbar/base.html', {'panels': self.panels, 'base_url': self.request.META.get('SCRIPT_NAME', '')})
+        return render_to_string('debug_toolbar/base.html', {
+            'panels': self.panels,
+            'BASE_URL': self.request.META.get('SCRIPT_NAME', '')
+        })
