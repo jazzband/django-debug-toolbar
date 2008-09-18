@@ -32,11 +32,11 @@ class TemplateDebugPanel(DebugPanel):
 
     def __init__(self, request):
         super(TemplateDebugPanel, self).__init__(request)
-        self.templates_used = []
-        template_rendered.connect(self._storeRenderedTemplates)
+        self.templates = []
+        template_rendered.connect(self._storeTemplateInfo)
 
-    def _storeRenderedTemplates(self, sender, **kwargs):
-        self.templates_used.append(kwargs['template'])
+    def _storeTemplateInfo(self, sender, **kwargs):
+        self.templates.append(kwargs)
 
     def title(self):
         return 'Templates'
@@ -45,12 +45,22 @@ class TemplateDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        templates = [
-            (t.name, t.origin and t.origin.name or 'No origin')
-            for t in self.templates_used
-        ]
+        template_context = []
+        for i, d in enumerate(self.templates):
+            info = {}
+            # Clean up some info about templates
+            t = d.get('template', None)
+            if t.origin and t.origin.name:
+                t.origin_name = t.origin.name
+            else:
+                t.origin_name = 'No origin'
+            info['template'] = t
+            # Clean up context for better readability
+            c = d.get('context', None)
+            info['context'] = '\n'.join([_d.__repr__() for _d in c.dicts])
+            template_context.append(info)
         context = {
-            'templates': templates,
+            'templates': template_context,
             'template_dirs': settings.TEMPLATE_DIRS,
         }
         return render_to_string('debug_toolbar/panels/templates.html', context)

@@ -17,6 +17,9 @@ jQuery.noConflict();
 				}
 				return false;
 			});
+			jQuery('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
+				jQuery.djDebug.toggle_content(jQuery(this).parent().next());
+			});
 			jQuery('#djDebug a.close').click(function() {
 				jQuery(document).trigger('close.djDebug');
 				return false;
@@ -28,6 +31,13 @@ jQuery.noConflict();
 					jQuery.djDebug.close();
 				}
 			});
+		},
+		toggle_content: function(elem) {
+			if (elem.is(':visible')) {
+				elem.hide();
+			} else {
+				elem.show();
+			}
 		},
 		close: function() {
 			jQuery(document).trigger('close.djDebug');

@@ -12,8 +12,12 @@
 {% if templates %}
 <dl>
 {% for template in templates %}
-	<dt><strong>{{ template.0|addslashes }}</strong></dt>
-	<dd><samp>{{ template.1|addslashes }}</samp></dd>
+	<dt><strong>{{ template.template.name|addslashes }}</strong></dt>
+	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
+	<dd>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
+	</dd>
 {% endfor %}
 </dl>
 {% else %}
