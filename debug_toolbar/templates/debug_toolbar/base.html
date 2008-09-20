@@ -21,11 +21,10 @@
 	{% for panel in panels %}
 		{% if panel.has_content %}
 			<div id="{{ panel.dom_id }}" class="panelContent">
-				<div class="title">
-					<a href="" class="close">Close</a>
-				</div>
+				<a href="" class="close">Close</a>
 				{{ panel.content|safe }}
 			</div>
 		{% endif %}
 	{% endfor %}
+	<div id="djDebugWindow" class="panelContent"></div>
 </div>

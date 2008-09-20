@@ -23,8 +23,8 @@ class DebugToolbarMiddleware(object):
     def show_toolbar(self, request):
         if not settings.DEBUG:
             return False
-        if request.is_ajax():
-            return False
+        #if request.is_ajax():
+        #    return False
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return False
         return True

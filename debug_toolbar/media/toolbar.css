@@ -12,3 +12,5 @@
 #djDebug th, #djDebug td {padding: 5px;}
 #djDebug .row1 td {background:#fff;}
 #djDebug .row2 td {background:#ddd;}
+#djDebugWindow {z-index:2000000;}
+#djDebugWindow .back {float:right; font-weight:bold;}

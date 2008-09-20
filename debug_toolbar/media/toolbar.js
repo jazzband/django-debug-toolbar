@@ -17,12 +17,21 @@ jQuery(function() {
 				}
 				return false;
 			});
-			jQuery('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
-				jQuery.djDebug.toggle_content(jQuery(this).parent().next());
-			});
 			jQuery('#djDebug a.close').click(function() {
 				jQuery(document).trigger('close.djDebug');
 				return false;
+			});
+			jQuery('#djDebugWindow a.back').click(function() {
+				console.dir(jQuery(this).parent());
+				jQuery(this).parent().hide();
+				return false;
+			});
+			jQuery('#djDebug a.remoteCall').click(function() {
+				jQuery.djDebug.remote_call(this);
+				return false;
+			});
+			jQuery('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
+				jQuery.djDebug.toggle_content(jQuery(this).parent().next());
 			});
 		},
 		open: function() {
@@ -38,6 +47,10 @@ jQuery(function() {
 			} else {
 				elem.show();
 			}
+		},
+		remote_call: function(obj) {
+			jQuery('#djDebugWindow').load(obj.href).show();
+			
 		},
 		close: function() {
 			jQuery(document).trigger('close.djDebug');
