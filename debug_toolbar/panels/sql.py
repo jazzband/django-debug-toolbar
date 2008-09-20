@@ -1,9 +1,9 @@
-import simplejson
 import time
 from debug_toolbar.panels import DebugPanel
 from django.db import connection
 from django.db.backends import util
 from django.template.loader import render_to_string
+from django.utils import simplejson
 
 class DatabaseStatTracker(util.CursorDebugWrapper):
     """
