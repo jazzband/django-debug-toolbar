@@ -5,6 +5,8 @@ from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from debug_toolbar.panels import DebugPanel
 
+from pprint import pformat
+
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
 
@@ -60,7 +62,7 @@ class TemplateDebugPanel(DebugPanel):
             info['template'] = t
             # Clean up context for better readability
             c = d.get('context', None)
-            info['context'] = '\n'.join([_d.__repr__() for _d in c.dicts])
+            info['context'] = '\n'.join([pformat(_d) for _d in c.dicts])
             template_context.append(info)
         context = {
             'templates': template_context,

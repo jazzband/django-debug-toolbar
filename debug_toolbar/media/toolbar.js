@@ -49,7 +49,6 @@ jQuery(function($) {
 		$('.panelContent').hide();
 	});
 });
-
 jQuery(function() {
 	jQuery.djDebug();
 });
