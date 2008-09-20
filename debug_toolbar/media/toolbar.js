@@ -1,5 +1,5 @@
 jQuery.noConflict();
-(function(jQuery) {
+jQuery(function() {
 	jQuery.djDebug = function(data, klass) {
 		jQuery.djDebug.init();
 	}
@@ -48,7 +48,8 @@ jQuery.noConflict();
 		jQuery(document).unbind('keydown.djDebug');
 		jQuery('.panelContent').hide();
 	});
-})(jQuery);
-jQuery(document).ready(function() {
+});
+
+jQuery(function() {
 	jQuery.djDebug();
 });
