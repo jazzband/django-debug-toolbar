@@ -39,7 +39,11 @@ class SQLDebugPanel(DebugPanel):
 
     def title(self):
         self._sql_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
-        return '%d SQL Queries (%.2fms)' % (len(connection.queries), self._sql_time)
+        return '%d SQL %s (%.2fms)' % (
+            len(connection.queries), 
+            (len(connection.queries) == 1) and 'query' or 'queries',
+            self._sql_time
+        )
 
     def url(self):
         return ''
