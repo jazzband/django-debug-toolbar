@@ -5,11 +5,11 @@ views in any other way is generally not advised.
 """
 
 import os
-import simplejson
 import django.views.static
 from django.conf import settings
 from django.db import connection
 from django.shortcuts import render_to_response
+from django.utils import simplejson
 
 def debug_media(request, path):
     root = getattr(settings, 'DEBUG_TOOLBAR_MEDIA_ROOT', None)

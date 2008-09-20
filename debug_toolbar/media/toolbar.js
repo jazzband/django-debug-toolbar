@@ -1,43 +1,44 @@
 jQuery.noConflict();
-jQuery(function() {
-	jQuery.djDebug = function(data, klass) {
-		jQuery.djDebug.init();
+jQuery(function($) {
+	$.djDebug = function(data, klass) {
+		$.djDebug.init();
 	}
-	jQuery.extend(jQuery.djDebug, {
+	$.extend($.djDebug, {
 		init: function() {
 			var current = null;
-			jQuery('#djDebugPanelList li a').click(function() {
-				current = jQuery('#djDebug #' + this.className);
+			$('#djDebugPanelList li a').click(function() {
+				current = $('#djDebug #' + this.className);
 				if (current.is(':visible')) {
-					jQuery(document).trigger('close.djDebug');
+					$(document).trigger('close.djDebug');
 				} else {
-					jQuery('.panelContent').hide();
+					$('.panelContent').hide();
 					current.show();
-					jQuery.djDebug.open();
+					$.djDebug.open();
 				}
 				return false;
 			});
-			jQuery('#djDebug a.close').click(function() {
-				jQuery(document).trigger('close.djDebug');
+			$('#djDebug a.close').click(function() {
+				$(document).trigger('close.djDebug');
 				return false;
 			});
-			jQuery('#djDebugWindow a.back').click(function() {
-				console.dir(jQuery(this).parent());
-				jQuery(this).parent().hide();
+			$('#djDebug a.remoteCall').click(function() {
+				$('#djDebugWindow').load(this.href, {}, function() {
+					$('#djDebugWindow a.back').click(function() {
+						$(this).parent().hide();
+						return false;
+					});
+				});
+				$('#djDebugWindow').show();
 				return false;
 			});
-			jQuery('#djDebug a.remoteCall').click(function() {
-				jQuery.djDebug.remote_call(this);
-				return false;
-			});
-			jQuery('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
-				jQuery.djDebug.toggle_content(jQuery(this).parent().next());
+			$('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
+				$.djDebug.toggle_content($(this).parent().next());
 			});
 		},
 		open: function() {
-			jQuery(document).bind('keydown.djDebug', function(e) {
+			$(document).bind('keydown.djDebug', function(e) {
 				if (e.keyCode == 27) {
-					jQuery.djDebug.close();
+					$.djDebug.close();
 				}
 			});
 		},
@@ -48,21 +49,16 @@ jQuery(function() {
 				elem.show();
 			}
 		},
-		remote_call: function(obj) {
-			jQuery('#djDebugWindow').load(obj.href).show();
-			
-		},
 		close: function() {
-			jQuery(document).trigger('close.djDebug');
+			$(document).trigger('close.djDebug');
 			return false;
 		}
 	});
-	jQuery(document).bind('close.djDebug', function() {
-		jQuery(document).unbind('keydown.djDebug');
-		jQuery('.panelContent').hide();
+	$(document).bind('close.djDebug', function() {
+		$(document).unbind('keydown.djDebug');
+		$('.panelContent').hide();
 	});
 });
-
 jQuery(function() {
 	jQuery.djDebug();
 });
