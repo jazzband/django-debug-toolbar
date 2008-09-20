@@ -23,28 +23,28 @@ class DebugToolbarMiddleware(object):
     def show_toolbar(self, request):
         if not settings.DEBUG:
             return False
-        #if request.is_ajax():
-        #    return False
+        if request.is_ajax():
+            return False
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return False
         return True
 
     def process_request(self, request):
+        # Monkeypatch in the URLpatterns for the debug toolbar. The last item
+        # in the URLpatterns needs to be ```('', include(ROOT_URLCONF))``` so
+        # that the existing URLs load *after* the ones we patch in. However,
+        # this is difficult to get right: a previous middleware might have
+        # changed request.urlconf, so we need to pick that up instead.
+        original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+        debug_toolbar.urls.urlpatterns += patterns('',
+            ('', include(original_urlconf)),
+        )
+        request.urlconf = 'debug_toolbar.urls'
+
         if self.show_toolbar(request):
             self.debug_toolbar = DebugToolbar(request)
             self.debug_toolbar.load_panels()
-            
-            # Monkeypatch in the URLpatterns for the debug toolbar. The last item
-            # in the URLpatterns needs to be ```('', include(ROOT_URLCONF))``` so
-            # that the existing URLs load *after* the ones we patch in. However,
-            # this is difficult to get right: a previous middleware might have
-            # changed request.urlconf, so we need to pick that up instead.
-            original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            debug_toolbar.urls.urlpatterns += patterns('',
-                ('', include(original_urlconf)),
-            )
-            request.urlconf = 'debug_toolbar.urls'
-            
+
         return None
 
     def process_response(self, request, response):
