@@ -3,16 +3,16 @@
 	<thead>
 		<tr>
 			<th>Time&nbsp;(ms)</th>
-			<th>Query</th>
 			<th>Action</th>
+			<th>Query</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for query in queries %}
 			<tr class="{% cycle 'row1' 'row2' %}">
 				<td>{{ query.time|floatformat:"4" }}</td>
-				<td><pre>{{ query.sql|wordwrap:80|escape }}</pre></td>
 				<td><a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"4"|urlencode }}">EXPLAIN</a></td>
+				<td>{{ query.sql|safe }}</td>
 			</tr>
 		{% endfor %}
 	</tbody>

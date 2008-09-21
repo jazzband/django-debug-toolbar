@@ -57,9 +57,18 @@ class SQLDebugPanel(DebugPanel):
 
 def reformat_sql(sql):
     sql = sql.replace('`,`', '`, `')
-    sql = sql.replace('` FROM `', '` \n  FROM `')
-    sql = sql.replace('` WHERE ', '` \n  WHERE ')
-    sql = sql.replace('` INNER JOIN ', '` \n  INNER JOIN ')
-    sql = sql.replace('` OUTER JOIN ', '` \n  OUTER JOIN ')
-    sql = sql.replace(' ORDER BY ', ' \n  ORDER BY ')
+    sql = sql.replace('SELECT ', 'SELECT\n\t')
+    sql = sql.replace('` FROM ', '`\nFROM\n\t')
+    sql = sql.replace('` WHERE ', '`\nWHERE\n\t')
+    sql = sql.replace('` INNER JOIN ', '`\nINNER JOIN\n\t')
+    sql = sql.replace('` OUTER JOIN ', '`\nOUTER JOIN\n\t')
+    sql = sql.replace(' ORDER BY ', '\nORDER BY\n\t')
+    # Use Pygments to highlight SQL if it's available
+    try:
+        from pygments import highlight
+        from pygments.lexers import SqlLexer
+        from pygments.formatters import HtmlFormatter
+        sql = highlight(sql, SqlLexer(), HtmlFormatter(noclasses=True))
+    except ImportError:
+        pass
     return sql
