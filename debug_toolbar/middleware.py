@@ -10,7 +10,8 @@ from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 _END_HEAD_RE = re.compile(r'</head>', re.IGNORECASE)
-_END_BODY_RE = re.compile(r'<body([^<]*)>', re.IGNORECASE)
+_START_BODY_RE = re.compile(r'<body([^<]*)>', re.IGNORECASE)
+_END_BODY_RE = re.compile(r'</body>', re.IGNORECASE)
 
 class DebugToolbarMiddleware(object):
     """
@@ -54,5 +55,6 @@ class DebugToolbarMiddleware(object):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
                 # Saving this here in case we ever need to inject into <head>
                 #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
-                response.content = _END_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
+                response.content = _START_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
+                response.content = _END_BODY_RE.sub(smart_str('<script src="' + request.META.get('SCRIPT_NAME', '') + '/__debug__/m/toolbar.js" type="text/javascript" charset="utf-8"></script></body>'), response.content)
         return response
