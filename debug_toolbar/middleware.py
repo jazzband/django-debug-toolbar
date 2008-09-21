@@ -12,6 +12,7 @@ _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 _END_HEAD_RE = re.compile(r'</head>', re.IGNORECASE)
 _START_BODY_RE = re.compile(r'<body([^<]*)>', re.IGNORECASE)
 _END_BODY_RE = re.compile(r'</body>', re.IGNORECASE)
+_CONTAINS_JQUERY_RE = re.compile("src=(?:(\"(.*?)jquery(.*?)\.js\")|('(.*?)jquery(.*?)\.js'))", re.IGNORECASE)
 
 class DebugToolbarMiddleware(object):
     """
@@ -53,8 +54,11 @@ class DebugToolbarMiddleware(object):
             return response
         if self.show_toolbar(request):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+                script_loc = request.META.get('SCRIPT_NAME', '')
                 # Saving this here in case we ever need to inject into <head>
                 #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
                 response.content = _START_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
-                response.content = _END_BODY_RE.sub(smart_str('<script src="' + request.META.get('SCRIPT_NAME', '') + '/__debug__/m/toolbar.js" type="text/javascript" charset="utf-8"></script></body>'), response.content)
+                if not _CONTAINS_JQUERY_RE.search(response.content):
+                    response.content = _END_BODY_RE.sub(smart_str('<script src="%s/__debug__/m/jquery.js" type="text/javascript" charset="utf-8"></script></body>' % script_loc), response.content)
+                response.content = _END_BODY_RE.sub(smart_str('<script src="%s/__debug__/m/toolbar.js" type="text/javascript" charset="utf-8"></script></body>' % script_loc), response.content)
         return response
