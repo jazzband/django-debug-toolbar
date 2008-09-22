@@ -1,4 +1,9 @@
-<script src="{{ BASE_URL }}/__debug__/m/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+	if (typeof jQuery == 'undefined') {
+		var jquery_url = '{{ BASE_URL }}/__debug__/m/jquery.js';
+		document.write(unescape('%3Cscript src="' + jquery_url + '" type="text/javascript"%3E%3C/script%3E'));
+	}
+</script>
 <style type="text/css">
   @import url({{ BASE_URL }}/__debug__/m/toolbar.css);
 </style>
