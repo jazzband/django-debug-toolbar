@@ -44,13 +44,20 @@ class DebugToolbarMiddleware(object):
 
         if self.show_toolbar(request):
             self.debug_toolbar = DebugToolbar(request)
-            self.debug_toolbar.load_panels()
+            for panel in self.debug_toolbar.panels:
+                panel.process_request(request)
 
         return None
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        for panel in self.debug_toolbar.panels:
+            panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
         if response.status_code != 200:
             return response
+        for panel in self.debug_toolbar.panels:
+            panel.process_response(request, response)
         if self.show_toolbar(request):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
                 # Saving this here in case we ever need to inject into <head>

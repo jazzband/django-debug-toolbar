@@ -27,13 +27,13 @@ util.CursorDebugWrapper = DatabaseStatTracker
 
 class SQLDebugPanel(DebugPanel):
     """
-    Panel that displays information about the SQL queries run while processing the request.
+    Panel that displays information about the SQL queries run while processing
+    the request.
     """
     name = 'SQL'
     has_content = True
     
-    def __init__(self, request):
-        super(SQLDebugPanel, self).__init__(request)
+    def __init__(self):
         self._offset = len(connection.queries)
         self._sql_time = 0
 

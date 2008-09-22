@@ -37,8 +37,13 @@ class HeaderDebugPanel(DebugPanel):
     def url(self):
         return ''
 
+    def process_request(self, request):
+        self.headers = dict(
+            [(k, request.META[k]) for k in self.header_filter if k in request.META]
+        )
+
     def content(self):
         context = {
-            'headers': dict([(k, self.request.META[k]) for k in self.header_filter if k in self.request.META]),
+            'headers': self.headers
         }
         return render_to_string('debug_toolbar/panels/headers.html', context)

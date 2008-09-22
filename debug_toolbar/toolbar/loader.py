@@ -8,8 +8,6 @@ class DebugToolbar(object):
     def __init__(self, request):
         self.request = request
         self.panels = []
-        self.panel_list = []
-        self.content_list = []
         # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
         self.default_panels = (
             'debug_toolbar.panels.version.VersionDebugPanel',
@@ -20,7 +18,8 @@ class DebugToolbar(object):
             'debug_toolbar.panels.cache.CacheDebugPanel',
             'debug_toolbar.panels.template.TemplateDebugPanel',
         )
-    
+        self.load_panels()
+
     def load_panels(self):
         """
         Populate debug panels
@@ -48,8 +47,9 @@ class DebugToolbar(object):
                 raise exceptions.ImproperlyConfigured, 'Toolbar Panel module "%s" does not define a "%s" class' % (panel_module, panel_classname)
 
             try:
-                panel_instance = panel_class(self.request)
+                panel_instance = panel_class()
             except:
+                print panel_class
                 raise # Bubble up problem loading panel
 
             self.panels.append(panel_instance)

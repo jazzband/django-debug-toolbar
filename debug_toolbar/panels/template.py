@@ -1,11 +1,10 @@
+from pprint import pformat
 from django.conf import settings
 from django.core.signals import request_started
 from django.dispatch import Signal
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from debug_toolbar.panels import DebugPanel
-
-from pprint import pformat
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
@@ -32,8 +31,7 @@ class TemplateDebugPanel(DebugPanel):
     name = 'Template'
     has_content = True
 
-    def __init__(self, request):
-        super(TemplateDebugPanel, self).__init__(request)
+    def __init__(self):
         self.templates = []
         template_rendered.connect(self._storeTemplateInfo)
 
