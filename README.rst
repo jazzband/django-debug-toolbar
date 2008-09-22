@@ -69,8 +69,6 @@ TODO
 - Panel idea: Show some commonly used settings from settings.py
 - Panel idea: AJAX call to show cprofile data similar to the ?prof idea
 - CSS Stylings
-- Move towards more explicit middleware style calls for panels in toolbar
-  middleware (e.g. panel.process_request)
 - Restructure panels to popular context that pushes up to the toolbar
 - Consider moving panel to the bottom of the HTML document, which would allow us
   to use common reset.css for consistent toolbar styling without affecting
