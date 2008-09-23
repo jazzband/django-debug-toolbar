@@ -1,3 +1,4 @@
+import simplejson
 import time
 from debug_toolbar.panels import DebugPanel
 from django.db import connection
@@ -20,7 +21,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'time': stop - start,
                 'raw_sql': sql,
-                'params': params,
+                'params': simplejson.dumps(params),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
@@ -36,13 +37,6 @@ class SQLDebugPanel(DebugPanel):
         self._offset = len(connection.queries)
         self._sql_time = 0
 
-    def _reformat_sql(self, sql):
-        sql = sql.replace('`,`', '`, `')
-        sql = sql.replace('` FROM `', '` \n  FROM `')
-        sql = sql.replace('` WHERE ', '` \n  WHERE ')
-        sql = sql.replace(' ORDER BY ', ' \n  ORDER BY ')
-        return sql
-
     def title(self):
         self._sql_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
         return '%d SQL Queries (%.2fms)' % (len(connection.queries), self._sql_time)
@@ -53,10 +47,19 @@ class SQLDebugPanel(DebugPanel):
     def content(self):
         sql_queries = connection.queries[self._offset:]
         for query in sql_queries:
-            query['sql'] = self._reformat_sql(query['sql'])
+            query['sql'] = reformat_sql(query['sql'])
 
         context = {
             'queries': sql_queries,
             'sql_time': self._sql_time,
         }
         return render_to_string('debug_toolbar/panels/sql.html', context)
+
+def reformat_sql(sql):
+    sql = sql.replace('`,`', '`, `')
+    sql = sql.replace('` FROM `', '` \n  FROM `')
+    sql = sql.replace('` WHERE ', '` \n  WHERE ')
+    sql = sql.replace('` INNER JOIN ', '` \n  INNER JOIN ')
+    sql = sql.replace('` OUTER JOIN ', '` \n  OUTER JOIN ')
+    sql = sql.replace(' ORDER BY ', ' \n  ORDER BY ')
+    return sql

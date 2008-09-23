@@ -50,6 +50,9 @@ class TemplateDebugPanel(DebugPanel):
             info = {}
             # Clean up some info about templates
             t = d.get('template', None)
+            # Skip templates that we are generating through the debug toolbar.
+            if t.name.startswith('debug_toolbar/'):
+                continue
             if t.origin and t.origin.name:
                 t.origin_name = t.origin.name
             else:
