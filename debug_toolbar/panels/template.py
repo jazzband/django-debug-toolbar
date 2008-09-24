@@ -4,6 +4,7 @@ from django.core.signals import request_started
 from django.dispatch import Signal
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
+from django.template.context import get_standard_processors
 from debug_toolbar.panels import DebugPanel
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -44,6 +45,11 @@ class TemplateDebugPanel(DebugPanel):
     def url(self):
         return ''
 
+    def process_request(self, request):
+        self.context_processors = dict(
+            [("%s.%s" % (k.__module__, k.__name__), pformat(k(request))) for k in get_standard_processors()]
+        )
+
     def content(self):
         template_context = []
         for i, d in enumerate(self.templates):
@@ -65,5 +71,6 @@ class TemplateDebugPanel(DebugPanel):
         context = {
             'templates': template_context,
             'template_dirs': settings.TEMPLATE_DIRS,
+            'context_processors': self.context_processors,
         }
         return render_to_string('debug_toolbar/panels/templates.html', context)

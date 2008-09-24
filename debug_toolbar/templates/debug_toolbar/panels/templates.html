@@ -23,3 +23,17 @@
 {% else %}
 	None
 {% endif %}
+{% if context_processors %}
+<h3>Context processors used:</h3>
+<dl>
+{% for key, value in context_processors.iteritems %}
+    <dt><strong>{{ key|escape }}</strong></dt>
+    <dd>
+        <div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+        <div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
+    </dd>
+{% endfor %}
+</dl>
+{% else %}
+	None
+{% endif %}
