@@ -72,7 +72,7 @@ def reformat_sql(sql):
         from pygments import highlight
         from pygments.lexers import SqlLexer
         from pygments.formatters import HtmlFormatter
-        sql = highlight(sql, SqlLexer(), HtmlFormatter(noclasses=True))
+        sql = highlight(sql, SqlLexer(), HtmlFormatter())
     except ImportError:
         pass
     return sql
