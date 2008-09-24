@@ -16,12 +16,17 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             stop = time.time()
+            _params = None
+            try:
+                _params = simplejson.dumps(params)
+            except TypeError:
+                pass # object not JSON serializable
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'time': stop - start,
                 'raw_sql': sql,
-                'params': simplejson.dumps(params),
+                'params': _params
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
