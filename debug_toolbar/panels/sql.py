@@ -1,9 +1,11 @@
 import time
 from debug_toolbar.panels import DebugPanel
+from django.conf import settings
 from django.db import connection
 from django.db.backends import util
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from django.utils.hashcompat import sha_constructor
 
 class DatabaseStatTracker(util.CursorDebugWrapper):
     """
@@ -26,7 +28,8 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'time': stop - start,
                 'raw_sql': sql,
-                'params': _params
+                'params': _params,
+                'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
@@ -37,7 +40,7 @@ class SQLDebugPanel(DebugPanel):
     """
     name = 'SQL'
     has_content = True
-    
+
     def __init__(self):
         self._offset = len(connection.queries)
         self._sql_time = 0
