@@ -14,6 +14,9 @@ class RequestVarsDebugPanel(DebugPanel):
     def url(self):
         return ''
 
+    def process_request(self, request):
+        self.request = request
+
     def content(self):
         context = {
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET.iterkeys()],

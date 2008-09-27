@@ -1,9 +1,11 @@
 import time
 from debug_toolbar.panels import DebugPanel
+from django.conf import settings
 from django.db import connection
 from django.db.backends import util
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from django.utils.hashcompat import sha_constructor
 
 class DatabaseStatTracker(util.CursorDebugWrapper):
     """
@@ -16,32 +18,38 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             stop = time.time()
+            _params = None
+            try:
+                _params = simplejson.dumps(params)
+            except TypeError:
+                pass # object not JSON serializable
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'time': stop - start,
                 'raw_sql': sql,
-                'params': simplejson.dumps(params),
+                'params': _params,
+                'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
 class SQLDebugPanel(DebugPanel):
     """
-    Panel that displays information about the SQL queries run while processing the request.
+    Panel that displays information about the SQL queries run while processing
+    the request.
     """
     name = 'SQL'
     has_content = True
-    
-    def __init__(self, request):
-        super(SQLDebugPanel, self).__init__(request)
+
+    def __init__(self):
         self._offset = len(connection.queries)
         self._sql_time = 0
 
     def title(self):
         self._sql_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
-        return '%d SQL Quer%s (%.2fms)' % (
-            len(connection.queries),
-            len(connection.queries) == 1 and 'y' or 'ies', 
+        return '%d SQL %s (%.2fms)' % (
+            len(connection.queries), 
+            (len(connection.queries) == 1) and 'query' or 'queries',
             self._sql_time
         )
 
@@ -72,7 +80,7 @@ def reformat_sql(sql):
         from pygments import highlight
         from pygments.lexers import SqlLexer
         from pygments.formatters import HtmlFormatter
-        sql = highlight(sql, SqlLexer(), HtmlFormatter(noclasses=True))
+        sql = highlight(sql, SqlLexer(), HtmlFormatter())
     except ImportError:
         pass
     return sql

@@ -3,20 +3,18 @@ Django Debug Toolbar
 ====================
 
 The Django Debug Toolbar is a configurable set of panels that display various
-debug information about the current request/response.  It is a small toolbar
-that, when activated, situates itself in the top-right location of the browser
-window.  When particular panels are clicked, more details about that panel's
-content are displayed.
+debug information about the current request/response and when clicked, display 
+more details about the panel's content.
 
 Currently, the following panels have been written and are working:
 
 - Django version
-- SQL queries including time to execute
 - Request timer
 - Common HTTP headers
-- GET/POST variable display
+- GET/POST/cookie/session variable display
+- SQL queries including time to execute and links to EXPLAIN each query
 - Cache stats
-- Templates used and template directories
+- Templates and context used, and their template paths
 
 If you have ideas for other panels please let us know.
 
@@ -71,3 +69,10 @@ TODO
 - Panel idea: Show some commonly used settings from settings.py
 - Panel idea: AJAX call to show cprofile data similar to the ?prof idea
 - CSS Stylings
+- Restructure panels to popular context that pushes up to the toolbar
+- Consider moving panel to the bottom of the HTML document, which would allow us
+  to use common reset.css for consistent toolbar styling without affecting
+  anything else.
+- Make the trigger whether to display the toolbar configurable with options such
+  as if: DEBUG is true, IP is in INTERNAL_IPS, authenticated user is_superuser,
+  etc.

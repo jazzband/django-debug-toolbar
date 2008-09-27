@@ -1,11 +1,11 @@
+from pprint import pformat
 from django.conf import settings
 from django.core.signals import request_started
 from django.dispatch import Signal
+from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from debug_toolbar.panels import DebugPanel
-
-from pprint import pformat
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
@@ -32,8 +32,7 @@ class TemplateDebugPanel(DebugPanel):
     name = 'Template'
     has_content = True
 
-    def __init__(self, request):
-        super(TemplateDebugPanel, self).__init__(request)
+    def __init__(self):
         self.templates = []
         template_rendered.connect(self._storeTemplateInfo)
 
@@ -45,6 +44,11 @@ class TemplateDebugPanel(DebugPanel):
 
     def url(self):
         return ''
+
+    def process_request(self, request):
+        self.context_processors = dict(
+            [("%s.%s" % (k.__module__, k.__name__), pformat(k(request))) for k in get_standard_processors()]
+        )
 
     def content(self):
         template_context = []
@@ -67,5 +71,6 @@ class TemplateDebugPanel(DebugPanel):
         context = {
             'templates': template_context,
             'template_dirs': settings.TEMPLATE_DIRS,
+            'context_processors': self.context_processors,
         }
         return render_to_string('debug_toolbar/panels/templates.html', context)

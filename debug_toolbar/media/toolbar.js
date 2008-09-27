@@ -1,3 +1,4 @@
+var _$ = window.$;
 jQuery.noConflict();
 jQuery(function($) {
 	$.djDebug = function(data, klass) {
@@ -62,3 +63,4 @@ jQuery(function($) {
 jQuery(function() {
 	jQuery.djDebug();
 });
+$ = _$;
