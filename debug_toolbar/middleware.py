@@ -50,10 +50,13 @@ class DebugToolbarMiddleware(object):
         return None
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        for panel in self.debug_toolbar.panels:
-            panel.process_view(request, view_func, view_args, view_kwargs)
+        if self.debug_toolbar:
+            for panel in self.debug_toolbar.panels:
+                panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
+        if not self.debug_toolbar:
+            return response
         if response.status_code != 200:
             return response
         for panel in self.debug_toolbar.panels:
