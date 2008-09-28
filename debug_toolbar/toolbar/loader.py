@@ -17,6 +17,7 @@ class DebugToolbar(object):
             'debug_toolbar.panels.sql.SQLDebugPanel',
             'debug_toolbar.panels.cache.CacheDebugPanel',
             'debug_toolbar.panels.template.TemplateDebugPanel',
+            'debug_toolbar.panels.logger.LoggingPanel',
         )
         self.load_panels()
 
@@ -60,5 +61,5 @@ class DebugToolbar(object):
         """
         return render_to_string('debug_toolbar/base.html', {
             'panels': self.panels,
-            'BASE_URL': self.request.META.get('SCRIPT_NAME', '')
+            'BASE_URL': self.request.META.get('SCRIPT_NAME', ''),
         })
