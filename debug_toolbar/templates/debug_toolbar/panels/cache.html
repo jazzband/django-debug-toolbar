@@ -31,6 +31,7 @@
 		<td>{{ cache.get_many }}</td>
 	</tr>
 </table>
+{% if cache.calls %}
 <h3>Breakdown</h3>
 <table>
 	<thead>
@@ -52,3 +53,4 @@
 		{% endfor %}
 	</tbody>
 </table>
+{% endif %}

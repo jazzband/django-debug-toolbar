@@ -78,7 +78,7 @@ class CacheDebugPanel(DebugPanel):
     name = 'Cache'
     has_content = True
 
-    def __init__(self, request):
+    def __init__(self):
         # This is hackish but to prevent threading issues is somewhat needed
         if isinstance(cache.cache, CacheStatTracker):
             cache.cache.reset()
@@ -86,7 +86,6 @@ class CacheDebugPanel(DebugPanel):
         else:
             self.cache = CacheStatTracker(cache.cache)
             cache.cache = self.cache
-        super(CacheDebugPanel, self).__init__(request)
 
     def title(self):
         return 'Cache: %.2fms' % self.cache.total_time

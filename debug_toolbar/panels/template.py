@@ -1,6 +1,8 @@
+from pprint import pformat
 from django.conf import settings
 from django.core.signals import request_started
 from django.dispatch import Signal
+from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from debug_toolbar.panels import DebugPanel
@@ -30,13 +32,12 @@ class TemplateDebugPanel(DebugPanel):
     name = 'Template'
     has_content = True
 
-    def __init__(self, request):
-        super(TemplateDebugPanel, self).__init__(request)
-        self.templates_used = []
-        template_rendered.connect(self._storeRenderedTemplates)
+    def __init__(self):
+        self.templates = []
+        template_rendered.connect(self._storeTemplateInfo)
 
-    def _storeRenderedTemplates(self, sender, **kwargs):
-        self.templates_used.append(kwargs['template'])
+    def _storeTemplateInfo(self, sender, **kwargs):
+        self.templates.append(kwargs)
 
     def title(self):
         return 'Templates'
@@ -44,13 +45,32 @@ class TemplateDebugPanel(DebugPanel):
     def url(self):
         return ''
 
+    def process_request(self, request):
+        self.context_processors = dict(
+            [("%s.%s" % (k.__module__, k.__name__), pformat(k(request))) for k in get_standard_processors()]
+        )
+
     def content(self):
-        templates = [
-            (t.name, t.origin and t.origin.name or 'No origin')
-            for t in self.templates_used
-        ]
+        template_context = []
+        for i, d in enumerate(self.templates):
+            info = {}
+            # Clean up some info about templates
+            t = d.get('template', None)
+            # Skip templates that we are generating through the debug toolbar.
+            if t.name.startswith('debug_toolbar/'):
+                continue
+            if t.origin and t.origin.name:
+                t.origin_name = t.origin.name
+            else:
+                t.origin_name = 'No origin'
+            info['template'] = t
+            # Clean up context for better readability
+            c = d.get('context', None)
+            info['context'] = '\n'.join([pformat(_d) for _d in c.dicts])
+            template_context.append(info)
         context = {
-            'templates': templates,
+            'templates': template_context,
             'template_dirs': settings.TEMPLATE_DIRS,
+            'context_processors': self.context_processors,
         }
         return render_to_string('debug_toolbar/panels/templates.html', context)

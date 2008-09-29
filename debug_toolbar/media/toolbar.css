@@ -1,0 +1,142 @@
+#djDebugToolbar {
+    background: #326342;
+    height: 30px;
+    z-index: 100000000;
+    border-bottom: 2px solid #234f32;
+}
+
+#djDebugToolbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#djDebugToolbar li {
+    border-left: 1px solid #487858;
+    color: #fff;
+    display: inline;
+    font-size: 11px;
+    font-weight: bold;
+    float: none;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    line-height: 30px;
+    padding: 8px 9px 9px;
+    position: relative;
+    width: auto;
+}
+
+#djDebugToolbar li:hover {
+    background: #487858;
+}
+
+#djDebugToolbar li:hover a {
+    color: #fff;
+}
+
+#djDebugToolbar li:last-child {
+    border-right: 1px solid #487858;
+}
+
+#djDebugToolbar #djDebugButton {
+    color: #92ef3f;
+}
+
+#djDebug * {
+    color: #fff;
+    text-shadow: 0 0 2px #333;
+    float: none;
+    margin: 0;
+    padding: 0;
+    position: static;
+}
+
+#djDebug a {
+    color: #f7c757;
+}
+
+#djDebug a:hover {
+    color: #fff;
+}
+
+#djDebug .panelContent {
+    background: #2a5738;
+    border-bottom: 2px solid #234f32;
+    border-top: 2px solid #487858;
+    display: none;
+    position: absolute;
+    margin: 0;
+    padding: 10px;
+    top: 35px;
+    width: auto;
+    left: 0px;
+    right: 0px;
+    bottom: 5px;
+    color: black;
+    z-index: 1000000;
+    overflow: auto;
+}
+
+#djDebug h3 {
+    border-bottom: 1px solid #40684c;
+    color: #92ef3f;
+    padding: 0 0 5px;
+}
+
+#djDebug .panelContent p {
+    padding: 0 5px;
+}
+
+#djDebug .panelContent p, #djDebug .panelContent table, #djDebug .panelContent ol, #djDebug .panelContent ul, #djDebug .panelContent dl {
+    margin: 5px 0 15px;
+}
+
+#djDebug .panelContent table {
+    width: 100%;
+}
+
+#djDebug .close {
+    float: right;
+    font-weight: bold;
+}
+
+#djDebug .panelContent dt, #djDebug .panelContent dd {
+    display: block;
+}
+
+#djDebug .panelContent dd {
+    margin-left: 10px;
+}
+
+#djDebug th {
+    font-weight: bold;
+    text-align: left;
+    padding: 5px;
+}
+
+#djDebug td {
+    padding: 5px;
+}
+
+#djDebug .row1 td {
+    background: #40684c;
+}
+
+#djDebug .row2 td {
+    background: #356042;
+}
+#djDebug .syntax  { color: #ffffff }
+#djDebug .syntax .err { color: #ffffff } /* Error */
+#djDebug .syntax .g { color: #ffffff } /* Generic */
+#djDebug .syntax .k { color: #F7C757; font-weight: bold } /* Keyword */
+#djDebug .syntax .o { color: #ffffff } /* Operator */
+#djDebug .syntax .n { color: #ffffff } /* Name */
+#djDebug .syntax .mi { color: #92ef3f; font-weight: bold } /* Literal.Number.Integer */
+#djDebug .syntax .l { color: #ffffff } /* Literal */
+#djDebug .syntax .x { color: #ffffff } /* Other */
+#djDebug .syntax .p { color: #ffffff } /* Punctuation */
+#djDebug .syntax .m { color: #92ef3f; font-weight: bold } /* Literal.Number */
+#djDebug .syntax .s { color: #0086d2 } /* Literal.String */
+#djDebug .syntax .w { color: #888888 } /* Text.Whitespace */
+#djDebug .syntax .il { color: #92ef3f; font-weight: bold } /* Literal.Number.Integer.Long */
