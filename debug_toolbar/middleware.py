@@ -61,10 +61,9 @@ class DebugToolbarMiddleware(object):
             return response
         for panel in self.debug_toolbar.panels:
             panel.process_response(request, response)
-        if self.show_toolbar(request):
-            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-                # Saving this here in case we ever need to inject into <head>
-                #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
-                response.content = _START_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
-                response.content = _END_BODY_RE.sub(smart_str('<script src="' + request.META.get('SCRIPT_NAME', '') + '/__debug__/m/toolbar.js" type="text/javascript" charset="utf-8"></script></body>'), response.content)
+        if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+            # Saving this here in case we ever need to inject into <head>
+            #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
+            response.content = _START_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
+            response.content = _END_BODY_RE.sub(smart_str('<script src="' + request.META.get('SCRIPT_NAME', '') + '/__debug__/m/toolbar.js" type="text/javascript" charset="utf-8"></script></body>'), response.content)
         return response
