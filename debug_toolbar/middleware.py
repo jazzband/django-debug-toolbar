@@ -3,6 +3,8 @@ Debug Toolbar middleware
 """
 import re
 from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.conf.urls.defaults import include, patterns
 import debug_toolbar.urls
@@ -57,6 +59,13 @@ class DebugToolbarMiddleware(object):
     def process_response(self, request, response):
         if not self.debug_toolbar:
             return response
+        if isinstance(response, HttpResponseRedirect):
+            redirect_to = response.get('Location', None)
+            if redirect_to:
+                response = render_to_response(
+                    'debug_toolbar/redirect.html',
+                    {'redirect_to': redirect_to}
+                )
         if response.status_code != 200:
             return response
         for panel in self.debug_toolbar.panels:
