@@ -1,0 +1,18 @@
+<h3 id="settings-info">Settings</h3>
+<h4>Using settings module <code>{{ settings.SETTINGS_MODULE }}</code></h4>
+<table class="req">
+  <thead>
+    <tr>
+      <th>Setting</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for var in settings.items|dictsort:"0" %}
+      <tr>
+        <td>{{ var.0 }}</td>
+        <td class="code"><div>{{ var.1|pprint }}</div></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
