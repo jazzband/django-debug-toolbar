@@ -8,6 +8,9 @@ class DebugToolbar(object):
     def __init__(self, request):
         self.request = request
         self.panels = []
+        self.config = {
+            'INTERCEPT_REDIRECTS': True,
+        }
         # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
         self.default_panels = (
             'debug_toolbar.panels.version.VersionDebugPanel',
@@ -31,6 +34,9 @@ class DebugToolbar(object):
         # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
         if hasattr(settings, 'DEBUG_TOOLBAR_PANELS'):
             self.default_panels = settings.DEBUG_TOOLBAR_PANELS
+        # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
+        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
+            self.config.update(settings.DEBUG_TOOLBAR_CONFIG)
 
         for panel_path in self.default_panels:
             try:
