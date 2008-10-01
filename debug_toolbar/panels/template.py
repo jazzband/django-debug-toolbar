@@ -1,4 +1,6 @@
+from os.path import normpath
 from pprint import pformat
+
 from django.conf import settings
 from django.core.signals import request_started
 from django.dispatch import Signal
@@ -70,7 +72,7 @@ class TemplateDebugPanel(DebugPanel):
             template_context.append(info)
         context = {
             'templates': template_context,
-            'template_dirs': settings.TEMPLATE_DIRS,
+            'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
             'context_processors': self.context_processors,
         }
         return render_to_string('debug_toolbar/panels/templates.html', context)
