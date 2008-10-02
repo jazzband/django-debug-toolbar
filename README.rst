@@ -10,11 +10,12 @@ Currently, the following panels have been written and are working:
 
 - Django version
 - Request timer
+- A list of settings in settings.py
 - Common HTTP headers
 - GET/POST/cookie/session variable display
+- Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
 - Cache stats
-- Templates and context used, and their template paths
 - Logging output via Python's built-in logging module
 
 If you have ideas for other panels please let us know.
@@ -54,11 +55,12 @@ Installation
 	DEBUG_TOOLBAR_PANELS = (
 	    'debug_toolbar.panels.version.VersionDebugPanel',
 	    'debug_toolbar.panels.timer.TimerDebugPanel',
+	    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
 	    'debug_toolbar.panels.headers.HeaderDebugPanel',
 	    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+	    'debug_toolbar.panels.template.TemplateDebugPanel',
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
 	    'debug_toolbar.panels.cache.CacheDebugPanel',
-	    'debug_toolbar.panels.template.TemplateDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
 	)
 
@@ -68,7 +70,6 @@ Installation
 
 TODO
 ====
-- Panel idea: Show some commonly used settings from settings.py
 - Panel idea: AJAX call to show cprofile data similar to the ?prof idea
 - CSS Stylings
 - Restructure panels to popular context that pushes up to the toolbar
