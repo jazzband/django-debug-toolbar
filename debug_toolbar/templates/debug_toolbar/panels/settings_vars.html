@@ -8,7 +8,7 @@
 	</thead>
 	<tbody>
 		{% for var in settings.items|dictsort:"0" %}
-			<tr>
+			<tr class="{% cycle 'odd' 'even' %}">
 				<td>{{ var.0 }}</td>
 				<td><code>{{ var.1|pprint }}</code></td>
 			</tr>

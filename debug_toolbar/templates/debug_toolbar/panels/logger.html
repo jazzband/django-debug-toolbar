@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			{% for record in records %}
-				<tr class="{% cycle 'row1' 'row2' %}">
+				<tr class="{% cycle 'odd' 'even' %}">
 					<td>{{ record.level }}</td>
 					<td>{{ record.time|date:"h:i:s m/d/Y" }}</td>
 					<td>{{ record.message }}</td>

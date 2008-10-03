@@ -9,7 +9,7 @@
 	</thead>
 	<tbody>
 		{% for query in queries %}
-			<tr class="{% cycle 'row1' 'row2' %}">
+			<tr class="{% cycle 'odd' 'even' %}">
 				<td>{{ query.time|floatformat:"4" }}</td>
 				<td>
 				{% if query.params %}

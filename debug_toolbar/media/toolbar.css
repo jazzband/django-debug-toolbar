@@ -1,8 +1,27 @@
+#djDebug * {
+    color: #000;
+    text-shadow: 0 0 2px #333;
+    float: none;
+    margin: 0;
+    padding: 0;
+    position: static;
+}
+#djDebug a {
+    color: #f7c757;
+}
+#djDebug a:hover {
+    color: #aaa;
+}
+
 #djDebugToolbar {
     background: #326342;
     height: 30px;
     z-index: 100000000;
     border-bottom: 2px solid #234f32;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
 }
 
 #djDebugToolbar ul {
@@ -43,22 +62,6 @@
     color: #92ef3f;
 }
 
-#djDebug * {
-    color: #fff;
-    text-shadow: 0 0 2px #333;
-    float: none;
-    margin: 0;
-    padding: 0;
-    position: static;
-}
-
-#djDebug a {
-    color: #f7c757;
-}
-
-#djDebug a:hover {
-    color: #fff;
-}
 
 #djDebug .panelContent {
     background: #2a5738;
@@ -68,7 +71,7 @@
     position: absolute;
     margin: 0;
     padding: 10px;
-    top: 35px;
+    top: 32px;
     width: auto;
     left: 0px;
     right: 0px;
@@ -78,7 +81,14 @@
     overflow: auto;
 }
 
-#djDebug h3 {
+#djDebug .panelContent p a, #djDebug .panelContent dl a {
+    color: #40684c;
+}
+#djDebug .panelContent p a:hover, #djDebug .panelContent dl a:hover {
+    color: #92EF3F;
+}
+
+#djDebug .panelContent h3 {
     border-bottom: 1px solid #40684c;
     color: #92ef3f;
     padding: 0 0 5px;
@@ -90,13 +100,40 @@
 
 #djDebug .panelContent p, #djDebug .panelContent table, #djDebug .panelContent ol, #djDebug .panelContent ul, #djDebug .panelContent dl {
     margin: 5px 0 15px;
+    background-color: #fff;
 }
 
 #djDebug .panelContent table {
     width: 100%;
+    clear: both;
 }
 
-#djDebug .close {
+#djDebug .panelContent table a {
+    color: #40684C;
+}
+
+#djDebug .panelContent table th {
+    background-color: #9dcc49;
+    font-weight: bold;
+    color: #000;
+    font-size: 11px;
+    padding: 3px 7px 3px;
+    text-align: left;
+    cursor: pointer;
+    border-right: 1px solid #b9d977;
+}
+#djDebug .panelContent table td {
+    padding: 5px 10px;
+    font-size: 11px;
+    background: #fff;
+    color: #000;
+    vertical-align: top;
+}
+#djDebug .panelContent table tr.odd td {
+  background: #eee;
+}
+
+#djDebug .panelContent .close {
     float: right;
     font-weight: bold;
 }
@@ -109,34 +146,17 @@
     margin-left: 10px;
 }
 
-#djDebug th {
-    font-weight: bold;
-    text-align: left;
-    padding: 5px;
-}
-
-#djDebug td {
-    padding: 5px;
-}
-
-#djDebug .row1 td {
-    background: #40684c;
-}
-
-#djDebug .row2 td {
-    background: #356042;
-}
-#djDebug .syntax  { color: #ffffff }
-#djDebug .syntax .err { color: #ffffff } /* Error */
-#djDebug .syntax .g { color: #ffffff } /* Generic */
-#djDebug .syntax .k { color: #F7C757; font-weight: bold } /* Keyword */
-#djDebug .syntax .o { color: #ffffff } /* Operator */
-#djDebug .syntax .n { color: #ffffff } /* Name */
-#djDebug .syntax .mi { color: #92ef3f; font-weight: bold } /* Literal.Number.Integer */
-#djDebug .syntax .l { color: #ffffff } /* Literal */
-#djDebug .syntax .x { color: #ffffff } /* Other */
-#djDebug .syntax .p { color: #ffffff } /* Punctuation */
-#djDebug .syntax .m { color: #92ef3f; font-weight: bold } /* Literal.Number */
+#djDebug .syntax  { color: #000; }
+#djDebug .syntax .err { color: #000; } /* Error */
+#djDebug .syntax .g { color: #000; } /* Generic */
+#djDebug .syntax .k { color: #40684C; font-weight: bold } /* Keyword */
+#djDebug .syntax .o { color: #000; } /* Operator */
+#djDebug .syntax .n { color: #000; } /* Name */
+#djDebug .syntax .mi { color: #40684C; font-weight: bold } /* Literal.Number.Integer */
+#djDebug .syntax .l { color: #000; } /* Literal */
+#djDebug .syntax .x { color: #000; } /* Other */
+#djDebug .syntax .p { color: #000; } /* Punctuation */
+#djDebug .syntax .m { color: #40684C; font-weight: bold } /* Literal.Number */
 #djDebug .syntax .s { color: #0086d2 } /* Literal.String */
 #djDebug .syntax .w { color: #888888 } /* Text.Whitespace */
-#djDebug .syntax .il { color: #92ef3f; font-weight: bold } /* Literal.Number.Integer.Long */
+#djDebug .syntax .il { color: #40684C; font-weight: bold } /* Literal.Number.Integer.Long */

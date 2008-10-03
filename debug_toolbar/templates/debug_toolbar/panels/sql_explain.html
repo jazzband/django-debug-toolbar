@@ -16,7 +16,7 @@
 	</thead>
 	<tbody>
 		{% for row in result %}
-			<tr class="{% cycle 'row1' 'row2' %}">
+			<tr class="{% cycle 'odd' 'even' %}">
 				{% for column in row %}
 					<td>{{ column|escape }}</td>
 				{% endfor %}

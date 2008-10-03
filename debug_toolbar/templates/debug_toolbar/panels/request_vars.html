@@ -13,7 +13,7 @@
 		</thead>
 		<tbody>
 			{% for key, value in cookies %}
-				<tr class="{% cycle 'row1' 'row2' %}">
+				<tr class="{% cycle 'odd' 'even' %}">
 					<td>{{ key|escape }}</td>
 					<td>{{ value|escape }}</td>
 				</tr>
@@ -38,7 +38,7 @@
 		</thead>
 		<tbody>
 			{% for key, value in session %}
-				<tr class="{% cycle 'row1' 'row2' %}">
+				<tr class="{% cycle 'odd' 'even' %}">
 					<td>{{ key|escape }}</td>
 					<td>{{ value|escape }}</td>
 				</tr>
@@ -59,7 +59,7 @@
 		</thead>
 		<tbody>
 			{% for key, value in get %}
-				<tr class="{% cycle 'row1' 'row2' %}">
+				<tr class="{% cycle 'odd' 'even' %}">
 					<td>{{ key|escape }}</td>
 					<td>{{ value|join:", "|escape }}</td>
 				</tr>

@@ -1,19 +1,27 @@
 """
 Debug Toolbar middleware
 """
-import re
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_unicode
 from django.conf.urls.defaults import include, patterns
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
-_END_HEAD_RE = re.compile(r'</head>', re.IGNORECASE)
-_START_BODY_RE = re.compile(r'<body([^<]*)>', re.IGNORECASE)
-_END_BODY_RE = re.compile(r'</body>', re.IGNORECASE)
+
+def replace_insensitive(string, target, replacement):
+    """
+    Similar to string.replace() but is case insensitive
+    Code borrowed from: http://forums.devshed.com/python-programming-11/case-insensitive-string-replace-490921.html
+    """
+    no_case = string.lower()
+    index = no_case.find(target.lower())
+    if index >= 0:
+        return string[:index] + replacement + string[index + len(target):]
+    else: # no results so return the original string
+        return string
 
 class DebugToolbarMiddleware(object):
     """
@@ -72,8 +80,5 @@ class DebugToolbarMiddleware(object):
         for panel in self.debug_toolbar.panels:
             panel.process_response(request, response)
         if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-            # Saving this here in case we ever need to inject into <head>
-            #response.content = _END_HEAD_RE.sub(smart_str(self.debug_toolbar.render_styles() + "%s" % match.group()), response.content)
-            response.content = _START_BODY_RE.sub(smart_str('<body\\1>' + self.debug_toolbar.render_toolbar()), response.content)
-            response.content = _END_BODY_RE.sub(smart_str('<script src="' + request.META.get('SCRIPT_NAME', '') + '/__debug__/m/toolbar.js" type="text/javascript" charset="utf-8"></script></body>'), response.content)
+            response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbar.render_toolbar() + u'</body>'))
         return response
