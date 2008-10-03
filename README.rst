@@ -73,9 +73,6 @@ TODO
 - Panel idea: AJAX call to show cprofile data similar to the ?prof idea
 - CSS Stylings
 - Restructure panels to popular context that pushes up to the toolbar
-- Consider moving panel to the bottom of the HTML document, which would allow us
-  to use common reset.css for consistent toolbar styling without affecting
-  anything else.
 - Make the trigger whether to display the toolbar configurable with options such
   as if: DEBUG is true, IP is in INTERNAL_IPS, authenticated user is_superuser,
   etc.
