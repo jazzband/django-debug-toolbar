@@ -30,6 +30,9 @@ class DebugToolbarMiddleware(object):
     """
     def __init__(self):
         self.debug_toolbar = None
+        self.original_urlconf = settings.ROOT_URLCONF
+        self.original_pattern = patterns('', ('', include(self.original_urlconf)),)
+        self.override_url = True
 
     def show_toolbar(self, request):
         if not settings.DEBUG:
@@ -41,15 +44,9 @@ class DebugToolbarMiddleware(object):
         return True
 
     def process_request(self, request):
-        # Monkeypatch in the URLpatterns for the debug toolbar. The last item
-        # in the URLpatterns needs to be ```('', include(ROOT_URLCONF))``` so
-        # that the existing URLs load *after* the ones we patch in. However,
-        # this is difficult to get right: a previous middleware might have
-        # changed request.urlconf, so we need to pick that up instead.
-        original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-        debug_toolbar.urls.urlpatterns += patterns('',
-            ('', include(original_urlconf)),
-        )
+        if self.override_url:
+            debug_toolbar.urls.urlpatterns += self.original_pattern
+            self.override_url = False
         request.urlconf = 'debug_toolbar.urls'
 
         if self.show_toolbar(request):
