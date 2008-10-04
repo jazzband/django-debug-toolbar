@@ -68,12 +68,12 @@ class SQLDebugPanel(DebugPanel):
         return render_to_string('debug_toolbar/panels/sql.html', context)
 
 def reformat_sql(sql):
-    sql = sql.replace('`,`', '`, `')
+    sql = sql.replace(',', ', ')
     sql = sql.replace('SELECT ', 'SELECT\n\t')
-    sql = sql.replace('` FROM ', '`\nFROM\n\t')
-    sql = sql.replace('` WHERE ', '`\nWHERE\n\t')
-    sql = sql.replace('` INNER JOIN ', '`\nINNER JOIN\n\t')
-    sql = sql.replace('` OUTER JOIN ', '`\nOUTER JOIN\n\t')
+    sql = sql.replace(' FROM ', '\nFROM\n\t')
+    sql = sql.replace(' WHERE ', '\nWHERE\n\t')
+    sql = sql.replace(' INNER JOIN ', '\nINNER JOIN\n\t')
+    sql = sql.replace(' OUTER JOIN ', '\nOUTER JOIN\n\t')
     sql = sql.replace(' ORDER BY ', '\nORDER BY\n\t')
     # Use Pygments to highlight SQL if it's available
     try:
