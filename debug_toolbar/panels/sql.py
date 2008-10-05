@@ -5,6 +5,7 @@ from django.db import connection
 from django.db.backends import util
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
 
 class DatabaseStatTracker(util.CursorDebugWrapper):
@@ -28,7 +29,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'time': stop - start,
                 'raw_sql': sql,
-                'params': _params,
+                'params': _params and [force_unicode(x) for x in _params] or _params,
                 'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
