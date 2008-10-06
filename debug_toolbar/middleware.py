@@ -44,6 +44,11 @@ class DebugToolbarMiddleware(object):
         return True
 
     def process_request(self, request):
+        if not hasattr(request, 'user'):
+            import warnings
+            warnings.warn("You should place the debug_toolbar middleware after \
+                the AuthenticationMiddleware, if you aren't using django's auth\
+                app you can safely ignore this message.")
         if self.override_url:
             debug_toolbar.urls.urlpatterns += self.original_pattern
             self.override_url = False
