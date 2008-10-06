@@ -1,0 +1,30 @@
+<a class="back" href="">&laquo;&nbsp;Back</a>
+<h3>SQL Selected</h3>
+<dl>
+	<dt>Executed SQL</dt>
+	<dd><pre>{{ sql|safe }}</pre></dd>
+	<dt>Time</dt>
+	<dd>{{ time }} ms</dd>
+</dl>
+{% if result %}
+<table>
+	<thead>
+		<tr>
+			{% for h in headers %}
+				<th>{{ h|upper }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in result %}
+			<tr class="{% cycle 'odd' 'even' %}">
+				{% for column in row %}
+					<td>{{ column|escape }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% else %}
+	<p>Empty set</p>
+{% endif %}
