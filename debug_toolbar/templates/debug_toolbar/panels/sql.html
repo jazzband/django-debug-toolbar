@@ -15,6 +15,7 @@
 				{% if query.params %}
 					<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"4"|urlencode }}&hash={{ query.hash }}">SELECT</a>
 					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"4"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a>
+					<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"4"|urlencode }}&hash={{ query.hash }}">PROFILE</a>
 				{% endif %}
 				</td>
 				<td class="syntax">{{ query.sql|safe }}</td>
