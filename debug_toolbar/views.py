@@ -35,7 +35,7 @@ def sql_select(request):
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponse('<h3>Tamper alert</h3>') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
@@ -66,7 +66,7 @@ def sql_explain(request):
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponse('<h3>Tamper alert</h3>') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
@@ -97,7 +97,7 @@ def sql_profile(request):
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponse('<h3>Tamper alert</h3>') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
