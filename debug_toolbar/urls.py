@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^__debug__/sql_select/$', 'debug_toolbar.views.sql_select', name='sql_select'),
     url(r'^__debug__/sql_explain/$', 'debug_toolbar.views.sql_explain', name='sql_explain'),
     url(r'^__debug__/sql_profile/$', 'debug_toolbar.views.sql_profile', name='sql_profile'),
+    url(r'^__debug__/template_source/$', 'debug_toolbar.views.template_source', name='template_source'),
 )
