@@ -8,7 +8,7 @@ import os
 import django.views.static
 from django.conf import settings
 from django.db import connection
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
@@ -35,7 +35,7 @@ def sql_select(request):
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponse('<h3>Tamper alert</h3>') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
@@ -66,7 +66,7 @@ def sql_explain(request):
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponse('<h3>Tamper alert</h3>') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
@@ -97,7 +97,7 @@ def sql_profile(request):
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponse('<h3>Tamper alert</h3>') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
@@ -116,3 +116,32 @@ def sql_profile(request):
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
+
+def template_source(request):
+    """
+    Return the source of a template, syntax-highlighted by Pygments if
+    it's available.
+    """
+    from django.template.loader import find_template_source
+    from django.utils.safestring import mark_safe
+
+    template_name = request.GET.get('template', None)
+    if template_name is None:
+        return HttpResponseBadRequest('"template" key is required')
+
+    source, origin = find_template_source(template_name)
+
+    try:
+        from pygments import highlight
+        from pygments.lexers import HtmlDjangoLexer
+        from pygments.formatters import HtmlFormatter
+
+        source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
+        source = mark_safe(source)
+    except ImportError:
+        pass
+
+    return render_to_response('debug_toolbar/panels/template_source.html', {
+        'source': source,
+        'template_name': template_name
+    })

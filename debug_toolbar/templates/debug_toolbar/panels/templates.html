@@ -12,7 +12,7 @@
 {% if templates %}
 <dl>
 {% for template in templates %}
-	<dt><strong>{{ template.template.name|addslashes }}</strong></dt>
+	<dt><strong><a class="remoteCall" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	<dd>
 		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>

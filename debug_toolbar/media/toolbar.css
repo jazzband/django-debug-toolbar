@@ -61,6 +61,10 @@
     color: #92ef3f;
 }
 
+#djDebug pre {
+    background-color: #ffffff;
+}
+
 
 #djDebug .panelContent {
     background: #2a5738;
@@ -145,17 +149,22 @@
     margin-left: 10px;
 }
 
-#djDebug .syntax  { color: #000; }
-#djDebug .syntax .err { color: #000; } /* Error */
-#djDebug .syntax .g { color: #000; } /* Generic */
-#djDebug .syntax .k { color: #40684C; font-weight: bold } /* Keyword */
-#djDebug .syntax .o { color: #000; } /* Operator */
-#djDebug .syntax .n { color: #000; } /* Name */
-#djDebug .syntax .mi { color: #40684C; font-weight: bold } /* Literal.Number.Integer */
-#djDebug .syntax .l { color: #000; } /* Literal */
-#djDebug .syntax .x { color: #000; } /* Other */
-#djDebug .syntax .p { color: #000; } /* Punctuation */
-#djDebug .syntax .m { color: #40684C; font-weight: bold } /* Literal.Number */
-#djDebug .syntax .s { color: #0086d2 } /* Literal.String */
-#djDebug .syntax .w { color: #888888 } /* Text.Whitespace */
-#djDebug .syntax .il { color: #40684C; font-weight: bold } /* Literal.Number.Integer.Long */
+#djDebug .highlight  { color: #000; }
+#djDebug .highlight .err { color: #000; } /* Error */
+#djDebug .highlight .g { color: #000; } /* Generic */
+#djDebug .highlight .k { color: #40684C; font-weight: bold } /* Keyword */
+#djDebug .highlight .o { color: #000; } /* Operator */
+#djDebug .highlight .n { color: #000; } /* Name */
+#djDebug .highlight .mi { color: #40684C; font-weight: bold } /* Literal.Number.Integer */
+#djDebug .highlight .l { color: #000; } /* Literal */
+#djDebug .highlight .x { color: #000; } /* Other */
+#djDebug .highlight .p { color: #000; } /* Punctuation */
+#djDebug .highlight .m { color: #40684C; font-weight: bold } /* Literal.Number */
+#djDebug .highlight .s { color: #0086d2 } /* Literal.String */
+#djDebug .highlight .w { color: #888888 } /* Text.Whitespace */
+#djDebug .highlight .il { color: #40684C; font-weight: bold } /* Literal.Number.Integer.Long */
+#djDebug .highlight .na { color: #7D9029 } /* Name.Attribute */
+#djDebug .highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+#djDebug .highlight .nv { color: #19177C } /* Name.Variable */
+#djDebug .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+#djDebug .highlight .cp { color: #BC7A00 } /* Comment.Preproc */
