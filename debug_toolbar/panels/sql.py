@@ -19,7 +19,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             stop = time.time()
-            _params = None
+            _params = ''
             try:
                 _params = simplejson.dumps([force_unicode(x) for x in params])
             except TypeError:
