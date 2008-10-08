@@ -27,7 +27,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
-                'time': stop - start,
+                'time': (stop - start) * 1000, # convert to ms
                 'raw_sql': sql,
                 'params': _params,
                 'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
@@ -47,7 +47,7 @@ class SQLDebugPanel(DebugPanel):
         self._sql_time = 0
 
     def title(self):
-        self._sql_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
+        self._sql_time = sum(map(lambda q: float(q['time']), connection.queries))
         return '%d SQL %s (%.2fms)' % (
             len(connection.queries), 
             (len(connection.queries) == 1) and 'query' or 'queries',
