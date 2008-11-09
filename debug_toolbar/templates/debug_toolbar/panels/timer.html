@@ -1,0 +1,7 @@
+<h3>Resource Usage</h3>
+<table>
+    <colgroup><col width="50%" align="right" /><col width="50%" /></colgroup>
+    {% for row in rows %}
+	<tr><td align="right">{{ row.1 }}</td><th>{{ row.0 }}</th></tr>
+    {% endfor %}
+</table>
