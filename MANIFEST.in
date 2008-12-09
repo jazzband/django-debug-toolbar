@@ -1,0 +1,5 @@
+include AUTHORS
+include LICENSE
+include README.rst
+recursive-include debug_toolbar/media *
+recursive-include debug_toolbar/templates *
