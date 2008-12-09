@@ -65,6 +65,7 @@ class SQLDebugPanel(DebugPanel):
         context = {
             'queries': sql_queries,
             'sql_time': self._sql_time,
+            'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         }
         return render_to_string('debug_toolbar/panels/sql.html', context)
 
