@@ -1,7 +1,21 @@
 <h3>Resource Usage</h3>
 <table>
-    <colgroup><col width="50%" align="right" /><col width="50%" /></colgroup>
-    {% for row in rows %}
-	<tr><td align="right">{{ row.1 }}</td><th>{{ row.0 }}</th></tr>
-    {% endfor %}
+	<colgroup>
+		<col style="width:20%"/>
+		<col/>
+	</colgroup>
+	<thead>
+		<tr>
+			<th>Key</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for key, value in rows %}
+			<tr class="{% cycle 'odd' 'even' %}">
+				<td>{{ key|escape }}</td>
+				<td>{{ value|escape }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
 </table>

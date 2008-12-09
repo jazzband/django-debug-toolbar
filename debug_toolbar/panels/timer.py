@@ -1,7 +1,6 @@
-import time, resource
-
+import resource
+import time
 from django.template.loader import render_to_string
-
 from debug_toolbar.panels import DebugPanel
 
 
