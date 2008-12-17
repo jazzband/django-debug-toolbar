@@ -44,12 +44,12 @@ class DebugToolbarMiddleware(object):
         return True
 
     def process_request(self, request):
-        if self.override_url:
-            debug_toolbar.urls.urlpatterns += self.original_pattern
-            self.override_url = False
-        request.urlconf = 'debug_toolbar.urls'
-
         if self.show_toolbar(request):
+            if self.override_url:
+                debug_toolbar.urls.urlpatterns += self.original_pattern
+                self.override_url = False
+            request.urlconf = 'debug_toolbar.urls'
+
             self.debug_toolbar = DebugToolbar(request)
             for panel in self.debug_toolbar.panels:
                 panel.process_request(request)
