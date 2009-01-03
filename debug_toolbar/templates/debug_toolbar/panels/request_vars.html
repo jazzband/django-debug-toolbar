@@ -8,8 +8,8 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Key" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -22,7 +22,7 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
 <h3>SESSION Variables</h3>
 {% if session %}
@@ -33,8 +33,8 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Key" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -47,15 +47,15 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
 <h3>GET Variables</h3>
 {% if get %}
 	<table>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Key" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -68,15 +68,15 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
 <h3>POST Variables</h3>
 {% if post %}
 	<table>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Key" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -89,5 +89,5 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
