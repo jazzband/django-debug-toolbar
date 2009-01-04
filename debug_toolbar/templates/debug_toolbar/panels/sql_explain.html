@@ -1,9 +1,10 @@
-<a class="back" href="">&laquo;&nbsp;Back</a>
+{% load i18n %}
+<a class="back" href="">&laquo;&nbsp;{% trans "Back" %}</a>
 <h3>SQL Explained</h3>
 <dl>
-	<dt>Executed SQL</dt>
+	<dt>{% trans "Executed SQL" %}</dt>
 	<dd><pre>{{ sql|safe }}</pre></dd>
-	<dt>Time</dt>
+	<dt>{% trans "Time" %}</dt>
 	<dd>{{ time }} ms</dd>
 </dl>
 <table>
