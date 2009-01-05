@@ -1,3 +1,4 @@
+{% load i18n %}
 <script type="text/javascript" charset="utf-8">
 	if (typeof jQuery == 'undefined') {
 		var jquery_url = '{{ BASE_URL }}/__debug__/m/jquery.js';
@@ -26,7 +27,7 @@
 	{% for panel in panels %}
 		{% if panel.has_content %}
 			<div id="{{ panel.dom_id }}" class="panelContent">
-				<a href="" class="close">Close</a>
+				<a href="" class="close">{% trans "Close" %}</a>
 				{{ panel.content|safe }}
 			</div>
 		{% endif %}
