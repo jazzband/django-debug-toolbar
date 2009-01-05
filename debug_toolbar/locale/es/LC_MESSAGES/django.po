@@ -1,7 +1,7 @@
-# Django Debug Toolbar en Espanol.
+# Django Debug Toolbar en Español.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Percy Perez-Pinedo <percyp3@gmail.com>, 2009.
+# Percy Pérez-Pinedo <percyp3@gmail.com>, 2009.
 #
 # Caracteres especiales: á, é, í, ó, ú, ñ,
 #
@@ -110,7 +110,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/request_vars.html:71
 #: templates/debug_toolbar/panels/request_vars.html:92
 msgid "None"
-msgstr ""
+msgstr "Ninguno"
 
 #: templates/debug_toolbar/panels/settings_vars.html:6
 msgid "Setting"
