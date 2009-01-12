@@ -42,7 +42,7 @@ Installation
 	INTERNAL_IPS = ('127.0.0.1',)
 
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
-   the template files associated with the Debug Toolbar.
+   template files associated with the Debug Toolbar.
    
    Alternatively, add the path to the debug toolbar templates
    (``'path/to/debug_toolbar/templates'`` to your ``TEMPLATE_DIRS`` setting.)
