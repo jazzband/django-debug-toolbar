@@ -42,9 +42,9 @@ jQuery(function($) {
 			$('#djShowToolBarButton').click(function() {
 				$.djDebug.show_toolbar();
 			});
-			if($.cookie(COOKIE_NAME)){
+			if ($.cookie(COOKIE_NAME)) {
 				$.djDebug.hide_toolbar(false);
-			}else{
+			} else {
 				$('#djDebugToolbar').show();
 			}
 		},
@@ -69,14 +69,20 @@ jQuery(function($) {
 		hide_toolbar: function(setCookie) {
 			$('#djDebugToolbar').hide("fast");
 			$('#djDebugToolbarHandle').show();
-			if(setCookie){
-				$.cookie(COOKIE_NAME, 'hide', {path: '/', expires: 10 });
+			if (setCookie) {
+				$.cookie(COOKIE_NAME, 'hide', {
+					path: '/',
+					expires: 10
+				});
 			}
 		},
 		show_toolbar: function() {
 			$('#djDebugToolbarHandle').hide();
 			$('#djDebugToolbar').show("fast");
-			$.cookie(COOKIE_NAME, null, {path: '/', expires: -1 });
+			$.cookie(COOKIE_NAME, null, {
+				path: '/',
+				expires: -1
+			});
 		}
 	});
 	$(document).bind('close.djDebug', function() {

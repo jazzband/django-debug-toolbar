@@ -35,13 +35,13 @@
     width: 16px;
 }
 
-#djDebugToolbarHandle ul li{
-	padding: 3px 0px 0px 3px;
+#djDebugToolbarHandle ul li {
+    padding: 3px 0px 0px 3px;
 }
 
-#djDebugToolbarHandle ul li a{
-	font-size: 16px;
-	font-weight: bold;
+#djDebugToolbarHandle ul li a {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 #djDebugToolbar ul {
