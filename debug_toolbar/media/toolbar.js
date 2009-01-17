@@ -1,6 +1,7 @@
 var _$ = window.$;
 jQuery.noConflict();
 jQuery(function($) {
+	var COOKIE_NAME = 'dj_debug_panel';
 	$.djDebug = function(data, klass) {
 		$.djDebug.init();
 	}
@@ -35,6 +36,17 @@ jQuery(function($) {
 			$('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
 				$.djDebug.toggle_content($(this).parent().next());
 			});
+			$('#djHideToolBarButton').click(function() {
+				$.djDebug.hide_toolbar(true);
+			});
+			$('#djShowToolBarButton').click(function() {
+				$.djDebug.show_toolbar();
+			});
+			if($.cookie(COOKIE_NAME)){
+				$.djDebug.hide_toolbar(false);
+			}else{
+				$('#djDebugToolbar').show();
+			}
 		},
 		open: function() {
 			$(document).bind('keydown.djDebug', function(e) {
@@ -53,6 +65,18 @@ jQuery(function($) {
 		close: function() {
 			$(document).trigger('close.djDebug');
 			return false;
+		},
+		hide_toolbar: function(setCookie) {
+			$('#djDebugToolbar').hide("fast");
+			$('#djDebugToolbarHandle').show();
+			if(setCookie){
+				$.cookie(COOKIE_NAME, 'hide', {path: '/', expires: 10 });
+			}
+		},
+		show_toolbar: function() {
+			$('#djDebugToolbarHandle').hide();
+			$('#djDebugToolbar').show("fast");
+			$.cookie(COOKIE_NAME, null, {path: '/', expires: -1 });
 		}
 	});
 	$(document).bind('close.djDebug', function() {
@@ -64,3 +88,4 @@ jQuery(function() {
 	jQuery.djDebug();
 });
 $ = _$;
+
