@@ -8,6 +8,8 @@ from django.utils.encoding import smart_unicode
 from django.conf.urls.defaults import include, patterns
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
+from debug_toolbar.urls import DEBUG_TB_URL_PREFIX
+import os
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
@@ -37,7 +39,7 @@ class DebugToolbarMiddleware(object):
     def show_toolbar(self, request):
         if not settings.DEBUG:
             return False
-        if request.is_ajax():
+        if request.is_ajax() and not request.path.startswith(os.path.join('/', DEBUG_TB_URL_PREFIX)): #Allow ajax requests from the debug toolbar
             return False
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return False

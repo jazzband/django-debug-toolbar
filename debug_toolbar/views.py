@@ -8,11 +8,17 @@ import os
 import django.views.static
 from django.conf import settings
 from django.db import connection
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
 
+class InvalidSQLError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+    
 def debug_media(request, path):
     root = getattr(settings, 'DEBUG_TOOLBAR_MEDIA_ROOT', None)
     if root is None:
@@ -36,7 +42,7 @@ def sql_select(request):
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
-    if sql.lower().startswith('select'):
+    if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
         cursor.execute(sql, params)
@@ -50,6 +56,7 @@ def sql_select(request):
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_select.html', context)
+    raise InvalidSQLError("Only 'select' queries are allowed.")
 
 def sql_explain(request):
     """
@@ -67,7 +74,7 @@ def sql_explain(request):
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
-    if sql.lower().startswith('select'):
+    if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
         cursor.execute("EXPLAIN %s" % (sql,), params)
@@ -81,6 +88,7 @@ def sql_explain(request):
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
+    raise InvalidSQLError("Only 'select' queries are allowed.")
 
 def sql_profile(request):
     """
@@ -98,7 +106,7 @@ def sql_profile(request):
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
-    if sql.lower().startswith('select'):
+    if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
         cursor.execute("SET PROFILING=1") # Enable profiling
@@ -116,6 +124,7 @@ def sql_profile(request):
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
+    raise InvalidSQLError("Only 'select' queries are allowed.")
 
 def template_source(request):
     """
