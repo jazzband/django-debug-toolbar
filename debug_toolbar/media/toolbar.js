@@ -35,12 +35,19 @@ jQuery(function($) {
 			});
 			$('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
 				$.djDebug.toggle_content($(this).parent().next());
+				return false;
+			});
+			$('#djDebugSQLPanel a.djSQLShowStacktrace').click(function() {
+				$.djDebug.toggle_content($(this).parent().next());
+				return false;
 			});
 			$('#djHideToolBarButton').click(function() {
 				$.djDebug.hide_toolbar(true);
+				return false;
 			});
 			$('#djShowToolBarButton').click(function() {
 				$.djDebug.show_toolbar();
+				return false;
 			});
 			if ($.cookie(COOKIE_NAME)) {
 				$.djDebug.hide_toolbar(false);
