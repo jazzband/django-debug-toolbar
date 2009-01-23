@@ -86,6 +86,9 @@
     background-color: #ffffff;
 }
 
+#djDebug tr.odd pre {
+    background-color: #eeeeee;
+}
 
 #djDebug .panelContent {
     background: #2a5738;
