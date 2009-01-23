@@ -31,11 +31,11 @@
 								<th>Method</th>
 								<th>File</th>
 							</tr>
-							{% for s in query.stacktrace %}
+							{% for file, line, method in query.stacktrace %}
 								<tr>
-									<td>{{ s.1 }}</td>
-									<td><pre>{{ s.2|escape }}<pre></td>
-									<td><pre>{{ s.0|escape }}</pre></td>
+									<td>{{ line }}</td>
+									<td><pre>{{ method|escape }}<pre></td>
+									<td><pre>{{ file|escape }}</pre></td>
 								</tr>
 							{% endfor %}
 						</table>
