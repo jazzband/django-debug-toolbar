@@ -79,6 +79,22 @@
     border-right: 1px solid #487858;
 }
 
+#djDebugMore ul {
+    float: right;
+    background: #2a5738;
+    display: none;
+}
+
+#djDebugMore:hover ul {
+    display: block;
+}
+
+#djDebugMore li {
+    display: inherit;
+    position: inherit;
+    line-height: inherit;
+}
+
 #djDebugToolbar #djDebugButton {
     color: #92ef3f;
 }
