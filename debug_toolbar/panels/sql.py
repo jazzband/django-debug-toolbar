@@ -73,7 +73,7 @@ class SQLDebugPanel(DebugPanel):
 def reformat_sql(sql):
     sql = sql.replace('`,`', '`, `')
     sql = sql.replace('SELECT ', 'SELECT\n\t')
-    sql = sql.replace('` FROM ', '`\nFROM\n\t')
+    sql = sql.replace(' FROM ', '\nFROM\n\t')
     sql = sql.replace(' WHERE ', '\nWHERE\n\t')
     sql = sql.replace(' INNER JOIN ', '\nINNER JOIN\n\t')
     sql = sql.replace(' LEFT OUTER JOIN ', '\nLEFT OUTER JOIN\n\t')
