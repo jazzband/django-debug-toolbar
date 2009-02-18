@@ -75,9 +75,11 @@ def reformat_sql(sql):
     sql = sql.replace('SELECT ', 'SELECT\n\t')
     sql = sql.replace(' FROM ', '\nFROM\n\t')
     sql = sql.replace(' WHERE ', '\nWHERE\n\t')
-    sql = sql.replace(' INNER JOIN ', '\nINNER JOIN\n\t')
-    sql = sql.replace(' LEFT OUTER JOIN ', '\nLEFT OUTER JOIN\n\t')
+    sql = sql.replace(' INNER JOIN', '\n\tINNER JOIN')
+    sql = sql.replace(' LEFT OUTER JOIN' , '\n\tLEFT OUTER JOIN')
     sql = sql.replace(' ORDER BY ', '\nORDER BY\n\t')
+    sql = sql.replace(' HAVING ', '\nHAVING\n\t')
+    sql = sql.replace(' GROUP BY ', '\nGROUP BY\n\t')
     # Use Pygments to highlight SQL if it's available
     try:
         from pygments import highlight
