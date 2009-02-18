@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     position: static;
+    text-align: left;
 }
 #djDebug a {
     color: #f7c757;
