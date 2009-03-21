@@ -103,7 +103,7 @@
     background-color: #ffffff;
 }
 
-#djDebug tr.odd pre {
+#djDebug tr.djDebugOdd pre {
     background-color: #eeeeee;
 }
 
@@ -173,7 +173,7 @@
     color: #000;
     vertical-align: top;
 }
-#djDebug .panelContent table tr.odd td {
+#djDebug .panelContent table tr.djDebugOdd td {
   background: #eee;
 }
 
