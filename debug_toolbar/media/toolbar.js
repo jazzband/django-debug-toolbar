@@ -47,8 +47,6 @@ jQuery(function() {
 			} else {
 				$j('#djDebugToolbar').show();
 			}
-			$j(window).load($j.djDebug.format_panels);
-			$j(window).resize($j.djDebug.format_panels);
 		},
 		open: function() {
 			$j(document).bind('keydown.djDebug', function(e) {
@@ -85,37 +83,6 @@ jQuery(function() {
 				path: '/',
 				expires: -1
 			});
-		},
-		/* Make sure that panel layout doesn't overflow the screen
-		 * width. Any panel that would otherwise wrap to the next line
-		 * are pushed into a "more..." vertical display in the final
-		 * panel position. */
-		format_panels: function () {
-			// If we've already done some overflow-avoidance, undo the
-			// effect before recomputing (needed, for example, after a
-			// window resize).
-			$j("#djDebugMore > ul > li").appendTo("#djDebugPanelList");
-			$j("#djDebugMore").remove();
-
-			// Check for wrapping by examing the position of the last
-			// element.
-			var row_top = $j("#djDebugPanelList > li").position().top;
-			var final_pos = $j("#djDebugPanelList > li:last").position();
-
-			if (final_pos.top == row_top && final_pos.left != 0) {
-				return;
-			}
-
-			function overflow_check(idx) {
-				pos = $j(this).position();
-				return pos.top > row_top || (idx > 1 && pos.left == 0);
-			};
-
-			var more = $j("<li id='djDebugMore'>More...<ul></ul></li>");
-			more.prependTo("#djDebugPanelList");
-			overflows = $j("#djDebugPanelList > li").filter(overflow_check);
-			more.appendTo("#djDebugPanelList");
-			$j("#djDebugMore > ul").append(overflows);
 		}
 	});
 	$j(document).bind('close.djDebug', function() {
@@ -126,6 +93,5 @@ jQuery(function() {
 jQuery(function() {
 	jQuery.djDebug();
 });
-
 $ = _$;
 
