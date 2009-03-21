@@ -40,8 +40,11 @@ jQuery(function() {
 				$j.djDebug.toggle_content($j(this).parent().next());
 				return false;
 			});
+			$j('#djDebugSQLPanel a.djSQLShowStacktrace').click(function() {
+				$j.djDebug.toggle_content($j(this).parent().next());
+				return false;
+			});
 			$j('#djHideToolBarButton').click(function() {
-				$j(document).trigger('close.djDebug');
 				$j.djDebug.hide_toolbar(true);
 				return false;
 			});
