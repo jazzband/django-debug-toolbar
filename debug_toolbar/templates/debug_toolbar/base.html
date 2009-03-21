@@ -9,9 +9,13 @@
 	@import url({{ BASE_URL }}/__debug__/m/toolbar.min.css);
 </style>
 <div id="djDebug">
-	<div id="djDebugToolbar">
+	<div style="display: none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
+			{% if panels %}
+			<li><a id="djHideToolBarButton" href="#" title="Hide Toolbar">&laquo; Hide</a></li>
+			{% else %}
 			<li id="djDebugButton">DEBUG</li>
+			{% endif %}
 			{% for panel in panels %}
 				<li>
 					{% if panel.has_content %}
@@ -21,6 +25,11 @@
 					{% endif %}
 				</li>
 			{% endfor %}
+		</ul>
+	</div>
+	<div style="display: none;" id="djDebugToolbarHandle">
+		<ul id="djDebugPanelList">
+			<li><a title="Show Toolbar" id="djShowToolBarButton" href="#">&raquo;</a></li>
 		</ul>
 	</div>
 	{% for panel in panels %}

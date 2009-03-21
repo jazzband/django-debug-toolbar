@@ -8,6 +8,8 @@ from django.utils.encoding import smart_unicode
 from django.conf.urls.defaults import include, patterns
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
+from debug_toolbar.urls import DEBUG_TB_URL_PREFIX
+import os
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
@@ -37,24 +39,19 @@ class DebugToolbarMiddleware(object):
     def show_toolbar(self, request):
         if not settings.DEBUG:
             return False
-        if request.is_ajax():
+        if request.is_ajax() and not request.path.startswith(os.path.join('/', DEBUG_TB_URL_PREFIX)): #Allow ajax requests from the debug toolbar
             return False
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return False
         return True
 
     def process_request(self, request):
-        if not hasattr(request, 'user'):
-            import warnings
-            warnings.warn("You should place the debug_toolbar middleware after \
-                the AuthenticationMiddleware, if you aren't using django's auth\
-                app you can safely ignore this message.")
-        if self.override_url:
-            debug_toolbar.urls.urlpatterns += self.original_pattern
-            self.override_url = False
-        request.urlconf = 'debug_toolbar.urls'
-
         if self.show_toolbar(request):
+            if self.override_url:
+                debug_toolbar.urls.urlpatterns += self.original_pattern
+                self.override_url = False
+            request.urlconf = 'debug_toolbar.urls'
+
             self.debug_toolbar = DebugToolbar(request)
             for panel in self.debug_toolbar.panels:
                 panel.process_request(request)

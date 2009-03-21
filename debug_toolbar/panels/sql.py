@@ -19,7 +19,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             stop = time.time()
-            _params = None
+            _params = ''
             try:
                 _params = simplejson.dumps([force_unicode(x) for x in params])
             except TypeError:
@@ -27,7 +27,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
-                'time': stop - start,
+                'time': (stop - start) * 1000, # convert to ms
                 'raw_sql': sql,
                 'params': _params,
                 'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
@@ -47,10 +47,11 @@ class SQLDebugPanel(DebugPanel):
         self._sql_time = 0
 
     def title(self):
-        self._sql_time = sum(map(lambda q: float(q['time']) * 1000, connection.queries))
+        self._sql_time = sum(map(lambda q: float(q['time']), connection.queries))
+        num_queries = len(connection.queries) - self._offset
         return '%d SQL %s (%.2fms)' % (
-            len(connection.queries), 
-            (len(connection.queries) == 1) and 'query' or 'queries',
+            num_queries,
+            (num_queries == 1) and 'query' or 'queries',
             self._sql_time
         )
 
@@ -65,6 +66,7 @@ class SQLDebugPanel(DebugPanel):
         context = {
             'queries': sql_queries,
             'sql_time': self._sql_time,
+            'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         }
         return render_to_string('debug_toolbar/panels/sql.html', context)
 
@@ -73,9 +75,11 @@ def reformat_sql(sql):
     sql = sql.replace('SELECT ', 'SELECT\n\t')
     sql = sql.replace(' FROM ', '\nFROM\n\t')
     sql = sql.replace(' WHERE ', '\nWHERE\n\t')
-    sql = sql.replace(' INNER JOIN ', '\nINNER JOIN\n\t')
-    sql = sql.replace(' OUTER JOIN ', '\nOUTER JOIN\n\t')
+    sql = sql.replace(' INNER JOIN', '\n\tINNER JOIN')
+    sql = sql.replace(' LEFT OUTER JOIN' , '\n\tLEFT OUTER JOIN')
     sql = sql.replace(' ORDER BY ', '\nORDER BY\n\t')
+    sql = sql.replace(' HAVING ', '\nHAVING\n\t')
+    sql = sql.replace(' GROUP BY ', '\nGROUP BY\n\t')
     # Use Pygments to highlight SQL if it's available
     try:
         from pygments import highlight

@@ -42,7 +42,7 @@ Installation
 	INTERNAL_IPS = ('127.0.0.1',)
 
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
-   the template files associated with the Debug Toolbar.
+   template files associated with the Debug Toolbar.
    
    Alternatively, add the path to the debug toolbar templates
    (``'path/to/debug_toolbar/templates'`` to your ``TEMPLATE_DIRS`` setting.)
@@ -68,11 +68,6 @@ Installation
    panels you want to display.  And you can include panels that you have created
    or that are specific to your project.
 
-TODO
-====
-- Panel idea: AJAX call to show cprofile data similar to the ?prof idea
-- CSS Stylings
-- Restructure panels to popular context that pushes up to the toolbar
-- Make the trigger whether to display the toolbar configurable with options such
-  as if: DEBUG is true, IP is in INTERNAL_IPS, authenticated user is_superuser,
-  etc.
+TODOs and BUGS
+==============
+See: http://code.google.com/p/django-debug-toolbar/issues/list
