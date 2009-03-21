@@ -9,6 +9,9 @@ jQuery(function() {
 		init: function() {
 			var current = null;
 			$j('#djDebugPanelList li a').click(function() {
+				if (!this.className) {
+					return false;
+				}
 				current = $j('#djDebug #' + this.className);
 				if (current.is(':visible')) {
 					$j(document).trigger('close.djDebug');
@@ -35,12 +38,16 @@ jQuery(function() {
 			});
 			$j('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
 				$j.djDebug.toggle_content($j(this).parent().next());
+				return false;
 			});
 			$j('#djHideToolBarButton').click(function() {
+				$j(document).trigger('close.djDebug');
 				$j.djDebug.hide_toolbar(true);
+				return false;
 			});
 			$j('#djShowToolBarButton').click(function() {
 				$j.djDebug.show_toolbar();
+				return false;
 			});
 			if ($j.cookie(COOKIE_NAME)) {
 				$j.djDebug.hide_toolbar(false);
