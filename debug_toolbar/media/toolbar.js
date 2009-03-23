@@ -1,6 +1,5 @@
-var _$ = window.$;
-$j = jQuery.noConflict();
-jQuery(function() {
+jQuery.noConflict();
+jQuery(function($j) {
 	var COOKIE_NAME = 'dj_debug_panel';
 	$j.djDebug = function(data, klass) {
 		$j.djDebug.init();
@@ -104,5 +103,3 @@ jQuery(function() {
 jQuery(function() {
 	jQuery.djDebug();
 });
-$ = _$;
-

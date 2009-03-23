@@ -1,10 +1,17 @@
 <script type="text/javascript" charset="utf-8">
+	// When jQuery is sourced, it's going to overwrite whatever might be in the
+	// '$' variable, so store a reference of it in a temporary variable...
+	var _$ = window.$;
 	if (typeof jQuery == 'undefined') {
 		var jquery_url = '{{ BASE_URL }}/__debug__/m/jquery.js';
 		document.write(unescape('%3Cscript src="' + jquery_url + '" type="text/javascript"%3E%3C/script%3E'));
 	}
 </script>
 <script type="text/javascript" src="{{ BASE_URL }}/__debug__/m/toolbar.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+	// Now that jQuery is done loading, put the '$' variable back to what it was...
+	var $ = _$;
+</script>
 <style type="text/css">
 	@import url({{ BASE_URL }}/__debug__/m/toolbar.min.css);
 </style>
