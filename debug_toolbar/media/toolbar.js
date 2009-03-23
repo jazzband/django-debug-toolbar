@@ -78,6 +78,7 @@ jQuery(function() {
 		},
 		hide_toolbar: function(setCookie) {
 			$j('#djDebugToolbar').hide("fast");
+			$j(document).trigger('close.djDebug');
 			$j('#djDebugToolbarHandle').show();
 			if (setCookie) {
 				$j.cookie(COOKIE_NAME, 'hide', {
