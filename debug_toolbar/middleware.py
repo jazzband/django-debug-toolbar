@@ -37,7 +37,15 @@ class DebugToolbarMiddleware(object):
         self.original_pattern = patterns('', ('', include(self.original_urlconf)),)
         self.override_url = True
 
-    def show_toolbar(self, request):
+        # Set method to use to decide to show toolbar
+        self.show_toolbar = self._show_toolbar # default
+        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
+            show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
+                'SHOW_TOOLBAR_CALLBACK', None)
+            if show_toolbar_callback:
+                self.show_toolbar = show_toolbar_callback
+
+    def _show_toolbar(self, request):
         if not settings.DEBUG:
             return False
         if request.is_ajax() and not \
