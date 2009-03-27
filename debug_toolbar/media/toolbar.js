@@ -1,6 +1,5 @@
-var _$ = window.$;
-$j = jQuery.noConflict();
-jQuery(function() {
+jQuery.noConflict();
+jQuery(function($j) {
 	var COOKIE_NAME = 'dj_debug_panel';
 	$j.djDebug = function(data, klass) {
 		$j.djDebug.init();
@@ -78,6 +77,7 @@ jQuery(function() {
 		},
 		hide_toolbar: function(setCookie) {
 			$j('#djDebugToolbar').hide("fast");
+			$j(document).trigger('close.djDebug');
 			$j('#djDebugToolbarHandle').show();
 			if (setCookie) {
 				$j.cookie(COOKIE_NAME, 'hide', {
@@ -103,5 +103,3 @@ jQuery(function() {
 jQuery(function() {
 	jQuery.djDebug();
 });
-$ = _$;
-
