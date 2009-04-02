@@ -18,12 +18,12 @@ class InvalidSQLError(Exception):
         self.value = value
     def __str__(self):
         return repr(self.value)
-    
+
 def debug_media(request, path):
     root = getattr(settings, 'DEBUG_TOOLBAR_MEDIA_ROOT', None)
     if root is None:
         parent = os.path.abspath(os.path.dirname(__file__))
-        root = os.path.join(parent, 'media')
+        root = os.path.join(parent, 'media', 'debug_toolbar')
     return django.views.static.serve(request, path, root)
 
 def sql_select(request):
