@@ -15,7 +15,6 @@ Currently, the following panels have been written and are working:
 - GET/POST/cookie/session variable display
 - Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
-- Cache stats
 - Logging output via Python's built-in logging module
 
 If you have ideas for other panels please let us know.
@@ -73,7 +72,6 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
 	    'debug_toolbar.panels.template.TemplateDebugPanel',
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
-	    'debug_toolbar.panels.cache.CacheDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
 	)
 
