@@ -108,4 +108,4 @@ The debug toolbar has two settings that can be set in `settings.py`:
 
 TODOs and BUGS
 ==============
-See: http://code.google.com/p/django-debug-toolbar/issues/list
+See: http://github.com/robhudson/django-debug-toolbar/issues
