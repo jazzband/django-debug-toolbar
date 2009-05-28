@@ -1,0 +1,19 @@
+<h3>Signals</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Signal</th>
+            <th>Providing Args</th>
+            <th>Receivers</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name, signal, receivers in signals %}
+            <tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+                <td>{{ name|escape }}</td>
+                <td>{{ signal.providing_args|join:", " }}</td>
+                <td>{{ receivers|join:", " }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

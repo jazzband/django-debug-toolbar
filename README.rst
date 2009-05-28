@@ -15,6 +15,7 @@ Currently, the following panels have been written and are working:
 - GET/POST/cookie/session variable display
 - Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
+- List of signals, their args and receivers
 - Logging output via Python's built-in logging module
 
 If you have ideas for other panels please let us know.
@@ -50,7 +51,7 @@ Installation
 
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
    template files associated with the Debug Toolbar.
-   
+
    Alternatively, add the path to the debug toolbar templates
    (``'path/to/debug_toolbar/templates'`` to your ``TEMPLATE_DIRS`` setting.)
 
@@ -72,6 +73,7 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
 	    'debug_toolbar.panels.template.TemplateDebugPanel',
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
+	    'debug_toolbar.panels.signals.SignalDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
 	)
 
@@ -96,6 +98,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
      provide your own method for displaying the toolbar which contains your
      custom logic.  This method should return True or False.
 
+   * `EXTRA_SIGNALS`: An array of custom signals that might be in your project,
+     defined as the python path to the signal.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
@@ -104,8 +109,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	DEBUG_TOOLBAR_CONFIG = {
 	    'INTERCEPT_REDIRECTS': False,
 	    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
 	}
 
 TODOs and BUGS
 ==============
-See: http://code.google.com/p/django-debug-toolbar/issues/list
+See: http://github.com/robhudson/django-debug-toolbar/issues
