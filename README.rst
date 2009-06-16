@@ -3,7 +3,7 @@ Django Debug Toolbar
 ====================
 
 The Django Debug Toolbar is a configurable set of panels that display various
-debug information about the current request/response and when clicked, display 
+debug information about the current request/response and when clicked, display
 more details about the panel's content.
 
 Currently, the following panels have been written and are working:
@@ -32,8 +32,8 @@ Installation
    Tying into middleware allows each panel to be instantiated on request and
    rendering to happen on response.
 
-   The order of MIDDLEWARE_CLASSES is important: the Debug Toolbar middleware 
-   must come after any other middleware that encodes the response's content 
+   The order of MIDDLEWARE_CLASSES is important: the Debug Toolbar middleware
+   must come after any other middleware that encodes the response's content
    (such as GZipMiddleware).
 
    Note: The debug toolbar will only display itself if the mimetype of the
@@ -60,9 +60,9 @@ Configuration
 
 The debug toolbar has two settings that can be set in `settings.py`:
 
-#. Optional: Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` 
-   file that specifies the full Python path to the panel that you want included 
-   in the Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES` 
+#. Optional: Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py``
+   file that specifies the full Python path to the panel that you want included
+   in the Toolbar.  This setting looks very much like the `MIDDLEWARE_CLASSES`
    setting.  For example::
 
 	DEBUG_TOOLBAR_PANELS = (
@@ -101,15 +101,19 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `EXTRA_SIGNALS`: An array of custom signals that might be in your project,
      defined as the python path to the signal.
 
+   * `HIDE_DJANGO_SQL`: If set to True (the default) then code in Django itself
+     won't be show in SQL stacktraces.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
 	    return True # Always show toolbar, for example purposes only.
-	
+
 	DEBUG_TOOLBAR_CONFIG = {
 	    'INTERCEPT_REDIRECTS': False,
 	    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
+	    'HIDE_DJANGO_SQL': False,
 	}
 
 TODOs and BUGS

@@ -2,6 +2,7 @@ import os
 import SocketServer
 import time
 import traceback
+
 import django
 from django.conf import settings
 from django.db import connection
@@ -10,6 +11,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
+
 from debug_toolbar.panels import DebugPanel
 
 # Figure out some paths
@@ -26,7 +28,7 @@ def tidy_stacktrace(strace):
     trace = []
     for s in strace[:-1]:
         s_path = os.path.realpath(s[0])
-        if django_path in s_path and not 'django/contrib' in s_path:
+        if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True) and  django_path in s_path and not 'django/contrib' in s_path:
             continue
         if socketserver_path in s_path:
             continue
