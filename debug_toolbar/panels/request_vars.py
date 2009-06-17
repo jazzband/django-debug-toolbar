@@ -24,7 +24,9 @@ class RequestVarsDebugPanel(DebugPanel):
         context = {
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET.iterkeys()],
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST.iterkeys()],
-            'session': [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES.iterkeys()],
         }
+        if hasattr(self.request, 'session'):
+            context['session'] = [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()],
+
         return render_to_string('debug_toolbar/panels/request_vars.html', context)
