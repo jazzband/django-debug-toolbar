@@ -48,11 +48,15 @@ class TemplateDebugPanel(DebugPanel):
         return ''
 
     def process_request(self, request):
-        self.context_processors = dict(
-            [("%s.%s" % (k.__module__, k.__name__), pformat(k(request))) for k in get_standard_processors()]
-        )
+        self.request = request
 
     def content(self):
+        context_processors = dict(
+            [
+                ("%s.%s" % (k.__module__, k.__name__),
+                    pformat(k(self.request))) for k in get_standard_processors()
+            ]
+        )
         template_context = []
         for i, d in enumerate(self.templates):
             info = {}
@@ -73,6 +77,6 @@ class TemplateDebugPanel(DebugPanel):
         context = {
             'templates': template_context,
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
-            'context_processors': self.context_processors,
+            'context_processors': context_processors,
         }
         return render_to_string('debug_toolbar/panels/templates.html', context)

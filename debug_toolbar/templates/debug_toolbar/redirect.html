@@ -4,7 +4,7 @@
 </head>
 <body>
 <h1>HttpResponseRedirect</h1>
-<p>Location: <a href="{{ redirect_to }}">{{ redirect_to }}</a></p>
+<p>Location: <a href="{{ redirect_to|urlencode }}">{{ redirect_to }}</a></p>
 <p class="notice">
 	{% trans "The Django Debug Toolbar has intercepted a redirect to the above URL for
 	debug viewing purposes.  You can click the above link to continue with the

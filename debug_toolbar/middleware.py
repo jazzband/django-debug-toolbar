@@ -1,11 +1,14 @@
 """
 Debug Toolbar middleware
 """
+import os
+
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
 from django.conf.urls.defaults import include, patterns
+
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
 
@@ -17,7 +20,7 @@ def replace_insensitive(string, target, replacement):
     Code borrowed from: http://forums.devshed.com/python-programming-11/case-insensitive-string-replace-490921.html
     """
     no_case = string.lower()
-    index = no_case.find(target.lower())
+    index = no_case.rfind(target.lower())
     if index >= 0:
         return string[:index] + replacement + string[index + len(target):]
     else: # no results so return the original string
@@ -34,11 +37,21 @@ class DebugToolbarMiddleware(object):
         self.original_pattern = patterns('', ('', include(self.original_urlconf)),)
         self.override_url = True
 
-    def show_toolbar(self, request):
+        # Set method to use to decide to show toolbar
+        self.show_toolbar = self._show_toolbar # default
+        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
+            show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
+                'SHOW_TOOLBAR_CALLBACK', None)
+            if show_toolbar_callback:
+                self.show_toolbar = show_toolbar_callback
+
+    def _show_toolbar(self, request):
         if not settings.DEBUG:
             return False
-        if request.is_ajax():
-            return False
+        if request.is_ajax() and not \
+            request.path.startswith(os.path.join('/', debug_toolbar.urls._PREFIX)):
+            # Allow ajax requests from the debug toolbar
+            return False 
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return False
         return True

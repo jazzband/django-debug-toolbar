@@ -15,7 +15,7 @@ Currently, the following panels have been written and are working:
 - GET/POST/cookie/session variable display
 - Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
-- Cache stats
+- List of signals, their args and receivers
 - Logging output via Python's built-in logging module
 
 If you have ideas for other panels please let us know.
@@ -36,16 +36,29 @@ Installation
    must come after any other middleware that encodes the response's content 
    (such as GZipMiddleware).
 
+   Note: The debug toolbar will only display itself if the mimetype of the
+   response is either `text/html` or `application/xhtml+xml` and contains a
+   closing `</body>` tag.
+
 #. Make sure your IP is listed in the `INTERNAL_IPS` setting.  If you are
    working locally this will be:
 
 	INTERNAL_IPS = ('127.0.0.1',)
 
+   Note: This is required because of the built-in requirements of the
+   `show_toolbar` method.  See below for how to define a method to determine
+   your own logic for displaying the toolbar.
+
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
-   the template files associated with the Debug Toolbar.
-   
+   template files associated with the Debug Toolbar.
+
    Alternatively, add the path to the debug toolbar templates
    (``'path/to/debug_toolbar/templates'`` to your ``TEMPLATE_DIRS`` setting.)
+
+Configuration
+=============
+
+The debug toolbar has two settings that can be set in `settings.py`:
 
 #. Optional: Add a tuple called `DEBUG_TOOLBAR_PANELS` to your ``settings.py`` 
    file that specifies the full Python path to the panel that you want included 
@@ -60,14 +73,45 @@ Installation
 	    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
 	    'debug_toolbar.panels.template.TemplateDebugPanel',
 	    'debug_toolbar.panels.sql.SQLDebugPanel',
-	    'debug_toolbar.panels.cache.CacheDebugPanel',
+	    'debug_toolbar.panels.signals.SignalDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the
-   panels you want to display.  And you can include panels that you have created
-   or that are specific to your project.
+   panels you want to display, or add/remove panels.  If you have custom panels
+   you can include them in this way -- just provide the full Python path to
+   your panel.
+
+#. Optional: There are a few configuration options to the debug toolbar that
+   can be placed in a dictionary:
+
+   * `INTERCEPT_REDIRECTS`: If set to True (default), the debug toolbar will
+     show an intermediate page upon redirect so you can view any debug
+     information prior to redirecting.  This page will provide a link to the
+     redirect destination you can follow when ready.  If set to False, redirects
+     will proceed as normal.
+
+   * `SHOW_TOOLBAR_CALLBACK`: If not set or set to None, the debug_toolbar
+     middleware will use its built-in show_toolbar method for determining whether
+     the toolbar should show or not.  The default checks are that DEBUG must be
+     set to True and the IP of the request must be in INTERNAL_IPS.  You can
+     provide your own method for displaying the toolbar which contains your
+     custom logic.  This method should return True or False.
+
+   * `EXTRA_SIGNALS`: An array of custom signals that might be in your project,
+     defined as the python path to the signal.
+
+   Example configuration::
+
+	def custom_show_toolbar(request):
+	    return True # Always show toolbar, for example purposes only.
+	
+	DEBUG_TOOLBAR_CONFIG = {
+	    'INTERCEPT_REDIRECTS': False,
+	    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
+	}
 
 TODOs and BUGS
 ==============
-See: http://code.google.com/p/django-debug-toolbar/issues/list
+See: http://github.com/robhudson/django-debug-toolbar/issues
