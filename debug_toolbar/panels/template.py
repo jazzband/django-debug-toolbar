@@ -72,7 +72,14 @@ class TemplateDebugPanel(DebugPanel):
             info['template'] = t
             # Clean up context for better readability
             c = d.get('context', None)
-            info['context'] = '\n'.join([pformat(_d) for _d in c.dicts])
+            
+            d_list = []
+            for _d in c.dicts:
+                try:
+                    d_list.append(pformat(d))
+                except UnicodeEncodeError:
+                    pass
+            info['context'] = '\n'.join(d_list)
             template_context.append(info)
         context = {
             'templates': template_context,
