@@ -36,13 +36,15 @@ class TemplateDebugPanel(DebugPanel):
 
     def __init__(self):
         self.templates = []
-        template_rendered.connect(self._storeTemplateInfo)
+        template_rendered.connect(self._store_template_info)
 
-    def _storeTemplateInfo(self, sender, **kwargs):
+    def _store_template_info(self, sender, **kwargs):
         self.templates.append(kwargs)
 
     def title(self):
-        return 'Templates'
+        num_templates = len([t for t in self.templates
+            if not t['template'].name.startswith('debug_toolbar/')])
+        return 'Templates (%s rendered)' % num_templates
 
     def url(self):
         return ''
