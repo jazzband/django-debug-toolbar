@@ -73,15 +73,16 @@ class TemplateDebugPanel(DebugPanel):
                 t.origin_name = 'No origin'
             info['template'] = t
             # Clean up context for better readability
-            c = d.get('context', None)
-            
-            d_list = []
-            for _d in c.dicts:
-                try:
-                    d_list.append(pformat(d))
-                except UnicodeEncodeError:
-                    pass
-            info['context'] = '\n'.join(d_list)
+            if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SHOW_TEMPLATE_CONTEXT', True):
+                c = d.get('context', None)
+
+                d_list = []
+                for _d in c.dicts:
+                    try:
+                        d_list.append(pformat(d))
+                    except UnicodeEncodeError:
+                        pass
+                info['context'] = '\n'.join(d_list)
             template_context.append(info)
         context = {
             'templates': template_context,

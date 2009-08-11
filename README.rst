@@ -104,6 +104,11 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `HIDE_DJANGO_SQL`: If set to True (the default) then code in Django itself
      won't be show in SQL stacktraces.
 
+   * `SHOW_TEMPLATE_CONTEXT`: If set to True (the default) then a template's
+     context will be included with it in the Template debug panel.  Turning this
+     off is useful when you have large template contexts, or you have template
+     contexts with lazy datastructures that you don't want to be evaluated.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
