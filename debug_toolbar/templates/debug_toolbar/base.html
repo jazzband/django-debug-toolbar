@@ -19,7 +19,7 @@
 	<div style="display: none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if panels %}
-			<li><a id="djHideToolBarButton" href="#" title="Hide Toolbar">&laquo; Hide</a></li>
+			<li><a id="djHideToolBarButton" href="#" title="Hide Toolbar">Hide &raquo;</a></li>
 			{% else %}
 			<li id="djDebugButton">DEBUG</li>
 			{% endif %}
@@ -30,13 +30,16 @@
 					{% else %}
 						{{ panel.title }}
 					{% endif %}
+					{% with panel.subtitle as subtitle %}
+						{% if subtitle %}<br><small>{{ subtitle }}</small>{% endif %}
+					{% endwith %}
 				</li>
 			{% endfor %}
 		</ul>
 	</div>
 	<div style="display: none;" id="djDebugToolbarHandle">
 		<ul id="djDebugPanelList">
-			<li><a title="Show Toolbar" id="djShowToolBarButton" href="#">&raquo;</a></li>
+			<li><a title="Show Toolbar" id="djShowToolBarButton" href="#">&laquo;</a></li>
 		</ul>
 	</div>
 	{% for panel in panels %}

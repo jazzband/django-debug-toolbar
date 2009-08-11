@@ -52,7 +52,10 @@ class LoggingPanel(DebugPanel):
         return records
 
     def title(self):
-        return "Logging (%s message%s)" % (len(handler.get_records()), (len(handler.get_records()) == 1) and '' or 's')
+        return "Logging"
+
+    def subtitle(self):
+        return "%s message%s" % (len(handler.get_records()), (len(handler.get_records()) == 1) and '' or 's')
 
     def url(self):
         return ''

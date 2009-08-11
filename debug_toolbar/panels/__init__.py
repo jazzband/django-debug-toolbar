@@ -15,7 +15,12 @@ class DebugPanel(object):
         return 'djDebug%sPanel' % (self.name.replace(' ', ''))
 
     def title(self):
+        """Title showing in toolbar"""
         raise NotImplementedError
+
+    def subtitle(self):
+        """Subtitle showing until title in toolbar"""
+        return ''
 
     def url(self):
         raise NotImplementedError
