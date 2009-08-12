@@ -22,6 +22,10 @@ class DebugPanel(object):
         """Subtitle showing until title in toolbar"""
         return ''
 
+    def title(self):
+        """Title showing in panel"""
+        raise NotImplementedError
+
     def url(self):
         raise NotImplementedError
 

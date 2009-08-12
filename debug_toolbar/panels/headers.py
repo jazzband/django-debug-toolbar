@@ -34,6 +34,9 @@ class HeaderDebugPanel(DebugPanel):
     def nav_title(self):
         return 'HTTP Headers'
 
+    def title(self):
+        return 'HTTP Headers'
+
     def url(self):
         return ''
 

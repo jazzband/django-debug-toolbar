@@ -52,6 +52,7 @@
 	{% for panel in panels %}
 		{% if panel.has_content %}
 			<div id="{{ panel.dom_id }}" class="panelContent">
+			    <h3>{{ panel.title|safe }}</h3>
 				<a href="" class="close">Close</a>
 				{{ panel.content|safe }}
 			</div>

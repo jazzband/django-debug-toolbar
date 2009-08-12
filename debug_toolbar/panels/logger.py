@@ -57,6 +57,9 @@ class LoggingPanel(DebugPanel):
     def nav_subtitle(self):
         return "%s message%s" % (len(handler.get_records()), (len(handler.get_records()) == 1) and '' or 's')
 
+    def title(self):
+        return 'Log Messages'
+
     def url(self):
         return ''
 

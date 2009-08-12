@@ -37,6 +37,9 @@ class SignalDebugPanel(DebugPanel):
     def nav_title(self):
         return "Signals"
 
+    def title(self):
+        return "Signals"
+
     def url(self):
         return ''
 

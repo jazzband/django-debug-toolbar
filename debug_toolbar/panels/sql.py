@@ -84,6 +84,9 @@ class SQLDebugPanel(DebugPanel):
             (num_queries == 1) and 'query' or 'queries',
             self._sql_time
         )
+    
+    def title(self):
+        return 'SQL Queries'
 
     def url(self):
         return ''

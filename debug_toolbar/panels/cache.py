@@ -90,6 +90,9 @@ class CacheDebugPanel(DebugPanel):
     def nav_title(self):
         return 'Cache: %.2fms' % self.cache.total_time
 
+    def title(self):
+        return 'Cache Usage'
+
     def url(self):
         return ''
 

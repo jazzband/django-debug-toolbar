@@ -44,6 +44,9 @@ class TemplateDebugPanel(DebugPanel):
     def nav_title(self):
         return 'Templates'
 
+    def title(self):
+        return 'Template path{{ template_dirs|length|pluralize }}:'
+
     def url(self):
         return ''
 
