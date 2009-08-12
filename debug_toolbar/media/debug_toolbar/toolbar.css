@@ -137,10 +137,11 @@
     display: none;
     position: absolute;
     margin: 0;
+    margin-left: 30px;
     padding: 10px 20px;
     top: 15px;
     width: auto;
-    max-width: 700px;
+    /*max-width: 800px;*/
     min-width: 500px;
     right: 200px;
     bottom: 15px;
@@ -154,18 +155,41 @@
 	background: transparent url(panel_bg.png) repeat left top;
 }
 
-#djDebug .panelContent .panelScroll {
-	position: relative;
+#djDebug .panelContent .panelScrollWrap {
 	overflow: auto;
 	height: 90%;
-	padding: 0px 10px 10px 0px;
+	width: 100%;
 }
 
-#djDebug .panelContent p a, #djDebug .panelContent dl a {
-    color: #000;
+#djDebug .panelContent .panelScrollContent {
+	width: auto;
+	margin-right: 10px;
 }
-#djDebug .panelContent p a:hover, #djDebug .panelContent dl a:hover {
-    color: #900;
+
+#djDebug .panelContent .boxed {
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #c6d6da;
+}
+
+
+
+#djDebug .panelContent p a, #djDebug .panelContent dt a {
+    color: #000;
+    padding: 2px 4px;
+}
+#djDebug .panelContent p a:hover, #djDebug .panelContent dt a:hover {
+	background-color: #ffc;
+}
+
+#djDebug .panelContent p a, #djDebug .panelContent dd a {
+    color: #000;
+    background-color: #eee;
+    padding: 2px 4px;
+}
+#djDebug .panelContent p a:hover, #djDebug .panelContent dd a:hover {
+    color: #111;
+	background-color: #ffc;
 }
 
 #djDebug .panelContent h3 {
@@ -181,6 +205,9 @@
 
 #djDebug .panelContent h4 {
 	font-weight: normal;
+	margin-top: 0.5em;
+	font-size: 20px;
+	line-height: 24px;
 }
 
 #djDebug .panelContent code {
@@ -204,17 +231,21 @@
 }
 
 #djDebug .panelContent table {
-    width: 100%;
+    /*width: 90%;*/
     clear: both;
     border: 0;
     padding: 0;
+    margin: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 #djDebug .panelContent table a {
     color: #000;
+    padding: 2px 4px;
 }
 #djDebug .panelContent table a:hover {
-    color: #900;
+    background-color: #ffc;
 }
 
 #djDebug .panelContent table th {
@@ -252,8 +283,22 @@
 	background-image: url(close_hover.png);
 }
 
+#djDebug .panelContent .close.back {
+	background-image: url(back.png);
+}
+
+#djDebug .panelContent .close.back:hover  {
+	background-image: url(back_hover.png);
+}
+
+
+
 #djDebug .panelContent dt, #djDebug .panelContent dd {
     display: block;
+}
+
+#djDebug .panelContent dt {
+    margin-top: 0.75em;
 }
 
 #djDebug .panelContent dd {

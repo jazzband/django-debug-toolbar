@@ -54,8 +54,10 @@
 			<div id="{{ panel.dom_id }}" class="panelContent">
 				<a href="" class="close">Close</a>
 			    <h3>{{ panel.title|safe }}</h3>
-			    <div class="panelScroll">
-					{{ panel.content|safe }}
+			    <div class="panelScrollWrap">
+			        <div class="panelScrollContent">
+			            {{ panel.content|safe }}
+			        </div>
 			    </div>
 			</div>
 		{% endif %}
