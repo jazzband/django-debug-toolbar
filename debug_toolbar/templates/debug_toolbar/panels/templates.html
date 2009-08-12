@@ -1,3 +1,4 @@
+<h4>Template path{{ template_dirs|length|pluralize }}</h4>
 {% if template_dirs %}
 	<ol>
 	{% for template in template_dirs %}
@@ -7,7 +8,7 @@
 {% else %}
 	<p>None</p>
 {% endif %}
-<h3>Template{{ templates|length|pluralize }}</h3>
+<h4>Template{{ templates|length|pluralize }}</h4>
 {% if templates %}
 <dl>
 {% for template in templates %}
@@ -22,7 +23,7 @@
 {% else %}
 	<p>None</p>
 {% endif %}
-<h3>Context processor{{ context_processors|length|pluralize }}</h3>
+<h4>Context processor{{ context_processors|length|pluralize }}</h4>
 {% if context_processors %}
 <dl>
 {% for key, value in context_processors.iteritems %}
