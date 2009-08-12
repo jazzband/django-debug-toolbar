@@ -102,6 +102,7 @@ jQuery(function($j) {
 	$j(document).bind('close.djDebug', function() {
 		$j(document).unbind('keydown.djDebug');
 		$j('.panelContent').hide();
+		$j('#djDebugToolbar li').removeClass("active");
 	});
 });
 jQuery(function() {
