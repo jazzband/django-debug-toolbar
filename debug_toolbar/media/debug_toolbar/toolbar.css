@@ -5,17 +5,13 @@
     padding: 0;
     position: static;
     text-align: left;
-}
-#djDebug a {
-    color: #fff;
-}
-#djDebug a:hover {
-    color: #900;
+	font-family: Cambria, Georgia, serif;
+	font-size: 16px;
 }
 
 #djDebugToolbar {
     background: #111;
-    width: 150px;
+    width: 200px;
     z-index: 100000000;
     position:absolute;
     top:0;
@@ -28,23 +24,38 @@
     color:#999;
 }
 
+
+
 #djDebugToolbarHandle {
     position:absolute;
     background: #111;
     top:0;
-    bottom:0;
     right:0;
+    height: 25px;
+    width: 25px;
     z-index: 100000000;
 }
 
 #djDebugToolbarHandle ul li {
     list-style-type:none;
-    padding: 3px;
+    padding: 0;
 }
 
 #djDebugToolbarHandle ul li a {
-    font-size: 16px;
-    font-weight: bold;
+	display: block;
+	width: 100%;
+	font-size: 16px;
+	line-height: 25px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #daf7ff;
+	text-align: center;
+}
+
+#djDebugToolbarHandle ul li a:hover {
+	color: #111;
+	background-color: #9fbb54;
+	border: 1px solid #111;
 }
 
 #djDebugToolbar ul {
@@ -57,23 +68,57 @@
     border-bottom: 1px solid #222;
     color: #fff;
     display: block;
-    font-size: 11px;
     font-weight: bold;
     float: none;
     margin: 0;
     padding: 0;
-    padding: 8px;
     position: relative;
     width: auto;
 }
 
-#djDebugToolbar li:hover {
-    background: #222;
+
+
+#djDebugToolbar li>a,
+#djDebugToolbar li>div.contentless  {
+	font-weight: normal;
+	font-style: normal;
+	font-variant: small-caps;
+	text-decoration: none;
+	display: block;
+	font-size: 18px;
+	padding: 10px 10px 5px 25px;
+	color: #fff;
 }
 
-#djDebugToolbar li:hover a {
-    color: #fff;
+#djDebugToolbar li a:hover {
+	color: #111;
+	background-color: #c6d6da;
+	border-right: 10px solid #fff;
 }
+
+#djDebugToolbar li.active {
+	background-image: url(indicator.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+#djDebugToolbar li.active a:hover {
+	background-color: #111;
+	background-image: inherit;
+	background-position: inherit;
+	background-repeat: inherit;
+	color: #b36a60;
+	border: none;
+}
+
+#djDebugToolbar li small {
+	font-size: 12px;
+	color: #999;
+	font-style: italic;
+	text-decoration: none;
+	font-variant: normal;
+}
+
 
 #djDebugToolbar #djDebugButton {
     color: #92ef3f;
@@ -88,19 +133,24 @@
 }
 
 #djDebug .panelContent {
-    background: #222;
+    background: #daf7ff;
     display: none;
     position: absolute;
     margin: 0;
     padding: 10px;
-    top: 0;
+    top: 15px;
     width: auto;
-    left: 0px;
-    right: 150px;
-    bottom: 0;
-    color: #fff;
+    max-width: 700px;
+    min-width: 500px;
+    right: 200px;
+    bottom: 15px;
+    color: #111;
     z-index: 1000000;
     overflow: auto;
+	border-left: 10px solid #c6d6da;
+	border-top: 10px solid #c6d6da;
+	border-bottom: 10px solid #c6d6da;
+	opacity: 0.9;
 }
 
 #djDebug .panelContent p a, #djDebug .panelContent dl a {

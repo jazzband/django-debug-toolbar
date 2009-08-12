@@ -14,10 +14,13 @@ jQuery(function($j) {
 				current = $j('#djDebug #' + this.className);
 				if (current.is(':visible')) {
 					$j(document).trigger('close.djDebug');
+					$j(this).parent().removeClass("active");
 				} else {
 					$j('.panelContent').hide();
 					current.show();
 					$j.djDebug.open();
+					$j('#djDebugToolbar li').removeClass("active");
+					$j(this).parent().addClass("active");
 				}
 				return false;
 			});
@@ -77,6 +80,7 @@ jQuery(function($j) {
 		},
 		hide_toolbar: function(setCookie) {
 			$j('#djDebugToolbar').hide("fast");
+			$j('#djDebugToolbar li').removeClass("active");
 			$j(document).trigger('close.djDebug');
 			$j('#djDebugToolbarHandle').show();
 			if (setCookie) {
