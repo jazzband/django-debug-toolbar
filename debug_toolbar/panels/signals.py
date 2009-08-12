@@ -34,7 +34,7 @@ class SignalDebugPanel(DebugPanel):
         'post_syncdb': post_syncdb,
     }
 
-    def title(self):
+    def nav_title(self):
         return "Signals"
 
     def url(self):

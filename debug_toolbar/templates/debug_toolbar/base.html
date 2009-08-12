@@ -31,8 +31,8 @@
 					{% else %}
 					    <div class="contentless">
 					{% endif %}
-					{{ panel.title }}
-					{% with panel.subtitle as subtitle %}
+					{{ panel.nav_title }}
+					{% with panel.nav_subtitle as subtitle %}
 						{% if subtitle %}<br><small>{{ subtitle }}</small>{% endif %}
 					{% endwith %}
 					{% if panel.has_content %}

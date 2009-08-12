@@ -87,7 +87,7 @@ class CacheDebugPanel(DebugPanel):
             self.cache = CacheStatTracker(cache.cache)
             cache.cache = self.cache
 
-    def title(self):
+    def nav_title(self):
         return 'Cache: %.2fms' % self.cache.total_time
 
     def url(self):

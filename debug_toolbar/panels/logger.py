@@ -51,10 +51,10 @@ class LoggingPanel(DebugPanel):
         handler.clear_records()
         return records
 
-    def title(self):
+    def nav_title(self):
         return "Logging"
 
-    def subtitle(self):
+    def nav_subtitle(self):
         return "%s message%s" % (len(handler.get_records()), (len(handler.get_records()) == 1) and '' or 's')
 
     def url(self):

@@ -73,10 +73,10 @@ class SQLDebugPanel(DebugPanel):
         self._offset = len(connection.queries)
         self._sql_time = 0
 
-    def title(self):
+    def nav_title(self):
         return 'SQL'
 
-    def subtitle(self):
+    def nav_subtitle(self):
         self._sql_time = sum(map(lambda q: float(q['time']), connection.queries))
         num_queries = len(connection.queries) - self._offset
         return "%d %s in %.2fms" % (

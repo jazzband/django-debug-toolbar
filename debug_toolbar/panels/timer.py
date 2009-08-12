@@ -31,10 +31,10 @@ class TimerDebugPanel(DebugPanel):
         if self.has_resource:
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
 
-    def title(self):
+    def nav_title(self):
         return 'Time'
 
-    def subtitle(self):
+    def nav_subtitle(self):
         if self.has_resource:
             utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
             stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime

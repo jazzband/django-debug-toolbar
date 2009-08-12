@@ -7,10 +7,10 @@ class VersionDebugPanel(DebugPanel):
     """
     name = 'Version'
 
-    def title(self):
+    def nav_title(self):
         return 'Django Version'
 
-    def subtitle(self):
+    def nav_subtitle(self):
         return django.get_version()
 
     def url(self):

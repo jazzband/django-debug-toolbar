@@ -41,7 +41,7 @@ class TemplateDebugPanel(DebugPanel):
     def _storeTemplateInfo(self, sender, **kwargs):
         self.templates.append(kwargs)
 
-    def title(self):
+    def nav_title(self):
         return 'Templates'
 
     def url(self):
