@@ -7,6 +7,7 @@ from django.dispatch import Signal
 from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
+from django.template.defaultfilters import pluralize
 from debug_toolbar.panels import DebugPanel
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -45,7 +46,7 @@ class TemplateDebugPanel(DebugPanel):
         return 'Templates'
 
     def title(self):
-        return 'Template path{{ template_dirs|length|pluralize }}:'
+        return 'Template path%s:' % pluralize(len(self.templates))
 
     def url(self):
         return ''
