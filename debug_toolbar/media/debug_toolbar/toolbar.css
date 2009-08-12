@@ -133,11 +133,11 @@
 }
 
 #djDebug .panelContent {
-    background: #daf7ff;
+    
     display: none;
     position: absolute;
     margin: 0;
-    padding: 10px;
+    padding: 10px 20px;
     top: 15px;
     width: auto;
     max-width: 700px;
@@ -146,11 +146,18 @@
     bottom: 15px;
     color: #111;
     z-index: 1000000;
-    overflow: auto;
+    /*overflow: auto;*/
 	border-left: 10px solid #c6d6da;
 	border-top: 10px solid #c6d6da;
 	border-bottom: 10px solid #c6d6da;
-	opacity: 0.9;
+	opacity: 1.0;
+	background: transparent url(panel_bg.png) repeat left top;
+}
+
+#djDebug .panelContent .panelScroll {
+	position: relative;
+	overflow: auto;
+	height: 90%;
 }
 
 #djDebug .panelContent p a, #djDebug .panelContent dl a {
@@ -161,8 +168,12 @@
 }
 
 #djDebug .panelContent h3 {
-    color: #fff;
-    padding: 0 0 5px;
+    color: #111;
+    font-size: 20px;
+    line-height: 25px;
+    margin-top: 2px;
+    margin-bottom: 0.5em;
+	font-variant: small-caps;
 }
 
 #djDebug .panelContent p {
@@ -177,6 +188,8 @@
 #djDebug .panelContent table {
     width: 100%;
     clear: both;
+    border: 0;
+    padding: 0;
 }
 
 #djDebug .panelContent table a {
@@ -190,25 +203,31 @@
     background-color: #333;
     font-weight: bold;
     color: #fff;
-    font-size: 11px;
     padding: 3px 7px 3px;
     text-align: left;
     cursor: pointer;
 }
 #djDebug .panelContent table td {
     padding: 5px 10px;
-    font-size: 11px;
+    font-size: 14px;
     background: #fff;
     color: #000;
     vertical-align: top;
+    border: 0;
 }
 #djDebug .panelContent table tr.djDebugOdd td {
   background: #eee;
 }
 
 #djDebug .panelContent .close {
-    float: right;
-    font-weight: bold;
+    text-indent: -9999999px;
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: -25px;
+	background: url(close.png) no-repeat center center;
+	height: 40px;
+	width: 40px;
 }
 
 #djDebug .panelContent dt, #djDebug .panelContent dd {
