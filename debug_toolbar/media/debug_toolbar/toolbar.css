@@ -158,6 +158,7 @@
 	position: relative;
 	overflow: auto;
 	height: 90%;
+	padding: 0px 10px 10px 0px;
 }
 
 #djDebug .panelContent p a, #djDebug .panelContent dl a {
@@ -228,6 +229,10 @@
 	background: url(close.png) no-repeat center center;
 	height: 40px;
 	width: 40px;
+}
+
+#djDebug .panelContent .close:hover {
+	background-image: url(close_hover.png);
 }
 
 #djDebug .panelContent dt, #djDebug .panelContent dd {
