@@ -170,12 +170,29 @@
 
 #djDebug .panelContent h3 {
     color: #111;
-    font-size: 20px;
+    font-size: 24px;
     line-height: 25px;
     margin-top: 2px;
     margin-bottom: 0.5em;
 	font-variant: small-caps;
 }
+
+
+
+#djDebug .panelContent h4 {
+	font-weight: normal;
+}
+
+#djDebug .panelContent code {
+	font-family:
+		Consolas,
+		Monaco,
+        "Bitstream Vera Sans Mono",
+        "Lucida Console",
+        monospace;
+    font-size: inherit;
+}
+
 
 #djDebug .panelContent p {
     padding: 0 5px;
