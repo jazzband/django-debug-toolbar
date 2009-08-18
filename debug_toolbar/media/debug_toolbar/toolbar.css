@@ -1,3 +1,20 @@
+/* Debug Toolbar CSS Reset, adapted from YUI CSS Reset */
+#djDebug {color:#000;background:#FFF;}
+#djDebug div,#djDebug dl,#djDebug dt,#djDebug dd,#djDebug ul,#djDebug ol,#djDebug li,#djDebug h1,#djDebug h2,#djDebug h3,#djDebug h4,#djDebug h5,#djDebug h6,#djDebug pre,#djDebug code,#djDebug form,#djDebug fieldset,#djDebug legend,#djDebug input,#djDebug button,#djDebug textarea,#djDebug p,#djDebug blockquote,#djDebug th,#djDebug td{margin:0;padding:0;}
+#djDebug table{border-collapse:collapse;border-spacing:0;}
+#djDebug fieldset,#djDebug img{border:0;}
+#djDebug address,#djDebug caption,#djDebug cite,#djDebug code,#djDebug dfn,#djDebug em,#djDebug strong,#djDebug th,#djDebug var,#djDebug optgroup{font-style:inherit;font-weight:inherit;}
+#djDebug del,#djDebug ins{text-decoration:none;}
+#djDebug li{list-style:none;}
+#djDebug caption,#djDebug th{text-align:left;}
+#djDebug h1,#djDebug h2,#djDebug h3,#djDebug h4,#djDebug h5,#djDebug h6{font-size:100%;font-weight:normal;}
+#djDebug q:before,#djDebug q:after{content:'';}
+#djDebug abbr,#djDebug acronym{border:0;font-variant:normal;}
+#djDebug sup{vertical-align:baseline;}
+#djDebug sub{vertical-align:baseline;}
+#djDebug legend{color:#000;}
+#djDebug input,#djDebug button,#djDebug textarea,#djDebug select,#djDebug optgroup,#djDebug option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
+#djDebug input,#djDebug button,#djDebug textarea,#djDebug select{*font-size:100%;}
 #djDebug * {
 	color: #000;
 	float: none;
