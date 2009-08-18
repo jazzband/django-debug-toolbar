@@ -148,14 +148,11 @@
 	display: none;
 	position: absolute;
 	margin: 0;
-	margin-left: 30px;
 	padding: 10px 20px;
-	top: 15px;
-	width: auto;
-	/*max-width: 800px;*/
-	min-width: 500px;
+	top: 2px;
 	right: 200px;
-	bottom: 15px;
+	bottom: 2px;
+	left: 2px;
 	color: #111;
 	z-index: 1000000;
 	/*overflow: auto;*/
@@ -269,11 +266,11 @@
 	text-indent: -9999999px;
 	display: block;
 	position: absolute;
-	top: 5px;
-	left: -25px;
-	background: url(close.png) no-repeat center center;
+	top: 0;
+	right: 10px;
 	height: 40px;
 	width: 40px;
+	background: url(close.png) no-repeat center center;
 }
 
 #djDebug .panelContent .close:hover {
