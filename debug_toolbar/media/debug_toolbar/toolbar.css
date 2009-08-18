@@ -97,7 +97,7 @@
 	font-variant: small-caps;
 	text-decoration: none;
 	display: block;
-	font-size: 18px;
+	font-size: 16px;
 	padding: 10px 10px 5px 25px;
 	color: #fff;
 }
@@ -202,11 +202,7 @@
 }
 
 #djDebug .panelContent h3 {
-	color: #111;
 	font-size: 24px;
-	line-height: 25px;
-	margin-top: 2px;
-	margin-bottom: 0.5em;
 	font-variant: small-caps;
 }
 
