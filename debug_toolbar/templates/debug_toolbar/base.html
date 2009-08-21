@@ -17,7 +17,7 @@
 	@import url({{ BASE_URL }}/__debug__/m/toolbar.css);
 </style>
 <div id="djDebug">
-	<div style="display: none;" id="djDebugToolbar">
+	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if panels %}
 			<li><a id="djHideToolBarButton" href="#" title="Hide Toolbar">Hide &raquo;</a></li>
@@ -44,10 +44,8 @@
 			{% endfor %}
 		</ul>
 	</div>
-	<div style="display: none;" id="djDebugToolbarHandle">
-		<ul id="djDebugPanelList">
-			<li><a title="Show Toolbar" id="djShowToolBarButton" href="#">&laquo;</a></li>
-		</ul>
+	<div style="display:none;" id="djDebugToolbarHandle">
+		<a title="Show Toolbar" id="djShowToolBarButton" href="#">&laquo;</a>
 	</div>
 	{% for panel in panels %}
 		{% if panel.has_content %}

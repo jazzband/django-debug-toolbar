@@ -41,37 +41,6 @@
 	color:#999;
 }
 
-#djDebugToolbarHandle {
-	position:absolute;
-	background:#111;
-	top:0;
-	right:0;
-	height:25px;
-	width:25px;
-	z-index:100000000;
-}
-
-#djDebugToolbarHandle ul li {
-	list-style-type:none;
-	padding:0;
-}
-
-#djDebugToolbarHandle ul li a {
-	display:block;
-	width:100%;
-	font-size:16px;
-	line-height:25px;
-	font-weight:bold;
-	text-decoration:none;
-	color:#daf7ff;
-	text-align:center;
-}
-
-#djDebugToolbarHandle ul li a:hover {
-	color:#111;
-	background-color:#9fbb54;
-}
-
 #djDebugToolbar ul {
 	margin:0;
 	padding:0;
@@ -131,8 +100,28 @@
 	font-variant:normal;
 }
 
-#djDebugToolbar #djDebugButton {
-	color:#92ef3f;
+#djDebugToolbarHandle {
+	position:absolute;
+	background:#111;
+	top:0;
+	bottom:0;
+	right:0;
+	z-index:100000000;
+}
+
+#djDebug a#djShowToolBarButton {
+	display:block;
+	height:100%;
+	padding:2px;
+	color:#fff;
+	font-size:10px;
+	font-weight:bold;
+	text-decoration:none;
+	text-align:center;
+}
+
+#djDebug a#djShowToolBarButton:hover {
+	background-color:#f00;
 }
 
 #djDebug pre {
