@@ -18,6 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Hide"
+msgstr "Ocultar"
+
+
 #: templates/debug_toolbar/base.html:30
 msgid "Close"
 msgstr "Cerrar"
