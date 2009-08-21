@@ -10,8 +10,11 @@ class SettingsVarsDebugPanel(DebugPanel):
     name = 'SettingsVars'
     has_content = True
 
-    def title(self):
+    def nav_title(self):
         return 'Settings'
+
+    def title(self):
+        return 'Settings from <code>%s</code>' % settings.SETTINGS_MODULE
 
     def url(self):
         return ''

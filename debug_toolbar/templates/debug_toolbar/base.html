@@ -8,28 +8,38 @@
 		document.write(unescape('%3Cscript src="' + jquery_url + '" type="text/javascript"%3E%3C/script%3E'));
 	}
 </script>
-<script type="text/javascript" src="{{ BASE_URL }}/__debug__/m/toolbar.min.js"></script>
+<script type="text/javascript" src="{{ BASE_URL }}/__debug__/m/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{ BASE_URL }}/__debug__/m/toolbar.js"></script>
 <script type="text/javascript" charset="utf-8">
 	// Now that jQuery is done loading, put the '$' variable back to what it was...
 	var $ = _$;
 </script>
 <style type="text/css">
-	@import url({{ BASE_URL }}/__debug__/m/toolbar.min.css);
+	@import url({{ BASE_URL }}/__debug__/m/toolbar.css);
 </style>
 <div id="djDebug">
 	<div style="display: none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if panels %}
-			<li><a id="djHideToolBarButton" href="#" title="Hide Toolbar">&laquo; {% trans "Hide" %}</a></li>
+			<li><a id="djHideToolBarButton" href="#" title="Hide Toolbar">{% trans "Hide" %} &raquo;</a></li>
 			{% else %}
 			<li id="djDebugButton">DEBUG</li>
 			{% endif %}
 			{% for panel in panels %}
 				<li>
 					{% if panel.has_content %}
-						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">{{ panel.title }}</a>
+						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}
-						{{ panel.title }}
+					    <div class="contentless">
+					{% endif %}
+					{{ panel.nav_title }}
+					{% with panel.nav_subtitle as subtitle %}
+						{% if subtitle %}<br><small>{{ subtitle }}</small>{% endif %}
+					{% endwith %}
+					{% if panel.has_content %}
+						</a>
+					{% else %}
+					    </div>
 					{% endif %}
 				</li>
 			{% endfor %}
@@ -37,14 +47,19 @@
 	</div>
 	<div style="display: none;" id="djDebugToolbarHandle">
 		<ul id="djDebugPanelList">
-			<li><a title="Show Toolbar" id="djShowToolBarButton" href="#">&raquo;</a></li>
+			<li><a title="Show Toolbar" id="djShowToolBarButton" href="#">&laquo;</a></li>
 		</ul>
 	</div>
 	{% for panel in panels %}
 		{% if panel.has_content %}
 			<div id="{{ panel.dom_id }}" class="panelContent">
 				<a href="" class="close">{% trans "Close" %}</a>
-				{{ panel.content|safe }}
+			    <h3>{{ panel.title|safe }}</h3>
+			    <div class="panelScrollWrap">
+			        <div class="panelScrollContent">
+			            {{ panel.content|safe }}
+			        </div>
+			    </div>
 			</div>
 		{% endif %}
 	{% endfor %}

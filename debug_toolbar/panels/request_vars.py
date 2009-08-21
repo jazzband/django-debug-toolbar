@@ -8,9 +8,12 @@ class RequestVarsDebugPanel(DebugPanel):
     name = 'RequestVars'
     has_content = True
 
+    def nav_title(self):
+        return 'Request Vars'
+    
     def title(self):
         return 'Request Vars'
-
+    
     def url(self):
         return ''
 

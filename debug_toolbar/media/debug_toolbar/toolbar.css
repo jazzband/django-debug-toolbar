@@ -1,195 +1,317 @@
+/* Debug Toolbar CSS Reset, adapted from YUI CSS Reset */
+#djDebug {color:#000;background:#FFF;}
+#djDebug div,#djDebug dl,#djDebug dt,#djDebug dd,#djDebug ul,#djDebug ol,#djDebug li,#djDebug h1,#djDebug h2,#djDebug h3,#djDebug h4,#djDebug h5,#djDebug h6,#djDebug pre,#djDebug code,#djDebug form,#djDebug fieldset,#djDebug legend,#djDebug input,#djDebug button,#djDebug textarea,#djDebug p,#djDebug blockquote,#djDebug th,#djDebug td{margin:0;padding:0;}
+#djDebug table{border-collapse:collapse;border-spacing:0;}
+#djDebug fieldset,#djDebug img{border:0;}
+#djDebug address,#djDebug caption,#djDebug cite,#djDebug code,#djDebug dfn,#djDebug em,#djDebug strong,#djDebug th,#djDebug var,#djDebug optgroup{font-style:inherit;font-weight:inherit;}
+#djDebug del,#djDebug ins{text-decoration:none;}
+#djDebug li{list-style:none;}
+#djDebug caption,#djDebug th{text-align:left;}
+#djDebug h1,#djDebug h2,#djDebug h3,#djDebug h4,#djDebug h5,#djDebug h6{font-size:100%;font-weight:normal;}
+#djDebug q:before,#djDebug q:after{content:'';}
+#djDebug abbr,#djDebug acronym{border:0;font-variant:normal;}
+#djDebug sup{vertical-align:baseline;}
+#djDebug sub{vertical-align:baseline;}
+#djDebug legend{color:#000;}
+#djDebug input,#djDebug button,#djDebug textarea,#djDebug select,#djDebug optgroup,#djDebug option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
+#djDebug input,#djDebug button,#djDebug textarea,#djDebug select{*font-size:100%;}
 #djDebug * {
-    color: #000;
-    float: none;
-    margin: 0;
-    padding: 0;
-    position: static;
-    text-align: left;
-}
-#djDebug a {
-    color: #f7c757;
-}
-#djDebug a:hover {
-    color: #aaa;
+	color: #000;
+	float: none;
+	margin: 0;
+	padding: 0;
+	position: static;
+	text-align: left;
+	font-family:sans-serif;
 }
 
 #djDebugToolbar {
-    background: #326342;
-    height: 30px;
-    z-index: 100000000;
-    border-bottom: 2px solid #234f32;
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
+	background: #111;
+	width: 200px;
+	z-index: 100000000;
+	position:absolute;
+	top:0;
+	bottom:0;
+	right:0;
+	opacity:0.9;
+}
+
+#djDebugToolbar small {
+	color:#999;
 }
 
 #djDebugToolbarHandle {
-    background: #326342;
-    height: 30px;
-    z-index: 100000000;
-    border-bottom: 2px solid #234f32;
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    width: 16px;
+	position:absolute;
+	background: #111;
+	top:0;
+	right:0;
+	height: 25px;
+	width: 25px;
+	z-index: 100000000;
 }
 
 #djDebugToolbarHandle ul li {
-    padding: 3px 0px 0px 3px;
+	list-style-type:none;
+	padding: 0;
 }
 
 #djDebugToolbarHandle ul li a {
-    font-size: 16px;
-    font-weight: bold;
+	display: block;
+	width: 100%;
+	font-size: 16px;
+	line-height: 25px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #daf7ff;
+	text-align: center;
+}
+
+#djDebugToolbarHandle ul li a:hover {
+	color: #111;
+	background-color: #9fbb54;
 }
 
 #djDebugToolbar ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 #djDebugToolbar li {
-    border-left: 1px solid #487858;
-    color: #fff;
-    display: inline;
-    font-size: 11px;
-    font-weight: bold;
-    float: none;
-    height: 20px;
-    margin: 0;
-    padding: 0;
-    line-height: 30px;
-    padding: 8px 9px 9px;
-    position: relative;
-    width: auto;
+	border-bottom: 1px solid #222;
+	color: #fff;
+	display: block;
+	font-weight: bold;
+	float: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: auto;
 }
 
-#djDebugToolbar li:hover {
-    background: #487858;
+#djDebugToolbar li>a,
+#djDebugToolbar li>div.contentless  {
+	font-weight: normal;
+	font-style: normal;
+	font-variant: small-caps;
+	text-decoration: none;
+	display: block;
+	font-size: 16px;
+	padding: 10px 10px 5px 25px;
+	color: #fff;
 }
 
-#djDebugToolbar li:hover a {
-    color: #fff;
+#djDebugToolbar li a:hover {
+	color: #111;
+	background-color: #c6d6da;
+	border-right: 10px solid #fff;
 }
 
-#djDebugToolbar li:last-child {
-    border-right: 1px solid #487858;
+#djDebugToolbar li.active {
+	background-image: url(indicator.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+#djDebugToolbar li.active a:hover {
+	background-color: #111;
+	background-image: inherit;
+	background-position: inherit;
+	background-repeat: inherit;
+	color: #b36a60;
+	border: none;
+}
+
+#djDebugToolbar li small {
+	font-size: 12px;
+	color: #999;
+	font-style: italic;
+	text-decoration: none;
+	font-variant: normal;
 }
 
 #djDebugToolbar #djDebugButton {
-    color: #92ef3f;
+	color: #92ef3f;
 }
 
 #djDebug pre {
-    background-color: #ffffff;
+	background-color: #ffffff;
 }
 
 #djDebug tr.djDebugOdd pre {
-    background-color: #eeeeee;
+	background-color: #eeeeee;
 }
 
 #djDebug .panelContent {
-    background: #2a5738;
-    border-bottom: 2px solid #234f32;
-    border-top: 2px solid #487858;
-    display: none;
-    position: absolute;
-    margin: 0;
-    padding: 10px;
-    top: 32px;
-    width: auto;
-    left: 0px;
-    right: 0px;
-    bottom: 5px;
-    color: black;
-    z-index: 1000000;
-    overflow: auto;
+	
+	display: none;
+	position: absolute;
+	margin: 0;
+	padding: 10px 20px;
+	top: 2px;
+	right: 200px;
+	bottom: 2px;
+	left: 2px;
+	color: #111;
+	z-index: 1000000;
+	/*overflow: auto;*/
+	border-left: 10px solid #c6d6da;
+	border-top: 10px solid #c6d6da;
+	border-bottom: 10px solid #c6d6da;
+	opacity: 1.0;
+	background: transparent url(panel_bg.png) repeat left top;
 }
 
-#djDebug .panelContent p a, #djDebug .panelContent dl a {
-    color: #40684c;
+#djDebug .panelContent .panelScrollWrap {
+	overflow: auto;
+	height: 90%;
+	width: 100%;
 }
-#djDebug .panelContent p a:hover, #djDebug .panelContent dl a:hover {
-    color: #92EF3F;
+
+#djDebug .panelContent .panelScrollContent {
+	width: auto;
+	margin-right: 10px;
+}
+
+#djDebug .panelContent .boxed {
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #c6d6da;
+}
+
+#djDebug .panelContent p a, #djDebug .panelContent dt a {
+	color: #000;
+	padding: 2px 4px;
+}
+#djDebug .panelContent p a:hover, #djDebug .panelContent dt a:hover {
+	background-color: #ffc;
+}
+
+#djDebug .panelContent p a, #djDebug .panelContent dd a {
+	color: #000;
+	background-color: #eee;
+	padding: 2px 4px;
+}
+#djDebug .panelContent p a:hover, #djDebug .panelContent dd a:hover {
+	color: #111;
+	background-color: #ffc;
 }
 
 #djDebug .panelContent h3 {
-    border-bottom: 1px solid #40684c;
-    color: #92ef3f;
-    padding: 0 0 5px;
+	font-size: 24px;
+	font-variant: small-caps;
+}
+
+#djDebug .panelContent h4 {
+	font-weight: normal;
+	margin-top: 0.5em;
+	font-size: 20px;
+	line-height: 24px;
+}
+
+#djDebug .panelContent code {
+	font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+	font-size: inherit;
 }
 
 #djDebug .panelContent p {
-    padding: 0 5px;
+	padding: 0 5px;
 }
 
 #djDebug .panelContent p, #djDebug .panelContent table, #djDebug .panelContent ol, #djDebug .panelContent ul, #djDebug .panelContent dl {
-    margin: 5px 0 15px;
-    background-color: #fff;
+	margin: 5px 0 15px;
+	background-color: #fff;
 }
 
 #djDebug .panelContent table {
-    width: 100%;
-    clear: both;
+	/*width: 90%;*/
+	clear: both;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 #djDebug .panelContent table a {
-    color: #40684C;
+	color: #000;
+	padding: 2px 4px;
+}
+#djDebug .panelContent table a:hover {
+	background-color: #ffc;
 }
 
 #djDebug .panelContent table th {
-    background-color: #9dcc49;
-    font-weight: bold;
-    color: #000;
-    font-size: 11px;
-    padding: 3px 7px 3px;
-    text-align: left;
-    cursor: pointer;
-    border-right: 1px solid #b9d977;
+	background-color: #333;
+	font-weight: bold;
+	color: #fff;
+	padding: 3px 7px 3px;
+	text-align: left;
+	cursor: pointer;
 }
 #djDebug .panelContent table td {
-    padding: 5px 10px;
-    font-size: 11px;
-    background: #fff;
-    color: #000;
-    vertical-align: top;
+	padding: 5px 10px;
+	font-size: 14px;
+	background: #fff;
+	color: #000;
+	vertical-align: top;
+	border: 0;
 }
 #djDebug .panelContent table tr.djDebugOdd td {
   background: #eee;
 }
 
 #djDebug .panelContent .close {
-    float: right;
-    font-weight: bold;
+	text-indent: -9999999px;
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 10px;
+	height: 40px;
+	width: 40px;
+	background: url(close.png) no-repeat center center;
+}
+
+#djDebug .panelContent .close:hover {
+	background-image: url(close_hover.png);
+}
+
+#djDebug .panelContent .close.back {
+	background-image: url(back.png);
+}
+
+#djDebug .panelContent .close.back:hover  {
+	background-image: url(back_hover.png);
 }
 
 #djDebug .panelContent dt, #djDebug .panelContent dd {
-    display: block;
+	display: block;
+}
+
+#djDebug .panelContent dt {
+	margin-top: 0.75em;
 }
 
 #djDebug .panelContent dd {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
 #djDebug .highlight  { color: #000; }
 #djDebug .highlight .err { color: #000; } /* Error */
 #djDebug .highlight .g { color: #000; } /* Generic */
-#djDebug .highlight .k { color: #40684C; font-weight: bold } /* Keyword */
+#djDebug .highlight .k { color: #000; font-weight: bold } /* Keyword */
 #djDebug .highlight .o { color: #000; } /* Operator */
 #djDebug .highlight .n { color: #000; } /* Name */
-#djDebug .highlight .mi { color: #40684C; font-weight: bold } /* Literal.Number.Integer */
+#djDebug .highlight .mi { color: #000; font-weight: bold } /* Literal.Number.Integer */
 #djDebug .highlight .l { color: #000; } /* Literal */
 #djDebug .highlight .x { color: #000; } /* Other */
 #djDebug .highlight .p { color: #000; } /* Punctuation */
-#djDebug .highlight .m { color: #40684C; font-weight: bold } /* Literal.Number */
-#djDebug .highlight .s { color: #0086d2 } /* Literal.String */
+#djDebug .highlight .m { color: #000; font-weight: bold } /* Literal.Number */
+#djDebug .highlight .s { color: #333 } /* Literal.String */
 #djDebug .highlight .w { color: #888888 } /* Text.Whitespace */
-#djDebug .highlight .il { color: #40684C; font-weight: bold } /* Literal.Number.Integer.Long */
-#djDebug .highlight .na { color: #7D9029 } /* Name.Attribute */
-#djDebug .highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
-#djDebug .highlight .nv { color: #19177C } /* Name.Variable */
-#djDebug .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
-#djDebug .highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+#djDebug .highlight .il { color: #000; font-weight: bold } /* Literal.Number.Integer.Long */
+#djDebug .highlight .na { color: #333 } /* Name.Attribute */
+#djDebug .highlight .nt { color: #000; font-weight: bold } /* Name.Tag */
+#djDebug .highlight .nv { color: #333 } /* Name.Variable */
+#djDebug .highlight .s2 { color: #333 } /* Literal.String.Double */
+#djDebug .highlight .cp { color: #333 } /* Comment.Preproc */
