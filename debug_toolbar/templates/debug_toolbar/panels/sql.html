@@ -3,7 +3,7 @@
     <table>
     	<thead>
     		<tr>
-    			<th>Time&nbsp;(ms)</th>
+    			<th>{% trans "Time" %}&nbsp;(ms)</th>
     			<th>{% trans "Action" %}</th>
     			<th>Stacktrace</th>
     			<th>Query</th>
@@ -29,8 +29,8 @@
     						<table>
     							<tr>
     								<th>{% trans "Line" %}</th>
-    								<th>Method</th>
-    								<th>File</th>
+    								<th>{% trans "Method" %}</th>
+    								<th>{% trans "File" %}</th>
     							</tr>
     							{% for file, line, method in query.stacktrace %}
     								<tr>
