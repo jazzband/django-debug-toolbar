@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-21 14:46-0700\n"
+"POT-Creation-Date: 2009-08-21 15:06-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,6 @@ msgid "Function"
 msgstr "Función"
 
 #: templates/debug_toolbar/panels/headers.html:6
-#: templates/debug_toolbar/panels/timer.html:10
 msgid "Key"
 msgstr "Llave"
 
@@ -137,7 +136,6 @@ msgstr "Acción"
 msgid "Line"
 msgstr "Línea"
 
-
 #: templates/debug_toolbar/panels/sql_explain.html:2
 #: templates/debug_toolbar/panels/sql_profile.html:2
 #: templates/debug_toolbar/panels/sql_select.html:2
@@ -155,5 +153,8 @@ msgstr "SQL Ejecutado"
 msgid "Empty set"
 msgstr "Set Vacío"
 
-# msgid "Settings from"
-# msgstr "Configuraciones de"
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Resource"
+msgstr "Recurso"
+
+
