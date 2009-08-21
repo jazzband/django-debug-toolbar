@@ -9,7 +9,7 @@
     		</colgroup>
     		<thead>
     			<tr>
-    				<th>{% trans "Key" %}</th>
+    				<th>{% trans "Variable" %}</th>
     				<th>{% trans "Value" %}</th>
     			</tr>
     		</thead>
@@ -37,7 +37,7 @@
     		</colgroup>
     		<thead>
     			<tr>
-    				<th>{% trans "Key" %}</th>
+    				<th>{% trans "Variable" %}</th>
     				<th>{% trans "Value" %}</th>
     			</tr>
     		</thead>
@@ -51,7 +51,7 @@
     		</tbody>
     	</table>
     {% else %}
-    	<p>{% trans "None" %}</p>
+    	<p>{% trans "No SESSION data" %}</p>
     {% endif %}
 </div>
 
@@ -61,7 +61,7 @@
     	<table>
     		<thead>
     			<tr>
-    				<th>{% trans "Key" %}</th>
+    				<th>{% trans "Variable" %}</th>
     				<th>{% trans "Value" %}</th>
     			</tr>
     		</thead>
@@ -75,7 +75,7 @@
     		</tbody>
     	</table>
     {% else %}
-    	<p>{% trans "None" %}</p>
+    	<p>{% trans "No GET data" %}</p>
     {% endif %}
 </div>
 
@@ -85,7 +85,7 @@
     	<table>
     		<thead>
     			<tr>
-    				<th>{% trans "Key" %}</th>
+    				<th>{% trans "Variable" %}</th>
     				<th>{% trans "Value" %}</th>
     			</tr>
     		</thead>
@@ -99,6 +99,6 @@
     		</tbody>
     	</table>
     {% else %}
-    	<p>{% trans "None" %}</p>
+    	<p>{% trans "No POST data" %}</p>
     {% endif %}
 </div>
