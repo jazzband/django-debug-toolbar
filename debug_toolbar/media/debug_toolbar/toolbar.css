@@ -30,7 +30,7 @@
 	background:#111;
 	width:200px;
 	z-index:100000000;
-	position:absolute;
+	position:fixed;
 	top:0;
 	bottom:0;
 	right:0;
@@ -63,7 +63,6 @@
 #djDebugToolbar li>div.contentless  {
 	font-weight:normal;
 	font-style:normal;
-	font-variant:small-caps;
 	text-decoration:none;
 	display:block;
 	font-size:16px;
@@ -73,55 +72,66 @@
 
 #djDebugToolbar li a:hover {
 	color:#111;
-	background-color:#c6d6da;
-	border-right:10px solid #fff;
+	background-color:#ffc;
 }
 
 #djDebugToolbar li.active {
 	background-image:url(indicator.png);
 	background-repeat:no-repeat;
 	background-position:left center;
+	background-color: #333;
+	padding-left: 10px;
+	
 }
 
 #djDebugToolbar li.active a:hover {
-	background-color:#111;
-	background-image:inherit;
-	background-position:inherit;
-	background-repeat:inherit;
 	color:#b36a60;
-	border:none;
+	background-color: transparent;
 }
 
 #djDebugToolbar li small {
 	font-size:12px;
 	color:#999;
-	font-style:italic;
+	font-style:normal;
 	text-decoration:none;
-	font-variant:normal;
+	font-variant:small-caps;
 }
 
 #djDebugToolbarHandle {
-	position:absolute;
-	background:#111;
-	top:0;
-	bottom:0;
+	position:fixed;
+	background:#fff;
+	border:1px solid #111;
+	top:30px;
 	right:0;
 	z-index:100000000;
+	opacity: 0.75;
 }
 
 #djDebug a#djShowToolBarButton {
 	display:block;
-	height:100%;
-	padding:2px;
+	height:75px;
+	width: 30px;
+	border-right: none;
+	border-bottom:4px solid #fff;
+	border-top:4px solid #fff;
+	border-left:4px solid #fff;
 	color:#fff;
 	font-size:10px;
 	font-weight:bold;
 	text-decoration:none;
 	text-align:center;
+	text-indent:-999999px;
+	background:#000 url(djdt_vertical.png) no-repeat left center;
+	opacity:0.5;
 }
 
 #djDebug a#djShowToolBarButton:hover {
-	background-color:#f00;
+	background-color:#111;
+	padding-right:6px;
+	border-top-color:#ffc;
+	border-left-color:#ffc;
+	border-bottom-color:#ffc;
+	opacity:1.0;
 }
 
 #djDebug pre {
@@ -134,7 +144,7 @@
 
 #djDebug .panelContent {
 	display:none;
-	position:absolute;
+	position:fixed;
 	margin:0;
 	top:0;
 	right:200px;
@@ -143,7 +153,6 @@
 	background-color:#f6f6f6;
 	color:#666;
 	z-index:1000000;
-	overflow:auto;
 }
 
 #djDebug .panelContent > div {
@@ -155,10 +164,15 @@
 	background-color:#ffc;
 	color:#666;
 }
+
+.djDebugPanelContent {
+	overflow:hidden;
+	height:90%;
+}
+
 #djDebug h3 {
 	font-size:24px;
 	font-weight:bold;
-	font-variant:small-caps;
 }
 
 #djDebug h4 {
@@ -199,7 +213,6 @@
 
 #djDebug .panelContent code {
 	font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
-	font-size:12px;
 }
 /*
 #djDebug .panelContent p a:hover, #djDebug .panelContent dd a:hover {
@@ -257,8 +270,8 @@
 	text-indent:-9999999px;
 	display:block;
 	position:absolute;
-	top:0;
-	right:10px;
+	top:4px;
+	right:15px;
 	height:40px;
 	width:40px;
 	background:url(close.png) no-repeat center center;
