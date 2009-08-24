@@ -1,9 +1,14 @@
-<a class="close back" href="">Back</a>
-<h3>Template Source: <code>{{ template_name }}</code></h3>
-<div class="panelScrollWrap">
-    <div class="panelScrollContent">
-        <div class="boxed">
-            {{ source }}
-        </div>
-    </div>
+{% load i18n %}
+<div class="djDebugPanelTitle">
+	<a class="close back" href="">{% trans "Back" %}</a>
+	<h3>Template Source: <code>{{ template_name }}</code></h3>
+</div>
+<div class="djDebugPanelContent">
+	<div class="panelScrollWrap">
+		<div class="panelScrollContent">
+			<div class="boxed">
+				{{ source }}
+			</div>
+		</div>
+	</div>
 </div>

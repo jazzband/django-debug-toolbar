@@ -1,51 +1,51 @@
+{% load i18n %}
 <div class="boxed">
-    <table>
-    	<thead>
-    		<tr>
-    			<th>Time&nbsp;(ms)</th>
-    			<th>Action</th>
-    			<th>Stacktrace</th>
-    			<th>Query</th>
-    		</tr>
-    	</thead>
-    	<tbody>
-    		{% for query in queries %}
-    			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-    				<td>{{ query.time|floatformat:"2" }}</td>
-    				<td>
-    				{% if query.params %}
-    					<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a>
-    					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a>
-    					{% if is_mysql %}
-    						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a>
-    					{% endif %}
-    				{% endif %}
-    				</td>
-    				<td>
-    					{% if query.stacktrace %}
-    					<div class="djSQLShowStacktraceDiv"><a class="djSQLShowStacktrace" href="#">Toggle Stacktrace</a></div>
-    					<div class="djSQLHideStacktraceDiv" style="display:none;">
-    						<table>
-    							<tr>
-    								<th>Line</th>
-    								<th>Method</th>
-    								<th>File</th>
-    							</tr>
-    							{% for file, line, method in query.stacktrace %}
-    								<tr>
-    									<td>{{ line }}</td>
-    									<td><pre>{{ method|escape }}<pre></td>
-    									<td><pre>{{ file|escape }}</pre></td>
-    								</tr>
-    							{% endfor %}
-    						</table>
-    					</div>
-    					{% endif %}
-    				</td>
-    				<td class="syntax">{{ query.sql|safe }}</td>
-    			</tr>
-    		{% endfor %}
-    	</tbody>
-    </table>
+	<table>
+		<thead>
+			<tr>
+				<th>{% trans "Time" %}&nbsp;(ms)</th>
+				<th>{% trans "Action" %}</th>
+				<th>Stacktrace</th>
+				<th>Query</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for query in queries %}
+				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+					<td>{{ query.time|floatformat:"2" }}</td>
+					<td>
+					{% if query.params %}
+						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a>
+						<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a>
+						{% if is_mysql %}
+							<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a>
+						{% endif %}
+					{% endif %}
+					</td>
+					<td>
+						{% if query.stacktrace %}
+						<div class="djSQLShowStacktraceDiv"><a class="djSQLShowStacktrace" href="#">Toggle Stacktrace</a></div>
+						<div class="djSQLHideStacktraceDiv" style="display:none;">
+							<table>
+								<tr>
+									<th>{% trans "Line" %}</th>
+									<th>{% trans "Method" %}</th>
+									<th>{% trans "File" %}</th>
+								</tr>
+								{% for file, line, method in query.stacktrace %}
+									<tr>
+										<td>{{ line }}</td>
+										<td><pre>{{ method|escape }}<pre></td>
+										<td><pre>{{ file|escape }}</pre></td>
+									</tr>
+								{% endfor %}
+							</table>
+						</div>
+						{% endif %}
+					</td>
+					<td class="syntax">{{ query.sql|safe }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>
-

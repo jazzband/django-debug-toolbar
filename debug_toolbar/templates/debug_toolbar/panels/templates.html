@@ -1,3 +1,4 @@
+{% load i18n %}
 <h4>Template path{{ template_dirs|length|pluralize }}</h4>
 <div class="boxed">
 {% if template_dirs %}
@@ -11,37 +12,37 @@
 {% endif %}
 </div>
 
-<h4>Template{{ templates|length|pluralize }}</h4>
+<h4>{% trans "Template" %}{{ templates|length|pluralize }}</h4>
 <div class="boxed">
-    {% if templates %}
-    <dl>
-    {% for template in templates %}
-    	<dt><strong><a class="remoteCall" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
-    	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
-    	<dd>
-    		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
-    		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
-    	</dd>
-    {% endfor %}
-    </dl>
-    {% else %}
-    	<p>None</p>
-    {% endif %}
+	{% if templates %}
+	<dl>
+	{% for template in templates %}
+		<dt><strong><a class="remoteCall" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
+		<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
+		<dd>
+			<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+			<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
+		</dd>
+	{% endfor %}
+	</dl>
+	{% else %}
+		<p>None</p>
+	{% endif %}
 </div>
 
 <h4>Context processor{{ context_processors|length|pluralize }}</h4>
 <div class="boxed">
-    {% if context_processors %}
-    <dl>
-    {% for key, value in context_processors.iteritems %}
-    	<dt><strong>{{ key|escape }}</strong></dt>
-    	<dd>
-    		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
-    		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
-    	</dd>
-    {% endfor %}
-    </dl>
-    {% else %}
-    	<p>None</p>
-    {% endif %}
+	{% if context_processors %}
+	<dl>
+	{% for key, value in context_processors.iteritems %}
+		<dt><strong>{{ key|escape }}</strong></dt>
+		<dd>
+			<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+			<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
+		</dd>
+	{% endfor %}
+	</dl>
+	{% else %}
+		<p>None</p>
+	{% endif %}
 </div>

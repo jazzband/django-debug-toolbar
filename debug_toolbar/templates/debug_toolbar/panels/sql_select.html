@@ -1,12 +1,13 @@
+{% load i18n %}
 <div class="djDebugPanelTitle">
-	<a class="back" href="">&laquo;&nbsp;Back</a>
+	<a class="back" href="">&laquo;&nbsp;{% trans "Back" %}</a>
 	<h3>SQL Selected</h3>
 </div>
 <div class="djDebugPanelContent">
 	<dl>
-		<dt>Executed SQL</dt>
+		<dt>{% trans "Executed SQL" %}</dt>
 		<dd><pre>{{ sql|safe }}</pre></dd>
-		<dt>Time</dt>
+		<dt>{% trans "Time" %}</dt>
 		<dd>{{ time }} ms</dd>
 	</dl>
 	{% if result %}
@@ -29,6 +30,6 @@
 		</tbody>
 	</table>
 	{% else %}
-		<p>Empty set</p>
+		<p>{% trans "Empty set" %}</p>
 	{% endif %}
 </div>
