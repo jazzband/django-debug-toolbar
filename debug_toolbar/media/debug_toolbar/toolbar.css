@@ -128,9 +128,9 @@
 #djDebug a#djShowToolBarButton:hover {
 	background-color:#111;
 	padding-right:6px;
-	border-top-color:#ffc;
-	border-left-color:#ffc;
-	border-bottom-color:#ffc;
+	border-top-color:#FFE761;
+	border-left-color:#FFE761;
+	border-bottom-color:#FFE761;
 	opacity:1.0;
 }
 
