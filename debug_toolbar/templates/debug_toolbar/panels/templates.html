@@ -1,3 +1,4 @@
+{% load i18n %}
 <h4>Template path{{ template_dirs|length|pluralize }}</h4>
 <div class="boxed">
 {% if template_dirs %}
@@ -11,7 +12,7 @@
 {% endif %}
 </div>
 
-<h4>Template{{ templates|length|pluralize }}</h4>
+<h4>{% trans "Template" %}{{ templates|length|pluralize }}</h4>
 <div class="boxed">
     {% if templates %}
     <dl>
