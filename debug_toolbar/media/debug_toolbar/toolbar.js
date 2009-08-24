@@ -31,7 +31,7 @@ jQuery(function($j) {
 			$j('#djDebug a.remoteCall').click(function() {
 				$j('#djDebugWindow').load(this.href, {}, function() {
 					$j('#djDebugWindow a.back').click(function() {
-						$j(this).parent().hide();
+						$j(this).parent().parent().hide();
 						return false;
 					});
 				});

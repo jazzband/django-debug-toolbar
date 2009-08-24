@@ -50,13 +50,13 @@
 	{% for panel in panels %}
 		{% if panel.has_content %}
 			<div id="{{ panel.dom_id }}" class="panelContent">
-				<a href="" class="close">Close</a>
-			    <h3>{{ panel.title|safe }}</h3>
-			    <div class="panelScrollWrap">
-			        <div class="panelScrollContent">
-			            {{ panel.content|safe }}
-			        </div>
-			    </div>
+				<div class="djDebugPanelTitle">
+					<a href="" class="close">Close</a>
+					<h3>{{ panel.title|safe }}</h3>
+				</div>
+				<div class="djDebugPanelContent">
+					{{ panel.content|safe }}
+				</div>
 			</div>
 		{% endif %}
 	{% endfor %}

@@ -133,75 +133,78 @@
 }
 
 #djDebug .panelContent {
-	
 	display:none;
 	position:absolute;
 	margin:0;
-	padding:10px 20px;
-	top:2px;
+	top:0;
 	right:200px;
-	bottom:2px;
-	left:2px;
-	color:#111;
+	bottom:0;
+	left:0;
+	background-color:#f6f6f6;
+	color:#666;
 	z-index:1000000;
-	/*overflow:auto;*/
-	border-left:10px solid #c6d6da;
-	border-top:10px solid #c6d6da;
-	border-bottom:10px solid #c6d6da;
-	opacity:1.0;
-	background:transparent url(panel_bg.png) repeat left top;
-}
-
-#djDebug .panelContent .panelScrollWrap {
 	overflow:auto;
-	height:90%;
-	width:100%;
 }
 
-#djDebug .panelContent .panelScrollContent {
-	width:auto;
-	margin-right:10px;
+#djDebug .panelContent > div {
+	border-bottom:1px solid #ddd;
+	padding:10px 20px;
 }
 
-#djDebug .panelContent .boxed {
-	background-color:#fff;
-	padding:5px;
-	border:1px solid #c6d6da;
-}
-
-#djDebug .panelContent p a, #djDebug .panelContent dt a {
-	color:#000;
-	padding:2px 4px;
-}
-#djDebug .panelContent p a:hover, #djDebug .panelContent dt a:hover {
+.djDebugPanelTitle {
 	background-color:#ffc;
+	color:#666;
 }
-
-#djDebug .panelContent p a, #djDebug .panelContent dd a {
-	color:#000;
-	background-color:#eee;
-	padding:2px 4px;
-}
-#djDebug .panelContent p a:hover, #djDebug .panelContent dd a:hover {
-	color:#111;
-	background-color:#ffc;
-}
-
-#djDebug .panelContent h3 {
+#djDebug h3 {
 	font-size:24px;
+	font-weight:bold;
 	font-variant:small-caps;
 }
 
-#djDebug .panelContent h4 {
-	font-weight:normal;
-	margin-top:0.5em;
+#djDebug h4 {
 	font-size:20px;
-	line-height:24px;
+	font-weight:bold;
+}
+
+#djDebug .panelContent {
+	background-color:#eee;
+	color:#000;
+}
+
+#djDebug .panelContent table {
+	border:1px solid #ccc;
+	border-collapse:collapse;
+	width:100%;
+	background-color:#fff;
+}
+#djDebug .panelContent tbody td,
+#djDebug .panelContent tbody th {
+	vertical-align:top;
+	padding:2px 3px;
+}
+#djDebug .panelContent thead th {
+	padding:1px 6px 1px 3px;
+	background:#fefefe;
+	text-align:left;
+	font-weight:normal;
+	font-size:11px;
+	border:1px solid #ddd;
+}
+#djDebug .panelContent tbody th {
+	width:12em;
+	text-align:right;
+	color:#666;
+	padding-right:.5em;
 }
 
 #djDebug .panelContent code {
 	font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
-	font-size:inherit;
+	font-size:12px;
+}
+/*
+#djDebug .panelContent p a:hover, #djDebug .panelContent dd a:hover {
+	color:#111;
+	background-color:#ffc;
 }
 
 #djDebug .panelContent p {
@@ -212,9 +215,7 @@
 	margin:5px 0 15px;
 	background-color:#fff;
 }
-
 #djDebug .panelContent table {
-	/*width:90%;*/
 	clear:both;
 	border:0;
 	padding:0;
@@ -250,6 +251,7 @@
 #djDebug .panelContent table tr.djDebugOdd td {
   background:#eee;
 }
+*/
 
 #djDebug .panelContent .close {
 	text-indent:-9999999px;
