@@ -18,6 +18,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: panels/logger.py:56
+msgid "Logging"
+msgstr "Registros"
+
+#: panels/settings_vars.py:16
+msgid "Settings"
+msgstr "Configuraciones"
+
+#: panels/signals.py:39
+msgid "Signals"
+msgstr "Señales"
+
+#: panels/template.py:46
+msgid "Templates"
+msgstr "Plantillas"
+
+#: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
+#: templates/debug_toolbar/panels/logger.html:8
+#: templates/debug_toolbar/panels/sql.html:6
+#: templates/debug_toolbar/panels/sql_explain.html:7
+#: templates/debug_toolbar/panels/sql_profile.html:7
+#: templates/debug_toolbar/panels/sql_select.html:7
+msgid "Time"
+msgstr "Tiempo"
+
+#: panels/version.py:12
+msgid "Django Version"
+msgstr "Versión Django"
+
 #: templates/debug_toolbar/base.html:24
 msgid "Hide"
 msgstr "Ocultar"
@@ -162,7 +191,7 @@ msgstr "SQL Ejecutado"
 msgid "Empty set"
 msgstr "Set Vacío"
 
-#: templates/debug_toolbar/panels/templates.html:14
+#: templates/debug_toolbar/panels/templates.html:15
 msgid "Template"
 msgstr "Plantilla"
 
