@@ -4,8 +4,8 @@ except ImportError:
     pass # Will fail on Win32 systems
 import time
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
-
 
 class TimerDebugPanel(DebugPanel):
     """
@@ -32,7 +32,7 @@ class TimerDebugPanel(DebugPanel):
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
 
     def nav_title(self):
-        return 'Time'
+        return _('Time')
 
     def nav_subtitle(self):
         if self.has_resource:

@@ -5,6 +5,7 @@ try:
 except ImportError:
     threading = None
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 class ThreadTrackingHandler(logging.Handler):
@@ -52,7 +53,7 @@ class LoggingPanel(DebugPanel):
         return records
 
     def nav_title(self):
-        return "Logging"
+        return _("Logging")
 
     def nav_subtitle(self):
         return "%s message%s" % (len(handler.get_records()), (len(handler.get_records()) == 1) and '' or 's')
