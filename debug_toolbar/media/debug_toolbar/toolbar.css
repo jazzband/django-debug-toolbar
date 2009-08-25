@@ -1,32 +1,27 @@
-/* Debug Toolbar CSS Reset, adapted from YUI CSS Reset */
+/* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
 #djDebug {color:#000;background:#FFF;}
-#djDebug div,#djDebug dl,#djDebug dt,#djDebug dd,#djDebug ul,#djDebug ol,#djDebug li,#djDebug h1,#djDebug h2,#djDebug h3,#djDebug h4,#djDebug h5,#djDebug h6,#djDebug pre,#djDebug code,#djDebug form,#djDebug fieldset,#djDebug legend,#djDebug input,#djDebug button,#djDebug textarea,#djDebug p,#djDebug blockquote,#djDebug th,#djDebug td{margin:0;padding:0;}
-#djDebug table{border-collapse:collapse;border-spacing:0;}
-#djDebug fieldset,#djDebug img{border:0;}
-#djDebug address,#djDebug caption,#djDebug cite,#djDebug code,#djDebug dfn,#djDebug em,#djDebug strong,#djDebug th,#djDebug var,#djDebug optgroup{font-style:inherit;font-weight:inherit;}
-#djDebug del,#djDebug ins{text-decoration:none;}
-#djDebug li{list-style:none;}
-#djDebug caption,#djDebug th{text-align:left;}
-#djDebug h1,#djDebug h2,#djDebug h3,#djDebug h4,#djDebug h5,#djDebug h6{font-size:100%;font-weight:normal;}
-#djDebug q:before,#djDebug q:after{content:'';}
-#djDebug abbr,#djDebug acronym{border:0;font-variant:normal;}
-#djDebug sup{vertical-align:baseline;}
-#djDebug sub{vertical-align:baseline;}
-#djDebug legend{color:#000;}
-#djDebug input,#djDebug button,#djDebug textarea,#djDebug select,#djDebug optgroup,#djDebug option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
-#djDebug input,#djDebug button,#djDebug textarea,#djDebug select{*font-size:100%;}
-
-#djDebug * {
-	color:#000;
-	float:none;
-	margin:0;
-	padding:0;
-	position:static;
-	text-align:left;
-	font-family:sans-serif;
+#djDebug, #djDebug div, #djDebug span, #djDebug applet, #djDebug object, #djDebug iframe,
+#djDebug h1, #djDebug h2, #djDebug h3, #djDebug h4, #djDebug h5, #djDebug h6, #djDebug p, blockquote, #djDebug pre,
+#djDebug a, #djDebug abbr, #djDebug acronym, #djDebug address, #djDebug big, #djDebug cite, #djDebug code,
+#djDebug del, #djDebug dfn, #djDebug em, #djDebug font, #djDebug img, #djDebug ins, #djDebug kbd, #djDebug q, #djDebug s, #djDebug samp,
+#djDebug small, #djDebug strike, #djDebug strong, #djDebug sub, #djDebug sup, #djDebug tt, #djDebug var,
+#djDebug b, #djDebug u, #djDebug i, #djDebug center,
+#djDebug dl, #djDebug dt, #djDebug dd, #djDebug ol, #djDebug ul, #djDebug li,
+#djDebug fieldset, #djDebug form, #djDebug label, #djDebug legend,
+#djDebug table, #djDebug caption, #djDebug tbody, #djDebug tfoot, #djDebug thead, #djDebug tr, #djDebug th, #djDebug td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 16px%;
+	line-height: 1.5em;
+	color: #000;
+	vertical-align: baseline;
+	background: transparent;
+	font-family: sans-serif;
 }
 
-#djDebugToolbar {
+#djDebug #djDebugToolbar {
 	background:#111;
 	width:200px;
 	z-index:100000000;
@@ -37,17 +32,17 @@
 	opacity:0.9;
 }
 
-#djDebugToolbar small {
+#djDebug #djDebugToolbar small {
 	color:#999;
 }
 
-#djDebugToolbar ul {
+#djDebug #djDebugToolbar ul {
 	margin:0;
 	padding:0;
 	list-style:none;
 }
 
-#djDebugToolbar li {
+#djDebug #djDebugToolbar li {
 	border-bottom:1px solid #222;
 	color:#fff;
 	display:block;
@@ -59,8 +54,8 @@
 	width:auto;
 }
 
-#djDebugToolbar li>a,
-#djDebugToolbar li>div.contentless  {
+#djDebug #djDebugToolbar li>a,
+#djDebug #djDebugToolbar li>div.contentless  {
 	font-weight:normal;
 	font-style:normal;
 	text-decoration:none;
@@ -70,12 +65,12 @@
 	color:#fff;
 }
 
-#djDebugToolbar li a:hover {
+#djDebug #djDebugToolbar li a:hover {
 	color:#111;
 	background-color:#ffc;
 }
 
-#djDebugToolbar li.active {
+#djDebug #djDebugToolbar li.active {
 	background-image:url(indicator.png);
 	background-repeat:no-repeat;
 	background-position:left center;
@@ -83,12 +78,12 @@
 	padding-left:10px;	
 }
 
-#djDebugToolbar li.active a:hover {
+#djDebug #djDebugToolbar li.active a:hover {
 	color:#b36a60;
 	background-color:transparent;
 }
 
-#djDebugToolbar li small {
+#djDebug #djDebugToolbar li small {
 	font-size:12px;
 	color:#999;
 	font-style:normal;
@@ -96,7 +91,7 @@
 	font-variant:small-caps;
 }
 
-#djDebugToolbarHandle {
+#djDebug #djDebugToolbarHandle {
 	position:fixed;
 	background:#fff;
 	border:1px solid #111;
