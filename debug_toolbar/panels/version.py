@@ -1,4 +1,5 @@
 import django
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 class VersionDebugPanel(DebugPanel):
@@ -8,7 +9,7 @@ class VersionDebugPanel(DebugPanel):
     name = 'Version'
 
     def nav_title(self):
-        return 'Django Version'
+        return _('Django Version')
 
     def nav_subtitle(self):
         return django.get_version()

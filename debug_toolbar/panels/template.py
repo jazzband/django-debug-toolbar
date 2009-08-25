@@ -7,6 +7,7 @@ from django.dispatch import Signal
 from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -42,7 +43,7 @@ class TemplateDebugPanel(DebugPanel):
         self.templates.append(kwargs)
 
     def nav_title(self):
-        return 'Templates'
+        return _('Templates')
 
     def title(self):
         return 'Templates'
