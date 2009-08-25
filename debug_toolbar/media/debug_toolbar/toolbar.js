@@ -43,6 +43,7 @@ jQuery(function($j) {
 				return false;
 			});
 			$j('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
+				$j.djDebug.toggle_arrow($j(this).children('.toggleArrow'))
 				$j.djDebug.toggle_content($j(this).parent().next());
 				return false;
 			});
@@ -101,7 +102,12 @@ jQuery(function($j) {
 				path: '/',
 				expires: -1
 			});
-		}
+		},
+		toggle_arrow: function(elem) {
+            var uarr = String.fromCharCode(0x25b6);
+            var darr = String.fromCharCode(0x25bc);
+            elem.html(elem.html() == uarr ? darr : uarr);
+        }
 	});
 	$j(document).bind('close.djDebug', function() {
 		$j(document).unbind('keydown.djDebug');

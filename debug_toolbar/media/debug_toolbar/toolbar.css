@@ -176,14 +176,14 @@
 	bottom:0;
 	left:0;
 	height:auto;
-	padding:10px 20px;
+	padding:0px 20px;
 }
 
 #djDebug .djDebugPanelContent .scroll {
 	height:100%;
 	overflow:auto;
 	display:block;
-	padding-right:10px;
+	padding:10px;
 }
 
 #djDebug h3 {
@@ -195,6 +195,8 @@
 #djDebug h4 {
 	font-size:20px;
 	font-weight:bold;
+	margin-bottom:0.8em;
+	margin-top:0.4em;
 }
 
 #djDebug .panelContent table {
@@ -312,6 +314,31 @@
 
 #djDebug .panelContent dd {
 	margin-left:10px;
+}
+
+#djDebug a.toggleTemplate {
+	padding:4px;
+	background-color:#bbb;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+}
+
+#djDebug a.toggleTemplate:hover {
+	padding:4px;
+	background-color:#444;
+	color:#ffe761;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+}
+
+
+#djDebug a.djTemplateShowContext, #djDebug a.djTemplateShowContext span.toggleArrow {
+	color:#999;
+}
+
+#djDebug a.djTemplateShowContext:hover,  #djDebug a.djTemplateShowContext:hover span.toggleArrow {
+	color:#000;
+	cursor:pointer;
 }
 
 #djDebug .highlight  { color:#000; }

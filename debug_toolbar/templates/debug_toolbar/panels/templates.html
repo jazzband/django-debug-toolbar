@@ -14,10 +14,10 @@
 {% if templates %}
 <dl>
 {% for template in templates %}
-	<dt><strong><a class="remoteCall" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
+	<dt><strong><a class="remoteCall toggleTemplate" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
 	</dd>
 {% endfor %}
@@ -32,7 +32,7 @@
 {% for key, value in context_processors.iteritems %}
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
 	</dd>
 {% endfor %}
