@@ -4,7 +4,7 @@
 # Percy Pérez-Pinedo <percyp3@gmail.com>, 2009.
 #
 # Caracteres especiales: á, é, í, ó, ú, ñ,
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
