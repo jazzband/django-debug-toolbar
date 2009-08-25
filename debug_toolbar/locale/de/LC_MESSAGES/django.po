@@ -1,15 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
+# Django Debug Toolbar auf Deutsch.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Jannis Leidel, 2009.
+# 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 22:59-0500\n"
-"PO-Revision-Date: 2009-08-24 23:08-0600\n"
-"Last-Translator: Alex <alex.gaynor@gmail.com>\n"
+"POT-Creation-Date: 2009-08-21 15:26-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,19 +18,23 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:24
 msgid "Hide"
-msgstr "הסתיר"
+msgstr "Verbergen"
 
-#: templates/debug_toolbar/base.html:55
+#: templates/debug_toolbar/base.html:56
 msgid "Close"
-msgstr "סגור"
+msgstr "Schließen"
 
 #: templates/debug_toolbar/panels/cache.html:14
 msgid "Total Calls"
-msgstr ""
+msgstr "Aufrufe gesamt"
 
 #: templates/debug_toolbar/panels/cache.html:16
 msgid "Total Time"
-msgstr "זמן"
+msgstr "Zeit gesamt"
+
+#: templates/debug_toolbar/panels/cache.html:18
+msgid "Hits"
+msgstr "Aufrufe"
 
 #: templates/debug_toolbar/panels/cache.html:20
 msgid "Misses"
@@ -42,27 +47,27 @@ msgstr ""
 #: templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:8
 #: templates/debug_toolbar/panels/sql.html:6
-#: templates/debug_toolbar/panels/sql_explain.html:10
-#: templates/debug_toolbar/panels/sql_profile.html:10
-#: templates/debug_toolbar/panels/sql_select.html:10
+#: templates/debug_toolbar/panels/sql_explain.html:7
+#: templates/debug_toolbar/panels/sql_profile.html:7
+#: templates/debug_toolbar/panels/sql_select.html:7
 msgid "Time"
-msgstr "זמן"
+msgstr "Zeit"
 
 #: templates/debug_toolbar/panels/cache.html:40
 msgid "Type"
-msgstr "סוג"
+msgstr "Typ"
 
 #: templates/debug_toolbar/panels/cache.html:41
 msgid "Parameters"
-msgstr ""
+msgstr "Parameter"
 
 #: templates/debug_toolbar/panels/cache.html:42
 msgid "Function"
-msgstr ""
+msgstr "Funktion"
 
 #: templates/debug_toolbar/panels/headers.html:6
 msgid "Key"
-msgstr ""
+msgstr "Schlüssel"
 
 #: templates/debug_toolbar/panels/headers.html:7
 #: templates/debug_toolbar/panels/request_vars.html:13
@@ -72,96 +77,92 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings_vars.html:7
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "Wert"
+
+#: templates/debug_toolbar/panels/logger.html:7
+msgid "Level"
+msgstr "Niveau"
 
 #: templates/debug_toolbar/panels/logger.html:9
 msgid "Message"
-msgstr "הודעה"
+msgstr "Nachricht"
 
 #: templates/debug_toolbar/panels/logger.html:10
 msgid "Location"
-msgstr "מקום"
+msgstr "Ort"
 
 #: templates/debug_toolbar/panels/logger.html:25
 msgid "No messages logged"
-msgstr "אין הודעות"
+msgstr "Keine Nachricht gespeichert"
+
+#: templates/debug_toolbar/panels/request_vars.html:26
+msgid "None"
+msgstr "Nichts"
+
+#: templates/debug_toolbar/panels/request_vars.html:54
+msgid "No SESSION data"
+msgstr "Keine SESSION-Daten"
+
+#: templates/debug_toolbar/panels/request_vars.html:78
+msgid "No GET data"
+msgstr "Keine GET-Daten"
+
+#: templates/debug_toolbar/panels/request_vars.html:102
+msgid "No POST data"
+msgstr "Keine POST-Daten"
+
+#: templates/debug_toolbar/panels/settings_vars.html:6
+msgid "Setting"
+msgstr "Einstellung"
+
+#: templates/debug_toolbar/panels/signals.html:6
+msgid "Signal"
+msgstr "Signal"
+
+#: templates/debug_toolbar/panels/sql.html:7
+msgid "Action"
+msgstr "Aktion"
+
+#: templates/debug_toolbar/panels/sql.html:31
+msgid "Line"
+msgstr "Zeile"
+
+#: templates/debug_toolbar/panels/sql.html:32
+msgid "Method"
+msgstr "Methode"
+
+#: templates/debug_toolbar/panels/sql.html:33
+msgid "File"
+msgstr "Datei"
+
+#: templates/debug_toolbar/panels/sql_explain.html:2
+#: templates/debug_toolbar/panels/sql_profile.html:2
+#: templates/debug_toolbar/panels/sql_select.html:2
+#: templates/debug_toolbar/panels/template_source.html:2
+msgid "Back"
+msgstr "Zurück"
+
+#: templates/debug_toolbar/panels/sql_explain.html:5
+#: templates/debug_toolbar/panels/sql_profile.html:5
+#: templates/debug_toolbar/panels/sql_select.html:5
+msgid "Executed SQL"
+msgstr "Ausgeführtes SQL"
+
+#: templates/debug_toolbar/panels/sql_select.html:30
+msgid "Empty set"
+msgstr "Leeres Set"
+
+#: templates/debug_toolbar/panels/templates.html:14
+msgid "Template"
+msgstr "Template"
+
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Resource"
+msgstr "Ressource"
 
 #: templates/debug_toolbar/panels/request_vars.html:12
 #: templates/debug_toolbar/panels/request_vars.html:40
 #: templates/debug_toolbar/panels/request_vars.html:64
 #: templates/debug_toolbar/panels/request_vars.html:88
 msgid "Variable"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:26
-msgid "No COOKIE data"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:54
-msgid "No SESSION data"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:78
-msgid "No GET data"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:102
-msgid "No POST data"
-msgstr ""
-
-#: templates/debug_toolbar/panels/signals.html:6
-msgid "Signal"
-msgstr "סימן"
-
-#: templates/debug_toolbar/panels/sql.html:31
-msgid "Line"
-msgstr "שורה"
-
-#: templates/debug_toolbar/panels/sql.html:32
-msgid "Method"
-msgstr ""
-
-#: templates/debug_toolbar/panels/sql.html:33
-msgid "File"
-msgstr "קובץ"
-
-#: templates/debug_toolbar/panels/sql_explain.html:3
-#: templates/debug_toolbar/panels/sql_profile.html:3
-#: templates/debug_toolbar/panels/sql_select.html:3
-#: templates/debug_toolbar/panels/template_source.html:3
-msgid "Back"
-msgstr "חזרה"
-
-#: templates/debug_toolbar/panels/sql_explain.html:8
-#: templates/debug_toolbar/panels/sql_profile.html:8
-#: templates/debug_toolbar/panels/sql_select.html:8
-msgid "Executed SQL"
-msgstr ""
-
-#: templates/debug_toolbar/panels/templates.html:15
-msgid "Template"
-msgstr ""
-
-#: templates/debug_toolbar/panels/timer.html:10
-msgid "Resource"
-msgstr ""
-
-#: templates/debug_toolbar/panels/cache.html:18
-msgid "Hits"
-msgstr "הצלחות"
-
-#: templates/debug_toolbar/panels/logger.html:7
-msgid "Level"
-msgstr "רמה"
-
-#: templates/debug_toolbar/panels/sql.html:7
-msgid "Action"
-msgstr ""
-
-#: templates/debug_toolbar/panels/settings_vars.html:6
-msgid "Setting"
-msgstr ""
-
-#: templates/debug_toolbar/panels/sql_select.html:33
-msgid "Empty set"
-msgstr "תוצאות ריק"
+msgstr "Variable"

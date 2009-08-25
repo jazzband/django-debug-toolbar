@@ -2,10 +2,9 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Percy Pérez-Pinedo <percyp3@gmail.com>, 2009.
-#
+# 
 # Caracteres especiales: á, é, í, ó, ú, ñ,
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -63,18 +62,6 @@ msgstr "Total Llamadas"
 msgid "Total Time"
 msgstr "Tiempo Total"
 
-#: templates/debug_toolbar/panels/cache.html:18
-msgid "Hits"
-msgstr ""
-
-#: templates/debug_toolbar/panels/cache.html:20
-msgid "Misses"
-msgstr ""
-
-#: templates/debug_toolbar/panels/cache.html:35
-msgid "Breakdown"
-msgstr ""
-
 #: templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:8
 #: templates/debug_toolbar/panels/sql.html:6
@@ -117,22 +104,6 @@ msgstr "Nivel"
 #: templates/debug_toolbar/panels/logger.html:9
 msgid "Message"
 msgstr "Mensaje"
-
-#: templates/debug_toolbar/panels/logger.html:10
-msgid "Location"
-msgstr ""
-
-#: templates/debug_toolbar/panels/logger.html:25
-msgid "No messages logged"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:12
-#: templates/debug_toolbar/panels/request_vars.html:40
-#: templates/debug_toolbar/panels/request_vars.html:64
-#: templates/debug_toolbar/panels/request_vars.html:88
-#, fuzzy
-msgid "Variable"
-msgstr "Variable"
 
 #: templates/debug_toolbar/panels/request_vars.html:26
 msgid "None"
@@ -198,3 +169,31 @@ msgstr "Plantilla"
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
 msgstr "Recurso"
+
+#: templates/debug_toolbar/panels/cache.html:18
+msgid "Hits"
+msgstr "Visitas"
+
+#: templates/debug_toolbar/panels/cache.html:35
+msgid "Breakdown"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:20
+msgid "Misses"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:12
+#: templates/debug_toolbar/panels/request_vars.html:40
+#: templates/debug_toolbar/panels/request_vars.html:64
+#: templates/debug_toolbar/panels/request_vars.html:88
+#, fuzzy
+msgid "Variable"
+msgstr "Variable"
+
+#: templates/debug_toolbar/panels/logger.html:25
+msgid "No messages logged"
+msgstr "No hay mensajes registrados"
+
+#: templates/debug_toolbar/panels/logger.html:10
+msgid "Location"
+msgstr ""
