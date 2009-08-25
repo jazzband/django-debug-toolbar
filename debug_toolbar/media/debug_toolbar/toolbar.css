@@ -79,14 +79,14 @@
 	background-image:url(indicator.png);
 	background-repeat:no-repeat;
 	background-position:left center;
-	background-color: #333;
-	padding-left: 10px;
+	background-color:#333;
+	padding-left:10px;
 	
 }
 
 #djDebugToolbar li.active a:hover {
 	color:#b36a60;
-	background-color: transparent;
+	background-color:transparent;
 }
 
 #djDebugToolbar li small {
@@ -104,14 +104,14 @@
 	top:30px;
 	right:0;
 	z-index:100000000;
-	opacity: 0.75;
+	opacity:0.75;
 }
 
 #djDebug a#djShowToolBarButton {
 	display:block;
 	height:75px;
-	width: 30px;
-	border-right: none;
+	width:30px;
+	border-right:none;
 	border-bottom:4px solid #fff;
 	border-top:4px solid #fff;
 	border-left:4px solid #fff;
@@ -160,37 +160,37 @@
 }
 
 #djDebug .djDebugPanelTitle {
-	position: absolute;
+	position:absolute;
 	background-color:#ffc;
 	color:#666;
-	padding-left: 20px;
-	top: 0;
-	right: 0;
-	left: 0;
-	height: 50px;
+	padding-left:20px;
+	top:0;
+	right:0;
+	left:0;
+	height:50px;
 }
 
 #djDebug .djDebugPanelContent {
-	position: absolute;
-	top: 50px;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	height: auto;
-	padding: 10px 20px;
+	position:absolute;
+	top:50px;
+	right:0;
+	bottom:0;
+	left:0;
+	height:auto;
+	padding:10px 20px;
 }
 
 #djDebug .djDebugPanelContent .boxed {
-	height: 100%;
-	overflow: auto;
-	display: block;
-	padding-right: 10px;
+	height:100%;
+	overflow:auto;
+	display:block;
+	padding-right:10px;
 }
 
 #djDebug h3 {
 	font-size:24px;
 	font-weight:normal;
-	line-height: 50px;
+	line-height:50px;
 }
 
 #djDebug h4 {
@@ -203,7 +203,7 @@
 	border-collapse:collapse;
 	width:100%;
 	background-color:#fff;
-	display: block;
+	display:block;
 }
 #djDebug .panelContent tbody td,
 #djDebug .panelContent tbody th {
@@ -318,19 +318,19 @@
 #djDebug .highlight  { color:#000; }
 #djDebug .highlight .err { color:#000; } /* Error */
 #djDebug .highlight .g { color:#000; } /* Generic */
-#djDebug .highlight .k { color:#000; font-weight: bold } /* Keyword */
+#djDebug .highlight .k { color:#000; font-weight:bold } /* Keyword */
 #djDebug .highlight .o { color:#000; } /* Operator */
 #djDebug .highlight .n { color:#000; } /* Name */
-#djDebug .highlight .mi { color:#000; font-weight: bold } /* Literal.Number.Integer */
+#djDebug .highlight .mi { color:#000; font-weight:bold } /* Literal.Number.Integer */
 #djDebug .highlight .l { color:#000; } /* Literal */
 #djDebug .highlight .x { color:#000; } /* Other */
 #djDebug .highlight .p { color:#000; } /* Punctuation */
-#djDebug .highlight .m { color:#000; font-weight: bold } /* Literal.Number */
+#djDebug .highlight .m { color:#000; font-weight:bold } /* Literal.Number */
 #djDebug .highlight .s { color:#333 } /* Literal.String */
 #djDebug .highlight .w { color:#888888 } /* Text.Whitespace */
-#djDebug .highlight .il { color:#000; font-weight: bold } /* Literal.Number.Integer.Long */
+#djDebug .highlight .il { color:#000; font-weight:bold } /* Literal.Number.Integer.Long */
 #djDebug .highlight .na { color:#333 } /* Name.Attribute */
-#djDebug .highlight .nt { color:#000; font-weight: bold } /* Name.Tag */
+#djDebug .highlight .nt { color:#000; font-weight:bold } /* Name.Tag */
 #djDebug .highlight .nv { color:#333 } /* Name.Variable */
 #djDebug .highlight .s2 { color:#333 } /* Literal.String.Double */
 #djDebug .highlight .cp { color:#333 } /* Comment.Preproc */
