@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -30,10 +30,6 @@ msgstr ""
 #: templates/debug_toolbar/panels/cache.html:16
 msgid "Total Time"
 msgstr "זמן"
-
-#: templates/debug_toolbar/panels/cache.html:18
-msgid "Hits"
-msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:20
 msgid "Misses"
@@ -78,10 +74,6 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: templates/debug_toolbar/panels/logger.html:7
-msgid "Level"
-msgstr ""
-
 #: templates/debug_toolbar/panels/logger.html:9
 msgid "Message"
 msgstr "הודעה"
@@ -117,17 +109,9 @@ msgstr ""
 msgid "No POST data"
 msgstr ""
 
-#: templates/debug_toolbar/panels/settings_vars.html:6
-msgid "Setting"
-msgstr ""
-
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Signal"
 msgstr "סימן"
-
-#: templates/debug_toolbar/panels/sql.html:7
-msgid "Action"
-msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:31
 msgid "Line"
@@ -154,10 +138,6 @@ msgstr "חזרה"
 msgid "Executed SQL"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql_select.html:33
-msgid "Empty set"
-msgstr ""
-
 #: templates/debug_toolbar/panels/templates.html:15
 msgid "Template"
 msgstr ""
@@ -166,3 +146,22 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
+#: templates/debug_toolbar/panels/cache.html:18
+msgid "Hits"
+msgstr "הצלחות"
+
+#: templates/debug_toolbar/panels/logger.html:7
+msgid "Level"
+msgstr "רמה"
+
+#: templates/debug_toolbar/panels/sql.html:7
+msgid "Action"
+msgstr ""
+
+#: templates/debug_toolbar/panels/settings_vars.html:6
+msgid "Setting"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql_select.html:33
+msgid "Empty set"
+msgstr "תוצאות ריק"
