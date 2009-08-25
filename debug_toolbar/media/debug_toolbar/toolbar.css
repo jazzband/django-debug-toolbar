@@ -80,8 +80,7 @@
 	background-repeat:no-repeat;
 	background-position:left center;
 	background-color:#333;
-	padding-left:10px;
-	
+	padding-left:10px;	
 }
 
 #djDebugToolbar li.active a:hover {
@@ -147,9 +146,9 @@
 	position:fixed;
 	margin:0;
 	top:0;
-	right:200px;
+	right:150px;
 	bottom:0;
-	left:0;
+	left:50px;
 	background-color:#eee;
 	color:#666;
 	z-index:1000000;
