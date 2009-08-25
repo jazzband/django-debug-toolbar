@@ -179,7 +179,7 @@
 	padding:10px 20px;
 }
 
-#djDebug .djDebugPanelContent .boxed {
+#djDebug .djDebugPanelContent .scroll {
 	height:100%;
 	overflow:auto;
 	display:block;

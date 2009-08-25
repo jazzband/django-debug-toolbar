@@ -56,7 +56,9 @@
 					<h3>{{ panel.title|safe }}</h3>
 				</div>
 				<div class="djDebugPanelContent">
-					{{ panel.content|safe }}
+				    <div class="scroll">
+				        {{ panel.content|safe }}
+				    </div>
 				</div>
 			</div>
 		{% endif %}
