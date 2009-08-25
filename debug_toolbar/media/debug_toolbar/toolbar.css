@@ -150,29 +150,47 @@
 	right:200px;
 	bottom:0;
 	left:0;
-	background-color:#f6f6f6;
+	background-color:#eee;
 	color:#666;
 	z-index:1000000;
 }
 
 #djDebug .panelContent > div {
 	border-bottom:1px solid #ddd;
-	padding:10px 20px;
 }
 
-.djDebugPanelTitle {
+#djDebug .djDebugPanelTitle {
+	position: absolute;
 	background-color:#ffc;
 	color:#666;
+	padding-left: 20px;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 50px;
 }
 
-.djDebugPanelContent {
-	overflow:hidden;
-	height:90%;
+#djDebug .djDebugPanelContent {
+	position: absolute;
+	top: 50px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: auto;
+	padding: 10px 20px;
+}
+
+#djDebug .djDebugPanelContent .boxed {
+	height: 100%;
+	overflow: auto;
+	display: block;
+	padding-right: 10px;
 }
 
 #djDebug h3 {
 	font-size:24px;
-	font-weight:bold;
+	font-weight:normal;
+	line-height: 50px;
 }
 
 #djDebug h4 {
@@ -180,16 +198,12 @@
 	font-weight:bold;
 }
 
-#djDebug .panelContent {
-	background-color:#eee;
-	color:#000;
-}
-
 #djDebug .panelContent table {
 	border:1px solid #ccc;
 	border-collapse:collapse;
 	width:100%;
 	background-color:#fff;
+	display: block;
 }
 #djDebug .panelContent tbody td,
 #djDebug .panelContent tbody th {
