@@ -171,14 +171,14 @@
 	bottom:0;
 	left:0;
 	height:auto;
-	padding:0px 20px;
+	padding:0 0 0 20px;
 }
 
 #djDebug .djDebugPanelContent .scroll {
 	height:100%;
 	overflow:auto;
 	display:block;
-	padding:10px;
+	padding:0 10px 0 0;
 }
 
 #djDebug h3 {
