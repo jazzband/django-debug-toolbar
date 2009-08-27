@@ -141,9 +141,9 @@
 	position:fixed;
 	margin:0;
 	top:0;
-	right:150px;
+	right:200px;
 	bottom:0;
-	left:50px;
+	left:0px;
 	background-color:#eee;
 	color:#666;
 	z-index:1000000;

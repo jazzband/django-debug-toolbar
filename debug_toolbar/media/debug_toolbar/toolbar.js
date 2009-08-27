@@ -12,16 +12,13 @@ jQuery(function($j) {
 					return false;
 				}
 				current = $j('#djDebug #' + this.className);
-				$j(document).trigger('close.djDebug');
 				if (current.is(':visible')) {
+				    $j(document).trigger('close.djDebug');
 					$j(this).parent().removeClass("active");
 				} else {
-					$j('.panelContent').hide();
-					current.animate({
-					    right:"200px",
-					    left:"0px",
-					    opacity:"show"
-					},200);
+					//$j('.panelContent').hide();
+					$j(document).trigger('close.djDebug');
+					current.show();
 					$j.djDebug.open();
 					$j('#djDebugToolbar li').removeClass("active");
 					$j(this).parent().addClass("active");
@@ -111,11 +108,7 @@ jQuery(function($j) {
 	});
 	$j(document).bind('close.djDebug', function() {
 		$j(document).unbind('keydown.djDebug');
-		$j('.panelContent').animate({
-		    right:"150px",
-		    left:"50px",
-		    opacity:"hide"
-		}, 150);
+		$j('.panelContent').hide()
 		$j('#djDebugToolbar li').removeClass("active");
 	});
 });
