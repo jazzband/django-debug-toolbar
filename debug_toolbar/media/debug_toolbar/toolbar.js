@@ -12,12 +12,16 @@ jQuery(function($j) {
 					return false;
 				}
 				current = $j('#djDebug #' + this.className);
+				$j(document).trigger('close.djDebug');
 				if (current.is(':visible')) {
-					$j(document).trigger('close.djDebug');
 					$j(this).parent().removeClass("active");
 				} else {
 					$j('.panelContent').hide();
-					current.show();
+					current.animate({
+					    right:"200px",
+					    left:"0px",
+					    opacity:"show"
+					},200);
 					$j.djDebug.open();
 					$j('#djDebugToolbar li').removeClass("active");
 					$j(this).parent().addClass("active");
@@ -39,6 +43,7 @@ jQuery(function($j) {
 				return false;
 			});
 			$j('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
+				$j.djDebug.toggle_arrow($j(this).children('.toggleArrow'))
 				$j.djDebug.toggle_content($j(this).parent().next());
 				return false;
 			});
@@ -79,9 +84,9 @@ jQuery(function($j) {
 			return false;
 		},
 		hide_toolbar: function(setCookie) {
+		    $j(document).trigger('close.djDebug');
 			$j('#djDebugToolbar').hide("fast");
 			$j('#djDebugToolbar li').removeClass("active");
-			$j(document).trigger('close.djDebug');
 			$j('#djDebugToolbarHandle').show();
 			if (setCookie) {
 				$j.cookie(COOKIE_NAME, 'hide', {
@@ -97,11 +102,20 @@ jQuery(function($j) {
 				path: '/',
 				expires: -1
 			});
-		}
+		},
+		toggle_arrow: function(elem) {
+            var uarr = String.fromCharCode(0x25b6);
+            var darr = String.fromCharCode(0x25bc);
+            elem.html(elem.html() == uarr ? darr : uarr);
+        }
 	});
 	$j(document).bind('close.djDebug', function() {
 		$j(document).unbind('keydown.djDebug');
-		$j('.panelContent').hide();
+		$j('.panelContent').animate({
+		    right:"150px",
+		    left:"50px",
+		    opacity:"hide"
+		}, 150);
 		$j('#djDebugToolbar li').removeClass("active");
 	});
 });
