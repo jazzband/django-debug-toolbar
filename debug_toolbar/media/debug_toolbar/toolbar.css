@@ -190,8 +190,7 @@
 #djDebug h4 {
 	font-size:20px;
 	font-weight:bold;
-	margin-bottom:0.8em;
-	margin-top:0.4em;
+	margin-top:0.8em;
 }
 
 #djDebug .panelContent table {
@@ -200,6 +199,7 @@
 	width:100%;
 	background-color:#fff;
 	display:block;
+	margin-top:0.8em;
 }
 #djDebug .panelContent tbody td,
 #djDebug .panelContent tbody th {
