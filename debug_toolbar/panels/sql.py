@@ -20,6 +20,17 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 # get a copy of the toolbar object with access to its config dictionary
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SQL_WARNING_THRESHOLD', 500)
 
+SQL_KEYWORDS = (
+    'SELECT',
+    'FROM',
+    'WHERE',
+    'INNER JOIN',
+    'LEFT OUTER JOIN',
+    'ORDER BY',
+    'HAVING',
+    'GROUP BY',
+)
+
 def tidy_stacktrace(strace):
     """
     Clean up stacktrace and remove all entries that:
@@ -125,21 +136,7 @@ def ms_from_timedelta(td):
     return (td.seconds * 1000) + (td.microseconds / 1000.0)
 
 def reformat_sql(sql):
-    sql = sql.replace(',', ', ')
-    sql = sql.replace('SELECT ', 'SELECT\n\t')
-    sql = sql.replace(' FROM ', '\nFROM\n\t')
-    sql = sql.replace(' WHERE ', '\nWHERE\n\t')
-    sql = sql.replace(' INNER JOIN', '\n\tINNER JOIN')
-    sql = sql.replace(' LEFT OUTER JOIN' , '\n\tLEFT OUTER JOIN')
-    sql = sql.replace(' ORDER BY ', '\nORDER BY\n\t')
-    sql = sql.replace(' HAVING ', '\nHAVING\n\t')
-    sql = sql.replace(' GROUP BY ', '\nGROUP BY\n\t')
-    # Use Pygments to highlight SQL if it's available
-    try:
-        from pygments import highlight
-        from pygments.lexers import SqlLexer
-        from pygments.formatters import HtmlFormatter
-        sql = highlight(sql, SqlLexer(), HtmlFormatter())
-    except ImportError:
-        pass
+    for kwd in SQL_KEYWORDS:
+        sql = sql.replace(kwd, '<strong>%s</strong>' % (kwd,))
     return sql
+
