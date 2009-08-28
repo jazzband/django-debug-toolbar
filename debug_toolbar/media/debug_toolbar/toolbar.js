@@ -14,13 +14,13 @@ jQuery(function($j) {
 				current = $j('#djDebug #' + this.className);
 				if (current.is(':visible')) {
 				    $j(document).trigger('close.djDebug');
-					$j(this).parent().removeClass("active");
+					$j(this).parent().removeClass('active');
 				} else {
 					$j('.panelContent').hide(); // Hide any that are already open
 					current.show();
 					$j.djDebug.open();
-					$j('#djDebugToolbar li').removeClass("active");
-					$j(this).parent().addClass("active");
+					$j('#djDebugToolbar li').removeClass('active');
+					$j(this).parent().addClass('active');
 				}
 				return false;
 			});
@@ -58,7 +58,7 @@ jQuery(function($j) {
 			if ($j.cookie(COOKIE_NAME)) {
 				$j.djDebug.hide_toolbar(false);
 			} else {
-				$j('#djDebugToolbar').show();
+				$j.djDebug.show_toolbar(false);
 			}
 		},
 		open: function() {
@@ -80,10 +80,12 @@ jQuery(function($j) {
 			$j('#djDebugWindow').hide();
 			// close all panels
 			$j('.panelContent').hide();
-			$j('#djDebugToolbar li').removeClass("active");
+			$j('#djDebugToolbar li').removeClass('active');
 			// finally close toolbar
-			$j('#djDebugToolbar').hide("fast");
+			$j('#djDebugToolbar').hide('fast');
 			$j('#djDebugToolbarHandle').show();
+			// Unbind keydown
+			$j(document).unbind('keydown.djDebug');
 			if (setCookie) {
 				$j.cookie(COOKIE_NAME, 'hide', {
 					path: '/',
@@ -91,7 +93,7 @@ jQuery(function($j) {
 				});
 			}
 		},
-		show_toolbar: function() {
+		show_toolbar: function(animate) {
 			// Set up keybindings
 			$j(document).bind('keydown.djDebug', function(e) {
 				if (e.keyCode == 27) {
@@ -99,7 +101,11 @@ jQuery(function($j) {
 				}
 			});
 			$j('#djDebugToolbarHandle').hide();
-			$j('#djDebugToolbar').show("fast");
+			if (animate) {
+				$j('#djDebugToolbar').show('fast');
+			} else {
+				$j('#djDebugToolbar').show();
+			}
 			$j.cookie(COOKIE_NAME, null, {
 				path: '/',
 				expires: -1
@@ -125,7 +131,6 @@ jQuery(function($j) {
 		// Otherwise, just minimize the toolbar
 		if ($j('#djDebugToolbar').is(':visible')) {
 			$j.djDebug.hide_toolbar(true);
-			$j(document).unbind('keydown.djDebug');
 			return;
 		}
 	});
