@@ -336,6 +336,27 @@
 	cursor:pointer;
 }
 
+#djDebug .djDebugSqlWrap {
+	position:relative;
+}
+
+#djDebug .djDebugSql {
+	z-index:100000002;
+}
+
+#djDebug span.djDebugLineChart {
+	border-top:3px solid #777;
+	position:absolute;
+	bottom:0;
+	top:0;
+	left:0;
+	display:block;
+	z-index:1000000001;
+}
+#djDebug span.djDebugLineChartWarning {
+	border-top-color:#900;
+}
+
 #djDebug .highlight  { color:#000; }
 #djDebug .highlight .err { color:#000; } /* Error */
 #djDebug .highlight .g { color:#000; } /* Generic */

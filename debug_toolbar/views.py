@@ -33,7 +33,7 @@ def sql_select(request):
     Expected GET variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
-        time: time for SQL to execute passed in from toolbar just for redisplay
+        duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
@@ -52,7 +52,7 @@ def sql_select(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'time': request.GET.get('time', 0.0),
+            'duration': request.GET.get('duration', 0.0),
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_select.html', context)
@@ -65,7 +65,7 @@ def sql_explain(request):
     Expected GET variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
-        time: time for SQL to execute passed in from toolbar just for redisplay
+        duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
@@ -84,7 +84,7 @@ def sql_explain(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'time': request.GET.get('time', 0.0),
+            'duration': request.GET.get('duration', 0.0),
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
@@ -97,7 +97,7 @@ def sql_profile(request):
     Expected GET variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
-        time: time for SQL to execute passed in from toolbar just for redisplay
+        duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
@@ -127,7 +127,7 @@ def sql_profile(request):
             'result': result,
             'result_error': result_error,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'time': request.GET.get('time', 0.0),
+            'duration': request.GET.get('duration', 0.0),
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_profile.html', context)

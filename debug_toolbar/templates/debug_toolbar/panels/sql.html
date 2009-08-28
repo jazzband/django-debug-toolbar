@@ -11,13 +11,13 @@
 	<tbody>
 		{% for query in queries %}
 			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-				<td>{{ query.time|floatformat:"2" }}</td>
+				<td>{{ query.duration|floatformat:"2" }}</td>
 				<td>
 				{% if query.params %}
-					<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a>
-					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a>
+					<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a>
+					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a>
 					{% if is_mysql %}
-						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&time={{ query.time|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a>
+						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a>
 					{% endif %}
 				{% endif %}
 				</td>
@@ -42,7 +42,12 @@
 					</div>
 					{% endif %}
 				</td>
-				<td class="syntax">{{ query.sql|safe }}</td>
+				<td class="syntax">
+					<div class="djDebugSqlWrap">
+						<div class="djDebugSql">{{ query.sql|safe }}</div>
+						<span class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="width:{{ query.width_ratio }}%; left:{{ query.start_offset }}%;"</span>
+					</div>
+				</td>
 			</tr>
 		{% endfor %}
 	</tbody>
