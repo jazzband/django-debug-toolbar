@@ -62,15 +62,6 @@ msgstr "Total Llamadas"
 msgid "Total Time"
 msgstr "Tiempo Total"
 
-#: templates/debug_toolbar/panels/cache.html:39
-#: templates/debug_toolbar/panels/logger.html:8
-#: templates/debug_toolbar/panels/sql.html:6
-#: templates/debug_toolbar/panels/sql_explain.html:7
-#: templates/debug_toolbar/panels/sql_profile.html:7
-#: templates/debug_toolbar/panels/sql_select.html:7
-msgid "Time"
-msgstr "Tiempo"
-
 #: templates/debug_toolbar/panels/cache.html:40
 msgid "Type"
 msgstr "Tipo"
