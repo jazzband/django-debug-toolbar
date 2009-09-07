@@ -4,7 +4,11 @@
 	<h3>Template Source: <code>{{ template_name }}</code></h3>
 </div>
 <div class="djDebugPanelContent">
-    <div class='scroll'>
-    	{{ source }}
-    </div>
+	<div class="scroll">
+		{% if not source.pygmentized %}
+			<pre>{{ source }}</pre>
+		{% else %}
+			{{ source }}
+		{% endif %}
+	</div>
 </div>

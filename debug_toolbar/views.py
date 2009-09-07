@@ -154,6 +154,7 @@ def template_source(request):
 
         source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
         source = mark_safe(source)
+        source.pygmentized = True
     except ImportError:
         pass
 
