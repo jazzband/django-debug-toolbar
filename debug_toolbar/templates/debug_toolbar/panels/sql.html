@@ -14,10 +14,10 @@
 				<td>{{ query.duration|floatformat:"2" }}</td>
 				<td>
 				{% if query.params %}
-					<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a>
-					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a>
+					<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a><br>
+					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a><br>
 					{% if is_mysql %}
-						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a>
+						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a><br>
 					{% endif %}
 				{% endif %}
 				</td>
