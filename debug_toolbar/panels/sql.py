@@ -91,13 +91,15 @@ class SQLDebugPanel(DebugPanel):
     def __init__(self):
         self._offset = len(connection.queries)
         self._sql_time = 0
+        self._queries = []
 
     def nav_title(self):
         return 'SQL'
 
     def nav_subtitle(self):
-        self._sql_time = sum([q['duration'] for q in connection.queries[self._offset:]])
-        num_queries = len(connection.queries) - self._offset
+        self._queries = connection.queries[self._offset:]
+        self._sql_time = sum([q['duration'] for q in self._queries])
+        num_queries = len(self._queries)
         return "%d %s in %.2fms" % (
             num_queries,
             (num_queries == 1) and 'query' or 'queries',
@@ -111,9 +113,8 @@ class SQLDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        sql_queries = connection.queries[self._offset:]
         width_ratio_tally = 0
-        for query in sql_queries:
+        for query in self._queries:
             query['sql'] = reformat_sql(query['sql'])
             try:
                 query['width_ratio'] = (query['duration'] / self._sql_time) * 100
@@ -123,7 +124,7 @@ class SQLDebugPanel(DebugPanel):
             width_ratio_tally += query['width_ratio']
 
         context = {
-            'queries': sql_queries,
+            'queries': self._queries,
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         }
