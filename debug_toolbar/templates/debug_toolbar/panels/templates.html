@@ -1,4 +1,5 @@
-<h3>Template path{{ template_dirs|length|pluralize }}:</h3>
+{% load i18n %}
+<h4>Template path{{ template_dirs|length|pluralize }}</h4>
 {% if template_dirs %}
 	<ol>
 	{% for template in template_dirs %}
@@ -8,30 +9,32 @@
 {% else %}
 	<p>None</p>
 {% endif %}
-<h3>Template{{ templates|length|pluralize }}</h3>
+
+<h4>{% trans "Template" %}{{ templates|length|pluralize }}</h4>
 {% if templates %}
 <dl>
 {% for template in templates %}
-	<dt><strong><a class="remoteCall" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
+	<dt><strong><a class="remoteCall toggleTemplate" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	{% if template.context %}
-	    <dd>
-		    <div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
-		    <div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
-	    </dd>
+	<dd>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
+		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
+	</dd>
 	{% endif %}
 {% endfor %}
 </dl>
 {% else %}
 	<p>None</p>
 {% endif %}
-<h3>Context processor{{ context_processors|length|pluralize }}</h3>
+
+<h4>Context processor{{ context_processors|length|pluralize }}</h4>
 {% if context_processors %}
 <dl>
 {% for key, value in context_processors.iteritems %}
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext">Toggle Context</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
 	</dd>
 {% endfor %}

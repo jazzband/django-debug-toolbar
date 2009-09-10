@@ -7,6 +7,7 @@ from django.dispatch import Signal
 from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -40,6 +41,9 @@ class TemplateDebugPanel(DebugPanel):
 
     def _store_template_info(self, sender, **kwargs):
         self.templates.append(kwargs)
+
+    def nav_title(self):
+        return _('Templates')
 
     def title(self):
         num_templates = len([t for t in self.templates

@@ -1,4 +1,4 @@
-<h3>Cache Usage</h3>
+{% load i18n %}
 <table>
 	<colgroup>
 		<col width="12%"/>
@@ -11,13 +11,13 @@
 		<col width="12%"/>
 	</colgroup>
 	<tr>
-		<th>Total Calls</th>
+		<th>{% trans "Total Calls" %}</th>
 		<td>{{ cache_calls }}</td>
-		<th>Total Time</th>
+		<th>{% trans "Total Time" %}</th>
 		<td>{{ cache_time }}ms</td>
-		<th>Hits</th>
+		<th>{% trans "Hits" %}</th>
 		<td>{{ cache.hits }}</td>
-		<th>Misses</th>
+		<th>{% trans "Misses" %}</th>
 		<td>{{ cache.misses }}</td>
 	</tr>
 	<tr>
@@ -32,14 +32,14 @@
 	</tr>
 </table>
 {% if cache.calls %}
-<h3>Breakdown</h3>
+<h3>{% trans "Breakdown" %}</h3>
 <table>
 	<thead>
 		<tr>
-			<th>Time&nbsp;(ms)</th>
-			<th>Type</th>
-			<th>Parameters</th>
-			<th>Function</th>
+			<th>{% trans "Time" %}&nbsp;(ms)</th>
+			<th>{% trans "Type" %}</th>
+			<th>{% trans "Parameters" %}</th>
+			<th>{% trans "Function" %}</th>
 		</tr>
 	</thead>
 	<tbody>

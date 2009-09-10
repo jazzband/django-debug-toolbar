@@ -14,7 +14,16 @@ class DebugPanel(object):
     def dom_id(self):
         return 'djDebug%sPanel' % (self.name.replace(' ', ''))
 
+    def nav_title(self):
+        """Title showing in toolbar"""
+        raise NotImplementedError
+
+    def nav_subtitle(self):
+        """Subtitle showing until title in toolbar"""
+        return ''
+
     def title(self):
+        """Title showing in panel"""
         raise NotImplementedError
 
     def url(self):

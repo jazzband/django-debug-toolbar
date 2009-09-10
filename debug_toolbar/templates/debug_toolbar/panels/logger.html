@@ -1,12 +1,12 @@
-<h3>Log Messages</h3>
+{% load i18n %}
 {% if records %}
 	<table>
 		<thead>
 			<tr>
-				<th>Level</th>
-				<th>Time</th>
-				<th>Message</th>
-				<th>Location</th>
+				<th>{% trans "Level" %}</th>
+				<th>{% trans "Time" %}</th>
+				<th>{% trans "Message" %}</th>
+				<th>{% trans "Location" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -21,6 +21,6 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>No messages logged.</p>
+	<p>{% trans "No messages logged" %}.</p>
 {% endif %}
 

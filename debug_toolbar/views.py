@@ -33,7 +33,7 @@ def sql_select(request):
     Expected GET variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
-        time: time for SQL to execute passed in from toolbar just for redisplay
+        duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
@@ -52,7 +52,7 @@ def sql_select(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'time': request.GET.get('time', 0.0),
+            'duration': request.GET.get('duration', 0.0),
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_select.html', context)
@@ -65,7 +65,7 @@ def sql_explain(request):
     Expected GET variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
-        time: time for SQL to execute passed in from toolbar just for redisplay
+        duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
@@ -84,7 +84,7 @@ def sql_explain(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'time': request.GET.get('time', 0.0),
+            'duration': request.GET.get('duration', 0.0),
             'headers': headers,
         }
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
@@ -97,7 +97,7 @@ def sql_profile(request):
     Expected GET variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
-        time: time for SQL to execute passed in from toolbar just for redisplay
+        duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
@@ -109,21 +109,28 @@ def sql_profile(request):
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
-        cursor.execute("SET PROFILING=1") # Enable profiling
-        cursor.execute(sql, params) # Execute SELECT
-        cursor.execute("SET PROFILING=0") # Disable profiling
-        # The Query ID should always be 1 here but I'll subselect to get the last one just in case...
-        cursor.execute("SELECT * FROM information_schema.profiling WHERE query_id=(SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)")
-        headers = [d[0] for d in cursor.description]
-        result = cursor.fetchall()
+        result = None
+        headers = None
+        result_error = None
+        try:
+            cursor.execute("SET PROFILING=1") # Enable profiling
+            cursor.execute(sql, params) # Execute SELECT
+            cursor.execute("SET PROFILING=0") # Disable profiling
+            # The Query ID should always be 1 here but I'll subselect to get the last one just in case...
+            cursor.execute("SELECT * FROM information_schema.profiling WHERE query_id=(SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)")
+            headers = [d[0] for d in cursor.description]
+            result = cursor.fetchall()
+        except:
+            result_error = "Profiling is either not available or not supported by your database."
         cursor.close()
         context = {
             'result': result,
+            'result_error': result_error,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'time': request.GET.get('time', 0.0),
+            'duration': request.GET.get('duration', 0.0),
             'headers': headers,
         }
-        return render_to_response('debug_toolbar/panels/sql_explain.html', context)
+        return render_to_response('debug_toolbar/panels/sql_profile.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
 def template_source(request):
@@ -147,6 +154,7 @@ def template_source(request):
 
         source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
         source = mark_safe(source)
+        source.pygmentized = True
     except ImportError:
         pass
 

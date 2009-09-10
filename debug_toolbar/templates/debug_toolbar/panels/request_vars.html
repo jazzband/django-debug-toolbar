@@ -1,4 +1,5 @@
-<h3>COOKIES Variables</h3>
+{% load i18n %}
+<h4>COOKIES Variables</h4>
 {% if cookies %}
 	<table>
 		<colgroup>
@@ -7,8 +8,8 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Variable" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -21,9 +22,10 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "No COOKIE data" %}</p>
 {% endif %}
-<h3>SESSION Variables</h3>
+
+<h4>SESSION Variables</h4>
 {% if session %}
 	<table>
 		<colgroup>
@@ -32,8 +34,8 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Variable" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -46,15 +48,16 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "No SESSION data" %}</p>
 {% endif %}
-<h3>GET Variables</h3>
+
+<h4>GET Variables</h4>
 {% if get %}
 	<table>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Variable" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -67,15 +70,16 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "No GET data" %}</p>
 {% endif %}
-<h3>POST Variables</h3>
+
+<h4>POST Variables</h4>
 {% if post %}
 	<table>
 		<thead>
 			<tr>
-				<th>Key</th>
-				<th>Value</th>
+				<th>{% trans "Variable" %}</th>
+				<th>{% trans "Value" %}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -88,5 +92,5 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>None</p>
+	<p>{% trans "No POST data" %}</p>
 {% endif %}

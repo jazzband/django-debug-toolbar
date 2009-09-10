@@ -7,6 +7,7 @@ from django.db.models.signals import class_prepared, pre_init, post_init, \
     pre_save, post_save, pre_delete, post_delete, post_syncdb
 from django.dispatch.dispatcher import WEAKREF_TYPES
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 
 try:
     from django.db.backends.signals import connection_created
@@ -33,6 +34,9 @@ class SignalDebugPanel(DebugPanel):
         'post_delete': post_delete,
         'post_syncdb': post_syncdb,
     }
+
+    def nav_title(self):
+        return _("Signals")
 
     def title(self):
         return "Signals"
