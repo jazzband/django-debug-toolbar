@@ -138,14 +138,6 @@ msgstr "חזרה"
 msgid "Executed SQL"
 msgstr ""
 
-#: templates/debug_toolbar/panels/templates.html:15
-msgid "Template"
-msgstr ""
-
-#: templates/debug_toolbar/panels/timer.html:10
-msgid "Resource"
-msgstr ""
-
 #: templates/debug_toolbar/panels/cache.html:18
 msgid "Hits"
 msgstr "הצלחות"
@@ -165,3 +157,11 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_select.html:33
 msgid "Empty set"
 msgstr "תוצאות ריק"
+
+#: templates/debug_toolbar/panels/templates.html:15
+msgid "Template"
+msgstr "תבנית"
+
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Resource"
+msgstr ""
