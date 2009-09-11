@@ -1,35 +1,37 @@
 {% load i18n %}
 <div class="djDebugPanelTitle">
 	<a class="close back" href="">{% trans "Back" %}</a>
-	<h3>SQL Selected</h3>
+	<h3>{% trans "SQL Selected" %}</h3>
 </div>
 <div class="djDebugPanelContent">
-	<dl>
-		<dt>{% trans "Executed SQL" %}</dt>
-		<dd>{{ sql|safe }}</dd>
-		<dt>{% trans "Time" %}</dt>
-		<dd>{{ duration }} ms</dd>
-	</dl>
-	{% if result %}
-	<table>
-		<thead>
-			<tr>
-				{% for h in headers %}
-					<th>{{ h|upper }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-			{% for row in result %}
-				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-					{% for column in row %}
-						<td>{{ column|escape }}</td>
+	<div class="scroll">
+		<dl>
+			<dt>{% trans "Executed SQL" %}</dt>
+			<dd>{{ sql|safe }}</dd>
+			<dt>{% trans "Time" %}</dt>
+			<dd>{{ duration }} ms</dd>
+		</dl>
+		{% if result %}
+		<table>
+			<thead>
+				<tr>
+					{% for h in headers %}
+						<th>{{ h|upper }}</th>
 					{% endfor %}
 				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	{% else %}
-		<p>{% trans "Empty set" %}</p>
-	{% endif %}
+			</thead>
+			<tbody>
+				{% for row in result %}
+					<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+						{% for column in row %}
+							<td>{{ column|escape }}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+			<p>{% trans "Empty set" %}</p>
+		{% endif %}
+	</div>
 </div>
