@@ -26,6 +26,7 @@ jQuery(function($j) {
 			});
 			$j('#djDebug a.close').click(function() {
 				$j(document).trigger('close.djDebug');
+				$j('#djDebugToolbar li').removeClass('active');
 				return false;
 			});
 			$j('#djDebug a.remoteCall').click(function() {
