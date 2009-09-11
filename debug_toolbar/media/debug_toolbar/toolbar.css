@@ -9,16 +9,17 @@
 #djDebug dl, #djDebug dt, #djDebug dd, #djDebug ol, #djDebug ul, #djDebug li,
 #djDebug fieldset, #djDebug form, #djDebug label, #djDebug legend,
 #djDebug table, #djDebug caption, #djDebug tbody, #djDebug tfoot, #djDebug thead, #djDebug tr, #djDebug th, #djDebug td {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-size: 12px;
-	line-height: 1.5em;
-	color: #000;
-	vertical-align: baseline;
-	background: transparent;
-	font-family: sans-serif;
+	margin:0;
+	padding:0;
+	border:0;
+	outline:0;
+	font-size:12px;
+	line-height:1.5em;
+	color:#000;
+	vertical-align:baseline;
+	background:transparent;
+	font-family:sans-serif;
+	text-align:left;
 }
 
 #djDebug #djDebugToolbar {
@@ -130,6 +131,7 @@
 
 #djDebug pre {
 	background-color:#ffffff;
+	overflow:auto;
 }
 
 #djDebug tr.djDebugOdd pre {
