@@ -16,10 +16,12 @@
 {% for template in templates %}
 	<dt><strong><a class="remoteCall toggleTemplate" href="/__debug__/template_source/?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
+	{% if template.context %}
 	<dd>
 		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
 	</dd>
+	{% endif %}
 {% endfor %}
 </dl>
 {% else %}
