@@ -202,6 +202,7 @@
 	background-color:#fff;
 	display:block;
 	margin-top:0.8em;
+	overflow: auto;
 }
 #djDebug .panelContent tbody td,
 #djDebug .panelContent tbody th {
