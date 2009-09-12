@@ -2,8 +2,8 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Jannis Leidel, 2009.
-#
-#
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -16,25 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: panels/logger.py:56
-msgid "Logging"
-msgstr ""
-
-#: panels/settings_vars.py:16
-#, fuzzy
-msgid "Settings"
-msgstr "Einstellung"
-
-#: panels/signals.py:39
-#, fuzzy
-msgid "Signals"
-msgstr "Signal"
-
-#: panels/template.py:46
-#, fuzzy
-msgid "Templates"
-msgstr "Template"
-
 #: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7
 #: templates/debug_toolbar/panels/sql.html:5
@@ -44,10 +25,6 @@ msgstr "Template"
 msgid "Time"
 msgstr "Zeit"
 
-#: panels/version.py:12
-msgid "Django Version"
-msgstr ""
-
 #: templates/debug_toolbar/base.html:24
 msgid "Hide"
 msgstr "Verbergen"
@@ -55,15 +32,6 @@ msgstr "Verbergen"
 #: templates/debug_toolbar/base.html:55
 msgid "Close"
 msgstr "Schließen"
-
-#: templates/debug_toolbar/redirect.html:9
-msgid ""
-"The Django Debug Toolbar has intercepted a redirect to the above URL for "
-"debug viewing purposes.  You can click the above link to continue with the "
-"redirect as normal.  If you'd like to disable this feature, set the "
-"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
-"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
-msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:14
 msgid "Total Calls"
@@ -134,11 +102,6 @@ msgstr "Keine Nachricht gespeichert"
 msgid "Variable"
 msgstr "Variable"
 
-#: templates/debug_toolbar/panels/request_vars.html:25
-#, fuzzy
-msgid "No COOKIE data"
-msgstr "Keine GET-Daten"
-
 #: templates/debug_toolbar/panels/request_vars.html:51
 msgid "No SESSION data"
 msgstr "Keine SESSION-Daten"
@@ -196,10 +159,6 @@ msgstr "Ausgeführtes SQL"
 msgid "SQL Profiled"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql_profile.html:35
-msgid "Error"
-msgstr ""
-
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL Selected"
 msgstr ""
@@ -215,6 +174,38 @@ msgstr "Template"
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
 msgstr "Ressource"
+
+#: panels/logger.py:56
+msgid "Logging"
+msgstr "Logging"
+
+#: panels/signals.py:39
+msgid "Signals"
+msgstr "Signals"
+
+#: panels/settings_vars.py:16
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: panels/template.py:46
+msgid "Templates"
+msgstr "Templates"
+
+#: panels/version.py:12
+msgid "Django Version"
+msgstr "Django-Version"
+
+#: templates/debug_toolbar/redirect.html:9
+msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:25
+msgid "No COOKIE data"
+msgstr "Keine COOKIE-Daten"
+
+#: templates/debug_toolbar/panels/sql_profile.html:35
+msgid "Error"
+msgstr "Fehler"
 
 #~ msgid "None"
 #~ msgstr "Nichts"
