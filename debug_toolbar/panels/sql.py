@@ -20,15 +20,45 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 # get a copy of the toolbar object with access to its config dictionary
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SQL_WARNING_THRESHOLD', 500)
 
+# Note: This isn't intended to catch ALL possible SQL keywords, just a good common set.
+# Note: Subsets are listed last to avoid matching a subset of a keyword.  This
+# whole thing could be greatly improved but for now this works.
 SQL_KEYWORDS = (
-    'SELECT',
+    'ALTER',
+    'AND',
+    'ASC',
+    'AS',
+    'AVG',
+    'COUNT',
+    'CREATE',
+    'DESC',
+    'DELETE',
+    'DISTINCT',
+    'DROP',
     'FROM',
-    'WHERE',
-    'INNER JOIN',
-    'LEFT OUTER JOIN',
-    'ORDER BY',
-    'HAVING',
     'GROUP BY',
+    'HAVING',
+    'INNER JOIN',
+    'INSERT',
+    'IN',
+    'LEFT OUTER JOIN',
+    'LIKE',
+    'LIMIT',
+    'MAX',
+    'MIN',
+    'OFFSET',
+    'ON',
+    'ORDER BY',
+    'OR',
+    'SELECT',
+    'SET',
+    'STDDEV_POP',
+    'STDDEV_SAMP',
+    'SUM',
+    'UPDATE',
+    'VAR_POP',
+    'VAR_SAMP',
+    'WHERE',
 )
 
 def tidy_stacktrace(strace):
