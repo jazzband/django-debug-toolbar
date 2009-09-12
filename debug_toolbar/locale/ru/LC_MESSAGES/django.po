@@ -1,0 +1,233 @@
+# Django Debug Toolbar in Russian.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Mikhail Korobov, 2009.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-12 23:31+0600\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Mikhail Korobov <kmike84@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: panels/headers.py:36
+msgid "HTTP Headers"
+msgstr "Заголовки HTTP"
+
+#: panels/logger.py:56
+msgid "Logging"
+msgstr "Журналирование"
+
+#: panels/request_vars.py:13
+msgid "Request Vars"
+msgstr "Запрос"
+
+#: panels/settings_vars.py:16
+msgid "Settings"
+msgstr "Настройки"
+
+#: panels/signals.py:39
+msgid "Signals"
+msgstr "Сигналы"
+
+#: panels/template.py:46
+msgid "Templates"
+msgstr "Шаблоны"
+
+#: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
+#: templates/debug_toolbar/panels/logger.html:7
+#: templates/debug_toolbar/panels/sql.html:5
+#: templates/debug_toolbar/panels/sql_explain.html:11
+#: templates/debug_toolbar/panels/sql_profile.html:12
+#: templates/debug_toolbar/panels/sql_select.html:11
+msgid "Time"
+msgstr "Время"
+
+#: panels/version.py:12
+msgid "Django Version"
+msgstr "Версия Django"
+
+#: templates/debug_toolbar/base.html:23
+msgid "Hide"
+msgstr "Скрыть"
+
+#: templates/debug_toolbar/base.html:54
+msgid "Close"
+msgstr "Закрыть"
+
+#: templates/debug_toolbar/redirect.html:9
+msgid ""
+"The Django Debug Toolbar has intercepted a redirect to the above URL for "
+"debug viewing purposes.  You can click the above link to continue with the "
+"redirect as normal.  If you'd like to disable this feature, set the "
+"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
+"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgstr ""
+"Django Debug Toolbar в отладочных целях перехватила редирект на адрес, "
+"указанный выше. Вы можете нажать на ссылку, чтобы продолжить обычное "
+"выполнение. Если хотите отключить это поведение, установитев словаре "
+"<code>DEBUG_TOOLBAR_CONFIG</code> ключ <code>INTERCEPT_REDIRECTS</"
+"code>равным <code>False</code>."
+
+#: templates/debug_toolbar/panels/cache.html:14
+msgid "Total Calls"
+msgstr "Всего вызовов"
+
+#: templates/debug_toolbar/panels/cache.html:16
+msgid "Total Time"
+msgstr "Общее время"
+
+#: templates/debug_toolbar/panels/cache.html:18
+msgid "Hits"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:20
+msgid "Misses"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:35
+msgid "Breakdown"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:40
+msgid "Type"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:41
+msgid "Parameters"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:42
+msgid "Function"
+msgstr ""
+
+#: templates/debug_toolbar/panels/headers.html:5
+msgid "Key"
+msgstr "Заголовок"
+
+#: templates/debug_toolbar/panels/headers.html:6
+#: templates/debug_toolbar/panels/request_vars.html:12
+#: templates/debug_toolbar/panels/request_vars.html:38
+#: templates/debug_toolbar/panels/request_vars.html:60
+#: templates/debug_toolbar/panels/request_vars.html:82
+#: templates/debug_toolbar/panels/settings_vars.html:6
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Value"
+msgstr "Значение"
+
+#: templates/debug_toolbar/panels/logger.html:6
+msgid "Level"
+msgstr "Уровень"
+
+#: templates/debug_toolbar/panels/logger.html:8
+msgid "Message"
+msgstr "Сообщение"
+
+#: templates/debug_toolbar/panels/logger.html:9
+msgid "Location"
+msgstr "Место"
+
+#: templates/debug_toolbar/panels/logger.html:24
+msgid "No messages logged"
+msgstr "Сообщений нет"
+
+#: templates/debug_toolbar/panels/request_vars.html:11
+#: templates/debug_toolbar/panels/request_vars.html:37
+#: templates/debug_toolbar/panels/request_vars.html:59
+#: templates/debug_toolbar/panels/request_vars.html:81
+msgid "Variable"
+msgstr "Переменная"
+
+#: templates/debug_toolbar/panels/request_vars.html:25
+msgid "No COOKIE data"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:51
+msgid "No SESSION data"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:73
+msgid "No GET data"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:95
+msgid "No POST data"
+msgstr ""
+
+#: templates/debug_toolbar/panels/settings_vars.html:5
+msgid "Setting"
+msgstr "Параметр"
+
+#: templates/debug_toolbar/panels/signals.html:5
+msgid "Signal"
+msgstr "Сигналы"
+
+#: templates/debug_toolbar/panels/sql.html:6
+msgid "Action"
+msgstr "Действие"
+
+#: templates/debug_toolbar/panels/sql.html:8
+msgid "Query"
+msgstr "Запрос"
+
+#: templates/debug_toolbar/panels/sql.html:30
+msgid "Line"
+msgstr "Строка"
+
+#: templates/debug_toolbar/panels/sql.html:31
+msgid "Method"
+msgstr "Метод"
+
+#: templates/debug_toolbar/panels/sql.html:32
+msgid "File"
+msgstr "Файл"
+
+#: templates/debug_toolbar/panels/sql_explain.html:3
+#: templates/debug_toolbar/panels/sql_profile.html:3
+#: templates/debug_toolbar/panels/sql_select.html:3
+#: templates/debug_toolbar/panels/template_source.html:3
+msgid "Back"
+msgstr "Назад"
+
+#: templates/debug_toolbar/panels/sql_explain.html:4
+msgid "SQL Explained"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql_explain.html:9
+#: templates/debug_toolbar/panels/sql_profile.html:10
+#: templates/debug_toolbar/panels/sql_select.html:9
+msgid "Executed SQL"
+msgstr "Запрос"
+
+#: templates/debug_toolbar/panels/sql_profile.html:4
+msgid "SQL Profiled"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql_profile.html:35
+msgid "Error"
+msgstr "Ошибка"
+
+#: templates/debug_toolbar/panels/sql_select.html:4
+msgid "SQL Selected"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql_select.html:34
+msgid "Empty set"
+msgstr "Ничего"
+
+#: templates/debug_toolbar/panels/templates.html:13
+msgid "Template"
+msgstr ""
+
+#: templates/debug_toolbar/panels/timer.html:9
+msgid "Resource"
+msgstr "Ресурс"
+
+#~ msgid "Template Source"
+#~ msgstr "Исходный код шаблона"
