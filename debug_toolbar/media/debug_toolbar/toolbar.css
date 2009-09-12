@@ -134,8 +134,8 @@
 	overflow:auto;
 }
 
-#djDebug tr.djDebugOdd pre {
-	background-color:#eeeeee;
+#djDebug tr.djDebugOdd {
+	background-color:#f5f5f5;
 }
 
 #djDebug .panelContent {
@@ -202,6 +202,7 @@
 	background-color:#fff;
 	display:block;
 	margin-top:0.8em;
+	overflow: auto;
 }
 #djDebug .panelContent tbody td,
 #djDebug .panelContent tbody th {
@@ -210,11 +211,9 @@
 }
 #djDebug .panelContent thead th {
 	padding:1px 6px 1px 3px;
-	background:#fefefe;
 	text-align:left;
-	font-weight:normal;
-	font-size:11px;
-	border:1px solid #ddd;
+	font-weight:bold;
+	font-size:14px;
 }
 #djDebug .panelContent tbody th {
 	width:12em;
