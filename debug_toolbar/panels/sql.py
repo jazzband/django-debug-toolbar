@@ -106,7 +106,8 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,
-                'is_slow': (duration > SQL_WARNING_THRESHOLD)
+                'is_slow': (duration > SQL_WARNING_THRESHOLD),
+                'is_select': sql.lower().strip().startswith('select'),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
