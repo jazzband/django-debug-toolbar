@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -55,12 +55,7 @@ msgid "Close"
 msgstr "סגור"
 
 #: templates/debug_toolbar/redirect.html:9
-msgid ""
-"The Django Debug Toolbar has intercepted a redirect to the above URL for "
-"debug viewing purposes.  You can click the above link to continue with the "
-"redirect as normal.  If you'd like to disable this feature, set the "
-"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
-"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:14
@@ -93,10 +88,6 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:42
 msgid "Function"
-msgstr ""
-
-#: templates/debug_toolbar/panels/headers.html:5
-msgid "Key"
 msgstr ""
 
 #: templates/debug_toolbar/panels/headers.html:6
@@ -212,3 +203,7 @@ msgstr "תבנית"
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
 msgstr ""
+
+#: templates/debug_toolbar/panels/headers.html:5
+msgid "Key"
+msgstr "מפתח"

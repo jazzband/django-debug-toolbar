@@ -40,7 +40,8 @@ msgstr "Сигналы"
 msgid "Templates"
 msgstr "Шаблоны"
 
-#: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
+#: panels/timer.py:35
+#: templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7
 #: templates/debug_toolbar/panels/sql.html:5
 #: templates/debug_toolbar/panels/sql_explain.html:11
@@ -68,12 +69,11 @@ msgid ""
 "redirect as normal.  If you'd like to disable this feature, set the "
 "<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
 "<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
-msgstr ""
-"Django Debug Toolbar в отладочных целях перехватила редирект на адрес, "
+msgstr "Django Debug Toolbar в отладочных целях перехватила редирект на адрес, "
 "указанный выше. Вы можете нажать на ссылку, чтобы продолжить обычное "
-"выполнение. Если хотите отключить это поведение, установитев словаре "
+"выполнение. Если хотите отключить это поведение, установите в словаре "
 "<code>DEBUG_TOOLBAR_CONFIG</code> ключ <code>INTERCEPT_REDIRECTS</"
-"code>равным <code>False</code>."
+"code> равным <code>False</code>."
 
 #: templates/debug_toolbar/panels/cache.html:14
 msgid "Total Calls"
@@ -229,5 +229,3 @@ msgstr ""
 msgid "Resource"
 msgstr "Ресурс"
 
-#~ msgid "Template Source"
-#~ msgstr "Исходный код шаблона"
