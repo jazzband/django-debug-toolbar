@@ -8,7 +8,7 @@ setup(
     # Get more strings from http://www.python.org/pypi?:action=list_classifiers
     author='Rob Hudson',
     author_email='rob@cogit8.org',
-    url='http://rob.cogit8.org/blog/2008/Sep/19/introducing-django-debug-toolbar/',
+    url='http://robhudson.github.com/django-debug-toolbar/',
     download_url='http://github.com/robhudson/django-debug-toolbar/downloads',
     license='BSD',
     packages=find_packages(exclude=['ez_setup']),
