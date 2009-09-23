@@ -4,12 +4,7 @@ from optparse import make_option
 from django.core.management.base import NoArgsCommand
 from django.db.backends import util
 
-# Optional sqlparse to make the SQL look pretty...
-# http://code.google.com/p/python-sqlparse/
-try:
-    import sqlparse
-except ImportError:
-    sqlparse = None
+from debug_toolbar.utils import sqlparse
 
 class PrintQueryWrapper(util.CursorDebugWrapper):
     def execute(self, sql, params=()):
@@ -17,10 +12,7 @@ class PrintQueryWrapper(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             raw_sql = self.db.ops.last_executed_query(self.cursor, sql, params)
-            if sqlparse:
-                print sqlparse.format(raw_sql, reindent=True)
-            else:
-                print raw_sql
+            print sqlparse.format(raw_sql, reindent=True)
             print
 
 util.CursorDebugWrapper = PrintQueryWrapper
