@@ -15,10 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: panels/logger.py:56
-msgid "Logging"
-msgstr ""
-
 #: panels/settings_vars.py:16
 msgid "Settings"
 msgstr ""
@@ -41,10 +37,6 @@ msgstr "תבנית"
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
 msgstr "זמן"
-
-#: panels/version.py:12
-msgid "Django Version"
-msgstr ""
 
 #: templates/debug_toolbar/base.html:24
 msgid "Hide"
@@ -90,16 +82,6 @@ msgstr ""
 msgid "Function"
 msgstr ""
 
-#: templates/debug_toolbar/panels/headers.html:6
-#: templates/debug_toolbar/panels/request_vars.html:12
-#: templates/debug_toolbar/panels/request_vars.html:38
-#: templates/debug_toolbar/panels/request_vars.html:60
-#: templates/debug_toolbar/panels/request_vars.html:82
-#: templates/debug_toolbar/panels/settings_vars.html:6
-#: templates/debug_toolbar/panels/timer.html:10
-msgid "Value"
-msgstr ""
-
 #: templates/debug_toolbar/panels/logger.html:6
 msgid "Level"
 msgstr "רמה"
@@ -116,21 +98,6 @@ msgstr "מקום"
 msgid "No messages logged"
 msgstr "אין הודעות"
 
-#: templates/debug_toolbar/panels/request_vars.html:11
-#: templates/debug_toolbar/panels/request_vars.html:37
-#: templates/debug_toolbar/panels/request_vars.html:59
-#: templates/debug_toolbar/panels/request_vars.html:81
-msgid "Variable"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:25
-msgid "No COOKIE data"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:51
-msgid "No SESSION data"
-msgstr ""
-
 #: templates/debug_toolbar/panels/request_vars.html:73
 msgid "No GET data"
 msgstr ""
@@ -146,10 +113,6 @@ msgstr ""
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
 msgstr "סימן"
-
-#: templates/debug_toolbar/panels/sql.html:6
-msgid "Action"
-msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:30
 msgid "Line"
@@ -207,3 +170,40 @@ msgstr ""
 #: templates/debug_toolbar/panels/headers.html:5
 msgid "Key"
 msgstr "מפתח"
+
+#: panels/logger.py:56
+msgid "Logging"
+msgstr "רישום יומן"
+
+#: panels/version.py:12
+msgid "Django Version"
+msgstr "ג 'נגו גירסה"
+
+#: templates/debug_toolbar/panels/headers.html:6
+#: templates/debug_toolbar/panels/request_vars.html:12
+#: templates/debug_toolbar/panels/request_vars.html:38
+#: templates/debug_toolbar/panels/request_vars.html:60
+#: templates/debug_toolbar/panels/request_vars.html:82
+#: templates/debug_toolbar/panels/settings_vars.html:6
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Value"
+msgstr "ערך"
+
+#: templates/debug_toolbar/panels/request_vars.html:25
+msgid "No COOKIE data"
+msgstr "אין נתונים  לעוגיות"
+
+#: templates/debug_toolbar/panels/request_vars.html:51
+msgid "No SESSION data"
+msgstr "אין נתונים  להתחברות"
+
+#: templates/debug_toolbar/panels/request_vars.html:11
+#: templates/debug_toolbar/panels/request_vars.html:37
+#: templates/debug_toolbar/panels/request_vars.html:59
+#: templates/debug_toolbar/panels/request_vars.html:81
+msgid "Variable"
+msgstr "מזהה"
+
+#: templates/debug_toolbar/panels/sql.html:6
+msgid "Action"
+msgstr "פעילות"
