@@ -83,7 +83,7 @@ class TemplateDebugPanel(DebugPanel):
                 d_list = []
                 for _d in c.dicts:
                     try:
-                        d_list.append(pformat(d))
+                        d_list.append(pformat(_d))
                     except UnicodeEncodeError:
                         pass
                 info['context'] = '\n'.join(d_list)
