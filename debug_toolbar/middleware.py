@@ -32,7 +32,7 @@ class DebugToolbarMiddleware(object):
     on outgoing response.
     """
     def __init__(self):
-        self.debug_toolbar = None
+        self.debug_toolbars = {}
         self.original_urlconf = settings.ROOT_URLCONF
         self.original_pattern = patterns('', ('', include(self.original_urlconf)),)
         self.override_url = True
@@ -63,22 +63,19 @@ class DebugToolbarMiddleware(object):
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
 
-            self.debug_toolbar = DebugToolbar(request)
-            for panel in self.debug_toolbar.panels:
+            self.debug_toolbars[request] = DebugToolbar(request)
+            for panel in self.debug_toolbars[request].panels:
                 panel.process_request(request)
-        elif self.debug_toolbar:
-            self.debug_toolbar = None
-        return None
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if self.debug_toolbar:
-            for panel in self.debug_toolbar.panels:
+        if request in self.debug_toolbars:
+            for panel in self.debug_toolbars[request].panels:
                 panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
-        if not self.debug_toolbar:
+        if request not in self.debug_toolbars:
             return response
-        if self.debug_toolbar.config['INTERCEPT_REDIRECTS']:
+        if self.debug_toolbars[request].config['INTERCEPT_REDIRECTS']:
             if isinstance(response, HttpResponseRedirect):
                 redirect_to = response.get('Location', None)
                 if redirect_to:
@@ -88,8 +85,9 @@ class DebugToolbarMiddleware(object):
                     )
         if response.status_code != 200:
             return response
-        for panel in self.debug_toolbar.panels:
+        for panel in self.debug_toolbars[request].panels:
             panel.process_response(request, response)
         if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-            response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbar.render_toolbar() + u'</body>'))
+            response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbars[request].render_toolbar() + u'</body>'))
+        del self.debug_toolbars[request]
         return response
