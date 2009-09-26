@@ -49,7 +49,7 @@ class VersionDebugPanel(DebugPanel):
             if isinstance(version, (list, tuple)):
                 version = '.'.join(str(o) for o in version)
             versions[name] = version
-                
+
         return render_to_string('debug_toolbar/panels/versions.html', {
             'versions': versions,
             'paths': sys.path,
