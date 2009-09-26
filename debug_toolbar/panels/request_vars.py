@@ -10,10 +10,10 @@ class RequestVarsDebugPanel(DebugPanel):
 
     def nav_title(self):
         return 'Request Vars'
-    
+
     def title(self):
         return 'Request Vars'
-    
+
     def url(self):
         return ''
 
@@ -27,6 +27,6 @@ class RequestVarsDebugPanel(DebugPanel):
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES.iterkeys()],
         }
         if hasattr(self.request, 'session'):
-            context['session'] = [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()],
+            context['session'] = [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()]
 
         return render_to_string('debug_toolbar/panels/request_vars.html', context)
