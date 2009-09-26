@@ -64,7 +64,7 @@ class DebugToolbarMiddleware(object):
             request.urlconf = 'debug_toolbar.urls'
 
             self.debug_toolbars[request] = DebugToolbar(request)
-            for panel in self.debug_toolbars[request]:
+            for panel in self.debug_toolbars[request].panels:
                 panel.process_request(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
