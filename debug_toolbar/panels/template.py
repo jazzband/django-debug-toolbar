@@ -1,6 +1,7 @@
 from os.path import normpath
 from pprint import pformat
 
+from django import http
 from django.conf import settings
 from django.core.signals import request_started
 from django.dispatch import Signal
@@ -80,13 +81,24 @@ class TemplateDebugPanel(DebugPanel):
             if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SHOW_TEMPLATE_CONTEXT', True):
                 c = d.get('context', None)
 
-                d_list = []
-                for _d in c.dicts:
+                context_list = []
+                for context_layer in c.dicts:
+                    for key, value in context_layer.items():
+                        # Replace any request elements - they have a large
+                        # unicode representation. The request data is already
+                        # made available from the Request Vars panel.
+                        if isinstance(value, http.HttpRequest):
+                            context_layer[key] = '<request>' 
+                        # Remove the debugging sql_queries element from the
+                        # context. The SQL data is already made available from
+                        # the SQL panel. 
+                        elif key == 'sql_queries' and isinstance(value, list):
+                            del context_layer[key]
                     try:
-                        d_list.append(pformat(_d))
+                        context_list.append(pformat(context_layer))
                     except UnicodeEncodeError:
                         pass
-                info['context'] = '\n'.join(d_list)
+                info['context'] = '\n'.join(context_list)
             template_context.append(info)
         context = {
             'templates': template_context,
