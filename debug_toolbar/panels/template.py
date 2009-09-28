@@ -85,15 +85,14 @@ class TemplateDebugPanel(DebugPanel):
                 for context_layer in context_data.dicts:
                     for key, value in context_layer.items():
                         # Replace any request elements - they have a large
-                        # unicode representation. The request data is already
-                        # made available from the Request Vars panel.
+                        # unicode representation and the request data is
+                        # already made available from the Request Vars panel.
                         if isinstance(value, http.HttpRequest):
-                            context_layer[key] = '<request>' 
-                        # Remove the debugging sql_queries element from the
-                        # context. The SQL data is already made available from
-                        # the SQL panel. 
+                            context_layer[key] = '<<request>>' 
+                        # Replace the debugging sql_queries element. The SQL
+                        # data is already made available from the SQL panel.
                         elif key == 'sql_queries' and isinstance(value, list):
-                            del context_layer[key]
+                            context_layer[key] = '<<sql_queries>>' 
                     try:
                         context_list.append(pformat(context_layer))
                     except UnicodeEncodeError:
