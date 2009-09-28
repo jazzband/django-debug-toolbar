@@ -65,24 +65,24 @@ class TemplateDebugPanel(DebugPanel):
             ]
         )
         template_context = []
-        for i, d in enumerate(self.templates):
+        for template_data in self.templates:
             info = {}
             # Clean up some info about templates
-            t = d.get('template', None)
+            template = template_data.get('template', None)
             # Skip templates that we are generating through the debug toolbar.
-            if t.name.startswith('debug_toolbar/'):
+            if template.name.startswith('debug_toolbar/'):
                 continue
-            if t.origin and t.origin.name:
-                t.origin_name = t.origin.name
+            if template.origin and template.origin.name:
+                template.origin_name = template.origin.name
             else:
-                t.origin_name = 'No origin'
-            info['template'] = t
+                template.origin_name = 'No origin'
+            info['template'] = template
             # Clean up context for better readability
             if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SHOW_TEMPLATE_CONTEXT', True):
-                c = d.get('context', None)
+                context_data = template_data.get('context', None)
 
                 context_list = []
-                for context_layer in c.dicts:
+                for context_layer in context_data.dicts:
                     for key, value in context_layer.items():
                         # Replace any request elements - they have a large
                         # unicode representation. The request data is already
