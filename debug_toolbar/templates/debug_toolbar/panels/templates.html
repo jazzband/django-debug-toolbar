@@ -1,5 +1,5 @@
 {% load i18n %}
-<h4>{% trans 'Template path' %} {{ template_dirs|length|pluralize }}</h4>
+<h4>{% trans 'Template path' %}{{ template_dirs|length|pluralize }}</h4>
 {% if template_dirs %}
 	<ol>
 	{% for template in template_dirs %}
@@ -28,7 +28,7 @@
 	<p>{% trans 'None' %}</p>
 {% endif %}
 
-<h4>{% trans 'Context processor' %} {{ context_processors|length|pluralize }}</h4>
+<h4>{% trans 'Context processor' %}{{ context_processors|length|pluralize }}</h4>
 {% if context_processors %}
 <dl>
 {% for key, value in context_processors.iteritems %}
