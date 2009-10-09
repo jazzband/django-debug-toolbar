@@ -1,5 +1,5 @@
 {% load i18n %}
-<h4>COOKIES Variables</h4>
+<h4>{% trans 'COOKIES Variables' %}</h4>
 {% if cookies %}
 	<table>
 		<colgroup>
@@ -25,7 +25,7 @@
 	<p>{% trans "No COOKIE data" %}</p>
 {% endif %}
 
-<h4>SESSION Variables</h4>
+<h4>{% trans 'SESSION Variables' %}</h4>
 {% if session %}
 	<table>
 		<colgroup>
@@ -51,7 +51,7 @@
 	<p>{% trans "No SESSION data" %}</p>
 {% endif %}
 
-<h4>GET Variables</h4>
+<h4>{% trans 'GET Variables' %}</h4>
 {% if get %}
 	<table>
 		<thead>
@@ -73,7 +73,7 @@
 	<p>{% trans "No GET data" %}</p>
 {% endif %}
 
-<h4>POST Variables</h4>
+<h4>{% trans 'POST Variables' %}</h4>
 {% if post %}
 	<table>
 		<thead>

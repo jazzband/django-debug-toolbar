@@ -1,5 +1,5 @@
 {% load i18n %}
-<h4>Template path{{ template_dirs|length|pluralize }}</h4>
+<h4>{% trans 'Template path' %} {{ template_dirs|length|pluralize }}</h4>
 {% if template_dirs %}
 	<ol>
 	{% for template in template_dirs %}
@@ -18,27 +18,27 @@
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	{% if template.context %}
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
 	</dd>
 	{% endif %}
 {% endfor %}
 </dl>
 {% else %}
-	<p>None</p>
+	<p>{% trans 'None' %}</p>
 {% endif %}
 
-<h4>Context processor{{ context_processors|length|pluralize }}</h4>
+<h4>{% trans 'Context processor' %} {{ context_processors|length|pluralize }}</h4>
 {% if context_processors %}
 <dl>
 {% for key, value in context_processors.iteritems %}
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> Toggle Context</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
 	</dd>
 {% endfor %}
 </dl>
 {% else %}
-	<p>None</p>
+	<p>{% trans 'None' %}</p>
 {% endif %}
