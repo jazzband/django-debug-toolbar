@@ -49,7 +49,7 @@ class TemplateDebugPanel(DebugPanel):
     def title(self):
         num_templates = len([t for t in self.templates
             if not t['template'].name.startswith('debug_toolbar/')])
-        return 'Templates (%s rendered)' % num_templates
+        return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
 
     def url(self):
         return ''
