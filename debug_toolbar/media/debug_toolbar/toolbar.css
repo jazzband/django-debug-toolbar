@@ -345,6 +345,10 @@
 	z-index:100000002;
 }
 
+#djDebug .djSQLHideStacktraceDiv tbody th {
+	text-align: left;
+}
+
 #djDebug span.djDebugLineChart {
 	border-top:3px solid #777;
 	position:absolute;
