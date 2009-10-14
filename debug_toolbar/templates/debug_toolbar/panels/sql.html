@@ -26,27 +26,29 @@
 				<td>
 					{% if query.stacktrace %}
 					<div class="djSQLShowStacktraceDiv"><a class="djSQLShowStacktrace" href="#">Toggle Stacktrace</a></div>
-					<div class="djSQLHideStacktraceDiv" style="display:none;">
-						<table>
-							<tr>
-								<th>{% trans "Line" %}</th>
-								<th>{% trans "Method" %}</th>
-								<th>{% trans "File" %}</th>
-							</tr>
-							{% for file, line, method in query.stacktrace %}
-								<tr>
-									<td>{{ line }}</td>
-									<td><pre>{{ method|escape }}<pre></td>
-									<td><pre>{{ file|escape }}</pre></td>
-								</tr>
-							{% endfor %}
-						</table>
-					</div>
 					{% endif %}
 				</td>
 				<td class="syntax">
 					<div class="djDebugSqlWrap">
 						<div class="djDebugSql">{{ query.sql|safe }}</div>
+						{% if query.stacktrace %}
+						<div class="djSQLHideStacktraceDiv" style="display:none;">
+							<table>
+								<tr>
+									<th>{% trans "Line" %}</th>
+									<th>{% trans "Method" %}</th>
+									<th>{% trans "File" %}</th>
+								</tr>
+								{% for file, line, method in query.stacktrace %}
+									<tr>
+										<td>{{ line }}</td>
+										<td><pre>{{ method|escape }}<pre></td>
+										<td><pre>{{ file|escape }}</pre></td>
+									</tr>
+								{% endfor %}
+							</table>
+						</div>
+						{% endif %}
             <span class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="width:{{ query.width_ratio }}%; left:{{ query.start_offset }}%;"></span>
 					</div>
 				</td>
