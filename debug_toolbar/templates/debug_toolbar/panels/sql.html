@@ -47,6 +47,17 @@
 									</tr>
 								{% endfor %}
 							</table>
+							{% if query.template_info %}
+							<table>
+								{% for line in query.template_info.context %}
+								<tr>
+									<td>{{ line.num }}</td>
+									<td><pre style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</pre></td>
+								</tr>
+								{% endfor %}
+							</table>
+							<p><strong>{{ query.template_info.name|default:"(unknown)" }}</strong></p>
+							{% endif %}
 						</div>
 						{% endif %}
             <span class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="width:{{ query.width_ratio }}%; left:{{ query.start_offset }}%;"></span>
