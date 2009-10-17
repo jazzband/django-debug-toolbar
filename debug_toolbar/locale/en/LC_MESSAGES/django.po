@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-11 18:05-0700\n"
+"POT-Creation-Date: 2009-10-16 20:40-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Signals"
 msgstr ""
 
-#: panels/template.py:46
+#: panels/template.py:47
 msgid "Templates"
 msgstr ""
 
@@ -44,12 +44,17 @@ msgstr ""
 msgid "Django Version"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:24
+#: templates/debug_toolbar/base.html:23
 msgid "Hide"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:55
+#: templates/debug_toolbar/base.html:54
 msgid "Close"
+msgstr ""
+
+#: templates/debug_toolbar/redirect.html:7
+#: templates/debug_toolbar/panels/logger.html:9
+msgid "Location"
 msgstr ""
 
 #: templates/debug_toolbar/redirect.html:9
@@ -115,12 +120,12 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: templates/debug_toolbar/panels/logger.html:9
-msgid "Location"
-msgstr ""
-
 #: templates/debug_toolbar/panels/logger.html:24
 msgid "No messages logged"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:2
+msgid "COOKIES Variables"
 msgstr ""
 
 #: templates/debug_toolbar/panels/request_vars.html:11
@@ -134,12 +139,24 @@ msgstr ""
 msgid "No COOKIE data"
 msgstr ""
 
+#: templates/debug_toolbar/panels/request_vars.html:28
+msgid "SESSION Variables"
+msgstr ""
+
 #: templates/debug_toolbar/panels/request_vars.html:51
 msgid "No SESSION data"
 msgstr ""
 
+#: templates/debug_toolbar/panels/request_vars.html:54
+msgid "GET Variables"
+msgstr ""
+
 #: templates/debug_toolbar/panels/request_vars.html:73
 msgid "No GET data"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:76
+msgid "POST Variables"
 msgstr ""
 
 #: templates/debug_toolbar/panels/request_vars.html:95
@@ -154,19 +171,35 @@ msgstr ""
 msgid "Signal"
 msgstr ""
 
+#: templates/debug_toolbar/panels/signals.html:6
+msgid "Providing Args"
+msgstr ""
+
+#: templates/debug_toolbar/panels/signals.html:7
+msgid "Receivers"
+msgstr ""
+
 #: templates/debug_toolbar/panels/sql.html:6
 msgid "Action"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:30
-msgid "Line"
+#: templates/debug_toolbar/panels/sql.html:7
+msgid "Stacktrace"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:31
-msgid "Method"
+#: templates/debug_toolbar/panels/sql.html:8
+msgid "Query"
 msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:32
+msgid "Line"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:33
+msgid "Method"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:34
 msgid "File"
 msgstr ""
 
@@ -203,8 +236,30 @@ msgstr ""
 msgid "Empty set"
 msgstr ""
 
+#: templates/debug_toolbar/panels/template_source.html:4
+msgid "Template Source"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:2
+msgid "Template path"
+msgstr ""
+
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:21
+#: templates/debug_toolbar/panels/templates.html:37
+msgid "Toggle Context"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:31
+msgid "Context processor"
 msgstr ""
 
 #: templates/debug_toolbar/panels/timer.html:9

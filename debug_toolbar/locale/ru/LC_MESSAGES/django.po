@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-12 23:31+0600\n"
+"POT-Creation-Date: 2009-10-16 20:40-0700\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mikhail Korobov <kmike84@gmail.com>\n"
 "Language-Team: \n"
@@ -16,17 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: panels/headers.py:36
-msgid "HTTP Headers"
-msgstr "Заголовки HTTP"
-
 #: panels/logger.py:56
 msgid "Logging"
 msgstr "Журналирование"
-
-#: panels/request_vars.py:13
-msgid "Request Vars"
-msgstr "Запрос"
 
 #: panels/settings_vars.py:16
 msgid "Settings"
@@ -36,12 +28,11 @@ msgstr "Настройки"
 msgid "Signals"
 msgstr "Сигналы"
 
-#: panels/template.py:46
+#: panels/template.py:47
 msgid "Templates"
 msgstr "Шаблоны"
 
-#: panels/timer.py:35
-#: templates/debug_toolbar/panels/cache.html:39
+#: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7
 #: templates/debug_toolbar/panels/sql.html:5
 #: templates/debug_toolbar/panels/sql_explain.html:11
@@ -62,6 +53,11 @@ msgstr "Скрыть"
 msgid "Close"
 msgstr "Закрыть"
 
+#: templates/debug_toolbar/redirect.html:7
+#: templates/debug_toolbar/panels/logger.html:9
+msgid "Location"
+msgstr "Место"
+
 #: templates/debug_toolbar/redirect.html:9
 msgid ""
 "The Django Debug Toolbar has intercepted a redirect to the above URL for "
@@ -69,11 +65,12 @@ msgid ""
 "redirect as normal.  If you'd like to disable this feature, set the "
 "<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
 "<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
-msgstr "Django Debug Toolbar в отладочных целях перехватила редирект на адрес, "
+msgstr ""
+"Django Debug Toolbar в отладочных целях перехватила редирект на адрес, "
 "указанный выше. Вы можете нажать на ссылку, чтобы продолжить обычное "
 "выполнение. Если хотите отключить это поведение, установите в словаре "
-"<code>DEBUG_TOOLBAR_CONFIG</code> ключ <code>INTERCEPT_REDIRECTS</"
-"code> равным <code>False</code>."
+"<code>DEBUG_TOOLBAR_CONFIG</code> ключ <code>INTERCEPT_REDIRECTS</code> "
+"равным <code>False</code>."
 
 #: templates/debug_toolbar/panels/cache.html:14
 msgid "Total Calls"
@@ -129,13 +126,14 @@ msgstr "Уровень"
 msgid "Message"
 msgstr "Сообщение"
 
-#: templates/debug_toolbar/panels/logger.html:9
-msgid "Location"
-msgstr "Место"
-
 #: templates/debug_toolbar/panels/logger.html:24
 msgid "No messages logged"
 msgstr "Сообщений нет"
+
+#: templates/debug_toolbar/panels/request_vars.html:2
+#, fuzzy
+msgid "COOKIES Variables"
+msgstr "Переменная"
 
 #: templates/debug_toolbar/panels/request_vars.html:11
 #: templates/debug_toolbar/panels/request_vars.html:37
@@ -148,13 +146,28 @@ msgstr "Переменная"
 msgid "No COOKIE data"
 msgstr ""
 
+#: templates/debug_toolbar/panels/request_vars.html:28
+#, fuzzy
+msgid "SESSION Variables"
+msgstr "Переменная"
+
 #: templates/debug_toolbar/panels/request_vars.html:51
 msgid "No SESSION data"
 msgstr ""
 
+#: templates/debug_toolbar/panels/request_vars.html:54
+#, fuzzy
+msgid "GET Variables"
+msgstr "Переменная"
+
 #: templates/debug_toolbar/panels/request_vars.html:73
 msgid "No GET data"
 msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:76
+#, fuzzy
+msgid "POST Variables"
+msgstr "Переменная"
 
 #: templates/debug_toolbar/panels/request_vars.html:95
 msgid "No POST data"
@@ -168,23 +181,35 @@ msgstr "Параметр"
 msgid "Signal"
 msgstr "Сигналы"
 
+#: templates/debug_toolbar/panels/signals.html:6
+msgid "Providing Args"
+msgstr ""
+
+#: templates/debug_toolbar/panels/signals.html:7
+msgid "Receivers"
+msgstr ""
+
 #: templates/debug_toolbar/panels/sql.html:6
 msgid "Action"
 msgstr "Действие"
+
+#: templates/debug_toolbar/panels/sql.html:7
+msgid "Stacktrace"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:8
 msgid "Query"
 msgstr "Запрос"
 
-#: templates/debug_toolbar/panels/sql.html:30
+#: templates/debug_toolbar/panels/sql.html:32
 msgid "Line"
 msgstr "Строка"
 
-#: templates/debug_toolbar/panels/sql.html:31
+#: templates/debug_toolbar/panels/sql.html:33
 msgid "Method"
 msgstr "Метод"
 
-#: templates/debug_toolbar/panels/sql.html:32
+#: templates/debug_toolbar/panels/sql.html:34
 msgid "File"
 msgstr "Файл"
 
@@ -221,11 +246,40 @@ msgstr ""
 msgid "Empty set"
 msgstr "Ничего"
 
+#: templates/debug_toolbar/panels/template_source.html:4
+#, fuzzy
+msgid "Template Source"
+msgstr "Шаблоны"
+
+#: templates/debug_toolbar/panels/templates.html:2
+#, fuzzy
+msgid "Template path"
+msgstr "Шаблоны"
+
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:21
+#: templates/debug_toolbar/panels/templates.html:37
+msgid "Toggle Context"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:31
+msgid "Context processor"
 msgstr ""
 
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
 msgstr "Ресурс"
 
+#~ msgid "HTTP Headers"
+#~ msgstr "Заголовки HTTP"
+
+#~ msgid "Request Vars"
+#~ msgstr "Запрос"

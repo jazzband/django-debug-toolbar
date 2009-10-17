@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-11 18:05-0700\n"
+"POT-Creation-Date: 2009-10-16 20:40-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr "Configuraciones"
 msgid "Signals"
 msgstr "Señales"
 
-#: panels/template.py:46
+#: panels/template.py:47
 msgid "Templates"
 msgstr "Plantillas"
 
@@ -46,13 +46,18 @@ msgstr "Tiempo"
 msgid "Django Version"
 msgstr "Versión Django"
 
-#: templates/debug_toolbar/base.html:24
+#: templates/debug_toolbar/base.html:23
 msgid "Hide"
 msgstr "Ocultar"
 
-#: templates/debug_toolbar/base.html:55
+#: templates/debug_toolbar/base.html:54
 msgid "Close"
 msgstr "Cerrar"
+
+#: templates/debug_toolbar/redirect.html:7
+#: templates/debug_toolbar/panels/logger.html:9
+msgid "Location"
+msgstr ""
 
 #: templates/debug_toolbar/redirect.html:9
 msgid ""
@@ -117,13 +122,14 @@ msgstr "Nivel"
 msgid "Message"
 msgstr "Mensaje"
 
-#: templates/debug_toolbar/panels/logger.html:9
-msgid "Location"
-msgstr ""
-
 #: templates/debug_toolbar/panels/logger.html:24
 msgid "No messages logged"
 msgstr "No hay mensajes registrados"
+
+#: templates/debug_toolbar/panels/request_vars.html:2
+#, fuzzy
+msgid "COOKIES Variables"
+msgstr "Variable"
 
 #: templates/debug_toolbar/panels/request_vars.html:11
 #: templates/debug_toolbar/panels/request_vars.html:37
@@ -138,13 +144,28 @@ msgstr "Variable"
 msgid "No COOKIE data"
 msgstr "No GET datos"
 
+#: templates/debug_toolbar/panels/request_vars.html:28
+#, fuzzy
+msgid "SESSION Variables"
+msgstr "Variable"
+
 #: templates/debug_toolbar/panels/request_vars.html:51
 msgid "No SESSION data"
 msgstr "No SESSION datos"
 
+#: templates/debug_toolbar/panels/request_vars.html:54
+#, fuzzy
+msgid "GET Variables"
+msgstr "Variable"
+
 #: templates/debug_toolbar/panels/request_vars.html:73
 msgid "No GET data"
 msgstr "No GET datos"
+
+#: templates/debug_toolbar/panels/request_vars.html:76
+#, fuzzy
+msgid "POST Variables"
+msgstr "Variable"
 
 #: templates/debug_toolbar/panels/request_vars.html:95
 msgid "No POST data"
@@ -158,19 +179,35 @@ msgstr "Configuración"
 msgid "Signal"
 msgstr "Señal"
 
+#: templates/debug_toolbar/panels/signals.html:6
+msgid "Providing Args"
+msgstr ""
+
+#: templates/debug_toolbar/panels/signals.html:7
+msgid "Receivers"
+msgstr ""
+
 #: templates/debug_toolbar/panels/sql.html:6
 msgid "Action"
 msgstr "Acción"
 
-#: templates/debug_toolbar/panels/sql.html:30
+#: templates/debug_toolbar/panels/sql.html:7
+msgid "Stacktrace"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:8
+msgid "Query"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:32
 msgid "Line"
 msgstr "Línea"
 
-#: templates/debug_toolbar/panels/sql.html:31
+#: templates/debug_toolbar/panels/sql.html:33
 msgid "Method"
 msgstr "Método"
 
-#: templates/debug_toolbar/panels/sql.html:32
+#: templates/debug_toolbar/panels/sql.html:34
 msgid "File"
 msgstr "Archivo"
 
@@ -207,13 +244,34 @@ msgstr ""
 msgid "Empty set"
 msgstr "Set Vacío"
 
+#: templates/debug_toolbar/panels/template_source.html:4
+#, fuzzy
+msgid "Template Source"
+msgstr "Plantilla"
+
+#: templates/debug_toolbar/panels/templates.html:2
+#, fuzzy
+msgid "Template path"
+msgstr "Plantilla"
+
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgstr "Plantilla"
 
+#: templates/debug_toolbar/panels/templates.html:21
+#: templates/debug_toolbar/panels/templates.html:37
+msgid "Toggle Context"
+msgstr ""
+
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr "Ninguno"
+
+#: templates/debug_toolbar/panels/templates.html:31
+msgid "Context processor"
+msgstr ""
+
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
 msgstr "Recurso"
-
-#~ msgid "None"
-#~ msgstr "Ninguno"
