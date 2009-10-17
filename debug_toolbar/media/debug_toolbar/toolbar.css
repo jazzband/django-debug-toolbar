@@ -1,7 +1,7 @@
 /* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
 #djDebug {color:#000;background:#FFF;}
 #djDebug, #djDebug div, #djDebug span, #djDebug applet, #djDebug object, #djDebug iframe,
-#djDebug h1, #djDebug h2, #djDebug h3, #djDebug h4, #djDebug h5, #djDebug h6, #djDebug p, blockquote, #djDebug pre,
+#djDebug h1, #djDebug h2, #djDebug h3, #djDebug h4, #djDebug h5, #djDebug h6, #djDebug p, #djDebug blockquote, #djDebug pre,
 #djDebug a, #djDebug abbr, #djDebug acronym, #djDebug address, #djDebug big, #djDebug cite, #djDebug code,
 #djDebug del, #djDebug dfn, #djDebug em, #djDebug font, #djDebug img, #djDebug ins, #djDebug kbd, #djDebug q, #djDebug s, #djDebug samp,
 #djDebug small, #djDebug strike, #djDebug strong, #djDebug sub, #djDebug sup, #djDebug tt, #djDebug var,

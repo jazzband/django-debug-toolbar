@@ -1,7 +1,8 @@
+from datetime import datetime
 import os
 import SocketServer
-from datetime import datetime
 import traceback
+
 import django
 from django.conf import settings
 from django.db import connection
@@ -10,7 +11,9 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
+
 from debug_toolbar.panels import DebugPanel
+from debug_toolbar.utils import sqlparse
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
@@ -18,48 +21,8 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
-SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SQL_WARNING_THRESHOLD', 500)
-
-# Note: This isn't intended to catch ALL possible SQL keywords, just a good common set.
-# Note: Subsets are listed last to avoid matching a subset of a keyword.  This
-# whole thing could be greatly improved but for now this works.
-SQL_KEYWORDS = (
-    'ALTER',
-    'AND',
-    'ASC',
-    'AS',
-    'AVG',
-    'COUNT',
-    'CREATE',
-    'DESC',
-    'DELETE',
-    'DISTINCT',
-    'DROP',
-    'FROM',
-    'GROUP BY',
-    'HAVING',
-    'INNER JOIN',
-    'INSERT',
-    'IN',
-    'LEFT OUTER JOIN',
-    'LIKE',
-    'LIMIT',
-    'MAX',
-    'MIN',
-    'OFFSET',
-    'ON',
-    'ORDER BY',
-    'OR',
-    'SELECT',
-    'SET',
-    'STDDEV_POP',
-    'STDDEV_SAMP',
-    'SUM',
-    'UPDATE',
-    'VAR_POP',
-    'VAR_SAMP',
-    'WHERE',
-)
+SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
+                            .get('SQL_WARNING_THRESHOLD', 500)
 
 def tidy_stacktrace(strace):
     """
@@ -71,7 +34,8 @@ def tidy_stacktrace(strace):
     trace = []
     for s in strace[:-1]:
         s_path = os.path.realpath(s[0])
-        if django_path in s_path and not 'django/contrib' in s_path:
+        if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True) \
+            and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if socketserver_path in s_path:
             continue
@@ -106,7 +70,8 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,
-                'is_slow': (duration > SQL_WARNING_THRESHOLD)
+                'is_slow': (duration > SQL_WARNING_THRESHOLD),
+                'is_select': sql.lower().strip().startswith('select'),
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
@@ -166,8 +131,20 @@ def ms_from_timedelta(td):
     """
     return (td.seconds * 1000) + (td.microseconds / 1000.0)
 
-def reformat_sql(sql):
-    for kwd in SQL_KEYWORDS:
-        sql = sql.replace(kwd, '<strong>%s</strong>' % (kwd,))
-    return sql
+class BoldKeywordFilter(sqlparse.filters.Filter):
+    """sqlparse filter to bold SQL keywords"""
+    def process(self, stack, stream):
+        """Process the token stream"""
+        for token_type, value in stream:
+            is_keyword = token_type in sqlparse.tokens.Keyword
+            if is_keyword:
+                yield sqlparse.tokens.Text, '<strong>'
+            yield token_type, value
+            if is_keyword:
+                yield sqlparse.tokens.Text, '</strong>'
 
+def reformat_sql(sql):
+    stack = sqlparse.engine.FilterStack()
+    stack.preprocess.append(BoldKeywordFilter()) # add our custom filter
+    stack.postprocess.append(sqlparse.filters.SerializerUnicode()) # tokens -> strings
+    return ''.join(stack.run(sql))

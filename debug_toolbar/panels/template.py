@@ -1,6 +1,7 @@
 from os.path import normpath
 from pprint import pformat
 
+from django import http
 from django.conf import settings
 from django.core.signals import request_started
 from django.dispatch import Signal
@@ -37,16 +38,18 @@ class TemplateDebugPanel(DebugPanel):
 
     def __init__(self):
         self.templates = []
-        template_rendered.connect(self._storeTemplateInfo)
+        template_rendered.connect(self._store_template_info)
 
-    def _storeTemplateInfo(self, sender, **kwargs):
+    def _store_template_info(self, sender, **kwargs):
         self.templates.append(kwargs)
 
     def nav_title(self):
         return _('Templates')
 
     def title(self):
-        return 'Templates'
+        num_templates = len([t for t in self.templates
+            if not t['template'].name.startswith('debug_toolbar/')])
+        return 'Templates (%s rendered)' % num_templates
 
     def url(self):
         return ''
@@ -62,28 +65,39 @@ class TemplateDebugPanel(DebugPanel):
             ]
         )
         template_context = []
-        for i, d in enumerate(self.templates):
+        for template_data in self.templates:
             info = {}
             # Clean up some info about templates
-            t = d.get('template', None)
+            template = template_data.get('template', None)
             # Skip templates that we are generating through the debug toolbar.
-            if t.name.startswith('debug_toolbar/'):
+            if template.name.startswith('debug_toolbar/'):
                 continue
-            if t.origin and t.origin.name:
-                t.origin_name = t.origin.name
+            if template.origin and template.origin.name:
+                template.origin_name = template.origin.name
             else:
-                t.origin_name = 'No origin'
-            info['template'] = t
+                template.origin_name = 'No origin'
+            info['template'] = template
             # Clean up context for better readability
-            c = d.get('context', None)
-            
-            d_list = []
-            for _d in c.dicts:
-                try:
-                    d_list.append(pformat(d))
-                except UnicodeEncodeError:
-                    pass
-            info['context'] = '\n'.join(d_list)
+            if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('SHOW_TEMPLATE_CONTEXT', True):
+                context_data = template_data.get('context', None)
+
+                context_list = []
+                for context_layer in context_data.dicts:
+                    for key, value in context_layer.items():
+                        # Replace any request elements - they have a large
+                        # unicode representation and the request data is
+                        # already made available from the Request Vars panel.
+                        if isinstance(value, http.HttpRequest):
+                            context_layer[key] = '<<request>>' 
+                        # Replace the debugging sql_queries element. The SQL
+                        # data is already made available from the SQL panel.
+                        elif key == 'sql_queries' and isinstance(value, list):
+                            context_layer[key] = '<<sql_queries>>' 
+                    try:
+                        context_list.append(pformat(context_layer))
+                    except UnicodeEncodeError:
+                        pass
+                info['context'] = '\n'.join(context_list)
             template_context.append(info)
         context = {
             'templates': template_context,
