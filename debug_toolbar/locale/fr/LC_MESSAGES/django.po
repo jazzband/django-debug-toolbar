@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-16 20:40-0700\n"
+"POT-Creation-Date: 2009-11-02 12:50-0800\n"
 "PO-Revision-Date: 2009-10-14 22:53+0200\n"
 "Last-Translator: David Paccoud <dpaccoud@gmail.com>\n"
 "Language-Team: French <LL@li.org>\n"
@@ -41,8 +41,9 @@ msgstr "Gabarits"
 msgid "Time"
 msgstr "Temps"
 
-#: panels/version.py:12
-msgid "Django Version"
+#: panels/version.py:20
+#, fuzzy
+msgid "Versions"
 msgstr "Version de Django"
 
 #: templates/debug_toolbar/base.html:23
@@ -202,15 +203,15 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:32
+#: templates/debug_toolbar/panels/sql.html:38
 msgid "Line"
 msgstr "Ligne"
 
-#: templates/debug_toolbar/panels/sql.html:33
+#: templates/debug_toolbar/panels/sql.html:39
 msgid "Method"
 msgstr "Méthode"
 
-#: templates/debug_toolbar/panels/sql.html:34
+#: templates/debug_toolbar/panels/sql.html:40
 msgid "File"
 msgstr "Fichier"
 
@@ -278,3 +279,12 @@ msgstr ""
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
 msgstr "Ressources"
+
+#: templates/debug_toolbar/panels/versions.html:6
+msgid "Package"
+msgstr ""
+
+#: templates/debug_toolbar/panels/versions.html:7
+#, fuzzy
+msgid "Version"
+msgstr "Version de Django"

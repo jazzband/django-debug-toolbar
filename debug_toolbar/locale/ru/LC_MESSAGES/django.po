@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-16 20:40-0700\n"
+"POT-Creation-Date: 2009-11-02 12:50-0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mikhail Korobov <kmike84@gmail.com>\n"
 "Language-Team: \n"
@@ -41,8 +41,9 @@ msgstr "Шаблоны"
 msgid "Time"
 msgstr "Время"
 
-#: panels/version.py:12
-msgid "Django Version"
+#: panels/version.py:20
+#, fuzzy
+msgid "Versions"
 msgstr "Версия Django"
 
 #: templates/debug_toolbar/base.html:23
@@ -201,15 +202,15 @@ msgstr ""
 msgid "Query"
 msgstr "Запрос"
 
-#: templates/debug_toolbar/panels/sql.html:32
+#: templates/debug_toolbar/panels/sql.html:38
 msgid "Line"
 msgstr "Строка"
 
-#: templates/debug_toolbar/panels/sql.html:33
+#: templates/debug_toolbar/panels/sql.html:39
 msgid "Method"
 msgstr "Метод"
 
-#: templates/debug_toolbar/panels/sql.html:34
+#: templates/debug_toolbar/panels/sql.html:40
 msgid "File"
 msgstr "Файл"
 
@@ -277,6 +278,15 @@ msgstr ""
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
 msgstr "Ресурс"
+
+#: templates/debug_toolbar/panels/versions.html:6
+msgid "Package"
+msgstr ""
+
+#: templates/debug_toolbar/panels/versions.html:7
+#, fuzzy
+msgid "Version"
+msgstr "Версия Django"
 
 #~ msgid "HTTP Headers"
 #~ msgstr "Заголовки HTTP"
