@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-02 12:50-0800\n"
+"POT-Creation-Date: 2009-11-02 13:09-0800\n"
 "PO-Revision-Date: 2009-08-24 23:08-0600\n"
 "Last-Translator: Alex <alex.gaynor@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,9 +15,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: panels/logger.py:56
+msgid "Logging"
+msgstr "רישום יומן"
+
 #: panels/settings_vars.py:16
 msgid "Settings"
 msgstr ""
+
+#: panels/signals.py:39
+msgid "Signals"
+msgstr "סימנים"
+
+#: panels/template.py:47
+msgid "Templates"
+msgstr "תבניות"
 
 #: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7
@@ -37,12 +49,22 @@ msgstr "ג 'נגו גירסה"
 msgid "Hide"
 msgstr "הסתיר"
 
-#: templates/debug_toolbar/base.html:55
+#: templates/debug_toolbar/base.html:54
 msgid "Close"
 msgstr "סגור"
 
+#: templates/debug_toolbar/redirect.html:7
+#: templates/debug_toolbar/panels/logger.html:9
+msgid "Location"
+msgstr "מקום"
+
 #: templates/debug_toolbar/redirect.html:9
-msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgid ""
+"The Django Debug Toolbar has intercepted a redirect to the above URL for "
+"debug viewing purposes.  You can click the above link to continue with the "
+"redirect as normal.  If you'd like to disable this feature, set the "
+"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
+"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:14
@@ -77,6 +99,20 @@ msgstr ""
 msgid "Function"
 msgstr ""
 
+#: templates/debug_toolbar/panels/headers.html:5
+msgid "Key"
+msgstr "מפתח"
+
+#: templates/debug_toolbar/panels/headers.html:6
+#: templates/debug_toolbar/panels/request_vars.html:12
+#: templates/debug_toolbar/panels/request_vars.html:38
+#: templates/debug_toolbar/panels/request_vars.html:60
+#: templates/debug_toolbar/panels/request_vars.html:82
+#: templates/debug_toolbar/panels/settings_vars.html:6
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Value"
+msgstr "ערך"
+
 #: templates/debug_toolbar/panels/logger.html:6
 msgid "Level"
 msgstr "רמה"
@@ -85,13 +121,52 @@ msgstr "רמה"
 msgid "Message"
 msgstr "הודעה"
 
-#: templates/debug_toolbar/panels/logger.html:9
-msgid "Location"
-msgstr "מקום"
-
 #: templates/debug_toolbar/panels/logger.html:24
 msgid "No messages logged"
 msgstr "אין הודעות"
+
+#: templates/debug_toolbar/panels/request_vars.html:2
+#, fuzzy
+msgid "COOKIES Variables"
+msgstr "מזהה"
+
+#: templates/debug_toolbar/panels/request_vars.html:11
+#: templates/debug_toolbar/panels/request_vars.html:37
+#: templates/debug_toolbar/panels/request_vars.html:59
+#: templates/debug_toolbar/panels/request_vars.html:81
+msgid "Variable"
+msgstr "מזהה"
+
+#: templates/debug_toolbar/panels/request_vars.html:25
+msgid "No COOKIE data"
+msgstr "אין נתונים  לעוגיות"
+
+#: templates/debug_toolbar/panels/request_vars.html:28
+#, fuzzy
+msgid "SESSION Variables"
+msgstr "מזהה"
+
+#: templates/debug_toolbar/panels/request_vars.html:51
+msgid "No SESSION data"
+msgstr "אין נתונים  להתחברות"
+
+#: templates/debug_toolbar/panels/request_vars.html:54
+#, fuzzy
+msgid "GET Variables"
+msgstr "מזהה"
+
+#: templates/debug_toolbar/panels/request_vars.html:73
+msgid "No GET data"
+msgstr "שום דבר עבור GET"
+
+#: templates/debug_toolbar/panels/request_vars.html:76
+#, fuzzy
+msgid "POST Variables"
+msgstr "מזהה"
+
+#: templates/debug_toolbar/panels/request_vars.html:95
+msgid "No POST data"
+msgstr "שום דבר עבור POST"
 
 #: templates/debug_toolbar/panels/settings_vars.html:5
 msgid "Setting"
@@ -144,9 +219,19 @@ msgstr "חזרה"
 msgid "SQL Explained"
 msgstr ""
 
+#: templates/debug_toolbar/panels/sql_explain.html:9
+#: templates/debug_toolbar/panels/sql_profile.html:10
+#: templates/debug_toolbar/panels/sql_select.html:9
+msgid "Executed SQL"
+msgstr "הסבר עבור SQL"
+
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL Profiled"
 msgstr ""
+
+#: templates/debug_toolbar/panels/sql_profile.html:35
+msgid "Error"
+msgstr "שגיאה"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL Selected"
@@ -156,79 +241,36 @@ msgstr ""
 msgid "Empty set"
 msgstr "תוצאות ריק"
 
+#: templates/debug_toolbar/panels/template_source.html:4
+#, fuzzy
+msgid "Template Source"
+msgstr "תבנית"
+
+#: templates/debug_toolbar/panels/templates.html:2
+#, fuzzy
+msgid "Template path"
+msgstr "תבנית"
+
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgstr "תבנית"
 
-#: templates/debug_toolbar/panels/timer.html:9
-msgid "Resource"
+#: templates/debug_toolbar/panels/templates.html:21
+#: templates/debug_toolbar/panels/templates.html:37
+msgid "Toggle Context"
 msgstr ""
 
-#: templates/debug_toolbar/panels/headers.html:5
-msgid "Key"
-msgstr "מפתח"
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr ""
 
-#: panels/logger.py:56
-msgid "Logging"
-msgstr "רישום יומן"
+#: templates/debug_toolbar/panels/templates.html:31
+msgid "Context processor"
+msgstr ""
 
-#: templates/debug_toolbar/panels/headers.html:6
-#: templates/debug_toolbar/panels/request_vars.html:12
-#: templates/debug_toolbar/panels/request_vars.html:38
-#: templates/debug_toolbar/panels/request_vars.html:60
-#: templates/debug_toolbar/panels/request_vars.html:82
-#: templates/debug_toolbar/panels/settings_vars.html:6
-#: templates/debug_toolbar/panels/timer.html:10
-msgid "Value"
-msgstr "ערך"
-
-#: templates/debug_toolbar/panels/request_vars.html:25
-msgid "No COOKIE data"
-msgstr "אין נתונים  לעוגיות"
-
-#: templates/debug_toolbar/panels/request_vars.html:51
-msgid "No SESSION data"
-msgstr "אין נתונים  להתחברות"
-
-#: templates/debug_toolbar/panels/request_vars.html:11
-#: templates/debug_toolbar/panels/request_vars.html:37
-#: templates/debug_toolbar/panels/request_vars.html:59
-#: templates/debug_toolbar/panels/request_vars.html:81
-msgid "Variable"
-msgstr "מזהה"
-
-#: templates/debug_toolbar/panels/sql.html:6
-msgid "Action"
-msgstr "פעילות"
-
-#: panels/template.py:46
-msgid "Templates"
-msgstr "תבניות"
-
-#: panels/signals.py:39
-msgid "Signals"
-msgstr "סימנים"
-
-#: templates/debug_toolbar/panels/request_vars.html:73
-msgid "No GET data"
-msgstr "שום דבר עבור GET"
-
-#: templates/debug_toolbar/panels/request_vars.html:95
-msgid "No POST data"
-msgstr "שום דבר עבור POST"
-
-#: templates/debug_toolbar/panels/sql_explain.html:9
-#: templates/debug_toolbar/panels/sql_profile.html:10
-#: templates/debug_toolbar/panels/sql_select.html:9
-msgid "Executed SQL"
-msgstr "הסבר עבור SQL"
-
-#: templates/debug_toolbar/panels/sql_profile.html:35
-msgid "Error"
-msgstr "שגיאה"
-
-#: templates/debug_toolbar/panels/versions.html:6
-msgid "Package"
+#: templates/debug_toolbar/panels/timer.html:9
+msgid "Resource"
 msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:6
