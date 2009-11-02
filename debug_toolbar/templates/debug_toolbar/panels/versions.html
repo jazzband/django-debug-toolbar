@@ -10,7 +10,7 @@
 	<tbody>
 		{% for package, version in versions.iteritems %}
 			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-			    <td>{{ package }}</td>
+				<td>{{ package }}</td>
 				<td>{{ version }}</td>
 			</tr>
 		{% endfor %}

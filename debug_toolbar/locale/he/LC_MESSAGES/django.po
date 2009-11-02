@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-11 18:05-0700\n"
+"POT-Creation-Date: 2009-11-02 12:50-0800\n"
 "PO-Revision-Date: 2009-08-24 23:08-0600\n"
 "Last-Translator: Alex <alex.gaynor@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,6 +226,10 @@ msgstr "הסבר עבור SQL"
 #: templates/debug_toolbar/panels/sql_profile.html:35
 msgid "Error"
 msgstr "שגיאה"
+
+#: templates/debug_toolbar/panels/versions.html:6
+msgid "Package"
+msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Package"

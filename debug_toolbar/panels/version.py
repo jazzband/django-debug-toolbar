@@ -28,6 +28,9 @@ class VersionDebugPanel(DebugPanel):
     def title(self):
         return 'Versions'
 
+    def title(self):
+        return 'Versions'
+
     def content(self):
         versions = {}
         for app in settings.INSTALLED_APPS + ['django']:
