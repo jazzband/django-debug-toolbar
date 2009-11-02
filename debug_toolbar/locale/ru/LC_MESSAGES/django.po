@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-02 13:09-0800\n"
+"POT-Creation-Date: 2009-11-02 13:13-0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mikhail Korobov <kmike84@gmail.com>\n"
 "Language-Team: \n"
@@ -31,6 +31,11 @@ msgstr "Сигналы"
 #: panels/template.py:47
 msgid "Templates"
 msgstr "Шаблоны"
+
+#: panels/template.py:52
+#, python-format
+msgid "Templates (%(num_templates)s rendered)"
+msgstr ""
 
 #: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-02 13:09-0800\n"
+"POT-Creation-Date: 2009-11-02 13:13-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,11 @@ msgstr ""
 
 #: panels/template.py:47
 msgid "Templates"
+msgstr ""
+
+#: panels/template.py:52
+#, python-format
+msgid "Templates (%(num_templates)s rendered)"
 msgstr ""
 
 #: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
