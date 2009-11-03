@@ -1,4 +1,31 @@
 {% load i18n %}
+
+<h4>{% trans 'View information' %}</h4>
+<table>
+	<colgroup>
+		<col style="width:20%"/>
+		<col/>
+	</colgroup>
+	<tbody>
+        <tr>
+            <th>{% trans 'View function' %}</th>
+	        <td>{{ view_func }}</td>
+        </tr>
+        {% if view_args %}
+            <tr>
+                <th>{% trans 'View arguments' %}</th>
+                <td>{{ view_args }}</td>
+            </tr>
+        {% endif %}
+        {% if view_kwargs %}
+            <tr>
+                <th>{% trans 'View keyword arguments' %}</th>
+                <td>{{ view_kwargs }}</td>
+            </tr>
+        {% endif %}
+	</tbody>
+</table>
+
 <h4>{% trans 'COOKIES Variables' %}</h4>
 {% if cookies %}
 	<table>
