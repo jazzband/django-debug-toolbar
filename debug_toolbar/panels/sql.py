@@ -110,8 +110,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                     cur_frame = cur_frame.f_back
             except:
                 pass
-            finally:
-                del cur_frame
+            del cur_frame
 
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
