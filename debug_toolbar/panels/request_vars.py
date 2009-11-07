@@ -19,7 +19,7 @@ class RequestVarsDebugPanel(DebugPanel):
 
     def process_request(self, request):
         self.request = request
-    
+
     def process_view(self, request, view_func, view_args, view_kwargs):
         self.view_func = view_func
         self.view_args = view_args
