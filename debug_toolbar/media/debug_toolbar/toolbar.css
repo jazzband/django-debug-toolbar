@@ -277,7 +277,7 @@
 }
 */
 
-#djDebug .panelContent .close {
+#djDebug .panelContent .djDebugClose {
 	text-indent:-9999999px;
 	display:block;
 	position:absolute;
@@ -288,15 +288,15 @@
 	background:url(close.png) no-repeat center center;
 }
 
-#djDebug .panelContent .close:hover {
+#djDebug .panelContent .djDebugClose:hover {
 	background-image:url(close_hover.png);
 }
 
-#djDebug .panelContent .close.back {
+#djDebug .panelContent .djDebugClose.djDebugBack {
 	background-image:url(back.png);
 }
 
-#djDebug .panelContent .close.back:hover  {
+#djDebug .panelContent .djDebugClose.djDebugBack:hover  {
 	background-image:url(back_hover.png);
 }
 
