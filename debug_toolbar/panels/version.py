@@ -26,10 +26,7 @@ class VersionDebugPanel(DebugPanel):
         return ''
     
     def title(self):
-        return 'Versions'
-
-    def title(self):
-        return 'Versions'
+        return _('Versions')
 
     def content(self):
         versions = {}

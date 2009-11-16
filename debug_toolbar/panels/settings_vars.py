@@ -16,7 +16,7 @@ class SettingsVarsDebugPanel(DebugPanel):
         return _('Settings')
 
     def title(self):
-        return 'Settings from <code>%s</code>' % settings.SETTINGS_MODULE
+        return _('Settings from <code>%s</code>') % settings.SETTINGS_MODULE
 
     def url(self):
         return ''

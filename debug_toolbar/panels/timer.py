@@ -35,6 +35,7 @@ class TimerDebugPanel(DebugPanel):
         return _('Time')
 
     def nav_subtitle(self):
+        # TODO l10n
         if self.has_resource:
             utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
             stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
@@ -43,7 +44,7 @@ class TimerDebugPanel(DebugPanel):
             return 'TOTAL: %0.2fms' % (self.total_time)
 
     def title(self):
-        return 'Resource Usage'
+        return _('Resource Usage')
 
     def url(self):
         return ''
@@ -72,12 +73,13 @@ class TimerDebugPanel(DebugPanel):
 #        urss = self._end_rusage.ru_idrss
 #        usrss = self._end_rusage.ru_isrss
 
+        # TODO l10n on values
         rows = (
-            ('User CPU time', '%0.3f msec' % utime),
-            ('System CPU time', '%0.3f msec' % stime),
-            ('Total CPU time', '%0.3f msec' % (utime + stime)),
-            ('Elapsed time', '%0.3f msec' % self.total_time),
-            ('Context switches', '%d voluntary, %d involuntary' % (vcsw, ivcsw)),
+            (_('User CPU time'), '%0.3f msec' % utime),
+            (_('System CPU time'), '%0.3f msec' % stime),
+            (_('Total CPU time'), '%0.3f msec' % (utime + stime)),
+            (_('Elapsed time'), '%0.3f msec' % self.total_time),
+            (_('Context switches'), '%d voluntary, %d involuntary' % (vcsw, ivcsw)),
 #            ('Memory use', '%d max RSS, %d shared, %d unshared' % (rss, srss, urss + usrss)),
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (minflt, majflt)),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (blkin, blkout, swap)),

@@ -7,6 +7,7 @@ except ImportError:
 from django.core import cache
 from django.core.cache.backends.base import BaseCache
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 class CacheStatTracker(BaseCache):
@@ -88,10 +89,10 @@ class CacheDebugPanel(DebugPanel):
             cache.cache = self.cache
 
     def nav_title(self):
-        return 'Cache: %.2fms' % self.cache.total_time
+        return _('Cache: %.2fms') % self.cache.total_time
 
     def title(self):
-        return 'Cache Usage'
+        return _('Cache Usage')
 
     def url(self):
         return ''

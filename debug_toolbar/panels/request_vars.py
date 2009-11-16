@@ -1,4 +1,5 @@
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 class RequestVarsDebugPanel(DebugPanel):
@@ -9,10 +10,10 @@ class RequestVarsDebugPanel(DebugPanel):
     has_content = True
 
     def nav_title(self):
-        return 'Request Vars'
+        return _('Request Vars')
 
     def title(self):
-        return 'Request Vars'
+        return _('Request Vars')
 
     def url(self):
         return ''

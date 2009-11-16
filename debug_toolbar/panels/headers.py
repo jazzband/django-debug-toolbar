@@ -1,4 +1,5 @@
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 class HeaderDebugPanel(DebugPanel):
@@ -32,10 +33,10 @@ class HeaderDebugPanel(DebugPanel):
     )
 
     def nav_title(self):
-        return 'HTTP Headers'
+        return _('HTTP Headers')
 
     def title(self):
-        return 'HTTP Headers'
+        return _('HTTP Headers')
 
     def url(self):
         return ''

@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
+from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import sqlparse
@@ -142,12 +143,13 @@ class SQLDebugPanel(DebugPanel):
         self._queries = []
 
     def nav_title(self):
-        return 'SQL'
+        return _('SQL')
 
     def nav_subtitle(self):
         self._queries = connection.queries[self._offset:]
         self._sql_time = sum([q['duration'] for q in self._queries])
         num_queries = len(self._queries)
+        # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
             num_queries,
             (num_queries == 1) and 'query' or 'queries',
@@ -155,7 +157,7 @@ class SQLDebugPanel(DebugPanel):
         )
 
     def title(self):
-        return 'SQL Queries'
+        return _('SQL Queries')
 
     def url(self):
         return ''

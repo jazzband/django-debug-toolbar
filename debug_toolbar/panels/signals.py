@@ -39,7 +39,7 @@ class SignalDebugPanel(DebugPanel):
         return _("Signals")
 
     def title(self):
-        return "Signals"
+        return _("Signals")
 
     def url(self):
         return ''
