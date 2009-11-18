@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-02 13:13-0800\n"
+"POT-Creation-Date: 2009-11-18 08:06-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,16 +15,50 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: panels/cache.py:92
+#, python-format
+msgid "Cache: %.2fms"
+msgstr ""
+
+#: panels/cache.py:95
+msgid "Cache Usage"
+msgstr ""
+
+#: panels/headers.py:36 panels/headers.py:39
+msgid "HTTP Headers"
+msgstr ""
+
 #: panels/logger.py:56
 msgid "Logging"
+msgstr ""
+
+#: panels/logger.py:63
+msgid "Log Messages"
+msgstr ""
+
+#: panels/request_vars.py:13 panels/request_vars.py:16
+msgid "Request Vars"
 msgstr ""
 
 #: panels/settings_vars.py:16
 msgid "Settings"
 msgstr ""
 
-#: panels/signals.py:39
+#: panels/settings_vars.py:19
+#, python-format
+msgid "Settings from <code>%s</code>"
+msgstr ""
+
+#: panels/signals.py:39 panels/signals.py:42
 msgid "Signals"
+msgstr ""
+
+#: panels/sql.py:146
+msgid "SQL"
+msgstr ""
+
+#: panels/sql.py:160
+msgid "SQL Queries"
 msgstr ""
 
 #: panels/template.py:47
@@ -45,12 +79,44 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: panels/version.py:20
+#: panels/timer.py:47
+msgid "Resource Usage"
+msgstr ""
+
+#: panels/timer.py:78
+msgid "User CPU time"
+msgstr ""
+
+#: panels/timer.py:79
+msgid "System CPU time"
+msgstr ""
+
+#: panels/timer.py:80
+msgid "Total CPU time"
+msgstr ""
+
+#: panels/timer.py:81
+msgid "Elapsed time"
+msgstr ""
+
+#: panels/timer.py:82
+msgid "Context switches"
+msgstr ""
+
+#: panels/version.py:20 panels/version.py:29
 msgid "Versions"
 msgstr ""
 
 #: templates/debug_toolbar/base.html:23
+msgid "Hide Toolbar"
+msgstr ""
+
+#: templates/debug_toolbar/base.html:23
 msgid "Hide"
+msgstr ""
+
+#: templates/debug_toolbar/base.html:48
+msgid "Show Toolbar"
 msgstr ""
 
 #: templates/debug_toolbar/base.html:54
@@ -108,10 +174,10 @@ msgid "Key"
 msgstr ""
 
 #: templates/debug_toolbar/panels/headers.html:6
-#: templates/debug_toolbar/panels/request_vars.html:12
-#: templates/debug_toolbar/panels/request_vars.html:38
-#: templates/debug_toolbar/panels/request_vars.html:60
-#: templates/debug_toolbar/panels/request_vars.html:82
+#: templates/debug_toolbar/panels/request_vars.html:37
+#: templates/debug_toolbar/panels/request_vars.html:63
+#: templates/debug_toolbar/panels/request_vars.html:85
+#: templates/debug_toolbar/panels/request_vars.html:107
 #: templates/debug_toolbar/panels/settings_vars.html:6
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Value"
@@ -129,42 +195,58 @@ msgstr ""
 msgid "No messages logged"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:2
+#: templates/debug_toolbar/panels/request_vars.html:3
+msgid "View information"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:7
+msgid "View Function"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:8
+msgid "args"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:9
+msgid "kwargs"
+msgstr ""
+
+#: templates/debug_toolbar/panels/request_vars.html:27
 msgid "COOKIES Variables"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:11
-#: templates/debug_toolbar/panels/request_vars.html:37
-#: templates/debug_toolbar/panels/request_vars.html:59
-#: templates/debug_toolbar/panels/request_vars.html:81
+#: templates/debug_toolbar/panels/request_vars.html:36
+#: templates/debug_toolbar/panels/request_vars.html:62
+#: templates/debug_toolbar/panels/request_vars.html:84
+#: templates/debug_toolbar/panels/request_vars.html:106
 msgid "Variable"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:25
+#: templates/debug_toolbar/panels/request_vars.html:50
 msgid "No COOKIE data"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:28
+#: templates/debug_toolbar/panels/request_vars.html:53
 msgid "SESSION Variables"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:51
+#: templates/debug_toolbar/panels/request_vars.html:76
 msgid "No SESSION data"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:54
+#: templates/debug_toolbar/panels/request_vars.html:79
 msgid "GET Variables"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:73
+#: templates/debug_toolbar/panels/request_vars.html:98
 msgid "No GET data"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:76
+#: templates/debug_toolbar/panels/request_vars.html:101
 msgid "POST Variables"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:95
+#: templates/debug_toolbar/panels/request_vars.html:120
 msgid "No POST data"
 msgstr ""
 
