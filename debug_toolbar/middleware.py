@@ -83,11 +83,10 @@ class DebugToolbarMiddleware(object):
                         'debug_toolbar/redirect.html',
                         {'redirect_to': redirect_to}
                     )
-        if response.status_code != 200:
-            return response
-        for panel in self.debug_toolbars[request].panels:
-            panel.process_response(request, response)
-        if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-            response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbars[request].render_toolbar() + u'</body>'))
+        if response.status_code == 200:
+            for panel in self.debug_toolbars[request].panels:
+                panel.process_response(request, response)
+            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+                response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbars[request].render_toolbar() + u'</body>'))
         del self.debug_toolbars[request]
         return response
