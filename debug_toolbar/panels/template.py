@@ -93,6 +93,9 @@ class TemplateDebugPanel(DebugPanel):
                         # data is already made available from the SQL panel.
                         elif key == 'sql_queries' and isinstance(value, list):
                             context_layer[key] = '<<sql_queries>>' 
+                        # Replace LANGUAGES, which is available in i18n context processor
+                        elif key == 'LANGUAGES' and isinstance(value, tuple):
+                            context_layer[key] = '<<languages>>'
                     try:
                         context_list.append(pformat(context_layer))
                     except UnicodeEncodeError:
