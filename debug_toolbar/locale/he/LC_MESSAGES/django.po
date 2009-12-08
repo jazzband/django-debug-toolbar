@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -45,11 +45,6 @@ msgstr ""
 msgid "Time"
 msgstr "זמן"
 
-#: panels/version.py:20
-#, fuzzy
-msgid "Versions"
-msgstr "ג 'נגו גירסה"
-
 #: templates/debug_toolbar/base.html:23
 msgid "Hide"
 msgstr "הסתיר"
@@ -64,12 +59,7 @@ msgid "Location"
 msgstr "מקום"
 
 #: templates/debug_toolbar/redirect.html:9
-msgid ""
-"The Django Debug Toolbar has intercepted a redirect to the above URL for "
-"debug viewing purposes.  You can click the above link to continue with the "
-"redirect as normal.  If you'd like to disable this feature, set the "
-"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
-"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:14
@@ -130,11 +120,6 @@ msgstr "הודעה"
 msgid "No messages logged"
 msgstr "אין הודעות"
 
-#: templates/debug_toolbar/panels/request_vars.html:2
-#, fuzzy
-msgid "COOKIES Variables"
-msgstr "מזהה"
-
 #: templates/debug_toolbar/panels/request_vars.html:11
 #: templates/debug_toolbar/panels/request_vars.html:37
 #: templates/debug_toolbar/panels/request_vars.html:59
@@ -146,28 +131,13 @@ msgstr "מזהה"
 msgid "No COOKIE data"
 msgstr "אין נתונים  לעוגיות"
 
-#: templates/debug_toolbar/panels/request_vars.html:28
-#, fuzzy
-msgid "SESSION Variables"
-msgstr "מזהה"
-
 #: templates/debug_toolbar/panels/request_vars.html:51
 msgid "No SESSION data"
 msgstr "אין נתונים  להתחברות"
 
-#: templates/debug_toolbar/panels/request_vars.html:54
-#, fuzzy
-msgid "GET Variables"
-msgstr "מזהה"
-
 #: templates/debug_toolbar/panels/request_vars.html:73
 msgid "No GET data"
 msgstr "שום דבר עבור GET"
-
-#: templates/debug_toolbar/panels/request_vars.html:76
-#, fuzzy
-msgid "POST Variables"
-msgstr "מזהה"
 
 #: templates/debug_toolbar/panels/request_vars.html:95
 msgid "No POST data"
@@ -180,10 +150,6 @@ msgstr ""
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
 msgstr "סימן"
-
-#: templates/debug_toolbar/panels/signals.html:6
-msgid "Providing Args"
-msgstr ""
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
@@ -286,3 +252,27 @@ msgstr ""
 #, fuzzy
 msgid "Version"
 msgstr "ג 'נגו גירסה"
+
+#: panels/version.py:20
+msgid "Versions"
+msgstr "גירסאות"
+
+#: templates/debug_toolbar/panels/request_vars.html:2
+msgid "COOKIES Variables"
+msgstr "משתנים COOKIES"
+
+#: templates/debug_toolbar/panels/request_vars.html:28
+msgid "SESSION Variables"
+msgstr "משתנים SESSION"
+
+#: templates/debug_toolbar/panels/request_vars.html:76
+msgid "POST Variables"
+msgstr "משתנים POST"
+
+#: templates/debug_toolbar/panels/request_vars.html:54
+msgid "GET Variables"
+msgstr "משתנים GET"
+
+#: templates/debug_toolbar/panels/signals.html:6
+msgid "Providing Args"
+msgstr "פרמטרים מסופק"
