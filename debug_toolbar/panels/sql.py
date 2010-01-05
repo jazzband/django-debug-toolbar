@@ -95,7 +95,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             stacktrace = tidy_stacktrace(traceback.extract_stack())
             _params = ''
             try:
-                _params = simplejson.dumps([force_unicode(x) for x in params])
+                _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
             except TypeError:
                 pass # object not JSON serializable
 
