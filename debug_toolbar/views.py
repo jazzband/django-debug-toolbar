@@ -77,7 +77,15 @@ def sql_explain(request):
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connection.cursor()
-        cursor.execute("EXPLAIN %s" % (sql,), params)
+
+        if settings.DATABASE_ENGINE == "sqlite3":
+            # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
+            # EXPLAIN QUERY PLAN dumps a more human-readable summary
+            # See http://www.sqlite.org/lang_explain.html for details
+            cursor.execute("EXPLAIN QUERY PLAN %s" % (sql,), params)
+        else:
+            cursor.execute("EXPLAIN %s" % (sql,), params)
+
         headers = [d[0] for d in cursor.description]
         result = cursor.fetchall()
         cursor.close()
