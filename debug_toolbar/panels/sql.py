@@ -137,7 +137,8 @@ class SQLDebugPanel(DebugPanel):
     name = 'SQL'
     has_content = True
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
         self._offset = len(connection.queries)
         self._sql_time = 0
         self._queries = []
@@ -173,11 +174,13 @@ class SQLDebugPanel(DebugPanel):
             query['start_offset'] = width_ratio_tally
             width_ratio_tally += query['width_ratio']
 
-        context = {
+        context = self.context.copy()
+        context.update({
             'queries': self._queries,
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
-        }
+        })
+
         return render_to_string('debug_toolbar/panels/sql.html', context)
 
 def ms_from_timedelta(td):

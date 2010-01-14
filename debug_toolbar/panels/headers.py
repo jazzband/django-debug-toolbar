@@ -47,7 +47,8 @@ class HeaderDebugPanel(DebugPanel):
         )
 
     def content(self):
-        context = {
+        context = self.context.copy()
+        context.update({
             'headers': self.headers
-        }
+        })
         return render_to_string('debug_toolbar/panels/headers.html', context)

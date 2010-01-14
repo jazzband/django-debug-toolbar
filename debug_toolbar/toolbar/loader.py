@@ -11,6 +11,9 @@ class DebugToolbar(object):
         self.config = {
             'INTERCEPT_REDIRECTS': True,
         }
+        self.template_context = {
+            'BASE_URL': self.request.META.get('SCRIPT_NAME', ''),
+        }
         # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
         self.default_panels = (
             'debug_toolbar.panels.version.VersionDebugPanel',
@@ -56,9 +59,8 @@ class DebugToolbar(object):
                 raise exceptions.ImproperlyConfigured, 'Toolbar Panel module "%s" does not define a "%s" class' % (panel_module, panel_classname)
 
             try:
-                panel_instance = panel_class()
+                panel_instance = panel_class(context=self.template_context)
             except:
-                print panel_class
                 raise # Bubble up problem loading panel
 
             self.panels.append(panel_instance)
@@ -67,7 +69,7 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
-        return render_to_string('debug_toolbar/base.html', {
-            'panels': self.panels,
-            'BASE_URL': self.request.META.get('SCRIPT_NAME', ''),
-        })
+        context = self.template_context.copy()
+        context.update({ 'panels': self.panels, })
+
+        return render_to_string('debug_toolbar/base.html', context)

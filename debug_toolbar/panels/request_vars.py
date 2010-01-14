@@ -27,15 +27,18 @@ class RequestVarsDebugPanel(DebugPanel):
         self.view_kwargs = view_kwargs
 
     def content(self):
-        context = {
+        context = self.context.copy()
+        context.update({
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
             'view_func': '%s.%s' % (self.view_func.__module__, self.view_func.__name__),
             'view_args': self.view_args,
             'view_kwargs': self.view_kwargs
-        }
+        })
         if hasattr(self.request, 'session'):
-            context['session'] = [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()]
+            context.update({
+                'session': [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()]
+            })
 
         return render_to_string('debug_toolbar/panels/request_vars.html', context)

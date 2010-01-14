@@ -84,7 +84,10 @@ class TimerDebugPanel(DebugPanel):
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (minflt, majflt)),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (blkin, blkout, swap)),
         )
-        context = {
+
+        context = self.context.copy()
+        context.update({
             'rows': rows,
-        }
+        })
+
         return render_to_string('debug_toolbar/panels/timer.html', context)

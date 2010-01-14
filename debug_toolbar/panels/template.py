@@ -36,7 +36,8 @@ class TemplateDebugPanel(DebugPanel):
     name = 'Template'
     has_content = True
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
         self.templates = []
         template_rendered.connect(self._store_template_info)
 
@@ -103,9 +104,12 @@ class TemplateDebugPanel(DebugPanel):
                         pass
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
-        context = {
+
+        context = self.context.copy()
+        context.update({
             'templates': template_context,
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
             'context_processors': context_processors,
-        }
+        })
+
         return render_to_string('debug_toolbar/panels/templates.html', context)

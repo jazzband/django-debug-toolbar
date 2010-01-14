@@ -75,4 +75,9 @@ class LoggingPanel(DebugPanel):
                 'file': record.pathname,
                 'line': record.lineno,
             })
-        return render_to_string('debug_toolbar/panels/logger.html', {'records': records})
+
+        context = self.context.copy()
+        context.update({'records': records})
+
+        return render_to_string('debug_toolbar/panels/logger.html', context)
+

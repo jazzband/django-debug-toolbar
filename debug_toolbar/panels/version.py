@@ -50,7 +50,10 @@ class VersionDebugPanel(DebugPanel):
                 version = '.'.join(str(o) for o in version)
             versions[name] = version
 
-        return render_to_string('debug_toolbar/panels/versions.html', {
+        context = self.context.copy()
+        context.update({
             'versions': versions,
             'paths': sys.path,
         })
+
+        return render_to_string('debug_toolbar/panels/versions.html', context)

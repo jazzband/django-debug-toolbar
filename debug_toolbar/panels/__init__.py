@@ -7,9 +7,13 @@ class DebugPanel(object):
     # name = Base
     has_content = False # If content returns something, set to true in subclass
 
+    # We'll maintain a local context instance so we can expose our template
+    # context variables to panels which need them:
+    context = {}
+
     # Panel methods
-    def __init__(self):
-        pass
+    def __init__(self, context={}):
+        self.context.update(context)
 
     def dom_id(self):
         return 'djDebug%sPanel' % (self.name.replace(' ', ''))

@@ -76,7 +76,8 @@ class CacheDebugPanel(DebugPanel):
     name = 'Cache'
     has_content = True
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
         # This is hackish but to prevent threading issues is somewhat needed
         if isinstance(cache.cache, CacheStatTracker):
             cache.cache.reset()
@@ -95,9 +96,10 @@ class CacheDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        context = dict(
-            cache_calls = len(self.cache.calls),
-            cache_time = self.cache.total_time,
-            cache = self.cache,
-        )
+        context = self.context.copy()
+        context.update({
+            'cache_calls': len(self.cache.calls),
+            'cache_time': self.cache.total_time,
+            'cache': self.cache,
+        })
         return render_to_string('debug_toolbar/panels/cache.html', context)
