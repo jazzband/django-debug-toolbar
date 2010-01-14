@@ -1,9 +1,6 @@
 import time
 import inspect
-try: 
-    from cStringIO import StringIO
-except ImportError: 
-    import StringIO
+
 from django.core import cache
 from django.core.cache.backends.base import BaseCache
 from django.template.loader import render_to_string
@@ -53,7 +50,7 @@ class CacheStatTracker(BaseCache):
 
     def delete(self, key):
         t = time.time()
-        self.instance.delete(key, value)
+        self.cache.delete(key)
         this_time = time.time() - t
         self.total_time += this_time * 1000
         self.deletes += 1
