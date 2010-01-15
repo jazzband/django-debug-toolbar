@@ -15,11 +15,11 @@
 				<td>
 				{% if query.params %}
 					{% if query.is_select %}
-						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">SELECT</a><br>
+						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">SELECT</a><br />
 					{% endif %}
-					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">EXPLAIN</a><br>
+					<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">EXPLAIN</a><br />
 					{% if is_mysql %}
-						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&params={{ query.params|urlencode }}&duration={{ query.duration|floatformat:"2"|urlencode }}&hash={{ query.hash }}">PROFILE</a><br>
+						<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">PROFILE</a><br />
 					{% endif %}
 				{% endif %}
 				</td>
@@ -42,8 +42,8 @@
 								{% for file, line, method in query.stacktrace %}
 									<tr>
 										<td>{{ line }}</td>
-										<td><pre>{{ method|escape }}<pre></td>
-										<td><pre>{{ file|escape }}</pre></td>
+										<td><code>{{ method|escape }}</code></td>
+										<td><code>{{ file|escape }}</code></td>
 									</tr>
 								{% endfor %}
 							</table>
@@ -52,7 +52,7 @@
 								{% for line in query.template_info.context %}
 								<tr>
 									<td>{{ line.num }}</td>
-									<td><pre style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</pre></td>
+									<td><code style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</code></td>
 								</tr>
 								{% endfor %}
 							</table>

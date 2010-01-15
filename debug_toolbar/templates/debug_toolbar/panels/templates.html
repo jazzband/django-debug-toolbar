@@ -19,7 +19,7 @@
 	{% if template.context %}
 	<dd>
 		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>
-		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ template.context }}</pre></div>
+		<div class="djTemplateHideContextDiv" style="display:none;"><code>{{ template.context }}</code></div>
 	</dd>
 	{% endif %}
 {% endfor %}
@@ -35,7 +35,7 @@
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
 		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>
-		<div class="djTemplateHideContextDiv" style="display:none;"><pre>{{ value|escape }}</pre></div>
+		<div class="djTemplateHideContextDiv" style="display:none;"><code>{{ value|escape }}</code></div>
 	</dd>
 {% endfor %}
 </dl>

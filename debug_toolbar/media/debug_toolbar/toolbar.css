@@ -129,7 +129,10 @@
 	opacity:1.0;
 }
 
-#djDebug pre {
+#djDebug code {
+	display:block;
+	font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+	white-space:pre;
 	background-color:#ffffff;
 	overflow:auto;
 }
@@ -222,9 +225,6 @@
 	padding-right:.5em;
 }
 
-#djDebug .panelContent code {
-	font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
-}
 /*
 #djDebug .panelContent p a:hover, #djDebug .panelContent dd a:hover {
 	color:#111;
