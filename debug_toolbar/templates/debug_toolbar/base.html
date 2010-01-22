@@ -6,7 +6,11 @@
 	var _$ = window.$;
 	if (typeof jQuery == 'undefined') {
 		var jquery_url = '{{ BASE_URL }}/__debug__/m/jquery.js';
-		document.write(unescape('%3Cscript src="' + jquery_url + '" type="text/javascript"%3E%3C/script%3E'));
+		var head = document.getElementsByTagName("head")[0];
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = jquery_url;
+		head.appendChild(script);
 	}
 /* ]]> */
 </script>
