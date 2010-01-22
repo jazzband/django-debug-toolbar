@@ -197,7 +197,7 @@ class BoldKeywordFilter(sqlparse.filters.Filter):
             is_keyword = token_type in sqlparse.tokens.Keyword
             if is_keyword:
                 yield sqlparse.tokens.Text, '<strong>'
-            yield token_type, value
+            yield token_type, django.utils.html.escape(value)
             if is_keyword:
                 yield sqlparse.tokens.Text, '</strong>'
 
