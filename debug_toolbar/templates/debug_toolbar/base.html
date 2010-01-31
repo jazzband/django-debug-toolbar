@@ -1,29 +1,10 @@
 {% load i18n %}
 <script type="text/javascript" charset="utf-8">
-/* <![CDATA[ */
-	// When jQuery is sourced, it's going to overwrite whatever might be in the
-	// '$' variable, so store a reference of it in a temporary variable...
-	var _$ = window.$;
-	if (typeof jQuery == 'undefined') {
-		var jquery_url = '{{ BASE_URL }}/__debug__/m/jquery.js';
-		var head = document.getElementsByTagName("head")[0];
-		var script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = jquery_url;
-		head.appendChild(script);
-	}
-/* ]]> */
+// <![CDATA[
+var BASEURL = "{{ BASE_URL }}";
+// ]]>
 </script>
 <script type="text/javascript" src="{{ BASE_URL }}/__debug__/m/toolbar.min.js"></script>
-<script type="text/javascript" charset="utf-8">
-/* <![CDATA[ */
-	// Now that jQuery is done loading, put the '$' variable back to what it was...
-	var $ = _$;
-	jQuery(document).ready(function() {
-		jQuery('head').append('<link rel="stylesheet" href="{{ BASE_URL }}/__debug__/m/toolbar.min.css" type="text/css" />');
-	});
-/* ]]> */
-</script>
 <div id="djDebug">
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
