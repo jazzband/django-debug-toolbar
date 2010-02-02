@@ -133,7 +133,6 @@
 	display:block;
 	font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
 	white-space:pre;
-	background-color:#ffffff;
 	overflow:auto;
 }
 
@@ -167,6 +166,11 @@
 	right:0;
 	left:0;
 	height:50px;
+}
+
+#djDebug .djDebugPanelTitle code {
+	display:inline;
+	font-size:inherit;
 }
 
 #djDebug .djDebugPanelContent {
@@ -223,6 +227,10 @@
 	text-align:right;
 	color:#666;
 	padding-right:.5em;
+}
+
+#djDebug .djTemplateHideContextDiv {
+	background-color:#fff;
 }
 
 /*
