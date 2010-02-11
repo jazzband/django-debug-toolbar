@@ -1,0 +1,19 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>MooTools Test</title>
+	<style>
+	.hide {display:none;}
+	</style>
+	<script type="text/javascript" charset="utf-8" src="{{ MEDIA_URL }}/js/mootools.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		window.addEvent('domready', function() {
+			$$('p.hide').setStyle('display', 'block');
+		});
+	</script>
+</head>
+<body>
+	<h1>MooTools Test</h1>
+	<p class="hide">If you see this, MooTools is working.</p>
+</body>
+</html>
