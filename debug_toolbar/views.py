@@ -146,14 +146,30 @@ def template_source(request):
     Return the source of a template, syntax-highlighted by Pygments if
     it's available.
     """
-    from django.template.loader import find_template_source
+    from django.template import TemplateDoesNotExist
     from django.utils.safestring import mark_safe
+    from django.conf import settings
 
     template_name = request.GET.get('template', None)
     if template_name is None:
         return HttpResponseBadRequest('"template" key is required')
 
-    source, origin = find_template_source(template_name)
+    try: # Django 1.2 ...
+        from django.template.loader import find_template_loader, make_origin
+        loaders = []
+        for loader_name in settings.TEMPLATE_LOADERS:
+            loader = find_template_loader(loader_name)
+            if loader is not None:
+                loaders.append(loader)
+        for loader in loaders:
+            try:
+                source, display_name = loader.load_template_source(template_name)
+                origin = make_origin(display_name, loader, template_name, settings.TEMPLATE_DIRS)
+            except TemplateDoesNotExist:
+                source = "Template Does Not Exist: %s" % (template_name,)
+    except ImportError: # Django 1.1 ...
+        from django.template.loader import find_template_source
+        source, origin = find_template_source(template_name)
 
     try:
         from pygments import highlight
