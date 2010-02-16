@@ -44,13 +44,8 @@ class DebugToolbarMiddleware(object):
                 self.show_toolbar = show_toolbar_callback
 
     def _show_toolbar(self, request):
-        if not settings.DEBUG:
-            return False
-        if request.is_ajax() and not \
-            request.path.startswith(os.path.join('/', debug_toolbar.urls._PREFIX)):
-            # Allow ajax requests from the debug toolbar
-            return False 
-        if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+        if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS \
+                or request.is_ajax() or not settings.DEBUG:
             return False
         return True
 
