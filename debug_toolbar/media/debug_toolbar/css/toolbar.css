@@ -72,7 +72,7 @@
 }
 
 #djDebug #djDebugToolbar li.active {
-	background-image:url(indicator.png);
+	background-image:url(../img/indicator.png);
 	background-repeat:no-repeat;
 	background-position:left center;
 	background-color:#333;
@@ -116,7 +116,7 @@
 	text-decoration:none;
 	text-align:center;
 	text-indent:-999999px;
-	background:#000 url(djdt_vertical.png) no-repeat left center;
+	background:#000 url(../img/djdt_vertical.png) no-repeat left center;
 	opacity:0.5;
 }
 
@@ -293,19 +293,19 @@
 	right:15px;
 	height:40px;
 	width:40px;
-	background:url(close.png) no-repeat center center;
+	background:url(../img/close.png) no-repeat center center;
 }
 
 #djDebug .panelContent .djDebugClose:hover {
-	background-image:url(close_hover.png);
+	background-image:url(../img/close_hover.png);
 }
 
 #djDebug .panelContent .djDebugClose.djDebugBack {
-	background-image:url(back.png);
+	background-image:url(../img/back.png);
 }
 
 #djDebug .panelContent .djDebugClose.djDebugBack:hover  {
-	background-image:url(back_hover.png);
+	background-image:url(../img/back_hover.png);
 }
 
 #djDebug .panelContent dt, #djDebug .panelContent dd {
