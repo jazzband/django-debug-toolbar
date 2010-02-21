@@ -37,11 +37,19 @@ class DebugToolbarMiddleware(object):
 
         # Set method to use to decide to show toolbar
         self.show_toolbar = self._show_toolbar # default
+
+        # The tag to attach the toolbar to
+        self.tag= u'</body>'
+
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
             show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
                 'SHOW_TOOLBAR_CALLBACK', None)
             if show_toolbar_callback:
                 self.show_toolbar = show_toolbar_callback
+
+            tag = settings.DEBUG_TOOLBAR_CONFIG.get('TAG', None)
+            if tag:
+                self.tag = u'</' + tag + u'>'
 
     def _show_toolbar(self, request):
         if not request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS \
@@ -83,6 +91,9 @@ class DebugToolbarMiddleware(object):
             for panel in self.debug_toolbars[request].panels:
                 panel.process_response(request, response)
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-                response.content = replace_insensitive(smart_unicode(response.content), u'</body>', smart_unicode(self.debug_toolbars[request].render_toolbar() + u'</body>'))
+                response.content = replace_insensitive(
+                    smart_unicode(response.content), 
+                    self.tag,
+                    smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
         del self.debug_toolbars[request]
         return response

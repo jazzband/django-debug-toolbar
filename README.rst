@@ -114,6 +114,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
      off is useful when you have large template contexts, or you have template
      contexts with lazy datastructures that you don't want to be evaluated.
 
+   * `TAG`: If set, this will be the tag to which debug_toolbar will attach the 
+     debug toolbar. Defaults to 'body'.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
@@ -124,6 +127,7 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
 	    'HIDE_DJANGO_SQL': False,
+	    'TAG': 'div',
 	}
 
 `debugsqlshell`
