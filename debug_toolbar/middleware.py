@@ -58,7 +58,7 @@ class DebugToolbarMiddleware(object):
         else:
             remote_addr = request.META.get('REMOTE_ADDR', None)
         if not remote_addr in settings.INTERNAL_IPS \
-                or request.is_ajax() or not setting.DEBUG:
+                or request.is_ajax() or not settings.DEBUG:
             return False
         return True
 
