@@ -14,11 +14,13 @@
 			<td>{{ view_func }}</td>
 			<td>{{ view_args|default:"None" }}</td>
 			<td>
-			{% for k, v in view_kwargs.items %}
-				{{ k }}={{ v }}{% if not forloop.last %}, {% endif %}
-			{% empty %}
+			{% if view_kwargs.items %}
+				{% for k, v in view_kwargs.items %}
+					{{ k }}={{ v }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+			{% else %}
 				None
-			{% endfor %}
+			{% endif %}
 			</td>
 		</tr>
 	</tbody>
