@@ -45,6 +45,11 @@ Installation
    response is either `text/html` or `application/xhtml+xml` and contains a
    closing `</body>` tag.
 
+   Note: Be aware of middleware ordering and other middleware that may
+   intercept requests and return responses.  Putting the debug toolbar
+   middleware *after* the Flatpage middleware, for example, means the
+   toolbar will not show up on flatpages.
+
 #. Make sure your IP is listed in the `INTERNAL_IPS` setting.  If you are
    working locally this will be:
 
