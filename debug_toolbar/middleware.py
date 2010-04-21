@@ -32,7 +32,7 @@ class DebugToolbarMiddleware(object):
     on outgoing response.
     """
     def __init__(self):
-        self.debug_toolbars = {}
+        self.debug_toolbar = DebugToolbar()
         self.override_url = True
 
         # Set method to use to decide to show toolbar
@@ -66,6 +66,7 @@ class DebugToolbarMiddleware(object):
 
     def process_request(self, request):
         if self.show_toolbar(request):
+            self.debug_toolbar.process_request(request)
             if self.override_url:
                 original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
                 debug_toolbar.urls.urlpatterns += patterns('',
@@ -74,19 +75,18 @@ class DebugToolbarMiddleware(object):
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
 
-            self.debug_toolbars[request] = DebugToolbar(request)
-            for panel in self.debug_toolbars[request].panels:
+            for panel in self.debug_toolbar.panels:
                 panel.process_request(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if request in self.debug_toolbars:
-            for panel in self.debug_toolbars[request].panels:
+        if request in self.debug_toolbar.requests:
+            for panel in self.debug_toolbar.panels:
                 panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
-        if request not in self.debug_toolbars:
+        if request not in self.debug_toolbar.requests:
             return response
-        if self.debug_toolbars[request].config['INTERCEPT_REDIRECTS']:
+        if self.debug_toolbar.config['INTERCEPT_REDIRECTS']:
             if isinstance(response, HttpResponseRedirect):
                 redirect_to = response.get('Location', None)
                 if redirect_to:
@@ -95,14 +95,14 @@ class DebugToolbarMiddleware(object):
                         {'redirect_to': redirect_to}
                     )
         if response.status_code == 200:
-            for panel in self.debug_toolbars[request].panels:
+            for panel in self.debug_toolbar.panels:
                 panel.process_response(request, response)
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
                 response.content = replace_insensitive(
                     smart_unicode(response.content), 
                     self.tag,
-                    smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
+                    smart_unicode(self.debug_toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
-        del self.debug_toolbars[request]
+        del self.debug_toolbar.requests[request]
         return response

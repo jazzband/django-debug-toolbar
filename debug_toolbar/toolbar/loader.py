@@ -6,20 +6,14 @@ from django.template.loader import render_to_string
 
 class DebugToolbar(object):
 
-    def __init__(self, request):
-        self.request = request
-        self.panels = []
-        base_url = self.request.META.get('SCRIPT_NAME', '')
-        self.config = {
-            'INTERCEPT_REDIRECTS': True,
-            'MEDIA_URL': u'%s/__debug__/m/' % base_url
-        }
+    config = {}
+    panels = []
+    requests = {}
+    template_context = {}
+
+    def __init__(self):
         # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
         self.config.update(getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}))
-        self.template_context = {
-            'BASE_URL': base_url, # for backwards compatibility
-            'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
-        }
         # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
         self.default_panels = (
             'debug_toolbar.panels.version.VersionDebugPanel',
@@ -34,6 +28,18 @@ class DebugToolbar(object):
             'debug_toolbar.panels.logger.LoggingPanel',
         )
         self.load_panels()
+
+    def process_request(self, request):
+        self.requests[request] = []
+        base_url = request.META.get('SCRIPT_NAME', '')
+        self.config.update({
+            'INTERCEPT_REDIRECTS': True,
+            'MEDIA_URL': u'%s/__debug__/m/' % (base_url,)
+        })
+        self.template_context.update({
+            'BASE_URL': base_url, # for backwards compatibility
+            'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
+        })
 
     def load_panels(self):
         """
