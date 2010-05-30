@@ -186,7 +186,7 @@ class SQLDebugPanel(DebugPanel):
             subtitle = "%s (%d duplicate in %.2fms)" % (
                 subtitle,
                 self.duplicate,
-                self.duplicate_sql_time,
+                self._duplicate_sql_time,
             )
         return subtitle
 
