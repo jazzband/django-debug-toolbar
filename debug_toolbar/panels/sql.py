@@ -28,6 +28,9 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
                             .get('SQL_WARNING_THRESHOLD', 500)
 
+SQL_COUNT_DUPLICATES = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}). \
+                            .get('SQL_COUNT_DUPLICATES', True)
+
 def tidy_stacktrace(strace):
     """
     Clean up stacktrace and remove all entries that:
@@ -149,28 +152,43 @@ class SQLDebugPanel(DebugPanel):
     def nav_subtitle(self):
         self._queries = connection.queries[self._offset:]
         
-        self._duplicate_sql_time = 0
-        self.seen = {}
-        self.duplicate = 0
-        for q in self._queries:
-            sql = q["sql"]
-            c = self.seen.get(sql, 0)
-            if c:
-                self.duplicate += 1
-                self._duplicate_sql_time += q['duration']
-            q["seen"] = c
-            self.seen[sql] = c + 1
+        if SQL_COUNT_DUPLICATES:
+            self._duplicate_sql_time = 0
+            self.seen = {}
+            self.duplicate = 0
+            for q in self._queries:
+                sql = q["sql"]
+                c = self.seen.get(sql, (0,[]))
+                if c[0]:
+                    self.duplicate += 1
+                    self._duplicate_sql_time += q['duration']
+                else:
+                    q["seen"] = 0
+                c[0] += 1
+                c[1].append(q)
+                self.seen[sql] = c
+            # After calculating the queries count
+            # apply the same counter to all equal
+            # queries
+            for c in self.seen.values():
+                for q in c[1]:
+                    q["seen"] = c[0]
         
         self._sql_time = sum([q['duration'] for q in self._queries])
         num_queries = len(self._queries)
         # TODO l10n: use ngettext
-        return "%d %s in %.2fms (%d duplicate in %.2fms)" % (
+        subtitle = "%d %s in %.2fms" % (
             num_queries,
             (num_queries == 1) and 'query' or 'queries',
             self._sql_time,
-            self.duplicate,
-            self._duplicate_sql_time,
         )
+        if SQL_COUNT_DUPLICATES:
+            subtitle = "%s (%d duplicate in %.2fms)" % (
+                subtitle,
+                self.duplicate,
+                self.duplicate_sql_time,
+            )
+        return subtitle
 
     def title(self):
         return _('SQL Queries')
@@ -194,6 +212,7 @@ class SQLDebugPanel(DebugPanel):
             'queries': self._queries,
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
+            'count_duplicates': SQL_COUNT_DUPLICATES,
         })
 
         return render_to_string('debug_toolbar/panels/sql.html', context)

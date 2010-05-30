@@ -2,7 +2,7 @@
 <table>
 	<thead>
 		<tr>
-			<th>{% trans "Seen times" %}</th>
+			{% if count_duplicates %}<th>{% trans "Seen times" %}</th>{% endif %}
 			<th>{% trans "Time" %}&nbsp;(ms)</th>
 			<th>{% trans "Action" %}</th>
 			<th>{% trans 'Stacktrace' %}</th>
@@ -12,7 +12,7 @@
 	<tbody>
 		{% for query in queries %}
 			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-				<td>{{ query.seen }}</td>
+				{% if count_duplicates %}<td>{{ query.seen }}</td>{% endif %}
 				<td>{{ query.duration|floatformat:"2" }}</td>
 				<td>
 				{% if query.params %}

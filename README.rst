@@ -122,6 +122,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `TAG`: If set, this will be the tag to which debug_toolbar will attach the 
      debug toolbar. Defaults to 'body'.
 
+   * `SQL_COUNT_DUPLICATES`: If set to True (the default) then the sql panel will
+     count the duplicate queries.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
