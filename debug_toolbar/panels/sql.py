@@ -149,8 +149,6 @@ class SQLDebugPanel(DebugPanel):
     def nav_subtitle(self):
         self._queries = connection.queries[self._offset:]
 
-        self._duplicate_sql_time = 0
-        self.seen = {}
         self.duplicate = 0
         for q in self._queries:
             sql = q["sql"]
@@ -164,7 +162,7 @@ class SQLDebugPanel(DebugPanel):
         self._sql_time = sum([q['duration'] for q in self._queries])
         num_queries = len(self._queries)
         # TODO l10n: use ngettext
-        return "%d %s in %.2fms" % (
+        return "%d %s in %.2fms (%d duplicate in %.2fms)" % (
             num_queries,
             (num_queries == 1) and 'query' or 'queries',
             self._sql_time,
