@@ -148,7 +148,9 @@ class SQLDebugPanel(DebugPanel):
 
     def nav_subtitle(self):
         self._queries = connection.queries[self._offset:]
-
+        
+        self._duplicate_sql_time = 0
+        self.seen = {}
         self.duplicate = 0
         for q in self._queries:
             sql = q["sql"]
