@@ -148,13 +148,28 @@ class SQLDebugPanel(DebugPanel):
 
     def nav_subtitle(self):
         self._queries = connection.queries[self._offset:]
+
+        self._duplicate_sql_time = 0
+        self.seen = {}
+        self.duplicate = 0
+        for q in self._queries:
+            sql = q["sql"]
+            c = self.seen.get(sql, 0)
+            if c:
+                self.duplicate += 1
+                self._duplicate_sql_time += q['duration']
+            q["seen"] = c
+            self.seen[sql] = c + 1
+        
         self._sql_time = sum([q['duration'] for q in self._queries])
         num_queries = len(self._queries)
         # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
             num_queries,
             (num_queries == 1) and 'query' or 'queries',
-            self._sql_time
+            self._sql_time,
+            self.duplicate,
+            self._duplicate_sql_time,
         )
 
     def title(self):
