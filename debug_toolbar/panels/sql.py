@@ -28,7 +28,7 @@ socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
                             .get('SQL_WARNING_THRESHOLD', 500)
 
-SQL_COUNT_DUPLICATES = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}). \
+SQL_COUNT_DUPLICATES = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
                             .get('SQL_COUNT_DUPLICATES', True)
 
 def tidy_stacktrace(strace):
