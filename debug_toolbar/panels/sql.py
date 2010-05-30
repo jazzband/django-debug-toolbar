@@ -158,7 +158,7 @@ class SQLDebugPanel(DebugPanel):
             self.duplicate = 0
             for q in self._queries:
                 sql = q["sql"]
-                c = self.seen.get(sql, (0,[]))
+                c = self.seen.get(sql, [0,[]])
                 if c[0]:
                     self.duplicate += 1
                     self._duplicate_sql_time += q['duration']
