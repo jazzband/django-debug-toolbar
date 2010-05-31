@@ -153,15 +153,15 @@ class SQLDebugPanel(DebugPanel):
         self._queries = connection.queries[self._offset:]
         
         if SQL_COUNT_DUPLICATES:
-            self._duplicate_sql_time = 0
+            duplicate_sql_time = 0
             self.seen = {}
-            self.duplicate = 0
+            duplicate = 0
             for q in self._queries:
                 sql = q["sql"]
                 c = self.seen.get(sql, [0,[]])
                 if c[0]:
-                    self.duplicate += 1
-                    self._duplicate_sql_time += q['duration']
+                    duplicate += 1
+                    duplicate_sql_time += q['duration']
                 else:
                     q["seen"] = 0
                 c[0] += 1
@@ -182,11 +182,11 @@ class SQLDebugPanel(DebugPanel):
             (num_queries == 1) and 'query' or 'queries',
             self._sql_time,
         )
-        if SQL_COUNT_DUPLICATES:
+        if SQL_COUNT_DUPLICATES and duplicate:
             subtitle = "%s (%d duplicate in %.2fms)" % (
                 subtitle,
-                self.duplicate,
-                self._duplicate_sql_time,
+                duplicate,
+                duplicate_sql_time,
             )
         return subtitle
 
