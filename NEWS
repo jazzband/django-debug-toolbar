@@ -4,6 +4,8 @@ News for django-debug-toolbar
 develop
 -------
 
+* Fixed template block inheritance bug (issues 77 and 97).
+
 * Fixed flash of unstyled toolbar.
 
 * Updated to work with old TEMPLATE_LOADERS settings from < 1.2.
