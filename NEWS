@@ -1,0 +1,13 @@
+News for django-debug-toolbar
+=============================
+
+develop
+-------
+
+* Updated to work with old TEMPLATE_LOADERS settings from < 1.2.
+
+* Updated to stop template loader iteration when template is found.
+
+
+(Note: NEWS was started after the 0.8.3 release and is not complete)
+
