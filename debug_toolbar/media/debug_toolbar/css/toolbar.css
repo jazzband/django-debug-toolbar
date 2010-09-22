@@ -358,7 +358,8 @@
 }
 
 #djDebug span.djDebugLineChart {
-	border-top:3px solid #777;
+	background-color:#777;
+	height:3px;
 	position:absolute;
 	bottom:0;
 	top:0;
@@ -367,7 +368,7 @@
 	z-index:1000000001;
 }
 #djDebug span.djDebugLineChartWarning {
-	border-top-color:#900;
+	background-color:#900;
 }
 
 #djDebug .highlight  { color:#000; }
