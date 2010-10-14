@@ -1,4 +1,6 @@
 {% load i18n %}
+{% for db, queries in dbqueries.items %}
+<h3>{{db}}</h3>
 <table>
 	<thead>
 		<tr>
@@ -67,3 +69,4 @@
 		{% endfor %}
 	</tbody>
 </table>
+{% endfor %}

@@ -6,7 +6,6 @@ import traceback
 
 import django
 from django.conf import settings
-from django.db import connection
 from django.db.backends import util
 from django.views.debug import linebreak_iter
 from django.template import Node
@@ -18,6 +17,14 @@ from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import sqlparse
+
+try:
+    from django.db import connections
+except ImportError:
+    # Django 1.1 compatibility
+    from django.db import connection
+    connections = {'default': connection}
+    connection.alias = 'default'
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
@@ -126,6 +133,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'is_slow': (duration > SQL_WARNING_THRESHOLD),
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
+                'db': self.db.alias,
             })
 util.CursorDebugWrapper = DatabaseStatTracker
 
@@ -139,17 +147,21 @@ class SQLDebugPanel(DebugPanel):
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self._offset = len(connection.queries)
+        self._offsets = dict((conn, len(connections[conn].queries)) for conn in connections)
         self._sql_time = 0
-        self._queries = []
+        self._queries = {}
 
     def nav_title(self):
         return _('SQL')
 
+    def load_queries(self):
+        for conn in connections:
+            self._queries[conn] = [qr for qr in connections[conn].queries[self._offsets[conn]:] if 'duration' in qr]
+
     def nav_subtitle(self):
-        self._queries = connection.queries[self._offset:]
-        self._sql_time = sum([q['duration'] for q in self._queries])
-        num_queries = len(self._queries)
+        self.load_queries()
+        self._sql_time = sum([q['duration'] for queries in self._queries.values() for q in queries])
+        num_queries = sum(len(queries) for queries in self._queries.values())
         # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
             num_queries,
@@ -165,18 +177,19 @@ class SQLDebugPanel(DebugPanel):
 
     def content(self):
         width_ratio_tally = 0
-        for query in self._queries:
-            query['sql'] = reformat_sql(query['sql'])
-            try:
-                query['width_ratio'] = (query['duration'] / self._sql_time) * 100
-            except ZeroDivisionError:
-                query['width_ratio'] = 0
-            query['start_offset'] = width_ratio_tally
-            width_ratio_tally += query['width_ratio']
+        for db, queries in self._queries.items():
+            for query in queries:
+                query['sql'] = reformat_sql(query['sql'])
+                try:
+                    query['width_ratio'] = (query['duration'] / self._sql_time) * 100
+                except ZeroDivisionError:
+                    query['width_ratio'] = 0
+                query['start_offset'] = width_ratio_tally
+                width_ratio_tally += query['width_ratio']
 
         context = self.context.copy()
         context.update({
-            'queries': self._queries,
+            'dbqueries': self._queries,
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         })
