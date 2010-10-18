@@ -357,6 +357,10 @@
 	text-align: left;
 }
 
+#djDebug .djSqlExplain td {
+	white-space: pre;
+}
+
 #djDebug span.djDebugLineChart {
 	background-color:#777;
 	height:3px;
