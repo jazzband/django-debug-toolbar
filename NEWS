@@ -4,6 +4,12 @@ News for django-debug-toolbar
 develop
 -------
 
+* Fixed "Badly formatted SQL query plan" (issue 86)
+
+* Fixed "SQL not selectable due to line chart" (issue 85)
+
+* Fixed "Redirect page does not set cookie" (issue 6)
+
 * Fixed template block inheritance bug (issues 77 and 97).
 
 * Fixed flash of unstyled toolbar.
