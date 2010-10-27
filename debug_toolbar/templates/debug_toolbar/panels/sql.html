@@ -5,7 +5,8 @@
 			<th>{% trans "Time" %}&nbsp;(ms)</th>
 			<th>{% trans "Action" %}</th>
 			<th>{% trans 'Stacktrace' %}</th>
-			<th>{% trans 'Query' %}</th>
+			<th>{% trans 'Database' %}</th>
+            <th>{% trans 'Query' %}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,6 +28,9 @@
 					{% if query.stacktrace %}
 					<div class="djSQLShowStacktraceDiv"><a class="djSQLShowStacktrace" href="#">Toggle Stacktrace</a></div>
 					{% endif %}
+				</td>
+				<td>
+					{{ query.db }}
 				</td>
 				<td class="syntax">
 					<div class="djDebugSqlWrap">
