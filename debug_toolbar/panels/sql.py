@@ -116,7 +116,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
-                'db': self.db.alias,
+                'db': getattr(self.db, 'alias', 'default'),
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
