@@ -180,6 +180,7 @@ class SQLDebugPanel(DebugPanel):
             'queries': self._queries,
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
+            'show_db_column': django.VERSION[0] >=1 and django.VERSION[1] >= 2
         })
 
         return render_to_string('debug_toolbar/panels/sql.html', context)
