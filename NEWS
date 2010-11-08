@@ -4,6 +4,8 @@ News for django-debug-toolbar
 develop
 -------
 
+* Added print style to hide the toolbar (issue 90)
+
 * Fixed "Badly formatted SQL query plan" (issue 86)
 
 * Fixed "SQL not selectable due to line chart" (issue 85)
