@@ -90,10 +90,12 @@ class DebugToolbarMiddleware(object):
             if isinstance(response, HttpResponseRedirect):
                 redirect_to = response.get('Location', None)
                 if redirect_to:
+                    cookies = response.cookies
                     response = render_to_response(
                         'debug_toolbar/redirect.html',
                         {'redirect_to': redirect_to}
                     )
+                    response.cookies = cookies
         if response.status_code == 200:
             for panel in self.debug_toolbars[request].panels:
                 panel.process_response(request, response)

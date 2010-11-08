@@ -20,6 +20,7 @@
 	var COOKIE_NAME = 'djdt';
 	var djdt = {
 		init: function() {
+			$('#djDebug').show();
 			var current = null;
 			$('#djDebugPanelList li a').click(function() {
 				if (!this.className) {
