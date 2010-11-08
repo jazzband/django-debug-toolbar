@@ -1,8 +1,8 @@
 News for django-debug-toolbar
 =============================
 
-develop
--------
+0.8.4 (2010 Nov 8)
+------------------
 
 * Added print style to hide the toolbar (issue 90)
 
