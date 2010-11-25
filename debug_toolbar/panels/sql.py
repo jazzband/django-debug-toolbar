@@ -139,6 +139,49 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
             })
+
+    def executemany(self, sql, params=()):
+        start = datetime.now()
+        try:
+            return self.cursor.executemany(sql, params)
+        finally:
+            stop = datetime.now()
+            duration = ms_from_timedelta(stop - start)
+            stacktrace = tidy_stacktrace(traceback.extract_stack())
+            _params = ''
+            try:
+                _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
+            except TypeError:
+                pass # object not JSON serializable
+
+            template_info = None
+            cur_frame = sys._getframe().f_back
+            try:
+                while cur_frame is not None:
+                    if cur_frame.f_code.co_name == 'render':
+                        node = cur_frame.f_locals['self']
+                        if isinstance(node, Node):
+                            template_info = get_template_info(node.source)
+                            break
+                    cur_frame = cur_frame.f_back
+            except:
+                pass
+            del cur_frame
+
+            # We keep `sql` to maintain backwards compatibility
+            self.db.queries.append({
+                'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
+                'duration': duration,
+                'raw_sql': sql,
+                'params': _params,
+                'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
+                'stacktrace': stacktrace,
+                'start_time': start,
+                'stop_time': stop,
+                'is_slow': (duration > SQL_WARNING_THRESHOLD),
+                'is_select': sql.lower().strip().startswith('select'),
+                'template_info': template_info,
+            })
 util.CursorDebugWrapper = DatabaseStatTracker
 
 class SQLDebugPanel(DebugPanel):

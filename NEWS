@@ -4,6 +4,8 @@ News for django-debug-toolbar
 develop branch
 --------------
 
+* Added support for `executemany`. Thanks to postal2600.
+
 * Added support for LogBook. Thanks to Vincent Driessen.
 
 * Added clean_params method to DatabaseStatTracker to scrub non-unicode
