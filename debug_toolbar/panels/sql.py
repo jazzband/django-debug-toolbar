@@ -12,7 +12,7 @@ from django.views.debug import linebreak_iter
 from django.template import Node
 from django.template.loader import render_to_string
 from django.utils import simplejson
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 
@@ -85,12 +85,24 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
     Replacement for CursorDebugWrapper which stores additional information
     in `connection.queries`.
     """
+    def clean_params(self, params):
+        clean_params = ()
+        for x in params:
+            try:
+                force_unicode(x, strings_only=True)
+            except DjangoUnicodeDecodeError:
+                clean_params += ("<non unicode object>", )
+            else:
+                clean_params += (x, )
+        return clean_params
+
     def execute(self, sql, params=()):
         start = datetime.now()
         try:
             return self.cursor.execute(sql, params)
         finally:
             stop = datetime.now()
+            params = self.clean_params(params)
             duration = ms_from_timedelta(stop - start)
             stacktrace = tidy_stacktrace(traceback.extract_stack())
             _params = ''
