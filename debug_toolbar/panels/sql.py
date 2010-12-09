@@ -89,12 +89,13 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
         clean_params = ()
         for x in params:
             try:
-                force_unicode(x, strings_only=True)
+                clean_params += (force_unicode(x, strings_only=True), )
             except DjangoUnicodeDecodeError:
                 clean_params += ("<non unicode object>", )
-            else:
-                clean_params += (x, )
-        return clean_params
+		try:
+			return simplejson.dumps(clean_params)
+		except TypeError:
+			pass # object not JSON serializable
 
     def execute(self, sql, params=()):
         start = datetime.now()
@@ -102,14 +103,9 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             stop = datetime.now()
-            params = self.clean_params(params)
             duration = ms_from_timedelta(stop - start)
             stacktrace = tidy_stacktrace(traceback.extract_stack())
-            _params = ''
-            try:
-                _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
-            except TypeError:
-                pass # object not JSON serializable
+	        _params = self.clean_params(params)
 
             template_info = None
             cur_frame = sys._getframe().f_back
