@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-debug-toolbar',
-    version='dev',
+    version=__import__('debug_toolbar').__version__,
     description='A configurable set of panels that display various debug information about the current request/response.',
     long_description=open('README.rst').read(),
     # Get more strings from http://www.python.org/pypi?:action=list_classifiers
