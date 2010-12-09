@@ -87,11 +87,15 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
     """
     def clean_params(self, params):
         clean_params = ()
+
         for x in params:
             try:
                 clean_params += (force_unicode(x, strings_only=True), )
             except DjangoUnicodeDecodeError:
                 clean_params += ("<non unicode object>", )
+        return clean_params
+
+    def get_params_json(self, clean_params):
         try:
             return simplejson.dumps(clean_params)
         except TypeError:
@@ -105,8 +109,8 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
             stacktrace = tidy_stacktrace(traceback.extract_stack())
-            _params = self.clean_params(params)
-
+            params = self.clean_params(params)
+            _params = self.get_params_json(params)
             template_info = None
             cur_frame = sys._getframe().f_back
             try:
