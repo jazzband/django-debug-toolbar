@@ -99,7 +99,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
         try:
             return simplejson.dumps(clean_params)
         except TypeError:
-            pass # object not JSON serializable
+            return '' # object not JSON serializable
 
     def execute(self, sql, params=()):
         start = datetime.now()
