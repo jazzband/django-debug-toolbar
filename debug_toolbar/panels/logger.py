@@ -1,5 +1,6 @@
 import datetime
 import logging
+import logbook
 try:
     import threading
 except ImportError:
@@ -53,10 +54,29 @@ class ThreadTrackingHandler(logging.Handler):
         self.collector.add_record(record)
 
 
+class LogbookThreadTrackingHandler(logbook.handlers.Handler):
+    def __init__(self, collector):
+        logbook.handlers.Handler.__init__(self, bubble=True)
+        self.collector = collector
+
+    def emit(self, record):
+        record = {
+            'message': record.message,
+            'time': record.time,
+            'level': record.level_name,
+            'file': record.filename,
+            'line': record.lineno,
+        }
+        self.collector.add_record(record)
+
+
 collector = LogCollector()
 logging_handler = ThreadTrackingHandler(collector)
 logging.root.setLevel(logging.NOTSET)
 logging.root.addHandler(logging_handler)  # register with logging
+
+logbook_handler = LogbookThreadTrackingHandler(collector)
+logbook_handler.push_application()        # register with logbook
 
 
 class LoggingPanel(DebugPanel):
