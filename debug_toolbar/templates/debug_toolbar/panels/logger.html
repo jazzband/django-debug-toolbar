@@ -5,6 +5,7 @@
 			<tr>
 				<th>{% trans "Level" %}</th>
 				<th>{% trans "Time" %}</th>
+				<th>{% trans "Channel" %}</th>
 				<th>{% trans "Message" %}</th>
 				<th>{% trans "Location" %}</th>
 			</tr>
@@ -14,6 +15,7 @@
 				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
 					<td>{{ record.level }}</td>
 					<td>{{ record.time|date:"h:i:s m/d/Y" }}</td>
+					<td>{{ record.channel|default:"-" }}</td>
 					<td>{{ record.message }}</td>
 					<td>{{ record.file }}:{{ record.line }}</td>
 				</tr>

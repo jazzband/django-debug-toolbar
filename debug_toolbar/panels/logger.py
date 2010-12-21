@@ -49,6 +49,7 @@ class ThreadTrackingHandler(logging.Handler):
             'level': record.levelname,
             'file': record.pathname,
             'line': record.lineno,
+            'channel': record.name,
         }
         self.collector.add_record(record)
 
@@ -78,6 +79,7 @@ if logbook_supported:
                 'level': record.level_name,
                 'file': record.filename,
                 'line': record.lineno,
+                'channel': record.channel,
             }
             self.collector.add_record(record)
 
