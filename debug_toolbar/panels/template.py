@@ -19,9 +19,16 @@ from debug_toolbar.panels import DebugPanel
 # e-mail interception, which we don't want
 from django.test.utils import instrumented_test_render
 from django.template import Template
-if Template.render != instrumented_test_render:
-    Template.original_render = Template.render
-    Template.render = instrumented_test_render
+
+if not hasattr(Template, '_render'): # Django < 1.2
+    if Template.render != instrumented_test_render:
+        Template.original_render = Template.render
+        Template.render = instrumented_test_render
+else:
+    if Template._render != instrumented_test_render:
+        Template.original_render = Template._render
+        Template._render = instrumented_test_render
+
 # MONSTER monkey-patch
 old_template_init = Template.__init__
 def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):

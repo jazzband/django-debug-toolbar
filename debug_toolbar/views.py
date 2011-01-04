@@ -165,9 +165,10 @@ def template_source(request):
             try:
                 source, display_name = loader.load_template_source(template_name)
                 origin = make_origin(display_name, loader, template_name, settings.TEMPLATE_DIRS)
+                break
             except TemplateDoesNotExist:
                 source = "Template Does Not Exist: %s" % (template_name,)
-    except ImportError: # Django 1.1 ...
+    except (ImportError, AttributeError): # Django 1.1 ...
         from django.template.loader import find_template_source
         source, origin = find_template_source(template_name)
 
