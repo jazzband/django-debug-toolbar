@@ -8,16 +8,16 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
-class ThreadTrackingHandler(logging.Handler):
+
+class LogCollector(object):
     def __init__(self):
         if threading is None:
             raise NotImplementedError("threading module is not available, \
                 the logging panel cannot be used without it")
-        logging.Handler.__init__(self)
         self.records = {} # a dictionary that maps threads to log records
 
-    def emit(self, record):
-        self.get_records().append(record)
+    def add_record(self, record, thread=None):
+        self.get_records(thread).append(record)
 
     def get_records(self, thread=None):
         """
@@ -36,20 +36,67 @@ class ThreadTrackingHandler(logging.Handler):
         if thread in self.records:
             del self.records[thread]
 
-handler = ThreadTrackingHandler()
+
+class ThreadTrackingHandler(logging.Handler):
+    def __init__(self, collector):
+        logging.Handler.__init__(self)
+        self.collector = collector
+
+    def emit(self, record):
+        record = {
+            'message': record.getMessage(),
+            'time': datetime.datetime.fromtimestamp(record.created),
+            'level': record.levelname,
+            'file': record.pathname,
+            'line': record.lineno,
+            'channel': record.name,
+        }
+        self.collector.add_record(record)
+
+
+collector = LogCollector()
+logging_handler = ThreadTrackingHandler(collector)
 logging.root.setLevel(logging.NOTSET)
-logging.root.addHandler(handler)
+logging.root.addHandler(logging_handler)  # register with logging
+
+try:
+    import logbook
+    logbook_supported = True
+except ImportError:
+    # logbook support is optional, so fail silently
+    logbook_supported = False
+
+if logbook_supported:
+    class LogbookThreadTrackingHandler(logbook.handlers.Handler):
+        def __init__(self, collector):
+            logbook.handlers.Handler.__init__(self, bubble=True)
+            self.collector = collector
+
+        def emit(self, record):
+            record = {
+                'message': record.message,
+                'time': record.time,
+                'level': record.level_name,
+                'file': record.filename,
+                'line': record.lineno,
+                'channel': record.channel,
+            }
+            self.collector.add_record(record)
+
+
+    logbook_handler = LogbookThreadTrackingHandler(collector)
+    logbook_handler.push_application()        # register with logbook
 
 class LoggingPanel(DebugPanel):
     name = 'Logging'
     has_content = True
 
     def process_request(self, request):
-        handler.clear_records()
+        collector.clear_records()
 
     def get_and_delete(self):
-        records = handler.get_records()
-        handler.clear_records()
+        records = collector.get_records()
+        collector.clear_records()
         return records
 
     def nav_title(self):
@@ -57,7 +104,7 @@ class LoggingPanel(DebugPanel):
 
     def nav_subtitle(self):
         # FIXME l10n: use ngettext
-        return "%s message%s" % (len(handler.get_records()), (len(handler.get_records()) == 1) and '' or 's')
+        return "%s message%s" % (len(collector.get_records()), (len(collector.get_records()) == 1) and '' or 's')
 
     def title(self):
         return _('Log Messages')
@@ -66,16 +113,7 @@ class LoggingPanel(DebugPanel):
         return ''
 
     def content(self):
-        records = []
-        for record in self.get_and_delete():
-            records.append({
-                'message': record.getMessage(),
-                'time': datetime.datetime.fromtimestamp(record.created),
-                'level': record.levelname,
-                'file': record.pathname,
-                'line': record.lineno,
-            })
-
+        records = self.get_and_delete()
         context = self.context.copy()
         context.update({'records': records})
 
