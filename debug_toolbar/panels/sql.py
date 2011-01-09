@@ -6,7 +6,7 @@ import traceback
 
 import django
 from django.conf import settings
-from django.db import connection
+from django.db import connections
 from django.db.backends import util
 from django.views.debug import linebreak_iter
 from django.template import Node
@@ -139,7 +139,6 @@ class SQLDebugPanel(DebugPanel):
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self._offset = len(connection.queries)
         self._sql_time = 0
         self._queries = []
 
@@ -147,7 +146,10 @@ class SQLDebugPanel(DebugPanel):
         return _('SQL')
 
     def nav_subtitle(self):
-        self._queries = connection.queries[self._offset:]
+        self._queries = []
+        for connection in connections.all():
+            self._queries += connection.queries
+        
         self._sql_time = sum([q['duration'] for q in self._queries])
         num_queries = len(self._queries)
         # TODO l10n: use ngettext
