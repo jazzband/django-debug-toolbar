@@ -72,7 +72,8 @@ class SignalDebugPanel(DebugPanel):
                     receiver = receiver()
                 if receiver is None:
                     continue
-                if getattr(receiver, 'im_self', None) is not None:
+                if getattr(receiver, 'im_self', None) is not None and \
+                   getattr(receiver.im_self, '__class__', None) is not None:
                     text = "method %s on %s object" % (receiver.__name__, receiver.im_self.__class__.__name__)
                 elif getattr(receiver, 'im_class', None) is not None:
                     text = "method %s on %s" % (receiver.__name__, receiver.im_class.__name__)
