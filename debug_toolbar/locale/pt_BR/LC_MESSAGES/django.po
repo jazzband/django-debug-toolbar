@@ -136,11 +136,9 @@ msgid ""
 "<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
 "<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
-"A Barra de Debug do Django interceptou um redirecionamento para a URL acima
-por "
+"A Barra de Debug do Django interceptou um redirecionamento para a URL acima por "
 "propósito de debug. Você pode clicar no link acima para continuar com o "
-"redirecionamento normal. Se você gostaria de desabilitar essa funcionalidade,
-configure a "
+"redirecionamento normal. Se você gostaria de desabilitar essa funcionalidade, configure a "
 "chave <code></code> do dicionário "
 "<code>DEBUG_TOOLBAR_CONFIG</code> para <code>False</code>"
 
