@@ -2,6 +2,7 @@
 Debug Toolbar middleware
 """
 import os
+import sys
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -33,7 +34,6 @@ class DebugToolbarMiddleware(object):
     """
     def __init__(self):
         self.debug_toolbars = {}
-        self.override_url = True
 
         # Set method to use to decide to show toolbar
         self.show_toolbar = self._show_toolbar # default
@@ -66,13 +66,12 @@ class DebugToolbarMiddleware(object):
 
     def process_request(self, request):
         if self.show_toolbar(request):
-            if self.override_url:
-                original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-                debug_toolbar.urls.urlpatterns += patterns('',
-                    ('', include(original_urlconf)),
-                )
-                self.override_url = False
-            request.urlconf = 'debug_toolbar.urls'
+            urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+            __import__(urlconf)
+            module = sys.modules[urlconf]
+            if not getattr(module, 'DEBUGGER_INSTALLED', False):
+                module.urlpatterns += debug_toolbar.urls.urlpatterns
+                module.DEBUGGER_INSTALLED = True
 
             self.debug_toolbars[request] = DebugToolbar(request)
             for panel in self.debug_toolbars[request].panels:
