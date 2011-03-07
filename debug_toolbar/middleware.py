@@ -105,6 +105,10 @@ class DebugToolbarMiddleware(object):
                     self.tag,
                     smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
             if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+                # response.content in Django 1.3 may be an iterator (if it is static)
+                # copy the value to do not loose it
+                content = response.content
+                response['Content-Length'] = len(content)
+                response.content = content
         del self.debug_toolbars[request]
         return response
