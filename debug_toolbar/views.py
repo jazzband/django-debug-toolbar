@@ -12,6 +12,12 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
+try:
+    from django.views.decorators.csrf import csrf_exempt
+except ImportError:
+    HAS_CSRF = False
+else:
+    HAS_CSRF = True
 
 class InvalidSQLError(Exception):
     def __init__(self, value):
@@ -98,6 +104,10 @@ def sql_explain(request):
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
+if HAS_CSRF:
+    sql_explain = csrf_exempt(sql_explain)
+
+
 def sql_profile(request):
     """
     Returns the output of running the SQL and getting the profiling statistics.
@@ -140,6 +150,7 @@ def sql_profile(request):
         }
         return render_to_response('debug_toolbar/panels/sql_profile.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
+
 
 def template_source(request):
     """
@@ -187,3 +198,6 @@ def template_source(request):
         'source': source,
         'template_name': template_name
     })
+
+if HAS_CSRF:
+    template_source = csrf_exempt(template_source)
