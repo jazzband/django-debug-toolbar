@@ -28,11 +28,19 @@ class RequestVarsDebugPanel(DebugPanel):
 
     def content(self):
         context = self.context.copy()
+
+        if hasattr(self.view_func, '__name__'):
+            view_name = self.view_func.__name__
+        elif hasattr(self.view_func, '__class__'):
+            view_name = self.view_func.__class__.__name__
+        else:
+            view_name = '<unknown>'
+
         context.update({
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
-            'view_func': '%s.%s' % (self.view_func.__module__, self.view_func.__name__),
+            'view_func': '%s.%s' % (self.view_func.__module__, view_name),
             'view_args': self.view_args,
             'view_kwargs': self.view_kwargs
         })
