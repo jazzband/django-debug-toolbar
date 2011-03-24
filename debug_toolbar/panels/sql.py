@@ -22,7 +22,7 @@ from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import sqlparse
@@ -161,11 +161,13 @@ class SQLDebugPanel(DebugPanel):
         self._databases = {}
         for alias in connections:
             db_queries = connections[alias].queries[self._offset[alias]:]
-            self._databases[alias] = {
-                'time_spent': sum(q['duration'] for q in db_queries),
-                'queries': len(db_queries),
-            }
-            self._queries.extend([(alias, q) for q in db_queries])
+            num_queries = len(db_queries)
+            if num_queries:
+                self._databases[alias] = {
+                    'time_spent': sum(q['duration'] for q in db_queries),
+                    'queries': num_queries,
+                }
+                self._queries.extend([(alias, q) for q in db_queries])
 
         self._queries.sort(key=lambda x: x[1]['start_time'])
         self._sql_time = sum([d['time_spent'] for d in self._databases.itervalues()])
@@ -178,7 +180,11 @@ class SQLDebugPanel(DebugPanel):
         )
 
     def title(self):
-        return _('SQL Queries')
+        count = len(self._databases)
+        
+        return __('SQL Queries from %(count)d connection', 'SQL Queries from %(count)d connections', count) % dict(
+            count=count,
+        )
 
     def url(self):
         return ''
