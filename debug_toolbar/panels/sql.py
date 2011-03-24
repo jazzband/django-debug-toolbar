@@ -7,7 +7,12 @@ import traceback
 
 import django
 from django.conf import settings
-from django.db import connection
+try:
+    from django.db import connections
+except ImportError:
+    # Compat with < Django 1.2
+    from django.db import connection
+    connections = {'default': connection}
 from django.db.backends import util
 from django.views.debug import linebreak_iter
 from django.template import Node
@@ -119,6 +124,7 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
+                'time': duration * 1000,
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
@@ -142,16 +148,27 @@ class SQLDebugPanel(DebugPanel):
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self._offset = len(connection.queries)
+        self._offset = dict((k, len(connections[k].queries)) for k in connections)
         self._sql_time = 0
         self._queries = []
+        self._databases = {}
 
     def nav_title(self):
         return _('SQL')
 
     def nav_subtitle(self):
-        self._queries = connection.queries[self._offset:]
-        self._sql_time = sum([q['duration'] for q in self._queries])
+        self._queries = []
+        self._databases = {}
+        for alias in connections:
+            db_queries = connections[alias].queries[self._offset[alias]:]
+            self._databases[alias] = {
+                'time_spent': sum(q['duration'] for q in db_queries),
+                'queries': len(db_queries),
+            }
+            self._queries.extend([(alias, q) for q in db_queries])
+
+        self._queries.sort(key=lambda x: x[1]['start_time'])
+        self._sql_time = sum([d['time_spent'] for d in self._databases.itervalues()])
         num_queries = len(self._queries)
         # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
@@ -168,7 +185,8 @@ class SQLDebugPanel(DebugPanel):
 
     def content(self):
         width_ratio_tally = 0
-        for query in self._queries:
+        for alias, query in self._queries:
+            query['alias'] = alias
             query['sql'] = reformat_sql(query['sql'])
             try:
                 query['width_ratio'] = (query['duration'] / self._sql_time) * 100
@@ -186,7 +204,8 @@ class SQLDebugPanel(DebugPanel):
 
         context = self.context.copy()
         context.update({
-            'queries': self._queries,
+            'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
+            'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         })

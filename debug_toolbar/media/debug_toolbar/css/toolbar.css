@@ -1,3 +1,17 @@
+/* http://www.positioniseverything.net/easyclearing.html */
+.clearfix:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+.clearfix {display: inline-block;}
+/* Hides from IE-mac \*/
+.clearfix {display: block;}
+* html .clearfix {height: 1%;}
+/* end hide from IE-mac */
+
 /* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
 #djDebug {color:#000;background:#FFF;}
 #djDebug, #djDebug div, #djDebug span, #djDebug applet, #djDebug object, #djDebug iframe,
@@ -143,7 +157,7 @@
 }
 
 #djDebug .djDebugHover td {
-	background-color:#e5e5e5;
+	background-color:#eee;
 }
 
 #djDebug .panelContent {
@@ -186,7 +200,7 @@
 	bottom:0;
 	left:0;
 	height:auto;
-	padding:0 0 0 20px;
+	padding:5px 0 0 20px;
 }
 
 #djDebug .djDebugPanelContent .scroll {
@@ -373,7 +387,7 @@
 	z-index:100000002;
 }
 
-#djDebug .djSQLHideStacktraceDiv tbody th {
+#djDebug .djSQLDetailsDiv tbody th {
 	text-align: left;
 }
 
@@ -415,6 +429,9 @@
 #djDebug .highlight .s2 { color:#333 } /* Literal.String.Double */
 #djDebug .highlight .cp { color:#333 } /* Comment.Preproc */
 
+#djDebug .timeline {
+    width: 30%;
+}
 #djDebug .djDebugTimeline {
     position: relative;
     height: 100%;
@@ -443,30 +460,70 @@
     background-color:#900;
 }
 
+#djDebug .panelContent ul.stats {
+    position: relative; 
+}
+#djDebug .panelContent ul.stats li {
+    width: 30%;
+    float: left;
+}
+#djDebug .panelContent ul.stats li strong {
+    display: block;
+}
+#djDebug .panelContent ul.stats li span {
+    display: block;
+    padding-left: 5px;
+}
+
+#djDebug .panelcontent thead th {
+    white-space: nowrap;
+}
 #djDebug .djDebugRowWarning .time {
     color: red;
 }
+#djdebug .panelcontent tbody td.toggle {
+    padding-top: 3px;
+}
+#djdebug .panelcontent tbody td.actions {
+    min-width: 70px;
+}
 
-#djDebug .djSQLHideStacktraceDiv pre {
+#djDebug .djSQLToggleDetails {
+    text-decoration: none;
+    border: 1px solid #999;
+    height: 12px;
+    width: 12px;
+    line-height: 12px;
+    text-align: center;
+    color: #777;
+    display: inline-block;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#DCDCDC'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DCDCDC)); /* for webkit browsers */
+    background:-moz-linear-gradient(center top , #FFFFFF 0pt, #DCDCDC 100%) repeat scroll 0 0 transparent;
+}
+
+#djDebug .djSQLDetailsDiv {
+    margin-top:0.8em;
+}
+#djDebug .djSQLDetailsDiv pre {
     color: #777;
     border:1px solid #ccc;
     border-collapse:collapse;
     width:100%;
     background-color:#fff;
     display:block;
-    margin-top:0.8em;
     overflow: auto;
     padding:2px 3px;
     font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
 }
-#djDebug .djSQLHideStacktraceDiv pre span {
+#djDebug .djSQLDetailsDiv pre span {
     color: #000;
     font-weight: bold;
 }
-#djDebug .djSQLHideStacktraceDiv pre span.path {
+#djDebug .djSQLDetailsDiv pre span.path {
     color: #777;
     font-weight: normal;
 }
-#djDebug .djSQLHideStacktraceDiv pre span.code {
+#djDebug .djSQLDetailsDiv pre span.code {
     font-weight: normal;
 }

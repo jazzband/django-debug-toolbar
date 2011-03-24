@@ -1,35 +1,36 @@
 {% load i18n %}
+<div class="clearfix">
+	<ul class="stats">
+		{% for alias, info in databases %}
+			<li>
+				<strong>{{ alias }}</strong>
+				<span>{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %})</span>
+			</li>
+		{% endfor %}
+	</ul>
+</div>
+
 <table>
 	<thead>
 		<tr>
-			<th>{% trans "Action" %}</th>
-			<th>{% trans 'Query' %}</th>
-			<th style="width:30%">{% trans 'Timeline' %}</th>
-			<th>{% trans 'Time&nbsp;(ms)' %}</th>
+			<th class="query" colspan="2">{% trans 'Query' %}</th>
+			<th class="timeline">{% trans 'Timeline' %}</th>
+			<th class="time">{% trans 'Time (ms)' %}</th>
+			<th class="actions">{% trans "Action" %}</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for query in queries %}
 			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}">
-				<td>
-				{% if query.params %}
-					{% if query.is_select %}
-						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">S</a>
-						<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">E</a>
-						{% if is_mysql %}
-							<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">P</a>
-						{% endif %}
-					{% endif %}
-				{% endif %}
-				{% if query.stacktrace %}
-				    <a class="djSQLShowStacktrace" href="#">T</a>
-				{% endif %}
+				<td class="toggle">
+					<a class="djSQLToggleDetails" href="javascript:void(0)">+</a>
 				</td>
-				<td class="syntax">
+				<td class="query">
 					<div class="djDebugSqlWrap">
 						<div class="djDebugSql">{{ query.sql|safe }}</div>
 						{% if query.stacktrace %}
-						<div class="djSQLHideStacktraceDiv" style="display:none;">
+						<div class="djSQLDetailsDiv" style="display:none;">
+							<p><strong>Connection:</strong> {{ query.alias }}</p>
 							<pre>{{ query.stacktrace }}</pre>
 							{% if query.template_info %}
 							<table>
@@ -47,10 +48,21 @@
 					</div>
 				</td>
 				<td class="timeline">
-				    <div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset }}%;"><strong style="width:{{ query.width_ratio }}%;">{{ query.width_ratio }}%</strong></div></div>
+					<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset }}%;"><strong style="width:{{ query.width_ratio }}%;">{{ query.width_ratio }}%</strong></div></div>
 				</td>
-				<td class="duration">
-				    {{ query.duration|floatformat:"2" }}
+				<td class="time">
+					{{ query.duration|floatformat:"2" }}
+				</td>
+				<td class="actions">
+				{% if query.params %}
+					{% if query.is_select %}
+						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Sel</a>
+						<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Expl</a>
+						{% if is_mysql %}
+							<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Prof</a>
+						{% endif %}
+					{% endif %}
+				{% endif %}
 				</td>
 			</tr>
 		{% endfor %}

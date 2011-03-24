@@ -47,8 +47,8 @@ window.djdt = (function(window, document, jQuery) {
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
-			$('#djDebugSQLPanel a.djSQLShowStacktrace').click(function() {
-				djdt.toggle_content($('.djSQLHideStacktraceDiv', $(this).parents('tr')));
+			$('#djDebugSQLPanel a.djSQLToggleDetails').click(function() {
+				djdt.toggle_content($('.djSQLDetailsDiv', $(this).parents('tr')));
 				return false;
 			});
 			$('#djHideToolBarButton').click(function() {
