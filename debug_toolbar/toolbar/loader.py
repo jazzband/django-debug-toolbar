@@ -1,8 +1,11 @@
 """
 The main DebugToolbar class that loads and renders the Toolbar.
 """
+import os.path, os
+
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 
 class DebugToolbar(object):
 
@@ -72,7 +75,13 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
+        media_path = os.path.join(os.path.dirname(__file__), os.pardir, 'media', 'debug_toolbar')
+        
         context = self.template_context.copy()
-        context.update({ 'panels': self.panels, })
+        context.update({
+            'panels': self.panels,
+            'js': mark_safe(open(os.path.join(media_path, 'js', 'toolbar.min.js'), 'r').read()),
+            'css': mark_safe(open(os.path.join(media_path, 'css', 'toolbar.min.css'), 'r').read()),
+        })
 
         return render_to_string('debug_toolbar/base.html', context)

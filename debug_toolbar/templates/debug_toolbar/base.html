@@ -1,11 +1,9 @@
 {% load i18n %}
-<style type="text/css">@media print { #djDebug {display:none;}}</style>
-<script type="text/javascript">
-// <![CDATA[
-var DEBUG_TOOLBAR_MEDIA_URL = "{{ DEBUG_TOOLBAR_MEDIA_URL }}";
-// ]]>
-</script>
-<script type="text/javascript" src="{{ DEBUG_TOOLBAR_MEDIA_URL }}js/toolbar.min.js"></script>
+<style type="text/css">
+@media print { #djDebug {display:none;}}
+{{ css }}
+</style>
+<script type="text/javascript">{{ js }}</script>
 <div id="djDebug" style="display:none;">
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
