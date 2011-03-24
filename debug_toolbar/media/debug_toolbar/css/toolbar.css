@@ -156,10 +156,6 @@
 	background-color:#f5f5f5;
 }
 
-#djDebug .djDebugHover td {
-	background-color:#eee;
-}
-
 #djDebug .panelContent {
 	display:none;
 	position:fixed;
@@ -375,8 +371,9 @@
 
 #djDebug .djDebugCollapse {
     display: inline-block;
-    background: #ccc;
-    width: 20px;
+    background: #ddd;
+    background: url(data:image/gif;base64,R0lGODlhBgAKAJEDAJGRkdra2qysrP///yH5BAEAAAMALAAAAAAGAAoAAAIPnI+JIRImABBQ0sGc2qoAADs=) 0 3px repeat-x;
+    width: 18px;
     text-indent: -10000em;
 }
 #djDebug .djDebugCollapsable {
@@ -509,11 +506,11 @@
     color: #777;
     border:1px solid #ccc;
     border-collapse:collapse;
-    width:100%;
     background-color:#fff;
     display:block;
     overflow: auto;
     padding:2px 3px;
+    margin-bottom: 3px;
     font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
 }
 #djDebug .djSQLDetailsDiv pre span {

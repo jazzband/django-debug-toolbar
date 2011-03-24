@@ -21,30 +21,13 @@
 	</thead>
 	<tbody>
 		{% for query in queries %}
-			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}">
+			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
 				<td class="toggle">
-					<a class="djSQLToggleDetails" href="javascript:void(0)">+</a>
+					<a class="djSQLToggleDetails" data-queryid="{{ forloop.counter }}" href="javascript:void(0)">+</a>
 				</td>
 				<td class="query">
 					<div class="djDebugSqlWrap">
 						<div class="djDebugSql">{{ query.sql|safe }}</div>
-						{% if query.stacktrace %}
-						<div class="djSQLDetailsDiv" style="display:none;">
-							<p><strong>Connection:</strong> {{ query.alias }}</p>
-							<pre>{{ query.stacktrace }}</pre>
-							{% if query.template_info %}
-							<table>
-								{% for line in query.template_info.context %}
-								<tr>
-									<td>{{ line.num }}</td>
-									<td><code style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</code></td>
-								</tr>
-								{% endfor %}
-							</table>
-							<p><strong>{{ query.template_info.name|default:"(unknown)" }}</strong></p>
-							{% endif %}
-						</div>
-						{% endif %}
 					</div>
 				</td>
 				<td class="timeline">
@@ -63,6 +46,28 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
+				</td>
+			</tr>
+			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
+				<td></td>
+				<td colspan="4">
+					<div class="djSQLDetailsDiv" style="display:none;">
+						<p><strong>Connection:</strong> {{ query.alias }}</p>
+						{% if query.stacktrace %}
+							<pre>{{ query.stacktrace }}</pre>
+						{% endif %}
+						{% if query.template_info %}
+							<table>
+								{% for line in query.template_info.context %}
+								<tr>
+									<td>{{ line.num }}</td>
+									<td><code style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</code></td>
+								</tr>
+								{% endfor %}
+							</table>
+							<p><strong>{{ query.template_info.name|default:"(unknown)" }}</strong></p>
+						{% endif %}
+					</div>
 				</td>
 			</tr>
 		{% endfor %}
