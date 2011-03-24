@@ -7,6 +7,7 @@ window.djdt = (function(window, document, jQuery) {
 		events: {
 			ready: []
 		},
+		isReady: false,
 		init: function() {
 			$('#djDebug').show();
 			var current = null;
@@ -85,6 +86,7 @@ window.djdt = (function(window, document, jQuery) {
 			}, function(){
 			    $(this).removeClass('djDebugHover');
 			});
+			djdt.isReady = true;
 			$.each(djdt.events.ready, function(_, callback){
 			    callback(djdt);
 			});
@@ -142,7 +144,11 @@ window.djdt = (function(window, document, jQuery) {
 			elem.html(elem.html() == uarr ? darr : uarr);
 		},
 		ready: function(callback){
-		    djdt.events.ready.push(callback);
+			if (djdt.isReady) {
+				callback(djdt);
+			} else {
+				djdt.events.ready.push(callback);
+			}
 		}
 	};
 	$(document).ready(function() {
