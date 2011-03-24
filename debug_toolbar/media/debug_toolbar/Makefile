@@ -3,7 +3,6 @@ all: compress_js compress_css
 
 compress_js:
 	java -jar ~/bin/yuicompressor.jar js/jquery.js > js/toolbar.min.js
-	java -jar ~/bin/yuicompressor.jar js/jquery.cookie.js >> js/toolbar.min.js
 	java -jar ~/bin/yuicompressor.jar js/toolbar.js >> js/toolbar.min.js
 
 compress_css:
