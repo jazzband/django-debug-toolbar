@@ -2,51 +2,35 @@
 <table>
 	<thead>
 		<tr>
-			<th>{% trans "Time" %}&nbsp;(ms)</th>
 			<th>{% trans "Action" %}</th>
-			<th>{% trans 'Stacktrace' %}</th>
 			<th>{% trans 'Query' %}</th>
+			<th style="width:30%">{% trans 'Timeline' %}</th>
+			<th>{% trans 'Time&nbsp;(ms)' %}</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for query in queries %}
-			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-				<td>{{ query.duration|floatformat:"2" }}</td>
+			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}">
 				<td>
 				{% if query.params %}
 					{% if query.is_select %}
-						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">SELECT</a><br />
-						<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">EXPLAIN</a><br />
+						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">S</a>
+						<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">E</a>
 						{% if is_mysql %}
-							<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">PROFILE</a><br />
+							<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">P</a>
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				</td>
-				<td>
-					{% if query.stacktrace %}
-					<div class="djSQLShowStacktraceDiv"><a class="djSQLShowStacktrace" href="#">Toggle Stacktrace</a></div>
-					{% endif %}
+				{% if query.stacktrace %}
+				    <a class="djSQLShowStacktrace" href="#">T</a>
+				{% endif %}
 				</td>
 				<td class="syntax">
 					<div class="djDebugSqlWrap">
 						<div class="djDebugSql">{{ query.sql|safe }}</div>
 						{% if query.stacktrace %}
 						<div class="djSQLHideStacktraceDiv" style="display:none;">
-							<table>
-								<tr>
-									<th>{% trans "Line" %}</th>
-									<th>{% trans "Method" %}</th>
-									<th>{% trans "File" %}</th>
-								</tr>
-								{% for file, line, method in query.stacktrace %}
-									<tr>
-										<td>{{ line }}</td>
-										<td><code>{{ method|escape }}</code></td>
-										<td><code>{{ file|escape }}</code></td>
-									</tr>
-								{% endfor %}
-							</table>
+							<pre>{{ query.stacktrace }}</pre>
 							{% if query.template_info %}
 							<table>
 								{% for line in query.template_info.context %}
@@ -60,8 +44,13 @@
 							{% endif %}
 						</div>
 						{% endif %}
-            <span class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="width:{{ query.width_ratio }}%; left:{{ query.start_offset }}%;"></span>
 					</div>
+				</td>
+				<td class="timeline">
+				    <div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset }}%;"><strong style="width:{{ query.width_ratio }}%;">{{ query.width_ratio }}%</strong></div></div>
+				</td>
+				<td class="duration">
+				    {{ query.duration|floatformat:"2" }}
 				</td>
 			</tr>
 		{% endfor %}

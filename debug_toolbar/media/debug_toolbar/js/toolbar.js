@@ -11,7 +11,7 @@
 				j(script).remove();
 			}
 		};
-		document.documentElement.childNodes[0].appendChild(script)
+		document.documentElement.childNodes[0].appendChild(script);
 	}
 })(window, document, "1.3", function($, jquery_loaded) {
 
@@ -54,7 +54,7 @@
 				return false;
 			});
 			$('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
-				djdt.toggle_arrow($(this).children('.toggleArrow'))
+				djdt.toggle_arrow($(this).children('.toggleArrow'));
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
@@ -92,6 +92,11 @@
 			} else {
 				djdt.show_toolbar(false);
 			}
+			$('#djDebug .djDebugHoverable').hover(function(){
+				$(this).addClass('djDebugHover');
+			}, function(){
+			    $(this).removeClass('djDebugHover');
+			});
 		},
 		toggle_content: function(elem) {
 			if (elem.is(':visible')) {

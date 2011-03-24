@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import re
 import sys
 import SocketServer
 import traceback
@@ -10,10 +11,12 @@ from django.db import connection
 from django.db.backends import util
 from django.views.debug import linebreak_iter
 from django.template import Node
+from django.template.defaultfilters import escape
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
@@ -172,7 +175,14 @@ class SQLDebugPanel(DebugPanel):
             except ZeroDivisionError:
                 query['width_ratio'] = 0
             query['start_offset'] = width_ratio_tally
+            query['end_offset'] = query['width_ratio'] + query['start_offset']
             width_ratio_tally += query['width_ratio']
+            
+            stacktrace = []
+            for frame in query['stacktrace']:
+                params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
+                stacktrace.append('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>"'.format(*params))
+            query['stacktrace'] = mark_safe('\n'.join(stacktrace))
 
         context = self.context.copy()
         context.update({
@@ -201,8 +211,11 @@ class BoldKeywordFilter(sqlparse.filters.Filter):
             if is_keyword:
                 yield sqlparse.tokens.Text, '</strong>'
 
+def swap_fields(sql):
+    return re.sub('SELECT</strong> (.*) <strong>FROM', 'SELECT</strong> <span class="djDebugCollapse">\g<1></span> <strong>FROM', sql)
+
 def reformat_sql(sql):
     stack = sqlparse.engine.FilterStack()
     stack.preprocess.append(BoldKeywordFilter()) # add our custom filter
     stack.postprocess.append(sqlparse.filters.SerializerUnicode()) # tokens -> strings
-    return ''.join(stack.run(sql))
+    return swap_fields(''.join(stack.run(sql)))
