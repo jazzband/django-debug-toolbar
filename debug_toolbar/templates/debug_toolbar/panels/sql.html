@@ -3,8 +3,8 @@
 	<ul class="stats">
 		{% for alias, info in databases %}
 			<li>
-				<strong>{{ alias }}</strong>
-				<span>{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %})</span>
+				<strong class="label"><span style="background-color: rgb({{ info.rgb_color|join:", " }})" class="color">&nbsp;</span> {{ alias }}</strong>
+				<span class="info">{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %})</span>
 			</li>
 		{% endfor %}
 	</ul>
@@ -13,6 +13,7 @@
 <table>
 	<thead>
 		<tr>
+			<th class="color">&nbsp;</th>
 			<th class="query" colspan="2">{% trans 'Query' %}</th>
 			<th class="timeline">{% trans 'Timeline' %}</th>
 			<th class="time">{% trans 'Time (ms)' %}</th>
@@ -22,6 +23,7 @@
 	<tbody>
 		{% for query in queries %}
 			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
+				<td class="color"><span style="background-color: rgb({{ query.rgb_color|join:", " }});">&nbsp;</span></td>
 				<td class="toggle">
 					<a class="djSQLToggleDetails" data-queryid="{{ forloop.counter }}" href="javascript:void(0)">+</a>
 				</td>
@@ -49,6 +51,7 @@
 				</td>
 			</tr>
 			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
+				<td class="color"><span style="background-color: rgb({{ query.rgb_color|join:", " }});">&nbsp;</span></td>
 				<td></td>
 				<td colspan="4">
 					<div class="djSQLDetailsDiv" style="display:none;">

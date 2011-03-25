@@ -464,10 +464,15 @@
     width: 30%;
     float: left;
 }
-#djDebug .panelContent ul.stats li strong {
+#djDebug .panelContent ul.stats li strong.label {
     display: block;
 }
-#djDebug .panelContent ul.stats li span {
+#djDebug .panelContent ul.stats li span.color {
+    height: 12px;
+    width: 3px;
+    display: inline-block;
+}
+#djDebug .panelContent ul.stats li span.info {
     display: block;
     padding-left: 5px;
 }
@@ -483,6 +488,12 @@
 }
 #djdebug .panelcontent tbody td.actions {
     min-width: 70px;
+}
+#djdebug .panelcontent tbody td.color span {
+    width: 3px;
+    height: 12px;
+    overflow: hidden;
+    padding: 0;
 }
 
 #djDebug .djSQLToggleDetails {

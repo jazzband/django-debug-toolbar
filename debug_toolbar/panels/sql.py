@@ -1,4 +1,5 @@
 from datetime import datetime
+import itertools
 import os
 import re
 import sys
@@ -191,9 +192,21 @@ class SQLDebugPanel(DebugPanel):
 
     def content(self):
         width_ratio_tally = 0
+        colors = [
+            (256, 0, 0), # red
+            (0, 256, 0), # blue
+            (0, 0, 256), # green
+        ]
+        for n, db in enumerate(self._databases.itervalues()):
+            rgb = [0, 0, 0]
+            color = n % 3
+            rgb[color] = 256 - n/3*32
+            db['rgb_color'] = rgb
+        
         for alias, query in self._queries:
             query['alias'] = alias
             query['sql'] = reformat_sql(query['sql'])
+            query['rgb_color'] = self._databases[alias]['rgb_color']
             try:
                 query['width_ratio'] = (query['duration'] / self._sql_time) * 100
             except ZeroDivisionError:
@@ -207,7 +220,7 @@ class SQLDebugPanel(DebugPanel):
                 params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
                 stacktrace.append('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>"'.format(*params))
             query['stacktrace'] = mark_safe('\n'.join(stacktrace))
-
+        
         context = self.context.copy()
         context.update({
             'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
