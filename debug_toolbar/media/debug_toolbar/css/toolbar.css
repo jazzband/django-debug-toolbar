@@ -376,8 +376,17 @@
     width: 18px;
     text-indent: -10000em;
 }
-#djDebug .djDebugCollapsable {
-    background: #ddd;
+#djDebug .djSelected .djDebugCollapse {
+    background: inherit;
+    text-indent: 0;
+    width: auto;
+    display: inline;
+}
+#djDebug tr.djHiddenByDefault {
+    display: none;
+}
+#djDebug tr.djSelected {
+    display: table-row;
 }
 
 #djDebug .djDebugSql {

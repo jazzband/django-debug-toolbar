@@ -48,7 +48,15 @@ window.djdt = (function(window, document, jQuery) {
 				return false;
 			});
 			$('#djDebugSQLPanel a.djSQLToggleDetails').click(function() {
-				djdt.toggle_content($('.djSQLDetailsDiv', $('#sqlDetails_' + $(this).attr('data-queryid'))));
+				var id = $(this).attr('data-queryid');
+				var elem = $('#sqlDetails_' + id);
+				if (!elem.hasClass('djSelected')) {
+					$('#sqlMain_' + id).addClass('djSelected');
+					elem.addClass('djSelected');
+				} else {
+					$('#sqlMain_' + id).removeClass('djSelected');
+					elem.removeClass('djSelected');
+				}
 				return false;
 			});
 			$('#djHideToolBarButton').click(function() {

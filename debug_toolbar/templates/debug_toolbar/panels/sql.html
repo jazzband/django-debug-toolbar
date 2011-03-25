@@ -50,10 +50,10 @@
 				{% endif %}
 				</td>
 			</tr>
-			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
+			<tr class="djHiddenByDefault djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
 				<td colspan="2"></td>
 				<td colspan="4">
-					<div class="djSQLDetailsDiv" style="display:none;">
+					<div class="djSQLDetailsDiv">
 						<p><strong>Connection:</strong> {{ query.alias }}</p>
 						{% if query.stacktrace %}
 							<pre>{{ query.stacktrace }}</pre>
