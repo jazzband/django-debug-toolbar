@@ -51,8 +51,7 @@
 				</td>
 			</tr>
 			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
-				<td class="color"><span style="background-color: rgb({{ query.rgb_color|join:", " }});">&nbsp;</span></td>
-				<td></td>
+				<td colspan="2"></td>
 				<td colspan="4">
 					<div class="djSQLDetailsDiv" style="display:none;">
 						<p><strong>Connection:</strong> {{ query.alias }}</p>
