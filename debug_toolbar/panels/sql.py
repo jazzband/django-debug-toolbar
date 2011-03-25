@@ -197,7 +197,8 @@ class SQLDebugPanel(DebugPanel):
             (0, 256, 0), # blue
             (0, 0, 256), # green
         ]
-        factor = int(256.0/len(self._databases)*2.5)
+        factor = int(256.0/(len(self._databases)*2.5))
+        print factor
         for n, db in enumerate(self._databases.itervalues()):
             rgb = [0, 0, 0]
             color = n % 3
@@ -205,6 +206,7 @@ class SQLDebugPanel(DebugPanel):
             nn = color
             # XXX: pretty sure this is horrible after so many aliases
             while rgb[color] < factor:
+                print rgb[color], factor
                 nc = min(256 - rgb[color], 256)
                 rgb[color] += nc
                 nn += 1
