@@ -198,7 +198,6 @@ class SQLDebugPanel(DebugPanel):
             (0, 0, 256), # green
         ]
         factor = int(256.0/(len(self._databases)*2.5))
-        print factor
         for n, db in enumerate(self._databases.itervalues()):
             rgb = [0, 0, 0]
             color = n % 3
