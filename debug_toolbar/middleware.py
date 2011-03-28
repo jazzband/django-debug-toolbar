@@ -2,6 +2,7 @@
 Debug Toolbar middleware
 """
 import os
+import thread
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -74,19 +75,24 @@ class DebugToolbarMiddleware(object):
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
 
-            self.debug_toolbars[request] = DebugToolbar(request)
-            for panel in self.debug_toolbars[request].panels:
+            toolbar = DebugToolbar(request)
+            for panel in toolbar.panels:
                 panel.process_request(request)
+            self.debug_toolbars[thread.get_ident()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if request in self.debug_toolbars:
-            for panel in self.debug_toolbars[request].panels:
-                panel.process_view(request, view_func, view_args, view_kwargs)
+        toolbar = self.debug_toolbars.get(thread.get_ident())
+        if not toolbar:
+            return
+        for panel in toolbar.panels:
+            panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
-        if request not in self.debug_toolbars:
-            return response
-        if self.debug_toolbars[request].config['INTERCEPT_REDIRECTS']:
+        ident = thread.get_ident()
+        toolbar = self.debug_toolbars.get(ident)
+        if not toolbar:
+            return
+        if toolbar.config['INTERCEPT_REDIRECTS']:
             if isinstance(response, HttpResponseRedirect):
                 redirect_to = response.get('Location', None)
                 if redirect_to:
@@ -97,14 +103,14 @@ class DebugToolbarMiddleware(object):
                     )
                     response.cookies = cookies
         if response.status_code == 200:
-            for panel in self.debug_toolbars[request].panels:
+            for panel in toolbar.panels:
                 panel.process_response(request, response)
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
                 response.content = replace_insensitive(
                     smart_unicode(response.content), 
                     self.tag,
-                    smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
+                    smart_unicode(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
-        del self.debug_toolbars[request]
+        del self.debug_toolbars[ident]
         return response
