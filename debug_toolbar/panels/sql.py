@@ -1,5 +1,4 @@
 from datetime import datetime
-import itertools
 import os
 import re
 import sys
@@ -25,6 +24,7 @@ from django.utils.hashcompat import sha_constructor
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
+from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import sqlparse
 
@@ -89,15 +89,21 @@ def get_template_info(source, context_lines=3):
         'context': context,
     }
 
-class DatabaseStatTracker(util.CursorDebugWrapper):
+def inject_sql_tracker(cls):
     """
-    Replacement for CursorDebugWrapper which stores additional information
-    in `connection.queries`.
+    Injects a replacement execute method which records queries within the SQLPanel.
     """
+    if getattr(cls.execute, 'is_tracked', False):
+        return
     def execute(self, sql, params=()):
+        djdt = DebugToolbarMiddleware.get_current()
+        if not djdt:
+            return cls.execute.__wraps(self, sql, params)
+
+        panel = djdt.get_panel(SQLDebugPanel)
         start = datetime.now()
         try:
-            return self.cursor.execute(sql, params)
+            return cls.execute.__wraps(self, sql, params)
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
@@ -123,9 +129,9 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             del cur_frame
 
             # We keep `sql` to maintain backwards compatibility
-            self.db.queries.append({
+            panel.record(**{
+                'alias': getattr(self, 'alias', 'default'),
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
-                'time': duration * 1000,
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
@@ -137,7 +143,13 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
             })
-util.CursorDebugWrapper = DatabaseStatTracker
+    execute.is_tracked = True
+    execute.__wraps = cls.execute
+
+    cls.execute = execute
+
+inject_sql_tracker(util.CursorWrapper)
+inject_sql_tracker(util.CursorDebugWrapper)
 
 class SQLDebugPanel(DebugPanel):
     """
@@ -151,32 +163,31 @@ class SQLDebugPanel(DebugPanel):
         super(self.__class__, self).__init__(*args, **kwargs)
         self._offset = dict((k, len(connections[k].queries)) for k in connections)
         self._sql_time = 0
+        self._num_queries = 0
         self._queries = []
         self._databases = {}
+    
+    def record(self, alias, **kwargs):
+        self._queries.append((alias, kwargs))
+        if alias not in self._databases:
+            self._databases[alias] = {
+                'time_spent': kwargs['duration'],
+                'num_queries': 1,
+            }
+        else:
+            self._databases[alias]['time_spent'] += kwargs['duration']
+            self._databases[alias]['num_queries'] += 1
+        self._sql_time += kwargs['duration']
+        self._num_queries += 1
 
     def nav_title(self):
         return _('SQL')
 
     def nav_subtitle(self):
-        self._queries = []
-        self._databases = {}
-        for alias in connections:
-            db_queries = connections[alias].queries[self._offset[alias]:]
-            num_queries = len(db_queries)
-            if num_queries:
-                self._databases[alias] = {
-                    'time_spent': sum(q['duration'] for q in db_queries),
-                    'queries': num_queries,
-                }
-                self._queries.extend([(alias, q) for q in db_queries])
-
-        self._queries.sort(key=lambda x: x[1]['start_time'])
-        self._sql_time = sum([d['time_spent'] for d in self._databases.itervalues()])
-        num_queries = len(self._queries)
         # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
-            num_queries,
-            (num_queries == 1) and 'query' or 'queries',
+            self._num_queries,
+            (self._num_queries == 1) and 'query' or 'queries',
             self._sql_time
         )
 
