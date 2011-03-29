@@ -32,8 +32,13 @@ class DebugToolbarMiddleware(object):
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
     """
+    debug_toolbars = {}
+    
+    @classmethod
+    def get_current(cls):
+        return cls.debug_toolbars.get(thread.get_ident())
+
     def __init__(self):
-        self.debug_toolbars = {}
         self.override_url = True
 
         # Set method to use to decide to show toolbar
@@ -78,10 +83,10 @@ class DebugToolbarMiddleware(object):
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
                 panel.process_request(request)
-            self.debug_toolbars[thread.get_ident()] = toolbar
+            self.__class__.debug_toolbars[thread.get_ident()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        toolbar = self.debug_toolbars.get(thread.get_ident())
+        toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
         if not toolbar:
             return
         for panel in toolbar.panels:
@@ -89,7 +94,7 @@ class DebugToolbarMiddleware(object):
 
     def process_response(self, request, response):
         ident = thread.get_ident()
-        toolbar = self.debug_toolbars.get(ident)
+        toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar:
             return
         if toolbar.config['INTERCEPT_REDIRECTS']:
@@ -112,5 +117,5 @@ class DebugToolbarMiddleware(object):
                     smart_unicode(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
-        del self.debug_toolbars[ident]
+        del self.__class__.debug_toolbars[ident]
         return response
