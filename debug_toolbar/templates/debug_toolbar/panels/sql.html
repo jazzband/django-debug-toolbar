@@ -10,68 +10,72 @@
 	</ul>
 </div>
 
-<table>
-	<thead>
-		<tr>
-			<th class="color">&nbsp;</th>
-			<th class="query" colspan="2">{% trans 'Query' %}</th>
-			<th class="timeline">{% trans 'Timeline' %}</th>
-			<th class="time">{% trans 'Time (ms)' %}</th>
-			<th class="actions">{% trans "Action" %}</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for query in queries %}
-			<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
-				<td class="color"><span style="background-color: rgb({{ query.rgb_color|join:", " }});">&nbsp;</span></td>
-				<td class="toggle">
-					<a class="djSQLToggleDetails" data-queryid="{{ forloop.counter }}" href="javascript:void(0)">+</a>
-				</td>
-				<td class="query">
-					<div class="djDebugSqlWrap">
-						<div class="djDebugSql">{{ query.sql|safe }}</div>
-					</div>
-				</td>
-				<td class="timeline">
-					<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset }}%;"><strong style="width:{{ query.width_ratio }}%;">{{ query.width_ratio }}%</strong></div></div>
-				</td>
-				<td class="time">
-					{{ query.duration|floatformat:"2" }}
-				</td>
-				<td class="actions">
-				{% if query.params %}
-					{% if query.is_select %}
-						<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Sel</a>
-						<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Expl</a>
-						{% if is_mysql %}
-							<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Prof</a>
+{% if queries %}
+	<table>
+		<thead>
+			<tr>
+				<th class="color">&nbsp;</th>
+				<th class="query" colspan="2">{% trans 'Query' %}</th>
+				<th class="timeline">{% trans 'Timeline' %}</th>
+				<th class="time">{% trans 'Time (ms)' %}</th>
+				<th class="actions">{% trans "Action" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for query in queries %}
+				<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
+					<td class="color"><span style="background-color: rgb({{ query.rgb_color|join:", " }});">&nbsp;</span></td>
+					<td class="toggle">
+						<a class="djSQLToggleDetails" data-queryid="{{ forloop.counter }}" href="javascript:void(0)">+</a>
+					</td>
+					<td class="query">
+						<div class="djDebugSqlWrap">
+							<div class="djDebugSql">{{ query.sql|safe }}</div>
+						</div>
+					</td>
+					<td class="timeline">
+						<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset }}%;"><strong style="width:{{ query.width_ratio }}%;">{{ query.width_ratio }}%</strong></div></div>
+					</td>
+					<td class="time">
+						{{ query.duration|floatformat:"2" }}
+					</td>
+					<td class="actions">
+					{% if query.params %}
+						{% if query.is_select %}
+							<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Sel</a>
+							<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Expl</a>
+							{% if is_mysql %}
+								<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Prof</a>
+							{% endif %}
 						{% endif %}
 					{% endif %}
-				{% endif %}
-				</td>
-			</tr>
-			<tr class="djHiddenByDefault djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
-				<td colspan="2"></td>
-				<td colspan="4">
-					<div class="djSQLDetailsDiv">
-						<p><strong>Connection:</strong> {{ query.alias }}</p>
-						{% if query.stacktrace %}
-							<pre>{{ query.stacktrace }}</pre>
-						{% endif %}
-						{% if query.template_info %}
-							<table>
-								{% for line in query.template_info.context %}
-								<tr>
-									<td>{{ line.num }}</td>
-									<td><code style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</code></td>
-								</tr>
-								{% endfor %}
-							</table>
-							<p><strong>{{ query.template_info.name|default:"(unknown)" }}</strong></p>
-						{% endif %}
-					</div>
-				</td>
-			</tr>
-		{% endfor %}
-	</tbody>
-</table>
+					</td>
+				</tr>
+				<tr class="djHiddenByDefault djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlDetails_{{ forloop.counter }}">
+					<td colspan="2"></td>
+					<td colspan="4">
+						<div class="djSQLDetailsDiv">
+							<p><strong>Connection:</strong> {{ query.alias }}</p>
+							{% if query.stacktrace %}
+								<pre>{{ query.stacktrace }}</pre>
+							{% endif %}
+							{% if query.template_info %}
+								<table>
+									{% for line in query.template_info.context %}
+									<tr>
+										<td>{{ line.num }}</td>
+										<td><code style="font-family: monospace;{% if line.highlight %}background-color: lightgrey{% endif %}">{{ line.content }}</code></td>
+									</tr>
+									{% endfor %}
+								</table>
+								<p><strong>{{ query.template_info.name|default:"(unknown)" }}</strong></p>
+							{% endif %}
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>No SQL queries were recorded during this request.</p>
+{% endif %}
