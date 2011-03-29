@@ -202,46 +202,47 @@ class SQLDebugPanel(DebugPanel):
         return ''
 
     def content(self):
-        width_ratio_tally = 0
-        colors = [
-            (256, 0, 0), # red
-            (0, 256, 0), # blue
-            (0, 0, 256), # green
-        ]
-        factor = int(256.0/(len(self._databases)*2.5))
-        for n, db in enumerate(self._databases.itervalues()):
-            rgb = [0, 0, 0]
-            color = n % 3
-            rgb[color] = 256 - n/3*factor
-            nn = color
-            # XXX: pretty sure this is horrible after so many aliases
-            while rgb[color] < factor:
-                print rgb[color], factor
-                nc = min(256 - rgb[color], 256)
-                rgb[color] += nc
-                nn += 1
-                if nn > 2:
-                    nn = 0
-                rgb[nn] = nc
-            db['rgb_color'] = rgb
+        if self._queries:
+            width_ratio_tally = 0
+            colors = [
+                (256, 0, 0), # red
+                (0, 256, 0), # blue
+                (0, 0, 256), # green
+            ]
+            factor = int(256.0/(len(self._databases)*2.5))
+            for n, db in enumerate(self._databases.itervalues()):
+                rgb = [0, 0, 0]
+                color = n % 3
+                rgb[color] = 256 - n/3*factor
+                nn = color
+                # XXX: pretty sure this is horrible after so many aliases
+                while rgb[color] < factor:
+                    print rgb[color], factor
+                    nc = min(256 - rgb[color], 256)
+                    rgb[color] += nc
+                    nn += 1
+                    if nn > 2:
+                        nn = 0
+                    rgb[nn] = nc
+                db['rgb_color'] = rgb
         
-        for alias, query in self._queries:
-            query['alias'] = alias
-            query['sql'] = reformat_sql(query['sql'])
-            query['rgb_color'] = self._databases[alias]['rgb_color']
-            try:
-                query['width_ratio'] = (query['duration'] / self._sql_time) * 100
-            except ZeroDivisionError:
-                query['width_ratio'] = 0
-            query['start_offset'] = width_ratio_tally
-            query['end_offset'] = query['width_ratio'] + query['start_offset']
-            width_ratio_tally += query['width_ratio']
+            for alias, query in self._queries:
+                query['alias'] = alias
+                query['sql'] = reformat_sql(query['sql'])
+                query['rgb_color'] = self._databases[alias]['rgb_color']
+                try:
+                    query['width_ratio'] = (query['duration'] / self._sql_time) * 100
+                except ZeroDivisionError:
+                    query['width_ratio'] = 0
+                query['start_offset'] = width_ratio_tally
+                query['end_offset'] = query['width_ratio'] + query['start_offset']
+                width_ratio_tally += query['width_ratio']
             
-            stacktrace = []
-            for frame in query['stacktrace']:
-                params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
-                stacktrace.append('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>"'.format(*params))
-            query['stacktrace'] = mark_safe('\n'.join(stacktrace))
+                stacktrace = []
+                for frame in query['stacktrace']:
+                    params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
+                    stacktrace.append('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>"'.format(*params))
+                query['stacktrace'] = mark_safe('\n'.join(stacktrace))
         
         context = self.context.copy()
         context.update({
