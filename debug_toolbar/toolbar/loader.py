@@ -5,13 +5,14 @@ import os.path, os
 
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.datastructures import SortedDict
 from django.utils.safestring import mark_safe
 
 class DebugToolbar(object):
 
     def __init__(self, request):
         self.request = request
-        self.panels = []
+        self._panels = SortedDict()
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
             'INTERCEPT_REDIRECTS': True,
@@ -37,6 +38,13 @@ class DebugToolbar(object):
             'debug_toolbar.panels.logger.LoggingPanel',
         )
         self.load_panels()
+    
+    def _get_panels(self):
+        return self._panels.values()
+    panels = property(_get_panels)
+
+    def get_panel(self, cls):
+        return self._panels[cls]
 
     def load_panels(self):
         """
@@ -69,7 +77,7 @@ class DebugToolbar(object):
             except:
                 raise # Bubble up problem loading panel
 
-            self.panels.append(panel_instance)
+            self._panels[panel_class] = panel_instance
 
     def render_toolbar(self):
         """
