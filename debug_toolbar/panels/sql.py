@@ -98,12 +98,12 @@ def inject_sql_tracker(cls):
     def execute(self, sql, params=()):
         djdt = DebugToolbarMiddleware.get_current()
         if not djdt:
-            return cls.execute.__wraps(self, sql, params)
+            return cls.execute.__wrapped__(self, sql, params)
 
         panel = djdt.get_panel(SQLDebugPanel)
         start = datetime.now()
         try:
-            return cls.execute.__wraps(self, sql, params)
+            return cls.execute.__wrapped__(self, sql, params)
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
@@ -144,7 +144,7 @@ def inject_sql_tracker(cls):
                 'template_info': template_info,
             })
     execute.is_tracked = True
-    execute.__wraps = cls.execute
+    execute.__wrapped__ = cls.execute
 
     cls.execute = execute
 
