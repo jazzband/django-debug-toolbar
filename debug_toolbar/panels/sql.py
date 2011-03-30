@@ -13,7 +13,7 @@ except ImportError:
     # Compat with < Django 1.2
     from django.db import connection
     connections = {'default': connection}
-from django.db.backends import util, BaseDatabaseWrapper
+from django.db.backends import BaseDatabaseWrapper
 from django.views.debug import linebreak_iter
 from django.template import Node
 from django.template.defaultfilters import escape
@@ -89,21 +89,25 @@ def get_template_info(source, context_lines=3):
         'context': context,
     }
 
-def inject_sql_tracker(cls):
+
+class CursorWrapper(object):
     """
-    Injects a replacement execute method which records queries within the SQLPanel.
+    Wraps a cursor and logs queries.
     """
-    if getattr(cls.execute, 'is_tracked', False):
-        return
+    
+    def __init__(self, cursor, db):
+        self.cursor = cursor
+        self.db = db # Instance of a BaseDatabaseWrapper subclass
+
     def execute(self, sql, params=()):
         djdt = DebugToolbarMiddleware.get_current()
         if not djdt:
-            return cls.execute.__wrapped__(self, sql, params)
+            return self.cursor.execute(self, sql, params)
 
         panel = djdt.get_panel(SQLDebugPanel)
         start = datetime.now()
         try:
-            return cls.execute.__wrapped__(self, sql, params)
+            return self.cursor.execute(self, sql, params)
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
@@ -143,18 +147,6 @@ def inject_sql_tracker(cls):
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
             })
-    execute.is_tracked = True
-    execute.__wrapped__ = cls.execute
-
-    cls.execute = execute
-
-class CursorWrapper(object):
-    def __init__(self, cursor, db):
-        self.cursor = cursor
-        self.db = db # Instance of a BaseDatabaseWrapper subclass
-
-    def execute(self, sql, params=None):
-        return self.cursor.execute(sql, params)
 
     def executemany(self, sql, param_list):
         return self.cursor.executemany(sql, param_list)
@@ -168,21 +160,29 @@ class CursorWrapper(object):
     def __iter__(self):
         return iter(self.cursor)
 
-if not hasattr(util, 'CursorWrapper'):
-    # Inject our CursorWrapper class
-    util.CursorWrapper = CursorWrapper
+def inject_sql_tracker(cls):
+    """
+    Injects a replacement execute method which records queries within the SQLPanel.
+    """
+    import warnings
+    
+    if not hasattr(cls, 'cursor'):
+        warnings.warn('Unable to patch %r: missing cursor method' % cls)
 
-def cursor(self):
-    from django.conf import settings
-    cursor = self._cursor()
-    if settings.DEBUG:
-        return self.make_debug_cursor(cursor)
-    return util.CursorWrapper(cursor, self)
+    if getattr(cls.cursor, 'djdt_tracked', False):
+        return
 
-BaseDatabaseWrapper.cursor = cursor
+    def cursor(self):
+        result = cls.cursor.__wrapped__(self)
+        return CursorWrapper(result, self)
 
-inject_sql_tracker(util.CursorWrapper)
-inject_sql_tracker(util.CursorDebugWrapper)
+    cursor.djdt_tracked = True
+    cursor.__wrapped__ = cls.cursor
+
+    cls.cursor = cursor
+
+# Inject our tracking code into the existing CursorWrapper's
+inject_sql_tracker(BaseDatabaseWrapper)
 
 class SQLDebugPanel(DebugPanel):
     """
@@ -250,7 +250,6 @@ class SQLDebugPanel(DebugPanel):
                 nn = color
                 # XXX: pretty sure this is horrible after so many aliases
                 while rgb[color] < factor:
-                    print rgb[color], factor
                     nc = min(256 - rgb[color], 256)
                     rgb[color] += nc
                     nn += 1
