@@ -102,12 +102,12 @@ class CursorWrapper(object):
     def execute(self, sql, params=()):
         djdt = DebugToolbarMiddleware.get_current()
         if not djdt:
-            return self.cursor.execute(self, sql, params)
+            return self.cursor.execute(sql, params)
 
         panel = djdt.get_panel(SQLDebugPanel)
         start = datetime.now()
         try:
-            return self.cursor.execute(self, sql, params)
+            return self.cursor.execute(sql, params)
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
