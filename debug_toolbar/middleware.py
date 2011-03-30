@@ -96,7 +96,7 @@ class DebugToolbarMiddleware(object):
         ident = thread.get_ident()
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar:
-            return
+            return response
         if toolbar.config['INTERCEPT_REDIRECTS']:
             if isinstance(response, HttpResponseRedirect):
                 redirect_to = response.get('Location', None)
