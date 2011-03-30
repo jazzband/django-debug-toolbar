@@ -13,7 +13,7 @@ except ImportError:
     # Compat with < Django 1.2
     from django.db import connection
     connections = {'default': connection}
-from django.db.backends import util
+from django.db.backends import util, BaseDatabaseWrapper
 from django.views.debug import linebreak_iter
 from django.template import Node
 from django.template.defaultfilters import escape
@@ -147,6 +147,39 @@ def inject_sql_tracker(cls):
     execute.__wrapped__ = cls.execute
 
     cls.execute = execute
+
+class CursorWrapper(object):
+    def __init__(self, cursor, db):
+        self.cursor = cursor
+        self.db = db # Instance of a BaseDatabaseWrapper subclass
+
+    def execute(self, sql, params=None):
+        return self.cursor.execute(sql, params)
+
+    def executemany(self, sql, param_list):
+        return self.cursor.executemany(sql, param_list)
+
+    def __getattr__(self, attr):
+        if attr in self.__dict__:
+            return self.__dict__[attr]
+        else:
+            return getattr(self.cursor, attr)
+
+    def __iter__(self):
+        return iter(self.cursor)
+
+if not hasattr(util, 'CursorWrapper'):
+    # Inject our CursorWrapper class
+    util.CursorWrapper = CursorWrapper
+
+def cursor(self):
+    from django.conf import settings
+    cursor = self._cursor()
+    if settings.DEBUG:
+        return self.make_debug_cursor(cursor)
+    return util.CursorWrapper(cursor, self)
+
+BaseDatabaseWrapper.cursor = cursor
 
 inject_sql_tracker(util.CursorWrapper)
 inject_sql_tracker(util.CursorDebugWrapper)
