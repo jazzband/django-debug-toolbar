@@ -18,7 +18,7 @@ msgstr ""
 #: panels/cache.py:92
 #, python-format
 msgid "Cache: %.2fms"
-msgstr ""
+msgstr "Cache: %.2fms"
 
 #: panels/cache.py:95
 msgid "Cache Usage"
@@ -30,7 +30,7 @@ msgstr "Cabeçalhos HTTP"
 
 #: panels/logger.py:56
 msgid "Logging"
-msgstr ""
+msgstr "Logs"
 
 #: panels/logger.py:63
 msgid "Log Messages"
@@ -152,15 +152,15 @@ msgstr "Tempo Total"
 
 #: templates/debug_toolbar/panels/cache.html:18
 msgid "Hits"
-msgstr ""
+msgstr "Hits"
 
 #: templates/debug_toolbar/panels/cache.html:20
 msgid "Misses"
-msgstr ""
+msgstr "Misses"
 
 #: templates/debug_toolbar/panels/cache.html:35
 msgid "Breakdown"
-msgstr ""
+msgstr "Breakdown"
 
 #: templates/debug_toolbar/panels/cache.html:40
 msgid "Type"
@@ -210,11 +210,11 @@ msgstr "Função View"
 
 #: templates/debug_toolbar/panels/request_vars.html:8
 msgid "args"
-msgstr ""
+msgstr "args"
 
 #: templates/debug_toolbar/panels/request_vars.html:9
 msgid "kwargs"
-msgstr ""
+msgstr "kwargs"
 
 #: templates/debug_toolbar/panels/request_vars.html:27
 msgid "COOKIES Variables"
@@ -269,7 +269,7 @@ msgstr "Argumentos Fornecidos"
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Recebedores"
 
 #: templates/debug_toolbar/panels/sql.html:6
 msgid "Action"
@@ -277,11 +277,11 @@ msgstr "Ação"
 
 #: templates/debug_toolbar/panels/sql.html:7
 msgid "Stacktrace"
-msgstr ""
+msgstr "Stacktrace"
 
 #: templates/debug_toolbar/panels/sql.html:8
 msgid "Query"
-msgstr ""
+msgstr "Query"
 
 #: templates/debug_toolbar/panels/sql.html:38
 msgid "Line"
@@ -343,7 +343,7 @@ msgstr "Template"
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
 msgid "Toggle Context"
-msgstr "Mostrar Contexto"
+msgstr "Mostrar/Esconder Contexto"
 
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
