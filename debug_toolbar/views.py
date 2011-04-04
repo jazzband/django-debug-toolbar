@@ -145,6 +145,7 @@ def sql_profile(request):
         return render_to_response('debug_toolbar/panels/sql_profile.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
+@csrf_exempt
 def template_source(request):
     """
     Return the source of a template, syntax-highlighted by Pygments if
