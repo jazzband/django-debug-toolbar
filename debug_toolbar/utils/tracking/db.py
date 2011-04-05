@@ -10,7 +10,7 @@ from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info
-
+from debug_toolbar.utils.compat.db import connections
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
@@ -29,6 +29,9 @@ class CursorWrapper(object):
         self.logger = logger
 
     def execute(self, sql, params=()):
+        alias = getattr(self, 'alias', 'default')
+        # HACK: avoid imports
+        engine = connections[alias].connection.__class__.__module__.split('.', 1)[0]
         start = datetime.now()
         try:
             return self.cursor.execute(sql, params)
@@ -56,9 +59,9 @@ class CursorWrapper(object):
                 pass
             del cur_frame
 
-            # We keep `sql` to maintain backwards compatibility
-            self.logger.record(**{
-                'alias': getattr(self, 'alias', 'default'),
+            params = {
+                'engine': engine,
+                'alias': alias,
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
                 'duration': duration,
                 'raw_sql': sql,
@@ -70,7 +73,18 @@ class CursorWrapper(object):
                 'is_slow': (duration > SQL_WARNING_THRESHOLD),
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
-            })
+            }
+
+            if engine == 'psycopg2':
+                conn = connections[alias].connection
+                params.update({
+                    'trans_status': conn.get_transaction_status(),
+                    'iso_level': conn.isolation_level,
+                    'encoding': conn.encoding,
+                })
+            
+            # We keep `sql` to maintain backwards compatibility
+            self.logger.record(**params)
 
     def executemany(self, sql, param_list):
         return self.cursor.executemany(sql, param_list)

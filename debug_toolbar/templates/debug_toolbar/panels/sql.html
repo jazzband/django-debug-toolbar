@@ -44,9 +44,9 @@
 						{% if query.is_select %}
 							<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Sel</a>
 							<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Expl</a>
-							{% if is_mysql %}
+							{% ifequal query.engine 'mysql' %}
 								<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}">Prof</a>
-							{% endif %}
+							{% endifequal %}
 						{% endif %}
 					{% endif %}
 					</td>
@@ -56,6 +56,12 @@
 					<td colspan="4">
 						<div class="djSQLDetailsDiv">
 							<p><strong>Connection:</strong> {{ query.alias }}</p>
+							{% if query.iso_level %}
+								<p><strong>Isolation Level:</strong> {{ query.iso_level }}</p>
+							{% endif %}
+							{% if query.trans_status %}
+								<p><strong>Transaction Status:</strong> {{ query.trans_status }}</p>
+							{% endif %}
 							{% if query.stacktrace %}
 								<pre>{{ query.stacktrace }}</pre>
 							{% endif %}

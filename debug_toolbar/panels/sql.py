@@ -1,6 +1,5 @@
 import re
 
-from django.conf import settings
 from django.db.backends import BaseDatabaseWrapper
 from django.template.loader import render_to_string
 from django.utils.html import escape
@@ -25,6 +24,36 @@ def cursor(func, self):
     logger = djdt.get_panel(SQLDebugPanel)
     
     return CursorWrapper(result, self, logger=logger)
+
+def get_isolation_level_display(engine, level):
+    if engine == 'psycopg2':
+        import psycopg2.extensions
+        choices = {
+            psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: 'Autocommit',
+            psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: 'Read uncommitted',
+            psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED: 'Read committed',
+            psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: 'Repeatable read',
+            psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: 'Serializable',
+        }
+    else:
+        raise ValueError(engine)
+    
+    return choices.get(level)
+
+def get_transaction_status_display(engine, level):
+    if engine == 'psycopg2':
+        import psycopg2.extensions
+        choices = {
+            psycopg2.extensions.TRANSACTION_STATUS_IDLE: 'Idle',
+            psycopg2.extensions.TRANSACTION_STATUS_ACTIVE: 'Active',
+            psycopg2.extensions.TRANSACTION_STATUS_INTRANS: 'In transaction',
+            psycopg2.extensions.TRANSACTION_STATUS_INERROR: 'In error',
+            psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN: 'Unknown',
+        }
+    else:
+        raise ValueError(engine)
+    
+    return choices.get(level)
 
 class SQLDebugPanel(DebugPanel):
     """
@@ -102,6 +131,10 @@ class SQLDebugPanel(DebugPanel):
         
             for alias, query in self._queries:
                 query['alias'] = alias
+                if 'iso_level' in query:
+                    query['iso_level'] = get_isolation_level_display(query['engine'], query['iso_level'])
+                if 'trans_status' in query:
+                    query['trans_status'] = get_transaction_status_display(query['engine'], query['trans_status'])
                 query['sql'] = reformat_sql(query['sql'])
                 query['rgb_color'] = self._databases[alias]['rgb_color']
                 try:
@@ -123,7 +156,6 @@ class SQLDebugPanel(DebugPanel):
             'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
             'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
-            'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         })
 
         return render_to_string('debug_toolbar/panels/sql.html', context)
