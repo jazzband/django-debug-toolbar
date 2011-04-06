@@ -5,6 +5,7 @@
 			<th>{% trans "Time" %}&nbsp;(ms)</th>
 			<th>{% trans "Action" %}</th>
 			<th>{% trans 'Stacktrace' %}</th>
+			<th>{% trans 'Alias' %}</th>
 			<th>{% trans 'Query' %}</th>
 		</tr>
 	</thead>
@@ -28,6 +29,7 @@
 					<div class="djSQLShowStacktraceDiv"><a class="djSQLShowStacktrace" href="#">Toggle Stacktrace</a></div>
 					{% endif %}
 				</td>
+				<td>{{ query.alias }}</td>
 				<td class="syntax">
 					<div class="djDebugSqlWrap">
 						<div class="djDebugSql">{{ query.sql|safe }}</div>
