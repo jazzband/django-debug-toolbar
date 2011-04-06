@@ -30,9 +30,16 @@ class CursorWrapper(object):
 
     def execute(self, sql, params=()):
         alias = getattr(self, 'alias', 'default')
+        conn = connections[alias].connection
         # HACK: avoid imports
-        engine = connections[alias].connection.__class__.__module__.split('.', 1)[0]
+        if conn:
+            engine = conn.__class__.__module__.split('.', 1)[0]
+        else:
+            engine = 'unknown'
+
         start = datetime.now()
+        if engine == 'psycopg2':
+            trans_status = self.logger.get_transaction_status(alias)
         try:
             return self.cursor.execute(sql, params)
         finally:
@@ -76,12 +83,17 @@ class CursorWrapper(object):
             }
 
             if engine == 'psycopg2':
-                conn = connections[alias].connection
+                import psycopg2.extensions
+                cur_trans_status = self.logger.get_transaction_status(alias, True)
                 params.update({
-                    'trans_status': conn.get_transaction_status(),
+                    'starts_trans': cur_trans_status > trans_status,
+                    'ends_trans': cur_trans_status < trans_status,
+                    'in_trans': cur_trans_status == psycopg2.extensions.TRANSACTION_STATUS_INTRANS,
+                    'trans_status': cur_trans_status,
                     'iso_level': conn.isolation_level,
                     'encoding': conn.encoding,
                 })
+                
             
             # We keep `sql` to maintain backwards compatibility
             self.logger.record(**params)

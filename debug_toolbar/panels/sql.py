@@ -70,6 +70,23 @@ class SQLDebugPanel(DebugPanel):
         self._num_queries = 0
         self._queries = []
         self._databases = {}
+        self._transaction_status = {}
+    
+    def get_transaction_status(self, alias, reset=False):
+        conn = connections[alias].connection
+        if not conn:
+            return None
+
+        engine = conn.__class__.__module__.split('.', 1)[0]
+        
+        if reset or self._transaction_status.get(alias) is None:
+            if engine == 'psycopg2':
+                self._transaction_status[alias] = conn.get_transaction_status()
+            else:
+                raise ValueError(engine)
+        
+        return self._transaction_status[alias]
+        
     
     def record(self, alias, **kwargs):
         self._queries.append((alias, kwargs))

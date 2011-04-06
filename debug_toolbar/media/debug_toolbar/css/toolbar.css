@@ -459,12 +459,26 @@
     background-color:#ccc;
 }
 
-#djDebug .djDebugHover div.djDebugLineChart strong {
-    background-color: #000;
-}
 #djDebug div.djDebugLineChartWarning strong {
     background-color:#900;
 }
+
+#djDebug .djDebugInTransaction div.djDebugLineChart strong {
+    background-color: #d3ff82;
+}
+#djDebug .djDebugStartTransaction div.djDebugLineChart strong {
+    border-left: 4px solid #94b24d;
+}
+#djDebug .djDebugEndTransaction div.djDebugLineChart strong {
+    border-right: 4px solid #94b24d;
+}
+#djDebug .djDebugHover div.djDebugLineChart strong {
+    background-color: #000;
+}
+#djDebug .djDebugInTransaction.djDebugHover div.djDebugLineChart strong {
+    background-color: #94b24d;
+}
+
 
 #djDebug .panelContent ul.stats {
     position: relative; 
