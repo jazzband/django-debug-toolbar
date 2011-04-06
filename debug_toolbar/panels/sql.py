@@ -164,7 +164,7 @@ class SQLDebugPanel(DebugPanel):
                 
                 if trans_id != last_trans_id:
                     if last_trans_id:
-                        self._queries[i][1]['ends_trans'] = True
+                        self._queries[i-1][1]['ends_trans'] = True
                     trans_ids[alias] = trans_id
                     query['starts_trans'] = True
                 if trans_id:
