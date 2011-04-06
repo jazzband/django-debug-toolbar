@@ -162,8 +162,7 @@ class SQLDebugPanel(DebugPanel):
                 trans_id = query.get('trans_id')
                 last_trans_id = trans_ids.get(alias)
                 
-                print trans_id, last_trans_id
-                if query['engine'] == 'psycopg2' and trans_id != last_trans_id:
+                if trans_id != last_trans_id:
                     if last_trans_id:
                         self._queries[i][1]['ends_trans'] = True
                     trans_ids[alias] = trans_id
