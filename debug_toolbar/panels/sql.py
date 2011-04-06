@@ -1,4 +1,5 @@
 import re
+import uuid
 
 from django.db.backends import BaseDatabaseWrapper
 from django.template.loader import render_to_string
@@ -71,22 +72,30 @@ class SQLDebugPanel(DebugPanel):
         self._queries = []
         self._databases = {}
         self._transaction_status = {}
+        self._transaction_ids = {}
     
-    def get_transaction_status(self, alias, reset=False):
+    def get_transaction_id(self, alias):
         conn = connections[alias].connection
         if not conn:
             return None
 
         engine = conn.__class__.__module__.split('.', 1)[0]
+        if engine == 'psycopg2':
+            cur_status = conn.get_transaction_status()
+        else:
+            raise ValueError(engine)
+
+        last_status = self._transaction_status.get(alias)
+        self._transaction_status[alias] = cur_status
+
+        if not cur_status:
+            # No available state
+            return None
+
+        if cur_status != last_status:
+            self._transaction_ids[alias] = uuid.uuid4().hex
         
-        if reset or self._transaction_status.get(alias) is None:
-            if engine == 'psycopg2':
-                self._transaction_status[alias] = conn.get_transaction_status()
-            else:
-                raise ValueError(engine)
-        
-        return self._transaction_status[alias]
-        
+        return self._transaction_ids[alias]
     
     def record(self, alias, **kwargs):
         self._queries.append((alias, kwargs))
@@ -146,7 +155,22 @@ class SQLDebugPanel(DebugPanel):
                     rgb[nn] = nc
                 db['rgb_color'] = rgb
         
+            trans_ids = {}
+            trans_id = None
+            i = 0
             for alias, query in self._queries:
+                trans_id = query.get('trans_id')
+                last_trans_id = trans_ids.get(alias)
+                
+                print trans_id, last_trans_id
+                if query['engine'] == 'psycopg2' and trans_id != last_trans_id:
+                    if last_trans_id:
+                        self._queries[i][1]['ends_trans'] = True
+                    trans_ids[alias] = trans_id
+                    query['starts_trans'] = True
+                if trans_id:
+                    query['in_trans'] = True
+                
                 query['alias'] = alias
                 if 'iso_level' in query:
                     query['iso_level'] = get_isolation_level_display(query['engine'], query['iso_level'])
@@ -167,6 +191,10 @@ class SQLDebugPanel(DebugPanel):
                     params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
                     stacktrace.append('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>"'.format(*params))
                 query['stacktrace'] = mark_safe('\n'.join(stacktrace))
+                i += 1
+
+            if trans_id:
+                self._queries[i][1]['ends_trans'] = True
         
         context = self.context.copy()
         context.update({

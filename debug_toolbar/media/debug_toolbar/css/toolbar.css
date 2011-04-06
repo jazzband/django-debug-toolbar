@@ -467,10 +467,10 @@
     background-color: #d3ff82;
 }
 #djDebug .djDebugStartTransaction div.djDebugLineChart strong {
-    border-left: 4px solid #94b24d;
+    border-left: 1px solid #94b24d;
 }
 #djDebug .djDebugEndTransaction div.djDebugLineChart strong {
-    border-right: 4px solid #94b24d;
+    border-right: 1px solid #94b24d;
 }
 #djDebug .djDebugHover div.djDebugLineChart strong {
     background-color: #000;
