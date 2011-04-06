@@ -169,7 +169,8 @@ class SQLDebugPanel(DebugPanel):
                     if last_trans_id:
                         self._queries[i-1][1]['ends_trans'] = True
                     trans_ids[alias] = trans_id
-                    query['starts_trans'] = True
+                    if trans_id:
+                        query['starts_trans'] = True
                 if trans_id:
                     query['in_trans'] = True
                 
