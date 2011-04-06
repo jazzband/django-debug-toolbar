@@ -93,7 +93,10 @@ class SQLDebugPanel(DebugPanel):
             return None
 
         if cur_status != last_status:
-            self._transaction_ids[alias] = uuid.uuid4().hex
+            if cur_status:
+                self._transaction_ids[alias] = uuid.uuid4().hex
+            else:
+                self._transaction_ids[alias] = None
         
         return self._transaction_ids[alias]
     
