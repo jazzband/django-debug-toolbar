@@ -21,6 +21,14 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 from django.utils.hashcompat import sha_constructor
+try:
+    from django.utils.log import getLogger
+    logger = getLogger('django.db.backends')
+    has_logger = True
+except ImportError:
+    # Compatibility with Django < 1.2
+    has_logger = False
+    
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
@@ -132,6 +140,12 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
                 pass
             del cur_frame
 
+            # Logging was added in Django 1.3
+            if has_logger:
+                logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+                    extra={'duration':duration, 'sql':sql, 'params':params}
+                )
+
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
                 'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
@@ -174,6 +188,11 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             except:
                 pass
             del cur_frame
+
+            if has_logger:
+                logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+                    extra={'duration':duration, 'sql':sql, 'params':params}
+                )
 
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
