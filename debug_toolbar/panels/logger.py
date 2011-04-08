@@ -17,6 +17,11 @@ class LogCollector(object):
         self.records = {} # a dictionary that maps threads to log records
 
     def add_record(self, record, thread=None):
+        # Avoid logging SQL queries since they are already in the SQL panel
+        # TODO: Make this check whether SQL panel is enabled
+        if record.get('channel', '') == 'django.db.backends':
+            return
+
         self.get_records(thread).append(record)
 
     def get_records(self, thread=None):
