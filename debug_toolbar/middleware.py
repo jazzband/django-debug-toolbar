@@ -99,7 +99,7 @@ class DebugToolbarMiddleware(object):
         if response.status_code == 200:
             for panel in self.debug_toolbars[request].panels:
                 panel.process_response(request, response)
-            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+            if response.get('Content-Type', None) and response['Content-Type'].split(';')[0] in _HTML_TYPES:
                 response.content = replace_insensitive(
                     smart_unicode(response.content), 
                     self.tag,
