@@ -3,8 +3,6 @@ from pprint import pformat
 
 from django import http
 from django.conf import settings
-from django.core.signals import request_started
-from django.dispatch import Signal
 from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
@@ -56,7 +54,7 @@ class TemplateDebugPanel(DebugPanel):
 
     def title(self):
         num_templates = len([t for t in self.templates
-            if not t['template'].name.startswith('debug_toolbar/')])
+            if not (t['template'].name and t['template'].name.startswith('debug_toolbar/'))])
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
 
     def url(self):
@@ -78,7 +76,7 @@ class TemplateDebugPanel(DebugPanel):
             # Clean up some info about templates
             template = template_data.get('template', None)
             # Skip templates that we are generating through the debug toolbar.
-            if template.name.startswith('debug_toolbar/'):
+            if template.name and template.name.startswith('debug_toolbar/'):
                 continue
             if template.origin and template.origin.name:
                 template.origin_name = template.origin.name
