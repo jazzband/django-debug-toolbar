@@ -197,7 +197,7 @@ class SQLDebugPanel(DebugPanel):
                 i += 1
 
             if trans_id:
-                self._queries[i][1]['ends_trans'] = True
+                self._queries[i-1][1]['ends_trans'] = True
         
         context = self.context.copy()
         context.update({
