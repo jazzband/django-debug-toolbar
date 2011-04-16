@@ -92,7 +92,7 @@ class TrackingTestCase(BaseTestCase):
         # best we can do
         self.assertEquals(foo['sender'].__name__, 'class_func')
         self.assertTrue('start' in foo, foo)
-        self.assertGreater(foo['start'], 0)
+        self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' not in foo, foo)
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 2)
@@ -136,9 +136,9 @@ class TrackingTestCase(BaseTestCase):
         # best we can do
         self.assertEquals(foo['sender'].__name__, 'module_func')
         self.assertTrue('start' in foo, foo)
-        self.assertGreater(foo['start'], 0)
+        self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' in foo, foo)
-        self.assertGreater(foo['stop'], foo['start'])
+        self.assertTrue(foo['stop'] > foo['start'])
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 1)
         self.assertEquals(foo['args'][0], 'hi')
@@ -162,9 +162,9 @@ class TrackingTestCase(BaseTestCase):
         # best we can do
         self.assertEquals(foo['sender'].__name__, 'class_func')
         self.assertTrue('start' in foo, foo)
-        self.assertGreater(foo['start'], 0)
+        self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' in foo, foo)
-        self.assertGreater(foo['stop'], foo['start'])
+        self.assertTrue(foo['stop'] > foo['start'])
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 2)
         self.assertEquals(foo['args'][1], 'hello')
