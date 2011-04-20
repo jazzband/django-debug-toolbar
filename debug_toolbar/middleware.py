@@ -97,14 +97,14 @@ class DebugToolbarMiddleware(object):
                     )
                     response.cookies = cookies
         if response.status_code == 200 and 'gzip' not in response.get('Content-Encoding', ''):
-            for panel in self.debug_toolbars[request].panels:
-                panel.process_response(request, response)
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+                for panel in self.debug_toolbars[request].panels:
+                    panel.process_response(request, response)
                 response.content = replace_insensitive(
                     smart_unicode(response.content), 
                     self.tag,
                     smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+                if response.get('Content-Length', None):
+                    response['Content-Length'] = len(response.content)
         del self.debug_toolbars[request]
         return response
