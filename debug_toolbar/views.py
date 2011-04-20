@@ -10,7 +10,6 @@ from django.conf import settings
 from django.db import connection
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
 
@@ -27,7 +26,6 @@ def debug_media(request, path):
         root = os.path.join(parent, 'media', 'debug_toolbar')
     return django.views.static.serve(request, path, root)
 
-@csrf_exempt
 def sql_select(request):
     """
     Returns the output of the SQL SELECT statement.
@@ -60,7 +58,6 @@ def sql_select(request):
         return render_to_response('debug_toolbar/panels/sql_select.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
-@csrf_exempt
 def sql_explain(request):
     """
     Returns the output of the SQL EXPLAIN on the given query.
@@ -101,7 +98,6 @@ def sql_explain(request):
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
-@csrf_exempt
 def sql_profile(request):
     """
     Returns the output of running the SQL and getting the profiling statistics.
@@ -145,7 +141,6 @@ def sql_profile(request):
         return render_to_response('debug_toolbar/panels/sql_profile.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
-@csrf_exempt
 def template_source(request):
     """
     Return the source of a template, syntax-highlighted by Pygments if
