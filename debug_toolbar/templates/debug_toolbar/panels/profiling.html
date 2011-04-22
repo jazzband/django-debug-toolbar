@@ -1,0 +1,23 @@
+{% load i18n %}
+
+
+
+<table width="100%">
+	<thead>
+		<tr>
+			<th>{% trans "ncalls" %}</th>
+			<th>{% trans "tottime" %}<br/>({% trans "percall" %})</th>
+			<th>{% trans "cumtime" %}<br/>({% trans "percall" %})</th>
+			<th>{% trans "filename:lineno(function)" %}</th>
+			<th>{% trans "toggle" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for call in func_list %}
+			<tr id="{{ call.id }}" class="djDebugProfileRow" style="background:{{ call.background }}" depth="{{ call.depth }}">
+				{{ call.as_row }}
+				<td><a class="djDebugProfileToggle">Toggle Subcalls</a></td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
