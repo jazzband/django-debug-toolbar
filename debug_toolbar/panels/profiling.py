@@ -1,3 +1,5 @@
+from __future__ import division
+
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
@@ -26,7 +28,7 @@ class DjangoDebugToolbarStats(Stats):
                     self.print_call_tree_node(called, depth+1, max_depth, cum_filter=cum_filter)
 
 class FunctionCall(object):
-    def __init__(self, statobj, func, depth=0, stats=None,  css_id='djDebugProfileCall_0', hsv=(0,0.5,1)):
+    def __init__(self, statobj, func, depth=0, stats=None, id=0, parent_ids=[], hsv=(0,0.5,1)):
         self.statobj = statobj
         self.func = func
         if stats:
@@ -34,8 +36,9 @@ class FunctionCall(object):
         else:
             self.stats = statobj.stats[func][:4]
         self.depth = depth
-        self.id = css_id
-        self.hsv=hsv
+        self.id = id
+        self.parent_ids = parent_ids
+        self.hsv = hsv
     
     def parent_classes(self):
         return self.parent_classes
@@ -58,7 +61,15 @@ class FunctionCall(object):
             idx = file_name.find('/site-packages/')
             if idx > -1:
                 file_name=file_name[idx+14:]
-            return "%s:%d(%s)" % (file_name, line_num, method)
+            
+            file_path, file_name = file_name.rsplit('/', 1)
+            
+            return mark_safe('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)'.format(
+                file_path,
+                file_name,
+                line_num,
+                method,
+            ))
     
     def subfuncs(self):
         i=0
@@ -75,35 +86,38 @@ class FunctionCall(object):
                                func, 
                                self.depth+1, 
                                stats=stats,
-                               css_id=self.id + '_' + str(i),
+                               id=str(self.id) + '_' + str(i),
+                               parent_ids=self.parent_ids + [self.id],
                                hsv=(h1,s1,1))
     
-    def as_row(self):
+    def count(self):
+        return self.stats[1]
+    
+    def tottime(self):
+        return self.stats[2]
+    
+    def cumtime(self):
         cc, nc, tt, ct = self.stats
-        if nc != cc:
-            c = str(nc) + '/' + str(cc)
-        else:
-            c = str(nc)
-            
-        if nc != 0:
-            ttdivnc = tt/nc
-        else:
-            ttdivnc = 0
-        
-        if cc == 0:
-            ctdivcc = 0
-        else:
-            ctdivcc = ct/cc
-        indent = 5*self.depth
-        funcstr = self.func_std_string()
-        out = """
-                <td>%(c)s</td>
-                <td>%(tt)8.3f<br/>(%(ttdivnc)8.3f)</td>
-                <td>%(ct)8.3f<br/>(%(ctdivcc)8.3f)</td>
-                <td style='padding-left:%(indent)ipx'>%(funcstr)s</td>
-               """ % locals()
-        return mark_safe(out)
+        return self.stats[3]
+    
+    def tottime_per_call(self):
+        cc, nc, tt, ct = self.stats
 
+        if nc == 0:
+            return 0
+
+        return tt/nc
+    
+    def cumtime_per_call(self):
+        cc, nc, tt, ct = self.stats
+
+        if cc == 0:
+            return 0
+
+        return ct/cc
+
+    def indent(self):
+        return 16 * self.depth
 
 class ProfilingDebugPanel(DebugPanel):
     """

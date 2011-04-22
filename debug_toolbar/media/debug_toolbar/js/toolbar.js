@@ -51,17 +51,23 @@ window.djdt = (function(window, document, jQuery) {
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
-			$('#djDebugSQLPanel a.djToggleSwitch').click(function() {
-				var id = $(this).attr('data-queryid');
-				var elem = $('#sqlDetails_' + id);
-				if (!elem.hasClass('djSelected')) {
-					$('#sqlMain_' + id).addClass('djSelected');
-					elem.addClass('djSelected');
-				} else {
-					$('#sqlMain_' + id).removeClass('djSelected');
-					elem.removeClass('djSelected');
+			$('#djDebug a.djToggleSwitch').click(function(e) {
+				e.preventDefault();
+				var id = $(this).attr('data-toggle-id');
+				if (id == '' || !id) {
+					return;
 				}
-				return false;
+				$(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
+					var $this = $(this);
+					if ($this.hasClass('djUnselected')) {
+						$this.addClass('djSelected');
+						$this.removeClass('djUnselected');
+					} else {
+						$this.removeClass('djSelected');
+						$this.addClass('djUnselected');
+					}
+				});
+				return;
 			});
 			function getSubcalls(row) {
 			  id = row.attr('id');

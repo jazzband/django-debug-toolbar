@@ -382,6 +382,9 @@
     width: auto;
     display: inline;
 }
+#djDebug .djUnselected {
+    display: none;
+}
 #djDebug tr.djHiddenByDefault {
     display: none;
 }

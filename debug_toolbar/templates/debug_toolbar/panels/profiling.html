@@ -1,22 +1,31 @@
 {% load i18n %}
 
-
-
 <table width="100%">
 	<thead>
 		<tr>
-			<th>{% trans "ncalls" %}</th>
-			<th>{% trans "tottime" %}<br/>({% trans "percall" %})</th>
-			<th>{% trans "cumtime" %}<br/>({% trans "percall" %})</th>
-			<th>{% trans "filename:lineno(function)" %}</th>
-			<th>{% trans "toggle" %}</th>
+			<th>{% trans "Call" %}</th>
+			<th>{% trans "TotTime" %}</th>
+			<th>{% trans "Per" %}</th>
+			<th>{% trans "CumTime" %}</th>
+			<th>{% trans "Per" %}</th>
+			<th>{% trans "Count" %}</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for call in func_list %}
-			<tr id="{{ call.id }}" class="djDebugProfileRow" style="background:{{ call.background }}" depth="{{ call.depth }}">
-				{{ call.as_row }}
-				<td><a class="djDebugProfileToggle">Toggle Subcalls</a></td>
+			<!--  style="background:{{ call.background }}" -->
+			<tr id="{{ call.id }}" class="djDebugProfileRow{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" depth="{{ call.depth }}">
+				<td>
+					<div style="padding-left: {{ call.indent }}px;">
+						<a class="djProfileToggleDetails djToggleSwitch" data-toggle-id="{{ call.id }}" href="javascript:void(0)">+</a>
+						<span class="stack">{{ call.func_std_string }}</span>
+					</div>
+				</td>
+				<td>{{ call.tottime|floatformat:3 }}</td>
+				<td>{{ call.tottime_per_call|floatformat:3 }}</td>
+				<td>{{ call.cumtime|floatformat:3 }}</td>
+				<td>{{ call.cumtime_per_call|floatformat:3 }}</td>
+				<td>{{ call.count }}</td>
 			</tr>
 		{% endfor %}
 	</tbody>
