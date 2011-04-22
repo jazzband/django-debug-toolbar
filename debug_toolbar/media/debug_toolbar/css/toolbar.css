@@ -506,20 +506,23 @@
 #djDebug .djDebugRowWarning .time {
     color: red;
 }
-#djdebug .panelcontent tbody td.toggle {
+#djdebug .panelcontent table .toggle {
+    width: 14px;
     padding-top: 3px;
 }
-#djdebug .panelcontent tbody td.actions {
+#djdebug .panelcontent table .actions {
     min-width: 70px;
 }
-#djdebug .panelcontent tbody td.color span {
+#djdebug .panelcontent table .color {
+    width: 3px;
+}
+#djdebug .panelcontent table .color span {
     width: 3px;
     height: 12px;
     overflow: hidden;
     padding: 0;
 }
-
-#djDebug .djSQLToggleDetails {
+#djDebug .djToggleSwitch {
     text-decoration: none;
     border: 1px solid #999;
     height: 12px;
@@ -547,15 +550,15 @@
     margin-bottom: 3px;
     font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
 }
-#djDebug .djSQLDetailsDiv pre span {
+#djDebug .stack span {
     color: #000;
     font-weight: bold;
 }
-#djDebug .djSQLDetailsDiv pre span.path {
+#djDebug .stack span.path {
     color: #777;
     font-weight: normal;
 }
-#djDebug .djSQLDetailsDiv pre span.code {
+#djDebug .stack span.code {
     font-weight: normal;
 }
 

@@ -51,7 +51,7 @@ window.djdt = (function(window, document, jQuery) {
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
-			$('#djDebugSQLPanel a.djSQLToggleDetails').click(function() {
+			$('#djDebugSQLPanel a.djToggleSwitch').click(function() {
 				var id = $(this).attr('data-queryid');
 				var elem = $('#sqlDetails_' + id);
 				if (!elem.hasClass('djSelected')) {
