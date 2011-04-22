@@ -47,7 +47,6 @@ class FunctionCall(object):
         return self.parent_classes
     
     def background(self):
-        print self.hsv
         r,g,b = hsv_to_rgb(*self.hsv)
         return 'rgb(%f%%,%f%%,%f%%)' %(r*100, g*100, b*100)
     
@@ -137,6 +136,8 @@ class ProfilingDebugPanel(DebugPanel):
 
     def process_response(self, request, response):
         self.profiler.create_stats()
+        if 'djDebugProfileDump' in request.GET:
+            self.profiler.dump_stats(settings.PROJECT_ROOT+'/'+request.GET.get('djDebugProfileDump', 'profile.out'))
         self.stats = DjangoDebugToolbarStats(self.profiler)
         return response
 
