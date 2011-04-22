@@ -1,16 +1,10 @@
-import django
-from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
-import debug_toolbar
 from debug_toolbar.panels import DebugPanel
 
-import sys
 import cProfile
-from pstats import Stats, f8, func_std_string
-from cStringIO import StringIO
-from django.conf import settings
+from pstats import Stats
 from colorsys import hsv_to_rgb
 
 class DjangoDebugToolbarStats(Stats):
@@ -62,8 +56,6 @@ class FunctionCall(object):
                 return name
         else:
             file_name, line_num, method = self.func
-            if file_name.startswith(settings.PROJECT_ROOT):
-                file_name='PROJECT' + file_name[len(settings.PROJECT_ROOT):]
             idx = file_name.find('/site-packages/')
             if idx > -1:
                 file_name=file_name[idx+14:]
