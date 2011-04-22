@@ -153,7 +153,7 @@ class ProfilingDebugPanel(DebugPanel):
         root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
         
         func_list = []
-        self.add_node(func_list, root, 10, root.stats[3]/8)
+        self.add_node(func_list, root, 10, root.stats[3]/16)
         context = self.context.copy()
         context.update({
             'func_list': func_list,
