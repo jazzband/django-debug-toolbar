@@ -1,7 +1,6 @@
 """
 Debug Toolbar middleware
 """
-import os
 import thread
 
 from django.conf import settings
@@ -111,14 +110,14 @@ class DebugToolbarMiddleware(object):
                         {'redirect_to': redirect_to}
                     )
                     response.cookies = cookies
-        if response.status_code == 200:
+        if response.status_code == 200 and 'gzip' not in response.get('Content-Encoding', '') and \
+           response['Content-Type'].split(';')[0] in _HTML_TYPES:
             for panel in toolbar.panels:
                 panel.process_response(request, response)
-            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-                response.content = replace_insensitive(
-                    smart_unicode(response.content), 
-                    self.tag,
-                    smart_unicode(toolbar.render_toolbar() + self.tag))
+            response.content = replace_insensitive(
+                smart_unicode(response.content), 
+                self.tag,
+                smart_unicode(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]

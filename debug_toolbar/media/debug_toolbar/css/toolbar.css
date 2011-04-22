@@ -558,3 +558,9 @@
 #djDebug .djSQLDetailsDiv pre span.code {
     font-weight: normal;
 }
+
+@media print {
+    #djDebug {
+        display: none;
+    }
+}
