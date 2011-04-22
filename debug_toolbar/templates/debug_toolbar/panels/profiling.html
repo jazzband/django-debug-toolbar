@@ -17,7 +17,11 @@
 			<tr id="{{ call.id }}" class="djDebugProfileRow{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" depth="{{ call.depth }}">
 				<td>
 					<div style="padding-left: {{ call.indent }}px;">
-						<a class="djProfileToggleDetails djToggleSwitch" data-toggle-id="{{ call.id }}" href="javascript:void(0)">+</a>
+						{% if call.has_subfuncs %}
+							<a class="djProfileToggleDetails djToggleSwitch" data-toggle-id="{{ call.id }}" data-toggle-open="+" data-toggle-close="-" href="javascript:void(0)">-</a>
+						{% else %}
+							<span class="djNoToggleSwitch"></span>
+						{% endif %}
 						<span class="stack">{{ call.func_std_string }}</span>
 					</div>
 				</td>

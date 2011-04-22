@@ -53,18 +53,25 @@ window.djdt = (function(window, document, jQuery) {
 			});
 			$('#djDebug a.djToggleSwitch').click(function(e) {
 				e.preventDefault();
-				var id = $(this).attr('data-toggle-id');
+				var btn = $(this);
+				var id = btn.attr('data-toggle-id');
+				var open_me = btn.text() == btn.attr('data-toggle-open');
 				if (id == '' || !id) {
 					return;
 				}
+				
 				$(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
 					var $this = $(this);
-					if ($this.hasClass('djUnselected')) {
+					if (open_me) {
 						$this.addClass('djSelected');
 						$this.removeClass('djUnselected');
+						btn.text(btn.attr('data-toggle-close'));
+						$this.find('.djToggleSwitch').text(btn.text());
 					} else {
 						$this.removeClass('djSelected');
 						$this.addClass('djUnselected');
+						btn.text(btn.attr('data-toggle-open'));
+						$this.find('.djToggleSwitch').text(btn.text());
 					}
 				});
 				return;

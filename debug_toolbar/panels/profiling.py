@@ -147,9 +147,11 @@ class ProfilingDebugPanel(DebugPanel):
 
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
         func_list.append(func)
+        func.has_subfuncs = False
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
                 if subfunc.stats[3] >= cum_time:
+                    func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
     
     def content(self):

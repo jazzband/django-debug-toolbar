@@ -538,6 +538,11 @@
     background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DCDCDC)); /* for webkit browsers */
     background:-moz-linear-gradient(center top , #FFFFFF 0pt, #DCDCDC 100%) repeat scroll 0 0 transparent;
 }
+#djDebug .djNoToggleSwitch {
+    height: 14px;
+    width: 14px;
+    display: inline-block;
+}
 
 #djDebug .djSQLDetailsDiv {
     margin-top:0.8em;
