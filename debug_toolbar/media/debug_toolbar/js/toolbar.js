@@ -44,7 +44,11 @@
 				return false;
 			});
 			$('#djDebug a.remoteCall').click(function() {
-				$('#djDebugWindow').load(this.href, {}, function() {
+				$('#djDebugWindow').load(this.href, function(response, status, xhr) {
+					if (status == "error") {
+						var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+						$('#djDebugWindow').html(message);
+					}
 					$('#djDebugWindow a.djDebugBack').click(function() {
 						$(this).parent().parent().hide();
 						return false;

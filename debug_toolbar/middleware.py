@@ -67,10 +67,14 @@ class DebugToolbarMiddleware(object):
     def process_request(self, request):
         if self.show_toolbar(request):
             if self.override_url:
-                original_urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+                original_urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
                 debug_toolbar.urls.urlpatterns += patterns('',
                     ('', include(original_urlconf)),
                 )
+                if hasattr(original_urlconf, 'handler404'):
+                    debug_toolbar.urls.handler404 = original_urlconf.handler404
+                if hasattr(original_urlconf, 'handler500'):
+                    debug_toolbar.urls.handler500 = original_urlconf.handler500
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
 
@@ -96,15 +100,15 @@ class DebugToolbarMiddleware(object):
                         {'redirect_to': redirect_to}
                     )
                     response.cookies = cookies
-        if response.status_code == 200:
-            for panel in self.debug_toolbars[request].panels:
-                panel.process_response(request, response)
+        if response.status_code == 200 and 'gzip' not in response.get('Content-Encoding', ''):
             if response['Content-Type'].split(';')[0] in _HTML_TYPES:
+                for panel in self.debug_toolbars[request].panels:
+                    panel.process_response(request, response)
                 response.content = replace_insensitive(
                     smart_unicode(response.content), 
                     self.tag,
                     smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+                if response.get('Content-Length', None):
+                    response['Content-Length'] = len(response.content)
         del self.debug_toolbars[request]
         return response

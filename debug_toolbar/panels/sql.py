@@ -6,14 +6,29 @@ import traceback
 
 import django
 from django.conf import settings
-from django.db import connection
+try:
+    from django.db import connections
+except ImportError:
+    # Compatibility with Django < 1.2
+    from django.db import connection
+    connections = {'default': connection}
+    connection.alias = 'default'
+
 from django.db.backends import util
 from django.views.debug import linebreak_iter
 from django.template import Node
 from django.template.loader import render_to_string
 from django.utils import simplejson
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 from django.utils.hashcompat import sha_constructor
+try:
+    from django.utils.log import getLogger
+    logger = getLogger('django.db.backends')
+    has_logger = True
+except ImportError:
+    # Compatibility with Django < 1.2
+    has_logger = False
+    
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
@@ -85,10 +100,71 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
     Replacement for CursorDebugWrapper which stores additional information
     in `connection.queries`.
     """
+    def clean_params(self, params):
+        clean_params = ()
+        for x in params:
+            try:
+                force_unicode(x, strings_only=True)
+            except DjangoUnicodeDecodeError:
+                clean_params += ("<non unicode object>", )
+            else:
+                clean_params += (x, )
+        return clean_params
+
     def execute(self, sql, params=()):
         start = datetime.now()
         try:
             return self.cursor.execute(sql, params)
+        finally:
+            stop = datetime.now()
+            params = self.clean_params(params)
+            duration = ms_from_timedelta(stop - start)
+            stacktrace = tidy_stacktrace(traceback.extract_stack())
+            _params = ''
+            try:
+                _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
+            except TypeError:
+                pass # object not JSON serializable
+
+            template_info = None
+            cur_frame = sys._getframe().f_back
+            try:
+                while cur_frame is not None:
+                    if cur_frame.f_code.co_name == 'render':
+                        node = cur_frame.f_locals['self']
+                        if isinstance(node, Node):
+                            template_info = get_template_info(node.source)
+                            break
+                    cur_frame = cur_frame.f_back
+            except:
+                pass
+            del cur_frame
+
+            # Logging was added in Django 1.3
+            if has_logger:
+                logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+                    extra={'duration':duration, 'sql':sql, 'params':params}
+                )
+
+            # We keep `sql` to maintain backwards compatibility
+            self.db.queries.append({
+                'sql': self.db.ops.last_executed_query(self.cursor, sql, params),
+                'duration': duration,
+                'raw_sql': sql,
+                'params': _params,
+                'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
+                'stacktrace': stacktrace,
+                'start_time': start,
+                'stop_time': stop,
+                'is_slow': (duration > SQL_WARNING_THRESHOLD),
+                'is_select': sql.lower().strip().startswith('select'),
+                'template_info': template_info,
+            })
+
+    def executemany(self, sql, params=()):
+        start = datetime.now()
+        try:
+            return self.cursor.executemany(sql, params)
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
@@ -112,6 +188,11 @@ class DatabaseStatTracker(util.CursorDebugWrapper):
             except:
                 pass
             del cur_frame
+
+            if has_logger:
+                logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+                    extra={'duration':duration, 'sql':sql, 'params':params}
+                )
 
             # We keep `sql` to maintain backwards compatibility
             self.db.queries.append({
@@ -139,16 +220,27 @@ class SQLDebugPanel(DebugPanel):
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
-        self._offset = len(connection.queries)
+        self._offset = dict((conn, len(connections[conn].queries)) for conn in connections)
         self._sql_time = 0
         self._queries = []
+        self._databases = {}
 
     def nav_title(self):
         return _('SQL')
 
     def nav_subtitle(self):
-        self._queries = connection.queries[self._offset:]
-        self._sql_time = sum([q['duration'] for q in self._queries])
+        self._queries = []
+        self._databases = {}
+        for alias in connections:
+            db_queries = connections[alias].queries[self._offset[alias]:]
+            self._databases[alias] = {
+                'time_spent': sum(q['duration'] for q in db_queries),
+                'queries': len(db_queries),
+            }
+            self._queries.extend([(alias, q) for q in db_queries])
+
+        self._queries.sort(key=lambda x: x[1]['start_time'])
+        self._sql_time = sum([d['time_spent'] for d in self._databases.itervalues()])
         num_queries = len(self._queries)
         # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
@@ -165,7 +257,8 @@ class SQLDebugPanel(DebugPanel):
 
     def content(self):
         width_ratio_tally = 0
-        for query in self._queries:
+        for alias, query in self._queries:
+            query['alias'] = alias
             query['sql'] = reformat_sql(query['sql'])
             try:
                 query['width_ratio'] = (query['duration'] / self._sql_time) * 100
@@ -176,7 +269,8 @@ class SQLDebugPanel(DebugPanel):
 
         context = self.context.copy()
         context.update({
-            'queries': self._queries,
+            'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
+            'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
             'is_mysql': settings.DATABASE_ENGINE == 'mysql',
         })
