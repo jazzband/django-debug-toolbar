@@ -16,8 +16,8 @@ Currently, the following panels have been written and are working:
 - Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
 - List of signals, their args and receivers
-- Logging output via Python's built-in logging module
-- State of available objects in the project - how much created/udpated/deleted
+- Logging output via Python's built-in logging, or via the `logbook <http://logbook.pocoo.org>`_ module
+- State of available objects in the project - how much objects was created/udpated/deleted
 
 There is also one Django management command currently:
 
