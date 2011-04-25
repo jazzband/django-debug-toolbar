@@ -394,3 +394,71 @@
 #djDebug .highlight .nv { color:#333 } /* Name.Variable */
 #djDebug .highlight .s2 { color:#333 } /* Literal.String.Double */
 #djDebug .highlight .cp { color:#333 } /* Comment.Preproc */
+
+
+/**
+ * State panel style
+*/
+#djDebug .created,
+#djDebug tr.created-obj {
+	background-color:#83F7A8;
+}
+
+#djDebug .updated,
+#djDebug tr.updated-obj {
+	background-color:#82E3F7;
+}
+#djDebug .deleted,
+#djDebug tr.deleted-obj {
+	background-color:#F79A83;
+}
+
+#djDebug span.deleted,
+#djDebug span.updated,
+#djDebug span.created {
+	display:inline;
+	display:inline-block;
+	padding:3px;
+}
+
+#djDebug .djDebug-state-summary  {
+	overflow:hidden;
+	width:100%;
+}
+#djDebug .djDebug-state-summary legend {
+	font-size:1.3em;
+	padding-top:1em;
+}
+
+#djDebug .djDebug-state-summary dl {
+	clear:both;
+	margin-top:15px;
+}
+#djDebug dt.deleted {
+	float:left;
+}
+#djDebug .panelContent .djDebug-state-summary dt,
+#djDebug .panelContent .djDebug-state-summary dd {
+	margin:0; padding:0;
+	float:left;
+}
+
+#djDebug .panelContent .djDebug-state-summary dt {
+	font-size:1.2em;
+	padding-left:0.3em;
+	padding-right:0.3em;
+}
+
+#djDebug .panelContent .djDebug-state-summary dd {
+	font-size:1.4em;
+	font-weight:bold;
+	padding-left:10px;
+	padding-right:20px;
+	line-height:1.2em;
+}
+
+#djDebug table th.io-cell,
+#djDebug table td.io-cell {
+	border-top:1px solid #fff;
+	text-align:center;
+}

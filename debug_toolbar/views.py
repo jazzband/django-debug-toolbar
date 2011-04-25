@@ -24,6 +24,8 @@ def debug_media(request, path):
     if root is None:
         parent = os.path.abspath(os.path.dirname(__file__))
         root = os.path.join(parent, 'media', 'debug_toolbar')
+    from django.http import HttpResponse
+    return HttpResponse(open(os.path.join(root,path)).read(), mimetype='text/css')
     return django.views.static.serve(request, path, root)
 
 def sql_select(request):

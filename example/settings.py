@@ -1,5 +1,9 @@
 import os
+import sys
+
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+
+sys.path.append(os.path.join(PROJECT_PATH, '..'))
 
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 DATABASE_ENGINE = 'sqlite3'
@@ -12,6 +16,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'debug_toolbar',
+    'example',
 )
 INTERNAL_IPS = ('127.0.0.1',)
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
