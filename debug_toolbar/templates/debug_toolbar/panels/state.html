@@ -1,0 +1,72 @@
+{% load i18n %}
+<fieldset class="djDebug-state-summary">
+	<legend>{% trans "Summary" %}:</legend>
+	<dl>
+		<dt class="created">{% trans "Created" %}:</dt>
+		<dd>{{ objs_created }}</dd>
+		<dt class="updated">{% trans "Updated" %}:</dt>
+		<dd>{{ objs_updated }}</dd>
+		<dt class="deleted">{% trans "Deleted" %}:</dt>
+		<dd>{{ objs_deleted }}</dd>
+	</dl>
+</fieldset>
+<hr />
+
+{% ifequal stat|length 0 %}
+<p>{% trans "No objects was created, updated or deleted" %}</p>
+{% else %}
+<h3>{% trans "Objects manipulations statistic" %}</h3>
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Model" %}</th>
+			<th>{% trans 'Created' %}</th>
+			<th>{% trans 'Changed' %}</th>
+			<th>{% trans 'Deleted' %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for sender, s in stat.iteritems %}
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<td>{{ sender }}</td>
+				<td>{{ s.created }}</td>
+				<td>{{ s.updated }}</td>
+				<td>{{ s.deleted }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endifequal %}
+
+<h3>{% trans "Objects state" %}</h3>
+<p>
+<span class="legend"><span class="created">{% trans "C" %}</span> &mdash; {% trans "Created" %}</span>
+&nbsp;&nbsp;&nbsp;
+<span class="legend"><span class="updated">{% trans "U" %}</span> &mdash; {% trans "Updated" %}</span>
+&nbsp;&nbsp;&nbsp;
+<span class="legend"><span class="deleted">{% trans "D" %}</span> &mdash; {% trans "Deleted" %}</span>
+</p>
+<table>
+	<thead>
+		<tr>
+			<th class="created io-cell">{% trans "C" %}</th>
+			<th class="updated io-cell">{% trans "U" %}</th>
+			<th class="deleted io-cell">{% trans "D" %}</th>
+			<th>{% trans "Model" %}</th>
+			<th>{% trans 'Objects amount' %}</th>
+			<th>{% trans 'Previous objects amount' %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in objects_state %}
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<td class="{% if item.have_created %}created io-cell{% endif %}">{{ item.created_amount }}</td>
+				<td class="{% if item.have_updated %}updated io-cell{% endif %}">{{ item.updated_amount }}</td>
+				<td class="{% if item.have_deleted %}deleted io-cell{% endif %}">{{ item.deleted_amount }}</td>
+				<td>{{ item.model }}</td>
+				<td>{{ item.cur }}</td>
+				<td>{{ item.prev }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

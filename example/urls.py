@@ -6,7 +6,7 @@ from django.views.generic.simple import direct_to_template
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', direct_to_template, {'template': 'index.html'}),
+    (r'^$', 'example.views.update_object', {'template': 'index.html'}),
     (r'^jquery/index/$', direct_to_template, {'template': 'jquery/index.html'}),
     (r'^mootools/index/$', direct_to_template, {'template': 'mootools/index.html'}),
     (r'^prototype/index/$', direct_to_template, {'template': 'prototype/index.html'}),
