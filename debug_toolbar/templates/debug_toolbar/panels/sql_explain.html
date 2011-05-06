@@ -6,7 +6,7 @@
 <div class="djDebugPanelContent">
 	<div class="scroll">
 		<dl>
-			<dt>{% trans "Executed SQL" %}</dt>
+			<dt>{% trans "Executed SQL on database" %} <strong>{{ alias }}</strong></dt>
 			<dd>{{ sql|safe }}</dd>
 			<dt>{% trans "Time" %}</dt>
 			<dd>{{ duration }} ms</dd>

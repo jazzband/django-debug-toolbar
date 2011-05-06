@@ -4,10 +4,10 @@ debug toolbar is displayed, and typically can do Bad Things, so hooking up these
 views in any other way is generally not advised.
 """
 
-import os
+import os 
 import django.views.static
 from django.conf import settings
-from django.db import connection
+from django.db import connections
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
@@ -38,18 +38,20 @@ def sql_select(request):
     """
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
+    alias = request.GET.get('alias', 'default')
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
-        cursor = connection.cursor()
+        cursor = connections[alias].cursor()
         cursor.execute(sql, params)
         headers = [d[0] for d in cursor.description]
         result = cursor.fetchall()
         cursor.close()
         context = {
+            'alias': alias,
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
             'duration': request.GET.get('duration', 0.0),
@@ -70,15 +72,16 @@ def sql_explain(request):
     """
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
+    alias = request.GET.get('alias', 'default')
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
-        cursor = connection.cursor()
+        cursor = connections[alias].cursor()
 
-        if settings.DATABASE_ENGINE == "sqlite3":
+        if settings.DATABASES[alias]['ENGINE'] == "django.db.backends.sqlite3":
             # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
             # EXPLAIN QUERY PLAN dumps a more human-readable summary
             # See http://www.sqlite.org/lang_explain.html for details
@@ -90,6 +93,7 @@ def sql_explain(request):
         result = cursor.fetchall()
         cursor.close()
         context = {
+            'alias' : alias,
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
             'duration': request.GET.get('duration', 0.0),
@@ -110,13 +114,14 @@ def sql_profile(request):
     """
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
+    alias = request.GET.get('alias', 'default')
     params = request.GET.get('params', '')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
-        cursor = connection.cursor()
+        cursor = connections[alias].cursor()
         result = None
         headers = None
         result_error = None
@@ -132,6 +137,7 @@ def sql_profile(request):
             result_error = "Profiling is either not available or not supported by your database."
         cursor.close()
         context = {
+            'alias' : alias,
             'result': result,
             'result_error': result_error,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
