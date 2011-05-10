@@ -10,6 +10,8 @@
 			<dd>{{ sql|safe }}</dd>
 			<dt>{% trans "Time" %}</dt>
 			<dd>{{ duration }} ms</dd>
+			<dt>{% trans "Database" %}</dt>
+			<dd>{{ alias }}</dd>
 		</dl>
 		<table class="djSqlExplain">
 			<thead>
