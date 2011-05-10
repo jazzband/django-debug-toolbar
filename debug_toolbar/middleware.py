@@ -100,17 +100,18 @@ class DebugToolbarMiddleware(object):
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar:
             return response
-        if toolbar.config['INTERCEPT_REDIRECTS']:
-            if isinstance(response, HttpResponseRedirect):
-                redirect_to = response.get('Location', None)
-                if redirect_to:
-                    cookies = response.cookies
-                    response = render_to_response(
-                        'debug_toolbar/redirect.html',
-                        {'redirect_to': redirect_to}
-                    )
-                    response.cookies = cookies
-        if response.status_code == 200 and 'gzip' not in response.get('Content-Encoding', '') and \
+        if isinstance(response, HttpResponseRedirect):
+            if not toolbar.config['INTERCEPT_REDIRECTS']:
+                return response
+            redirect_to = response.get('Location', None)
+            if redirect_to:
+                cookies = response.cookies
+                response = render_to_response(
+                    'debug_toolbar/redirect.html',
+                    {'redirect_to': redirect_to}
+                )
+                response.cookies = cookies
+        if 'gzip' not in response.get('Content-Encoding', '') and \
            response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
             for panel in toolbar.panels:
                 panel.process_response(request, response)
