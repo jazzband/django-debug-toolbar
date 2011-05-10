@@ -16,7 +16,7 @@ Currently, the following panels have been written and are working:
 - Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
 - List of signals, their args and receivers
-- Logging output via Python's built-in logging module
+- Logging output via Python's built-in logging, or via the `logbook <http://logbook.pocoo.org>`_ module
 
 There is also one Django management command currently:
 
@@ -182,4 +182,4 @@ output in the shell::
 
 TODOs and BUGS
 ==============
-See: http://github.com/robhudson/django-debug-toolbar/issues
+See: https://github.com/django-debug-toolbar/django-debug-toolbar/issues
