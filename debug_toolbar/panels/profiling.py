@@ -136,6 +136,7 @@ class ProfilingDebugPanel(DebugPanel):
         return _('Profiling')
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        __traceback_hide__ = True
         self.profiler = cProfile.Profile()
         args = (request,) + view_args
         return self.profiler.runcall(view_func, *args, **view_kwargs)

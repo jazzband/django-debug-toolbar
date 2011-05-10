@@ -15,22 +15,28 @@ def ms_from_timedelta(td):
     """
     return (td.seconds * 1000) + (td.microseconds / 1000.0)
 
-def tidy_stacktrace(strace):
+def tidy_stacktrace(stack):
     """
     Clean up stacktrace and remove all entries that:
     1. Are part of Django (except contrib apps)
     2. Are part of SocketServer (used by Django's dev server)
     3. Are the last entry (which is part of our stacktracing code)
+    
+    ``stack`` should be a list of frame tuples from ``inspect.stack()``
     """
     trace = []
-    for s in strace[:-1]:
-        s_path = os.path.realpath(s[0])
+    for frame, path, line_no, func_name, text in (f[:5] for f in stack):
+        s_path = os.path.realpath(path)
+        # Support hiding of frames -- used in various utilities that provide
+        # inspection.
+        if '__traceback_hide__' in frame.f_locals:
+            continue
         if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True) \
             and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if socketserver_path in s_path:
             continue
-        trace.append((s[0], s[1], s[2], s[3]))
+        trace.append((path, line_no, func_name, text))
     return trace
 
 def get_template_info(source, context_lines=3):

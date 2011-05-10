@@ -70,6 +70,7 @@ class DebugToolbarMiddleware(object):
         return True
 
     def process_request(self, request):
+        __traceback_hide__ = True
         if self.show_toolbar(request):
             if self.override_url:
                 original_urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
@@ -89,6 +90,7 @@ class DebugToolbarMiddleware(object):
             self.__class__.debug_toolbars[thread.get_ident()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        __traceback_hide__ = True
         toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
         if not toolbar:
             return
@@ -96,6 +98,7 @@ class DebugToolbarMiddleware(object):
             panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
+        __traceback_hide__ = True
         ident = thread.get_ident()
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar:
