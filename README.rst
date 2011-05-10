@@ -182,4 +182,4 @@ output in the shell::
 
 TODOs and BUGS
 ==============
-See: http://github.com/robhudson/django-debug-toolbar/issues
+See: https://github.com/django-debug-toolbar/django-debug-toolbar/issues
