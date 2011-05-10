@@ -29,6 +29,7 @@ class CursorWrapper(object):
         self.logger = logger
 
     def execute(self, sql, params=()):
+        __traceback_hide__ = True
         start = datetime.now()
         try:
             return self.cursor.execute(sql, params)
