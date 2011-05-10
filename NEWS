@@ -1,8 +1,20 @@
 News for django-debug-toolbar
 =============================
 
-develop branch
---------------
+0.8.5 (2011 Apr 25)
+-------------------
+
+* Ensure if we're overriding the urlconf that we're resetting handler404/500.
+
+* Updated middleware logic to avoid work if content-type isn't right.
+
+* Change .load() calls to GET to avoid CSRF protection.
+
+* Updated SQL panel to match Django's which now includes logging.
+
+* Added basic multi-db support.
+
+* Some HTML validation fixes.
 
 * Added support for `executemany`. Thanks to postal2600.
 
