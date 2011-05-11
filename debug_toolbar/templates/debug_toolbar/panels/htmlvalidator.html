@@ -1,0 +1,29 @@
+{% load i18n %}
+<br /><br />
+<fieldset class="djDebug-htmlvalidator-summary">
+	<legend>{% trans "Current page have following errors" %}:</legend>
+	<table>
+		<tr>
+			<th>Position</th>
+			<th>Error or Warning</th>
+		</tr>
+		{% for err in errors %}
+		<tr class="position-handler">
+			{{ err|safe }}
+		</tr>
+		{% endfor %}
+	</table>
+	
+	<h3>Content:</h3>
+	<form action="" class="repr-content" method="get" accept-charset="utf-8">
+		{% for lineno, line in lines %}
+		<div class="repr-line-{{ lineno }}">
+			<strong class="line-number" id="repr-line-{{ lineno }}">{{ lineno }}</strong>
+			<pre class="repr-content-code">{{ line }}</pre>
+		</div>
+		<div class="clean"></div>
+		{% endfor %}
+	</form>
+	
+</fieldset>
+<hr />

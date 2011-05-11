@@ -12,13 +12,15 @@ class DebugToolbar(object):
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
             'INTERCEPT_REDIRECTS': True,
-            'MEDIA_URL': u'%s/__debug__/m/' % base_url
+            'MEDIA_URL': u'%s/__debug__/m/' % base_url,
+            'DEBUG_TOOLBAR_DEV': False,
         }
         # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
         self.config.update(getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}))
         self.template_context = {
             'BASE_URL': base_url, # for backwards compatibility
             'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
+            'DEBUG_TOOLBAR_DEV': self.config.get('DEBUG_TOOLBAR_DEV', False),
         }
         # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
         self.default_panels = (
@@ -33,6 +35,7 @@ class DebugToolbar(object):
             'debug_toolbar.panels.signals.SignalDebugPanel',
             'debug_toolbar.panels.logger.LoggingPanel',
             'debug_toolbar.panels.state.StateDebugPanel',
+            'debug_toolbar.panels.htmlvalidator.HTMLValidationDebugPanel',
         )
         self.load_panels()
 

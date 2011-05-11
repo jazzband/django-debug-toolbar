@@ -16,7 +16,14 @@
 })(window, document, "1.3", function($, jquery_loaded) {
 
 	$.cookie = function(name, value, options) { if (typeof value != 'undefined') { options = options || {}; if (value === null) { value = ''; options.expires = -1; } var expires = ''; if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) { var date; if (typeof options.expires == 'number') { date = new Date(); date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000)); } else { date = options.expires; } expires = '; expires=' + date.toUTCString(); } var path = options.path ? '; path=' + (options.path) : ''; var domain = options.domain ? '; domain=' + (options.domain) : ''; var secure = options.secure ? '; secure' : ''; document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join(''); } else { var cookieValue = null; if (document.cookie && document.cookie != '') { var cookies = document.cookie.split(';'); for (var i = 0; i < cookies.length; i++) { var cookie = $.trim(cookies[i]); if (cookie.substring(0, name.length + 1) == (name + '=')) { cookieValue = decodeURIComponent(cookie.substring(name.length + 1)); break; } } } return cookieValue; } };
-	$('head').append('<link rel="stylesheet" href="'+DEBUG_TOOLBAR_MEDIA_URL+'css/toolbar.min.css" type="text/css" />');
+	var debug_toolbar_css = 'toolbar.min.css';
+	if(DEBUG_TOOLBAR_DEV){
+		var rand = Math.round(Math.random() * 1000);
+		// avoid css caching here
+		debug_toolbar_css = 'toolbar.css?' + rand;
+	}
+	$('head').append('<link rel="stylesheet" href="' + DEBUG_TOOLBAR_MEDIA_URL + 
+									 'css/' + debug_toolbar_css + '" type="text/css" />');
 	var COOKIE_NAME = 'djdt';
 	var djdt = {
 		init: function() {
@@ -73,6 +80,27 @@
 			$('#djShowToolBarButton').click(function() {
 				djdt.show_toolbar();
 				return false;
+			});
+
+			$('.handle-position').click(function(){
+				$('.repr-info-sel').removeClass('repr-info-sel');
+				$(this).parent().parent().addClass('repr-info-sel')
+				var text = $(this).text();
+				var re = new RegExp('line\\s+([0-9]+)');
+				var result = text.match(re);
+
+				try{
+					var lineno = result[1];
+				}catch(e){return;}
+				//
+				var prevPos = $(document).data('reprlineselpos') || null;
+				if(prevPos){
+					prevPos.removeClass('repr-line-sel');
+				}
+				$('.repr-line-' + lineno).addClass('repr-line-sel');
+				$(document).data('reprlineselpos', $('.repr-line-' + lineno));
+				// TODO: skip pervious link and add new one
+				location = location + '#' + 'repr-line-' + lineno;
 			});
 			$(document).bind('close.djDebug', function() {
 				// If a sub-panel is open, close that

@@ -468,3 +468,88 @@
 	border-top:1px solid #fff;
 	text-align:center;
 }
+
+/** 
+ * HTML Validator panel style
+*/
+#djDebug .panelContent .djDebug-htmlvalidator-summary {
+	/* pass */
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary legend {
+	font-size:1.4em;
+	padding-bottom:0.5em;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary pre {
+	display:block;
+	font-family:"Courier New", courier, fixed;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary td.tidy-msg {
+	width:90%;
+}
+#djDebug .panelContent .djDebug-htmlvalidator-summary td.validation-error {
+	background-color:#F79A83;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary .line-number {
+	display:block;
+	float:left;
+	width:35px;
+	padding-left:5px;
+	font-size:1em;
+	height:1em;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary table td {
+	border-bottom:1px solid #9a9a9a;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary table td {
+	border-bottom:1px solid #9a9a9a;
+}
+
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary .repr-content-code {
+	border:0;
+	background:transparent;
+	font-family:"Monaco", "Courier New", courier, fixed;
+	font-size:1em;
+	padding:0;
+	padding-left:40px;
+	border-bottom:1px dashed #8a8a8a;
+	margin-left:-40px;
+	height:1.3em;
+	line-height:1.3em;
+	font-weight:normal;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary .repr-line-sel {
+	background-color:#82E3F7;
+	-webkit-transition: background-color linear;
+	-webkit-transition-duration: 0.2s;
+	-ms-transition: background-color linear;
+	-ms-transition-duration: 0.2s;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary .repr-content {
+	background-color:#fff;
+	border:3px solid #676767;
+	width:100%;
+}
+
+#djDebug .panelContent .djDebug-htmlvalidator-summary .clean {
+	clear:both;
+}
+
+#djdebug .panelContent .djDebug-htmlvalidator-summary th {
+	text-align:left;
+	border-bottom:2px solid #898989;
+}
+#djDebug .panelContent .djDebug-htmlvalidator-summary .repr-info-sel td.validation-error,
+#djDebug .panelContent .djDebug-htmlvalidator-summary .repr-info-sel {
+	background-color:#83F7A8;
+}
