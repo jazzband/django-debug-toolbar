@@ -18,6 +18,7 @@ Currently, the following panels have been written and are working:
 - List of signals, their args and receivers
 - Logging output via Python's built-in logging, or via the `logbook <http://logbook.pocoo.org>`_ module
 - State of available objects in the project - how much objects was created/udpated/deleted
+- Added HTML Validator panel which provide list of HTML warnings/errors on the page
 
 There is also one Django management command currently:
 
@@ -87,6 +88,7 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'debug_toolbar.panels.signals.SignalDebugPanel',
 	    'debug_toolbar.panels.logger.LoggingPanel',
 	    'debug_toolbar.panels.state.StateDebugPanel',
+	    'debug_toolbar.panels.htmlvalidator.HTMLValidationDebugPanel',
 	)
 
    You can change the ordering of this tuple to customize the order of the
