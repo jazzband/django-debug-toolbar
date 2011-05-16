@@ -36,7 +36,7 @@ class CursorWrapper(object):
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
-            stacktrace = tidy_stacktrace(inspect.stack())
+            stacktrace = tidy_stacktrace(reversed(inspect.stack()))
             _params = ''
             try:
                 _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
