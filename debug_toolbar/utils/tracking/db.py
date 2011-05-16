@@ -57,7 +57,7 @@ class CursorWrapper(object):
                 pass
             del cur_frame
 
-            alias = getattr(self, 'alias', 'default')
+            alias = getattr(self.db, 'alias', 'default')
             conn = connections[alias].connection
             # HACK: avoid imports
             if conn:
