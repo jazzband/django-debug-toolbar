@@ -36,7 +36,7 @@ def tidy_stacktrace(stack):
             continue
         if socketserver_path in s_path:
             continue
-        trace.append((path, line_no, func_name, text))
+        trace.append((path, line_no, func_name, (''.join(text)).strip()))
     return trace
 
 def get_template_info(source, context_lines=3):
