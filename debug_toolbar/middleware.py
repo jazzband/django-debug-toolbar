@@ -76,15 +76,15 @@ class DebugToolbarMiddleware(object):
             urlconf_name = getattr(request, 'urlconf', settings.ROOT_URLCONF)
             if urlconf_name not in self._urlconfs:
 
-                import imp, copy
+                import imp
                 
                 original_urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
                 new_urlconf = imp.new_module('urlconf')
-                new_urlconf.urlpatterns = copy.copy(debug_toolbar.urls.urlpatterns)
+                new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
+                    patterns('',
+                             ('', include(original_urlconf)),
+                             )
                 
-                new_urlconf.urlpatterns += patterns('',
-                    ('', include(original_urlconf)),
-                )
                 if hasattr(original_urlconf, 'handler404'):
                     new_urlconf.handler404 = original_urlconf.handler404
                 if hasattr(original_urlconf, 'handler500'):
