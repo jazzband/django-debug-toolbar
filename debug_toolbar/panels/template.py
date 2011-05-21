@@ -71,14 +71,15 @@ class TemplateDebugPanel(DebugPanel):
             ]
         )
         template_context = []
+
         for template_data in self.templates:
             info = {}
             # Clean up some info about templates
             template = template_data.get('template', None)
             # Skip templates that we are generating through the debug toolbar.
-            if template.name and template.name.startswith('debug_toolbar/'):
+            if hasattr(template, 'name') and template.name.startswith('debug_toolbar/'):
                 continue
-            if template.origin and template.origin.name:
+            if hasattr(template, 'origin') and template.origin.name:
                 template.origin_name = template.origin.name
             else:
                 template.origin_name = 'No origin'
