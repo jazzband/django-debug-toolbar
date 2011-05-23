@@ -19,7 +19,7 @@ var DEBUG_TOOLBAR_DEV = {% if DEBUG_TOOLBAR_DEV %}true{% else %}false{% endif %}
 			<li id="djDebugButton">DEBUG</li>
 			{% endif %}
 			{% for panel in panels %}
-				<li>
+				<li class="djDebugPanelButton">
 					{% if panel.has_content %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}

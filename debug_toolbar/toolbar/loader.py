@@ -1,14 +1,18 @@
 """
 The main DebugToolbar class that loads and renders the Toolbar.
 """
+import os.path, os
+
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.datastructures import SortedDict
+from django.utils.safestring import mark_safe
 
 class DebugToolbar(object):
 
     def __init__(self, request):
         self.request = request
-        self.panels = []
+        self._panels = SortedDict()
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
             'INTERCEPT_REDIRECTS': True,
@@ -38,6 +42,13 @@ class DebugToolbar(object):
             'debug_toolbar.panels.htmlvalidator.HTMLValidationDebugPanel',
         )
         self.load_panels()
+    
+    def _get_panels(self):
+        return self._panels.values()
+    panels = property(_get_panels)
+
+    def get_panel(self, cls):
+        return self._panels[cls]
 
     def load_panels(self):
         """
@@ -70,13 +81,19 @@ class DebugToolbar(object):
             except:
                 raise # Bubble up problem loading panel
 
-            self.panels.append(panel_instance)
+            self._panels[panel_class] = panel_instance
 
     def render_toolbar(self):
         """
         Renders the overall Toolbar with panels inside.
         """
+        media_path = os.path.join(os.path.dirname(__file__), os.pardir, 'media', 'debug_toolbar')
+        
         context = self.template_context.copy()
-        context.update({ 'panels': self.panels, })
+        context.update({
+            'panels': self.panels,
+            'js': mark_safe(open(os.path.join(media_path, 'js', 'toolbar.min.js'), 'r').read()),
+            'css': mark_safe(open(os.path.join(media_path, 'css', 'toolbar.min.css'), 'r').read()),
+        })
 
         return render_to_string('debug_toolbar/base.html', context)

@@ -30,6 +30,7 @@ class VersionDebugPanel(DebugPanel):
 
     def content(self):
         versions = {}
+        versions['Python'] = '%d.%d.%d' % sys.version_info[:3]
         for app in settings.INSTALLED_APPS + ['django']:
             name = app.split('.')[-1].replace('_', ' ').capitalize()
             __import__(app)

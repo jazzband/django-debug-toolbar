@@ -7,11 +7,12 @@ views in any other way is generally not advised.
 import os
 import django.views.static
 from django.conf import settings
-from django.db import connection
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.utils.hashcompat import sha_constructor
+
+from debug_toolbar.utils.compat.db import connections
 
 class InvalidSQLError(Exception):
     def __init__(self, value):
@@ -39,12 +40,13 @@ def sql_select(request):
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
+    alias = request.GET.get('alias', 'default')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
-        cursor = connection.cursor()
+        cursor = connections[alias].cursor()
         cursor.execute(sql, params)
         headers = [d[0] for d in cursor.description]
         result = cursor.fetchall()
@@ -54,6 +56,7 @@ def sql_select(request):
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
             'duration': request.GET.get('duration', 0.0),
             'headers': headers,
+            'alias': alias,
         }
         return render_to_response('debug_toolbar/panels/sql_select.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
@@ -71,12 +74,13 @@ def sql_explain(request):
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
+    alias = request.GET.get('alias', 'default')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
-        cursor = connection.cursor()
+        cursor = connections[alias].cursor()
 
         if settings.DATABASE_ENGINE == "sqlite3":
             # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
@@ -94,6 +98,7 @@ def sql_explain(request):
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
             'duration': request.GET.get('duration', 0.0),
             'headers': headers,
+            'alias': alias,
         }
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
@@ -111,12 +116,13 @@ def sql_profile(request):
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
+    alias = request.GET.get('alias', 'default')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
-        cursor = connection.cursor()
+        cursor = connections[alias].cursor()
         result = None
         headers = None
         result_error = None
@@ -137,6 +143,7 @@ def sql_profile(request):
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
             'duration': request.GET.get('duration', 0.0),
             'headers': headers,
+            'alias': alias,
         }
         return render_to_response('debug_toolbar/panels/sql_profile.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")

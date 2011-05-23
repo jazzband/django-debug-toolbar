@@ -26,6 +26,11 @@
 									 'css/' + debug_toolbar_css + '" type="text/css" />');
 	var COOKIE_NAME = 'djdt';
 	var djdt = {
+		jQuery: jQuery,
+		events: {
+			ready: []
+		},
+		isReady: false,
 		init: function() {
 			$('#djDebug').show();
 			var current = null;
@@ -65,13 +70,52 @@
 				return false;
 			});
 			$('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
-				djdt.toggle_arrow($(this).children('.toggleArrow'))
+				djdt.toggle_arrow($(this).children('.toggleArrow'));
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
-			$('#djDebugSQLPanel a.djSQLShowStacktrace').click(function() {
-				djdt.toggle_content($('.djSQLHideStacktraceDiv', $(this).parents('tr')));
-				return false;
+			$('#djDebug a.djToggleSwitch').click(function(e) {
+				e.preventDefault();
+				var btn = $(this);
+				var id = btn.attr('data-toggle-id');
+				var open_me = btn.text() == btn.attr('data-toggle-open');
+				if (id == '' || !id) {
+					return;
+				}
+				
+				$(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
+					var $this = $(this);
+					if (open_me) {
+						$this.addClass('djSelected');
+						$this.removeClass('djUnselected');
+						btn.text(btn.attr('data-toggle-close'));
+						$this.find('.djToggleSwitch').text(btn.text());
+					} else {
+						$this.removeClass('djSelected');
+						$this.addClass('djUnselected');
+						btn.text(btn.attr('data-toggle-open'));
+						$this.find('.djToggleSwitch').text(btn.text());
+					}
+				});
+				return;
+			});
+			function getSubcalls(row) {
+			  id = row.attr('id');
+			  return $('.djDebugProfileRow[id^="'+id+'_"]');
+			}
+			function getDirectSubcalls(row) {
+			  subcalls = getSubcalls(row);
+			  depth = parseInt(row.attr('depth')) + 1;
+			  return subcalls.filter('[depth='+depth+']');
+			}
+			$('.djDebugProfileRow .djDebugProfileToggle').click(function(){
+			  row = $(this).closest('.djDebugProfileRow')
+			  subcalls = getSubcalls(row);
+			  if (subcalls.css('display')=='none') {
+			    getDirectSubcalls(row).show();
+			  } else {
+			    subcalls.hide();
+			  }
 			});
 			$('#djHideToolBarButton').click(function() {
 				djdt.hide_toolbar(true);
@@ -124,6 +168,15 @@
 			} else {
 				djdt.show_toolbar(false);
 			}
+			$('#djDebug .djDebugHoverable').hover(function(){
+				$(this).addClass('djDebugHover');
+			}, function(){
+			    $(this).removeClass('djDebugHover');
+			});
+			djdt.isReady = true;
+			$.each(djdt.events.ready, function(_, callback){
+			    callback(djdt);
+			});
 		},
 		toggle_content: function(elem) {
 			if (elem.is(':visible')) {
@@ -176,10 +229,17 @@
 			var uarr = String.fromCharCode(0x25b6);
 			var darr = String.fromCharCode(0x25bc);
 			elem.html(elem.html() == uarr ? darr : uarr);
+		},
+		ready: function(callback){
+			if (djdt.isReady) {
+				callback(djdt);
+			} else {
+				djdt.events.ready.push(callback);
+			}
 		}
 	};
 	$(document).ready(function() {
 		djdt.init();
 	});
-});
-
+	return djdt;
+}(window, document, jQuery.noConflict()));
