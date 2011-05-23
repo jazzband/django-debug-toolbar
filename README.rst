@@ -182,6 +182,16 @@ output in the shell::
     >>> print p.template.name
     Home
 
+Running the Tests
+=================
+
+The Debug Toolbar includes a limited (and growing) test suite. If you commit code, please consider
+adding proper coverage (especially if it has a chance for a regression) in the test suite.
+
+::
+
+    python setup.py test
+
 TODOs and BUGS
 ==============
-See: http://github.com/robhudson/django-debug-toolbar/issues
+See: https://github.com/django-debug-toolbar/django-debug-toolbar/issues

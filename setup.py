@@ -2,16 +2,21 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-debug-toolbar',
-    version=__import__('debug_toolbar').__version__,
+    version='0.8.6-dev',
     description='A configurable set of panels that display various debug information about the current request/response.',
     long_description=open('README.rst').read(),
     # Get more strings from http://www.python.org/pypi?:action=list_classifiers
     author='Rob Hudson',
     author_email='rob@cogit8.org',
-    url='http://robhudson.github.com/django-debug-toolbar/',
-    download_url='http://github.com/robhudson/django-debug-toolbar/downloads',
+    url='https://github.com/django-debug-toolbar/django-debug-toolbar',
+    download_url='https://github.com/django-debug-toolbar/django-debug-toolbar/downloads',
     license='BSD',
     packages=find_packages(exclude=['ez_setup']),
+    tests_require=[
+        'django',
+        'dingus',
+    ],
+    test_suite='debug_toolbar.runtests.runtests',
     include_package_data=True,
     zip_safe=False, # because we're including media that Django needs
     classifiers=[

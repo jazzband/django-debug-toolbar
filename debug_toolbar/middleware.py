@@ -1,7 +1,7 @@
 """
 Debug Toolbar middleware
 """
-import os
+import thread
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -31,8 +31,13 @@ class DebugToolbarMiddleware(object):
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
     """
+    debug_toolbars = {}
+    
+    @classmethod
+    def get_current(cls):
+        return cls.debug_toolbars.get(thread.get_ident())
+
     def __init__(self):
-        self.debug_toolbars = {}
         self.override_url = True
 
         # Set method to use to decide to show toolbar
@@ -60,11 +65,12 @@ class DebugToolbarMiddleware(object):
         if not remote_addr in settings.INTERNAL_IPS \
             or (request.is_ajax() and \
                 not debug_toolbar.urls._PREFIX in request.path) \
-                    or not settings.DEBUG:
+                    or not (settings.DEBUG or getattr(settings, 'TEST', False)):
             return False
         return True
 
     def process_request(self, request):
+        __traceback_hide__ = True
         if self.show_toolbar(request):
             if self.override_url:
                 original_urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
@@ -78,37 +84,45 @@ class DebugToolbarMiddleware(object):
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
 
-            self.debug_toolbars[request] = DebugToolbar(request)
-            for panel in self.debug_toolbars[request].panels:
+            toolbar = DebugToolbar(request)
+            for panel in toolbar.panels:
                 panel.process_request(request)
+            self.__class__.debug_toolbars[thread.get_ident()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if request in self.debug_toolbars:
-            for panel in self.debug_toolbars[request].panels:
-                panel.process_view(request, view_func, view_args, view_kwargs)
+        __traceback_hide__ = True
+        toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
+        if not toolbar:
+            return
+        for panel in toolbar.panels:
+            panel.process_view(request, view_func, view_args, view_kwargs)
 
     def process_response(self, request, response):
-        if request not in self.debug_toolbars:
+        __traceback_hide__ = True
+        ident = thread.get_ident()
+        toolbar = self.__class__.debug_toolbars.get(ident)
+        if not toolbar:
             return response
-        if self.debug_toolbars[request].config['INTERCEPT_REDIRECTS']:
-            if isinstance(response, HttpResponseRedirect):
-                redirect_to = response.get('Location', None)
-                if redirect_to:
-                    cookies = response.cookies
-                    response = render_to_response(
-                        'debug_toolbar/redirect.html',
-                        {'redirect_to': redirect_to}
-                    )
-                    response.cookies = cookies
-        if response.status_code == 200 and 'gzip' not in response.get('Content-Encoding', ''):
-            if response['Content-Type'].split(';')[0] in _HTML_TYPES:
-                for panel in self.debug_toolbars[request].panels:
-                    panel.process_response(request, response)
-                response.content = replace_insensitive(
-                    smart_unicode(response.content), 
-                    self.tag,
-                    smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
-                if response.get('Content-Length', None):
-                    response['Content-Length'] = len(response.content)
-        del self.debug_toolbars[request]
+        if isinstance(response, HttpResponseRedirect):
+            if not toolbar.config['INTERCEPT_REDIRECTS']:
+                return response
+            redirect_to = response.get('Location', None)
+            if redirect_to:
+                cookies = response.cookies
+                response = render_to_response(
+                    'debug_toolbar/redirect.html',
+                    {'redirect_to': redirect_to}
+                )
+                response.cookies = cookies
+        if 'gzip' not in response.get('Content-Encoding', '') and \
+           response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
+            for panel in toolbar.panels:
+                panel.process_response(request, response)
+            response.content = replace_insensitive(
+                smart_unicode(response.content), 
+                self.tag,
+                smart_unicode(toolbar.render_toolbar() + self.tag))
+            if response.get('Content-Length', None):
+                response['Content-Length'] = len(response.content)
+        del self.__class__.debug_toolbars[ident]
         return response

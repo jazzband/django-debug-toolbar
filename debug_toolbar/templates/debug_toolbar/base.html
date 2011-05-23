@@ -1,10 +1,9 @@
 {% load i18n %}
-<script type="text/javascript">
-// <![CDATA[
-var DEBUG_TOOLBAR_MEDIA_URL = "{{ DEBUG_TOOLBAR_MEDIA_URL }}";
-// ]]>
-</script>
-<script type="text/javascript" src="{{ DEBUG_TOOLBAR_MEDIA_URL }}js/toolbar.min.js"></script>
+<style type="text/css">
+@media print { #djDebug {display:none;}}
+{{ css }}
+</style>
+<script type="text/javascript">{{ js }}</script>
 <div id="djDebug" style="display:none;">
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
@@ -14,7 +13,7 @@ var DEBUG_TOOLBAR_MEDIA_URL = "{{ DEBUG_TOOLBAR_MEDIA_URL }}";
 			<li id="djDebugButton">DEBUG</li>
 			{% endif %}
 			{% for panel in panels %}
-				<li>
+				<li class="djDebugPanelButton">
 					{% if panel.has_content %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}
