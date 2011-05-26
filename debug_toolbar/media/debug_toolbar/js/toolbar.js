@@ -94,6 +94,35 @@ window.djdt = (function(window, document, jQuery) {
 			    subcalls.hide();
 			  }
 			});
+			
+			$('#djDebug-htmlvalidator .handle-position').click(function(){
+				$('#djDebug-htmlvalidator .repr-info-sel').removeClass('repr-info-sel');
+				$(this).parent().parent().addClass('repr-info-sel')
+				var text = $(this).text();
+				var re = new RegExp('line\\s+([0-9]+)');
+				var result = text.match(re);
+
+				try{
+					var lineno = result[1];
+				}catch(e){return;}
+				//
+				var prevPos = $(document).data('reprlineselpos') || null;
+				if(prevPos){
+					prevPos.removeClass('repr-line-sel');
+				}
+				$('#djDebug-htmlvalidator .repr-line-' + lineno).addClass('repr-line-sel');
+				$(document).data('reprlineselpos', $('.repr-line-' + lineno));
+				// skip pervious link and add new one
+				var locationPrefix = location;
+				if(location.href.indexOf('#repr-line-') > -1){
+					var newLocation = location.href.substring(0, location.href.indexOf('#repr'));
+					locationPrefix = newLocation;
+				}
+				location = locationPrefix + '#' + 'repr-line-' + lineno;
+			});
+			$('#djDebug-htmlvalidator .tidy-msg').click(function(e){
+				$('.handle-position:first', $(this).prev()).click();
+			});
 			$('#djHideToolBarButton').click(function() {
 				djdt.hide_toolbar(true);
 				return false;
