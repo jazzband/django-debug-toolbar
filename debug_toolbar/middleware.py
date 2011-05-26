@@ -38,8 +38,8 @@ class DebugToolbarMiddleware(object):
         return cls.debug_toolbars.get(thread.get_ident())
 
     def __init__(self):
-        self.override_url = True
-
+        self._urlconfs = {}
+        
         # Set method to use to decide to show toolbar
         self.show_toolbar = self._show_toolbar # default
 
@@ -70,17 +70,27 @@ class DebugToolbarMiddleware(object):
     def process_request(self, request):
         __traceback_hide__ = True
         if self.show_toolbar(request):
-            if self.override_url:
+
+            urlconf_name = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+            if urlconf_name not in self._urlconfs:
+
+                import imp
+                
                 original_urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
-                debug_toolbar.urls.urlpatterns += patterns('',
-                    ('', include(original_urlconf)),
-                )
+                new_urlconf = imp.new_module('urlconf')
+                new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
+                    patterns('',
+                             ('', include(original_urlconf)),
+                             )
+                
                 if hasattr(original_urlconf, 'handler404'):
-                    debug_toolbar.urls.handler404 = original_urlconf.handler404
+                    new_urlconf.handler404 = original_urlconf.handler404
                 if hasattr(original_urlconf, 'handler500'):
-                    debug_toolbar.urls.handler500 = original_urlconf.handler500
-                self.override_url = False
-            request.urlconf = 'debug_toolbar.urls'
+                    new_urlconf.handler500 = original_urlconf.handler500
+
+                self._urlconfs[urlconf_name] = new_urlconf
+
+            request.urlconf = self._urlconfs[urlconf_name] 
 
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
