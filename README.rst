@@ -32,7 +32,7 @@ Installation
 
 #. Add the `debug_toolbar` directory to your Python path.
 
-#. Execute `pip install pytidylib`
+#. Execute ``pip install pytidylib``
 
    *pytidylib required only for `HTMLValidationDebugPanel`*
 
