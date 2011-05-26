@@ -65,11 +65,11 @@ class DebugToolbarTestCase(BaseTestCase):
         
         middleware = DebugToolbarMiddleware()
         
-        with Settings(TEST=True):
-            self.assertTrue(middleware._show_toolbar(request))
-
-        with Settings(TEST=False):
+        with Settings(TEST=True, DEBUG=True):
             self.assertFalse(middleware._show_toolbar(request))
+
+        with Settings(TEST=False, DEBUG=True):
+            self.assertTrue(middleware._show_toolbar(request))
 
     def test_show_toolbar_INTERNAL_IPS(self):
         request = self.request

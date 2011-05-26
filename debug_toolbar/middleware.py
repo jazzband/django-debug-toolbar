@@ -58,14 +58,19 @@ class DebugToolbarMiddleware(object):
                 self.tag = u'</' + tag + u'>'
 
     def _show_toolbar(self, request):
+        if getattr(settings, 'TEST', False):
+            return False
+
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
         if x_forwarded_for:
             remote_addr = x_forwarded_for.split(',')[0].strip()
         else:
             remote_addr = request.META.get('REMOTE_ADDR', None)
-        # if not internal ip, and not DEBUG or TEST
-        if not (remote_addr in settings.INTERNAL_IPS or settings.DEBUG or getattr(settings, 'TEST', False)):
+
+        # if not internal ip, and not DEBUG
+        if not (remote_addr in settings.INTERNAL_IPS or settings.DEBUG):
             return False
+
         return True
 
     def process_request(self, request):
