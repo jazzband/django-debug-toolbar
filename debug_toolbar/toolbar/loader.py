@@ -90,10 +90,21 @@ class DebugToolbar(object):
         media_path = os.path.join(os.path.dirname(__file__), os.pardir, 'media', 'debug_toolbar')
         
         context = self.template_context.copy()
+        load_media = lambda file: mark_safe(open(os.path.join(media_path, file), 'r').read())
+        
         context.update({
             'panels': self.panels,
-            'js': mark_safe(open(os.path.join(media_path, 'js', 'toolbar.min.js'), 'r').read()),
-            'css': mark_safe(open(os.path.join(media_path, 'css', 'toolbar.min.css'), 'r').read()),
         })
+        if not getattr(settings, 'DEBUG_TOOLBAR_DEV_MODE', False):
+            context.update({
+                'js': load_media('js/toolbar.min.js'),
+                'css': load_media('css/toolbar.min.css'),
+            })
+        else:
+            context.update({
+                'js': mark_safe("\n\n".join([load_media('js/jquery.js'),
+                                  load_media('js/toolbar.js')])),
+                'css': load_media('css/toolbar.css'),
+            })
 
         return render_to_string('debug_toolbar/base.html', context)

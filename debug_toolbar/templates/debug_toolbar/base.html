@@ -1,15 +1,9 @@
 {% load i18n %}
-<script type="text/javascript">
-// <![CDATA[
-var DEBUG_TOOLBAR_MEDIA_URL = "{{ DEBUG_TOOLBAR_MEDIA_URL }}";
-var DEBUG_TOOLBAR_DEV = {% if DEBUG_TOOLBAR_DEV %}true{% else %}false{% endif %};
-// ]]>
-</script>
-{% if not DEBUG_TOOLBAR_DEV %}
-<script type="text/javascript" src="{{ DEBUG_TOOLBAR_MEDIA_URL }}js/toolbar.min.js"></script>
-{% else %}
-<script type="text/javascript" src="{{ DEBUG_TOOLBAR_MEDIA_URL }}js/toolbar.js"></script>
-{% endif %}
+<style type="text/css">
+@media print { #djDebug {display:none;}}
+{{ css }}
+</style>
+<script type="text/javascript">{{ js }}</script>
 <div id="djDebug" style="display:none;">
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">

@@ -665,6 +665,7 @@
 
 #djDebug .panelContent .djDebug-htmlvalidator-summary td.tidy-msg {
 	width:90%;
+	cursor:pointer;
 }
 #djDebug .panelContent .djDebug-htmlvalidator-summary td.validation-error {
 	background-color:#F79A83;
