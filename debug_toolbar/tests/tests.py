@@ -99,6 +99,23 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertEquals(urls.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertEquals(urls.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.tests.urls')
 
+    def test_request_urlconf_string_per_request(self):
+        request = self.request
+        
+        request.urlconf = 'debug_toolbar.tests.urls'
+        request.META = {'REMOTE_ADDR': '127.0.0.1'}
+        middleware = DebugToolbarMiddleware()
+        
+        with Settings(DEBUG=True):
+            middleware.process_request(request)
+            request.urlconf = 'debug_toolbar.urls'
+            middleware.process_request(request)
+
+            urls = getattr(__import__(request.urlconf), request.urlconf.rsplit('.', 1)[-1])
+            
+            self.assertEquals(urls.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
+            self.assertEquals(urls.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.urls')
+
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
         panel = self.toolbar.get_panel(SQLDebugPanel)
