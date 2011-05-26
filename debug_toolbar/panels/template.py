@@ -9,30 +9,58 @@ from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
-# Code taken and adapted from Simon Willison and Django Snippets:
-# http://www.djangosnippets.org/snippets/766/
+def render_decorator(r):
+    """
+    Decorate a Template's render function, r, to emit the signals
+    needed by DjDT.
+    """
+    
+    def render(self, context):
+        template_rendered.send(
+            sender=self, template=self, context=context)
+        return r(self, context)
 
-# Monkeypatch instrumented test renderer from django.test.utils - we could use
-# django.test.utils.setup_test_environment for this but that would also set up
-# e-mail interception, which we don't want
-from django.test.utils import instrumented_test_render
-from django.template import Template
-
-if not hasattr(Template, '_render'): # Django < 1.2
-    if Template.render != instrumented_test_render:
-        Template.original_render = Template.render
-        Template.render = instrumented_test_render
-else:
-    if Template._render != instrumented_test_render:
-        Template.original_render = Template._render
-        Template._render = instrumented_test_render
+    render.decorated = True
+    
+    return render
 
 # MONSTER monkey-patch
-old_template_init = Template.__init__
-def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
-    old_template_init(self, template_string, origin, name)
-    self.origin = origin
-Template.__init__ = new_template_init
+template_source_loaders = None
+def find_template_and_decorate(name, dirs=None):
+    # Calculate template_source_loaders the first time the function is executed
+    # because putting this logic in the module-level namespace may cause
+    # circular import errors. See Django ticket #1292.
+
+    from django.template.loader import find_template_loader, make_origin
+    from django.template import TemplateDoesNotExist
+    global template_source_loaders
+    if template_source_loaders is None:
+        loaders = []
+        for loader_name in settings.TEMPLATE_LOADERS:
+            loader = find_template_loader(loader_name)
+            if loader is not None:
+                loaders.append(loader)
+        template_source_loaders = tuple(loaders)
+    for loader in template_source_loaders:
+        try:
+            source, display_name = loader(name, dirs)
+
+            # see if this template has a render method, and if so
+            # decorate it to emit signals when rendering happens
+            if hasattr(source, 'render'):
+                if not hasattr(source.render, 'decorated'):
+
+                    # this class has not been decorated yet...
+                    source.__class__.render = render_decorator(
+                        source.__class__.render)
+                
+            return (source, make_origin(display_name, loader, name, dirs))
+        except TemplateDoesNotExist:
+            pass
+    raise TemplateDoesNotExist(name)
+
+import django.template.loader
+django.template.loader.find_template = find_template_and_decorate
 
 class TemplateDebugPanel(DebugPanel):
     """
@@ -71,14 +99,15 @@ class TemplateDebugPanel(DebugPanel):
             ]
         )
         template_context = []
+
         for template_data in self.templates:
             info = {}
             # Clean up some info about templates
             template = template_data.get('template', None)
             # Skip templates that we are generating through the debug toolbar.
-            if template.name and template.name.startswith('debug_toolbar/'):
+            if hasattr(template, 'name') and template.name.startswith('debug_toolbar/'):
                 continue
-            if template.origin and template.origin.name:
+            if hasattr(template, 'origin') and template.origin.name:
                 template.origin_name = template.origin.name
             else:
                 template.origin_name = 'No origin'
