@@ -4,7 +4,6 @@ from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
 
 from django.conf import settings
-from django.conf.urls.defaults import patterns
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -118,6 +117,21 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.urls')
 
+    def test_request_urlconf_module(self):
+        request = self.request
+        
+        request.urlconf = __import__('debug_toolbar.tests.urls').tests.urls
+        request.META = {'REMOTE_ADDR': '127.0.0.1'}
+        middleware = DebugToolbarMiddleware()
+        
+        with Settings(DEBUG=True):
+            middleware.process_request(request)
+            
+            self.assertFalse(isinstance(request.urlconf, basestring))
+            
+            self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
+            self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
+            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.tests.urls')
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):

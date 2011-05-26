@@ -1,13 +1,14 @@
 """
 Debug Toolbar middleware
 """
+import imp
 import thread
 
 from django.conf import settings
+from django.conf.urls.defaults import include, patterns
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
-from django.conf.urls.defaults import include, patterns
 
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
@@ -71,26 +72,25 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         if self.show_toolbar(request):
 
-            urlconf_name = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            if urlconf_name not in self._urlconfs:
-
-                import imp
+            urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
+            if isinstance(urlconf, basestring):
+                urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
                 
-                original_urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
+            if urlconf not in self._urlconfs:
                 new_urlconf = imp.new_module('urlconf')
                 new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
                     patterns('',
-                             ('', include(original_urlconf)),
-                             )
+                        ('', include(urlconf)),
+                    )
                 
-                if hasattr(original_urlconf, 'handler404'):
-                    new_urlconf.handler404 = original_urlconf.handler404
-                if hasattr(original_urlconf, 'handler500'):
-                    new_urlconf.handler500 = original_urlconf.handler500
+                if hasattr(urlconf, 'handler404'):
+                    new_urlconf.handler404 = urlconf.handler404
+                if hasattr(urlconf, 'handler500'):
+                    new_urlconf.handler500 = urlconf.handler500
 
-                self._urlconfs[urlconf_name] = new_urlconf
-
-            request.urlconf = self._urlconfs[urlconf_name] 
+                self._urlconfs[urlconf] = new_urlconf
+            
+            request.urlconf = self._urlconfs[urlconf] 
 
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
