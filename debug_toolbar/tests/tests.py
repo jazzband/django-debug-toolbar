@@ -94,10 +94,11 @@ class DebugToolbarTestCase(BaseTestCase):
         with Settings(DEBUG=True):
             middleware.process_request(request)
             
-            urls = getattr(__import__(request.urlconf), request.urlconf.rsplit('.', 1)[-1])
+            self.assertFalse(isinstance(request.urlconf, basestring))
             
-            self.assertEquals(urls.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(urls.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.tests.urls')
+            self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
+            self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
+            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.tests.urls')
 
     def test_request_urlconf_string_per_request(self):
         request = self.request
@@ -111,10 +112,12 @@ class DebugToolbarTestCase(BaseTestCase):
             request.urlconf = 'debug_toolbar.urls'
             middleware.process_request(request)
 
-            urls = getattr(__import__(request.urlconf), request.urlconf.rsplit('.', 1)[-1])
+            self.assertFalse(isinstance(request.urlconf, basestring))
             
-            self.assertEquals(urls.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(urls.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.urls')
+            self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
+            self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
+            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.urls')
+
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
