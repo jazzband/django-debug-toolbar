@@ -25,6 +25,8 @@ There is also one Django management command currently:
 
 If you have ideas for other panels please let us know.
 
+* Note: The Debug Toolbar only works on Django 1.1 and newer.
+
 Installation
 ============
 

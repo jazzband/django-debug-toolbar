@@ -13,7 +13,7 @@ setup(
     license='BSD',
     packages=find_packages(exclude=['ez_setup']),
     tests_require=[
-        'django',
+        'django>=1.1,<1.4',
         'dingus',
     ],
     test_suite='debug_toolbar.runtests.runtests',

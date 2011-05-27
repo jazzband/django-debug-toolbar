@@ -9,6 +9,7 @@ from django.conf.urls.defaults import include, patterns
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
+from django.utils.importlib import import_module
 
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
@@ -79,7 +80,7 @@ class DebugToolbarMiddleware(object):
 
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
             if isinstance(urlconf, basestring):
-                urlconf = __import__(getattr(request, 'urlconf', settings.ROOT_URLCONF), {}, {}, ['*'])
+                urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
                 
             if urlconf not in self._urlconfs:
                 new_urlconf = imp.new_module('urlconf')
