@@ -16,6 +16,9 @@ setup(
         'django',
         'dingus',
     ],
+    install_requires=[
+       'pytidylib',
+    ],
     test_suite='debug_toolbar.runtests.runtests',
     include_package_data=True,
     zip_safe=False, # because we're including media that Django needs
