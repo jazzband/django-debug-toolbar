@@ -8,7 +8,7 @@ class RequestVarsDebugPanel(DebugPanel):
     """
     name = 'RequestVars'
     has_content = True
-
+    
     def nav_title(self):
         return _('Request Vars')
 
@@ -29,20 +29,24 @@ class RequestVarsDebugPanel(DebugPanel):
     def content(self):
         context = self.context.copy()
 
-        if hasattr(self.view_func, '__name__'):
-            view_name = self.view_func.__name__
-        elif hasattr(self.view_func, '__class__'):
-            view_name = self.view_func.__class__.__name__
-        else:
-            view_name = '<unknown>'
+        view_name = '<unknown>'
+        view = False
+
+        if hasattr(self, 'view_func'):
+            view = True
+            if hasattr(self.view_func, '__name__'):
+                view_name = self.view_func.__name__
+            elif hasattr(self.view_func, '__class__'):
+                view_name = self.view_func.__class__.__name__
 
         context.update({
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
-            'view_func': '%s.%s' % (self.view_func.__module__, view_name),
-            'view_args': self.view_args,
-            'view_kwargs': self.view_kwargs
+            'view': view,
+            'view_func': '%s.%s' % (self.view_func.__module__, view_name) if view else None,
+            'view_args': self.view_args if view else None,
+            'view_kwargs': self.view_kwargs if view else None
         })
         if hasattr(self.request, 'session'):
             context.update({

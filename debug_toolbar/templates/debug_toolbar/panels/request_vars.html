@@ -1,6 +1,7 @@
 {% load i18n %}
 
 <h4>{% trans 'View information' %}</h4>
+{% if view %}
 <table>
 	<thead>
 		<tr>
@@ -25,6 +26,7 @@
 		</tr>
 	</tbody>
 </table>
+{% endif %}
 
 <h4>{% trans 'COOKIES Variables' %}</h4>
 {% if cookies %}
