@@ -78,6 +78,8 @@ class TemplateDebugPanel(DebugPanel):
             # Skip templates that we are generating through the debug toolbar.
             if template.name and template.name.startswith('debug_toolbar/'):
                 continue
+            if template.name == "<Unknown Template>":
+                continue
             if template.origin and template.origin.name:
                 template.origin_name = template.origin.name
             else:
