@@ -369,19 +369,17 @@
 	position:relative;
 }
 
-#djDebug .djDebugCollapse {
-    display: inline-block;
-    background: #ddd;
-    background: url(data:image/gif;base64,R0lGODlhBgAKAJEDAJGRkdra2qysrP///yH5BAEAAAMALAAAAAAGAAoAAAIPnI+JIRImABBQ0sGc2qoAADs=) 0 3px repeat-x;
-    width: 18px;
-    text-indent: -10000em;
+#djDebug .djDebugCollapsed {
+    display: none;
+    text-decoration: none;
+    color: #333;
 }
-#djDebug .djSelected .djDebugCollapse {
-    background: inherit;
-    text-indent: 0;
-    width: auto;
-    display: inline;
+
+#djDebug .djDebugUncollapsed {
+    color: #333;
+    text-decoration: none;
 }
+
 #djDebug .djUnselected {
     display: none;
 }
