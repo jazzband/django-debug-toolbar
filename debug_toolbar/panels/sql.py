@@ -183,8 +183,10 @@ class SQLDebugPanel(DebugPanel):
                 query['rgb_color'] = self._databases[alias]['rgb_color']
                 try:
                     query['width_ratio'] = (query['duration'] / self._sql_time) * 100
+                    query['width_ratio_relative'] =  100.0 * query['width_ratio'] / (100.0 - width_ratio_tally)
                 except ZeroDivisionError:
                     query['width_ratio'] = 0
+                    query['width_ratio_relative'] = 0
                 query['start_offset'] = width_ratio_tally
                 query['end_offset'] = query['width_ratio'] + query['start_offset']
                 width_ratio_tally += query['width_ratio']
