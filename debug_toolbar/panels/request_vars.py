@@ -37,7 +37,7 @@ class RequestVarsDebugPanel(DebugPanel):
 
         if self.view_func is not None:
             module = self.view_func.__module__
-            name = getattr(self.view_func, '__name__', None) or self.view_func.__class__.__name__
+            name = getattr(self.view_func, '__name__', None) or getattr(self.view_func.__class__,'__name__','<unknown>')
             view_func = '%s.%s' % (module, name)
         else:
             view_func = '<no view>'
