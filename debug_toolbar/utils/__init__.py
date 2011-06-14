@@ -47,7 +47,7 @@ def get_template_info(source, context_lines=3):
     line = 0
     upto = 0
     source_lines = []
-    before = during = after = ""
+    # before = during = after = ""
 
     origin, (start, end) = source
     template_source = origin.reload()
@@ -55,9 +55,9 @@ def get_template_info(source, context_lines=3):
     for num, next in enumerate(linebreak_iter(template_source)):
         if start >= upto and end <= next:
             line = num
-            before = template_source[upto:start]
-            during = template_source[start:end]
-            after = template_source[end:next]
+            # before = template_source[upto:start]
+            # during = template_source[start:end]
+            # after = template_source[end:next]
         source_lines.append((num, template_source[upto:next]))
         upto = next
 
@@ -76,3 +76,17 @@ def get_template_info(source, context_lines=3):
         'name': origin.name,
         'context': context,
     }
+
+def get_name_from_obj(obj):
+    if hasattr(obj, '__name__'):
+        name = obj.__name__
+    elif hasattr(obj, '__class__') and hasattr(obj.__class__, '__name__'):
+        name = obj.__class__.__name__
+    else:
+        name = '<unknown>'
+    
+    if hasattr(obj, '__module__'):
+        module = obj.__module__
+        name = '%s.%s' % (module, name)
+
+    return name

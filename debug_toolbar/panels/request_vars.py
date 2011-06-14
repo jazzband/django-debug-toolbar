@@ -1,6 +1,8 @@
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+
 from debug_toolbar.panels import DebugPanel
+from debug_toolbar.utils import get_name_from_obj
 
 class RequestVarsDebugPanel(DebugPanel):
     """
@@ -36,17 +38,15 @@ class RequestVarsDebugPanel(DebugPanel):
         context = self.context.copy()
 
         if self.view_func is not None:
-            module = self.view_func.__module__
-            name = getattr(self.view_func, '__name__', None) or getattr(self.view_func.__class__,'__name__','<unknown>')
-            view_func = '%s.%s' % (module, name)
+            name = get_name_from_obj(self.view_func)
         else:
-            view_func = '<no view>'
+            name = '<no view>'
 
         context.update({
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
-            'view_func': view_func,
+            'view_func': name,
             'view_args': self.view_args,
             'view_kwargs': self.view_kwargs
         })

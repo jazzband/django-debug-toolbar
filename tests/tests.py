@@ -2,10 +2,12 @@ from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 from debug_toolbar.toolbar.loader import DebugToolbar
+from debug_toolbar.utils import get_name_from_obj
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.test import TestCase
 
 from dingus import Dingus
@@ -145,7 +147,7 @@ class DebugToolbarTestCase(BaseTestCase):
             panel.process_request(request)
             panel.process_view(request, _test_view, [], {})
             content = panel.content()
-            self.assertIn('debug_toolbar.tests.tests._test_view', content)
+            self.assertIn('tests.tests._test_view', content)
 
     def test_without_process_view(self):
         request = self.request
@@ -155,6 +157,22 @@ class DebugToolbarTestCase(BaseTestCase):
             panel.process_request(request)
             content = panel.content()
             self.assertIn('&lt;no view&gt;', content)
+
+class DebugToolbarNameFromObjectTest(BaseTestCase):
+    def test_func(self):
+        def x():
+            return 1
+        res = get_name_from_obj(x)
+        self.assertEquals(res, 'tests.tests.x')
+
+    def test_lambda(self):
+        res = get_name_from_obj(lambda:1)
+        self.assertEquals(res, 'tests.tests.<lambda>')
+
+    def test_class(self):
+        class A: pass
+        res = get_name_from_obj(A)
+        self.assertEquals(res, 'tests.tests.A')
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
