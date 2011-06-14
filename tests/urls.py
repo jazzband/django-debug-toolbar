@@ -10,5 +10,5 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^execute_sql/$', 'debug_toolbar.tests.views.execute_sql'),
+    url(r'^execute_sql/$', 'tests.views.execute_sql'),
 )

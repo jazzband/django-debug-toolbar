@@ -43,7 +43,7 @@ class BaseTestCase(TestCase):
         self.toolbar = toolbar
 
 class DebugToolbarTestCase(BaseTestCase):
-    urls = 'debug_toolbar.tests.urls'
+    urls = 'tests.urls'
     
     def test_middleware(self):
         resp = self.client.get('/execute_sql/')
@@ -86,7 +86,7 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_request_urlconf_string(self):
         request = self.request
         
-        request.urlconf = 'debug_toolbar.tests.urls'
+        request.urlconf = 'tests.urls'
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
@@ -97,12 +97,12 @@ class DebugToolbarTestCase(BaseTestCase):
             
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.tests.urls')
+            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'tests.urls')
 
     def test_request_urlconf_string_per_request(self):
         request = self.request
         
-        request.urlconf = 'debug_toolbar.tests.urls'
+        request.urlconf = 'tests.urls'
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
@@ -120,7 +120,7 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_request_urlconf_module(self):
         request = self.request
         
-        request.urlconf = __import__('debug_toolbar.tests.urls').tests.urls
+        request.urlconf = __import__('tests.urls').urls
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
@@ -131,7 +131,7 @@ class DebugToolbarTestCase(BaseTestCase):
             
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.tests.urls')
+            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'tests.urls')
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
