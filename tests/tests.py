@@ -1,5 +1,6 @@
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
+from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
 
@@ -132,6 +133,28 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'tests.urls')
+
+    def test_with_process_view(self):
+        request = self.request
+        
+        def _test_view(request):
+            return HttpResponse('')
+        
+        with Settings(DEBUG=True):
+            panel = self.toolbar.get_panel(RequestVarsDebugPanel)
+            panel.process_request(request)
+            panel.process_view(request, _test_view, [], {})
+            content = panel.content()
+            self.assertIn('debug_toolbar.tests.tests._test_view', content)
+
+    def test_without_process_view(self):
+        request = self.request
+
+        with Settings(DEBUG=True):
+            panel = self.toolbar.get_panel(RequestVarsDebugPanel)
+            panel.process_request(request)
+            content = panel.content()
+            self.assertIn('&lt;no view&gt;', content)
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
