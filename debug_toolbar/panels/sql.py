@@ -219,7 +219,7 @@ class SQLDebugPanel(DebugPanel):
     has_content = True
 
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super(SQLDebugPanel, self).__init__(*args, **kwargs)
         self._offset = dict((conn, len(connections[conn].queries)) for conn in connections)
         self._sql_time = 0
         self._queries = []
