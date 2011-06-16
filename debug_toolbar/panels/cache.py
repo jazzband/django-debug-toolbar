@@ -77,7 +77,7 @@ class CacheDebugPanel(DebugPanel):
     has_content = True
 
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super(CacheDebugPanel, self).__init__(*args, **kwargs)
         # This is hackish but to prevent threading issues is somewhat needed
         if isinstance(cache.cache, CacheStatTracker):
             cache.cache.reset()
