@@ -11,12 +11,12 @@ setup(
     url='https://github.com/django-debug-toolbar/django-debug-toolbar',
     download_url='https://github.com/django-debug-toolbar/django-debug-toolbar/downloads',
     license='BSD',
-    packages=find_packages(exclude=['ez_setup']),
+    packages=find_packages(exclude=('ez_setup', 'tests', 'example')),
     tests_require=[
         'django>=1.1,<1.4',
         'dingus',
     ],
-    test_suite='debug_toolbar.runtests.runtests',
+    test_suite='runtests.runtests',
     include_package_data=True,
     zip_safe=False, # because we're including media that Django needs
     classifiers=[
