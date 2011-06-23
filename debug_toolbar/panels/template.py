@@ -47,6 +47,7 @@ class TemplateDebugPanel(DebugPanel):
         template_rendered.connect(self._store_template_info)
 
     def _store_template_info(self, sender, **kwargs):
+        kwargs['context'] = kwargs['context'].__copy__()
         self.templates.append(kwargs)
 
     def nav_title(self):
