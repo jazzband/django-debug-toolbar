@@ -223,7 +223,8 @@ class BoldKeywordFilter(sqlparse.filters.Filter):
                 yield sqlparse.tokens.Text, '</strong>'
 
 def swap_fields(sql):
-    return re.sub('SELECT</strong> (.*) <strong>FROM', 'SELECT</strong> <span class="djDebugCollapse">\g<1></span> <strong>FROM', sql)
+    return re.sub('SELECT</strong> (.*) <strong>FROM', 'SELECT</strong> <a class="djDebugUncollapsed djDebugToggle" href="#">&bull;&bull;&bull;</a> ' +
+        '<a class="djDebugCollapsed djDebugToggle" href="#">\g<1></a> <strong>FROM', sql)
 
 def reformat_sql(sql):
     stack = sqlparse.engine.FilterStack()
