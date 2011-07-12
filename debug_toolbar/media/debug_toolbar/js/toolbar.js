@@ -66,6 +66,24 @@
 				djdt.toggle_content($('.djSQLHideStacktraceDiv', $(this).parents('tr')));
 				return false;
 			});
+			function getSubcalls(row) {
+			  id = row.attr('id');
+			  return $('.djDebugProfileRow[id^="'+id+'_"]');
+			}
+			function getDirectSubcalls(row) {
+			  subcalls = getSubcalls(row);
+			  depth = parseInt(row.attr('depth')) + 1;
+			  return subcalls.filter('[depth='+depth+']');
+			}
+			$('.djDebugProfileRow .djDebugProfileToggle').click(function(){
+			  row = $(this).closest('.djDebugProfileRow')
+			  subcalls = getSubcalls(row);
+			  if (subcalls.css('display')=='none') {
+			    getDirectSubcalls(row).show();
+			  } else {
+			    subcalls.hide();
+			  }
+			});
 			$('#djHideToolBarButton').click(function() {
 				djdt.hide_toolbar(true);
 				return false;
