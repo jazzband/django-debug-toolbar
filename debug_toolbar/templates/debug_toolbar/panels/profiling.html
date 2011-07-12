@@ -4,9 +4,9 @@
 	<thead>
 		<tr>
 			<th>{% trans "Call" %}</th>
-			<th>{% trans "TotTime" %}</th>
-			<th>{% trans "Per" %}</th>
 			<th>{% trans "CumTime" %}</th>
+			<th>{% trans "Per" %}</th>
+			<th>{% trans "TotTime" %}</th>
 			<th>{% trans "Per" %}</th>
 			<th>{% trans "Count" %}</th>
 		</tr>
@@ -25,12 +25,21 @@
 						<span class="stack">{{ call.func_std_string }}</span>
 					</div>
 				</td>
-				<td>{{ call.tottime|floatformat:3 }}</td>
-				<td>{{ call.tottime_per_call|floatformat:3 }}</td>
 				<td>{{ call.cumtime|floatformat:3 }}</td>
 				<td>{{ call.cumtime_per_call|floatformat:3 }}</td>
+				<td>{{ call.tottime|floatformat:3 }}</td>
+				<td>{{ call.tottime_per_call|floatformat:3 }}</td>
 				<td>{{ call.count }}</td>
 			</tr>
+			{% if call.line_stats_text %}
+			<tr>
+				<td colspan='6'>
+					<pre style='font-family:Courier, monospace'>
+						{{ call.line_stats_text }}
+					</pre>
+				</td>
+			</tr>
+			{% endif %}
 		{% endfor %}
 	</tbody>
 </table>
