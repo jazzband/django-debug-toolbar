@@ -14,7 +14,7 @@
 	<tbody>
 		{% for call in func_list %}
 			<!--  style="background:{{ call.background }}" -->
-			<tr id="{{ call.id }}" class="djDebugProfileRow{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" depth="{{ call.depth }}">
+			<tr class="djDebugProfileRow{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" depth="{{ call.depth }}">
 				<td>
 					<div style="padding-left: {{ call.indent }}px;">
 						{% if call.has_subfuncs %}
@@ -32,13 +32,11 @@
 				<td>{{ call.count }}</td>
 			</tr>
 			{% if call.line_stats_text %}
-			<tr>
-				<td colspan='6'>
-					<pre style='font-family:Courier, monospace'>
-						{{ call.line_stats_text }}
-					</pre>
-				</td>
-			</tr>
+				<tr class="djToggleDetails_{{ call.id }}{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}">
+					<td colspan="6">
+						<pre style="padding-left: {{ call.indent }}px;">{{ call.line_stats_text }}</pre>
+					</td>
+				</tr>
 			{% endif %}
 		{% endfor %}
 	</tbody>
