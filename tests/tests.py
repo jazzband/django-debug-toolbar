@@ -147,7 +147,7 @@ class DebugToolbarTestCase(BaseTestCase):
             panel.process_request(request)
             panel.process_view(request, _test_view, [], {})
             content = panel.content()
-            self.assertIn('tests.tests._test_view', content)
+            self.assertTrue('tests.tests._test_view' in content, content)
 
     def test_without_process_view(self):
         request = self.request
@@ -156,7 +156,7 @@ class DebugToolbarTestCase(BaseTestCase):
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
             content = panel.content()
-            self.assertIn('&lt;no view&gt;', content)
+            self.assertTrue('&lt;no view&gt;' in content, content)
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
     def test_func(self):
