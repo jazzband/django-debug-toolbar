@@ -51,22 +51,25 @@ class TemplateDebugPanel(DebugPanel):
 
         context_list = []
         for context_layer in context_data.dicts:
+            temp_layer = {}
             if hasattr(context_layer, 'items'):
                 for key, value in context_layer.items():
                     # Replace any request elements - they have a large
                     # unicode representation and the request data is
                     # already made available from the Request Vars panel.
                     if isinstance(value, http.HttpRequest):
-                        context_layer[key] = '<<request>>'
+                        temp_layer[key] = '<<request>>'
                     # Replace the debugging sql_queries element. The SQL
                     # data is already made available from the SQL panel.
                     elif key == 'sql_queries' and isinstance(value, list):
-                        context_layer[key] = '<<sql_queries>>'
+                        temp_layer[key] = '<<sql_queries>>'
                     # Replace LANGUAGES, which is available in i18n context processor
                     elif key == 'LANGUAGES' and isinstance(value, tuple):
-                        context_layer[key] = '<<languages>>'
+                        temp_layer[key] = '<<languages>>'
+                    else:
+                        temp_layer[key] = value
             try:
-                context_list.append(pformat(context_layer))
+                context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
                 pass
         kwargs['context'] = context_list
