@@ -37,19 +37,23 @@ class RequestVarsDebugPanel(DebugPanel):
     def content(self):
         context = self.context.copy()
 
-        if self.view_func is not None:
-            name = get_name_from_obj(self.view_func)
-        else:
-            name = '<no view>'
-
         context.update({
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
-            'view_func': name,
-            'view_args': self.view_args,
-            'view_kwargs': self.view_kwargs
         })
+        if hasattr(self, 'view_func'):
+            if self.view_func is not None:
+                name = get_name_from_obj(self.view_func)
+            else:
+                name = '<no view>'
+
+            context.update({
+                'view_func': name,
+                'view_args': self.view_args,
+                'view_kwargs': self.view_kwargs
+            })
+
         if hasattr(self.request, 'session'):
             context.update({
                 'session': [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()]

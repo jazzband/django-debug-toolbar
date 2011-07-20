@@ -5,6 +5,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from debug_toolbar.panels import DebugPanel
 
+try:
+    from line_profiler import LineProfiler, show_func
+    DJ_PROFILE_USE_LINE_PROFILER = True
+except ImportError:    
+    DJ_PROFILE_USE_LINE_PROFILER = False
+    
+
+from cStringIO import StringIO
 import cProfile
 from pstats import Stats
 from colorsys import hsv_to_rgb
@@ -20,13 +28,6 @@ class DjangoDebugToolbarStats(Stats):
                     break
         return self.__root
     
-    def print_call_tree_node(self, function, depth, max_depth, cum_filter=0.1):
-        self.print_line(function, depth=depth)
-        if depth < max_depth:
-            for called in self.all_callees[function].keys():
-                if self.stats[called][3] >= cum_filter:
-                    self.print_call_tree_node(called, depth+1, max_depth, cum_filter=cum_filter)
-
 class FunctionCall(object):
     def __init__(self, statobj, func, depth=0, stats=None, id=0, parent_ids=[], hsv=(0,0.5,1)):
         self.statobj = statobj
@@ -39,6 +40,7 @@ class FunctionCall(object):
         self.id = id
         self.parent_ids = parent_ids
         self.hsv = hsv
+        self._line_stats_text = None
     
     def parent_classes(self):
         return self.parent_classes
@@ -118,6 +120,18 @@ class FunctionCall(object):
 
     def indent(self):
         return 16 * self.depth
+        
+    def line_stats_text(self):
+        if self._line_stats_text is None:
+            lstats = self.statobj.line_stats
+            if self.func in lstats.timings:
+                out = StringIO()
+                fn, lineno, name = self.func
+                show_func(fn, lineno, name, lstats.timings[self.func], lstats.unit, stream=out)
+                self._line_stats_text = out.getvalue()
+            else:
+                self._line_stats_text = False
+        return self._line_stats_text
 
 class ProfilingDebugPanel(DebugPanel):
     """
@@ -135,15 +149,35 @@ class ProfilingDebugPanel(DebugPanel):
     def title(self):
         return _('Profiling')
 
+    def _unwrap_closure_and_profile(self, func):
+        if not hasattr(func, 'func_code'):
+            return
+        self.line_profiler.add_function(func)
+        if func.func_closure:
+            for cell in func.func_closure:
+                if hasattr(cell.cell_contents, 'func_code'):
+                    self._unwrap_closure_and_profile(cell.cell_contents)
+
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
         self.profiler = cProfile.Profile()
         args = (request,) + view_args
-        return self.profiler.runcall(view_func, *args, **view_kwargs)
+        if DJ_PROFILE_USE_LINE_PROFILER:
+            self.line_profiler = LineProfiler()
+            self._unwrap_closure_and_profile(view_func)
+            self.line_profiler.enable_by_count()
+            out = self.profiler.runcall(view_func, *args, **view_kwargs)
+            self.line_profiler.disable_by_count()
+        else:
+            self.line_profiler = None
+            out = self.profiler.runcall(view_func, *args, **view_kwargs)
+        return out
 
     def process_response(self, request, response):
         self.profiler.create_stats()
         self.stats = DjangoDebugToolbarStats(self.profiler)
+        if DJ_PROFILE_USE_LINE_PROFILER:
+            self.stats.line_stats = self.line_profiler.get_stats()
         return response
 
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
@@ -151,7 +185,7 @@ class ProfilingDebugPanel(DebugPanel):
         func.has_subfuncs = False
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
-                if subfunc.stats[3] >= cum_time:
+                if subfunc.stats[3] >= cum_time or (subfunc.func in self.stats.line_stats.timings):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
     
