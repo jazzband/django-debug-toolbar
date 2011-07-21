@@ -106,7 +106,7 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `SHOW_TOOLBAR_CALLBACK`: If not set or set to None, the debug_toolbar
      middleware will use its built-in show_toolbar method for determining whether
      the toolbar should show or not.  The default checks are that DEBUG must be
-     set to True and the IP of the request must be in INTERNAL_IPS.  You can
+     set to True or the IP of the request must be in INTERNAL_IPS.  You can
      provide your own method for displaying the toolbar which contains your
      custom logic.  This method should return True or False.
 
