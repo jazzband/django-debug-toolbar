@@ -76,11 +76,11 @@ def build_filter_stack(stack, options):
       options: Dictionary with options validated by validate_options.
     """
     # Token filter
-    if 'keyword_case' in options:
+    if options.get('keyword_case', None):
         stack.preprocess.append(
             filters.KeywordCaseFilter(options['keyword_case']))
 
-    if 'identifier_case' in options:
+    if options.get('identifier_case', None):
         stack.preprocess.append(
             filters.IdentifierCaseFilter(options['identifier_case']))
 
@@ -118,5 +118,3 @@ def build_filter_stack(stack, options):
             stack.postprocess.append(fltr)
 
     return stack
-
-

@@ -2,7 +2,6 @@
 
 import re
 
-from debug_toolbar.utils.sqlparse.engine import grouping
 from debug_toolbar.utils.sqlparse import tokens as T
 from debug_toolbar.utils.sqlparse import sql
 
@@ -17,34 +16,6 @@ class TokenFilter(Filter):
 
     def process(self, stack, stream):
         raise NotImplementedError
-
-
-# FIXME: Should be removed
-def rstrip(stream):
-    buff = []
-    for token in stream:
-        if token.is_whitespace() and '\n' in token.value:
-            # assuming there's only one \n in value
-            before, rest = token.value.split('\n', 1)
-            token.value = '\n%s' % rest
-            buff = []
-            yield token
-        elif token.is_whitespace():
-            buff.append(token)
-        elif token.is_group():
-            token.tokens = list(rstrip(token.tokens))
-            # process group and look if it starts with a nl
-            if token.tokens and token.tokens[0].is_whitespace():
-                before, rest = token.tokens[0].value.split('\n', 1)
-                token.tokens[0].value = '\n%s' % rest
-                buff = []
-            while buff:
-                yield buff.pop(0)
-            yield token
-        else:
-            while buff:
-                yield buff.pop(0)
-            yield token
 
 
 # --------------------------
@@ -74,17 +45,28 @@ class KeywordCaseFilter(_CaseFilter):
 class IdentifierCaseFilter(_CaseFilter):
     ttype = (T.Name, T.String.Symbol)
 
+    def process(self, stack, stream):
+        for ttype, value in stream:
+            if ttype in self.ttype and not value.strip()[0] == '"':
+                value = self.convert(value)
+            yield ttype, value
+
 
 # ----------------------
 # statement process
 
 class StripCommentsFilter(Filter):
 
+    def _get_next_comment(self, tlist):
+        # TODO(andi) Comment types should be unified, see related issue38
+        token = tlist.token_next_by_instance(0, sql.Comment)
+        if token is None:
+            token = tlist.token_next_by_type(0, T.Comment)
+        return token
+
     def _process(self, tlist):
-        idx = 0
-        clss = set([x.__class__ for x in tlist.tokens])
-        while grouping.Comment in clss:
-            token = tlist.token_next_by_instance(0, grouping.Comment)
+        token = self._get_next_comment(tlist)
+        while token:
             tidx = tlist.token_index(token)
             prev = tlist.token_prev(tidx, False)
             next_ = tlist.token_next(tidx, False)
@@ -94,10 +76,10 @@ class StripCommentsFilter(Filter):
                 and not prev.is_whitespace() and not next_.is_whitespace()
                 and not (prev.match(T.Punctuation, '(')
                          or next_.match(T.Punctuation, ')'))):
-                tlist.tokens[tidx] = grouping.Token(T.Whitespace, ' ')
+                tlist.tokens[tidx] = sql.Token(T.Whitespace, ' ')
             else:
                 tlist.tokens.pop(tidx)
-            clss = set([x.__class__ for x in tlist.tokens])
+            token = self._get_next_comment(tlist)
 
     def process(self, stack, stmt):
         [self.process(stack, sgroup) for sgroup in stmt.get_sublists()]
@@ -149,24 +131,32 @@ class ReindentFilter(Filter):
     def _get_offset(self, token):
         all_ = list(self._curr_stmt.flatten())
         idx = all_.index(token)
-        raw = ''.join(unicode(x) for x in all_[:idx+1])
+        raw = ''.join(unicode(x) for x in all_[:idx + 1])
         line = raw.splitlines()[-1]
         # Now take current offset into account and return relative offset.
-        full_offset = len(line)-(len(self.char*(self.width*self.indent)))
+        full_offset = len(line) - len(self.char * (self.width * self.indent))
         return full_offset - self.offset
 
     def nl(self):
         # TODO: newline character should be configurable
-        ws = '\n'+(self.char*((self.indent*self.width)+self.offset))
-        return grouping.Token(T.Whitespace, ws)
+        ws = '\n' + (self.char * ((self.indent * self.width) + self.offset))
+        return sql.Token(T.Whitespace, ws)
 
     def _split_kwds(self, tlist):
         split_words = ('FROM', 'JOIN$', 'AND', 'OR',
                        'GROUP', 'ORDER', 'UNION', 'VALUES',
-                       'SET')
-        idx = 0
-        token = tlist.token_next_match(idx, T.Keyword, split_words,
+                       'SET', 'BETWEEN')
+        def _next_token(i):
+            t = tlist.token_next_match(i, T.Keyword, split_words,
                                        regex=True)
+            if t and t.value.upper() == 'BETWEEN':
+                t = _next_token(tlist.token_index(t)+1)
+                if t and t.value.upper() == 'AND':
+                    t = _next_token(tlist.token_index(t)+1)
+            return t
+
+        idx = 0
+        token = _next_token(idx)
         while token:
             prev = tlist.token_prev(tlist.token_index(token), False)
             offset = 1
@@ -181,8 +171,7 @@ class ReindentFilter(Filter):
             else:
                 nl = self.nl()
                 tlist.insert_before(token, nl)
-            token = tlist.token_next_match(tlist.token_index(nl)+offset,
-                                           T.Keyword, split_words, regex=True)
+            token = _next_token(tlist.token_index(nl) + offset)
 
     def _split_statements(self, tlist):
         idx = 0
@@ -195,7 +184,7 @@ class ReindentFilter(Filter):
             if prev:
                 nl = self.nl()
                 tlist.insert_before(token, nl)
-            token = tlist.token_next_by_type(tlist.token_index(token)+1,
+            token = tlist.token_next_by_type(tlist.token_index(token) + 1,
                                              (T.Keyword.DDL, T.Keyword.DML))
 
     def _process(self, tlist):
@@ -227,9 +216,9 @@ class ReindentFilter(Filter):
 
     def _process_identifierlist(self, tlist):
         identifiers = tlist.get_identifiers()
-        if len(identifiers) > 1:
+        if len(identifiers) > 1 and not tlist.within(sql.Function):
             first = list(identifiers[0].flatten())[0]
-            num_offset = self._get_offset(first)-len(first.value)
+            num_offset = self._get_offset(first) - len(first.value)
             self.offset += num_offset
             for token in identifiers[1:]:
                 tlist.insert_before(token, self.nl())
@@ -237,16 +226,16 @@ class ReindentFilter(Filter):
         self._process_default(tlist)
 
     def _process_case(self, tlist):
-        cases = tlist.get_cases()
         is_first = True
         num_offset = None
         case = tlist.tokens[0]
-        outer_offset = self._get_offset(case)-len(case.value)
+        outer_offset = self._get_offset(case) - len(case.value)
         self.offset += outer_offset
         for cond, value in tlist.get_cases():
             if is_first:
+                tcond = list(cond[0].flatten())[0]
                 is_first = False
-                num_offset = self._get_offset(cond[0])-len(cond[0].value)
+                num_offset = self._get_offset(tcond) - len(tcond.value)
                 self.offset += num_offset
                 continue
             if cond is None:
@@ -273,17 +262,17 @@ class ReindentFilter(Filter):
         [self._process(sgroup) for sgroup in tlist.get_sublists()]
 
     def process(self, stack, stmt):
-        if isinstance(stmt, grouping.Statement):
+        if isinstance(stmt, sql.Statement):
             self._curr_stmt = stmt
         self._process(stmt)
-        if isinstance(stmt, grouping.Statement):
+        if isinstance(stmt, sql.Statement):
             if self._last_stmt is not None:
                 if self._last_stmt.to_unicode().endswith('\n'):
                     nl = '\n'
                 else:
                     nl = '\n\n'
                 stmt.tokens.insert(0,
-                    grouping.Token(T.Whitespace, nl))
+                    sql.Token(T.Whitespace, nl))
             if self._last_stmt != stmt:
                 self._last_stmt = stmt
 
@@ -292,7 +281,7 @@ class ReindentFilter(Filter):
 class RightMarginFilter(Filter):
 
     keep_together = (
-#        grouping.TypeCast, grouping.Identifier, grouping.Alias,
+#        sql.TypeCast, sql.Identifier, sql.Alias,
     )
 
     def __init__(self, width=79):
@@ -317,7 +306,7 @@ class RightMarginFilter(Filter):
                         indent = match.group()
                     else:
                         indent = ''
-                    yield grouping.Token(T.Whitespace, '\n%s' % indent)
+                    yield sql.Token(T.Whitespace, '\n%s' % indent)
                     self.line = indent
                 self.line += val
             yield token
@@ -349,14 +338,14 @@ class OutputPythonFilter(Filter):
 
     def _process(self, stream, varname, count, has_nl):
         if count > 1:
-            yield grouping.Token(T.Whitespace, '\n')
-        yield grouping.Token(T.Name, varname)
-        yield grouping.Token(T.Whitespace, ' ')
-        yield grouping.Token(T.Operator, '=')
-        yield grouping.Token(T.Whitespace, ' ')
+            yield sql.Token(T.Whitespace, '\n')
+        yield sql.Token(T.Name, varname)
+        yield sql.Token(T.Whitespace, ' ')
+        yield sql.Token(T.Operator, '=')
+        yield sql.Token(T.Whitespace, ' ')
         if has_nl:
-            yield grouping.Token(T.Operator, '(')
-        yield grouping.Token(T.Text, "'")
+            yield sql.Token(T.Operator, '(')
+        yield sql.Token(T.Text, "'")
         cnt = 0
         for token in stream:
             cnt += 1
@@ -364,20 +353,20 @@ class OutputPythonFilter(Filter):
                 if cnt == 1:
                     continue
                 after_lb = token.value.split('\n', 1)[1]
-                yield grouping.Token(T.Text, " '")
-                yield grouping.Token(T.Whitespace, '\n')
-                for i in range(len(varname)+4):
-                    yield grouping.Token(T.Whitespace, ' ')
-                yield grouping.Token(T.Text, "'")
+                yield sql.Token(T.Text, " '")
+                yield sql.Token(T.Whitespace, '\n')
+                for i in range(len(varname) + 4):
+                    yield sql.Token(T.Whitespace, ' ')
+                yield sql.Token(T.Text, "'")
                 if after_lb:  # it's the indendation
-                    yield grouping.Token(T.Whitespace, after_lb)
+                    yield sql.Token(T.Whitespace, after_lb)
                 continue
             elif token.value and "'" in token.value:
                 token.value = token.value.replace("'", "\\'")
-            yield grouping.Token(T.Text, token.value or '')
-        yield grouping.Token(T.Text, "'")
+            yield sql.Token(T.Text, token.value or '')
+        yield sql.Token(T.Text, "'")
         if has_nl:
-            yield grouping.Token(T.Operator, ')')
+            yield sql.Token(T.Operator, ')')
 
     def process(self, stack, stmt):
         self.cnt += 1
@@ -398,36 +387,32 @@ class OutputPHPFilter(Filter):
 
     def _process(self, stream, varname):
         if self.count > 1:
-            yield grouping.Token(T.Whitespace, '\n')
-        yield grouping.Token(T.Name, varname)
-        yield grouping.Token(T.Whitespace, ' ')
-        yield grouping.Token(T.Operator, '=')
-        yield grouping.Token(T.Whitespace, ' ')
-        yield grouping.Token(T.Text, '"')
-        cnt = 0
+            yield sql.Token(T.Whitespace, '\n')
+        yield sql.Token(T.Name, varname)
+        yield sql.Token(T.Whitespace, ' ')
+        yield sql.Token(T.Operator, '=')
+        yield sql.Token(T.Whitespace, ' ')
+        yield sql.Token(T.Text, '"')
         for token in stream:
             if token.is_whitespace() and '\n' in token.value:
-#                cnt += 1
-#                if cnt == 1:
-#                    continue
                 after_lb = token.value.split('\n', 1)[1]
-                yield grouping.Token(T.Text, ' "')
-                yield grouping.Token(T.Operator, ';')
-                yield grouping.Token(T.Whitespace, '\n')
-                yield grouping.Token(T.Name, varname)
-                yield grouping.Token(T.Whitespace, ' ')
-                yield grouping.Token(T.Punctuation, '.')
-                yield grouping.Token(T.Operator, '=')
-                yield grouping.Token(T.Whitespace, ' ')
-                yield grouping.Token(T.Text, '"')
+                yield sql.Token(T.Text, ' "')
+                yield sql.Token(T.Operator, ';')
+                yield sql.Token(T.Whitespace, '\n')
+                yield sql.Token(T.Name, varname)
+                yield sql.Token(T.Whitespace, ' ')
+                yield sql.Token(T.Punctuation, '.')
+                yield sql.Token(T.Operator, '=')
+                yield sql.Token(T.Whitespace, ' ')
+                yield sql.Token(T.Text, '"')
                 if after_lb:
-                    yield grouping.Token(T.Text, after_lb)
+                    yield sql.Token(T.Text, after_lb)
                 continue
             elif '"' in token.value:
                 token.value = token.value.replace('"', '\\"')
-            yield grouping.Token(T.Text, token.value)
-        yield grouping.Token(T.Text, '"')
-        yield grouping.Token(T.Punctuation, ';')
+            yield sql.Token(T.Text, token.value)
+        yield sql.Token(T.Text, '"')
+        yield sql.Token(T.Punctuation, ';')
 
     def process(self, stack, stmt):
         self.count += 1
@@ -437,4 +422,3 @@ class OutputPHPFilter(Filter):
             varname = self.varname
         stmt.tokens = tuple(self._process(stmt.tokens, varname))
         return stmt
-
