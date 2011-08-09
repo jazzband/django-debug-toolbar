@@ -69,10 +69,7 @@ class DebugToolbarMiddleware(object):
             remote_addr = request.META.get('REMOTE_ADDR', None)
 
         # if not internal ip, and not DEBUG
-        if not (remote_addr in settings.INTERNAL_IPS or settings.DEBUG):
-            return False
-
-        return True
+        return remote_addr in settings.INTERNAL_IPS and settings.DEBUG
 
     def process_request(self, request):
         __traceback_hide__ = True
