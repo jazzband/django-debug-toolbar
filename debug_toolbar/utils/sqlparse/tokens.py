@@ -9,11 +9,6 @@
 
 """Tokens"""
 
-try:
-    set
-except NameError:
-    from sets import Set as set
-
 
 class _TokenType(tuple):
     parent = None
@@ -27,22 +22,14 @@ class _TokenType(tuple):
         buf.reverse()
         return buf
 
-    def __init__(self, *args):
-        # no need to call super.__init__
-        self.subtypes = set()
-
     def __contains__(self, val):
-        return self is val or (
-            type(val) is self.__class__ and
-            val[:len(self)] == self
-        )
+        return val is not None and (self is val or val[:len(self)] == self)
 
     def __getattr__(self, val):
         if not val or not val[0].isupper():
             return tuple.__getattribute__(self, val)
         new = _TokenType(self + (val,))
         setattr(self, val, new)
-        self.subtypes.add(new)
         new.parent = self
         return new
 
@@ -53,30 +40,31 @@ class _TokenType(tuple):
         return 'Token' + (self and '.' or '') + '.'.join(self)
 
 
-Token       = _TokenType()
+Token = _TokenType()
 
 # Special token types
-Text        = Token.Text
-Whitespace  = Text.Whitespace
-Newline     = Whitespace.Newline
-Error       = Token.Error
+Text = Token.Text
+Whitespace = Text.Whitespace
+Newline = Whitespace.Newline
+Error = Token.Error
 # Text that doesn't belong to this lexer (e.g. HTML in PHP)
-Other       = Token.Other
+Other = Token.Other
 
 # Common token types for source code
-Keyword     = Token.Keyword
-Name        = Token.Name
-Literal     = Token.Literal
-String      = Literal.String
-Number      = Literal.Number
+Keyword = Token.Keyword
+Name = Token.Name
+Literal = Token.Literal
+String = Literal.String
+Number = Literal.Number
 Punctuation = Token.Punctuation
-Operator    = Token.Operator
-Wildcard    = Token.Wildcard
-Comment     = Token.Comment
-Assignment  = Token.Assignement
+Operator = Token.Operator
+Comparison = Operator.Comparison
+Wildcard = Token.Wildcard
+Comment = Token.Comment
+Assignment = Token.Assignement
 
 # Generic types for non-source code
-Generic     = Token.Generic
+Generic = Token.Generic
 
 # String and some others are not direct childs of Token.
 # alias them:
@@ -93,39 +81,3 @@ Group = Token.Group
 Group.Parenthesis = Token.Group.Parenthesis
 Group.Comment = Token.Group.Comment
 Group.Where = Token.Group.Where
-
-
-def is_token_subtype(ttype, other):
-    """
-    Return True if ``ttype`` is a subtype of ``other``.
-
-    exists for backwards compatibility. use ``ttype in other`` now.
-    """
-    return ttype in other
-
-
-def string_to_tokentype(s):
-    """
-    Convert a string into a token type::
-
-        >>> string_to_token('String.Double')
-        Token.Literal.String.Double
-        >>> string_to_token('Token.Literal.Number')
-        Token.Literal.Number
-        >>> string_to_token('')
-        Token
-
-    Tokens that are already tokens are returned unchanged:
-
-        >>> string_to_token(String)
-        Token.Literal.String
-    """
-    if isinstance(s, _TokenType):
-        return s
-    if not s:
-        return Token
-    node = Token
-    for item in s.split('.'):
-        node = getattr(node, item)
-    return node
-
