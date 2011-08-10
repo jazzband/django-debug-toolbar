@@ -14,6 +14,8 @@ from debug_toolbar.utils import sqlparse
 from debug_toolbar.utils.tracking.db import CursorWrapper
 from debug_toolbar.utils.tracking import replace_call
 
+from threading import local
+
 # Inject our tracking cursor
 @replace_call(BaseDatabaseWrapper.cursor)
 def cursor(func, self):
@@ -56,6 +58,10 @@ def get_transaction_status_display(engine, level):
     
     return choices.get(level)
 
+class ThreadLocalState(local):
+    def __init__(self):
+        self.enabled = True
+
 class SQLDebugPanel(DebugPanel):
     """
     Panel that displays information about the SQL queries run while processing
@@ -63,6 +69,11 @@ class SQLDebugPanel(DebugPanel):
     """
     name = 'SQL'
     has_content = True
+    state = ThreadLocalState()
+
+    @staticmethod
+    def recording(value):
+        SQLDebugPanel.state.enabled = value
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
@@ -101,6 +112,8 @@ class SQLDebugPanel(DebugPanel):
         return self._transaction_ids[alias]
     
     def record(self, alias, **kwargs):
+        if not SQLDebugPanel.state.enabled:
+            return
         self._queries.append((alias, kwargs))
         if alias not in self._databases:
             self._databases[alias] = {
