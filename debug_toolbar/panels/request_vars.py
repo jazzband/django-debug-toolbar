@@ -4,6 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import get_name_from_obj
 
+from django.core.urlresolvers import resolve
+from django.http import Http404
+
 class RequestVarsDebugPanel(DebugPanel):
     """
     A panel to display request variables (POST/GET, session, cookies).
@@ -13,9 +16,6 @@ class RequestVarsDebugPanel(DebugPanel):
 
     def __init__(self, *args, **kwargs):
         DebugPanel.__init__(self, *args, **kwargs)
-        self.view_func = None
-        self.view_args = None
-        self.view_kwargs = None
 
     def nav_title(self):
         return _('Request Vars')
@@ -29,11 +29,6 @@ class RequestVarsDebugPanel(DebugPanel):
     def process_request(self, request):
         self.request = request
 
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        self.view_func = view_func
-        self.view_args = view_args
-        self.view_kwargs = view_kwargs
-
     def content(self):
         context = self.context.copy()
 
@@ -42,17 +37,22 @@ class RequestVarsDebugPanel(DebugPanel):
             'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
         })
-        if hasattr(self, 'view_func'):
-            if self.view_func is not None:
-                name = get_name_from_obj(self.view_func)
-            else:
-                name = '<no view>'
 
-            context.update({
-                'view_func': name,
-                'view_args': self.view_args,
-                'view_kwargs': self.view_kwargs
-            })
+        context['view_func'] = '<no view>'
+        context['view_args'] = 'None'
+        context['view_kwargs'] = 'None'
+        context['view_urlname'] = 'None'
+
+        try:
+            match = resolve(self.request.path)
+            func, args, kwargs = match
+            context['view_func'] = get_name_from_obj(func)
+            context['view_args'] = args
+            context['view_kwargs'] = kwargs
+            if hasattr(match, 'url_name'):  # Django 1.3
+                context['view_urlname'] = match.url_name
+        except Http404:
+            pass
 
         if hasattr(self.request, 'session'):
             context.update({
