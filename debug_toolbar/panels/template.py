@@ -9,6 +9,8 @@ from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
+from sql import SQLDebugPanel
+
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
 
@@ -71,9 +73,12 @@ class TemplateDebugPanel(DebugPanel):
                     else:
                         temp_layer[key] = value
             try:
-                context_list.append(pformat(temp_layer))
+                SQLDebugPanel.recording(False)
+                context_list.append(pformat(temp_layer)) # this may hit database
             except UnicodeEncodeError:
                 pass
+            finally:
+                SQLDebugPanel.recording(True)
         kwargs['context'] = context_list
         self.templates.append(kwargs)
 
