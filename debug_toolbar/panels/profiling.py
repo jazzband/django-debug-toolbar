@@ -16,6 +16,7 @@ from cStringIO import StringIO
 import cProfile
 from pstats import Stats
 from colorsys import hsv_to_rgb
+import os
 
 class DjangoDebugToolbarStats(Stats):
     __root = None
@@ -64,7 +65,7 @@ class FunctionCall(object):
             if idx > -1:
                 file_name=file_name[idx+14:]
             
-            file_path, file_name = file_name.rsplit('/', 1)
+            file_path, file_name = file_name.rsplit(os.sep, 1)
             
             return mark_safe('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)'.format(
                 file_path,
