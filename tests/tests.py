@@ -138,23 +138,21 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'tests.urls')
 
-    def test_with_process_view(self):
+    def test_view_resolving_success(self):
         request = self.request
         
-        def _test_view(request):
-            return HttpResponse('')
-        
         with Settings(DEBUG=True):
+            request.path = '/execute_sql/'  # existing URL
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
-            panel.process_view(request, _test_view, [], {})
             content = panel.content()
-            self.assertTrue('tests.tests._test_view' in content, content)
+            self.assertTrue('tests.views.execute_sql' in content)
 
-    def test_without_process_view(self):
+    def test_view_resolving_failure(self):
         request = self.request
 
         with Settings(DEBUG=True):
+            request.path = '/non_existing_url/' #
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
             content = panel.content()
