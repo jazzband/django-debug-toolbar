@@ -1,5 +1,6 @@
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
+from debug_toolbar.panels.template import TemplateDebugPanel
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils import get_name_from_obj
@@ -9,6 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase
+from django.template import Template, Context
 
 from dingus import Dingus
 import thread
@@ -173,6 +175,20 @@ class DebugToolbarNameFromObjectTest(BaseTestCase):
         class A: pass
         res = get_name_from_obj(A)
         self.assertEquals(res, 'tests.tests.A')
+
+class TemplatePanelTestCase(BaseTestCase):
+    def test_queryset_hook(self):
+        template_panel = self.toolbar.get_panel(TemplateDebugPanel)
+        sql_panel = self.toolbar.get_panel(SQLDebugPanel)
+        t = Template("No context variables here!")
+        c = Context({ 'queryset' : User.objects.all(), 'deep_queryset' : { 'queryset' : User.objects.all() } })
+        t.render(c)
+        # ensure the query was NOT logged
+        self.assertEquals(len(sql_panel._queries), 0)
+        ctx = template_panel.templates[0]['context'][0]
+        ctx = eval(ctx) # convert back to Python
+        self.assertEquals(ctx['queryset'], '<<queryset>>')
+        self.assertEquals(ctx['deep_queryset'], '<<contains queryset>>')
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
