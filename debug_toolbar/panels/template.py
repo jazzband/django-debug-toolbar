@@ -73,13 +73,14 @@ class TemplateDebugPanel(DebugPanel):
                         temp_layer[key] = '<<languages>>'
                     # QuerySet would trigger the database: user can run the query from SQL Panel
                     elif isinstance(value, QuerySet):
-                        temp_layer[key] = '<<queryset>>'
+                        model_name = "%s.%s" % (value.model._meta.app_label, value.model.__name__)
+                        temp_layer[key] = '<<queryset of %s>>' % model_name
                     else:
                         try:
                             SQLDebugPanel.recording(False)
                             pformat(value)  # this MAY trigger a db query
                         except SQLQueryTriggered:
-                            temp_layer[key] = '<<contains queryset>>'
+                            temp_layer[key] = '<<triggers database query>>'
                         else:
                             temp_layer[key] = value
                         finally:
