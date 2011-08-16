@@ -62,6 +62,10 @@ class ThreadLocalState(local):
     def __init__(self):
         self.enabled = True
 
+class SQLQueryTriggered(Exception):
+    """Thrown when template panel triggers a query"""
+    pass
+
 class SQLDebugPanel(DebugPanel):
     """
     Panel that displays information about the SQL queries run while processing
@@ -113,7 +117,7 @@ class SQLDebugPanel(DebugPanel):
     
     def record(self, alias, **kwargs):
         if not SQLDebugPanel.state.enabled:
-            return
+            raise SQLQueryTriggered()
         self._queries.append((alias, kwargs))
         if alias not in self._databases:
             self._databases[alias] = {
