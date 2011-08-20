@@ -6,10 +6,7 @@
 """Parse SQL statements."""
 
 
-__version__ = '0.1.1'
-
-
-import os
+__version__ = '0.1.3'
 
 
 class SQLParseError(Exception):
@@ -56,4 +53,3 @@ def split(sql):
     stack = engine.FilterStack()
     stack.split_statements = True
     return [unicode(stmt) for stmt in stack.run(sql)]
-

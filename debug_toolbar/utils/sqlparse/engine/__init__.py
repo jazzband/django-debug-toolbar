@@ -5,9 +5,7 @@
 
 """filter"""
 
-import re
-
-from debug_toolbar.utils.sqlparse import lexer, SQLParseError
+from debug_toolbar.utils.sqlparse import lexer
 from debug_toolbar.utils.sqlparse.engine import grouping
 from debug_toolbar.utils.sqlparse.engine.filter import StatementFilter
 
@@ -42,8 +40,8 @@ class FilterStack(object):
         stream = lexer.tokenize(sql)
         # Process token stream
         if self.preprocess:
-           for filter_ in self.preprocess:
-               stream = filter_.process(self, stream)
+            for filter_ in self.preprocess:
+                stream = filter_.process(self, stream)
 
         if (self.stmtprocess or self.postprocess or self.split_statements
             or self._grouping):
@@ -51,6 +49,7 @@ class FilterStack(object):
             stream = splitter.process(self, stream)
 
         if self._grouping:
+
             def _group(stream):
                 for stmt in stream:
                     grouping.group(stmt)
@@ -58,23 +57,24 @@ class FilterStack(object):
             stream = _group(stream)
 
         if self.stmtprocess:
-            def _run(stream):
+
+            def _run1(stream):
                 ret = []
                 for stmt in stream:
                     for filter_ in self.stmtprocess:
                         filter_.process(self, stmt)
                     ret.append(stmt)
                 return ret
-            stream = _run(stream)
+            stream = _run1(stream)
 
         if self.postprocess:
-            def _run(stream):
+
+            def _run2(stream):
                 for stmt in stream:
                     stmt.tokens = list(self._flatten(stmt.tokens))
                     for filter_ in self.postprocess:
                         stmt = filter_.process(self, stmt)
                     yield stmt
-            stream = _run(stream)
+            stream = _run2(stream)
 
         return stream
-
