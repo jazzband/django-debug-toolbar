@@ -3,7 +3,6 @@
 """This module contains classes representing syntactical elements of SQL."""
 
 import re
-import types
 
 from debug_toolbar.utils.sqlparse import tokens as T
 
@@ -16,14 +15,15 @@ class Token(object):
     the type of the token.
     """
 
-    __slots__ = ('value', 'ttype',)
+    __slots__ = ('value', 'ttype', 'parent')
 
     def __init__(self, ttype, value):
         self.value = value
         self.ttype = ttype
+        self.parent = None
 
     def __str__(self):
-        return unicode(self).encode('latin-1')
+        return unicode(self).encode('utf-8')
 
     def __repr__(self):
         short = self._get_repr_value()
@@ -43,7 +43,7 @@ class Token(object):
     def _get_repr_value(self):
         raw = unicode(self)
         if len(raw) > 7:
-            short = raw[:6]+u'...'
+            short = raw[:6] + u'...'
         else:
             short = raw
         return re.sub('\s+', ' ', short)
@@ -59,12 +59,12 @@ class Token(object):
         type.
         *values* is a list of possible values for this token. The values
         are OR'ed together so if only one of the values matches ``True``
-        is returned. Except for keyword tokens the comparsion is
+        is returned. Except for keyword tokens the comparison is
         case-sensitive. For convenience it's ok to pass in a single string.
         If *regex* is ``True`` (default is ``False``) the given values are
         treated as regular expressions.
         """
-        type_matched = self.ttype in ttype
+        type_matched = self.ttype is ttype
         if not type_matched or values is None:
             return type_matched
         if isinstance(values, basestring):
@@ -79,7 +79,7 @@ class Token(object):
                     return True
             return False
         else:
-            if self.ttype is T.Keyword:
+            if self.ttype in T.Keyword:
                 values = set([v.upper() for v in values])
                 return self.value.upper() in values
             else:
@@ -92,6 +92,32 @@ class Token(object):
     def is_whitespace(self):
         """Return ``True`` if this token is a whitespace token."""
         return self.ttype and self.ttype in T.Whitespace
+
+    def within(self, group_cls):
+        """Returns ``True`` if this token is within *group_cls*.
+
+        Use this method for example to check if an identifier is within
+        a function: ``t.within(sql.Function)``.
+        """
+        parent = self.parent
+        while parent:
+            if isinstance(parent, group_cls):
+                return True
+            parent = parent.parent
+        return False
+
+    def is_child_of(self, other):
+        """Returns ``True`` if this token is a direct child of *other*."""
+        return self.parent == other
+
+    def has_ancestor(self, other):
+        """Returns ``True`` if *other* is in this tokens ancestry."""
+        parent = self.parent
+        while parent:
+            if parent == other:
+                return True
+            parent = parent.parent
+        return False
 
 
 class TokenList(Token):
@@ -113,24 +139,24 @@ class TokenList(Token):
         return ''.join(unicode(x) for x in self.flatten())
 
     def __str__(self):
-        return unicode(self).encode('latin-1')
+        return unicode(self).encode('utf-8')
 
     def _get_repr_name(self):
         return self.__class__.__name__
 
-    ## def _pprint_tree(self, max_depth=None, depth=0):
-    ##     """Pretty-print the object tree."""
-    ##     indent = ' '*(depth*2)
-    ##     for token in self.tokens:
-    ##         if token.is_group():
-    ##             pre = ' | '
-    ##         else:
-    ##             pre = ' | '
-    ##         print '%s%s%s \'%s\'' % (indent, pre, token._get_repr_name(),
-    ##                                  token._get_repr_value())
-    ##         if (token.is_group() and max_depth is not None
-    ##             and depth < max_depth):
-    ##             token._pprint_tree(max_depth, depth+1)
+    def _pprint_tree(self, max_depth=None, depth=0):
+        """Pretty-print the object tree."""
+        indent = ' '*(depth*2)
+        for idx, token in enumerate(self.tokens):
+            if token.is_group():
+                pre = ' +-'
+            else:
+                pre = ' | '
+            print '%s%s%d %s \'%s\'' % (indent, pre, idx,
+                                        token._get_repr_name(),
+                                        token._get_repr_value())
+            if (token.is_group() and (max_depth is None or depth < max_depth)):
+                token._pprint_tree(max_depth, depth+1)
 
     def flatten(self):
         """Generator yielding ungrouped tokens.
@@ -149,6 +175,10 @@ class TokenList(Token):
 
     def get_sublists(self):
         return [x for x in self.tokens if isinstance(x, TokenList)]
+
+    @property
+    def _groupable_tokens(self):
+        return self.tokens
 
     def token_first(self, ignore_whitespace=True):
         """Returns the first child token.
@@ -190,7 +220,7 @@ class TokenList(Token):
 
     def token_next_match(self, idx, ttype, value, regex=False):
         """Returns next token where it's ``match`` method returns ``True``."""
-        if type(idx) != types.IntType:
+        if not isinstance(idx, int):
             idx = self.token_index(idx)
         for token in self.tokens[idx:]:
             if token.match(ttype, value, regex):
@@ -202,8 +232,8 @@ class TokenList(Token):
             passed = False
             for func in funcs:
                 if func(token):
-                   passed = True
-                   break
+                    passed = True
+                    break
             if not passed:
                 return token
         return None
@@ -241,7 +271,7 @@ class TokenList(Token):
             return None
         if not isinstance(idx, int):
             idx = self.token_index(idx)
-        while idx < len(self.tokens)-1:
+        while idx < len(self.tokens) - 1:
             idx += 1
             if self.tokens[idx].is_whitespace() and skip_ws:
                 continue
@@ -257,18 +287,27 @@ class TokenList(Token):
         If *exclude_end* is ``True`` (default is ``False``) the end token
         is included too.
         """
+        # FIXME(andi): rename exclude_end to inlcude_end
         if exclude_end:
             offset = 0
         else:
             offset = 1
-        return self.tokens[self.token_index(start):self.token_index(end)+offset]
+        end_idx = self.token_index(end) + offset
+        start_idx = self.token_index(start)
+        return self.tokens[start_idx:end_idx]
 
-    def group_tokens(self, grp_cls, tokens):
+    def group_tokens(self, grp_cls, tokens, ignore_ws=False):
         """Replace tokens by an instance of *grp_cls*."""
         idx = self.token_index(tokens[0])
+        if ignore_ws:
+            while tokens and tokens[-1].is_whitespace():
+                tokens = tokens[:-1]
         for t in tokens:
             self.tokens.remove(t)
         grp = grp_cls(tokens)
+        for token in tokens:
+            token.parent = grp
+        grp.parent = self
         self.tokens.insert(idx, grp)
         return grp
 
@@ -290,7 +329,11 @@ class Statement(TokenList):
         isn't a DML or DDL keyword "UNKNOWN" is returned.
         """
         first_token = self.token_first()
-        if first_token.ttype in (T.Keyword.DML, T.Keyword.DDL):
+        if first_token is None:
+            # An "empty" statement that either has not tokens at all
+            # or only whitespace tokens.
+            return 'UNKNOWN'
+        elif first_token.ttype in (T.Keyword.DML, T.Keyword.DDL):
             return first_token.value.upper()
         else:
             return 'UNKNOWN'
@@ -397,26 +440,35 @@ class Parenthesis(TokenList):
     """Tokens between parenthesis."""
     __slots__ = ('value', 'ttype', 'tokens')
 
+    @property
+    def _groupable_tokens(self):
+        return self.tokens[1:-1]
+
 
 class Assignment(TokenList):
     """An assignment like 'var := val;'"""
     __slots__ = ('value', 'ttype', 'tokens')
 
+
 class If(TokenList):
     """An 'if' clause with possible 'else if' or 'else' parts."""
     __slots__ = ('value', 'ttype', 'tokens')
+
 
 class For(TokenList):
     """A 'FOR' loop."""
     __slots__ = ('value', 'ttype', 'tokens')
 
-class Comparsion(TokenList):
-    """A comparsion used for example in WHERE clauses."""
+
+class Comparison(TokenList):
+    """A comparison used for example in WHERE clauses."""
     __slots__ = ('value', 'ttype', 'tokens')
+
 
 class Comment(TokenList):
     """A comment."""
     __slots__ = ('value', 'ttype', 'tokens')
+
 
 class Where(TokenList):
     """A WHERE clause."""
@@ -434,9 +486,12 @@ class Case(TokenList):
         If an ELSE exists condition is None.
         """
         ret = []
-        in_condition = in_value = False
+        in_value = False
+        in_condition = True
         for token in self.tokens:
-            if token.match(T.Keyword, 'WHEN'):
+            if token.match(T.Keyword, 'CASE'):
+                continue
+            elif token.match(T.Keyword, 'WHEN'):
                 ret.append(([], []))
                 in_condition = True
                 in_value = False
@@ -450,8 +505,25 @@ class Case(TokenList):
             elif token.match(T.Keyword, 'END'):
                 in_condition = False
                 in_value = False
+            if (in_condition or in_value) and not ret:
+                # First condition withou preceding WHEN
+                ret.append(([], []))
             if in_condition:
                 ret[-1][0].append(token)
             elif in_value:
                 ret[-1][1].append(token)
         return ret
+
+
+class Function(TokenList):
+    """A function or procedure call."""
+
+    __slots__ = ('value', 'ttype', 'tokens')
+
+    def get_parameters(self):
+        """Return a list of parameters."""
+        parenthesis = self.tokens[-1]
+        for t in parenthesis.tokens:
+            if isinstance(t, IdentifierList):
+                return t.get_identifiers()
+        return []
