@@ -55,23 +55,25 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_show_toolbar_DEBUG(self):
         request = self.request
         
+        request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
-        with Settings(DEBUG=True):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             self.assertTrue(middleware._show_toolbar(request))
 
-        with Settings(DEBUG=False):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=False):
             self.assertFalse(middleware._show_toolbar(request))
 
     def test_show_toolbar_TEST(self):
         request = self.request
         
+        request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
-        with Settings(TEST=True, DEBUG=True):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], TEST=True, DEBUG=True):
             self.assertFalse(middleware._show_toolbar(request))
 
-        with Settings(TEST=False, DEBUG=True):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], TEST=False, DEBUG=True):
             self.assertTrue(middleware._show_toolbar(request))
 
     def test_show_toolbar_INTERNAL_IPS(self):
@@ -80,10 +82,10 @@ class DebugToolbarTestCase(BaseTestCase):
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
-        with Settings(INTERNAL_IPS=['127.0.0.1']):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             self.assertTrue(middleware._show_toolbar(request))
 
-        with Settings(INTERNAL_IPS=[]):
+        with Settings(INTERNAL_IPS=[], DEBUG=True):
             self.assertFalse(middleware._show_toolbar(request))
 
     def test_request_urlconf_string(self):
@@ -93,7 +95,7 @@ class DebugToolbarTestCase(BaseTestCase):
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
-        with Settings(DEBUG=True):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             
             self.assertFalse(isinstance(request.urlconf, basestring))
@@ -109,7 +111,7 @@ class DebugToolbarTestCase(BaseTestCase):
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
-        with Settings(DEBUG=True):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             request.urlconf = 'debug_toolbar.urls'
             middleware.process_request(request)
@@ -127,7 +129,7 @@ class DebugToolbarTestCase(BaseTestCase):
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
-        with Settings(DEBUG=True):
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             
             self.assertFalse(isinstance(request.urlconf, basestring))
