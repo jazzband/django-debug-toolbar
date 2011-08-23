@@ -11,16 +11,51 @@ from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info
 from debug_toolbar.utils.compat.db import connections
+
+from threading import local
+
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
                             .get('SQL_WARNING_THRESHOLD', 500)
 
-class CursorWrapper(object):
+class SQLQueryTriggered(Exception):
+    """Thrown when template panel triggers a query"""
+    pass
+
+class ThreadLocalState(local):
+    def __init__(self):
+        self.enabled = True
+
+    @property
+    def Wrapper(self):
+        return NormalCursorWrapper if self.enabled else ExceptionCursorWrapper
+
+    def recording(self, v):
+        self.enabled = v
+
+state = ThreadLocalState()
+recording = state.recording # export
+
+def CursorWrapper(*args, **kwds):  # behave like a class
+    return state.Wrapper(*args, **kwds)
+
+class ExceptionCursorWrapper(object):
+    """
+    Wraps a cursor and raises an exception on any operation.
+    Used in Templates panel.
+    """
+    def __init__(self, cursor, db, logger):
+        pass
+
+    def __getattr__(self, attr):
+        raise SQLQueryTriggered()
+
+class NormalCursorWrapper(object):
     """
     Wraps a cursor and logs queries.
     """
-    
+
     def __init__(self, cursor, db, logger):
         self.cursor = cursor
         # Instance of a BaseDatabaseWrapper subclass

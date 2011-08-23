@@ -9,8 +9,9 @@ from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet
 from debug_toolbar.panels import DebugPanel
+from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 
-from sql import SQLDebugPanel, SQLQueryTriggered
+import sql # just trigger BaseDatabaseWrapper replacement
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
@@ -77,16 +78,16 @@ class TemplateDebugPanel(DebugPanel):
                         temp_layer[key] = '<<queryset of %s>>' % model_name
                     else:
                         try:
-                            SQLDebugPanel.recording(False)
+                            recording(False)
                             pformat(value)  # this MAY trigger a db query
                         except SQLQueryTriggered:
                             temp_layer[key] = '<<triggers database query>>'
                         else:
                             temp_layer[key] = value
                         finally:
-                            SQLDebugPanel.recording(True)
+                            recording(True)
             try:
-                context_list.append(pformat(temp_layer)) # this may hit database
+                context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
                 pass
         kwargs['context'] = context_list
