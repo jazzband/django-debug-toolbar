@@ -56,7 +56,7 @@ class RequestVarsDebugPanel(DebugPanel):
 
         if hasattr(self.request, 'session'):
             context.update({
-                'session': [(k, self.request.session.get(k)) for k in self.request.session.iterkeys()]
+                'session': [(unicode(k), unicode(self.request.session.get(k))) for k in self.request.session.iterkeys()]
             })
 
         return render_to_string('debug_toolbar/panels/request_vars.html', context)
