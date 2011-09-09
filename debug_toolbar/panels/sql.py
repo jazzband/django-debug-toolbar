@@ -190,11 +190,15 @@ class SQLDebugPanel(DebugPanel):
                 query['start_offset'] = width_ratio_tally
                 query['end_offset'] = query['width_ratio'] + query['start_offset']
                 width_ratio_tally += query['width_ratio']
-            
+                
                 stacktrace = []
                 for frame in query['stacktrace']:
                     params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
-                    stacktrace.append(u'<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>'.format(*params))
+                    try:
+                        stacktrace.append(u'<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>'.format(*params))
+                    except IndexError:
+                        # This frame doesn't have the expected format, so skip it and move on to the next one
+                        continue
                 query['stacktrace'] = mark_safe('\n'.join(stacktrace))
                 i += 1
 
