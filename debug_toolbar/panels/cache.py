@@ -102,6 +102,7 @@ class CacheDebugPanel(DebugPanel):
             'cache': self.cache,
         }
         request.debug_toolbar.stats['cache'] = self.stats
+        return response
 
     def content(self):
         context = self.context.copy()

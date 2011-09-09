@@ -211,6 +211,7 @@ class SQLDebugPanel(DebugPanel):
             'sql_time': self._sql_time,
         }
         request.debug_toolbar.stats['sql'] = getattr(self, 'stats', None)
+        return response
 
     def content(self):
         context = self.context.copy()
