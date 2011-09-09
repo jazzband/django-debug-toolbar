@@ -49,7 +49,8 @@ class DebugToolbarTestCase(BaseTestCase):
     urls = 'tests.urls'
     
     def test_middleware(self):
-        resp = self.client.get('/execute_sql/')
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+            resp = self.client.get('/execute_sql/')
         self.assertEquals(resp.status_code, 200)
 
     def test_show_toolbar_DEBUG(self):
