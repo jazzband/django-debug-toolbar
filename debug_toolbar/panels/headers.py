@@ -46,6 +46,9 @@ class HeaderDebugPanel(DebugPanel):
             [(k, request.META[k]) for k in self.header_filter if k in request.META]
         )
 
+    def process_response(self, request, response):
+        request.debug_toolbar.stats['headers'] = self.headers
+
     def content(self):
         context = self.context.copy()
         context.update({
