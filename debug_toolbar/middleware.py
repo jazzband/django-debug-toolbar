@@ -5,7 +5,6 @@ import imp
 import thread
 
 from django.conf import settings
-from django.conf.urls.defaults import include, patterns
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
@@ -97,6 +96,7 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_request(request)
             self.__class__.debug_toolbars[thread.get_ident()] = toolbar
+            request.debug_toolbar = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
@@ -124,13 +124,14 @@ class DebugToolbarMiddleware(object):
                 )
                 response.cookies = cookies
         if 'gzip' not in response.get('Content-Encoding', '') and \
-           response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
+            response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
+            toolbar.stats = {}
             for panel in toolbar.panels:
-                panel.process_response(request, response)
+                    panel.process_response(request, response)
             response.content = replace_insensitive(
-                smart_unicode(response.content),
-                self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
+                    smart_unicode(response.content),
+                    self.tag,
+                    smart_unicode(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]

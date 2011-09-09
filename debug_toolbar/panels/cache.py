@@ -95,11 +95,15 @@ class CacheDebugPanel(DebugPanel):
     def url(self):
         return ''
 
-    def content(self):
-        context = self.context.copy()
-        context.update({
+    def process_response(self, request, response):
+        self.stats = {
             'cache_calls': len(self.cache.calls),
             'cache_time': self.cache.total_time,
             'cache': self.cache,
-        })
+        }
+        request.debug_toolbar.stats['cache'] = self.stats
+
+    def content(self):
+        context = self.context.copy()
+        context.update(self.stats)
         return render_to_string('debug_toolbar/panels/cache.html', context)

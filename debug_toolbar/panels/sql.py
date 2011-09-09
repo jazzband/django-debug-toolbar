@@ -23,7 +23,7 @@ def cursor(func, self):
     if not djdt:
         return result
     logger = djdt.get_panel(SQLDebugPanel)
-    
+
     return CursorWrapper(result, self, logger=logger)
 
 def get_isolation_level_display(engine, level):
@@ -38,7 +38,7 @@ def get_isolation_level_display(engine, level):
         }
     else:
         raise ValueError(engine)
-    
+
     return choices.get(level)
 
 def get_transaction_status_display(engine, level):
@@ -53,7 +53,7 @@ def get_transaction_status_display(engine, level):
         }
     else:
         raise ValueError(engine)
-    
+
     return choices.get(level)
 
 class SQLDebugPanel(DebugPanel):
@@ -73,7 +73,7 @@ class SQLDebugPanel(DebugPanel):
         self._databases = {}
         self._transaction_status = {}
         self._transaction_ids = {}
-    
+
     def get_transaction_id(self, alias):
         conn = connections[alias].connection
         if not conn:
@@ -97,9 +97,9 @@ class SQLDebugPanel(DebugPanel):
                 self._transaction_ids[alias] = uuid.uuid4().hex
             else:
                 self._transaction_ids[alias] = None
-        
+
         return self._transaction_ids[alias]
-    
+
     def record(self, alias, **kwargs):
         self._queries.append((alias, kwargs))
         if alias not in self._databases:
@@ -126,7 +126,7 @@ class SQLDebugPanel(DebugPanel):
 
     def title(self):
         count = len(self._databases)
-        
+
         return __('SQL Queries from %(count)d connection', 'SQL Queries from %(count)d connections', count) % dict(
             count=count,
         )
@@ -134,7 +134,7 @@ class SQLDebugPanel(DebugPanel):
     def url(self):
         return ''
 
-    def content(self):
+    def process_response(self, request, response):
         if self._queries:
             width_ratio_tally = 0
             colors = [
@@ -157,14 +157,14 @@ class SQLDebugPanel(DebugPanel):
                         nn = 0
                     rgb[nn] = nc
                 db['rgb_color'] = rgb
-        
+
             trans_ids = {}
             trans_id = None
             i = 0
             for alias, query in self._queries:
                 trans_id = query.get('trans_id')
                 last_trans_id = trans_ids.get(alias)
-                
+
                 if trans_id != last_trans_id:
                     if last_trans_id:
                         self._queries[i-1][1]['ends_trans'] = True
@@ -173,7 +173,7 @@ class SQLDebugPanel(DebugPanel):
                         query['starts_trans'] = True
                 if trans_id:
                     query['in_trans'] = True
-                
+
                 query['alias'] = alias
                 if 'iso_level' in query:
                     query['iso_level'] = get_isolation_level_display(query['engine'], query['iso_level'])
@@ -190,7 +190,7 @@ class SQLDebugPanel(DebugPanel):
                 query['start_offset'] = width_ratio_tally
                 query['end_offset'] = query['width_ratio'] + query['start_offset']
                 width_ratio_tally += query['width_ratio']
-                
+
                 stacktrace = []
                 for frame in query['stacktrace']:
                     params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
@@ -204,14 +204,17 @@ class SQLDebugPanel(DebugPanel):
 
             if trans_id:
                 self._queries[i-1][1]['ends_trans'] = True
-        
-        context = self.context.copy()
-        context.update({
+
+        self.stats = {
             'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
             'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
-        })
+        }
+        request.debug_toolbar.stats['sql'] = getattr(self, 'stats', None)
 
+    def content(self):
+        context = self.context.copy()
+        context.update(self.stats)
         return render_to_string('debug_toolbar/panels/sql.html', context)
 
 class BoldKeywordFilter(sqlparse.filters.Filter):
