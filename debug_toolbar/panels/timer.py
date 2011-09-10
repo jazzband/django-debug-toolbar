@@ -27,32 +27,9 @@ class TimerDebugPanel(DebugPanel):
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
 
     def process_response(self, request, response):
-        self.total_time = (time.time() - self._start_time) * 1000
+        total_time = (time.time() - self._start_time) * 1000
         if self.has_resource:
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
-
-    def nav_title(self):
-        return _('Time')
-
-    def nav_subtitle(self):
-        # TODO l10n
-        if self.has_resource:
-            utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
-            stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
-            return 'CPU: %0.2fms (%0.2fms)' % ((utime + stime) * 1000.0, self.total_time)
-        else:
-            return 'TOTAL: %0.2fms' % (self.total_time)
-
-    def title(self):
-        return _('Resource Usage')
-
-    def url(self):
-        return ''
-
-    def _elapsed_ru(self, name):
-        return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
-
-    def content(self):
 
         utime = 1000 * self._elapsed_ru('ru_utime')
         stime = 1000 * self._elapsed_ru('ru_stime')
@@ -60,7 +37,6 @@ class TimerDebugPanel(DebugPanel):
         ivcsw = self._elapsed_ru('ru_nivcsw')
         minflt = self._elapsed_ru('ru_minflt')
         majflt = self._elapsed_ru('ru_majflt')
-
 # these are documented as not meaningful under Linux.  If you're running BSD
 # feel free to enable them, and add any others that I hadn't gotten to before
 # I noticed that I was getting nothing but zeroes and that the docs agreed. :-(
@@ -73,13 +49,45 @@ class TimerDebugPanel(DebugPanel):
 #        urss = self._end_rusage.ru_idrss
 #        usrss = self._end_rusage.ru_isrss
 
+        self.stats = {
+                'total_time': total_time,
+                'utime': utime,
+                'stime': stime,
+                'vcsw': vcsw,
+                'ivcsw': ivcsw,
+                'minflt': minflt,
+                'majflt': majflt,
+                }
+
+    def nav_title(self):
+        return _('Time')
+
+    def nav_subtitle(self):
+        # TODO l10n
+        if self.has_resource:
+            utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
+            stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
+            return 'CPU: %0.2fms (%0.2fms)' % ((utime + stime) * 1000.0, self.stats['total_time'])
+        else:
+            return 'TOTAL: %0.2fms' % (self.stats[total_time])
+
+    def title(self):
+        return _('Resource Usage')
+
+    def url(self):
+        return ''
+
+    def _elapsed_ru(self, name):
+        return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
+
+    def content(self):
         # TODO l10n on values
         rows = (
-            (_('User CPU time'), '%0.3f msec' % utime),
-            (_('System CPU time'), '%0.3f msec' % stime),
-            (_('Total CPU time'), '%0.3f msec' % (utime + stime)),
-            (_('Elapsed time'), '%0.3f msec' % self.total_time),
-            (_('Context switches'), '%d voluntary, %d involuntary' % (vcsw, ivcsw)),
+            (_('User CPU time'), '%0.3f msec' % self.stats['utime']),
+            (_('System CPU time'), '%0.3f msec' % self.stats['stime']),
+            (_('Total CPU time'), '%0.3f msec' % (self.stats['utime'] + self.stats['stime'])),
+            (_('Elapsed time'), '%0.3f msec' % self.stats['total_time']),
+            (_('Context switches'), '%d voluntary, %d involuntary' % (self.stats['vcsw'], self.stats['ivcsw'])),
 #            ('Memory use', '%d max RSS, %d shared, %d unshared' % (rss, srss, urss + usrss)),
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (minflt, majflt)),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (blkin, blkout, swap)),
