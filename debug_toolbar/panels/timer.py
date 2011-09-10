@@ -57,6 +57,13 @@ class TimerDebugPanel(DebugPanel):
                 'ivcsw': ivcsw,
                 'minflt': minflt,
                 'majflt': majflt,
+#                'blkin': blkin,
+#                'blkout': blkout,
+#                'swap': swap,
+#                'rss': rss,
+#                'urss': urss,
+#                'srss': srss,
+#                'usrss': usrss,
                 }
 
     def nav_title(self):
@@ -88,9 +95,10 @@ class TimerDebugPanel(DebugPanel):
             (_('Total CPU time'), '%0.3f msec' % (self.stats['utime'] + self.stats['stime'])),
             (_('Elapsed time'), '%0.3f msec' % self.stats['total_time']),
             (_('Context switches'), '%d voluntary, %d involuntary' % (self.stats['vcsw'], self.stats['ivcsw'])),
-#            ('Memory use', '%d max RSS, %d shared, %d unshared' % (rss, srss, urss + usrss)),
-#            ('Page faults', '%d no i/o, %d requiring i/o' % (minflt, majflt)),
-#            ('Disk operations', '%d in, %d out, %d swapout' % (blkin, blkout, swap)),
+#            ('Memory use', '%d max RSS, %d shared, %d unshared' % (self.stats['rss'], self.stats.['srss'],
+#                                                                   self.stats['urss'] + self.stats['usrss'])),
+#            ('Page faults', '%d no i/o, %d requiring i/o' % (self.stats['minflt'], self.stats['majflt'])),
+#            ('Disk operations', '%d in, %d out, %d swapout' % (self.stats['blkin'], self.stats['blkout'], self.stats['swap'])),
         )
 
         context = self.context.copy()
