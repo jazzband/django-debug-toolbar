@@ -23,11 +23,11 @@ class VersionDebugPanel(DebugPanel):
 
     def url(self):
         return ''
-    
+
     def title(self):
         return _('Versions')
 
-    def content(self):
+    def process_response(self, request, response):
         versions = {}
         versions['Python'] = '%d.%d.%d' % sys.version_info[:3]
         for app in settings.INSTALLED_APPS + ['django']:
@@ -49,11 +49,15 @@ class VersionDebugPanel(DebugPanel):
             if isinstance(version, (list, tuple)):
                 version = '.'.join(str(o) for o in version)
             versions[name] = version
+        self.stats = {
+                'versions': versions,
+                'paths': sys.path
+                }
+        request.debug_toolbar.stats['versions'] = self.stats['versions']
+        request.debug_toolbar.stats['paths'] = self.stats['paths']
+        return response
 
+    def content(self):
         context = self.context.copy()
-        context.update({
-            'versions': versions,
-            'paths': sys.path,
-        })
-
+        context.update(self.stats)
         return render_to_string('debug_toolbar/panels/versions.html', context)
