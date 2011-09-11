@@ -5,7 +5,6 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-import debug_toolbar
 from debug_toolbar.panels import DebugPanel
 
 
