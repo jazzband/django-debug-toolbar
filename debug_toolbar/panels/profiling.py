@@ -18,6 +18,7 @@ from pstats import Stats
 from colorsys import hsv_to_rgb
 import os
 
+
 class DjangoDebugToolbarStats(Stats):
     __root = None
 
@@ -29,8 +30,10 @@ class DjangoDebugToolbarStats(Stats):
                     break
         return self.__root
 
+
 class FunctionCall(object):
-    def __init__(self, statobj, func, depth=0, stats=None, id=0, parent_ids=[], hsv=(0,0.5,1)):
+    def __init__(self, statobj, func, depth=0, stats=None,
+                 id=0, parent_ids=[], hsv=(0,0.5,1)):
         self.statobj = statobj
         self.func = func
         if stats:
@@ -50,7 +53,7 @@ class FunctionCall(object):
         r,g,b = hsv_to_rgb(*self.hsv)
         return 'rgb(%f%%,%f%%,%f%%)' %(r*100, g*100, b*100)
 
-    def func_std_string(self): # match what old profile produced
+    def func_std_string(self):  # match what old profile produced
         func_name = self.func
         if func_name[:2] == ('~', 0):
             # special case for built-in functions
@@ -63,7 +66,7 @@ class FunctionCall(object):
             file_name, line_num, method = self.func
             idx = file_name.find('/site-packages/')
             if idx > -1:
-                file_name=file_name[idx+14:]
+                file_name = file_name[idx+14:]
 
             file_path, file_name = file_name.rsplit(os.sep, 1)
 
@@ -76,7 +79,7 @@ class FunctionCall(object):
 
     def subfuncs(self):
         i=0
-        h,s,v = self.hsv
+        h, s, v = self.hsv
         count = len(self.statobj.all_callees[self.func])
         for func, stats in self.statobj.all_callees[self.func].iteritems():
             i += 1
