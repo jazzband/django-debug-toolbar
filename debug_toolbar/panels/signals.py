@@ -14,12 +14,13 @@ try:
 except ImportError:
     connection_created = None
 
+from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 class SignalDebugPanel(DebugPanel):
     name = "Signals"
     has_content = True
-
+    
     SIGNALS = {
         'request_started': request_started,
         'request_finished': request_finished,
@@ -34,16 +35,16 @@ class SignalDebugPanel(DebugPanel):
         'post_delete': post_delete,
         'post_syncdb': post_syncdb,
     }
-
+    
     def nav_title(self):
         return _("Signals")
-
+    
     def title(self):
         return _("Signals")
-
+    
     def url(self):
         return ''
-
+    
     def signals(self):
         signals = self.SIGNALS.copy()
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
@@ -57,8 +58,8 @@ class SignalDebugPanel(DebugPanel):
             signals[parts[-1]] = getattr(sys.modules[path], parts[-1])
         return signals
     signals = property(signals)
-
-    def content(self):
+    
+    def process_response(self, request, response):
         signals = []
         keys = self.signals.keys()
         keys.sort()
@@ -80,8 +81,12 @@ class SignalDebugPanel(DebugPanel):
                     text = "function %s" % receiver.__name__
                 receivers.append(text)
             signals.append((name, signal, receivers))
-
+        
+        self.stats = {'signals': signals}
+        toolbar = DebugToolbarMiddleware.get_current()
+        toolbar.stats['signals'] = self.stats
+    
+    def content(self):
         context = self.context.copy()
-        context.update({'signals': signals})
-
+        context.update(self.stats)
         return render_to_string('debug_toolbar/panels/signals.html', context)
