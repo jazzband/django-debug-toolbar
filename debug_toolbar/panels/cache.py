@@ -13,7 +13,7 @@ class CacheStatTracker(BaseCache):
     def __init__(self, cache):
         self.cache = cache
         self.reset()
-
+    
     def reset(self):
         self.calls = []
         self.hits = 0
@@ -23,11 +23,11 @@ class CacheStatTracker(BaseCache):
         self.get_many = 0
         self.deletes = 0
         self.total_time = 0
-
+    
     def _get_func_info(self):
         stack = inspect.stack()[2]
         return (stack[1], stack[2], stack[3], stack[4])
-
+    
     def get(self, key, default=None):
         t = time.time()
         value = self.cache.get(key, default)
@@ -40,7 +40,7 @@ class CacheStatTracker(BaseCache):
         self.gets += 1
         self.calls.append((this_time, 'get', (key,), self._get_func_info()))
         return value
-
+    
     def set(self, key, value, timeout=None):
         t = time.time()
         self.cache.set(key, value, timeout)
@@ -48,7 +48,7 @@ class CacheStatTracker(BaseCache):
         self.total_time += this_time * 1000
         self.sets += 1
         self.calls.append((this_time, 'set', (key, value, timeout), self._get_func_info()))
-
+    
     def delete(self, key):
         t = time.time()
         self.cache.delete(key)
@@ -56,7 +56,7 @@ class CacheStatTracker(BaseCache):
         self.total_time += this_time * 1000
         self.deletes += 1
         self.calls.append((this_time, 'delete', (key,), self._get_func_info()))
-
+    
     def get_many(self, keys):
         t = time.time()
         results = self.cache.get_many(keys)
@@ -76,7 +76,7 @@ class CacheDebugPanel(DebugPanel):
     """
     name = 'Cache'
     has_content = True
-
+    
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         # This is hackish but to prevent threading issues is somewhat needed
@@ -86,16 +86,16 @@ class CacheDebugPanel(DebugPanel):
         else:
             self.cache = CacheStatTracker(cache.cache)
             cache.cache = self.cache
-
+    
     def nav_title(self):
         return _('Cache: %.2fms') % self.cache.total_time
-
+    
     def title(self):
         return _('Cache Usage')
-
+    
     def url(self):
         return ''
-
+    
     def process_response(self, request, response):
         self.stats = {
             'cache_calls': len(self.cache.calls),
@@ -104,7 +104,7 @@ class CacheDebugPanel(DebugPanel):
         }
         toolbar = DebugToolbarMiddleware.get_current()
         toolbar.stats['cache'] = self.stats
-
+    
     def content(self):
         context = self.context.copy()
         context.update(self.stats)
