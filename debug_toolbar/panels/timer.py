@@ -5,6 +5,7 @@ except ImportError:
 import time
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 class TimerDebugPanel(DebugPanel):
@@ -50,21 +51,24 @@ class TimerDebugPanel(DebugPanel):
 #        usrss = self._end_rusage.ru_isrss
 
         self.stats = {
-                'total_time': total_time,
-                'utime': utime,
-                'stime': stime,
-                'vcsw': vcsw,
-                'ivcsw': ivcsw,
-                'minflt': minflt,
-                'majflt': majflt,
-#                'blkin': blkin,
-#                'blkout': blkout,
-#                'swap': swap,
-#                'rss': rss,
-#                'urss': urss,
-#                'srss': srss,
-#                'usrss': usrss,
-                }
+            'total_time': total_time,
+            'utime': utime,
+            'stime': stime,
+            'vcsw': vcsw,
+            'ivcsw': ivcsw,
+            'minflt': minflt,
+            'majflt': majflt,
+#            'blkin': blkin,
+#            'blkout': blkout,
+#            'swap': swap,
+#            'rss': rss,
+#            'urss': urss,
+#            'srss': srss,
+#            'usrss': usrss,
+        }
+        
+        toolbar = DebugToolbarMiddleware.get_current()
+        toolbar.stats['timer'] = self.stats
 
     def nav_title(self):
         return _('Time')
