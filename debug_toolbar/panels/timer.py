@@ -21,17 +21,17 @@ class TimerDebugPanel(DebugPanel):
     else:
         has_content = True
         has_resource = True
-
+    
     def process_request(self, request):
         self._start_time = time.time()
         if self.has_resource:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
-
+    
     def process_response(self, request, response):
         total_time = (time.time() - self._start_time) * 1000
         if self.has_resource:
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
-
+        
         utime = 1000 * self._elapsed_ru('ru_utime')
         stime = 1000 * self._elapsed_ru('ru_stime')
         vcsw = self._elapsed_ru('ru_nvcsw')
@@ -49,7 +49,7 @@ class TimerDebugPanel(DebugPanel):
 #        srss = self._end_rusage.ru_ixrss
 #        urss = self._end_rusage.ru_idrss
 #        usrss = self._end_rusage.ru_isrss
-
+        
         self.stats = {
             'total_time': total_time,
             'utime': utime,
@@ -69,10 +69,10 @@ class TimerDebugPanel(DebugPanel):
         
         toolbar = DebugToolbarMiddleware.get_current()
         toolbar.stats['timer'] = self.stats
-
+    
     def nav_title(self):
         return _('Time')
-
+    
     def nav_subtitle(self):
         # TODO l10n
         if self.has_resource:
@@ -81,16 +81,16 @@ class TimerDebugPanel(DebugPanel):
             return 'CPU: %0.2fms (%0.2fms)' % ((utime + stime) * 1000.0, self.stats['total_time'])
         else:
             return 'TOTAL: %0.2fms' % (self.stats[total_time])
-
+    
     def title(self):
         return _('Resource Usage')
-
+    
     def url(self):
         return ''
-
+    
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
-
+    
     def content(self):
         # TODO l10n on values
         rows = (
@@ -104,10 +104,10 @@ class TimerDebugPanel(DebugPanel):
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (self.stats['minflt'], self.stats['majflt'])),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (self.stats['blkin'], self.stats['blkout'], self.stats['swap'])),
         )
-
+        
         context = self.context.copy()
         context.update({
             'rows': rows,
         })
-
+        
         return render_to_string('debug_toolbar/panels/timer.html', context)

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 
@@ -49,13 +50,14 @@ class VersionDebugPanel(DebugPanel):
             if isinstance(version, (list, tuple)):
                 version = '.'.join(str(o) for o in version)
             versions[name] = version
+        
         self.stats = {
-                'versions': versions,
-                'paths': sys.path
-                }
-        request.debug_toolbar.stats['versions'] = self.stats['versions']
-        request.debug_toolbar.stats['paths'] = self.stats['paths']
-        return response
+            'versions': versions,
+            'paths': sys.path,
+        }
+        
+        toolbar = DebugToolbarMiddleware.get_current()
+        toolbar.stats['version'] = self.stats
 
     def content(self):
         context = self.context.copy()
