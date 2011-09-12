@@ -38,12 +38,15 @@ class Settings(object):
 class BaseTestCase(TestCase):
     def setUp(self):
         request = Dingus('request')
+        response = Dingus('response')
         toolbar = DebugToolbar(request)
 
         DebugToolbarMiddleware.debug_toolbars[thread.get_ident()] = toolbar
 
         self.request = request
+        self.response = response
         self.toolbar = toolbar
+        self.toolbar.stats = {}
 
 class DebugToolbarTestCase(BaseTestCase):
     urls = 'tests.urls'
@@ -144,6 +147,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_with_process_view(self):
         request = self.request
+        response = self.response
         
         def _test_view(request):
             return HttpResponse('')
@@ -152,15 +156,18 @@ class DebugToolbarTestCase(BaseTestCase):
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
             panel.process_view(request, _test_view, [], {})
+            panel.process_response(request, response)
             content = panel.content()
             self.assertTrue('tests.tests._test_view' in content, content)
 
     def test_without_process_view(self):
         request = self.request
+        response = self.response
 
         with Settings(DEBUG=True):
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
+            panel.process_response(request, response)
             content = panel.content()
             self.assertTrue('&lt;no view&gt;' in content, content)
 
