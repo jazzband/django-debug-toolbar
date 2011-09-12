@@ -5,6 +5,7 @@ from django.core import cache
 from django.core.cache.backends.base import BaseCache
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 class CacheStatTracker(BaseCache):
@@ -101,8 +102,8 @@ class CacheDebugPanel(DebugPanel):
             'cache_time': self.cache.total_time,
             'cache': self.cache,
         }
-        request.debug_toolbar.stats['cache'] = self.stats
-        return response
+        toolbar = DebugToolbarMiddleware.get_current()
+        toolbar.stats['cache'] = self.stats
 
     def content(self):
         context = self.context.copy()
