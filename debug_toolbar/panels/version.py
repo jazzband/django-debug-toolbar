@@ -15,19 +15,19 @@ class VersionDebugPanel(DebugPanel):
     """
     name = 'Version'
     has_content = True
-
+    
     def nav_title(self):
         return _('Versions')
-
+    
     def nav_subtitle(self):
         return 'Django %s' % django.get_version()
-
+    
     def url(self):
         return ''
-
+    
     def title(self):
         return _('Versions')
-
+    
     def process_response(self, request, response):
         versions = {}
         versions['Python'] = '%d.%d.%d' % sys.version_info[:3]
@@ -58,7 +58,7 @@ class VersionDebugPanel(DebugPanel):
         
         toolbar = DebugToolbarMiddleware.get_current()
         toolbar.stats['version'] = self.stats
-
+    
     def content(self):
         context = self.context.copy()
         context.update(self.stats)
