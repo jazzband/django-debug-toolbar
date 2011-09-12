@@ -210,8 +210,8 @@ class SQLDebugPanel(DebugPanel):
             'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
         }
-        request.debug_toolbar.stats['sql'] = getattr(self, 'stats', None)
-        return response
+        toolbar = DebugToolbarMiddleware.get_current()
+        toolbar.stats['sql'] = self.stats
 
     def content(self):
         context = self.context.copy()
