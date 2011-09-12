@@ -7,6 +7,7 @@ from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
+from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -40,15 +41,15 @@ class TemplateDebugPanel(DebugPanel):
     """
     name = 'Template'
     has_content = True
-
+    
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
         self.templates = []
         template_rendered.connect(self._store_template_info)
-
+    
     def _store_template_info(self, sender, **kwargs):
         context_data = kwargs['context']
-
+        
         context_list = []
         for context_layer in context_data.dicts:
             temp_layer = {}
@@ -74,22 +75,22 @@ class TemplateDebugPanel(DebugPanel):
                 pass
         kwargs['context'] = context_list
         self.templates.append(kwargs)
-
+    
     def nav_title(self):
         return _('Templates')
-
+    
     def title(self):
         num_templates = len([t for t in self.templates
             if not (t['template'].name and t['template'].name.startswith('debug_toolbar/'))])
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
-
+    
     def url(self):
         return ''
-
+    
     def process_request(self, request):
         self.request = request
-
-    def content(self):
+    
+    def process_response(self, request, response):
         context_processors = dict(
             [
                 ("%s.%s" % (k.__module__, k.__name__),
@@ -116,12 +117,17 @@ class TemplateDebugPanel(DebugPanel):
                 context_list = template_data.get('context', [])
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
-
-        context = self.context.copy()
-        context.update({
+        
+        self.stats = {
             'templates': template_context,
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
             'context_processors': context_processors,
-        })
-
+        }
+        
+        toolbar = DebugToolbarMiddleware.get_current()
+        toolbar.stats['template'] = self.stats
+    
+    def content(self):
+        context = self.context.copy()
+        context.update(self.stats)
         return render_to_string('debug_toolbar/panels/templates.html', context)

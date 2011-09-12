@@ -47,15 +47,13 @@ class HeaderDebugPanel(DebugPanel):
         self.headers = dict(
             [(k, request.META[k]) for k in self.header_filter if k in request.META]
         )
+    
+    def process_response(self, request, response):
         self.stats = {
             'headers': self.headers
         }
         toolbar = DebugToolbarMiddleware.get_current()
         toolbar.stats['headers'] = self.stats
-    
-    
-    def process_response(self, request, response):
-        request.debug_toolbar.stats['headers'] = self.headers
     
     def content(self):
         context = self.context.copy()
