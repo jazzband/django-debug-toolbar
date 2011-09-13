@@ -104,25 +104,26 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'tests.urls')
+            self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
+            self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_string_per_request(self):
         request = self.request
-
-        request.urlconf = 'tests.urls'
+        request.urlconf = 'debug_toolbar.urls'
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
 
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
-            request.urlconf = 'debug_toolbar.urls'
+            request.urlconf = 'tests.urls'
             middleware.process_request(request)
 
             self.assertFalse(isinstance(request.urlconf, basestring))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'debug_toolbar.urls')
+            self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
+            self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_module(self):
         request = self.request
@@ -138,7 +139,8 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
-            self.assertEquals(request.urlconf.urlpatterns[-1].urlconf_name.__name__, 'tests.urls')
+            self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
+            self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_view_resolving_success(self):
         request = self.request

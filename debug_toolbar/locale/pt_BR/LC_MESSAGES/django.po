@@ -1,0 +1,367 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Percy Pérez-Pinedo, 2009.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Django Debug Toolbar 0.8.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-22 08:58+0000\n"
+"PO-Revision-Date: 2011-01-22 08:58+0000\n"
+"Last-Translator: Eduardo Cereto Carvalho <eduardocereto@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: panels/cache.py:92
+#, python-format
+msgid "Cache: %.2fms"
+msgstr "Cache: %.2fms"
+
+#: panels/cache.py:95
+msgid "Cache Usage"
+msgstr "Uso do Cache"
+
+#: panels/headers.py:36 panels/headers.py:39
+msgid "HTTP Headers"
+msgstr "Cabeçalhos HTTP"
+
+#: panels/logger.py:56
+msgid "Logging"
+msgstr "Logs"
+
+#: panels/logger.py:63
+msgid "Log Messages"
+msgstr "Mensagens de Log"
+
+#: panels/request_vars.py:13 panels/request_vars.py:16
+msgid "Request Vars"
+msgstr "Variáveis do Request"
+
+#: panels/settings_vars.py:16
+msgid "Settings"
+msgstr "Configurações"
+
+#: panels/settings_vars.py:19
+#, python-format
+msgid "Settings from <code>%s</code>"
+msgstr "Configurações de <code>%s</code>"
+
+#: panels/signals.py:39 panels/signals.py:42
+msgid "Signals"
+msgstr "Sinais"
+
+#: panels/sql.py:146
+msgid "SQL"
+msgstr "SQL"
+
+#: panels/sql.py:160
+msgid "SQL Queries"
+msgstr "Queries SQL"
+
+#: panels/template.py:47
+msgid "Templates"
+msgstr "Templates"
+
+#: panels/template.py:52
+#, python-format
+msgid "Templates (%(num_templates)s rendered)"
+msgstr "Templates (%(num_templates)s renderizados)"
+
+#: panels/timer.py:35 templates/debug_toolbar/panels/cache.html:39
+#: templates/debug_toolbar/panels/logger.html:7
+#: templates/debug_toolbar/panels/sql.html:5
+#: templates/debug_toolbar/panels/sql_explain.html:11
+#: templates/debug_toolbar/panels/sql_profile.html:12
+#: templates/debug_toolbar/panels/sql_select.html:11
+msgid "Time"
+msgstr "Tempo"
+
+#: panels/timer.py:47
+msgid "Resource Usage"
+msgstr "Uso de Recursos"
+
+#: panels/timer.py:78
+msgid "User CPU time"
+msgstr "Tempo de CPU do usuário"
+
+#: panels/timer.py:79
+msgid "System CPU time"
+msgstr "Tempo de CPU do sistema"
+
+#: panels/timer.py:80
+msgid "Total CPU time"
+msgstr "Tempo de CPU total"
+
+#: panels/timer.py:81
+msgid "Elapsed time"
+msgstr "Tempo decorrido"
+
+#: panels/timer.py:82
+msgid "Context switches"
+msgstr "Alterações de contexto"
+
+#: panels/version.py:20 panels/version.py:29
+msgid "Versions"
+msgstr "Versões"
+
+#: templates/debug_toolbar/base.html:23
+msgid "Hide Toolbar"
+msgstr "Esconder Barra"
+
+#: templates/debug_toolbar/base.html:23
+msgid "Hide"
+msgstr "Esconder"
+
+#: templates/debug_toolbar/base.html:48
+msgid "Show Toolbar"
+msgstr "Mostrar Barra"
+
+#: templates/debug_toolbar/base.html:54
+msgid "Close"
+msgstr "Fechar"
+
+#: templates/debug_toolbar/redirect.html:7
+#: templates/debug_toolbar/panels/logger.html:9
+msgid "Location"
+msgstr "Localização"
+
+#: templates/debug_toolbar/redirect.html:9
+msgid ""
+"The Django Debug Toolbar has intercepted a redirect to the above URL for "
+"debug viewing purposes.  You can click the above link to continue with the "
+"redirect as normal.  If you'd like to disable this feature, set the "
+"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
+"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgstr ""
+"A Barra de Debug do Django interceptou um redirecionamento para a URL acima por "
+"propósito de debug. Você pode clicar no link acima para continuar com o "
+"redirecionamento normal. Se você gostaria de desabilitar essa funcionalidade, configure a "
+"chave <code></code> do dicionário "
+"<code>DEBUG_TOOLBAR_CONFIG</code> para <code>False</code>"
+
+#: templates/debug_toolbar/panels/cache.html:14
+msgid "Total Calls"
+msgstr "Total de Chamadas"
+
+#: templates/debug_toolbar/panels/cache.html:16
+msgid "Total Time"
+msgstr "Tempo Total"
+
+#: templates/debug_toolbar/panels/cache.html:18
+msgid "Hits"
+msgstr "Hits"
+
+#: templates/debug_toolbar/panels/cache.html:20
+msgid "Misses"
+msgstr "Misses"
+
+#: templates/debug_toolbar/panels/cache.html:35
+msgid "Breakdown"
+msgstr "Breakdown"
+
+#: templates/debug_toolbar/panels/cache.html:40
+msgid "Type"
+msgstr "Tipo"
+
+#: templates/debug_toolbar/panels/cache.html:41
+msgid "Parameters"
+msgstr "Parâmetros"
+
+#: templates/debug_toolbar/panels/cache.html:42
+msgid "Function"
+msgstr "Função"
+
+#: templates/debug_toolbar/panels/headers.html:5
+msgid "Key"
+msgstr "Chave"
+
+#: templates/debug_toolbar/panels/headers.html:6
+#: templates/debug_toolbar/panels/request_vars.html:37
+#: templates/debug_toolbar/panels/request_vars.html:63
+#: templates/debug_toolbar/panels/request_vars.html:85
+#: templates/debug_toolbar/panels/request_vars.html:107
+#: templates/debug_toolbar/panels/settings_vars.html:6
+#: templates/debug_toolbar/panels/timer.html:10
+msgid "Value"
+msgstr "Valor"
+
+#: templates/debug_toolbar/panels/logger.html:6
+msgid "Level"
+msgstr "Nível"
+
+#: templates/debug_toolbar/panels/logger.html:8
+msgid "Message"
+msgstr "Mensagem"
+
+#: templates/debug_toolbar/panels/logger.html:24
+msgid "No messages logged"
+msgstr "Nenhuma mensagem logada"
+
+#: templates/debug_toolbar/panels/request_vars.html:3
+msgid "View information"
+msgstr "Informações da View"
+
+#: templates/debug_toolbar/panels/request_vars.html:7
+msgid "View Function"
+msgstr "Função View"
+
+#: templates/debug_toolbar/panels/request_vars.html:8
+msgid "args"
+msgstr "args"
+
+#: templates/debug_toolbar/panels/request_vars.html:9
+msgid "kwargs"
+msgstr "kwargs"
+
+#: templates/debug_toolbar/panels/request_vars.html:27
+msgid "COOKIES Variables"
+msgstr "Variáveis do COOKIE"
+
+#: templates/debug_toolbar/panels/request_vars.html:36
+#: templates/debug_toolbar/panels/request_vars.html:62
+#: templates/debug_toolbar/panels/request_vars.html:84
+#: templates/debug_toolbar/panels/request_vars.html:106
+msgid "Variable"
+msgstr "Variável"
+
+#: templates/debug_toolbar/panels/request_vars.html:50
+msgid "No COOKIE data"
+msgstr "Não há dados de COOKIE"
+
+#: templates/debug_toolbar/panels/request_vars.html:53
+msgid "SESSION Variables"
+msgstr "Variáveis de SESSION"
+
+#: templates/debug_toolbar/panels/request_vars.html:76
+msgid "No SESSION data"
+msgstr "Não há dados de SESSION"
+
+#: templates/debug_toolbar/panels/request_vars.html:79
+msgid "GET Variables"
+msgstr "Variáveis de GET"
+
+#: templates/debug_toolbar/panels/request_vars.html:98
+msgid "No GET data"
+msgstr "Não há dados de GET"
+
+#: templates/debug_toolbar/panels/request_vars.html:101
+msgid "POST Variables"
+msgstr "Variáveis de POST"
+
+#: templates/debug_toolbar/panels/request_vars.html:120
+msgid "No POST data"
+msgstr "Não há dados de POST"
+
+#: templates/debug_toolbar/panels/settings_vars.html:5
+msgid "Setting"
+msgstr "Configuração"
+
+#: templates/debug_toolbar/panels/signals.html:5
+msgid "Signal"
+msgstr "Sinais"
+
+#: templates/debug_toolbar/panels/signals.html:6
+msgid "Providing Args"
+msgstr "Argumentos Fornecidos"
+
+#: templates/debug_toolbar/panels/signals.html:7
+msgid "Receivers"
+msgstr "Recebedores"
+
+#: templates/debug_toolbar/panels/sql.html:6
+msgid "Action"
+msgstr "Ação"
+
+#: templates/debug_toolbar/panels/sql.html:7
+msgid "Stacktrace"
+msgstr "Stacktrace"
+
+#: templates/debug_toolbar/panels/sql.html:8
+msgid "Query"
+msgstr "Query"
+
+#: templates/debug_toolbar/panels/sql.html:38
+msgid "Line"
+msgstr "Linha"
+
+#: templates/debug_toolbar/panels/sql.html:39
+msgid "Method"
+msgstr "Método"
+
+#: templates/debug_toolbar/panels/sql.html:40
+msgid "File"
+msgstr "Arquivo"
+
+#: templates/debug_toolbar/panels/sql_explain.html:3
+#: templates/debug_toolbar/panels/sql_profile.html:3
+#: templates/debug_toolbar/panels/sql_select.html:3
+#: templates/debug_toolbar/panels/template_source.html:3
+msgid "Back"
+msgstr "Voltar"
+
+#: templates/debug_toolbar/panels/sql_explain.html:4
+msgid "SQL Explained"
+msgstr "SQL Explicada"
+
+#: templates/debug_toolbar/panels/sql_explain.html:9
+#: templates/debug_toolbar/panels/sql_profile.html:10
+#: templates/debug_toolbar/panels/sql_select.html:9
+msgid "Executed SQL"
+msgstr "SQL Executada"
+
+#: templates/debug_toolbar/panels/sql_profile.html:4
+msgid "SQL Profiled"
+msgstr "Perfil da SQL"
+
+#: templates/debug_toolbar/panels/sql_profile.html:35
+msgid "Error"
+msgstr "Erro"
+
+#: templates/debug_toolbar/panels/sql_select.html:4
+msgid "SQL Selected"
+msgstr "SQL Selecionada"
+
+#: templates/debug_toolbar/panels/sql_select.html:34
+msgid "Empty set"
+msgstr "Conjunto vazio"
+
+#: templates/debug_toolbar/panels/template_source.html:4
+msgid "Template Source"
+msgstr "Origem do Template"
+
+#: templates/debug_toolbar/panels/templates.html:2
+msgid "Template path"
+msgstr "Caminho do Template"
+
+#: templates/debug_toolbar/panels/templates.html:13
+msgid "Template"
+msgstr "Template"
+
+#: templates/debug_toolbar/panels/templates.html:21
+#: templates/debug_toolbar/panels/templates.html:37
+msgid "Toggle Context"
+msgstr "Mostrar/Esconder Contexto"
+
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr "Nenhum"
+
+#: templates/debug_toolbar/panels/templates.html:31
+msgid "Context processor"
+msgstr "Processador do Contexto"
+
+#: templates/debug_toolbar/panels/timer.html:9
+msgid "Resource"
+msgstr "Recurso"
+
+#: templates/debug_toolbar/panels/versions.html:6
+msgid "Package"
+msgstr "Pacote"
+
+#: templates/debug_toolbar/panels/versions.html:7
+msgid "Version"
+msgstr "Versão"
