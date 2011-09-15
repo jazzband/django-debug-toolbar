@@ -133,8 +133,5 @@ class DebugToolbarMiddleware(object):
                 smart_unicode(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
-            # Add the toolbar to the request object, so that the stats are
-            # available to subsequent middleware classes.
-            request.debug_toolbar_stats = toolbar.stats
         del self.__class__.debug_toolbars[ident]
         return response
