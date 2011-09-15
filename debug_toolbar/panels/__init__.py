@@ -18,7 +18,6 @@ class DebugPanel(object):
     # Panel methods
     def __init__(self, context={}):
         self.context.update(context)
-        self.toolbar = DebugToolbarMiddleware.get_current()
         self.slug = slugify(self.name)
     
     def dom_id(self):
@@ -46,14 +45,16 @@ class DebugPanel(object):
             return render_to_string(self.template, context)
     
     def record_stats(self, stats):
-        panel_stats = self.toolbar.stats.get(self.slug)
+        toolbar = DebugToolbarMiddleware.get_current()
+        panel_stats = toolbar.stats.get(self.slug)
         if panel_stats:
             panel_stats.update(stats)
         else:
-            self.toolbar.stats[self.slug] = stats
+            toolbar.stats[self.slug] = stats
     
     def get_stats(self):
-        return self.toolbar.stats.get(self.slug, {})
+        toolbar = DebugToolbarMiddleware.get_current()
+        return toolbar.stats.get(self.slug, {})
     
     # Standard middleware methods
     def process_request(self, request):
