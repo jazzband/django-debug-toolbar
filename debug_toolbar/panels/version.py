@@ -2,10 +2,8 @@ import sys
 
 import django
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 
@@ -14,6 +12,7 @@ class VersionDebugPanel(DebugPanel):
     Panel that displays the Django version.
     """
     name = 'Version'
+    template = 'debug_toolbar/panels/versions.html'
     has_content = True
     
     def nav_title(self):
@@ -51,15 +50,7 @@ class VersionDebugPanel(DebugPanel):
                 version = '.'.join(str(o) for o in version)
             versions[name] = version
         
-        self.stats = {
+        self.record_stats({
             'versions': versions,
             'paths': sys.path,
-        }
-        
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['version'] = self.stats
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/versions.html', context)
+        })

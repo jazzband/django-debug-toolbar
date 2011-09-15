@@ -4,10 +4,8 @@ try:
     import threading
 except ImportError:
     threading = None
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
 class LogCollector(object):
@@ -88,13 +86,14 @@ if logbook_supported:
                 'channel': record.channel,
             }
             self.collector.add_record(record)
-
+    
     
     logbook_handler = LogbookThreadTrackingHandler(collector)
     logbook_handler.push_application()        # register with logbook
 
 class LoggingPanel(DebugPanel):
     name = 'Logging'
+    template = 'debug_toolbar/panels/logger.html'
     has_content = True
     
     def process_request(self, request):
@@ -102,9 +101,7 @@ class LoggingPanel(DebugPanel):
     
     def process_response(self, request, response):
         records = self.get_and_delete()
-        self.stats = {'records': records}
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['logger'] = self.stats
+        self.record_stats({'records': records})
     
     def get_and_delete(self):
         records = collector.get_records()
@@ -123,9 +120,3 @@ class LoggingPanel(DebugPanel):
     
     def url(self):
         return ''
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/logger.html', context)
-

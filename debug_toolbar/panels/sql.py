@@ -2,7 +2,6 @@ import re
 import uuid
 
 from django.db.backends import BaseDatabaseWrapper
-from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
@@ -13,6 +12,7 @@ from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import sqlparse
 from debug_toolbar.utils.tracking.db import CursorWrapper
 from debug_toolbar.utils.tracking import replace_call
+
 
 # Inject our tracking cursor
 @replace_call(BaseDatabaseWrapper.cursor)
@@ -25,6 +25,7 @@ def cursor(func, self):
     logger = djdt.get_panel(SQLDebugPanel)
     
     return CursorWrapper(result, self, logger=logger)
+
 
 def get_isolation_level_display(engine, level):
     if engine == 'psycopg2':
@@ -41,6 +42,7 @@ def get_isolation_level_display(engine, level):
     
     return choices.get(level)
 
+
 def get_transaction_status_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions
@@ -56,12 +58,14 @@ def get_transaction_status_display(engine, level):
     
     return choices.get(level)
 
+
 class SQLDebugPanel(DebugPanel):
     """
     Panel that displays information about the SQL queries run while processing
     the request.
     """
     name = 'SQL'
+    template = 'debug_toolbar/panels/sql.html'
     has_content = True
     
     def __init__(self, *args, **kwargs):
@@ -205,18 +209,12 @@ class SQLDebugPanel(DebugPanel):
             if trans_id:
                 self._queries[i-1][1]['ends_trans'] = True
         
-        self.stats = {
+        self.record_stats({
             'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
             'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
-        }
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['sql'] = self.stats
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/sql.html', context)
+        })
+
 
 class BoldKeywordFilter(sqlparse.filters.Filter):
     """sqlparse filter to bold SQL keywords"""
@@ -230,9 +228,11 @@ class BoldKeywordFilter(sqlparse.filters.Filter):
             if is_keyword:
                 yield sqlparse.tokens.Text, '</strong>'
 
+
 def swap_fields(sql):
     return re.sub('SELECT</strong> (.*) <strong>FROM', 'SELECT</strong> <a class="djDebugUncollapsed djDebugToggle" href="#">&bull;&bull;&bull;</a> ' +
         '<a class="djDebugCollapsed djDebugToggle" href="#">\g<1></a> <strong>FROM', sql)
+
 
 def reformat_sql(sql):
     stack = sqlparse.engine.FilterStack()

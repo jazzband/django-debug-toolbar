@@ -1,7 +1,5 @@
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
 class HeaderDebugPanel(DebugPanel):
@@ -9,6 +7,7 @@ class HeaderDebugPanel(DebugPanel):
     A panel to display HTTP headers.
     """
     name = 'Header'
+    template = 'debug_toolbar/panels/headers.html'
     has_content = True
     # List of headers we want to display
     header_filter = (
@@ -49,13 +48,6 @@ class HeaderDebugPanel(DebugPanel):
         )
     
     def process_response(self, request, response):
-        self.stats = {
+        self.record_stats({
             'headers': self.headers
-        }
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['headers'] = self.stats
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/headers.html', context)
+        })

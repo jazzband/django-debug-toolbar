@@ -6,7 +6,6 @@ from django.core.signals import request_started, request_finished, \
 from django.db.models.signals import class_prepared, pre_init, post_init, \
     pre_save, post_save, pre_delete, post_delete, post_syncdb
 from django.dispatch.dispatcher import WEAKREF_TYPES
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 try:
@@ -14,11 +13,11 @@ try:
 except ImportError:
     connection_created = None
 
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 class SignalDebugPanel(DebugPanel):
     name = "Signals"
+    template = 'debug_toolbar/panels/signals.html'
     has_content = True
     
     SIGNALS = {
@@ -82,11 +81,4 @@ class SignalDebugPanel(DebugPanel):
                 receivers.append(text)
             signals.append((name, signal, receivers))
         
-        self.stats = {'signals': signals}
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['signals'] = self.stats
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/signals.html', context)
+        self.record_stats({'signals': signals})

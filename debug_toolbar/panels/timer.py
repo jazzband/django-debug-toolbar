@@ -5,14 +5,15 @@ except ImportError:
 import time
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
+
 
 class TimerDebugPanel(DebugPanel):
     """
     Panel that displays the time a response took in milliseconds.
     """
     name = 'Timer'
+    template = 'debug_toolbar/panels/timer.html'
     try: # if resource module not available, don't show content panel
         resource
     except NameError:
@@ -50,7 +51,7 @@ class TimerDebugPanel(DebugPanel):
 #        urss = self._end_rusage.ru_idrss
 #        usrss = self._end_rusage.ru_isrss
         
-        self.stats = {
+        self.record_stats({
             'total_time': total_time,
             'utime': utime,
             'stime': stime,
@@ -65,22 +66,21 @@ class TimerDebugPanel(DebugPanel):
 #            'urss': urss,
 #            'srss': srss,
 #            'usrss': usrss,
-        }
-        
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['timer'] = self.stats
+        })
     
     def nav_title(self):
         return _('Time')
     
     def nav_subtitle(self):
+        stats = self.get_stats()
+        
         # TODO l10n
         if self.has_resource:
             utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
             stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
-            return 'CPU: %0.2fms (%0.2fms)' % ((utime + stime) * 1000.0, self.stats['total_time'])
+            return 'CPU: %0.2fms (%0.2fms)' % ((utime + stime) * 1000.0, stats['total_time'])
         else:
-            return 'TOTAL: %0.2fms' % (self.stats[total_time])
+            return 'TOTAL: %0.2fms' % (stats['total_time'])
     
     def title(self):
         return _('Resource Usage')
@@ -92,22 +92,21 @@ class TimerDebugPanel(DebugPanel):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
     
     def content(self):
+        stats = self.get_stats()
+        
         # TODO l10n on values
         rows = (
-            (_('User CPU time'), '%0.3f msec' % self.stats['utime']),
-            (_('System CPU time'), '%0.3f msec' % self.stats['stime']),
-            (_('Total CPU time'), '%0.3f msec' % (self.stats['utime'] + self.stats['stime'])),
-            (_('Elapsed time'), '%0.3f msec' % self.stats['total_time']),
-            (_('Context switches'), '%d voluntary, %d involuntary' % (self.stats['vcsw'], self.stats['ivcsw'])),
-#            ('Memory use', '%d max RSS, %d shared, %d unshared' % (self.stats['rss'], self.stats.['srss'],
-#                                                                   self.stats['urss'] + self.stats['usrss'])),
-#            ('Page faults', '%d no i/o, %d requiring i/o' % (self.stats['minflt'], self.stats['majflt'])),
-#            ('Disk operations', '%d in, %d out, %d swapout' % (self.stats['blkin'], self.stats['blkout'], self.stats['swap'])),
+            (_('User CPU time'), '%0.3f msec' % stats['utime']),
+            (_('System CPU time'), '%0.3f msec' % stats['stime']),
+            (_('Total CPU time'), '%0.3f msec' % (stats['utime'] + stats['stime'])),
+            (_('Elapsed time'), '%0.3f msec' % stats['total_time']),
+            (_('Context switches'), '%d voluntary, %d involuntary' % (stats['vcsw'], stats['ivcsw'])),
+#            ('Memory use', '%d max RSS, %d shared, %d unshared' % (stats['rss'], stats.['srss'],
+#                                                                   stats['urss'] + stats['usrss'])),
+#            ('Page faults', '%d no i/o, %d requiring i/o' % (stats['minflt'], stats['majflt'])),
+#            ('Disk operations', '%d in, %d out, %d swapout' % (stats['blkin'], stats['blkout'], stats['swap'])),
         )
         
         context = self.context.copy()
-        context.update({
-            'rows': rows,
-        })
-        
-        return render_to_string('debug_toolbar/panels/timer.html', context)
+        context.update({'rows': rows,})
+        return render_to_string(self.template, context)

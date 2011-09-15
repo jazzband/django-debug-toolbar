@@ -4,10 +4,8 @@ from pprint import pformat
 from django import http
 from django.conf import settings
 from django.template.context import get_standard_processors
-from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -28,6 +26,7 @@ else:
         Template.original_render = Template._render
         Template._render = instrumented_test_render
 
+
 # MONSTER monkey-patch
 old_template_init = Template.__init__
 def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
@@ -35,11 +34,13 @@ def new_template_init(self, template_string, origin=None, name='<Unknown Templat
     self.origin = origin
 Template.__init__ = new_template_init
 
+
 class TemplateDebugPanel(DebugPanel):
     """
     A panel that lists all templates used during processing of a response.
     """
     name = 'Template'
+    template = 'debug_toolbar/panels/templates.html'
     has_content = True
     
     def __init__(self, *args, **kwargs):
@@ -118,16 +119,8 @@ class TemplateDebugPanel(DebugPanel):
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
         
-        self.stats = {
+        self.record_stats({
             'templates': template_context,
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
             'context_processors': context_processors,
-        }
-        
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['template'] = self.stats
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/templates.html', context)
+        })

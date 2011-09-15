@@ -1,9 +1,7 @@
 from __future__ import division
 
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 try:
@@ -143,6 +141,7 @@ class ProfilingDebugPanel(DebugPanel):
     Panel that displays the Django version.
     """
     name = 'Profiling'
+    template = 'debug_toolbar/panels/profiling.html'
     has_content = True
     
     def nav_title(self):
@@ -178,16 +177,6 @@ class ProfilingDebugPanel(DebugPanel):
             out = self.profiler.runcall(view_func, *args, **view_kwargs)
         return out
     
-    def process_response(self, request, response):
-        self.profiler.create_stats()
-        self.stats = DjangoDebugToolbarStats(self.profiler)
-        if DJ_PROFILE_USE_LINE_PROFILER:
-            self.stats.line_stats = self.line_profiler.get_stats()
-        self.stats.calc_callees()
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['profiling'] = self.stats
-        return response
-    
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
         func_list.append(func)
         func.has_subfuncs = False
@@ -199,14 +188,16 @@ class ProfilingDebugPanel(DebugPanel):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
     
-    def content(self):
+    def process_response(self, request, response):
+        self.profiler.create_stats()
+        self.stats = DjangoDebugToolbarStats(self.profiler)
+        if DJ_PROFILE_USE_LINE_PROFILER:
+            self.stats.line_stats = self.line_profiler.get_stats()
+        self.stats.calc_callees()
+        
         root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
         
         func_list = []
         self.add_node(func_list, root, 10, root.stats[3]/8)
-        context = self.context.copy()
-        context.update({
-            'func_list': func_list,
-        })
         
-        return render_to_string('debug_toolbar/panels/profiling.html', context)
+        self.stats_record({'func_list': func_list})

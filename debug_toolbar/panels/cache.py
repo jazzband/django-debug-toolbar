@@ -3,9 +3,7 @@ import inspect
 
 from django.core import cache
 from django.core.cache.backends.base import BaseCache
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 
 class CacheStatTracker(BaseCache):
@@ -75,6 +73,7 @@ class CacheDebugPanel(DebugPanel):
     Panel that displays the cache statistics.
     """
     name = 'Cache'
+    template = 'debug_toolbar/panels/cache.html'
     has_content = True
     
     def __init__(self, *args, **kwargs):
@@ -97,15 +96,8 @@ class CacheDebugPanel(DebugPanel):
         return ''
     
     def process_response(self, request, response):
-        self.stats = {
+        self.record_stats({
             'cache_calls': len(self.cache.calls),
             'cache_time': self.cache.total_time,
             'cache': self.cache,
-        }
-        toolbar = DebugToolbarMiddleware.get_current()
-        toolbar.stats['cache'] = self.stats
-    
-    def content(self):
-        context = self.context.copy()
-        context.update(self.stats)
-        return render_to_string('debug_toolbar/panels/cache.html', context)
+        })
