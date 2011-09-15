@@ -41,10 +41,14 @@ class DebugPanel(object):
         raise NotImplementedError
     
     def record_stats(self, stats):
-        self.toolbar.stats[self.slug].update(stats)
+        panel_stats = self.toolbar.stats.get(self.slug)
+        if panel_stats:
+            panel_stats.update(stats)
+        else:
+            self.toolbar.stats[self.slug] = stats
     
     def get_stats(self):
-        return self.toolbar.stats[self.slug]
+        return self.toolbar.stats.get(self.slug, {})
     
     # Standard middleware methods
     def process_request(self, request):
