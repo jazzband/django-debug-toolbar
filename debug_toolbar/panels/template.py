@@ -44,7 +44,7 @@ class TemplateDebugPanel(DebugPanel):
     has_content = True
     
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super(TemplateDebugPanel, self).__init__(*args, **kwargs)
         self.templates = []
         template_rendered.connect(self._store_template_info)
     
