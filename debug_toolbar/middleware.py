@@ -5,6 +5,7 @@ import imp
 import thread
 
 from django.conf import settings
+from django.conf.urls.defaults import include, patterns
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
@@ -123,8 +124,7 @@ class DebugToolbarMiddleware(object):
                 )
                 response.cookies = cookies
         if 'gzip' not in response.get('Content-Encoding', '') and \
-          response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
-            toolbar.stats = {}
+           response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             response.content = replace_insensitive(
