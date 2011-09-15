@@ -1,4 +1,5 @@
 from django.template.defaultfilters import slugify
+from django.template.loader import render_to_string
 from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
@@ -6,7 +7,8 @@ class DebugPanel(object):
     """
     Base class for debug panels.
     """
-    # name = Base
+    # name = 'Base'
+    # template = 'debug_toolbar/panels/base.html'
     has_content = False # If content returns something, set to true in subclass
     
     # We'll maintain a local context instance so we can expose our template
@@ -38,7 +40,10 @@ class DebugPanel(object):
         raise NotImplementedError
     
     def content(self):
-        raise NotImplementedError
+        if self.has_content:
+            context = self.context.copy()
+            context.update(self.get_stats())
+            return render_to_string(self.template, context)
     
     def record_stats(self, stats):
         panel_stats = self.toolbar.stats.get(self.slug)
