@@ -2,7 +2,6 @@ import re
 import uuid
 
 from django.db.backends import BaseDatabaseWrapper
-from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
@@ -14,17 +13,19 @@ from debug_toolbar.utils import sqlparse
 from debug_toolbar.utils.tracking.db import CursorWrapper
 from debug_toolbar.utils.tracking import replace_call
 
+
 # Inject our tracking cursor
 @replace_call(BaseDatabaseWrapper.cursor)
 def cursor(func, self):
     result = func(self)
-
+    
     djdt = DebugToolbarMiddleware.get_current()
     if not djdt:
         return result
     logger = djdt.get_panel(SQLDebugPanel)
     
     return CursorWrapper(result, self, logger=logger)
+
 
 def get_isolation_level_display(engine, level):
     if engine == 'psycopg2':
@@ -41,6 +42,7 @@ def get_isolation_level_display(engine, level):
     
     return choices.get(level)
 
+
 def get_transaction_status_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions
@@ -56,16 +58,18 @@ def get_transaction_status_display(engine, level):
     
     return choices.get(level)
 
+
 class SQLDebugPanel(DebugPanel):
     """
     Panel that displays information about the SQL queries run while processing
     the request.
     """
     name = 'SQL'
+    template = 'debug_toolbar/panels/sql.html'
     has_content = True
-
+    
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super(SQLDebugPanel, self).__init__(*args, **kwargs)
         self._offset = dict((k, len(connections[k].queries)) for k in connections)
         self._sql_time = 0
         self._num_queries = 0
@@ -78,20 +82,20 @@ class SQLDebugPanel(DebugPanel):
         conn = connections[alias].connection
         if not conn:
             return None
-
+        
         engine = conn.__class__.__module__.split('.', 1)[0]
         if engine == 'psycopg2':
             cur_status = conn.get_transaction_status()
         else:
             raise ValueError(engine)
-
+        
         last_status = self._transaction_status.get(alias)
         self._transaction_status[alias] = cur_status
-
+        
         if not cur_status:
             # No available state
             return None
-
+        
         if cur_status != last_status:
             if cur_status:
                 self._transaction_ids[alias] = uuid.uuid4().hex
@@ -112,10 +116,10 @@ class SQLDebugPanel(DebugPanel):
             self._databases[alias]['num_queries'] += 1
         self._sql_time += kwargs['duration']
         self._num_queries += 1
-
+    
     def nav_title(self):
         return _('SQL')
-
+    
     def nav_subtitle(self):
         # TODO l10n: use ngettext
         return "%d %s in %.2fms" % (
@@ -123,18 +127,18 @@ class SQLDebugPanel(DebugPanel):
             (self._num_queries == 1) and 'query' or 'queries',
             self._sql_time
         )
-
+    
     def title(self):
         count = len(self._databases)
         
         return __('SQL Queries from %(count)d connection', 'SQL Queries from %(count)d connections', count) % dict(
             count=count,
         )
-
+    
     def url(self):
         return ''
-
-    def content(self):
+    
+    def process_response(self, request, response):
         if self._queries:
             width_ratio_tally = 0
             colors = [
@@ -157,7 +161,7 @@ class SQLDebugPanel(DebugPanel):
                         nn = 0
                     rgb[nn] = nc
                 db['rgb_color'] = rgb
-        
+            
             trans_ids = {}
             trans_id = None
             i = 0
@@ -190,25 +194,27 @@ class SQLDebugPanel(DebugPanel):
                 query['start_offset'] = width_ratio_tally
                 query['end_offset'] = query['width_ratio'] + query['start_offset']
                 width_ratio_tally += query['width_ratio']
-            
+                
                 stacktrace = []
                 for frame in query['stacktrace']:
                     params = map(escape, frame[0].rsplit('/', 1) + list(frame[1:]))
-                    stacktrace.append(u'<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>'.format(*params))
+                    try:
+                        stacktrace.append(u'<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>'.format(*params))
+                    except IndexError:
+                        # This frame doesn't have the expected format, so skip it and move on to the next one
+                        continue
                 query['stacktrace'] = mark_safe('\n'.join(stacktrace))
                 i += 1
-
+            
             if trans_id:
                 self._queries[i-1][1]['ends_trans'] = True
         
-        context = self.context.copy()
-        context.update({
+        self.record_stats({
             'databases': sorted(self._databases.items(), key=lambda x: -x[1]['time_spent']),
             'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
         })
 
-        return render_to_string('debug_toolbar/panels/sql.html', context)
 
 class BoldKeywordFilter(sqlparse.filters.Filter):
     """sqlparse filter to bold SQL keywords"""
@@ -222,9 +228,11 @@ class BoldKeywordFilter(sqlparse.filters.Filter):
             if is_keyword:
                 yield sqlparse.tokens.Text, '</strong>'
 
+
 def swap_fields(sql):
     return re.sub('SELECT</strong> (.*) <strong>FROM', 'SELECT</strong> <a class="djDebugUncollapsed djDebugToggle" href="#">&bull;&bull;&bull;</a> ' +
         '<a class="djDebugCollapsed djDebugToggle" href="#">\g<1></a> <strong>FROM', sql)
+
 
 def reformat_sql(sql):
     stack = sqlparse.engine.FilterStack()

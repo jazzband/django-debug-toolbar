@@ -6,7 +6,6 @@ from django.core.signals import request_started, request_finished, \
 from django.db.models.signals import class_prepared, pre_init, post_init, \
     pre_save, post_save, pre_delete, post_delete, post_syncdb
 from django.dispatch.dispatcher import WEAKREF_TYPES
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 try:
@@ -18,8 +17,9 @@ from debug_toolbar.panels import DebugPanel
 
 class SignalDebugPanel(DebugPanel):
     name = "Signals"
+    template = 'debug_toolbar/panels/signals.html'
     has_content = True
-
+    
     SIGNALS = {
         'request_started': request_started,
         'request_finished': request_finished,
@@ -34,16 +34,16 @@ class SignalDebugPanel(DebugPanel):
         'post_delete': post_delete,
         'post_syncdb': post_syncdb,
     }
-
+    
     def nav_title(self):
         return _("Signals")
-
+    
     def title(self):
         return _("Signals")
-
+    
     def url(self):
         return ''
-
+    
     def signals(self):
         signals = self.SIGNALS.copy()
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
@@ -57,8 +57,8 @@ class SignalDebugPanel(DebugPanel):
             signals[parts[-1]] = getattr(sys.modules[path], parts[-1])
         return signals
     signals = property(signals)
-
-    def content(self):
+    
+    def process_response(self, request, response):
         signals = []
         keys = self.signals.keys()
         keys.sort()
@@ -80,8 +80,5 @@ class SignalDebugPanel(DebugPanel):
                     text = "function %s" % receiver.__name__
                 receivers.append(text)
             signals.append((name, signal, receivers))
-
-        context = self.context.copy()
-        context.update({'signals': signals})
-
-        return render_to_string('debug_toolbar/panels/signals.html', context)
+        
+        self.record_stats({'signals': signals})
