@@ -1,16 +1,18 @@
+{% load cache %}
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>Index of Tests</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Index of Tests</title>
 </head>
 <body>
 
-	<h1>Index of Tests</h1>
-	<ul>
-		<li><a href="/jquery/index/">jQuery 1.2.6</a></li>
-		<li><a href="/mootools/index/">MooTools 1.2.4</a></li>
-		<li><a href="/prototype/index/">Prototype 1.6.1</a></li>
-	</ul>
-
+    <h1>Index of Tests</h1>
+    {% cache 10 index_cache %}
+    <ul>
+        <li><a href="/jquery/index/">jQuery 1.2.6</a></li>
+        <li><a href="/mootools/index/">MooTools 1.2.4</a></li>
+        <li><a href="/prototype/index/">Prototype 1.6.1</a></li>
+    </ul>
+    {% endcache %}
 </body>
 </html>
