@@ -3,6 +3,7 @@ from pprint import pformat
 
 from django import http
 from django.conf import settings
+from django.db.models.query import QuerySet
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
@@ -68,6 +69,10 @@ class TemplateDebugPanel(DebugPanel):
                     # Replace LANGUAGES, which is available in i18n context processor
                     elif key == 'LANGUAGES' and isinstance(value, tuple):
                         temp_layer[key] = '<<languages>>'
+                    # Replace any query object. The representation
+                    # executes the query.
+                    elif isinstance(value, QuerySet):
+                        temp_layer[key] = '<<query>>'
                     else:
                         temp_layer[key] = value
             try:
