@@ -7,11 +7,7 @@ from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.query import QuerySet
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
-
-import sql # just trigger BaseDatabaseWrapper replacement
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
@@ -51,10 +47,8 @@ class TemplateDebugPanel(DebugPanel):
         template_rendered.connect(self._store_template_info)
 
     def _store_template_info(self, sender, **kwargs):
-        t = kwargs['template']
-        if t.name and t.name.startswith('debug_toolbar/'):
-            return  # skip templates that we are generating through the debug toolbar.
         context_data = kwargs['context']
+
         context_list = []
         for context_layer in context_data.dicts:
             temp_layer = {}
@@ -72,20 +66,8 @@ class TemplateDebugPanel(DebugPanel):
                     # Replace LANGUAGES, which is available in i18n context processor
                     elif key == 'LANGUAGES' and isinstance(value, tuple):
                         temp_layer[key] = '<<languages>>'
-                    # QuerySet would trigger the database: user can run the query from SQL Panel
-                    elif isinstance(value, QuerySet):
-                        model_name = "%s.%s" % (value.model._meta.app_label, value.model.__name__)
-                        temp_layer[key] = '<<queryset of %s>>' % model_name
                     else:
-                        try:
-                            recording(False)
-                            pformat(value)  # this MAY trigger a db query
-                        except SQLQueryTriggered:
-                            temp_layer[key] = '<<triggers database query>>'
-                        else:
-                            temp_layer[key] = value
-                        finally:
-                            recording(True)
+                        temp_layer[key] = value
             try:
                 context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
@@ -97,7 +79,8 @@ class TemplateDebugPanel(DebugPanel):
         return _('Templates')
 
     def title(self):
-        num_templates = len(self.templates)
+        num_templates = len([t for t in self.templates
+            if not (t['template'].name and t['template'].name.startswith('debug_toolbar/'))])
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
 
     def url(self):
@@ -118,6 +101,9 @@ class TemplateDebugPanel(DebugPanel):
             info = {}
             # Clean up some info about templates
             template = template_data.get('template', None)
+            # Skip templates that we are generating through the debug toolbar.
+            if template.name and template.name.startswith('debug_toolbar/'):
+                continue
             if not hasattr(template, 'origin'):
                 continue
             if template.origin and template.origin.name:

@@ -23,7 +23,7 @@ def cursor(func, self):
     if not djdt:
         return result
     logger = djdt.get_panel(SQLDebugPanel)
-
+    
     return CursorWrapper(result, self, logger=logger)
 
 def get_isolation_level_display(engine, level):

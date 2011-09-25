@@ -1,6 +1,5 @@
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
-from debug_toolbar.panels.template import TemplateDebugPanel
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils import get_name_from_obj
@@ -10,7 +9,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase
-from django.template import Template, Context
 
 from dingus import Dingus
 import thread
@@ -36,7 +34,7 @@ class Settings(object):
                 delattr(settings, k)
             else:
                 setattr(settings, k, v)
-
+    
 class BaseTestCase(TestCase):
     def setUp(self):
         request = Dingus('request')
@@ -49,7 +47,7 @@ class BaseTestCase(TestCase):
 
 class DebugToolbarTestCase(BaseTestCase):
     urls = 'tests.urls'
-
+    
     def test_middleware(self):
         resp = self.client.get('/execute_sql/')
         self.assertEquals(resp.status_code, 200)
@@ -80,7 +78,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_show_toolbar_INTERNAL_IPS(self):
         request = self.request
-
+        
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
@@ -92,16 +90,16 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_request_urlconf_string(self):
         request = self.request
-
+        
         request.urlconf = 'tests.urls'
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
-
+            
             self.assertFalse(isinstance(request.urlconf, basestring))
-
+            
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
@@ -109,17 +107,18 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_request_urlconf_string_per_request(self):
         request = self.request
+        
         request.urlconf = 'debug_toolbar.urls'
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
-
+        
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             request.urlconf = 'tests.urls'
             middleware.process_request(request)
 
             self.assertFalse(isinstance(request.urlconf, basestring))
-
+            
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
@@ -127,36 +126,38 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_request_urlconf_module(self):
         request = self.request
-
+        
         request.urlconf = __import__('tests.urls').urls
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
-
+            
             self.assertFalse(isinstance(request.urlconf, basestring))
-
+            
             self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
-    def test_view_resolving_success(self):
+    def test_with_process_view(self):
         request = self.request
-
+        
+        def _test_view(request):
+            return HttpResponse('')
+        
         with Settings(DEBUG=True):
-            request.path = '/execute_sql/'  # existing URL
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
+            panel.process_view(request, _test_view, [], {})
             content = panel.content()
-            self.assertTrue('tests.views.execute_sql' in content)
+            self.assertTrue('tests.tests._test_view' in content, content)
 
-    def test_view_resolving_failure(self):
+    def test_without_process_view(self):
         request = self.request
 
         with Settings(DEBUG=True):
-            request.path = '/non_existing_url/' #
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(request)
             content = panel.content()
@@ -178,27 +179,13 @@ class DebugToolbarNameFromObjectTest(BaseTestCase):
         res = get_name_from_obj(A)
         self.assertEquals(res, 'tests.tests.A')
 
-class TemplatePanelTestCase(BaseTestCase):
-    def test_queryset_hook(self):
-        template_panel = self.toolbar.get_panel(TemplateDebugPanel)
-        sql_panel = self.toolbar.get_panel(SQLDebugPanel)
-        t = Template("No context variables here!")
-        c = Context({ 'queryset' : User.objects.all(), 'deep_queryset' : { 'queryset' : User.objects.all() } })
-        t.render(c)
-        # ensure the query was NOT logged
-        self.assertEquals(len(sql_panel._queries), 0)
-        ctx = template_panel.templates[0]['context'][0]
-        ctx = eval(ctx) # convert back to Python
-        self.assertEquals(ctx['queryset'], '<<queryset of auth.User>>')
-        self.assertEquals(ctx['deep_queryset'], '<<triggers database query>>')
-
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
         panel = self.toolbar.get_panel(SQLDebugPanel)
         self.assertEquals(len(panel._queries), 0)
-
+        
         list(User.objects.all())
-
+        
         # ensure query was logged
         self.assertEquals(len(panel._queries), 1)
         query = panel._queries[0]
@@ -219,19 +206,19 @@ class TrackingTestCase(BaseTestCase):
     def class_func(self, *args, **kwargs):
         """Used by dispatch tests"""
         return 'blah'
-
+    
     def test_pre_hook(self):
         foo = {}
-
+        
         @pre_dispatch(module_func)
         def test(**kwargs):
             foo.update(kwargs)
-
+            
         self.assertTrue(hasattr(module_func, '__wrapped__'))
         self.assertEquals(len(callbacks['before']), 1)
-
+        
         module_func('hi', foo='bar')
-
+        
         self.assertTrue('sender' in foo, foo)
         # best we can do
         self.assertEquals(foo['sender'].__name__, 'module_func')
@@ -245,13 +232,13 @@ class TrackingTestCase(BaseTestCase):
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
         self.assertEquals(foo['kwargs']['foo'], 'bar')
-
+    
         callbacks['before'] = {}
-
+    
         @pre_dispatch(TrackingTestCase.class_func)
         def test(**kwargs):
             foo.update(kwargs)
-
+    
         self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
         self.assertEquals(len(callbacks['before']), 1)
 
@@ -272,16 +259,16 @@ class TrackingTestCase(BaseTestCase):
         self.assertEquals(foo['kwargs']['foo'], 'bar')
 
         # callbacks['before'] = {}
-        #
+        #     
         #         @pre_dispatch(TrackingTestCase.class_method)
         #         def test(**kwargs):
         #             foo.update(kwargs)
-        #
+        #     
         #         self.assertTrue(hasattr(TrackingTestCase.class_method, '__wrapped__'))
         #         self.assertEquals(len(callbacks['before']), 1)
-        #
+        # 
         #         TrackingTestCase.class_method()
-        #
+        # 
         #         self.assertTrue('sender' in foo, foo)
         #         # best we can do
         #         self.assertEquals(foo['sender'].__name__, 'class_method')
@@ -291,16 +278,16 @@ class TrackingTestCase(BaseTestCase):
 
     def test_post_hook(self):
         foo = {}
-
+        
         @post_dispatch(module_func)
         def test(**kwargs):
             foo.update(kwargs)
-
+            
         self.assertTrue(hasattr(module_func, '__wrapped__'))
         self.assertEquals(len(callbacks['after']), 1)
-
+        
         module_func('hi', foo='bar')
-
+        
         self.assertTrue('sender' in foo, foo)
         # best we can do
         self.assertEquals(foo['sender'].__name__, 'module_func')
@@ -315,13 +302,13 @@ class TrackingTestCase(BaseTestCase):
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
         self.assertEquals(foo['kwargs']['foo'], 'bar')
-
+    
         callbacks['after'] = {}
-
+    
         @post_dispatch(TrackingTestCase.class_func)
         def test(**kwargs):
             foo.update(kwargs)
-
+    
         self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
         self.assertEquals(len(callbacks['after']), 1)
 
