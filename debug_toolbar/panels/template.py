@@ -7,7 +7,9 @@ from django.template.context import get_standard_processors
 from django.template.loader import render_to_string
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.query import QuerySet
 from debug_toolbar.panels import DebugPanel
+from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
@@ -66,8 +68,19 @@ class TemplateDebugPanel(DebugPanel):
                     # Replace LANGUAGES, which is available in i18n context processor
                     elif key == 'LANGUAGES' and isinstance(value, tuple):
                         temp_layer[key] = '<<languages>>'
+                    # QuerySet would trigger the database: user can run the query from SQL Panel
+                    elif isinstance(value, QuerySet):
+                        temp_layer[key] = '<<queryset>>'
                     else:
-                        temp_layer[key] = value
+                        try:
+                            recording(False)
+                            pformat(value)  # this MAY trigger a db query
+                        except SQLQueryTriggered:
+                            temp_layer[key] = '<<contains queryset>>'
+                        else:
+                            temp_layer[key] = value
+                        finally:
+                            recording(True)
             try:
                 context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
