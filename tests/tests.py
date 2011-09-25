@@ -207,8 +207,8 @@ class TemplatePanelTestCase(BaseTestCase):
         self.assertEquals(len(sql_panel._queries), 0)
         ctx = template_panel.templates[0]['context'][0]
         ctx = eval(ctx) # convert back to Python
-        self.assertEquals(ctx['queryset'], '<<queryset>>')
-        self.assertEquals(ctx['deep_queryset'], '<<contains queryset>>')
+        self.assertEquals(ctx['queryset'], '<<queryset of auth.User>>')
+        self.assertEquals(ctx['deep_queryset'], '<<triggers database query>>')
 
 def module_func(*args, **kwargs):
     """Used by dispatch tests"""
