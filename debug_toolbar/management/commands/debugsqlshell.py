@@ -1,11 +1,10 @@
-import os
-from optparse import make_option
 from datetime import datetime
 
 from django.db.backends import util
 from django.core.management.commands.shell import Command
 
-from debug_toolbar.utils import sqlparse
+from debug_toolbar.utils import ms_from_timedelta, sqlparse
+
 
 class PrintQueryWrapper(util.CursorDebugWrapper):
     def execute(self, sql, params=()):
@@ -15,9 +14,8 @@ class PrintQueryWrapper(util.CursorDebugWrapper):
         finally:
             raw_sql = self.db.ops.last_executed_query(self.cursor, sql, params)
             execution_time = datetime.now() - starttime
-            print sqlparse.format(raw_sql, reindent=True)
-            print
-            print 'Execution time: %fs' % execution_time.total_seconds()
+            print sqlparse.format(raw_sql, reindent=True),
+            print ' [%.2fms]' % (ms_from_timedelta(execution_time),)
             print
 
 util.CursorDebugWrapper = PrintQueryWrapper
