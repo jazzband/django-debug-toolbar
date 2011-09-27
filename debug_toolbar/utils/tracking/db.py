@@ -27,7 +27,9 @@ class ThreadLocalState(local):
 
     @property
     def Wrapper(self):
-        return NormalCursorWrapper if self.enabled else ExceptionCursorWrapper
+        if self.enabled:
+            return NormalCursorWrapper
+        return ExceptionCursorWrapper
 
     def recording(self, v):
         self.enabled = v
