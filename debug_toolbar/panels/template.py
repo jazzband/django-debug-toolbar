@@ -51,6 +51,9 @@ class TemplateDebugPanel(DebugPanel):
         template_rendered.connect(self._store_template_info)
     
     def _store_template_info(self, sender, **kwargs):
+        t = kwargs['template']
+        if t.name and t.name.startswith('debug_toolbar/'):
+            return  # skip templates that we are generating through the debug toolbar.
         context_data = kwargs['context']
         
         context_list = []
@@ -95,8 +98,7 @@ class TemplateDebugPanel(DebugPanel):
         return _('Templates')
     
     def title(self):
-        num_templates = len([t for t in self.templates
-            if not (t['template'].name and t['template'].name.startswith('debug_toolbar/'))])
+        num_templates = len(self.templates)
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
     
     def url(self):
@@ -117,9 +119,6 @@ class TemplateDebugPanel(DebugPanel):
             info = {}
             # Clean up some info about templates
             template = template_data.get('template', None)
-            # Skip templates that we are generating through the debug toolbar.
-            if template.name and template.name.startswith('debug_toolbar/'):
-                continue
             if not hasattr(template, 'origin'):
                 continue
             if template.origin and template.origin.name:
