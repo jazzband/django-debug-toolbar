@@ -5,6 +5,7 @@
 	<thead>
 		<tr>
 			<th>{% trans 'View Function' %}</th>
+			<th>{% trans 'URL Name' %}</th>
 			<th>{% trans 'args' %}</th>
 			<th>{% trans 'kwargs' %}</th>
 		</tr>
@@ -12,6 +13,7 @@
 	<tbody>
 		<tr>
 			<td>{{ view_func }}</td>
+			<td>{{ view_urlname }}</td>
 			<td>{{ view_args|default:"None" }}</td>
 			<td>
 			{% if view_kwargs.items %}
