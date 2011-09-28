@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase
 from django.template import Template, Context
+from django import VERSION
 
 from dingus import Dingus
 import thread
@@ -147,31 +148,41 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
-    def test_with_process_view(self):
-        request = self.request
-        response = self.response
-        
-        def _test_view(request):
-            return HttpResponse('')
-        
+    def _resolve_stats(self, path):
+        # takes stats from RequestVars panel
+        self.request.path = path
         with Settings(DEBUG=True):
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
-            panel.process_request(request)
-            panel.process_view(request, _test_view, [], {})
-            panel.process_response(request, response)
-            content = panel.content()
-            self.assertTrue('tests.tests._test_view' in content, content)
+            panel.process_request(self.request)
+            panel.process_response(self.request, self.response)
+            return self.toolbar.stats['requestvars']
 
-    def test_without_process_view(self):
-        request = self.request
-        response = self.response
+    def test_url_resolving_positional(self):
+        stats = self._resolve_stats('/resolving1/a/b/')
+        if tuple(VERSION[:2]) >= (1, 3):
+            self.assertEquals(stats['view_urlname'], 'positional-resolving') # Django >= 1.3
+        else:
+            self.assertEquals(stats['view_urlname'], '<unavailable>') # Django < 1.3
+        self.assertEquals(stats['view_func'], 'tests.views.resolving_view')
+        self.assertEquals(stats['view_args'], ('a', 'b') )
+        self.assertEquals(stats['view_kwargs'], { } )
 
-        with Settings(DEBUG=True):
-            panel = self.toolbar.get_panel(RequestVarsDebugPanel)
-            panel.process_request(request)
-            panel.process_response(request, response)
-            content = panel.content()
-            self.assertTrue('&lt;no view&gt;' in content, content)
+    def test_url_resolving_named(self):
+        stats = self._resolve_stats('/resolving2/a/b/')
+        self.assertEquals(stats['view_args'], tuple() )
+        self.assertEquals(stats['view_kwargs'], { 'arg1' : 'a', 'arg2' : 'b' })
+
+    def test_url_resolving_mixed(self):
+        stats = self._resolve_stats('/resolving3/a/')
+        self.assertEquals(stats['view_args'], ('a',) )
+        self.assertEquals(stats['view_kwargs'], { 'arg2' : 'default' } )
+
+    def test_url_resolving_bad(self):
+        stats = self._resolve_stats('/non-existing-url/')
+        self.assertEquals(stats['view_urlname'], 'None')
+        self.assertEquals(stats['view_args'], 'None')
+        self.assertEquals(stats['view_kwargs'], 'None')
+        self.assertEquals(stats['view_func'], '<no view>')
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
     def test_func(self):
