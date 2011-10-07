@@ -71,7 +71,12 @@ class NormalCursorWrapper(object):
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
-            stacktrace = tidy_stacktrace(reversed(inspect.stack()))
+            enable_stacktraces = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
+                                    .get('ENABLE_STACKTRACES', True)
+            if enable_stacktraces:
+                stacktrace = tidy_stacktrace(reversed(inspect.stack()))
+            else:
+                stacktrace = []
             _params = ''
             try:
                 _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
