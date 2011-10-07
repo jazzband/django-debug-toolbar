@@ -3,12 +3,14 @@
 @media print { #djDebug {display:none;}}
 {{ css }}
 </style>
-<script type="text/javascript">{{ js }}</script>
+<script type="text/javascript">//<![CDATA[
+{{ js }}
+//]]></script>
 <div id="djDebug" style="display:none;">
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if panels %}
-			<li><a id="djHideToolBarButton" href="#" title="{% trans "Hide Toolbar" %}">{% trans "Hide" %} &raquo;</a></li>
+			<li><a id="djHideToolBarButton" href="#" title="{% trans "Hide Toolbar" %}">{% trans "Hide" %} &#187;</a></li>
 			{% else %}
 			<li id="djDebugButton">DEBUG</li>
 			{% endif %}
@@ -33,7 +35,7 @@
 		</ul>
 	</div>
 	<div style="display:none;" id="djDebugToolbarHandle">
-		<a title="{% trans "Show Toolbar" %}" id="djShowToolBarButton" href="#">&laquo;</a>
+		<a title="{% trans "Show Toolbar" %}" id="djShowToolBarButton" href="#">&#171;</a>
 	</div>
 	{% for panel in panels %}
 		{% if panel.has_content %}
