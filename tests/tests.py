@@ -204,6 +204,28 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertTrue('duration' in query[1])
         self.assertTrue('stacktrace' in query[1])
 
+        # ensure the stacktrace is populated
+        self.assertTrue(len(query[1]['stacktrace']) > 0)
+
+    def test_disable_stacktraces(self):
+        panel = self.toolbar.get_panel(SQLDebugPanel)
+        self.assertEquals(len(panel._queries), 0)
+       
+        with Settings(DEBUG_TOOLBAR_CONFIG={ 'ENABLE_STACKTRACES' : False }):
+            list(User.objects.all())
+        
+        # ensure query was logged
+        self.assertEquals(len(panel._queries), 1)
+        query = panel._queries[0]
+        self.assertEquals(query[0], 'default')
+        self.assertTrue('sql' in query[1])
+        self.assertTrue('duration' in query[1])
+        self.assertTrue('stacktrace' in query[1])
+
+        # ensure the stacktrace is empty
+        self.assertEquals([], query[1]['stacktrace'])
+
+
 class TemplatePanelTestCase(BaseTestCase):
     def test_queryset_hook(self):
         template_panel = self.toolbar.get_panel(TemplateDebugPanel)
