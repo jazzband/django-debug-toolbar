@@ -124,6 +124,10 @@ The debug toolbar has two settings that can be set in `settings.py`:
    * `TAG`: If set, this will be the tag to which debug_toolbar will attach the 
      debug toolbar. Defaults to 'body'.
 
+   * `ENABLE_STACKTRACES`: If set, this will show stacktraces for SQL queries.
+     Enabling stacktraces can increase the CPU time used when executing
+     queries. Defaults to True.
+
    Example configuration::
 
 	def custom_show_toolbar(request):
@@ -135,6 +139,7 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
 	    'HIDE_DJANGO_SQL': False,
 	    'TAG': 'div',
+	    'ENABLE_STACKTRACES' : True,
 	}
 
 `debugsqlshell`
