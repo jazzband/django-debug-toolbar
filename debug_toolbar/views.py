@@ -82,7 +82,10 @@ def sql_explain(request):
         params = simplejson.loads(params)
         cursor = connections[alias].cursor()
 
-        if settings.DATABASE_ENGINE == "sqlite3":
+        conn = connections[alias].connection
+        engine = conn.__class__.__module__.split('.', 1)[0]
+
+        if engine == "sqlite3":
             # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
             # EXPLAIN QUERY PLAN dumps a more human-readable summary
             # See http://www.sqlite.org/lang_explain.html for details
