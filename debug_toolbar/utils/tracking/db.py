@@ -10,7 +10,8 @@ from django.utils import simplejson
 from django.utils.encoding import force_unicode
 from django.utils.hashcompat import sha_constructor
 
-from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info
+from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info, \
+                                get_stack
 from debug_toolbar.utils.compat.db import connections
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
@@ -55,7 +56,7 @@ class NormalCursorWrapper(object):
     """
     Wraps a cursor and logs queries.
     """
-    
+
     def __init__(self, cursor, db, logger):
         self.cursor = cursor
         # Instance of a BaseDatabaseWrapper subclass
@@ -74,7 +75,7 @@ class NormalCursorWrapper(object):
             enable_stacktraces = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
                                     .get('ENABLE_STACKTRACES', True)
             if enable_stacktraces:
-                stacktrace = tidy_stacktrace(reversed(inspect.stack()))
+                stacktrace = tidy_stacktrace(reversed(get_stack()))
             else:
                 stacktrace = []
             _params = ''
@@ -128,8 +129,8 @@ class NormalCursorWrapper(object):
                     'iso_level': conn.isolation_level,
                     'encoding': conn.encoding,
                 })
-                
-            
+
+
             # We keep `sql` to maintain backwards compatibility
             self.logger.record(**params)
 
