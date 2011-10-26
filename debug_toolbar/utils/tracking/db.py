@@ -1,4 +1,3 @@
-import inspect
 import sys
 
 from datetime import datetime
@@ -7,7 +6,7 @@ from threading import local
 from django.conf import settings
 from django.template import Node
 from django.utils import simplejson
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, smart_str
 from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info, \
@@ -113,7 +112,7 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
-                'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
+                'hash': sha_constructor(settings.SECRET_KEY + smart_str(sql) + _params).hexdigest(),
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,

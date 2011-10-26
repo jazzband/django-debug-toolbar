@@ -1,5 +1,6 @@
 import os
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+os.sys.path.insert(0, os.path.dirname(PROJECT_PATH))
 
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 DATABASE_ENGINE = 'sqlite3'
@@ -31,7 +32,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 TEMPLATE_DEBUG = DEBUG
-TEMPLATE_DIRS = (os.path.join(PROJECT_PATH, 'templates'))
+TEMPLATE_DIRS = (
+        os.path.join(PROJECT_PATH, 'templates'),
+      )
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
     'debug_toolbar.panels.timer.TimerDebugPanel',
@@ -48,4 +51,41 @@ DEBUG_TOOLBAR_PANELS = (
 
 CACHE_BACKEND = 'dummy://'
 #CACHE_BACKEND = 'memcached://127.0.0.1:11211'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['null'],
+            'propagate': True,
+            'level':'INFO',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
 
