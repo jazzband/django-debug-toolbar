@@ -74,7 +74,6 @@ class DebugToolbarMiddleware(object):
     def process_request(self, request):
         __traceback_hide__ = True
         if self.show_toolbar(request):
-
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
             if isinstance(urlconf, basestring):
                 urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
