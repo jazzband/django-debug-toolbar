@@ -20,7 +20,7 @@ import os
 
 class DjangoDebugToolbarStats(Stats):
     __root = None
-    
+
     def get_root_func(self):
         if self.__root is None:
             for func, (cc, nc, tt, ct, callers) in self.stats.iteritems():
@@ -44,14 +44,14 @@ class FunctionCall(object):
         self.parent_ids = parent_ids
         self.hsv = hsv
         self._line_stats_text = None
-    
+
     def parent_classes(self):
         return self.parent_classes
-    
+
     def background(self):
         r,g,b = hsv_to_rgb(*self.hsv)
         return 'rgb(%f%%,%f%%,%f%%)' %(r*100, g*100, b*100)
-    
+
     def func_std_string(self): # match what old profile produced
         func_name = self.func
         if func_name[:2] == ('~', 0):
@@ -66,16 +66,16 @@ class FunctionCall(object):
             idx = file_name.find('/site-packages/')
             if idx > -1:
                 file_name = file_name[idx+14:]
-            
+
             file_path, file_name = file_name.rsplit(os.sep, 1)
-            
+
             return mark_safe('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)'.format(
                 file_path,
                 file_name,
                 line_num,
                 method,
             ))
-    
+
     def subfuncs(self):
         i=0
         h, s, v = self.hsv
@@ -94,36 +94,36 @@ class FunctionCall(object):
                                id=str(self.id) + '_' + str(i),
                                parent_ids=self.parent_ids + [self.id],
                                hsv=(h1,s1,1))
-    
+
     def count(self):
         return self.stats[1]
-    
+
     def tottime(self):
         return self.stats[2]
-    
+
     def cumtime(self):
         cc, nc, tt, ct = self.stats
         return self.stats[3]
-    
+
     def tottime_per_call(self):
         cc, nc, tt, ct = self.stats
-        
+
         if nc == 0:
             return 0
-        
+
         return tt/nc
-    
+
     def cumtime_per_call(self):
         cc, nc, tt, ct = self.stats
-        
+
         if cc == 0:
             return 0
-        
+
         return ct/cc
-    
+
     def indent(self):
         return 16 * self.depth
-    
+
     def line_stats_text(self):
         if self._line_stats_text is None and DJ_PROFILE_USE_LINE_PROFILER:
             lstats = self.statobj.line_stats
@@ -143,16 +143,16 @@ class ProfilingDebugPanel(DebugPanel):
     name = 'Profiling'
     template = 'debug_toolbar/panels/profiling.html'
     has_content = True
-    
+
     def nav_title(self):
         return _('Profiling')
-    
+
     def url(self):
         return ''
-    
+
     def title(self):
         return _('Profiling')
-    
+
     def _unwrap_closure_and_profile(self, func):
         if not hasattr(func, 'func_code'):
             return
@@ -161,9 +161,9 @@ class ProfilingDebugPanel(DebugPanel):
             for cell in func.func_closure:
                 if hasattr(cell.cell_contents, 'func_code'):
                     self._unwrap_closure_and_profile(cell.cell_contents)
-    
+
     def process_view(self, request, view_func, view_args, view_kwargs):
-        __traceback_hide__ = True
+        print "process_view", view_func
         self.profiler = cProfile.Profile()
         args = (request,) + view_args
         if DJ_PROFILE_USE_LINE_PROFILER:
@@ -176,7 +176,7 @@ class ProfilingDebugPanel(DebugPanel):
             self.line_profiler = None
             out = self.profiler.runcall(view_func, *args, **view_kwargs)
         return out
-    
+
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
         func_list.append(func)
         func.has_subfuncs = False
@@ -187,17 +187,17 @@ class ProfilingDebugPanel(DebugPanel):
                    (subfunc.func in self.stats.line_stats.timings))):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
-    
+
     def process_response(self, request, response):
         self.profiler.create_stats()
         self.stats = DjangoDebugToolbarStats(self.profiler)
         if DJ_PROFILE_USE_LINE_PROFILER:
             self.stats.line_stats = self.line_profiler.get_stats()
         self.stats.calc_callees()
-        
+
         root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
-        
+
         func_list = []
         self.add_node(func_list, root, 10, root.stats[3]/8)
-        
-        self.stats_record({'func_list': func_list})
+
+        self.record_stats({'func_list': func_list})
