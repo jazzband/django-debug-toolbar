@@ -1,0 +1,43 @@
+{% load i18n %}
+
+<table width="100%">
+	<thead>
+		<tr>
+			<th>{% trans "Call" %}</th>
+			<th>{% trans "CumTime" %}</th>
+			<th>{% trans "Per" %}</th>
+			<th>{% trans "TotTime" %}</th>
+			<th>{% trans "Per" %}</th>
+			<th>{% trans "Count" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for call in func_list %}
+			<!--  style="background:{{ call.background }}" -->
+			<tr class="djDebugProfileRow{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" depth="{{ call.depth }}">
+				<td>
+					<div style="padding-left: {{ call.indent }}px;">
+						{% if call.has_subfuncs %}
+							<a class="djProfileToggleDetails djToggleSwitch" data-toggle-id="{{ call.id }}" data-toggle-open="+" data-toggle-close="-" href="javascript:void(0)">-</a>
+						{% else %}
+							<span class="djNoToggleSwitch"></span>
+						{% endif %}
+						<span class="stack">{{ call.func_std_string }}</span>
+					</div>
+				</td>
+				<td>{{ call.cumtime|floatformat:3 }}</td>
+				<td>{{ call.cumtime_per_call|floatformat:3 }}</td>
+				<td>{{ call.tottime|floatformat:3 }}</td>
+				<td>{{ call.tottime_per_call|floatformat:3 }}</td>
+				<td>{{ call.count }}</td>
+			</tr>
+			{% if call.line_stats_text %}
+				<tr class="djToggleDetails_{{ call.id }}{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}">
+					<td colspan="6">
+						<div style="padding-left: {{ call.indent }}px;"><pre>{{ call.line_stats_text }}</pre></div>
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+</table>

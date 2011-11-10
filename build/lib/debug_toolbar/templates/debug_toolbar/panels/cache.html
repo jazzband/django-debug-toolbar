@@ -1,0 +1,56 @@
+{% load i18n %}
+<table>
+	<colgroup>
+		<col width="12%"/>
+		<col width="12%"/>
+		<col width="12%"/>
+		<col width="12%"/>
+		<col width="12%"/>
+		<col width="12%"/>
+		<col width="12%"/>
+		<col width="12%"/>
+	</colgroup>
+	<tr>
+		<th>{% trans "Total Calls" %}</th>
+		<td>{{ cache_calls }}</td>
+		<th>{% trans "Total Time" %}</th>
+		<td>{{ cache_time }}ms</td>
+		<th>{% trans "Hits" %}</th>
+		<td>{{ cache.hits }}</td>
+		<th>{% trans "Misses" %}</th>
+		<td>{{ cache.misses }}</td>
+	</tr>
+	<tr>
+		<th>gets</th>
+		<td>{{ cache.gets }}</td>
+		<th>sets</th>
+		<td>{{ cache.sets }}</td>
+		<th>deletes</th>
+		<td>{{ cache.deletes }}</td>
+		<th>get_many</th>
+		<td>{{ cache.get_many }}</td>
+	</tr>
+</table>
+{% if cache.calls %}
+<h3>{% trans "Breakdown" %}</h3>
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Time" %}&#160;(ms)</th>
+			<th>{% trans "Type" %}</th>
+			<th>{% trans "Parameters" %}</th>
+			<th>{% trans "Function" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for query in cache.calls %}
+			<tr class="{% cycle 'row1' 'row2' %}">
+				<td>{{ query.0|floatformat:"4" }}</td>
+				<td>{{ query.1|escape }}</td>
+				<td>{{ query.2|escape }}</td>
+				<td><acronym title="{{ query.3.0 }}:{{ query.3.1 }}">{{ query.3.2|escape }}</acronym>: {{ query.3.3.0|escape }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endif %}

@@ -1,0 +1,12 @@
+{% load i18n %}
+<html>
+<head>
+</head>
+<body>
+<h1>HttpResponseRedirect</h1>
+<p>{% trans 'Location' %}: <a href="{{ redirect_to }}">{{ redirect_to }}</a></p>
+<p class="notice">
+	{% trans "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>." %}
+</p>
+</body>
+</html>
