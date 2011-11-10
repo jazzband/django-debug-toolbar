@@ -7,10 +7,11 @@ from django.conf import settings, global_settings
 
 if not settings.configured:
     settings.configure(
-        DATABASE_ENGINE='sqlite3',
-        # HACK: this fixes our threaded runserver remote tests
-        # DATABASE_NAME='test_sentry',
-        # TEST_DATABASE_NAME='test_sentry',
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+            }
+        },
         INSTALLED_APPS=[
             'django.contrib.auth',
             'django.contrib.admin',
@@ -30,7 +31,7 @@ if not settings.configured:
         SITE_ID=1,
     )
 
-from django.test.simple import run_tests
+from django.test.simple import DjangoTestSuiteRunner
 
 def runtests(*test_args, **kwargs):
     if 'south' in settings.INSTALLED_APPS:
@@ -41,7 +42,8 @@ def runtests(*test_args, **kwargs):
         test_args = ['tests']
     parent = dirname(abspath(__file__))
     sys.path.insert(0, parent)
-    failures = run_tests(test_args, verbosity=kwargs.get('verbosity', 1), interactive=kwargs.get('interactive', False), failfast=kwargs.get('failfast'))
+    test_runner = DjangoTestSuiteRunner(verbosity=kwargs.get('verbosity', 1), interactive=kwargs.get('interactive', False), failfast=kwargs.get('failfast'))
+    failures = test_runner.run_tests(test_args)
     sys.exit(failures)
 
 if __name__ == '__main__':

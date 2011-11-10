@@ -1,4 +1,3 @@
-import inspect
 import sys
 
 from datetime import datetime
@@ -7,10 +6,11 @@ from threading import local
 from django.conf import settings
 from django.template import Node
 from django.utils import simplejson
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, smart_str
 from django.utils.hashcompat import sha_constructor
 
-from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info
+from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, get_template_info, \
+                                get_stack
 from debug_toolbar.utils.compat.db import connections
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
@@ -55,7 +55,7 @@ class NormalCursorWrapper(object):
     """
     Wraps a cursor and logs queries.
     """
-    
+
     def __init__(self, cursor, db, logger):
         self.cursor = cursor
         # Instance of a BaseDatabaseWrapper subclass
@@ -71,7 +71,12 @@ class NormalCursorWrapper(object):
         finally:
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
-            stacktrace = tidy_stacktrace(reversed(inspect.stack()))
+            enable_stacktraces = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
+                                    .get('ENABLE_STACKTRACES', True)
+            if enable_stacktraces:
+                stacktrace = tidy_stacktrace(reversed(get_stack()))
+            else:
+                stacktrace = []
             _params = ''
             try:
                 _params = simplejson.dumps([force_unicode(x, strings_only=True) for x in params])
@@ -107,7 +112,7 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
-                'hash': sha_constructor(settings.SECRET_KEY + sql + _params).hexdigest(),
+                'hash': sha_constructor(settings.SECRET_KEY + smart_str(sql) + _params).hexdigest(),
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,
@@ -123,8 +128,8 @@ class NormalCursorWrapper(object):
                     'iso_level': conn.isolation_level,
                     'encoding': conn.encoding,
                 })
-                
-            
+
+
             # We keep `sql` to maintain backwards compatibility
             self.logger.record(**params)
 
