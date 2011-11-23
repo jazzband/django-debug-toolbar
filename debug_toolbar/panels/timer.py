@@ -22,58 +22,42 @@ class TimerDebugPanel(DebugPanel):
     else:
         has_content = True
         has_resource = True
-    
+
     def process_request(self, request):
         self._start_time = time.time()
         if self.has_resource:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
-    
+
     def process_response(self, request, response):
-        total_time = (time.time() - self._start_time) * 1000
+        stats = {'total_time': (time.time() - self._start_time) * 1000}
         if self.has_resource:
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
-        
-        utime = 1000 * self._elapsed_ru('ru_utime')
-        stime = 1000 * self._elapsed_ru('ru_stime')
-        vcsw = self._elapsed_ru('ru_nvcsw')
-        ivcsw = self._elapsed_ru('ru_nivcsw')
-        minflt = self._elapsed_ru('ru_minflt')
-        majflt = self._elapsed_ru('ru_majflt')
-# these are documented as not meaningful under Linux.  If you're running BSD
-# feel free to enable them, and add any others that I hadn't gotten to before
-# I noticed that I was getting nothing but zeroes and that the docs agreed. :-(
-#
-#        blkin = self._elapsed_ru('ru_inblock')
-#        blkout = self._elapsed_ru('ru_oublock')
-#        swap = self._elapsed_ru('ru_nswap')
-#        rss = self._end_rusage.ru_maxrss
-#        srss = self._end_rusage.ru_ixrss
-#        urss = self._end_rusage.ru_idrss
-#        usrss = self._end_rusage.ru_isrss
-        
-        self.record_stats({
-            'total_time': total_time,
-            'utime': utime,
-            'stime': stime,
-            'vcsw': vcsw,
-            'ivcsw': ivcsw,
-            'minflt': minflt,
-            'majflt': majflt,
-#            'blkin': blkin,
-#            'blkout': blkout,
-#            'swap': swap,
-#            'rss': rss,
-#            'urss': urss,
-#            'srss': srss,
-#            'usrss': usrss,
-        })
-    
+            stats['utime'] = 1000 * self._elapsed_ru('ru_utime')
+            stats['stime'] = 1000 * self._elapsed_ru('ru_stime')
+            stats['vcsw'] = self._elapsed_ru('ru_nvcsw')
+            stats['ivcsw'] = self._elapsed_ru('ru_nivcsw')
+            stats['minflt'] = self._elapsed_ru('ru_minflt')
+            stats['majflt'] = self._elapsed_ru('ru_majflt')
+            # these are documented as not meaningful under Linux.  If you're running BSD
+            # feel free to enable them, and add any others that I hadn't gotten to before
+            # I noticed that I was getting nothing but zeroes and that the docs agreed. :-(
+            #
+            #        stats['blkin'] = self._elapsed_ru('ru_inblock')
+            #        stats['blkout'] = self._elapsed_ru('ru_oublock')
+            #        stats['swap'] = self._elapsed_ru('ru_nswap')
+            #        stats['rss'] = self._end_rusage.ru_maxrss
+            #        stats['srss'] = self._end_rusage.ru_ixrss
+            #        stats['urss'] = self._end_rusage.ru_idrss
+            #        stats['usrss'] = self._end_rusage.ru_isrss
+
+        self.record_stats(stats)
+
     def nav_title(self):
         return _('Time')
-    
+
     def nav_subtitle(self):
         stats = self.get_stats()
-        
+
         # TODO l10n
         if self.has_resource:
             utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
@@ -81,19 +65,19 @@ class TimerDebugPanel(DebugPanel):
             return 'CPU: %0.2fms (%0.2fms)' % ((utime + stime) * 1000.0, stats['total_time'])
         else:
             return 'TOTAL: %0.2fms' % (stats['total_time'])
-    
+
     def title(self):
         return _('Resource Usage')
-    
+
     def url(self):
         return ''
-    
+
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
-    
+
     def content(self):
         stats = self.get_stats()
-        
+
         # TODO l10n on values
         rows = (
             (_('User CPU time'), '%0.3f msec' % stats['utime']),
@@ -106,7 +90,7 @@ class TimerDebugPanel(DebugPanel):
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (stats['minflt'], stats['majflt'])),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (stats['blkin'], stats['blkout'], stats['swap'])),
         )
-        
+
         context = self.context.copy()
         context.update({'rows': rows,})
         return render_to_string(self.template, context)
