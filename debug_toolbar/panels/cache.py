@@ -71,6 +71,43 @@ class CacheStatTracker(BaseCache):
         self.calls.append((this_time, 'get_many', (keys, version), self._get_func_info()))
         return results
 
+    def make_key(self, key, version=None):
+        return self.cache.make_key(key, version)
+
+    def add(self, key, value, timeout=None, version=None):
+        return self.cache.add(key, value, timeout, version)
+
+    def has_key(self, key, version=None):
+        return self.cache.has_key(key, version)
+
+    def incr(self, key, delta=1, version=None):
+        return self.cache.incr(key, delta, version)
+
+    def decr(self, key, delta=1, version=None):
+        return self.cache.decr(key, delta, version)
+
+    def __contains__(self, key):
+        return self.cache.__contains__(key)
+
+    def set_many(self, data, timeout=None, version=None):
+        self.cache.set_many(data, timeout, version)
+
+    def delete_many(self, keys, version=None):
+        self.cache.delete_many(keys, version)
+
+    def clear(self):
+        self.cache.clear()
+
+    def validate_key(self, key):
+        self.cache.validate_key(key)
+
+    def incr_version(self, key, delta=1, version=None):
+        return self.cache.incr_version(key, delta, version)
+
+    def decr_version(self, key, delta=1, version=None):
+        return self.cache.decr_version(key, delta, version)
+
+
 class CacheDebugPanel(DebugPanel):
     """
     Panel that displays the cache statistics.
