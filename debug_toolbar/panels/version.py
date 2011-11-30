@@ -30,7 +30,7 @@ class VersionDebugPanel(DebugPanel):
     def process_response(self, request, response):
         versions = {}
         versions['Python'] = '%d.%d.%d' % sys.version_info[:3]
-        for app in settings.INSTALLED_APPS + ['django']:
+        for app in list(settings.INSTALLED_APPS) + ['django']:
             name = app.split('.')[-1].replace('_', ' ').capitalize()
             __import__(app)
             app = sys.modules[app]
