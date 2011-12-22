@@ -51,7 +51,7 @@ window.djdt = (function(window, document, jQuery) {
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
-            $('#djDebug a.djDebugToggle').click(function(e) {
+            $('#djDebug a.djDebugToggle').live('click', function(e) {
                 e.preventDefault();
                 $(this).parent().find('.djDebugCollapsed').toggle();
                 $(this).parent().find('.djDebugUncollapsed').toggle()
