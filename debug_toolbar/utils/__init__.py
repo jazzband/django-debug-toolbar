@@ -129,7 +129,10 @@ def getframeinfo(frame, context=1):
     else:
         lines = index = None
 
-    return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
+    if hasattr(inspect, 'Traceback'):
+        return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
+    else:
+        return (filename, lineno, frame.f_code.co_name, lines, index)
 
 def get_stack(context=1):
     """
