@@ -11,7 +11,7 @@ window.djdt = (function(window, document, jQuery) {
 		init: function() {
 			$('#djDebug').show();
 			var current = null;
-			$('#djDebugPanelList li a').click(function() {
+			$('#djDebugPanelList li a').live('click', function() {
 				if (!this.className) {
 					return false;
 				}
@@ -27,18 +27,18 @@ window.djdt = (function(window, document, jQuery) {
 				}
 				return false;
 			});
-			$('#djDebug a.djDebugClose').click(function() {
+			$('#djDebug a.djDebugClose').live('click', function() {
 				$(document).trigger('close.djDebug');
 				$('#djDebugToolbar li').removeClass('active');
 				return false;
 			});
-			$('#djDebug a.remoteCall').click(function() {
+			$('#djDebug a.remoteCall').live('click', function() {
 				$('#djDebugWindow').load(this.href, function(response, status, xhr) {
 					if (status == "error") {
 						var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
 						$('#djDebugWindow').html(message);
 					}
-					$('#djDebugWindow a.djDebugBack').click(function() {
+					$('#djDebugWindow a.djDebugBack').live('click', function() {
 						$(this).parent().parent().hide();
 						return false;
 					});
@@ -46,7 +46,7 @@ window.djdt = (function(window, document, jQuery) {
 				$('#djDebugWindow').show();
 				return false;
 			});
-			$('#djDebugTemplatePanel a.djTemplateShowContext').click(function() {
+			$('#djDebugTemplatePanel a.djTemplateShowContext').live('click', function() {
 				djdt.toggle_arrow($(this).children('.toggleArrow'));
 				djdt.toggle_content($(this).parent().next());
 				return false;
@@ -54,17 +54,17 @@ window.djdt = (function(window, document, jQuery) {
 			$('#djDebug a.djDebugToggle').live('click', function(e) {
 				e.preventDefault();
 				$(this).parent().find('.djDebugCollapsed').toggle();
-				$(this).parent().find('.djDebugUncollapsed').toggle()
+				$(this).parent().find('.djDebugUncollapsed').toggle();
 			});
-			$('#djDebug a.djToggleSwitch').click(function(e) {
+			$('#djDebug a.djToggleSwitch').live('click', function(e) {
 				e.preventDefault();
 				var btn = $(this);
 				var id = btn.attr('data-toggle-id');
 				var open_me = btn.text() == btn.attr('data-toggle-open');
-				if (id == '' || !id) {
+				if (id === '' || !id) {
 					return;
 				}
-				
+
 				btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugCollapsed').toggle(open_me);
 				btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugUncollapsed').toggle(!open_me);
 				$(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
@@ -84,28 +84,28 @@ window.djdt = (function(window, document, jQuery) {
 				return;
 			});
 			function getSubcalls(row) {
-			  id = row.attr('id');
-			  return $('.djDebugProfileRow[id^="'+id+'_"]');
+				var id = row.attr('id');
+				return $('.djDebugProfileRow[id^="'+id+'_"]');
 			}
 			function getDirectSubcalls(row) {
-			  subcalls = getSubcalls(row);
-			  depth = parseInt(row.attr('depth')) + 1;
-			  return subcalls.filter('[depth='+depth+']');
+				var subcalls = getSubcalls(row);
+				var depth = parseInt(row.attr('depth'), 10) + 1;
+				return subcalls.filter('[depth='+depth+']');
 			}
-			$('.djDebugProfileRow .djDebugProfileToggle').click(function(){
-			  row = $(this).closest('.djDebugProfileRow')
-			  subcalls = getSubcalls(row);
-			  if (subcalls.css('display')=='none') {
-				getDirectSubcalls(row).show();
-			  } else {
-				subcalls.hide();
-			  }
+			$('.djDebugProfileRow .djDebugProfileToggle').live('click', function(){
+				var row = $(this).closest('.djDebugProfileRow');
+				var subcalls = getSubcalls(row);
+				if (subcalls.css('display') == 'none') {
+					getDirectSubcalls(row).show();
+				} else {
+					subcalls.hide();
+				}
 			});
-			$('#djHideToolBarButton').click(function() {
+			$('#djHideToolBarButton').live('click', function() {
 				djdt.hide_toolbar(true);
 				return false;
 			});
-			$('#djShowToolBarButton').click(function() {
+			$('#djShowToolBarButton').live('click', function() {
 				djdt.show_toolbar();
 				return false;
 			});
