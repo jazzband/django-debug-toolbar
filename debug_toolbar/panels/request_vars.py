@@ -3,6 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import get_name_from_obj
 
+from django.core.urlresolvers import resolve
+from django.http import Http404
+
 class RequestVarsDebugPanel(DebugPanel):
     """
     A panel to display request variables (POST/GET, session, cookies).
@@ -13,9 +16,6 @@ class RequestVarsDebugPanel(DebugPanel):
     
     def __init__(self, *args, **kwargs):
         DebugPanel.__init__(self, *args, **kwargs)
-        self.view_func = None
-        self.view_args = None
-        self.view_kwargs = None
     
     def nav_title(self):
         return _('Request Vars')
@@ -29,11 +29,6 @@ class RequestVarsDebugPanel(DebugPanel):
     def process_request(self, request):
         self.request = request
     
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        self.view_func = view_func
-        self.view_args = view_args
-        self.view_kwargs = view_kwargs
-    
     def process_response(self, request, response):
         self.record_stats({
             'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
@@ -41,17 +36,26 @@ class RequestVarsDebugPanel(DebugPanel):
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
         })
         
-        if hasattr(self, 'view_func'):
-            if self.view_func is not None:
-                name = get_name_from_obj(self.view_func)
+        view_info = { }
+        view_info['view_func'] = '<no view>'
+        view_info['view_args'] = 'None'
+        view_info['view_kwargs'] = 'None'
+        view_info['view_urlname'] = 'None'
+
+        try:
+            match = resolve(self.request.path)
+            func, args, kwargs = match
+            view_info['view_func'] = get_name_from_obj(func)
+            view_info['view_args'] = args
+            view_info['view_kwargs'] = kwargs
+            if hasattr(match, 'url_name'):  # Django >= 1.3
+                view_info['view_urlname'] = match.url_name
             else:
-                name = '<no view>'
-            
-            self.record_stats({
-                'view_func': name,
-                'view_args': self.view_args,
-                'view_kwargs': self.view_kwargs
-            })
+                view_info['view_urlname'] = '<unavailable>'
+        except Http404:
+            pass
+
+        self.record_stats(view_info)
         
         if hasattr(self.request, 'session'):
             self.record_stats({
