@@ -14,11 +14,14 @@ from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils.compat.db import connections
 
+
 class InvalidSQLError(Exception):
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
+
 
 def debug_media(request, path):
     root = getattr(settings, 'DEBUG_TOOLBAR_MEDIA_ROOT', None)
@@ -26,6 +29,7 @@ def debug_media(request, path):
         parent = os.path.abspath(os.path.dirname(__file__))
         root = os.path.join(parent, 'media', 'debug_toolbar')
     return django.views.static.serve(request, path, root)
+
 
 def sql_select(request):
     """
@@ -43,7 +47,7 @@ def sql_select(request):
     alias = request.GET.get('alias', 'default')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connections[alias].cursor()
@@ -61,6 +65,7 @@ def sql_select(request):
         return render_to_response('debug_toolbar/panels/sql_select.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
+
 def sql_explain(request):
     """
     Returns the output of the SQL EXPLAIN on the given query.
@@ -77,7 +82,7 @@ def sql_explain(request):
     alias = request.GET.get('alias', 'default')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connections[alias].cursor()
@@ -106,6 +111,7 @@ def sql_explain(request):
         return render_to_response('debug_toolbar/panels/sql_explain.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
+
 def sql_profile(request):
     """
     Returns the output of running the SQL and getting the profiling statistics.
@@ -122,7 +128,7 @@ def sql_profile(request):
     alias = request.GET.get('alias', 'default')
     hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
-        return HttpResponseBadRequest('Tamper alert') # SQL Tampering alert
+        return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
         cursor = connections[alias].cursor()
@@ -130,9 +136,9 @@ def sql_profile(request):
         headers = None
         result_error = None
         try:
-            cursor.execute("SET PROFILING=1") # Enable profiling
-            cursor.execute(sql, params) # Execute SELECT
-            cursor.execute("SET PROFILING=0") # Disable profiling
+            cursor.execute("SET PROFILING=1")  # Enable profiling
+            cursor.execute(sql, params)  # Execute SELECT
+            cursor.execute("SET PROFILING=0")  # Disable profiling
             # The Query ID should always be 1 here but I'll subselect to get the last one just in case...
             cursor.execute("SELECT * FROM information_schema.profiling WHERE query_id=(SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)")
             headers = [d[0] for d in cursor.description]
@@ -151,6 +157,7 @@ def sql_profile(request):
         return render_to_response('debug_toolbar/panels/sql_profile.html', context)
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
+
 def template_source(request):
     """
     Return the source of a template, syntax-highlighted by Pygments if
@@ -164,7 +171,7 @@ def template_source(request):
     if template_name is None:
         return HttpResponseBadRequest('"template" key is required')
 
-    try: # Django 1.2 ...
+    try:  # Django 1.2 ...
         from django.template.loader import find_template_loader, make_origin
         loaders = []
         for loader_name in settings.TEMPLATE_LOADERS:
@@ -178,7 +185,7 @@ def template_source(request):
                 break
             except TemplateDoesNotExist:
                 source = "Template Does Not Exist: %s" % (template_name,)
-    except (ImportError, AttributeError): # Django 1.1 ...
+    except (ImportError, AttributeError):  # Django 1.1 ...
         from django.template.loader import find_template_source
         source, origin = find_template_source(template_name)
 

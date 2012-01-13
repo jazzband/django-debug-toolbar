@@ -2,17 +2,20 @@ import logging
 import time
 import types
 
+
 def post_dispatch(func):
     def wrapped(callback):
         register_hook(func, 'after', callback)
         return callback
     return wrapped
 
+
 def pre_dispatch(func):
     def wrapped(callback):
         register_hook(func, 'before', callback)
         return callback
     return wrapped
+
 
 def replace_call(func):
     def inner(callback):
@@ -28,6 +31,7 @@ def replace_call(func):
         return wrapped
     return inner
 
+
 def fire_hook(hook, sender, **kwargs):
     try:
         for callback in callbacks[hook].get(id(sender), []):
@@ -35,6 +39,7 @@ def fire_hook(hook, sender, **kwargs):
     except Exception, e:
         # Log the exception, dont mess w/ the underlying function
         logging.exception(e)
+
 
 def _replace_function(func, wrapped):
     if isinstance(func, types.FunctionType):
@@ -57,6 +62,7 @@ callbacks = {
     'before': {},
     'after': {},
 }
+
 
 def register_hook(func, hook, callback):
     """
@@ -81,7 +87,7 @@ def register_hook(func, hook, callback):
     wrapped.__wrapped__ = actual
     wrapped.__doc__ = getattr(actual, '__doc__', None)
     wrapped.__name__ = actual.__name__
-    
+
     id_ = id(actual)
     if id_ not in callbacks[hook]:
         callbacks[hook][id_] = []

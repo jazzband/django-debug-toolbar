@@ -19,7 +19,7 @@ from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 from django.test.utils import instrumented_test_render
 from django.template import Template
 
-if not hasattr(Template, '_render'): # Django < 1.2
+if not hasattr(Template, '_render'):  # Django < 1.2
     if Template.render != instrumented_test_render:
         Template.original_render = Template.render
         Template.render = instrumented_test_render
@@ -31,6 +31,8 @@ else:
 
 # MONSTER monkey-patch
 old_template_init = Template.__init__
+
+
 def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
     old_template_init(self, template_string, origin, name)
     self.origin = origin
@@ -44,18 +46,18 @@ class TemplateDebugPanel(DebugPanel):
     name = 'Template'
     template = 'debug_toolbar/panels/templates.html'
     has_content = True
-    
+
     def __init__(self, *args, **kwargs):
         super(TemplateDebugPanel, self).__init__(*args, **kwargs)
         self.templates = []
         template_rendered.connect(self._store_template_info)
-    
+
     def _store_template_info(self, sender, **kwargs):
         t = kwargs['template']
         if t.name and t.name.startswith('debug_toolbar/'):
             return  # skip templates that we are generating through the debug toolbar.
         context_data = kwargs['context']
-        
+
         context_list = []
         for context_layer in context_data.dicts:
             temp_layer = {}
@@ -95,20 +97,20 @@ class TemplateDebugPanel(DebugPanel):
                 pass
         kwargs['context'] = context_list
         self.templates.append(kwargs)
-    
+
     def nav_title(self):
         return _('Templates')
-    
+
     def title(self):
         num_templates = len(self.templates)
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
-    
+
     def url(self):
         return ''
-    
+
     def process_request(self, request):
         self.request = request
-    
+
     def process_response(self, request, response):
         context_processors = dict(
             [
@@ -133,7 +135,7 @@ class TemplateDebugPanel(DebugPanel):
                 context_list = template_data.get('context', [])
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
-        
+
         self.record_stats({
             'templates': template_context,
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],

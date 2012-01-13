@@ -14,19 +14,19 @@ class VersionDebugPanel(DebugPanel):
     name = 'Version'
     template = 'debug_toolbar/panels/versions.html'
     has_content = True
-    
+
     def nav_title(self):
         return _('Versions')
-    
+
     def nav_subtitle(self):
         return 'Django %s' % django.get_version()
-    
+
     def url(self):
         return ''
-    
+
     def title(self):
         return _('Versions')
-    
+
     def process_response(self, request, response):
         versions = {}
         versions['Python'] = '%d.%d.%d' % sys.version_info[:3]
@@ -49,7 +49,7 @@ class VersionDebugPanel(DebugPanel):
             if isinstance(version, (list, tuple)):
                 version = '.'.join(str(o) for o in version)
             versions[name] = version
-        
+
         self.record_stats({
             'versions': versions,
             'paths': sys.path,

@@ -32,7 +32,7 @@ class DjangoDebugToolbarStats(Stats):
 
 class FunctionCall(object):
     def __init__(self, statobj, func, depth=0, stats=None,
-                 id=0, parent_ids=[], hsv=(0,0.5,1)):
+                 id=0, parent_ids=[], hsv=(0, 0.5, 1)):
         self.statobj = statobj
         self.func = func
         if stats:
@@ -49,10 +49,10 @@ class FunctionCall(object):
         return self.parent_classes
 
     def background(self):
-        r,g,b = hsv_to_rgb(*self.hsv)
-        return 'rgb(%f%%,%f%%,%f%%)' %(r*100, g*100, b*100)
+        r, g, b = hsv_to_rgb(*self.hsv)
+        return 'rgb(%f%%,%f%%,%f%%)' % (r * 100, g * 100, b * 100)
 
-    def func_std_string(self): # match what old profile produced
+    def func_std_string(self):  # match what old profile produced
         func_name = self.func
         if func_name[:2] == ('~', 0):
             # special case for built-in functions
@@ -65,7 +65,7 @@ class FunctionCall(object):
             file_name, line_num, method = self.func
             idx = file_name.find('/site-packages/')
             if idx > -1:
-                file_name = file_name[idx+14:]
+                file_name = file_name[(idx + 14):]
 
             file_path, file_name = file_name.rsplit(os.sep, 1)
 
@@ -77,23 +77,23 @@ class FunctionCall(object):
             ))
 
     def subfuncs(self):
-        i=0
+        i = 0
         h, s, v = self.hsv
         count = len(self.statobj.all_callees[self.func])
         for func, stats in self.statobj.all_callees[self.func].iteritems():
             i += 1
-            h1 = h + (i/count)/(self.depth+1)
+            h1 = h + (i / count) / (self.depth + 1)
             if stats[3] == 0:
                 s1 = 0
             else:
-                s1 = s*(stats[3]/self.stats[3])
+                s1 = s * (stats[3] / self.stats[3])
             yield FunctionCall(self.statobj,
                                func,
-                               self.depth+1,
+                               self.depth + 1,
                                stats=stats,
                                id=str(self.id) + '_' + str(i),
                                parent_ids=self.parent_ids + [self.id],
-                               hsv=(h1,s1,1))
+                               hsv=(h1, s1, 1))
 
     def count(self):
         return self.stats[1]
@@ -111,7 +111,7 @@ class FunctionCall(object):
         if nc == 0:
             return 0
 
-        return tt/nc
+        return tt / nc
 
     def cumtime_per_call(self):
         cc, nc, tt, ct = self.stats
@@ -119,7 +119,7 @@ class FunctionCall(object):
         if cc == 0:
             return 0
 
-        return ct/cc
+        return ct / cc
 
     def indent(self):
         return 16 * self.depth
@@ -135,6 +135,7 @@ class FunctionCall(object):
             else:
                 self._line_stats_text = False
         return self._line_stats_text
+
 
 class ProfilingDebugPanel(DebugPanel):
     """
@@ -201,6 +202,6 @@ class ProfilingDebugPanel(DebugPanel):
         root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
 
         func_list = []
-        self.add_node(func_list, root, 10, root.stats[3]/8)
+        self.add_node(func_list, root, 10, root.stats[3] / 8)
 
         self.record_stats({'func_list': func_list})

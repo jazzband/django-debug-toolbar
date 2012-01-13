@@ -15,6 +15,7 @@ except ImportError:
 
 from debug_toolbar.panels import DebugPanel
 
+
 class SignalDebugPanel(DebugPanel):
     name = "Signals"
     template = 'debug_toolbar/panels/signals.html'
