@@ -19,7 +19,7 @@ class SignalDebugPanel(DebugPanel):
     name = "Signals"
     template = 'debug_toolbar/panels/signals.html'
     has_content = True
-    
+
     SIGNALS = {
         'request_started': request_started,
         'request_finished': request_finished,
@@ -34,16 +34,16 @@ class SignalDebugPanel(DebugPanel):
         'post_delete': post_delete,
         'post_syncdb': post_syncdb,
     }
-    
+
     def nav_title(self):
         return _("Signals")
-    
+
     def title(self):
         return _("Signals")
-    
+
     def url(self):
         return ''
-    
+
     def signals(self):
         signals = self.SIGNALS.copy()
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
@@ -57,7 +57,7 @@ class SignalDebugPanel(DebugPanel):
             signals[parts[-1]] = getattr(sys.modules[path], parts[-1])
         return signals
     signals = property(signals)
-    
+
     def process_response(self, request, response):
         signals = []
         keys = self.signals.keys()
@@ -77,8 +77,8 @@ class SignalDebugPanel(DebugPanel):
                 elif getattr(receiver, 'im_class', None) is not None:
                     text = "method %s on %s" % (receiver.__name__, receiver.im_class.__name__)
                 else:
-                    text = "function %s" % receiver.__name__
+                    text = "function %s" % getattr(receiver, '__name__', str(receiver))
                 receivers.append(text)
             signals.append((name, signal, receivers))
-        
+
         self.record_stats({'signals': signals})
