@@ -17,7 +17,7 @@ window.djdt = (function(window, document, jQuery) {
 				}
 				current = $('#djDebug #' + this.className);
 				if (current.is(':visible')) {
-				    $(document).trigger('close.djDebug');
+					$(document).trigger('close.djDebug');
 					$(this).parent().removeClass('active');
 				} else {
 					$('.panelContent').hide(); // Hide any that are already open
@@ -51,11 +51,11 @@ window.djdt = (function(window, document, jQuery) {
 				djdt.toggle_content($(this).parent().next());
 				return false;
 			});
-            $('#djDebug a.djDebugToggle').click(function(e) {
-                e.preventDefault();
-                $(this).parent().find('.djDebugCollapsed').toggle();
-                $(this).parent().find('.djDebugUncollapsed').toggle()
-            });
+			$('#djDebug a.djDebugToggle').live('click', function(e) {
+				e.preventDefault();
+				$(this).parent().find('.djDebugCollapsed').toggle();
+				$(this).parent().find('.djDebugUncollapsed').toggle()
+			});
 			$('#djDebug a.djToggleSwitch').click(function(e) {
 				e.preventDefault();
 				var btn = $(this);
@@ -65,8 +65,8 @@ window.djdt = (function(window, document, jQuery) {
 					return;
 				}
 				
-                btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugCollapsed').toggle(open_me);
-                btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugUncollapsed').toggle(!open_me);
+				btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugCollapsed').toggle(open_me);
+				btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugUncollapsed').toggle(!open_me);
 				$(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
 					var $this = $(this);
 					if (open_me) {
@@ -96,9 +96,9 @@ window.djdt = (function(window, document, jQuery) {
 			  row = $(this).closest('.djDebugProfileRow')
 			  subcalls = getSubcalls(row);
 			  if (subcalls.css('display')=='none') {
-			    getDirectSubcalls(row).show();
+				getDirectSubcalls(row).show();
 			  } else {
-			    subcalls.hide();
+				subcalls.hide();
 			  }
 			});
 			$('#djHideToolBarButton').click(function() {
@@ -134,11 +134,11 @@ window.djdt = (function(window, document, jQuery) {
 			$('#djDebug .djDebugHoverable').hover(function(){
 				$(this).addClass('djDebugHover');
 			}, function(){
-			    $(this).removeClass('djDebugHover');
+				$(this).removeClass('djDebugHover');
 			});
 			djdt.isReady = true;
 			$.each(djdt.events.ready, function(_, callback){
-			    callback(djdt);
+				callback(djdt);
 			});
 		},
 		toggle_content: function(elem) {
