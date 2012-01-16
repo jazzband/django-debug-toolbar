@@ -83,6 +83,7 @@ def load_panel_classes():
         'debug_toolbar.panels.cache.CacheDebugPanel',
         'debug_toolbar.panels.signals.SignalDebugPanel',
         'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar.panels.ajax.AjaxDebugPanel',
     ))
     for panel_path in panels:
         try:

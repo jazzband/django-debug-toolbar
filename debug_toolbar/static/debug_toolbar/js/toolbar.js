@@ -83,6 +83,25 @@ window.djdt = (function(window, document, jQuery) {
 				});
 				return;
 			});
+			function refreshAjaxPanel() {
+				$.get('/__debug__/ajax_request/', function(data) {
+				    $('#djDebugAjaxPanel .djDebugPanelContent div.scroll').html(data);
+				    var num_reqs = $('#djDebugAjaxPanel .djDebugPanelContent tbody tr').length;
+				    $('a.djDebugAjaxPanel small').html(num_reqs + ' requests');
+				});
+			}
+			$('#djDebug a.djAjaxLoad').live('click', function(e) {
+				e.preventDefault();
+				var req_id = $(this).attr('data-requestid');
+				$.get('/__debug__/ajax_request/' + req_id + '/', function(data) {
+				    $('#djDebugWrapper').wrap('<div>').parent().html(data);
+				    refreshAjaxPanel();
+				});
+			});
+			$('#djAjaxRefreshBtn').live('click', function(e) {
+				e.preventDefault();
+				refreshAjaxPanel();
+			});
 			function getSubcalls(row) {
 				var id = row.attr('id');
 				return $('.djDebugProfileRow[id^="'+id+'_"]');
