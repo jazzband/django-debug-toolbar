@@ -39,7 +39,6 @@ class AjaxDebugPanel(DebugPanel):
     def storage(self, request):
         if self.session_key not in request.session:
             request.session[self.session_key] = []
-       # request.session[self.session_key] = []
         return request.session[self.session_key]
 
     def record(self, request, ddt_html):
@@ -57,7 +56,7 @@ class AjaxDebugPanel(DebugPanel):
 
     def get_context(self, request):
         return {
-            'ajax_requests': request.session.get(self.session_key, []),
+            'ajax_requests': self.storage(request),
         }
 
     def process_request(self, request):
