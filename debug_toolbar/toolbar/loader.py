@@ -38,6 +38,7 @@ class DebugToolbar(object):
             #'debug_toolbar.panels.cache.CacheDebugPanel',
             'debug_toolbar.panels.signals.SignalDebugPanel',
             'debug_toolbar.panels.logger.LoggingPanel',
+            'debug_toolbar.panels.ajax.AjaxDebugPanel',
         )
         self.load_panels()
         self.stats = {}

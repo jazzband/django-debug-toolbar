@@ -3,6 +3,7 @@ Debug Toolbar middleware
 """
 import imp
 import thread
+import datetime
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -127,11 +128,20 @@ class DebugToolbarMiddleware(object):
            response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
             for panel in toolbar.panels:
                 panel.process_response(request, response)
-            response.content = replace_insensitive(
-                smart_unicode(response.content),
-                self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+            content = smart_unicode(response.content)
+            ddt_html = smart_unicode(toolbar.render_toolbar())
+            if self.tag in content:
+                response.content = replace_insensitive(content, self.tag,
+                                                       ddt_html + self.tag)
+                if response.get('Content-Length', None):
+                    response['Content-Length'] = len(response.content)
+            if request.is_ajax():
+                from debug_toolbar.panels.ajax import AjaxDebugPanel
+                try:
+                    ajax_panel = toolbar.get_panel(AjaxDebugPanel)
+                except IndexError:
+                    ajax_panel = None
+                if ajax_panel:
+                    ajax_panel.record(request, ddt_html)
         del self.__class__.debug_toolbars[ident]
         return response
