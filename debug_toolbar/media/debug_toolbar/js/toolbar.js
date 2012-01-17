@@ -101,11 +101,11 @@ window.djdt = (function(window, document, jQuery) {
 					subcalls.hide();
 				}
 			});
-			$('#djHideToolBarButton').live('click', function() {
+			$('#djHideToolBarButton').click(function() {
 				djdt.hide_toolbar(true);
 				return false;
 			});
-			$('#djShowToolBarButton').live('click', function() {
+			$('#djShowToolBarButton').click(function() {
 				djdt.show_toolbar();
 				return false;
 			});
