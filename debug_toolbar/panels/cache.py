@@ -27,9 +27,9 @@ class CacheStatTracker(BaseCache):
         stack = inspect.stack()[2]
         return (stack[1], stack[2], stack[3], stack[4])
 
-    def get(self, key, default=None):
+    def get(self, key, **kwargs):
         t = time.time()
-        value = self.cache.get(key, default)
+        value = self.cache.get(key, **kwargs)
         this_time = time.time() - t
         self.total_time += this_time * 1000
         if value is None:
