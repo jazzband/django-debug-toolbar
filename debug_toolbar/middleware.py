@@ -127,7 +127,8 @@ class DebugToolbarMiddleware(object):
            response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
             for panel in toolbar.panels:
                 panel.process_response(request, response)
-            set_urlconf(request.urlconf)
+            if getattr(request, 'urlconf', None):
+                set_urlconf(request.urlconf)
             response.content = replace_insensitive(
                 smart_unicode(response.content),
                 self.tag,
