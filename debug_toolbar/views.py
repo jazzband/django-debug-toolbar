@@ -10,6 +10,7 @@ from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
+from django.utils.encoding import smart_str
 from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils.compat.db import connections
@@ -42,10 +43,11 @@ def sql_select(request):
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
+    sql = smart_str(request.GET.get('sql', ''))
+    params = smart_str(request.GET.get('params', ''))
     alias = request.GET.get('alias', 'default')
-    hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
+    secret_key = smart_str(settings.SECRET_KEY)
+    hash = sha_constructor(secret_key + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
@@ -77,10 +79,11 @@ def sql_explain(request):
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
+    sql = smart_str(request.GET.get('sql', ''))
+    params = smart_str(request.GET.get('params', ''))
     alias = request.GET.get('alias', 'default')
-    hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
+    secret_key = smart_str(settings.SECRET_KEY)
+    hash = sha_constructor(secret_key + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
@@ -123,10 +126,11 @@ def sql_profile(request):
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
+    sql = smart_str(request.GET.get('sql', ''))
+    params = smart_str(request.GET.get('params', ''))
     alias = request.GET.get('alias', 'default')
-    hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
+    secret_key = smart_str(settings.SECRET_KEY)
+    hash = sha_constructor(secret_key + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
