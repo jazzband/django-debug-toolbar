@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 17:24+0100\n"
+"POT-Creation-Date: 2012-03-05 17:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,9 +68,23 @@ msgstr "Einstellungen"
 msgid "Settings from <code>%s</code>"
 msgstr "Einstellungen von <code>%s</code>"
 
-#: panels/signals.py:40 panels/signals.py:54
+#: panels/signals.py:40 panels/signals.py:58
 msgid "Signals"
-msgstr "Signals"
+msgstr "Signale"
+
+#: panels/signals.py:49
+#, python-format
+msgid "%(num_receivers)d receiver of 1 signal"
+msgid_plural "%(num_receivers)d receivers of 1 signal"
+msgstr[0] "%(num_receivers)d Empfänger von 1 Signal"
+msgstr[1] "%(num_receivers)d Empfänger von 1 Signal"
+
+#: panels/signals.py:52
+#, python-format
+msgid "%(num_receivers)d receiver of %(num_signals)d signals"
+msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
+msgstr[0] "%(num_receivers)d Empfänger von %(num_signals)d Signal"
+msgstr[1] "%(num_receivers)d Empfänger von %(num_signals)d Signalen"
 
 #: panels/sql.py:121
 msgid "SQL"
@@ -185,7 +199,7 @@ msgstr "Funktion"
 
 #: templates/debug_toolbar/panels/headers.html:5
 msgid "Key"
-msgstr "Schlüssel"
+msgstr "Name"
 
 #: templates/debug_toolbar/panels/headers.html:6
 #: templates/debug_toolbar/panels/request_vars.html:39
@@ -199,7 +213,7 @@ msgstr "Wert"
 
 #: templates/debug_toolbar/panels/logger.html:6
 msgid "Level"
-msgstr "Niveau"
+msgstr "Level"
 
 #: templates/debug_toolbar/panels/logger.html:8
 msgid "Channel"
@@ -299,7 +313,7 @@ msgstr "Signal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing Args"
-msgstr "Bereitgestellte Argumente"
+msgstr "Argumente"
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
