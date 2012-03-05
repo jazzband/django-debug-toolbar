@@ -121,12 +121,8 @@ class SQLDebugPanel(DebugPanel):
         return _('SQL')
 
     def nav_subtitle(self):
-        # TODO l10n: use ngettext
-        return "%d %s in %.2fms" % (
-            self._num_queries,
-            (self._num_queries == 1) and 'query' or 'queries',
-            self._sql_time
-        )
+        return __("%d query in %.2fms", "%d queries in %.2fms",
+                  self._num_queries) % (self._num_queries, self._sql_time)
 
     def title(self):
         count = len(self._databases)
