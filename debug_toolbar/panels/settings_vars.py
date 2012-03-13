@@ -11,16 +11,16 @@ class SettingsVarsDebugPanel(DebugPanel):
     name = 'SettingsVars'
     template = 'debug_toolbar/panels/settings_vars.html'
     has_content = True
-    
+
     def nav_title(self):
         return _('Settings')
-    
+
     def title(self):
         return _('Settings from <code>%s</code>') % settings.SETTINGS_MODULE
-    
+
     def url(self):
         return ''
-    
+
     def process_response(self, request, response):
         self.record_stats({
             'settings': get_safe_settings(),

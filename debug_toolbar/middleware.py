@@ -5,7 +5,6 @@ import imp
 import thread
 
 from django.conf import settings
-from django.conf.urls.defaults import include, patterns
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
@@ -16,6 +15,7 @@ from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
+
 def replace_insensitive(string, target, replacement):
     """
     Similar to string.replace() but is case insensitive
@@ -25,8 +25,9 @@ def replace_insensitive(string, target, replacement):
     index = no_case.rfind(target.lower())
     if index >= 0:
         return string[:index] + replacement + string[index + len(target):]
-    else: # no results so return the original string
+    else:  # no results so return the original string
         return string
+
 
 class DebugToolbarMiddleware(object):
     """
@@ -43,10 +44,10 @@ class DebugToolbarMiddleware(object):
         self._urlconfs = {}
 
         # Set method to use to decide to show toolbar
-        self.show_toolbar = self._show_toolbar # default
+        self.show_toolbar = self._show_toolbar  # default
 
         # The tag to attach the toolbar to
-        self.tag= u'</body>'
+        self.tag = u'</body>'
 
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
             show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(

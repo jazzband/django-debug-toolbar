@@ -146,13 +146,14 @@ class ReindentFilter(Filter):
         split_words = ('FROM', 'JOIN$', 'AND', 'OR',
                        'GROUP', 'ORDER', 'UNION', 'VALUES',
                        'SET', 'BETWEEN')
+
         def _next_token(i):
             t = tlist.token_next_match(i, T.Keyword, split_words,
                                        regex=True)
             if t and t.value.upper() == 'BETWEEN':
-                t = _next_token(tlist.token_index(t)+1)
+                t = _next_token(tlist.token_index(t) + 1)
                 if t and t.value.upper() == 'AND':
-                    t = _next_token(tlist.token_index(t)+1)
+                    t = _next_token(tlist.token_index(t) + 1)
             return t
 
         idx = 0

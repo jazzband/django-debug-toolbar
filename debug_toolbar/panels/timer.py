@@ -1,7 +1,7 @@
 try:
     import resource
 except ImportError:
-    pass # Will fail on Win32 systems
+    pass  # Will fail on Win32 systems
 import time
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -14,7 +14,7 @@ class TimerDebugPanel(DebugPanel):
     """
     name = 'Timer'
     template = 'debug_toolbar/panels/timer.html'
-    try: # if resource module not available, don't show content panel
+    try:  # if resource module not available, don't show content panel
         resource
     except NameError:
         has_content = False
@@ -92,5 +92,5 @@ class TimerDebugPanel(DebugPanel):
         )
 
         context = self.context.copy()
-        context.update({'rows': rows,})
+        context.update({'rows': rows})
         return render_to_string(self.template, context)

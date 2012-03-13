@@ -15,11 +15,12 @@ except ImportError:
 
 from debug_toolbar.panels import DebugPanel
 
+
 class SignalDebugPanel(DebugPanel):
     name = "Signals"
     template = 'debug_toolbar/panels/signals.html'
     has_content = True
-    
+
     SIGNALS = {
         'request_started': request_started,
         'request_finished': request_finished,
@@ -34,16 +35,27 @@ class SignalDebugPanel(DebugPanel):
         'post_delete': post_delete,
         'post_syncdb': post_syncdb,
     }
-    
+
     def nav_title(self):
         return _("Signals")
-    
+
+    def nav_subtitle(self):
+        signals = self.get_stats()['signals']
+        num_receivers = sum(len(s[2]) for s in signals)
+        num_signals = len(signals)
+        return '%d %s from %d %s' % (
+            num_receivers,
+            (num_receivers == 1) and 'receiver' or 'receivers',
+            num_signals,
+            (num_signals == 1) and 'signal' or 'signals',
+        )
+
     def title(self):
         return _("Signals")
-    
+
     def url(self):
         return ''
-    
+
     def signals(self):
         signals = self.SIGNALS.copy()
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
@@ -57,13 +69,10 @@ class SignalDebugPanel(DebugPanel):
             signals[parts[-1]] = getattr(sys.modules[path], parts[-1])
         return signals
     signals = property(signals)
-    
+
     def process_response(self, request, response):
         signals = []
-        keys = self.signals.keys()
-        keys.sort()
-        for name in keys:
-            signal = self.signals[name]
+        for name, signal in sorted(self.signals.items(), key=lambda x: x[0]):
             if signal is None:
                 continue
             receivers = []
@@ -72,13 +81,16 @@ class SignalDebugPanel(DebugPanel):
                     receiver = receiver()
                 if receiver is None:
                     continue
+
+                receiver = getattr(receiver, '__wraps__', receiver)
+                receiver_name = getattr(receiver, '__name__', str(receiver))
                 if getattr(receiver, 'im_self', None) is not None:
-                    text = "method %s on %s object" % (receiver.__name__, receiver.im_self.__class__.__name__)
+                    text = "%s.%s" % (getattr(receiver.im_self, '__class__', type).__name__, receiver_name)
                 elif getattr(receiver, 'im_class', None) is not None:
-                    text = "method %s on %s" % (receiver.__name__, receiver.im_class.__name__)
+                    text = "%s.%s" % (receiver.im_class.__name__, receiver_name)
                 else:
-                    text = "function %s" % receiver.__name__
+                    text = "%s" % receiver_name
                 receivers.append(text)
             signals.append((name, signal, receivers))
-        
+
         self.record_stats({'signals': signals})

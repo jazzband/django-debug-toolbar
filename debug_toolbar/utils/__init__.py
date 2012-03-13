@@ -11,11 +11,13 @@ from django.views.debug import linebreak_iter
 django_path = os.path.realpath(os.path.dirname(django.__file__))
 socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
 
+
 def ms_from_timedelta(td):
     """
     Given a timedelta object, returns a float representing milliseconds
     """
     return (td.seconds * 1000) + (td.microseconds / 1000.0)
+
 
 def tidy_stacktrace(stack):
     """
@@ -44,6 +46,7 @@ def tidy_stacktrace(stack):
             text = (''.join(text)).strip()
         trace.append((path, line_no, func_name, text))
     return trace
+
 
 def get_template_info(source, context_lines=3):
     line = 0
@@ -79,6 +82,7 @@ def get_template_info(source, context_lines=3):
         'context': context,
     }
 
+
 def get_name_from_obj(obj):
     if hasattr(obj, '__name__'):
         name = obj.__name__
@@ -92,6 +96,7 @@ def get_name_from_obj(obj):
         name = '%s.%s' % (module, name)
 
     return name
+
 
 def getframeinfo(frame, context=1):
     """
@@ -116,7 +121,7 @@ def getframeinfo(frame, context=1):
 
     filename = inspect.getsourcefile(frame) or inspect.getfile(frame)
     if context > 0:
-        start = lineno - 1 - context//2
+        start = lineno - 1 - context // 2
         try:
             lines, lnum = inspect.findsource(frame)
         except (IOError, IndexError):
@@ -124,12 +129,16 @@ def getframeinfo(frame, context=1):
         else:
             start = max(start, 1)
             start = max(0, min(start, len(lines) - context))
-            lines = lines[start:start+context]
+            lines = lines[start:(start + context)]
             index = lineno - 1 - start
     else:
         lines = index = None
 
-    return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
+    if hasattr(inspect, 'Traceback'):
+        return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
+    else:
+        return (filename, lineno, frame.f_code.co_name, lines, index)
+
 
 def get_stack(context=1):
     """

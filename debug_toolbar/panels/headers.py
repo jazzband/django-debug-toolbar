@@ -32,21 +32,21 @@ class HeaderDebugPanel(DebugPanel):
         'SERVER_PROTOCOL',
         'SERVER_SOFTWARE',
     )
-    
+
     def nav_title(self):
         return _('HTTP Headers')
-    
+
     def title(self):
         return _('HTTP Headers')
-    
+
     def url(self):
         return ''
-    
+
     def process_request(self, request):
         self.headers = dict(
             [(k, request.META[k]) for k in self.header_filter if k in request.META]
         )
-    
+
     def process_response(self, request, response):
         self.record_stats({
             'headers': self.headers
