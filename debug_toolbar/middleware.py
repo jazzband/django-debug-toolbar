@@ -82,7 +82,7 @@ class DebugToolbarMiddleware(object):
             if urlconf not in self._urlconfs:
                 new_urlconf = imp.new_module('urlconf')
                 new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
-                        urlconf.urlpatterns
+                        list(urlconf.urlpatterns)
 
                 if hasattr(urlconf, 'handler404'):
                     new_urlconf.handler404 = urlconf.handler404
