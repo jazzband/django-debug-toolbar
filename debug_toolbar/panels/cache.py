@@ -3,7 +3,7 @@ import inspect
 
 from django.core import cache
 from django.core.cache.backends.base import BaseCache
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ungettext
 from debug_toolbar.panels import DebugPanel
 
 
@@ -89,7 +89,14 @@ class CacheDebugPanel(DebugPanel):
             cache.cache = self.cache
 
     def nav_title(self):
-        return _('Cache: %.2fms') % self.cache.total_time
+        return _('Cache')
+
+    def nav_subtitle(self):
+        cache_calls = len(self.cache.calls)
+        return ungettext('%(cache_calls)d call in %(time).2fms',
+                         '%(cache_calls)d calls in %(time).2fms',
+                         cache_calls) % {'cache_calls': cache_calls,
+                                         'time': self.cache.total_time}
 
     def title(self):
         return _('Cache Usage')
