@@ -1,17 +1,17 @@
 import sys
 
 from django.conf import settings
-from django.core.signals import request_started, request_finished, \
-    got_request_exception
-from django.db.models.signals import class_prepared, pre_init, post_init, \
-    pre_save, post_save, pre_delete, post_delete, post_syncdb
+from django.core.signals import (request_started, request_finished,
+    got_request_exception)
+from django.db.models.signals import (class_prepared, pre_init, post_init,
+    pre_save, post_save, pre_delete, post_delete, post_syncdb)
 from django.dispatch.dispatcher import WEAKREF_TYPES
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ungettext
 
 try:
     from django.db.backends.signals import connection_created
 except ImportError:
-    connection_created = None
+    connection_created = None  # noqa
 
 from debug_toolbar.panels import DebugPanel
 
@@ -43,12 +43,16 @@ class SignalDebugPanel(DebugPanel):
         signals = self.get_stats()['signals']
         num_receivers = sum(len(s[2]) for s in signals)
         num_signals = len(signals)
-        return '%d %s from %d %s' % (
-            num_receivers,
-            (num_receivers == 1) and 'receiver' or 'receivers',
-            num_signals,
-            (num_signals == 1) and 'signal' or 'signals',
-        )
+        # here we have to handle a double count translation, hence the
+        # hard coding of one signal
+        if num_signals == 1:
+            return ungettext('%(num_receivers)d receiver of 1 signal',
+                             '%(num_receivers)d receivers of 1 signal',
+                             num_receivers) % {'num_receivers': num_receivers}
+        return ungettext('%(num_receivers)d receiver of %(num_signals)d signals',
+                         '%(num_receivers)d receivers of %(num_signals)d signals',
+                         num_receivers) % {'num_receivers': num_receivers,
+                                           'num_signals': num_signals}
 
     def title(self):
         return _("Signals")
