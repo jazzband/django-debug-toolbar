@@ -11,7 +11,7 @@ setup(
     url='https://github.com/django-debug-toolbar/django-debug-toolbar',
     download_url='https://github.com/django-debug-toolbar/django-debug-toolbar/downloads',
     license='BSD',
-    packages=find_packages(exclude=('ez_setup', 'tests', 'example')),
+    packages=find_packages(exclude=('tests', 'example')),
     tests_require=[
         'django>=1.1,<1.4',
         'dingus',
