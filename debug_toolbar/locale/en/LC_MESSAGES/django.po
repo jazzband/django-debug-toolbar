@@ -2,14 +2,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # 
-# Translators:
-# Percy Pérez-Pinedo, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: http://github.com/django-debug-toolbar/django-debug-toolbar/issues\n"
-"POT-Creation-Date: 2012-03-31 21:39+0200\n"
-"PO-Revision-Date: 2012-03-31 19:39+0000\n"
+"POT-Creation-Date: 2012-03-31 22:10+0200\n"
+"PO-Revision-Date: 2012-03-31 20:10+0000\n"
 "Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +98,7 @@ msgstr "Templates"
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "Templates (%(num_templates)s rendered)"
 
-#: panels/timer.py:56 templates/debug_toolbar/panels/cache.html:39
+#: panels/timer.py:58 templates/debug_toolbar/panels/cache.html:39
 #: templates/debug_toolbar/panels/logger.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
@@ -108,29 +106,64 @@ msgstr "Templates (%(num_templates)s rendered)"
 msgid "Time"
 msgstr "Time"
 
-#: panels/timer.py:70
+#: panels/timer.py:66
+#, python-format
+msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
+msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
+
+#: panels/timer.py:71
+#, python-format
+msgid "TOTAL: %0.2fms"
+msgstr "TOTAL: %0.2fms"
+
+#: panels/timer.py:74
 msgid "Resource Usage"
 msgstr "Resource Usage"
 
-#: panels/timer.py:83
+#: panels/timer.py:85
 msgid "User CPU time"
 msgstr "User CPU time"
 
-#: panels/timer.py:84
+#: panels/timer.py:85
+#, python-format
+msgid "%(utime)0.3f msec"
+msgstr "%(utime)0.3f msec"
+
+#: panels/timer.py:86
 msgid "System CPU time"
 msgstr "System CPU time"
 
-#: panels/timer.py:85
+#: panels/timer.py:86
+#, python-format
+msgid "%(stime)0.3f msec"
+msgstr "%(stime)0.3f msec"
+
+#: panels/timer.py:87
 msgid "Total CPU time"
 msgstr "Total CPU time"
 
-#: panels/timer.py:86
+#: panels/timer.py:87
+#, python-format
+msgid "%(total)0.3f msec"
+msgstr "%(total)0.3f msec"
+
+#: panels/timer.py:88
 msgid "Elapsed time"
 msgstr "Elapsed time"
 
-#: panels/timer.py:87
+#: panels/timer.py:88
+#, python-format
+msgid "%(total_time)0.3f msec"
+msgstr "%(total_time)0.3f msec"
+
+#: panels/timer.py:89
 msgid "Context switches"
 msgstr "Context switches"
+
+#: panels/timer.py:89
+#, python-format
+msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
+msgstr "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 
 #: panels/version.py:19 panels/version.py:28
 msgid "Versions"
@@ -341,6 +374,26 @@ msgstr "Time (ms)"
 msgid "Action"
 msgstr "Action"
 
+#: templates/debug_toolbar/panels/sql.html:59
+msgid "Connection:"
+msgstr "Connection:"
+
+#: templates/debug_toolbar/panels/sql.html:61
+msgid "Isolation level:"
+msgstr "Isolation level:"
+
+#: templates/debug_toolbar/panels/sql.html:64
+msgid "Transaction status:"
+msgstr "Transaction status:"
+
+#: templates/debug_toolbar/panels/sql.html:78
+msgid "(unknown)"
+msgstr "(unknown)"
+
+#: templates/debug_toolbar/panels/sql.html:87
+msgid "No SQL queries were recorded during this request."
+msgstr "No SQL queries were recorded during this request."
+
 #: templates/debug_toolbar/panels/sql_explain.html:3
 #: templates/debug_toolbar/panels/sql_profile.html:3
 #: templates/debug_toolbar/panels/sql_select.html:3
@@ -423,6 +476,3 @@ msgstr "Package"
 #: templates/debug_toolbar/panels/versions.html:7
 msgid "Version"
 msgstr "Version"
-
-#~ msgid "Parameters"
-#~ msgstr "Parameters"
