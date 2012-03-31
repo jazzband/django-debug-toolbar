@@ -38,8 +38,9 @@
 		<tr>
 			<th>{% trans "Time" %}&nbsp;(ms)</th>
 			<th>{% trans "Type" %}</th>
-			<th>{% trans "Parameters" %}</th>
 			<th>{% trans "Function" %}</th>
+			<th>{% trans "args" %}</th>
+			<th>{% trans "kwargs" %}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -47,8 +48,9 @@
 			<tr class="{% cycle 'row1' 'row2' %}">
 				<td>{{ call_time|floatformat:"4" }}</td>
 				<td>{{ call_type|escape }}</td>
-				<td>{{ call_args|escape }}, {{ call_kwargs|escape }}</td>
 				<td><acronym title="{{ call_func.0 }}:{{ call_func.1 }}">{{ call_func.2|escape }}</acronym>: {{ call_func.3.0|escape }}</td>
+				<td>{{ call_args|escape }}</td>
+				<td>{{ call_kwargs|escape }}</td>
 			</tr>
 		{% endfor %}
 	</tbody>

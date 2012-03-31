@@ -125,11 +125,11 @@ class CacheDebugPanel(DebugPanel):
         return _('Cache: %.2fms') % cache.cache.total_time
 
     def nav_subtitle(self):
-        cache_calls = len(self.cache.calls)
+        cache_calls = len(cache.cache.calls)
         return ungettext('%(cache_calls)d call in %(time).2fms',
                          '%(cache_calls)d calls in %(time).2fms',
                          cache_calls) % {'cache_calls': cache_calls,
-                                         'time': self.cache.total_time}
+                                         'time': cache.cache.total_time}
 
     def title(self):
         return _('Cache Usage')
