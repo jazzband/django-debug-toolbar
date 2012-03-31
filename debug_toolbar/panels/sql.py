@@ -1,3 +1,4 @@
+import os
 import re
 import uuid
 
@@ -31,15 +32,14 @@ def get_isolation_level_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions
         choices = {
-            psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: 'Autocommit',
-            psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: 'Read uncommitted',
-            psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED: 'Read committed',
-            psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: 'Repeatable read',
-            psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: 'Serializable',
+            psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: _('Autocommit'),
+            psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: _('Read uncommitted'),
+            psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED: _('Read committed'),
+            psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: _('Repeatable read'),
+            psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: _('Serializable'),
         }
     else:
         raise ValueError(engine)
-
     return choices.get(level)
 
 
@@ -47,15 +47,14 @@ def get_transaction_status_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions
         choices = {
-            psycopg2.extensions.TRANSACTION_STATUS_IDLE: 'Idle',
-            psycopg2.extensions.TRANSACTION_STATUS_ACTIVE: 'Active',
-            psycopg2.extensions.TRANSACTION_STATUS_INTRANS: 'In transaction',
-            psycopg2.extensions.TRANSACTION_STATUS_INERROR: 'In error',
-            psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN: 'Unknown',
+            psycopg2.extensions.TRANSACTION_STATUS_IDLE: _('Idle'),
+            psycopg2.extensions.TRANSACTION_STATUS_ACTIVE: _('Active'),
+            psycopg2.extensions.TRANSACTION_STATUS_INTRANS: _('In transaction'),
+            psycopg2.extensions.TRANSACTION_STATUS_INERROR: _('In error'),
+            psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN: _('Unknown'),
         }
     else:
         raise ValueError(engine)
-
     return choices.get(level)
 
 
@@ -126,10 +125,9 @@ class SQLDebugPanel(DebugPanel):
 
     def title(self):
         count = len(self._databases)
-
-        return __('SQL Queries from %(count)d connection', 'SQL Queries from %(count)d connections', count) % dict(
-            count=count,
-        )
+        return __('SQL Queries from %(count)d connection',
+                  'SQL Queries from %(count)d connections',
+                  count) % dict(count=count)
 
     def url(self):
         return ''
