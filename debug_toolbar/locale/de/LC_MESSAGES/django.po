@@ -1,21 +1,22 @@
-# Django Debug Toolbar auf Deutsch.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Jannis Leidel, 2009.
-#
-#
+# 
+# 
+# Translators:
+# Jannis Leidel <jannis@leidel.info>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-31 14:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Project-Id-Version: Django Debug Toolbar\n"
+"Report-Msgid-Bugs-To: http://github.com/django-debug-toolbar/django-debug-toolbar/issues\n"
+"POT-Creation-Date: 2012-03-31 14:25+0200\n"
+"PO-Revision-Date: 2012-03-31 13:19+0000\n"
+"Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/django-debug-toolbar/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: panels/cache.py:92
 msgid "Cache"
@@ -25,8 +26,8 @@ msgstr "Cache"
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] "%(cache_calls)d Anfrage in %(time).2fms"
-msgstr[1] "%(cache_calls)d Anfragen in %(time).2fms"
+msgstr[0] "%(cache_calls)d Abfrage in %(time).2fms"
+msgstr[1] "%(cache_calls)d Abfragen in %(time).2fms"
 
 #: panels/cache.py:102
 msgid "Cache Usage"
@@ -34,7 +35,7 @@ msgstr "Cache-Verbrauch"
 
 #: panels/headers.py:37 panels/headers.py:40
 msgid "HTTP Headers"
-msgstr "HTTP-Header"
+msgstr "HTTP -Header"
 
 #: panels/logger.py:117
 msgid "Logging"
@@ -44,12 +45,12 @@ msgstr "Logging"
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] "%(count)s Nachricht"
-msgstr[1] "%(count)s Nachrichten"
+msgstr[0] "%(count)s Eintrag"
+msgstr[1] "%(count)s Einträge"
 
 #: panels/logger.py:126
 msgid "Log Messages"
-msgstr "Log-Nachrichten"
+msgstr "Einträge"
 
 #: panels/profiling.py:149 panels/profiling.py:155
 msgid "Profiling"
@@ -76,14 +77,14 @@ msgstr "Signale"
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] "%(num_receivers)d Empfänger von 1 Signal"
-msgstr[1] "%(num_receivers)d Empfänger von 1 Signal"
+msgstr[0] "%(num_receivers)d Empfänger von einem Signal"
+msgstr[1] "%(num_receivers)d Empfänger von einem Signal"
 
 #: panels/signals.py:52
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] "%(num_receivers)d Empfänger von %(num_signals)d Signal"
+msgstr[0] "%(num_receivers)d Empfänger von %(num_signals)d Signalen"
 msgstr[1] "%(num_receivers)d Empfänger von %(num_signals)d Signalen"
 
 #: panels/sql.py:121
@@ -109,15 +110,15 @@ msgstr "Zeit"
 
 #: panels/timer.py:70
 msgid "Resource Usage"
-msgstr "Ressource-Verbrauch"
+msgstr "Ressourcenverbrauch"
 
 #: panels/timer.py:83
 msgid "User CPU time"
-msgstr "Benutzer CPU-Zeit"
+msgstr "CPU-Zeit Benutzer"
 
 #: panels/timer.py:84
 msgid "System CPU time"
-msgstr "System CPU-Zeit"
+msgstr "CPU-Zeit System"
 
 #: panels/timer.py:85
 msgid "Total CPU time"
@@ -125,7 +126,7 @@ msgstr "CPU-Zeit gesamt"
 
 #: panels/timer.py:86
 msgid "Elapsed time"
-msgstr "Zeit verstrichen"
+msgstr "Verstrichene Zeit"
 
 #: panels/timer.py:87
 msgid "Context switches"
@@ -157,8 +158,13 @@ msgid "Location"
 msgstr "Ort"
 
 #: templates/debug_toolbar/redirect.html:9
-msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
-msgstr ""
+msgid ""
+"The Django Debug Toolbar has intercepted a redirect to the above URL for "
+"debug viewing purposes.  You can click the above link to continue with the "
+"redirect as normal.  If you'd like to disable this feature, set the "
+"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
+"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgstr "Die Django Debug Toolbar hat eine Weiterleitung zu dieser URL zur weiteren Fehlerbeseitigung abgefangen. Bitte den oben stehenden Link klicken, um mit der Weiterleitung fortzufahren. Falls diese Funktion abgeschaltet werden soll, bitte die Konfigurationsvariable <code>INTERCEPT_REDIRECTS</code> im <code>DEBUG_TOOLBAR_CONFIG</code> Dictionary auf <code>False</code> setzen."
 
 #: templates/debug_toolbar/panels/cache.html:14
 msgid "Total Calls"
@@ -178,7 +184,7 @@ msgstr "Fehler"
 
 #: templates/debug_toolbar/panels/cache.html:35
 msgid "Breakdown"
-msgstr "Zusammenfassung"
+msgstr "Überblick"
 
 #: templates/debug_toolbar/panels/cache.html:40
 msgid "Type"
@@ -212,15 +218,15 @@ msgstr "Level"
 
 #: templates/debug_toolbar/panels/logger.html:8
 msgid "Channel"
-msgstr "Channel"
+msgstr "Kanal"
 
 #: templates/debug_toolbar/panels/logger.html:9
 msgid "Message"
-msgstr "Nachricht"
+msgstr "Eintrag"
 
 #: templates/debug_toolbar/panels/logger.html:26
 msgid "No messages logged"
-msgstr "Keine Nachricht gespeichert"
+msgstr "Keine Logbucheinträge vorhanden"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "Call"
@@ -228,7 +234,7 @@ msgstr "Aufruf"
 
 #: templates/debug_toolbar/panels/profiling.html:7
 msgid "CumTime"
-msgstr "Zeit einzeln"
+msgstr "Gesamt"
 
 #: templates/debug_toolbar/panels/profiling.html:8
 #: templates/debug_toolbar/panels/profiling.html:10
@@ -237,7 +243,7 @@ msgstr "Per"
 
 #: templates/debug_toolbar/panels/profiling.html:9
 msgid "TotTime"
-msgstr "Zeit gesamt"
+msgstr "Total"
 
 #: templates/debug_toolbar/panels/profiling.html:11
 msgid "Count"
@@ -245,11 +251,11 @@ msgstr "Anzahl"
 
 #: templates/debug_toolbar/panels/request_vars.html:3
 msgid "View information"
-msgstr "Details anzeigen"
+msgstr "View-Informationen"
 
 #: templates/debug_toolbar/panels/request_vars.html:7
 msgid "View Function"
-msgstr "Funktion anzeigen"
+msgstr "View"
 
 #: templates/debug_toolbar/panels/request_vars.html:8
 msgid "args"
@@ -261,7 +267,7 @@ msgstr "kwargs"
 
 #: templates/debug_toolbar/panels/request_vars.html:29
 msgid "COOKIES Variables"
-msgstr "COOKIES Variablen"
+msgstr "COOKIES-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:38
 #: templates/debug_toolbar/panels/request_vars.html:64
@@ -272,11 +278,11 @@ msgstr "Variable"
 
 #: templates/debug_toolbar/panels/request_vars.html:52
 msgid "No COOKIE data"
-msgstr "Keine COOKIE-Daten"
+msgstr "Keine COOKIES-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:55
 msgid "SESSION Variables"
-msgstr "SESSION Variablen"
+msgstr "SESSION-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:78
 msgid "No SESSION data"
@@ -284,7 +290,7 @@ msgstr "Keine SESSION-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:81
 msgid "GET Variables"
-msgstr "GET Variablen"
+msgstr "GET-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:100
 msgid "No GET data"
@@ -292,7 +298,7 @@ msgstr "Keine GET-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:103
 msgid "POST Variables"
-msgstr "POST Variablen"
+msgstr "POST-Daten"
 
 #: templates/debug_toolbar/panels/request_vars.html:122
 msgid "No POST data"
@@ -308,7 +314,7 @@ msgstr "Signal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing Args"
-msgstr "Argumente"
+msgstr "Übergebene Argumente"
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
@@ -318,12 +324,12 @@ msgstr "Empfänger"
 #, python-format
 msgid "%(num)s query"
 msgid_plural "%(num)s queries"
-msgstr[0] "%(num)s Anfrage"
-msgstr[1] "%(num)s Anfragen"
+msgstr[0] "%(num)s Abfrage"
+msgstr[1] "%(num)s Abfragen"
 
 #: templates/debug_toolbar/panels/sql.html:19
 msgid "Query"
-msgstr "Anfrage"
+msgstr "Abfrage"
 
 #: templates/debug_toolbar/panels/sql.html:20
 msgid "Timeline"
@@ -391,16 +397,16 @@ msgstr "Template"
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
 msgid "Toggle Context"
-msgstr "Context zeigen"
+msgstr "Kontext umschalten"
 
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr "Nichts"
+msgstr "-"
 
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
-msgstr "Context processor"
+msgstr "Context-Prozessor"
 
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
@@ -408,17 +414,8 @@ msgstr "Ressource"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Package"
-msgstr "Package"
+msgstr "Paket"
 
 #: templates/debug_toolbar/panels/versions.html:7
 msgid "Version"
 msgstr "Version"
-
-#~ msgid "Line"
-#~ msgstr "Zeile"
-
-#~ msgid "Method"
-#~ msgstr "Methode"
-
-#~ msgid "File"
-#~ msgstr "Datei"
