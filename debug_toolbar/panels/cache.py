@@ -122,7 +122,7 @@ class CacheDebugPanel(DebugPanel):
         cache.cache.reset()
 
     def nav_title(self):
-        return _('Cache: %.2fms') % cache.cache.total_time
+        return _('Cache')
 
     def nav_subtitle(self):
         cache_calls = len(cache.cache.calls)
