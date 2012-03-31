@@ -10,7 +10,7 @@
 	<p>None</p>
 {% endif %}
 
-<h4>{% blocktrans count template_count=template_dirs|length %}Template{% plural %}Templates{% endblocktrans %}</h4>
+<h4>{% blocktrans count template_count=templates|length %}Template{% plural %}Templates{% endblocktrans %}</h4>
 {% if templates %}
 <dl>
 {% for template in templates %}
