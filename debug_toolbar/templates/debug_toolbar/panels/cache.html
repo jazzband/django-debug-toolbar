@@ -28,7 +28,7 @@
 		<th>deletes</th>
 		<td>{{ cache.deletes }}</td>
 		<th>get_many</th>
-		<td>{{ cache.get_many }}</td>
+		<td>{{ cache.get_manys }}</td>
 	</tr>
 </table>
 {% if cache.calls %}
@@ -43,12 +43,12 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for query in cache.calls %}
+		{% for call_time, call_type, call_args, call_kwargs, call_func in cache.calls %}
 			<tr class="{% cycle 'row1' 'row2' %}">
-				<td>{{ query.0|floatformat:"4" }}</td>
-				<td>{{ query.1|escape }}</td>
-				<td>{{ query.2|escape }}</td>
-				<td><acronym title="{{ query.3.0 }}:{{ query.3.1 }}">{{ query.3.2|escape }}</acronym>: {{ query.3.3.0|escape }}</td>
+				<td>{{ call_time|floatformat:"4" }}</td>
+				<td>{{ call_type|escape }}</td>
+				<td>{{ call_args|escape }}, {{ call_kwargs|escape }}</td>
+				<td><acronym title="{{ call_func.0 }}:{{ call_func.1 }}">{{ call_func.2|escape }}</acronym>: {{ call_func.3.0|escape }}</td>
 			</tr>
 		{% endfor %}
 	</tbody>
