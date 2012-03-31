@@ -1,5 +1,5 @@
 {% load i18n %}
-<h4>{% trans 'Template path' %}{{ template_dirs|length|pluralize }}</h4>
+<h4>{% blocktrans count template_count=template_dirs|length %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
 {% if template_dirs %}
 	<ol>
 	{% for template in template_dirs %}
@@ -10,7 +10,7 @@
 	<p>None</p>
 {% endif %}
 
-<h4>{% trans "Template" %}{{ templates|length|pluralize }}</h4>
+<h4>{% blocktrans count template_count=template_dirs|length %}Template{% plural %}Templates{% endblocktrans %}</h4>
 {% if templates %}
 <dl>
 {% for template in templates %}
@@ -28,7 +28,7 @@
 	<p>{% trans 'None' %}</p>
 {% endif %}
 
-<h4>{% trans 'Context processor' %}{{ context_processors|length|pluralize }}</h4>
+<h4>{% blocktrans count context_processors_count=context_processors|length %}Context processor{% plural %}Context processors{% endblocktrans %}</h4>
 {% if context_processors %}
 <dl>
 {% for key, value in context_processors.iteritems %}
