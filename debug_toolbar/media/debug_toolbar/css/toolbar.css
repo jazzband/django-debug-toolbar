@@ -1,15 +1,15 @@
 /* http://www.positioniseverything.net/easyclearing.html */
-.clearfix:after {
+#djDebug .clearfix:after {
     content: "."; 
     display: block; 
     height: 0; 
     clear: both; 
     visibility: hidden;
 }
-.clearfix {display: inline-block;}
+#djDebug .clearfix {display: inline-block;}
 /* Hides from IE-mac \*/
-.clearfix {display: block;}
-* html .clearfix {height: 1%;}
+#djDebug .clearfix {display: block;}
+* html #djDebug .clearfix {height: 1%;}
 /* end hide from IE-mac */
 
 /* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
