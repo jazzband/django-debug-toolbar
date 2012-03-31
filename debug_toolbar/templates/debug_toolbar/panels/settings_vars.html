@@ -7,10 +7,10 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for var in settings.items|dictsort:"0" %}
+		{% for name, value in settings.items %}
 			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-				<td>{{ var.0 }}</td>
-				<td><code>{{ var.1|pprint }}</code></td>
+				<td>{{ name }}</td>
+				<td><code>{{ value|pprint }}</code></td>
 			</tr>
 		{% endfor %}
 	</tbody>

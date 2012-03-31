@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.views.debug import get_safe_settings
 from django.utils.translation import ugettext_lazy as _
+from django.utils.datastructures import SortedDict
+
 from debug_toolbar.panels import DebugPanel
 
 
@@ -23,5 +25,5 @@ class SettingsVarsDebugPanel(DebugPanel):
 
     def process_response(self, request, response):
         self.record_stats({
-            'settings': get_safe_settings(),
+            'settings': SortedDict(sorted(get_safe_settings().items(), key=lambda s: s[0])),
         })
