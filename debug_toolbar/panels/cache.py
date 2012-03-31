@@ -27,9 +27,9 @@ class CacheStatTracker(BaseCache):
         stack = inspect.stack()[2]
         return (stack[1], stack[2], stack[3], stack[4])
 
-    def get(self, key, default=None):
+    def get(self, key, **kwargs):
         t = time.time()
-        value = self.cache.get(key, default)
+        value = self.cache.get(key, **kwargs)
         this_time = time.time() - t
         self.total_time += this_time * 1000
         if value is None:
@@ -40,23 +40,23 @@ class CacheStatTracker(BaseCache):
         self.calls.append((this_time, 'get', (key,), self._get_func_info()))
         return value
 
-    def set(self, key, value, timeout=None):
+    def set(self, key, value, timeout=None, **kwargs):
         t = time.time()
-        self.cache.set(key, value, timeout)
+        self.cache.set(key, value, timeout, **kwargs)
         this_time = time.time() - t
         self.total_time += this_time * 1000
         self.sets += 1
         self.calls.append((this_time, 'set', (key, value, timeout), self._get_func_info()))
 
-    def delete(self, key):
+    def delete(self, key, **kwargs):
         t = time.time()
-        self.cache.delete(key)
+        self.cache.delete(key, **kwargs)
         this_time = time.time() - t
         self.total_time += this_time * 1000
         self.deletes += 1
         self.calls.append((this_time, 'delete', (key,), self._get_func_info()))
 
-    def get_many(self, keys):
+    def get_many(self, keys, **kwargs):
         t = time.time()
         results = self.cache.get_many(keys)
         this_time = time.time() - t
