@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: http://github.com/django-debug-toolbar/django-debug-toolbar/issues\n"
-"POT-Creation-Date: 2012-03-31 14:25+0200\n"
-"PO-Revision-Date: 2012-03-31 13:19+0000\n"
+"POT-Creation-Date: 2012-03-31 21:39+0200\n"
+"PO-Revision-Date: 2012-03-31 19:44+0000\n"
 "Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/django-debug-toolbar/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -18,24 +18,24 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: panels/cache.py:92
+#: panels/cache.py:125
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:96
+#: panels/cache.py:129
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] "%(cache_calls)d Abfrage in %(time).2fms"
 msgstr[1] "%(cache_calls)d Abfragen in %(time).2fms"
 
-#: panels/cache.py:102
+#: panels/cache.py:135
 msgid "Cache Usage"
 msgstr "Cache-Verbrauch"
 
 #: panels/headers.py:37 panels/headers.py:40
 msgid "HTTP Headers"
-msgstr "HTTP -Header"
+msgstr "HTTP-Header"
 
 #: panels/logger.py:117
 msgid "Logging"
@@ -60,11 +60,11 @@ msgstr "Profiling"
 msgid "Request Vars"
 msgstr "Request-Variablen"
 
-#: panels/settings_vars.py:16
+#: panels/settings_vars.py:18
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: panels/settings_vars.py:19
+#: panels/settings_vars.py:21
 #, python-format
 msgid "Settings from <code>%s</code>"
 msgstr "Einstellungen von <code>%s</code>"
@@ -191,12 +191,18 @@ msgid "Type"
 msgstr "Typ"
 
 #: templates/debug_toolbar/panels/cache.html:41
-msgid "Parameters"
-msgstr "Parameter"
-
-#: templates/debug_toolbar/panels/cache.html:42
 msgid "Function"
 msgstr "Funktion"
+
+#: templates/debug_toolbar/panels/cache.html:42
+#: templates/debug_toolbar/panels/request_vars.html:8
+msgid "args"
+msgstr "args"
+
+#: templates/debug_toolbar/panels/cache.html:43
+#: templates/debug_toolbar/panels/request_vars.html:9
+msgid "kwargs"
+msgstr "kwargs"
 
 #: templates/debug_toolbar/panels/headers.html:5
 msgid "Key"
@@ -256,14 +262,6 @@ msgstr "View-Informationen"
 #: templates/debug_toolbar/panels/request_vars.html:7
 msgid "View Function"
 msgstr "View"
-
-#: templates/debug_toolbar/panels/request_vars.html:8
-msgid "args"
-msgstr "args"
-
-#: templates/debug_toolbar/panels/request_vars.html:9
-msgid "kwargs"
-msgstr "kwargs"
 
 #: templates/debug_toolbar/panels/request_vars.html:29
 msgid "COOKIES Variables"
@@ -388,16 +386,20 @@ msgstr "Template-Quelle"
 
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
-msgstr "Template-Pfad"
+msgid_plural "Template paths"
+msgstr[0] "Template-Pfad"
+msgstr[1] "Template-Pfade"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
-msgstr "Template"
+msgid_plural "Templates"
+msgstr[0] "Template"
+msgstr[1] "Templates"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
 msgid "Toggle Context"
-msgstr "Kontext umschalten"
+msgstr "Context einblenden"
 
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
@@ -406,7 +408,9 @@ msgstr "-"
 
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
-msgstr "Context-Prozessor"
+msgid_plural "Context processors"
+msgstr[0] "Context-Prozessor"
+msgstr[1] "Context-Prozessoren"
 
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
@@ -419,3 +423,6 @@ msgstr "Paket"
 #: templates/debug_toolbar/panels/versions.html:7
 msgid "Version"
 msgstr "Version"
+
+#~ msgid "Parameters"
+#~ msgstr "Parameters"

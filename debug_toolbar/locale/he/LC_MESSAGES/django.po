@@ -1,33 +1,34 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-31 14:35+0200\n"
-"PO-Revision-Date: 2009-08-24 23:08-0600\n"
-"Last-Translator: Alex <alex.gaynor@gmail.com>\n"
+"Project-Id-Version: Django Debug Toolbar\n"
+"Report-Msgid-Bugs-To: http://github.com/django-debug-toolbar/django-debug-toolbar/issues\n"
+"POT-Creation-Date: 2012-03-31 21:39+0200\n"
+"PO-Revision-Date: 2012-03-31 19:39+0000\n"
+"Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: panels/cache.py:92
+#: panels/cache.py:125
 msgid "Cache"
 msgstr ""
 
-#: panels/cache.py:96
+#: panels/cache.py:129
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/cache.py:102
+#: panels/cache.py:135
 msgid "Cache Usage"
 msgstr ""
 
@@ -47,9 +48,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: panels/logger.py:126
-#, fuzzy
 msgid "Log Messages"
-msgstr "הודעה"
+msgstr ""
 
 #: panels/profiling.py:149 panels/profiling.py:155
 msgid "Profiling"
@@ -59,11 +59,11 @@ msgstr ""
 msgid "Request Vars"
 msgstr ""
 
-#: panels/settings_vars.py:16
+#: panels/settings_vars.py:18
 msgid "Settings"
 msgstr ""
 
-#: panels/settings_vars.py:19
+#: panels/settings_vars.py:21
 #, python-format
 msgid "Settings from <code>%s</code>"
 msgstr ""
@@ -120,9 +120,8 @@ msgid "System CPU time"
 msgstr ""
 
 #: panels/timer.py:85
-#, fuzzy
 msgid "Total CPU time"
-msgstr "זמן"
+msgstr ""
 
 #: panels/timer.py:86
 msgid "Elapsed time"
@@ -133,9 +132,8 @@ msgid "Context switches"
 msgstr ""
 
 #: panels/version.py:19 panels/version.py:28
-#, fuzzy
 msgid "Versions"
-msgstr "ג 'נגו גירסה"
+msgstr "גירסאות"
 
 #: templates/debug_toolbar/base.html:11
 msgid "Hide Toolbar"
@@ -159,7 +157,12 @@ msgid "Location"
 msgstr "מקום"
 
 #: templates/debug_toolbar/redirect.html:9
-msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgid ""
+"The Django Debug Toolbar has intercepted a redirect to the above URL for "
+"debug viewing purposes.  You can click the above link to continue with the "
+"redirect as normal.  If you'd like to disable this feature, set the "
+"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
+"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:14
@@ -187,11 +190,17 @@ msgid "Type"
 msgstr "סוג"
 
 #: templates/debug_toolbar/panels/cache.html:41
-msgid "Parameters"
+msgid "Function"
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:42
-msgid "Function"
+#: templates/debug_toolbar/panels/request_vars.html:8
+msgid "args"
+msgstr ""
+
+#: templates/debug_toolbar/panels/cache.html:43
+#: templates/debug_toolbar/panels/request_vars.html:9
+msgid "kwargs"
 msgstr ""
 
 #: templates/debug_toolbar/panels/headers.html:5
@@ -229,9 +238,8 @@ msgid "Call"
 msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:7
-#, fuzzy
 msgid "CumTime"
-msgstr "זמן"
+msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:8
 #: templates/debug_toolbar/panels/profiling.html:10
@@ -239,9 +247,8 @@ msgid "Per"
 msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:9
-#, fuzzy
 msgid "TotTime"
-msgstr "זמן"
+msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:11
 msgid "Count"
@@ -255,18 +262,9 @@ msgstr ""
 msgid "View Function"
 msgstr ""
 
-#: templates/debug_toolbar/panels/request_vars.html:8
-msgid "args"
-msgstr ""
-
-#: templates/debug_toolbar/panels/request_vars.html:9
-msgid "kwargs"
-msgstr ""
-
 #: templates/debug_toolbar/panels/request_vars.html:29
-#, fuzzy
 msgid "COOKIES Variables"
-msgstr "מזהה"
+msgstr "משתנים COOKIES"
 
 #: templates/debug_toolbar/panels/request_vars.html:38
 #: templates/debug_toolbar/panels/request_vars.html:64
@@ -280,27 +278,24 @@ msgid "No COOKIE data"
 msgstr "אין נתונים  לעוגיות"
 
 #: templates/debug_toolbar/panels/request_vars.html:55
-#, fuzzy
 msgid "SESSION Variables"
-msgstr "מזהה"
+msgstr "משתנים SESSION"
 
 #: templates/debug_toolbar/panels/request_vars.html:78
 msgid "No SESSION data"
 msgstr "אין נתונים  להתחברות"
 
 #: templates/debug_toolbar/panels/request_vars.html:81
-#, fuzzy
 msgid "GET Variables"
-msgstr "מזהה"
+msgstr "משתנים GET"
 
 #: templates/debug_toolbar/panels/request_vars.html:100
 msgid "No GET data"
 msgstr "שום דבר עבור GET"
 
 #: templates/debug_toolbar/panels/request_vars.html:103
-#, fuzzy
 msgid "POST Variables"
-msgstr "מזהה"
+msgstr "משתנים POST"
 
 #: templates/debug_toolbar/panels/request_vars.html:122
 msgid "No POST data"
@@ -316,7 +311,7 @@ msgstr "סימן"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing Args"
-msgstr ""
+msgstr "פרמטרים מסופק"
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
@@ -334,14 +329,12 @@ msgid "Query"
 msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:20
-#, fuzzy
 msgid "Timeline"
-msgstr "זמן"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:21
-#, fuzzy
 msgid "Time (ms)"
-msgstr "זמן"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:22
 msgid "Action"
@@ -387,18 +380,20 @@ msgid "Empty set"
 msgstr "תוצאות ריק"
 
 #: templates/debug_toolbar/panels/template_source.html:4
-#, fuzzy
 msgid "Template Source"
-msgstr "תבנית"
+msgstr ""
 
 #: templates/debug_toolbar/panels/templates.html:2
-#, fuzzy
 msgid "Template path"
-msgstr "תבנית"
+msgid_plural "Template paths"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
-msgstr "תבנית"
+msgid_plural "Templates"
+msgstr[0] ""
+msgstr[1] "תבנית"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
@@ -412,7 +407,9 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
-msgstr ""
+msgid_plural "Context processors"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
@@ -423,12 +420,8 @@ msgid "Package"
 msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:7
-#, fuzzy
 msgid "Version"
-msgstr "ג 'נגו גירסה"
+msgstr ""
 
-#~ msgid "Line"
-#~ msgstr "שורה"
-
-#~ msgid "File"
-#~ msgstr "קובץ"
+#~ msgid "Parameters"
+#~ msgstr "Parameters"
