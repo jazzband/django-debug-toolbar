@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 17:46+0100\n"
+"POT-Creation-Date: 2012-03-31 14:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,12 +157,7 @@ msgid "Location"
 msgstr "Ort"
 
 #: templates/debug_toolbar/redirect.html:9
-msgid ""
-"The Django Debug Toolbar has intercepted a redirect to the above URL for "
-"debug viewing purposes.  You can click the above link to continue with the "
-"redirect as normal.  If you'd like to disable this feature, set the "
-"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
-"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:14
