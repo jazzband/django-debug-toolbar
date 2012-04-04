@@ -7,7 +7,7 @@
 	{% endfor %}
 	</ol>
 {% else %}
-	<p>None</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
 
 <h4>{% blocktrans count template_count=templates|length %}Template{% plural %}Templates{% endblocktrans %}</h4>

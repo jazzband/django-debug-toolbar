@@ -1,19 +1,19 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
-"Report-Msgid-Bugs-To: http://github.com/django-debug-toolbar/django-debug-toolbar/issues\n"
-"POT-Creation-Date: 2012-03-31 22:10+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-04 21:35+0200\n"
 "PO-Revision-Date: 2012-03-31 20:10+0000\n"
 "Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: panels/cache.py:125
@@ -85,9 +85,58 @@ msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
 msgstr[0] "%(num_receivers)d receiver of %(num_signals)d signals"
 msgstr[1] "%(num_receivers)d receivers of %(num_signals)d signals"
 
-#: panels/sql.py:121
+#: panels/sql.py:35
+msgid "Autocommit"
+msgstr ""
+
+#: panels/sql.py:36
+msgid "Read uncommitted"
+msgstr ""
+
+#: panels/sql.py:37
+msgid "Read committed"
+msgstr ""
+
+#: panels/sql.py:38
+msgid "Repeatable read"
+msgstr ""
+
+#: panels/sql.py:39
+#, fuzzy
+msgid "Serializable"
+msgstr "Variable"
+
+#: panels/sql.py:50
+msgid "Idle"
+msgstr ""
+
+#: panels/sql.py:51
+#, fuzzy
+msgid "Active"
+msgstr "Action"
+
+#: panels/sql.py:52
+#, fuzzy
+msgid "In transaction"
+msgstr "Transaction status:"
+
+#: panels/sql.py:53
+#, fuzzy
+msgid "In error"
+msgstr "Error"
+
+#: panels/sql.py:54
+#, fuzzy
+msgid "Unknown"
+msgstr "(unknown)"
+
+#: panels/sql.py:120
 msgid "SQL"
 msgstr "SQL"
+
+#: panels/staticfiles.py:18 panels/staticfiles.py:21
+msgid "Static files"
+msgstr ""
 
 #: panels/template.py:102
 msgid "Templates"
@@ -165,7 +214,7 @@ msgstr "Context switches"
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 msgstr "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 
-#: panels/version.py:19 panels/version.py:28
+#: panels/version.py:20 panels/version.py:29
 msgid "Versions"
 msgstr "Versions"
 
@@ -191,12 +240,7 @@ msgid "Location"
 msgstr "Location"
 
 #: templates/debug_toolbar/redirect.html:9
-msgid ""
-"The Django Debug Toolbar has intercepted a redirect to the above URL for "
-"debug viewing purposes.  You can click the above link to continue with the "
-"redirect as normal.  If you'd like to disable this feature, set the "
-"<code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key "
-"<code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
+msgid "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 msgstr "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes.  You can click the above link to continue with the redirect as normal.  If you'd like to disable this feature, set the <code>DEBUG_TOOLBAR_CONFIG</code> dictionary's key <code>INTERCEPT_REDIRECTS</code> to <code>False</code>."
 
 #: templates/debug_toolbar/panels/cache.html:14
@@ -433,6 +477,27 @@ msgstr "SQL Selected"
 msgid "Empty set"
 msgstr "Empty set"
 
+#: templates/debug_toolbar/panels/staticfiles.html:5
+msgid "Static path"
+msgid_plural "Static paths"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:13
+#, fuzzy, python-format
+msgid "%(file_count)s file"
+msgid_plural "%(file_count)s files"
+msgstr[0] "%(count)s message"
+msgstr[1] "%(count)s messages"
+
+#: templates/debug_toolbar/panels/staticfiles.html:17
+msgid "Path"
+msgstr ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:18
+msgid "Storage"
+msgstr ""
+
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template Source"
 msgstr "Template Source"
@@ -442,6 +507,12 @@ msgid "Template path"
 msgid_plural "Template paths"
 msgstr[0] "Template path"
 msgstr[1] "Template path"
+
+#: templates/debug_toolbar/panels/templates.html:10
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr "None"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
@@ -454,11 +525,6 @@ msgstr[1] "Template"
 msgid "Toggle Context"
 msgstr "Toggle Context"
 
-#: templates/debug_toolbar/panels/templates.html:28
-#: templates/debug_toolbar/panels/templates.html:43
-msgid "None"
-msgstr "None"
-
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
 msgid_plural "Context processors"
@@ -469,10 +535,13 @@ msgstr[1] "Context processor"
 msgid "Resource"
 msgstr "Resource"
 
-#: templates/debug_toolbar/panels/versions.html:6
-msgid "Package"
-msgstr "Package"
+#: templates/debug_toolbar/panels/versions.html:5
+msgid "Name"
+msgstr ""
 
-#: templates/debug_toolbar/panels/versions.html:7
+#: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
 msgstr "Version"
+
+#~ msgid "Package"
+#~ msgstr "Package"
