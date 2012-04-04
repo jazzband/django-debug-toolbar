@@ -71,10 +71,10 @@ panel_classes = []
 
 def load_panel_classes():
     from django.conf import settings
-    from django.core import exceptions
+    from django.core.exceptions import ImproperlyConfigured
 
-    # Override this tuple by copying to settings.py as `DEBUG_TOOLBAR_PANELS`
-    default_panels = (
+    # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
+    panels = getattr(settings, 'DEBUG_TOOLBAR_PANELS', (
         'debug_toolbar.panels.version.VersionDebugPanel',
         'debug_toolbar.panels.timer.TimerDebugPanel',
         'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
@@ -82,26 +82,27 @@ def load_panel_classes():
         'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
         'debug_toolbar.panels.sql.SQLDebugPanel',
         'debug_toolbar.panels.template.TemplateDebugPanel',
-        #'debug_toolbar.panels.cache.CacheDebugPanel',
+        # 'debug_toolbar.panels.cache.CacheDebugPanel',
         'debug_toolbar.panels.signals.SignalDebugPanel',
         'debug_toolbar.panels.logger.LoggingPanel',
-    )
-    # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
-    if hasattr(settings, 'DEBUG_TOOLBAR_PANELS'):
-        default_panels = settings.DEBUG_TOOLBAR_PANELS
-
-    for panel_path in default_panels:
+    ))
+    for panel_path in panels:
         try:
             dot = panel_path.rindex('.')
         except ValueError:
-            raise exceptions.ImproperlyConfigured, '%s isn\'t a debug panel module' % panel_path
+            raise ImproperlyConfigured(
+                '%s isn\'t a debug panel module' % panel_path)
         panel_module, panel_classname = panel_path[:dot], panel_path[dot + 1:]
         try:
             mod = __import__(panel_module, {}, {}, [''])
         except ImportError, e:
-            raise exceptions.ImproperlyConfigured, 'Error importing debug panel %s: "%s"' % (panel_module, e)
+            raise ImproperlyConfigured(
+                'Error importing debug panel %s: "%s"' %
+                (panel_module, e))
         try:
             panel_class = getattr(mod, panel_classname)
         except AttributeError:
-            raise exceptions.ImproperlyConfigured, 'Toolbar Panel module "%s" does not define a "%s" class' % (panel_module, panel_classname)
+            raise ImproperlyConfigured(
+                'Toolbar Panel module "%s" does not define a "%s" class' %
+                (panel_module, panel_classname))
         panel_classes.append(panel_class)
