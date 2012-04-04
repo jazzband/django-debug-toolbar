@@ -3,6 +3,7 @@ import sys
 import django
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.utils.datastructures import SortedDict
 
 from debug_toolbar.panels import DebugPanel
 
@@ -28,8 +29,7 @@ class VersionDebugPanel(DebugPanel):
         return _('Versions')
 
     def process_response(self, request, response):
-        versions = {}
-        versions['Python'] = '%d.%d.%d' % sys.version_info[:3]
+        versions = [('Python', '%d.%d.%d' % sys.version_info[:3])]
         for app in list(settings.INSTALLED_APPS) + ['django']:
             name = app.split('.')[-1].replace('_', ' ').capitalize()
             __import__(app)
@@ -48,9 +48,10 @@ class VersionDebugPanel(DebugPanel):
                 continue
             if isinstance(version, (list, tuple)):
                 version = '.'.join(str(o) for o in version)
-            versions[name] = version
+            versions.append((name, version))
+            versions = sorted(versions, key=lambda version: version[0])
 
         self.record_stats({
-            'versions': versions,
+            'versions': SortedDict(versions),
             'paths': sys.path,
         })
