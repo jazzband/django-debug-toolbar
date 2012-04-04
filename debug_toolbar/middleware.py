@@ -123,8 +123,8 @@ class DebugToolbarMiddleware(object):
                     {'redirect_to': redirect_to}
                 )
                 response.cookies = cookies
-        if 'gzip' not in response.get('Content-Encoding', '') and \
-           response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
+        if ('gzip' not in response.get('Content-Encoding', '') and
+                response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             response.content = replace_insensitive(
