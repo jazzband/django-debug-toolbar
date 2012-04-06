@@ -82,7 +82,7 @@ def load_panel_classes():
         'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
         'debug_toolbar.panels.sql.SQLDebugPanel',
         'debug_toolbar.panels.template.TemplateDebugPanel',
-        # 'debug_toolbar.panels.cache.CacheDebugPanel',
+        'debug_toolbar.panels.cache.CacheDebugPanel',
         'debug_toolbar.panels.signals.SignalDebugPanel',
         'debug_toolbar.panels.logger.LoggingPanel',
     ))
