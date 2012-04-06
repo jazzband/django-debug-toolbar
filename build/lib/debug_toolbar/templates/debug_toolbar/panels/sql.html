@@ -56,12 +56,12 @@
 					<td colspan="2"></td>
 					<td colspan="4">
 						<div class="djSQLDetailsDiv">
-							<p><strong>{% trans "Connection:" %}</strong> {{ query.alias }}</p>
+							<p><strong>Connection:</strong> {{ query.alias }}</p>
 							{% if query.iso_level %}
-								<p><strong>{% trans "Isolation level:" %}</strong> {{ query.iso_level }}</p>
+								<p><strong>Isolation Level:</strong> {{ query.iso_level }}</p>
 							{% endif %}
 							{% if query.trans_status %}
-								<p><strong>{% trans "Transaction status:" %}</strong> {{ query.trans_status }}</p>
+								<p><strong>Transaction Status:</strong> {{ query.trans_status }}</p>
 							{% endif %}
 							{% if query.stacktrace %}
 								<pre class="stack">{{ query.stacktrace }}</pre>
@@ -75,7 +75,7 @@
 									</tr>
 									{% endfor %}
 								</table>
-								<p><strong>{{ query.template_info.name|default:_("(unknown)") }}</strong></p>
+								<p><strong>{{ query.template_info.name|default:"(unknown)" }}</strong></p>
 							{% endif %}
 						</div>
 					</td>
@@ -84,5 +84,5 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>{% trans "No SQL queries were recorded during this request." %}</p>
+	<p>No SQL queries were recorded during this request.</p>
 {% endif %}

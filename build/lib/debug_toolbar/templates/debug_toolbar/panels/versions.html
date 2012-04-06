@@ -1,0 +1,18 @@
+{% load i18n %}
+
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Package" %}</th>
+			<th>{% trans "Version" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for package, version in versions.iteritems %}
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<td>{{ package }}</td>
+				<td>{{ version }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

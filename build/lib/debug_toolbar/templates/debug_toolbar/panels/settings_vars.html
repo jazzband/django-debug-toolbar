@@ -1,0 +1,17 @@
+{% load i18n %}
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Setting" %}</th>
+			<th>{% trans "Value" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for var in settings.items|dictsort:"0" %}
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<td>{{ var.0 }}</td>
+				<td><code>{{ var.1|pprint }}</code></td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
