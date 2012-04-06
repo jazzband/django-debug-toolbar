@@ -1,0 +1,142 @@
+from __future__ import absolute_import
+from os.path import normpath, join
+try:
+    import threading
+except ImportError:
+    threading = None
+
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.core.files.storage import get_storage_class
+from django.contrib.staticfiles import finders, storage
+from django.contrib.staticfiles.templatetags import staticfiles
+
+from django.utils.translation import ungettext, ugettext_lazy as _
+from django.utils.datastructures import SortedDict
+from django.utils.functional import LazyObject
+
+from debug_toolbar import panels
+from debug_toolbar.utils import ThreadCollector
+
+
+class StaticFile(object):
+
+    def __init__(self, path):
+        self.path = path
+
+    def __unicode__(self):
+        return self.path
+
+    def real_path(self):
+        return finders.find(self.path)
+
+    def url(self):
+        return storage.staticfiles_storage.url(self.path)
+
+
+class FileCollector(ThreadCollector):
+
+    def collect(self, path, thread=None):
+        # handle the case of {% static "admin/" %}
+        if path.endswith('/'):
+            return
+        super(FileCollector, self).collect(StaticFile(path), thread)
+
+
+collector = FileCollector()
+
+
+class DebugConfiguredStorage(LazyObject):
+    def _setup(self):
+
+        configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
+
+        class DebugStaticFilesStorage(configured_storage_cls):
+
+            def __init__(self, collector, *args, **kwargs):
+                super(DebugStaticFilesStorage, self).__init__(*args, **kwargs)
+                self.collector = collector
+
+            def url(self, path):
+                self.collector.collect(path)
+                return super(DebugStaticFilesStorage, self).url(path)
+
+        self._wrapped = DebugStaticFilesStorage(collector)
+
+storage.staticfiles_storage = staticfiles.staticfiles_storage = DebugConfiguredStorage()
+
+
+class StaticFilesPanel(panels.Panel):
+    """
+    A panel to display the found staticfiles.
+    """
+    name = 'Static files'
+    template = 'debug_toolbar/panels/staticfiles.html'
+
+    @property
+    def title(self):
+        return (_("Static files (%(num_found)s found)") %
+                {'num_found': self.num_found, 'num_used': self.num_used})
+
+    def __init__(self, *args, **kwargs):
+        super(StaticFilesPanel, self).__init__(*args, **kwargs)
+        self.num_found = 0
+        self.ignore_patterns = []
+        self._paths = {}
+
+    @property
+    def has_content(self):
+        if "django.contrib.staticfiles" not in settings.INSTALLED_APPS:
+            raise ImproperlyConfigured("Could not find staticfiles in "
+                                       "INSTALLED_APPS setting.")
+        return True
+
+    @property
+    def num_used(self):
+        return len(self._paths[threading.currentThread()])
+
+    nav_title = _('Static files')
+
+    @property
+    def nav_subtitle(self):
+        num_used = self.num_used
+        return ungettext("%(num_used)s file used", "%(num_used)s files used",
+                         num_used) % {'num_used': num_used}
+
+    def process_request(self, request):
+        collector.clear_collection()
+
+    def process_response(self, request, response):
+        staticfiles_finders = SortedDict()
+        for finder in finders.get_finders():
+            for path, finder_storage in finder.list(self.ignore_patterns):
+                if getattr(finder_storage, 'prefix', None):
+                    prefixed_path = join(finder_storage.prefix, path)
+                else:
+                    prefixed_path = path
+                finder_path = '.'.join([finder.__class__.__module__,
+                                        finder.__class__.__name__])
+                real_path = finder_storage.path(path)
+                payload = (prefixed_path, real_path)
+                staticfiles_finders.setdefault(finder_path, []).append(payload)
+                self.num_found += 1
+
+        dirs = getattr(settings, 'STATICFILES_DIRS', ())
+
+        used_paths = collector.get_collection()
+        self._paths[threading.currentThread()] = used_paths
+
+        self.record_stats({
+            'num_found': self.num_found,
+            'num_used': self.num_used,
+            'staticfiles': used_paths,
+            'staticfiles_apps': self.get_static_apps(),
+            'staticfiles_dirs': [normpath(d) for d in dirs],
+            'staticfiles_finders': staticfiles_finders,
+        })
+
+    def get_static_apps(self):
+        for finder in finders.get_finders():
+            if isinstance(finder, finders.AppDirectoriesFinder):
+                return finder.apps
+        return []

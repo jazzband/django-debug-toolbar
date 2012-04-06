@@ -89,4 +89,7 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
 ]
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'example', 'static')]
