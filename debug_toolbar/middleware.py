@@ -6,6 +6,7 @@ import thread
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
+from django.core.exceptions import MiddlewareNotUsed
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
 from django.utils.importlib import import_module
@@ -41,6 +42,9 @@ class DebugToolbarMiddleware(object):
         return cls.debug_toolbars.get(thread.get_ident())
 
     def __init__(self):
+        if not bool(settings.DEBUG):
+            raise MiddlewareNotUsed('Not in DEBUG mode so toolbar disabled.')
+
         self._urlconfs = {}
 
         # Set method to use to decide to show toolbar
