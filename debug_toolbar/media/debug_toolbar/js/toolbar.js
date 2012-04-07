@@ -64,9 +64,9 @@ window.djdt = (function(window, document, jQuery) {
 				if (id === '' || !id) {
 					return;
 				}
-
-				btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugCollapsed').toggle(open_me);
-				btn.parents('.djDebugPanelContent').find('#sqlMain_' + id).find('.djDebugUncollapsed').toggle(!open_me);
+				var name = btn.attr('data-toggle-name');
+				btn.parents('.djDebugPanelContent').find('#' + name + '_' + id).find('.djDebugCollapsed').toggle(open_me);
+				btn.parents('.djDebugPanelContent').find('#' + name + '_' + id).find('.djDebugUncollapsed').toggle(!open_me);
 				$(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
 					var $this = $(this);
 					if (open_me) {

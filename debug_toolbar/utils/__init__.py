@@ -6,6 +6,8 @@ import sys
 
 from django.conf import settings
 from django.views.debug import linebreak_iter
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
@@ -46,6 +48,19 @@ def tidy_stacktrace(stack):
             text = (''.join(text)).strip()
         trace.append((path, line_no, func_name, text))
     return trace
+
+
+def render_stacktrace(trace):
+    stacktrace = []
+    for frame in trace:
+        params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
+        try:
+            stacktrace.append(u'<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>'.format(*params))
+        except IndexError:
+            # This frame doesn't have the expected format, so skip it and move on to the next one
+            continue
+    return mark_safe('\n'.join(stacktrace))
+
 
 
 def get_template_info(source, context_lines=3):

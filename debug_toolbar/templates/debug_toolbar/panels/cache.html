@@ -1,58 +1,69 @@
 {% load i18n %}
+<h3>{% trans "Summary" %}</h3>
 <table>
-	<colgroup>
-		<col width="12%"/>
-		<col width="12%"/>
-		<col width="12%"/>
-		<col width="12%"/>
-		<col width="12%"/>
-		<col width="12%"/>
-		<col width="12%"/>
-		<col width="12%"/>
-	</colgroup>
+	<thead>
 	<tr>
 		<th>{% trans "Total Calls" %}</th>
-		<td>{{ cache_calls }}</td>
 		<th>{% trans "Total Time" %}</th>
-		<td>{{ cache_time }}ms</td>
-		<th>{% trans "Hits" %}</th>
-		<td>{{ cache.hits }}</td>
-		<th>{% trans "Misses" %}</th>
-		<td>{{ cache.misses }}</td>
+		<th>{% trans "Cache Hits" %}</th>
+		<th>{% trans "Cache Misses" %}</th>
 	</tr>
+	</thead>
+	<tbody>
 	<tr>
-		<th>gets</th>
-		<td>{{ cache.gets }}</td>
-		<th>sets</th>
-		<td>{{ cache.sets }}</td>
-		<th>deletes</th>
-		<td>{{ cache.deletes }}</td>
-		<th>get_many</th>
-		<td>{{ cache.get_manys }}</td>
+		<td>{{ total_calls }}</td>
+		<td>{{ total_time }} ms</td>
+		<td>{{ hits }}</td>
+		<td>{{ misses }}</td>
 	</tr>
+	</tbody>
 </table>
-{% if cache.calls %}
-<h3>{% trans "Breakdown" %}</h3>
+<h3>{% trans "Commands" %}</h3>
+<table>
+	<thead>
+	<tr>
+	{% for name in counts.iterkeys %}
+		<th>{{ name }}</th>
+	{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+	{% for value in counts.itervalues %}
+		<td>{{ value }}</td>
+	{% endfor %}
+	</tr>
+	</tbody>
+</table>
+{% if calls %}
+<h3>{% trans "Calls" %}</h3>
 <table>
 	<thead>
 		<tr>
-			<th>{% trans "Time" %}&nbsp;(ms)</th>
+			<th colspan="2">{% trans "Time (ms)" %}</th>
 			<th>{% trans "Type" %}</th>
-			<th>{% trans "Function" %}</th>
 			<th>{% trans "args" %}</th>
 			<th>{% trans "kwargs" %}</th>
+			<th>{% trans "Backend" %}</th>
 		</tr>
 	</thead>
 	<tbody>
-		{% for call_time, call_type, call_args, call_kwargs, call_func in cache.calls %}
-			<tr class="{% cycle 'row1' 'row2' %}">
-				<td>{{ call_time|floatformat:"4" }}</td>
-				<td>{{ call_type|escape }}</td>
-				<td><acronym title="{{ call_func.0 }}:{{ call_func.1 }}">{{ call_func.2|escape }}</acronym>: {{ call_func.3.0|escape }}</td>
-				<td>{{ call_args|escape }}</td>
-				<td>{{ call_kwargs|escape }}</td>
-			</tr>
-		{% endfor %}
+	{% for call in calls %}
+		<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}" id="cacheMain_{{ forloop.counter }}">
+			<td class="toggle">
+				<a class="djToggleSwitch" data-toggle-name="cacheMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="javascript:void(0)">+</a>
+			</td>
+			<td>{{ call.time|floatformat:"4" }}</td>
+			<td>{{ call.name|escape }}</td>
+			<td>{{ call.args|escape }}</td>
+			<td>{{ call.kwargs|escape }}</td>
+			<td>{{ call.backend }}</td>
+		</tr>
+		<tr class="djUnselected djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %} djToggleDetails_{{ forloop.counter }}" id="cacheDetails_{{ forloop.counter }}">
+			<td colspan="1"></td>
+			<td colspan="5"><pre class="stack">{{ call.trace }}</pre></td>
+		</tr>
+	{% endfor %}
 	</tbody>
 </table>
 {% endif %}

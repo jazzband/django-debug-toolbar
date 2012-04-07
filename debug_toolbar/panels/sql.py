@@ -1,16 +1,14 @@
-import os
 import re
 import uuid
 
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.html import escape
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
 from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import sqlparse
+from debug_toolbar.utils import sqlparse, render_stacktrace
 from debug_toolbar.utils.tracking.db import CursorWrapper
 from debug_toolbar.utils.tracking import replace_call
 
@@ -183,16 +181,7 @@ class SQLDebugPanel(DebugPanel):
                 query['start_offset'] = width_ratio_tally
                 query['end_offset'] = query['width_ratio'] + query['start_offset']
                 width_ratio_tally += query['width_ratio']
-
-                stacktrace = []
-                for frame in query['stacktrace']:
-                    params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
-                    try:
-                        stacktrace.append(u'<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)\n  <span class="code">{4}</span>'.format(*params))
-                    except IndexError:
-                        # This frame doesn't have the expected format, so skip it and move on to the next one
-                        continue
-                query['stacktrace'] = mark_safe('\n'.join(stacktrace))
+                query['stacktrace'] = render_stacktrace(query['stacktrace'])
                 i += 1
 
             if trans_id:
