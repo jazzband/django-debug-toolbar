@@ -1,3 +1,12 @@
+import thread
+
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
+from django.template import Template, Context
+from django import VERSION
+
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
@@ -6,15 +15,7 @@ from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils import get_name_from_obj
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
 
-from django.conf import settings
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.test import TestCase
-from django.template import Template, Context
-from django import VERSION
-
-from dingus import Dingus
-import thread
+rf = RequestFactory()
 
 
 class Settings(object):
@@ -38,10 +39,11 @@ class Settings(object):
             else:
                 setattr(settings, k, v)
 
+
 class BaseTestCase(TestCase):
     def setUp(self):
-        request = Dingus('request')
-        response = Dingus('response')
+        request = rf.get('/')
+        response = HttpResponse()
         toolbar = DebugToolbar(request)
 
         DebugToolbarMiddleware.debug_toolbars[thread.get_ident()] = toolbar
@@ -50,6 +52,7 @@ class BaseTestCase(TestCase):
         self.response = response
         self.toolbar = toolbar
         self.toolbar.stats = {}
+
 
 class DebugToolbarTestCase(BaseTestCase):
     urls = 'tests.urls'
@@ -60,9 +63,7 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEquals(resp.status_code, 200)
 
     def test_show_toolbar_DEBUG(self):
-        request = self.request
-
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
+        request = rf.get('/')
         middleware = DebugToolbarMiddleware()
 
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
@@ -72,9 +73,7 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertFalse(middleware._show_toolbar(request))
 
     def test_show_toolbar_TEST(self):
-        request = self.request
-
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
+        request = rf.get('/')
         middleware = DebugToolbarMiddleware()
 
         with Settings(INTERNAL_IPS=['127.0.0.1'], TEST=True, DEBUG=True):
@@ -84,7 +83,7 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertTrue(middleware._show_toolbar(request))
 
     def test_show_toolbar_INTERNAL_IPS(self):
-        request = self.request
+        request = rf.get('/')
 
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
@@ -96,10 +95,8 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertFalse(middleware._show_toolbar(request))
 
     def test_request_urlconf_string(self):
-        request = self.request
-
+        request = rf.get('/')
         request.urlconf = 'tests.urls'
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
 
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
@@ -113,10 +110,8 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_string_per_request(self):
-        request = self.request
-
+        request = rf.get('/')
         request.urlconf = 'debug_toolbar.urls'
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
 
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
@@ -132,10 +127,8 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_module(self):
-        request = self.request
-
+        request = rf.get('/')
         request.urlconf = __import__('tests.urls').urls
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
 
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
@@ -149,11 +142,10 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_tuple_urlconf(self):
-        request = self.request
+        request = rf.get('/')
         urls = __import__('tests.urls').urls
         urls.urlpatterns = tuple(urls.urlpatterns)
         request.urlconf = urls
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
