@@ -7,6 +7,7 @@ import os.path
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
+from django.utils.importlib import import_module
 from django.utils.safestring import mark_safe
 
 
@@ -91,10 +92,10 @@ def load_panel_classes():
             dot = panel_path.rindex('.')
         except ValueError:
             raise ImproperlyConfigured(
-                '%s isn\'t a debug panel module' % panel_path)
+                "%s isn't a debug panel module" % panel_path)
         panel_module, panel_classname = panel_path[:dot], panel_path[dot + 1:]
         try:
-            mod = __import__(panel_module, {}, {}, [''])
+            mod = import_module(panel_module)
         except ImportError, e:
             raise ImproperlyConfigured(
                 'Error importing debug panel %s: "%s"' %

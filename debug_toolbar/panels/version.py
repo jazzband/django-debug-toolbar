@@ -4,6 +4,7 @@ import django
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.datastructures import SortedDict
+from django.utils.importlib import import_module
 
 from debug_toolbar.panels import DebugPanel
 
@@ -32,8 +33,7 @@ class VersionDebugPanel(DebugPanel):
         versions = [('Python', '%d.%d.%d' % sys.version_info[:3])]
         for app in list(settings.INSTALLED_APPS) + ['django']:
             name = app.split('.')[-1].replace('_', ' ').capitalize()
-            __import__(app)
-            app = sys.modules[app]
+            app = import_module(app)
             if hasattr(app, 'get_version'):
                 get_version = app.get_version
                 if callable(get_version):

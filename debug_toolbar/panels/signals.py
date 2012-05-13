@@ -1,5 +1,3 @@
-import sys
-
 from django.conf import settings
 from django.core.signals import (request_started, request_finished,
     got_request_exception)
@@ -7,6 +5,8 @@ from django.db.models.signals import (class_prepared, pre_init, post_init,
     pre_save, post_save, pre_delete, post_delete, post_syncdb)
 from django.dispatch.dispatcher import WEAKREF_TYPES
 from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.importlib import import_module
+
 
 try:
     from django.db.backends.signals import connection_created
@@ -60,6 +60,7 @@ class SignalDebugPanel(DebugPanel):
     def url(self):
         return ''
 
+    @property
     def signals(self):
         signals = self.SIGNALS.copy()
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
@@ -67,12 +68,10 @@ class SignalDebugPanel(DebugPanel):
         else:
             extra_signals = []
         for signal in extra_signals:
-            parts = signal.split('.')
-            path = '.'.join(parts[:-1])
-            __import__(path)
-            signals[parts[-1]] = getattr(sys.modules[path], parts[-1])
+            mod_path, signal_name = signal.rsplit('.', 1)
+            signals_mod = import_module(mod_path)
+            signals[signal_name] = getattr(signals_mod, signal_name)
         return signals
-    signals = property(signals)
 
     def process_response(self, request, response):
         signals = []
