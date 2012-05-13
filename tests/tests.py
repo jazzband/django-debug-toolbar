@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.template import Template, Context
-from django import VERSION
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
@@ -162,10 +161,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_url_resolving_positional(self):
         stats = self._resolve_stats('/resolving1/a/b/')
-        if tuple(VERSION[:2]) >= (1, 3):
-            self.assertEquals(stats['view_urlname'], 'positional-resolving')  # Django >= 1.3
-        else:
-            self.assertEquals(stats['view_urlname'], '<unavailable>')  # Django < 1.3
+        self.assertEquals(stats['view_urlname'], 'positional-resolving')  # Django >= 1.3
         self.assertEquals(stats['view_func'], 'tests.views.resolving_view')
         self.assertEquals(stats['view_args'], ('a', 'b'))
         self.assertEquals(stats['view_kwargs'], {})
