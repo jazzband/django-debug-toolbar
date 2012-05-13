@@ -192,13 +192,15 @@ class DebugToolbarNameFromObjectTest(BaseTestCase):
         self.assertEquals(res, 'tests.tests.x')
 
     def test_lambda(self):
-        res = get_name_from_obj(lambda:1)
+        res = get_name_from_obj(lambda: 1)
         self.assertEquals(res, 'tests.tests.<lambda>')
 
     def test_class(self):
-        class A: pass
+        class A:
+            pass
         res = get_name_from_obj(A)
         self.assertEquals(res, 'tests.tests.A')
+
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
@@ -222,7 +224,7 @@ class SQLPanelTestCase(BaseTestCase):
         panel = self.toolbar.get_panel(SQLDebugPanel)
         self.assertEquals(len(panel._queries), 0)
 
-        with Settings(DEBUG_TOOLBAR_CONFIG={ 'ENABLE_STACKTRACES' : False }):
+        with Settings(DEBUG_TOOLBAR_CONFIG={'ENABLE_STACKTRACES': False}):
             list(User.objects.all())
 
         # ensure query was logged
@@ -242,18 +244,24 @@ class TemplatePanelTestCase(BaseTestCase):
         template_panel = self.toolbar.get_panel(TemplateDebugPanel)
         sql_panel = self.toolbar.get_panel(SQLDebugPanel)
         t = Template("No context variables here!")
-        c = Context({ 'queryset' : User.objects.all(), 'deep_queryset' : { 'queryset' : User.objects.all() } })
+        c = Context({
+            'queryset': User.objects.all(),
+            'deep_queryset': {
+                'queryset': User.objects.all(),
+            }
+        })
         t.render(c)
         # ensure the query was NOT logged
         self.assertEquals(len(sql_panel._queries), 0)
         ctx = template_panel.templates[0]['context'][0]
-        ctx = eval(ctx) # convert back to Python
-        self.assertEquals(ctx['queryset'], '<<queryset of auth.User>>')
-        self.assertEquals(ctx['deep_queryset'], '<<triggers database query>>')
+        self.assertIn('<<queryset of auth.User>>', ctx)
+        self.assertIn('<<triggers database query>>', ctx)
+
 
 def module_func(*args, **kwargs):
     """Used by dispatch tests"""
     return 'blah'
+
 
 class TrackingTestCase(BaseTestCase):
     @classmethod
