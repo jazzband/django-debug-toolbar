@@ -21,6 +21,9 @@ def ms_from_timedelta(td):
     return (td.seconds * 1000) + (td.microseconds / 1000.0)
 
 
+hide_django_sql = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True)
+
+
 def tidy_stacktrace(stack):
     """
     Clean up stacktrace and remove all entries that:
@@ -37,8 +40,7 @@ def tidy_stacktrace(stack):
         # inspection.
         if '__traceback_hide__' in frame.f_locals:
             continue
-        if getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True) \
-            and django_path in s_path and not 'django/contrib' in s_path:
+        if  hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if socketserver_path in s_path:
             continue
@@ -60,7 +62,6 @@ def render_stacktrace(trace):
             # This frame doesn't have the expected format, so skip it and move on to the next one
             continue
     return mark_safe('\n'.join(stacktrace))
-
 
 
 def get_template_info(source, context_lines=3):
