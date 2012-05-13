@@ -1,6 +1,7 @@
 import logging
 import time
 import types
+from django.utils.importlib import import_module
 
 
 def post_dispatch(func):
@@ -47,7 +48,7 @@ def _replace_function(func, wrapped):
             # oh shit
             __builtins__[func] = wrapped
         else:
-            module = __import__(func.__module__, {}, {}, [func.__module__], 0)
+            module = import_module(func.__module__)
             setattr(module, func.__name__, wrapped)
     elif getattr(func, 'im_self', None):
         # TODO: classmethods
