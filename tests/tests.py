@@ -315,23 +315,23 @@ class TrackingTestCase(BaseTestCase):
         self.assertTrue('foo' in foo['kwargs'])
         self.assertEquals(foo['kwargs']['foo'], 'bar')
 
-        # callbacks['before'] = {}
-        #
-        #         @pre_dispatch(TrackingTestCase.class_method)
-        #         def test(**kwargs):
-        #             foo.update(kwargs)
-        #
-        #         self.assertTrue(hasattr(TrackingTestCase.class_method, '__wrapped__'))
-        #         self.assertEquals(len(callbacks['before']), 1)
-        #
-        #         TrackingTestCase.class_method()
-        #
-        #         self.assertTrue('sender' in foo, foo)
-        #         # best we can do
-        #         self.assertEquals(foo['sender'].__name__, 'class_method')
-        #         self.assertTrue('start' in foo, foo)
-        #         self.assertTrue('stop' not in foo, foo)
-        #         self.assertTrue('args' in foo, foo)
+        callbacks['before'] = {}
+
+        @pre_dispatch(TrackingTestCase.class_method)
+        def test(**kwargs):
+            foo.update(kwargs)
+
+        self.assertTrue(hasattr(TrackingTestCase.class_method, '__wrapped__'))
+        self.assertEquals(len(callbacks['before']), 1)
+
+        TrackingTestCase.class_method()
+
+        self.assertTrue('sender' in foo, foo)
+        # best we can do
+        self.assertEquals(foo['sender'].__name__, 'class_method')
+        self.assertTrue('start' in foo, foo)
+        self.assertTrue('stop' not in foo, foo)
+        self.assertTrue('args' in foo, foo)
 
     def test_post_hook(self):
         foo = {}
