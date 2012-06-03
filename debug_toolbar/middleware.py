@@ -85,7 +85,7 @@ class DebugToolbarMiddleware(object):
                         list(urlconf.urlpatterns)
 
                 if hasattr(urlconf, 'handler403'):
-                    new_urlconf.handler404 = urlconf.handler403
+                    new_urlconf.handler403 = urlconf.handler403
                 if hasattr(urlconf, 'handler404'):
                     new_urlconf.handler404 = urlconf.handler404
                 if hasattr(urlconf, 'handler500'):
