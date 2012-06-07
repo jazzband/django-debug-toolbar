@@ -170,7 +170,8 @@ class SQLDebugPanel(DebugPanel):
                     query['iso_level'] = get_isolation_level_display(query['engine'], query['iso_level'])
                 if 'trans_status' in query:
                     query['trans_status'] = get_transaction_status_display(query['engine'], query['trans_status'])
-                query['sql'] = reformat_sql(query['sql'])
+                if query['sql']:
+                    query['sql'] = reformat_sql(query['sql'])
                 query['rgb_color'] = self._databases[alias]['rgb_color']
                 try:
                     query['width_ratio'] = (query['duration'] / self._sql_time) * 100
