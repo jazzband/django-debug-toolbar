@@ -3,6 +3,7 @@ Debug Toolbar middleware
 """
 import imp
 import thread
+from functools import wraps
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -99,14 +100,25 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_request(request)
             self.__class__.debug_toolbars[thread.get_ident()] = toolbar
-
+    
+    def _wrap_view(self, view_func, panel):
+        @wraps(view_func)
+        def _wrapped_view(request, *view_args, **view_kwargs):
+            ret = panel.process_view(request, view_func, view_args, view_kwargs)
+            if ret is None: # call the next panel if this one didn't do it
+                ret = view_func( request, *view_args, **view_kwargs )
+            return ret
+        return _wrapped_view
+    
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
         toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
         if not toolbar:
             return
+        wrapped_view_func = view_func
         for panel in toolbar.panels:
-            panel.process_view(request, view_func, view_args, view_kwargs)
+            wrapped_view_func = self._wrap_view( wrapped_view_func, panel )
+        return wrapped_view_func(request, *view_args, **view_kwargs)
 
     def process_response(self, request, response):
         __traceback_hide__ = True
