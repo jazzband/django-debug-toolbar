@@ -115,7 +115,7 @@ class DebugToolbarMiddleware(object):
         if not toolbar:
             return response
         if isinstance(response, HttpResponseRedirect):
-            if not toolbar.config['INTERCEPT_REDIRECTS']:
+            if not toolbar.config['INTERCEPT_REDIRECTS'] or request.is_ajax():
                 return response
             redirect_to = response.get('Location', None)
             if redirect_to:
