@@ -146,10 +146,17 @@ class NormalCursorWrapper(object):
             }
 
             if engine == 'psycopg2':
+                # If an erroneous query was ran on the connection, it might
+                # be in a state where checking isolation_level raises an
+                # exception.
+                try:
+                    iso_level = conn.isolation_level
+                except conn.InternalError:
+                    iso_level = 'unknown'
                 params.update({
                     'trans_id': self.logger.get_transaction_id(alias),
                     'trans_status': conn.get_transaction_status(),
-                    'iso_level': conn.isolation_level,
+                    'iso_level': iso_level,
                     'encoding': conn.encoding,
                 })
 
