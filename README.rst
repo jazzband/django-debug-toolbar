@@ -32,9 +32,9 @@ Installation
 
 #. Add the `debug_toolbar` directory to your Python path.
 
-#. Add the following middleware to your project's `settings.py` file:
+#. Add the following middleware to your project's `settings.py` file::
 
-	``'debug_toolbar.middleware.DebugToolbarMiddleware',``
+	'debug_toolbar.middleware.DebugToolbarMiddleware',
 
    Tying into middleware allows each panel to be instantiated on request and
    rendering to happen on response.
@@ -53,7 +53,7 @@ Installation
    toolbar will not show up on flatpages.
 
 #. Make sure your IP is listed in the `INTERNAL_IPS` setting.  If you are
-   working locally this will be:
+   working locally this will be::
 
 	INTERNAL_IPS = ('127.0.0.1',)
 
@@ -62,8 +62,12 @@ Installation
    your own logic for displaying the toolbar.
 
 #. Add `debug_toolbar` to your `INSTALLED_APPS` setting so Django can find the
-   template files associated with the Debug Toolbar.
+   template files associated with the Debug Toolbar::
 
+	INSTALLED_APPS = (
+        ...
+	'debug_toolbar',
+	)
    Alternatively, add the path to the debug toolbar templates
    (``'path/to/debug_toolbar/templates'`` to your ``TEMPLATE_DIRS`` setting.)
 
