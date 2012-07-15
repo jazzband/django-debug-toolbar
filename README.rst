@@ -27,6 +27,11 @@ If you have ideas for other panels please let us know.
 
 * Note: The Debug Toolbar only works on Django 1.2 and newer.
 
+To disable the toolbar on a per request basis, add DISABLE to the query string::
+
+http://domain.com/path?DISABLE=disable
+
+
 Installation
 ============
 
