@@ -16,7 +16,7 @@
 					<td>{{ record.level }}</td>
 					<td>{{ record.time|date:"h:i:s m/d/Y" }}</td>
 					<td>{{ record.channel|default:"-" }}</td>
-					<td>{{ record.message }}</td>
+					<td>{{ record.message|linebreaksbr }}</td>
 					<td>{{ record.file }}:{{ record.line }}</td>
 				</tr>
 			{% endfor %}
