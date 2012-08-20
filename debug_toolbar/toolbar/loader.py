@@ -60,8 +60,6 @@ class DebugToolbar(object):
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
-            'js': mark_safe(open(os.path.join(media_path, 'js', 'toolbar.min.js'), 'r').read()),
-            'css': mark_safe(open(os.path.join(media_path, 'css', 'toolbar.min.css'), 'r').read()),
         })
 
         return render_to_string('debug_toolbar/base.html', context)

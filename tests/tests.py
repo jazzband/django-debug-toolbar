@@ -103,8 +103,6 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertFalse(isinstance(request.urlconf, basestring))
 
-            self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
-            self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
@@ -120,8 +118,6 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertFalse(isinstance(request.urlconf, basestring))
 
-            self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
-            self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
@@ -135,8 +131,6 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertFalse(isinstance(request.urlconf, basestring))
 
-            self.assertTrue(hasattr(request.urlconf.urlpatterns[0], '_callback_str'))
-            self.assertEquals(request.urlconf.urlpatterns[0]._callback_str, 'debug_toolbar.views.debug_media')
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
