@@ -118,6 +118,8 @@ class DebugToolbarMiddleware(object):
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar:
             return response
+        if 'XMLHttpRequest' in request.META.get('HTTP_X_REQUESTED_WITH', ''):
+            return response
         if isinstance(response, HttpResponseRedirect):
             if not toolbar.config['INTERCEPT_REDIRECTS']:
                 return response
