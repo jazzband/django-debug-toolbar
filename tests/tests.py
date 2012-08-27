@@ -2,9 +2,11 @@ import thread
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db import connection
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.template import Template, Context
+from django.utils import unittest
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
@@ -213,6 +215,19 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]['stacktrace']) > 0)
+
+    @unittest.skipUnless(connection.vendor=='postgresql',
+                         'Test valid only on PostgreSQL')
+    def test_erroneous_query(self):
+        """
+        Test that an error in the query isn't swallowed by the middleware.
+        """
+        from django.db import connection
+        from django.db.utils import DatabaseError
+        try:
+            connection.cursor().execute("erroneous query")
+        except DatabaseError as e:
+            self.assertTrue('erroneous query' in str(e))
 
     def test_disable_stacktraces(self):
         panel = self.toolbar.get_panel(SQLDebugPanel)
