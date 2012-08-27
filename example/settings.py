@@ -17,6 +17,8 @@ INSTALLED_APPS = (
 INTERNAL_IPS = ('127.0.0.1',)
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 MEDIA_URL = '/media'
+STATIC_ROOT = os.path.join(HOME_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

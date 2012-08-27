@@ -9,7 +9,6 @@ from django.conf.urls.defaults import *
 _PREFIX = '__debug__'
 
 urlpatterns = patterns('',
-    url(r'^%s/m/(.*)$' % _PREFIX, 'debug_toolbar.views.debug_media'),
     url(r'^%s/sql_select/$' % _PREFIX, 'debug_toolbar.views.sql_select', name='sql_select'),
     url(r'^%s/sql_explain/$' % _PREFIX, 'debug_toolbar.views.sql_explain', name='sql_explain'),
     url(r'^%s/sql_profile/$' % _PREFIX, 'debug_toolbar.views.sql_profile', name='sql_profile'),
