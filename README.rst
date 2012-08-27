@@ -146,6 +146,9 @@ The debug toolbar has two settings that can be set in `settings.py`:
 	    'ENABLE_STACKTRACES' : True,
 	}
 
+#. note: HTML page (your templates) must contain closed body tag, meta tag with content="text/html.
+   toolbar wont display itself in other pages
+
 `debugsqlshell`
 ===============
 The following is sample output from running the `debugsqlshell` management
