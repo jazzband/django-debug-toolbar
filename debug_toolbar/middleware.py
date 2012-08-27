@@ -63,6 +63,9 @@ class DebugToolbarMiddleware(object):
         if getattr(settings, 'TEST', False):
             return False
 
+        if request.REQUEST.get('DISABLE', False):            
+            return False
+
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
         if x_forwarded_for:
             remote_addr = x_forwarded_for.split(',')[0].strip()
