@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 from django.utils.safestring import mark_safe
+from django.template.context import RequestContext
 
 
 class DebugToolbar(object):
@@ -51,7 +52,7 @@ class DebugToolbar(object):
 
             self._panels[panel_class] = panel_instance
 
-    def render_toolbar(self):
+    def render_toolbar(self, request):
         """
         Renders the overall Toolbar with panels inside.
         """
@@ -62,7 +63,7 @@ class DebugToolbar(object):
             'panels': self.panels,
         })
 
-        return render_to_string('debug_toolbar/base.html', context)
+        return render_to_string('debug_toolbar/base.html', RequestContext(request, context))
 
 
 panel_classes = []
