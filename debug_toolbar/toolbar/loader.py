@@ -56,8 +56,6 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
-        media_path = os.path.join(os.path.dirname(__file__), os.pardir, 'media', 'debug_toolbar')
-
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
