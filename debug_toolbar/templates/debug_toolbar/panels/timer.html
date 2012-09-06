@@ -1,4 +1,5 @@
 {% load i18n %}
+<h4>{% trans 'Resource Usage' %}</h4>
 <table>
 	<colgroup>
 		<col style="width:20%"/>
@@ -19,3 +20,62 @@
 		{% endfor %}
 	</tbody>
 </table>
+
+<div id="djDebugBrowserTiming" style="display:none">
+	<h4>{% trans 'Browser Timing' %}</h4>
+	<table>
+		<colgroup>
+			<col style="width:20%"/>
+			<col/>
+		</colgroup>
+		<thead>
+			<tr>
+				<th>{% trans "Timing Attribute" %}</th>
+				<th>{% trans "Value" %}</th>
+			</tr>
+		</thead>
+		<tbody id="djDebugBrowserTimingTableBody">
+		</tbody>
+	</table>
+</div>
+<script>
+	(function(w, d) {
+		function _renderPerf() {
+			var perf = w.performance || w.msPerformance ||
+						w.webkitPerformance || w.mozPerformance;
+			if (perf) {
+				var rowCount = 0,
+					timingOffset = perf.timing.navigationStart;
+				function addRow(stat) {
+					rowCount++;
+					var row = document.createElement('tr'),
+					    keyCell = document.createElement('td'),
+						valueCell = document.createElement('td');
+					row.className = (rowCount % 2) ? 'djDebugOdd' : 'djDebugEven';
+					keyCell.innerHTML = stat;
+					valueCell.innerHTML = (perf.timing[stat] - timingOffset) + " msec";
+					row.appendChild(keyCell);
+					row.appendChild(valueCell);
+					d.getElementById('djDebugBrowserTimingTableBody').appendChild(row);
+				}
+
+				addRow('requestStart');
+				addRow('responseStart');
+				addRow('responseEnd');
+				addRow('domLoading');
+				addRow('domInteractive');
+				addRow('domComplete');
+				addRow('loadEventStart');
+				addRow('loadEventEnd');
+				d.getElementById('djDebugBrowserTiming').style.display = "block";
+			}
+		}
+
+		function renderPerf() {
+			setTimeout(_renderPerf, 1000);
+		}
+
+		if (w.addEventListener) { w.addEventListener("load", renderPerf, false); }
+  		else if (w.attachEvent) { w.attachEvent("onload", renderPerf); }
+	}(window, document));
+</script>
