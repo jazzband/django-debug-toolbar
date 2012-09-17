@@ -26,6 +26,7 @@ class DebugToolbar(object):
         self.template_context = {
             'BASE_URL': base_url,  # for backwards compatibility
             'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
+            'STATIC_URL': settings.STATIC_URL,
         }
 
         self.load_panels()
@@ -55,8 +56,6 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
-        media_path = os.path.join(os.path.dirname(__file__), os.pardir, 'media', 'debug_toolbar')
-
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
