@@ -26,6 +26,7 @@ class DebugToolbar(object):
         self.template_context = {
             'BASE_URL': base_url,  # for backwards compatibility
             'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
+            'STATIC_URL': getattr(settings, 'STATIC_URL'),
         }
 
         self.load_panels()
