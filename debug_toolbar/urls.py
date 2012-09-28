@@ -4,7 +4,10 @@ URLpatterns for the debug toolbar.
 These should not be loaded explicitly; the debug toolbar middleware will patch
 this into the urlconf for the request.
 """
-from django.conf.urls.defaults import *
+try:
+    from django.conf.urls import patterns, url
+except ImportError:
+    from django.conf.urls.defaults import patterns, url
 
 _PREFIX = '__debug__'
 
