@@ -146,10 +146,11 @@ class NormalCursorWrapper(object):
             }
 
             if engine == 'psycopg2':
+                from psycopg2.extensions import TRANSACTION_STATUS_INERROR
                 params.update({
                     'trans_id': self.logger.get_transaction_id(alias),
                     'trans_status': conn.get_transaction_status(),
-                    'iso_level': conn.isolation_level,
+                    'iso_level': conn.isolation_level if not conn.get_transaction_status() == TRANSACTION_STATUS_INERROR else "",
                     'encoding': conn.encoding,
                 })
 
