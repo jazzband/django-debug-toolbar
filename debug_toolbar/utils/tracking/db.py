@@ -149,9 +149,15 @@ class NormalCursorWrapper(object):
                 params.update({
                     'trans_id': self.logger.get_transaction_id(alias),
                     'trans_status': conn.get_transaction_status(),
-                    'iso_level': conn.isolation_level,
                     'encoding': conn.encoding,
                 })
+
+                # This fails when a query aborted the transaction. Avoid
+                # causing a 2nd exception and hiding the real error
+                try:
+                    params['iso_level'] = conn.isolation_level
+                except Exception:
+                    pass
 
             # We keep `sql` to maintain backwards compatibility
             self.logger.record(**params)
