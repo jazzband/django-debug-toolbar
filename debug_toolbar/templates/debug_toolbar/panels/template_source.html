@@ -6,7 +6,7 @@
 <div class="djDebugPanelContent">
 	<div class="scroll">
 		{% if not source.pygmentized %}
-			<code>{{ source }}</code>
+			<pre><code>{{ source }}</code></pre>
 		{% else %}
 			{{ source }}
 		{% endif %}
