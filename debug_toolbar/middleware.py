@@ -2,7 +2,7 @@
 Debug Toolbar middleware
 """
 import imp
-import thread
+import threading
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -14,6 +14,7 @@ import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
+threading._DummyThread._Thread__stop = lambda x: 1  # Handles python threading module bug - http://bugs.python.org/issue14308
 
 
 def replace_insensitive(string, target, replacement):
@@ -38,7 +39,7 @@ class DebugToolbarMiddleware(object):
 
     @classmethod
     def get_current(cls):
-        return cls.debug_toolbars.get(thread.get_ident())
+        return cls.debug_toolbars.get(threading.currentThread())
 
     def __init__(self):
         self._urlconfs = {}
@@ -98,11 +99,11 @@ class DebugToolbarMiddleware(object):
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
                 panel.process_request(request)
-            self.__class__.debug_toolbars[thread.get_ident()] = toolbar
+            self.__class__.debug_toolbars[threading.currentThread()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
-        toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
+        toolbar = self.__class__.debug_toolbars.get(threading.currentThread())
         if not toolbar:
             return
         result = None
@@ -114,7 +115,7 @@ class DebugToolbarMiddleware(object):
 
     def process_response(self, request, response):
         __traceback_hide__ = True
-        ident = thread.get_ident()
+        ident = threading.currentThread()
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar or request.is_ajax():
             return response
