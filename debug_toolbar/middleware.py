@@ -14,7 +14,7 @@ import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
-#threading._DummyThread._Thread__stop = lambda x: 1  # Handles python threading module bug - http://bugs.python.org/issue14308
+threading._DummyThread._Thread__stop = lambda x: 1  # Handles python threading module bug - http://bugs.python.org/issue14308
 
 
 def replace_insensitive(string, target, replacement):
