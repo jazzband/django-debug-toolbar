@@ -10,9 +10,13 @@ from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
-from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils.compat.db import connections
+
+try:
+    from hashlib import sha1
+except ImportError:
+    from django.utils.hashcompat import sha_constructor as sha1
 
 
 class InvalidSQLError(Exception):
@@ -37,7 +41,7 @@ def sql_select(request):
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
-    hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
+    hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
@@ -72,7 +76,7 @@ def sql_explain(request):
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
-    hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
+    hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
@@ -118,7 +122,7 @@ def sql_profile(request):
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
-    hash = sha_constructor(settings.SECRET_KEY + sql + params).hexdigest()
+    hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
