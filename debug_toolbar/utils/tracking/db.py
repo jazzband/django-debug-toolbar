@@ -7,11 +7,16 @@ from django.conf import settings
 from django.template import Node
 from django.utils import simplejson
 from django.utils.encoding import force_unicode, smart_str
-from django.utils.hashcompat import sha_constructor
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
 from debug_toolbar.utils.compat.db import connections
+
+try:
+    from hashlib import sha1
+except ImportError:
+    from django.utils.hashcompat import sha_constructor as sha1
+
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
 SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
@@ -134,7 +139,7 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
-                'hash': sha_constructor(settings.SECRET_KEY \
+                'hash': sha1(settings.SECRET_KEY \
                                         + smart_str(sql) \
                                         + _params).hexdigest(),
                 'stacktrace': stacktrace,
