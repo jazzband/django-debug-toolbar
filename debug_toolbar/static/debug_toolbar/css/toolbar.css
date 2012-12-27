@@ -502,8 +502,9 @@
     width: 14px;
     padding-top: 3px;
 }
-#djdebug .panelcontent table .actions {
+#djDebug .panelContent table .actions {
     min-width: 70px;
+    white-space: nowrap;
 }
 #djdebug .panelcontent table .color {
     width: 3px;

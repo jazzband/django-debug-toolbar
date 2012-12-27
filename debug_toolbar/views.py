@@ -4,12 +4,11 @@ debug toolbar is displayed, and typically can do Bad Things, so hooking up these
 views in any other way is generally not advised.
 """
 
-import os
-import django.views.static
 from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.utils import simplejson
+from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.utils.compat.db import connections
 
@@ -27,6 +26,7 @@ class InvalidSQLError(Exception):
         return repr(self.value)
 
 
+@csrf_exempt
 def sql_select(request):
     """
     Returns the output of the SQL SELECT statement.
@@ -38,11 +38,11 @@ def sql_select(request):
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
-    alias = request.GET.get('alias', 'default')
+    sql = request.REQUEST.get('sql', '')
+    params = request.REQUEST.get('params', '')
+    alias = request.REQUEST.get('alias', 'default')
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
-    if hash != request.GET.get('hash', ''):
+    if hash != request.REQUEST.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
@@ -54,7 +54,7 @@ def sql_select(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'duration': request.GET.get('duration', 0.0),
+            'duration': request.REQUEST.get('duration', 0.0),
             'headers': headers,
             'alias': alias,
         }
@@ -62,6 +62,7 @@ def sql_select(request):
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
 
+@csrf_exempt
 def sql_explain(request):
     """
     Returns the output of the SQL EXPLAIN on the given query.
@@ -73,11 +74,11 @@ def sql_explain(request):
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
-    alias = request.GET.get('alias', 'default')
+    sql = request.REQUEST.get('sql', '')
+    params = request.REQUEST.get('params', '')
+    alias = request.REQUEST.get('alias', 'default')
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
-    if hash != request.GET.get('hash', ''):
+    if hash != request.REQUEST.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
@@ -100,7 +101,7 @@ def sql_explain(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'duration': request.GET.get('duration', 0.0),
+            'duration': request.REQUEST.get('duration', 0.0),
             'headers': headers,
             'alias': alias,
         }
@@ -108,22 +109,15 @@ def sql_explain(request):
     raise InvalidSQLError("Only 'select' queries are allowed.")
 
 
+@csrf_exempt
 def sql_profile(request):
-    """
-    Returns the output of running the SQL and getting the profiling statistics.
-
-    Expected GET variables:
-        sql: urlencoded sql with positional arguments
-        params: JSON encoded parameter values
-        duration: time for SQL to execute passed in from toolbar just for redisplay
-        hash: the hash of (secret + sql + params) for tamper checking
-    """
+    """Returns the output of running the SQL and getting the profiling statistics"""
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
-    alias = request.GET.get('alias', 'default')
+    sql = request.REQUEST.get('sql', '')
+    params = request.REQUEST.get('params', '')
+    alias = request.REQUEST.get('alias', 'default')
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
-    if hash != request.GET.get('hash', ''):
+    if hash != request.REQUEST.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = simplejson.loads(params)
@@ -146,7 +140,7 @@ def sql_profile(request):
             'result': result,
             'result_error': result_error,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'duration': request.GET.get('duration', 0.0),
+            'duration': request.REQUEST.get('duration', 0.0),
             'headers': headers,
             'alias': alias,
         }

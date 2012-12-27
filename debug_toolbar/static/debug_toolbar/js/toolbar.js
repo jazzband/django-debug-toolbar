@@ -32,20 +32,41 @@ window.djdt = (function(window, document, jQuery) {
 				$('#djDebugToolbar li').removeClass('active');
 				return false;
 			});
-			$('#djDebug a.remoteCall').live('click', function() {
-				$('#djDebugWindow').load(this.href, function(response, status, xhr) {
-					if (status == "error") {
-						var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
-						$('#djDebugWindow').html(message);
-					}
-					$('#djDebugWindow a.djDebugBack').live('click', function() {
-						$(this).parent().parent().hide();
-						return false;
-					});
-				});
-				$('#djDebugWindow').show();
+
+			$('#djDebug .remoteCall').live('click', function() {
+                var self = $(this);
+                var name = self[0].tagName.toLowerCase();
+                var ajax_data = {};
+
+                if (name == 'button') {
+                    var form = self.parents('form:eq(0)');
+                    ajax_data['url'] = self.attr('formaction');
+
+                    if (form.length) {
+                        ajax_data['data'] = form.serialize();
+                        ajax_data['type'] = form.attr('method') || 'POST';
+                    }
+                }
+
+                if (name == 'a') {
+                    ajax_data['url'] = self.attr('href');
+                }
+
+                $.ajax(ajax_data).done(function(data){
+                    $('#djDebugWindow').html(data).show();
+                }).fail(function(xhr){
+                    var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+                    $('#djDebugWindow').html(message).show();
+                });
+
+                $('#djDebugWindow a.djDebugBack').live('click', function() {
+                    $(this).parent().parent().hide();
+                    return false;
+                });
+
 				return false;
 			});
+
 			$('#djDebugTemplatePanel a.djTemplateShowContext').live('click', function() {
 				djdt.toggle_arrow($(this).children('.toggleArrow'));
 				djdt.toggle_content($(this).parent().next());
