@@ -8,9 +8,9 @@ from django.conf.urls.defaults import *
 
 _PREFIX = '__debug__'
 
-urlpatterns = patterns('',
-    url(r'^%s/sql_select/$' % _PREFIX, 'debug_toolbar.views.sql_select', name='sql_select'),
-    url(r'^%s/sql_explain/$' % _PREFIX, 'debug_toolbar.views.sql_explain', name='sql_explain'),
-    url(r'^%s/sql_profile/$' % _PREFIX, 'debug_toolbar.views.sql_profile', name='sql_profile'),
-    url(r'^%s/template_source/$' % _PREFIX, 'debug_toolbar.views.template_source', name='template_source'),
+urlpatterns = patterns('debug_toolbar.views',
+    url(r'^%s/sql_select/$' % _PREFIX, 'sql_select', name='sql_select'),
+    url(r'^%s/sql_explain/$' % _PREFIX, 'sql_explain', name='sql_explain'),
+    url(r'^%s/sql_profile/$' % _PREFIX, 'sql_profile', name='sql_profile'),
+    url(r'^%s/template_source/$' % _PREFIX, 'template_source', name='template_source'),
 )
