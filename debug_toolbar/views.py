@@ -111,7 +111,15 @@ def sql_explain(request):
 
 @csrf_exempt
 def sql_profile(request):
-    """Returns the output of running the SQL and getting the profiling statistics"""
+    """
+    Returns the output of running the SQL and getting the profiling statistics.
+
+    Expected GET variables:
+        sql: urlencoded sql with positional arguments
+        params: JSON encoded parameter values
+        duration: time for SQL to execute passed in from toolbar just for redisplay
+        hash: the hash of (secret + sql + params) for tamper checking
+    """
     from debug_toolbar.panels.sql import reformat_sql
     sql = request.REQUEST.get('sql', '')
     params = request.REQUEST.get('params', '')
