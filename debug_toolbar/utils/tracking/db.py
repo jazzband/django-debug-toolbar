@@ -5,7 +5,6 @@ from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils import simplejson
 from django.utils.encoding import force_unicode, smart_str
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
@@ -13,8 +12,13 @@ from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
 from debug_toolbar.utils.compat.db import connections
 
 try:
+    import json
+except ImportError: # python < 2.6
+    from django.utils import simplejson as json
+
+try:
     from hashlib import sha1
-except ImportError:
+except ImportError: # python < 2.5
     from django.utils.hashcompat import sha_constructor as sha1
 
 # TODO:This should be set in the toolbar loader as a default and panels should
@@ -103,7 +107,7 @@ class NormalCursorWrapper(object):
                 stacktrace = []
             _params = ''
             try:
-                _params = simplejson.dumps(
+                _params = json.dumps(
                         [force_unicode(x, strings_only=True) for x in params]
                             )
             except TypeError:

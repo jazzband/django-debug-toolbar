@@ -9,13 +9,17 @@ import django.views.static
 from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from django.utils import simplejson
 
 from debug_toolbar.utils.compat.db import connections
 
 try:
+    import json
+except ImportError: # python < 2.6
+    from django.utils import simplejson as json
+
+try:
     from hashlib import sha1
-except ImportError:
+except ImportError: # python < 2.5
     from django.utils.hashcompat import sha_constructor as sha1
 
 
@@ -45,7 +49,7 @@ def sql_select(request):
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
-        params = simplejson.loads(params)
+        params = json.loads(params)
         cursor = connections[alias].cursor()
         cursor.execute(sql, params)
         headers = [d[0] for d in cursor.description]
@@ -80,7 +84,7 @@ def sql_explain(request):
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
-        params = simplejson.loads(params)
+        params = json.loads(params)
         cursor = connections[alias].cursor()
 
         conn = connections[alias].connection
@@ -126,7 +130,7 @@ def sql_profile(request):
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
-        params = simplejson.loads(params)
+        params = json.loads(params)
         cursor = connections[alias].cursor()
         result = None
         headers = None
