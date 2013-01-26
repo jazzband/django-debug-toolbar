@@ -136,7 +136,7 @@ class DebugToolbarMiddleware(object):
             response.content = replace_insensitive(
                 smart_unicode(response.content),
                 self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
+                smart_unicode(toolbar.render_toolbar(request) + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]
