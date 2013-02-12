@@ -1,15 +1,15 @@
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', direct_to_template, {'template': 'index.html'}),
-    (r'^jquery/index/$', direct_to_template, {'template': 'jquery/index.html'}),
-    (r'^mootools/index/$', direct_to_template, {'template': 'mootools/index.html'}),
-    (r'^prototype/index/$', direct_to_template, {'template': 'prototype/index.html'}),
+    (r'^$', TemplateView.as_view(template_name='index.html')),
+    (r'^jquery/index/$', TemplateView.as_view(template_name='jquery/index.html')),
+    (r'^mootools/index/$', TemplateView.as_view(template_name='mootools/index.html')),
+    (r'^prototype/index/$', TemplateView.as_view(template_name='prototype/index.html')),
     (r'^admin/', include(admin.site.urls)),
 )
 
