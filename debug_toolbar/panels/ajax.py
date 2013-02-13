@@ -3,10 +3,30 @@ import uuid
 import inspect
 import datetime
 
+from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
 
+class Storage:
+
+    def __init__(self, request):
+        self.session_key = request.session.session_key
+        cache.add(self.session_key, [])
+        
+    def append(self, what):
+        toset = cache.get(self.session_key) or []
+        toset.append(what)
+        cache.set(self.session_key, toset)
+        
+    def __iter__(self):
+        data = cache.get(self.session_key) or []
+        for d in data:
+            yield d
+
+    def __len__(self):
+        return len(cache.get(self.session_key) or [])
+    
 class AjaxDebugPanel(DebugPanel):
     """
     Panel that displays recent AJAX requests.
@@ -37,9 +57,7 @@ class AjaxDebugPanel(DebugPanel):
         return ''
 
     def storage(self, request):
-        if self.session_key not in request.session:
-            request.session[self.session_key] = []
-        return request.session[self.session_key]
+        return Storage(request)
 
     def record(self, request, ddt_html):
         self.storage(request).append({
