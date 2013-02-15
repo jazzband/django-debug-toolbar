@@ -1,4 +1,5 @@
 import thread
+import types
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -412,3 +413,19 @@ class MiddlewareAjaxTestCase(BaseTestCase):
             middleware.process_response(request, response)
             self.assertEquals(response.content, '<body></body>')
     
+    def test_handling_ajax_request(self):
+        request = request = rf.get('/')
+        request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        response = self.response
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+            middleware = DebugToolbarMiddleware()
+            
+            def handler_mock(self, toolbar, ddt_html, request, response):
+                handler_mock.called = True
+            handler_mock.called = False
+            middleware._handle_ajax_response = types.MethodType(handler_mock, middleware)
+            
+            middleware.process_request(request)
+            middleware.process_response(request, response)
+            self.assertTrue(handler_mock.called)
+        

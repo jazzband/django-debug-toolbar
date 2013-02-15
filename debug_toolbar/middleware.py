@@ -126,7 +126,7 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         ident = thread.get_ident()
         toolbar = self.__class__.debug_toolbars.get(ident)
-        if not toolbar or request.is_ajax():
+        if not toolbar:
             return response
         if isinstance(response, HttpResponseRedirect):
             if not toolbar.config['INTERCEPT_REDIRECTS']:
@@ -145,13 +145,14 @@ class DebugToolbarMiddleware(object):
                 panel.process_response(request, response)
             content = smart_unicode(response.content)
             ddt_html = smart_unicode(toolbar.render_toolbar())
-            if self.tag in content:
+
+            if request.is_ajax():
+                self._handle_ajax_response(toolbar, ddt_html, request, response)
+            elif self.tag in content:
                 response.content = replace_insensitive(content, self.tag,
                                                        ddt_html + self.tag)
                 if response.get('Content-Length', None):
                     response['Content-Length'] = len(response.content)
-            if request.is_ajax():
-                self._handle_ajax_response(toolbar, ddt_html, request, response)
         
         del self.__class__.debug_toolbars[ident]
         return response
