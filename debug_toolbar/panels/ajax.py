@@ -72,6 +72,7 @@ class AjaxDebugPanel(DebugPanel):
             'time': datetime.datetime.now(),
             'path': request.path,
             'html': ddt_html,
+            'is_ajax': request.is_ajax()
         })
 
     def get_html(self, request, req_id):

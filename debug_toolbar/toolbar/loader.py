@@ -59,10 +59,12 @@ class DebugToolbar(object):
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
-            'include_js': include_js
         })
-
-        return render_to_string('debug_toolbar/base.html', context)
+        base = render_to_string('debug_toolbar/base.html', context)
+        base_with_js = ''
+        if include_js:
+            base_with_js = render_to_string('debug_toolbar/base_with_js.html', context)
+        return base, base_with_js
 
 
 panel_classes = []

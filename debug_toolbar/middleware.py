@@ -73,7 +73,7 @@ class DebugToolbarMiddleware(object):
         # if not internal ip, and not DEBUG
         return remote_addr in settings.INTERNAL_IPS and bool(settings.DEBUG)
 
-    def _handle_ajax_response(self, toolbar, ddt_html, request, response):
+    def _handle_ajax(self, toolbar, ddt_html, request, response):
         from debug_toolbar.panels.ajax import AjaxDebugPanel
         try:
             ajax_panel = toolbar.get_panel(AjaxDebugPanel)
@@ -81,6 +81,7 @@ class DebugToolbarMiddleware(object):
             ajax_panel = None
         if ajax_panel:
             ajax_panel.record(request, ddt_html)
+
         
     def process_request(self, request):
         __traceback_hide__ = True
@@ -144,14 +145,15 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             content = smart_unicode(response.content)
-            ddt_html = smart_unicode(toolbar.render_toolbar(include_js = not request.is_ajax()))
+            ddt_html, ddt_html_js = map(smart_unicode, (toolbar.render_toolbar(include_js = not request.is_ajax())))
 
             if request.is_ajax():
                 if not request.path.startswith('/' + debug_toolbar.urls._PREFIX):
-                    self._handle_ajax_response(toolbar, ddt_html, request, response)
+                    self._handle_ajax(toolbar, ddt_html, request, response)
             elif self.tag in content:
+                self._handle_ajax(toolbar, ddt_html, request, response)
                 response.content = replace_insensitive(content, self.tag,
-                                                       ddt_html + self.tag)
+                                                       ddt_html_js + self.tag)
                 if response.get('Content-Length', None):
                     response['Content-Length'] = len(response.content)
         

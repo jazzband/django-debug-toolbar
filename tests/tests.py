@@ -188,6 +188,7 @@ class DebugToolbarTestCase(BaseTestCase):
             middleware.process_request(request)
             middleware.process_response(request, response)
             self.assertIn('djDebug', response.content)
+            self.assertIn('<script', response.content)
             
         
 class DebugToolbarNameFromObjectTest(BaseTestCase):
@@ -425,7 +426,7 @@ class MiddlewareAjaxTestCase(BaseTestCase):
                 handler_mock.called = True
                 handler_mock.ddt_html = ddt_html
             handler_mock.called = False
-            middleware._handle_ajax_response = types.MethodType(handler_mock, middleware)
+            middleware._handle_ajax = types.MethodType(handler_mock, middleware)
             
             middleware.process_request(request)
             middleware.process_response(request, response)
@@ -444,8 +445,29 @@ class MiddlewareAjaxTestCase(BaseTestCase):
                     handler_mock.called = True
                     handler_mock.ddt_html = ddt_html
                 handler_mock.called = False
-                middleware._handle_ajax_response = types.MethodType(handler_mock, middleware)
+                middleware._handle_ajax = types.MethodType(handler_mock, middleware)
                 
                 middleware.process_request(request)
                 middleware.process_response(request, response)
                 self.assertTrue(not handler_mock.called)
+    
+    def test_handling_initial_request(self):
+        request = request = rf.get('/')
+        response = HttpResponse('<body></body>')
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True, DEBUG_TOOLBAR_CONFIG = dict(TAG='body')):
+            middleware = DebugToolbarMiddleware()
+            
+            def handler_mock(self, toolbar, ddt_html, request, response):
+                handler_mock.called = True
+                handler_mock.is_ajax = request.is_ajax()
+                handler_mock.ddt_html = ddt_html
+            handler_mock.called = False
+            middleware._handle_ajax = types.MethodType(handler_mock, middleware)
+            
+            middleware.process_request(request)
+            middleware.process_response(request, response)
+            self.assertTrue(handler_mock.called)
+            self.assertFalse(handler_mock.is_ajax)
+            self.assertNotIn('<script', handler_mock.ddt_html)
+
+            
