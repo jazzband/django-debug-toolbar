@@ -112,10 +112,17 @@ class TemplateDebugPanel(DebugPanel):
         self.request = request
 
     def process_response(self, request, response):
+
+        def format(item):
+            try:
+                return pformat(item)
+            except UnicodeDecodeError:
+                return ""
+
         context_processors = dict(
             [
                 ("%s.%s" % (k.__module__, k.__name__),
-                    pformat(k(self.request))) for k in get_standard_processors()
+                    format(k(self.request))) for k in get_standard_processors()
             ]
         )
         template_context = []
