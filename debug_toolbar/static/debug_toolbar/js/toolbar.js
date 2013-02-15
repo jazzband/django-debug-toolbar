@@ -8,8 +8,7 @@ window.djdt = (function(window, document, jQuery) {
 			ready: []
 		},
 		isReady: false,
-		init: function() {
-			$('#djDebug').show();
+		setup: function() {
 			var current = null;
 			$('#djDebugPanelList li a').live('click', function() {
 				if (!this.className) {
@@ -94,8 +93,9 @@ window.djdt = (function(window, document, jQuery) {
 				e.preventDefault();
 				var req_id = $(this).attr('data-requestid');
 				$.get('/__debug__/ajax_request/' + req_id + '/', function(data) {
-				    $('#djDebugWrapper').wrap('<div>').parent().html(data);
-				    refreshAjaxPanel();
+					$('#djDebugWrapper').replaceWith(data);
+					refreshAjaxPanel();
+					djdt.init();
 				});
 			});
 			$('#djAjaxRefreshBtn').live('click', function(e) {
@@ -120,14 +120,6 @@ window.djdt = (function(window, document, jQuery) {
 					subcalls.hide();
 				}
 			});
-			$('#djHideToolBarButton').click(function() {
-				djdt.hide_toolbar(true);
-				return false;
-			});
-			$('#djShowToolBarButton').click(function() {
-				djdt.show_toolbar();
-				return false;
-			});
 			$(document).bind('close.djDebug', function() {
 				// If a sub-panel is open, close that
 				if ($('#djDebugWindow').is(':visible')) {
@@ -144,6 +136,18 @@ window.djdt = (function(window, document, jQuery) {
 					djdt.hide_toolbar(true);
 					return;
 				}
+			});
+		},
+		init: function() {
+			$('#djDebug').show();
+			
+			$('#djHideToolBarButton').click(function() {
+				djdt.hide_toolbar(true);
+				return false;
+			});
+			$('#djShowToolBarButton').click(function() {
+				djdt.show_toolbar();
+				return false;
 			});
 			if ($.cookie(COOKIE_NAME)) {
 				djdt.hide_toolbar(false);
@@ -221,6 +225,7 @@ window.djdt = (function(window, document, jQuery) {
 		}
 	};
 	$(document).ready(function() {
+		djdt.setup();
 		djdt.init();
 	});
 	return djdt;

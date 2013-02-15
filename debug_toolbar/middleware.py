@@ -144,7 +144,7 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             content = smart_unicode(response.content)
-            ddt_html = smart_unicode(toolbar.render_toolbar())
+            ddt_html = smart_unicode(toolbar.render_toolbar(include_js = not request.is_ajax()))
 
             if request.is_ajax():
                 self._handle_ajax_response(toolbar, ddt_html, request, response)

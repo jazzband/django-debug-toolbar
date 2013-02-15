@@ -422,10 +422,12 @@ class MiddlewareAjaxTestCase(BaseTestCase):
             
             def handler_mock(self, toolbar, ddt_html, request, response):
                 handler_mock.called = True
+                handler_mock.ddt_html = ddt_html
             handler_mock.called = False
             middleware._handle_ajax_response = types.MethodType(handler_mock, middleware)
             
             middleware.process_request(request)
             middleware.process_response(request, response)
             self.assertTrue(handler_mock.called)
+            self.assertNotIn('<script', handler_mock.ddt_html)
         

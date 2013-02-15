@@ -52,13 +52,14 @@ class DebugToolbar(object):
 
             self._panels[panel_class] = panel_instance
 
-    def render_toolbar(self):
+    def render_toolbar(self, include_js = True):
         """
         Renders the overall Toolbar with panels inside.
         """
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
+            'include_js': include_js
         })
 
         return render_to_string('debug_toolbar/base.html', context)
