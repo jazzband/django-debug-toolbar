@@ -11,21 +11,28 @@ from debug_toolbar.panels import DebugPanel
 class Storage:
 
     def __init__(self, request):
-        self.session_key = request.session.session_key
-        cache.add(self.session_key, [])
+        self.session_key = None
+        if hasattr(request, 'session'):
+            self.session_key = request.session.session_key
+            cache.add(self.session_key, [])
         
     def append(self, what):
-        toset = cache.get(self.session_key) or []
-        toset.append(what)
-        cache.set(self.session_key, toset)
+        if self.session_key:
+            toset = cache.get(self.session_key) or []
+            toset.append(what)
+            cache.set(self.session_key, toset)
         
     def __iter__(self):
-        data = cache.get(self.session_key) or []
+        data = []
+        if self.session_key:
+            data = cache.get(self.session_key) or []
         for d in data:
             yield d
 
     def __len__(self):
-        return len(cache.get(self.session_key) or [])
+        if self.session_key:
+            return len(cache.get(self.session_key) or [])
+        return 0
     
 class AjaxDebugPanel(DebugPanel):
     """
