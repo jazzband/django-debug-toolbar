@@ -177,7 +177,17 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEquals(stats['view_kwargs'], 'None')
         self.assertEquals(stats['view_func'], '<no view>')
 
-
+    def test_attaching_debug_toolbar(self):
+        # Smoke test: ensure debug toolbar is attached to the response during a typical scenario
+        request, response = self.request, self.response
+        response.content = '<body></body>'
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True, DEBUG_TOOLBAR_CONFIG = dict(TAG='body')):
+            middleware = DebugToolbarMiddleware()
+            middleware.process_request(request)
+            middleware.process_response(request, response)
+            self.assertIn('djDebug', response.content)
+            
+        
 class DebugToolbarNameFromObjectTest(BaseTestCase):
     def test_func(self):
         def x():
@@ -387,3 +397,18 @@ class TrackingTestCase(BaseTestCase):
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
         self.assertEquals(foo['kwargs']['foo'], 'bar')
+
+
+class MiddlewareAjaxTestCase(BaseTestCase):
+    urls = 'tests.urls'
+    
+    def test_response_to_ajax_request_stays_unchanged(self):
+        request = request = rf.get('/')
+        request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        response = HttpResponse('<body></body>')
+        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True, DEBUG_TOOLBAR_CONFIG = dict(TAG='body')):
+            middleware = DebugToolbarMiddleware()
+            middleware.process_request(request)
+            middleware.process_response(request, response)
+            self.assertEquals(response.content, '<body></body>')
+    
