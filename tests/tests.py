@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.template import Template, Context
+from django.core.urlresolvers import reverse
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
@@ -430,4 +431,21 @@ class MiddlewareAjaxTestCase(BaseTestCase):
             middleware.process_response(request, response)
             self.assertTrue(handler_mock.called)
             self.assertNotIn('<script', handler_mock.ddt_html)
-        
+   
+    def test_internal_ajax_requests_are_ignored(self):
+        with Settings(ROOT_URLCONF = 'debug_toolbar.urls'):
+            request = request = rf.get(reverse('ajax_list'))
+            request.META['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+            response = self.response
+            with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+                middleware = DebugToolbarMiddleware()
+                
+                def handler_mock(self, toolbar, ddt_html, request, response):
+                    handler_mock.called = True
+                    handler_mock.ddt_html = ddt_html
+                handler_mock.called = False
+                middleware._handle_ajax_response = types.MethodType(handler_mock, middleware)
+                
+                middleware.process_request(request)
+                middleware.process_response(request, response)
+                self.assertTrue(not handler_mock.called)

@@ -147,7 +147,8 @@ class DebugToolbarMiddleware(object):
             ddt_html = smart_unicode(toolbar.render_toolbar(include_js = not request.is_ajax()))
 
             if request.is_ajax():
-                self._handle_ajax_response(toolbar, ddt_html, request, response)
+                if not request.path.startswith('/' + debug_toolbar.urls._PREFIX):
+                    self._handle_ajax_response(toolbar, ddt_html, request, response)
             elif self.tag in content:
                 response.content = replace_insensitive(content, self.tag,
                                                        ddt_html + self.tag)
