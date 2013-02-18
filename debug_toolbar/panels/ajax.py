@@ -41,7 +41,6 @@ class AjaxDebugPanel(DebugPanel):
     name = 'Ajax'
     template = 'debug_toolbar/panels/ajax.html'
     has_content = True
-    session_key = 'debug_toolbar_ajax_requests'
 
     def __init__(self, *args, **kwargs):
         super(AjaxDebugPanel, self).__init__(*args, **kwargs)
