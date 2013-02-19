@@ -35,18 +35,18 @@ def sql_select(request):
     """
     Returns the output of the SQL SELECT statement.
 
-    Expected GET variables:
+    Expected POST variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
-    alias = request.GET.get('alias', 'default')
+    sql = request.POST.get('sql', '')
+    params = request.POST.get('params', '')
+    alias = request.POST.get('alias', 'default')
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
-    if hash != request.GET.get('hash', ''):
+    if hash != request.POST.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = json.loads(params)
@@ -58,7 +58,7 @@ def sql_select(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'duration': request.GET.get('duration', 0.0),
+            'duration': request.POST.get('duration', 0.0),
             'headers': headers,
             'alias': alias,
         }
@@ -70,18 +70,18 @@ def sql_explain(request):
     """
     Returns the output of the SQL EXPLAIN on the given query.
 
-    Expected GET variables:
+    Expected POST variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
-    alias = request.GET.get('alias', 'default')
+    sql = request.POST.get('sql', '')
+    params = request.POST.get('params', '')
+    alias = request.POST.get('alias', 'default')
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
-    if hash != request.GET.get('hash', ''):
+    if hash != request.POST.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = json.loads(params)
@@ -104,7 +104,7 @@ def sql_explain(request):
         context = {
             'result': result,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'duration': request.GET.get('duration', 0.0),
+            'duration': request.POST.get('duration', 0.0),
             'headers': headers,
             'alias': alias,
         }
@@ -116,18 +116,18 @@ def sql_profile(request):
     """
     Returns the output of running the SQL and getting the profiling statistics.
 
-    Expected GET variables:
+    Expected POST variables:
         sql: urlencoded sql with positional arguments
         params: JSON encoded parameter values
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     from debug_toolbar.panels.sql import reformat_sql
-    sql = request.GET.get('sql', '')
-    params = request.GET.get('params', '')
-    alias = request.GET.get('alias', 'default')
+    sql = request.POST.get('sql', '')
+    params = request.POST.get('params', '')
+    alias = request.POST.get('alias', 'default')
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
-    if hash != request.GET.get('hash', ''):
+    if hash != request.POST.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
         params = json.loads(params)
@@ -150,7 +150,7 @@ def sql_profile(request):
             'result': result,
             'result_error': result_error,
             'sql': reformat_sql(cursor.db.ops.last_executed_query(cursor, sql, params)),
-            'duration': request.GET.get('duration', 0.0),
+            'duration': request.POST.get('duration', 0.0),
             'headers': headers,
             'alias': alias,
         }
