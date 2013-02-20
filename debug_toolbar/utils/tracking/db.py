@@ -92,9 +92,10 @@ class NormalCursorWrapper(object):
         return map(self._quote_expr, params)
 
     def _decode(self, param):
-        if isinstance(param, unicode):
-            return param.decode('utf-8', 'ignore')
-        return param
+        try:
+            return force_unicode(param, strings_only=True)
+        except UnicodeDecodeError:
+            return '(encoded string)'
 
     def execute(self, sql, params=()):
         start = datetime.now()
