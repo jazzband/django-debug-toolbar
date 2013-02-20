@@ -1,6 +1,10 @@
 # Make file to compress and join all JS files
 all: compress_js compress_css
 
+test:
+	pip install Django
+	python runtests.py
+
 compress_js:
 	java -jar ~/bin/yuicompressor.jar debug_toolbar/static/debug_toolbar/js/jquery.js > debug_toolbar/static/debug_toolbar/js/toolbar.min.js
 	java -jar ~/bin/yuicompressor.jar debug_toolbar/static/debug_toolbar/js/toolbar.js >> debug_toolbar/static/debug_toolbar/js/toolbar.min.js
