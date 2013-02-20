@@ -91,8 +91,12 @@ class NormalCursorWrapper(object):
                             for key, value in params.iteritems())
         return map(self._quote_expr, params)
 
+    def _decode(self, param):
+        if isinstance(param, unicode):
+            return param.decode('utf-8', 'ignore')
+        return param
+
     def execute(self, sql, params=()):
-        __traceback_hide__ = True
         start = datetime.now()
         try:
             return self.cursor.execute(sql, params)
@@ -107,10 +111,8 @@ class NormalCursorWrapper(object):
                 stacktrace = []
             _params = ''
             try:
-                _params = json.dumps(
-                        [force_unicode(x, strings_only=True) for x in params]
-                            )
-            except TypeError:
+                _params = json.dumps(map(self._decode, params))
+            except Exception:
                 pass  # object not JSON serializable
 
             template_info = None
