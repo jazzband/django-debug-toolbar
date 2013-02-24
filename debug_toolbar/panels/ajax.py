@@ -2,11 +2,18 @@ import time
 import uuid
 import inspect
 import datetime
+from contextlib import contextmanager
 
 from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
+@contextmanager
+def disable_tracking(cache):
+    cache._django_debug_toolbar_do_not_track = True
+    yield
+    del cache._django_debug_toolbar_do_not_track
+    
 
 class Storage:
 
@@ -14,24 +21,28 @@ class Storage:
         self.session_key = None
         if hasattr(request, 'session'):
             self.session_key = request.session.session_key
-            cache.add(self.session_key, [])
+            with disable_tracking(cache):
+                cache.add(self.session_key, [])
         
     def append(self, what):
         if self.session_key:
-            toset = cache.get(self.session_key) or []
-            toset.append(what)
-            cache.set(self.session_key, toset)
+            with disable_tracking(cache):
+                toset = cache.get(self.session_key) or []
+                toset.append(what)
+                cache.set(self.session_key, toset)
         
     def __iter__(self):
         data = []
         if self.session_key:
-            data = cache.get(self.session_key) or []
+            with disable_tracking(cache):
+                data = cache.get(self.session_key) or []
         for d in data:
             yield d
 
     def __len__(self):
         if self.session_key:
-            return len(cache.get(self.session_key) or [])
+            with disable_tracking(cache):
+                return len(cache.get(self.session_key) or [])
         return 0
     
 class AjaxDebugPanel(DebugPanel):
