@@ -97,6 +97,3 @@ class AjaxDebugPanel(DebugPanel):
 
     def process_request(self, request):
         self._num_requests = len(self.storage(request))
-
-    def process_response(self, request, response):
-        self.record_stats(self.get_context(request))
