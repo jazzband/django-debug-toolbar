@@ -82,25 +82,18 @@ window.djdt = (function(window, document, jQuery) {
 				});
 				return;
 			});
-			function refreshAjaxPanel() {
-				$.get('/__debug__/ajax_request/', function(data) {
-				    $('#djDebugAjaxPanel .djDebugPanelContent div.scroll').html(data);
-				    var num_reqs = $('#djDebugAjaxPanel .djDebugPanelContent tbody tr').length;
-				    $('a.djDebugAjaxPanel small').html(num_reqs + ' requests');
-				});
-			}
 			$('#djDebug a.djAjaxLoad').live('click', function(e) {
 				e.preventDefault();
 				var req_id = $(this).attr('data-requestid');
 				$.get('/__debug__/ajax_request/' + req_id + '/', function(data) {
 					$('#djDebugWrapper').replaceWith(data);
-					refreshAjaxPanel();
-					djdt.init();
+					djdt.init(req_id);
 				});
 			});
 			$('#djAjaxRefreshBtn').live('click', function(e) {
 				e.preventDefault();
-				refreshAjaxPanel();
+				var panel = $('#djDebugAjaxPanel');
+				djdt.refreshAjaxPanel(panel.find('tr.highlight').find('.djAjaxLoad').attr('data-requestid'));
 			});
 			function getSubcalls(row) {
 				var id = row.attr('id');
@@ -137,8 +130,9 @@ window.djdt = (function(window, document, jQuery) {
 					return;
 				}
 			});
+			djdt.init(null);
 		},
-		init: function() {
+		init: function(req_id) {
 			$('#djDebug').show();
 			
 			$('#djHideToolBarButton').click(function() {
@@ -162,6 +156,18 @@ window.djdt = (function(window, document, jQuery) {
 			djdt.isReady = true;
 			$.each(djdt.events.ready, function(_, callback){
 				callback(djdt);
+			});
+			djdt.refreshAjaxPanel(req_id);
+		},
+		refreshAjaxPanel: function(curr_req_id) {
+			$.get('/__debug__/ajax_request/', function(data) {
+			    $('#djDebugAjaxPanel .djDebugPanelContent div.scroll').html(data);
+			    var num_reqs = $('#djDebugAjaxPanel .djDebugPanelContent tbody tr').length;
+			    $('a.djDebugAjaxPanel small').html(num_reqs + ' requests');
+				var panel = $('#djDebugAjaxPanel');
+				curr_req_id = curr_req_id || panel.find('tr.djAjaxReq-initial').last().find('.djAjaxLoad').attr('data-requestid');
+				panel.find('tr.highlight').removeClass('highlight');
+				panel.find('#djAjaxReq-' + curr_req_id).addClass('highlight');
 			});
 		},
 		toggle_content: function(elem) {
@@ -226,7 +232,6 @@ window.djdt = (function(window, document, jQuery) {
 	};
 	$(document).ready(function() {
 		djdt.setup();
-		djdt.init();
 	});
 	return djdt;
 }(window, document, jQuery.noConflict(true)));
