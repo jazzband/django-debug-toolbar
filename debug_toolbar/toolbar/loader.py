@@ -52,7 +52,7 @@ class DebugToolbar(object):
 
             self._panels[panel_class] = panel_instance
 
-    def render_toolbar(self):
+    def render_toolbar(self, include_js = True):
         """
         Renders the overall Toolbar with panels inside.
         """
@@ -60,8 +60,11 @@ class DebugToolbar(object):
         context.update({
             'panels': self.panels,
         })
-
-        return render_to_string('debug_toolbar/base.html', context)
+        base = render_to_string('debug_toolbar/base.html', context)
+        base_with_js = ''
+        if include_js:
+            base_with_js = render_to_string('debug_toolbar/base_with_js.html', context)
+        return base, base_with_js
 
 
 panel_classes = []
@@ -83,6 +86,7 @@ def load_panel_classes():
         'debug_toolbar.panels.cache.CacheDebugPanel',
         'debug_toolbar.panels.signals.SignalDebugPanel',
         'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar.panels.ajax.AjaxDebugPanel',
     ))
     for panel_path in panels:
         try:

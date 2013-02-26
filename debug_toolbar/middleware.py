@@ -72,6 +72,16 @@ class DebugToolbarMiddleware(object):
         # if not internal ip, and not DEBUG
         return remote_addr in settings.INTERNAL_IPS and bool(settings.DEBUG)
 
+    def _handle_ajax(self, toolbar, ddt_html, request, response):
+        from debug_toolbar.panels.ajax import AjaxDebugPanel
+        try:
+            ajax_panel = toolbar.get_panel(AjaxDebugPanel)
+        except IndexError:
+            ajax_panel = None
+        if ajax_panel:
+            ajax_panel.record(request, ddt_html)
+
+        
     def process_request(self, request):
         __traceback_hide__ = True
         if self.show_toolbar(request):
@@ -116,7 +126,7 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         ident = thread.get_ident()
         toolbar = self.__class__.debug_toolbars.get(ident)
-        if not toolbar or request.is_ajax():
+        if not toolbar:
             return response
         if isinstance(response, HttpResponseRedirect):
             if not toolbar.config['INTERCEPT_REDIRECTS']:
@@ -133,11 +143,18 @@ class DebugToolbarMiddleware(object):
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
-            response.content = replace_insensitive(
-                smart_unicode(response.content),
-                self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+            content = smart_unicode(response.content)
+            ddt_html, ddt_html_js = map(smart_unicode, (toolbar.render_toolbar(include_js = not request.is_ajax())))
+
+            if request.is_ajax():
+                if not request.path.startswith('/' + debug_toolbar.urls._PREFIX):
+                    self._handle_ajax(toolbar, ddt_html, request, response)
+            elif self.tag in content:
+                self._handle_ajax(toolbar, ddt_html, request, response)
+                response.content = replace_insensitive(content, self.tag,
+                                                       ddt_html_js + self.tag)
+                if response.get('Content-Length', None):
+                    response['Content-Length'] = len(response.content)
+        
         del self.__class__.debug_toolbars[ident]
         return response

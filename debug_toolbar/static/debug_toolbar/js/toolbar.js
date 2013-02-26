@@ -8,8 +8,7 @@ window.djdt = (function(window, document, jQuery) {
 			ready: []
 		},
 		isReady: false,
-		init: function() {
-			$('#djDebug').show();
+		setup: function() {
 			var current = null;
 			$('#djDebugPanelList li a').live('click', function() {
 				if (!this.className) {
@@ -83,6 +82,19 @@ window.djdt = (function(window, document, jQuery) {
 				});
 				return;
 			});
+			$('#djDebug a.djAjaxLoad').live('click', function(e) {
+				e.preventDefault();
+				var req_id = $(this).attr('data-requestid');
+				$.get('/__debug__/ajax_request/' + req_id + '/', function(data) {
+					$('#djDebugWrapper').replaceWith(data);
+					djdt.init(req_id);
+				});
+			});
+			$('#djAjaxRefreshBtn').live('click', function(e) {
+				e.preventDefault();
+				var panel = $('#djDebugAjaxPanel');
+				djdt.refreshAjaxPanel(panel.find('tr.highlight').find('.djAjaxLoad').attr('data-requestid'));
+			});
 			function getSubcalls(row) {
 				var id = row.attr('id');
 				return $('.djDebugProfileRow[id^="'+id+'_"]');
@@ -101,14 +113,6 @@ window.djdt = (function(window, document, jQuery) {
 					subcalls.hide();
 				}
 			});
-			$('#djHideToolBarButton').click(function() {
-				djdt.hide_toolbar(true);
-				return false;
-			});
-			$('#djShowToolBarButton').click(function() {
-				djdt.show_toolbar();
-				return false;
-			});
 			$(document).bind('close.djDebug', function() {
 				// If a sub-panel is open, close that
 				if ($('#djDebugWindow').is(':visible')) {
@@ -126,6 +130,19 @@ window.djdt = (function(window, document, jQuery) {
 					return;
 				}
 			});
+			djdt.init(null);
+		},
+		init: function(req_id) {
+			$('#djDebug').show();
+			
+			$('#djHideToolBarButton').click(function() {
+				djdt.hide_toolbar(true);
+				return false;
+			});
+			$('#djShowToolBarButton').click(function() {
+				djdt.show_toolbar();
+				return false;
+			});
 			if ($.cookie(COOKIE_NAME)) {
 				djdt.hide_toolbar(false);
 			} else {
@@ -139,6 +156,18 @@ window.djdt = (function(window, document, jQuery) {
 			djdt.isReady = true;
 			$.each(djdt.events.ready, function(_, callback){
 				callback(djdt);
+			});
+			djdt.refreshAjaxPanel(req_id);
+		},
+		refreshAjaxPanel: function(curr_req_id) {
+			$.get('/__debug__/ajax_request/', function(data) {
+			    $('#djDebugAjaxPanel .djDebugPanelContent div.scroll').html(data);
+			    var num_reqs = $('#djDebugAjaxPanel .djDebugPanelContent tbody tr').length;
+			    $('a.djDebugAjaxPanel small').html(num_reqs + ' requests');
+				var panel = $('#djDebugAjaxPanel');
+				curr_req_id = curr_req_id || panel.find('tr.djAjaxReq-initial').last().find('.djAjaxLoad').attr('data-requestid');
+				panel.find('tr.highlight').removeClass('highlight');
+				panel.find('#djAjaxReq-' + curr_req_id).addClass('highlight');
 			});
 		},
 		toggle_content: function(elem) {
@@ -202,7 +231,7 @@ window.djdt = (function(window, document, jQuery) {
 		}
 	};
 	$(document).ready(function() {
-		djdt.init();
+		djdt.setup();
 	});
 	return djdt;
 }(window, document, jQuery.noConflict(true)));

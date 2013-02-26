@@ -21,6 +21,8 @@ cache_called = Signal(providing_args=["time_taken", "name", "return_value", "arg
 
 def send_signal(method):
     def wrapped(self, *args, **kwargs):
+        if getattr(self, '_django_debug_toolbar_do_not_track', False):
+            return method(self, *args, **kwargs)
         t = time.time()
         value = method(self, *args, **kwargs)
         t = time.time() - t

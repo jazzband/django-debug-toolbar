@@ -1,0 +1,19 @@
+{% load i18n %}
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Request Time" %}</th>
+			<th>{% trans "Request Path" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for ajax_req in ajax_requests %}
+		<tr id='djAjaxReq-{{ ajax_req.id }}' class="{% cycle 'djDebugOdd' 'djDebugEven' %} {% if not ajax_req.is_ajax %}djAjaxReq-initial{% endif %}">
+			<td class="k">{{ ajax_req.time }}</td>
+			<td class="k"><a class='djAjaxLoad' data-requestid='{{ ajax_req.id }}' href='' title='Load the toolbar for this request'>{{ ajax_req.path }}{% if not ajax_req.is_ajax %} [initial]{% endif %}</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<br/>
+<button id='djAjaxRefreshBtn' type='button'>{% trans 'Refresh' %}</button>
