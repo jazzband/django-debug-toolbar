@@ -102,6 +102,14 @@ class NormalCursorWrapper(object):
         try:
             return self.cursor.execute(sql, params)
         finally:
+            # FIXME: Sometimes connections which are not in the connections
+            # dict are used (for example in test database destroying).
+            # The code below (at least get_transaction_id(alias) needs to have
+            # the connection in the connections dict. It would be good to
+            # not have this requirement at all, but for now lets just skip
+            # these connections.
+            if self.db.alias not in connections:
+                return
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
             enable_stacktraces = getattr(settings,
@@ -131,7 +139,7 @@ class NormalCursorWrapper(object):
             del cur_frame
 
             alias = getattr(self.db, 'alias', 'default')
-            conn = connections[alias].connection
+            conn = self.db.connection
             # HACK: avoid imports
             if conn:
                 engine = conn.__class__.__module__.split('.', 1)[0]
@@ -158,11 +166,17 @@ class NormalCursorWrapper(object):
             }
 
             if engine == 'psycopg2':
-                from psycopg2.extensions import TRANSACTION_STATUS_INERROR
+                # If an erroneous query was ran on the connection, it might
+                # be in a state where checking isolation_level raises an
+                # exception.
+                try:
+                    iso_level = conn.isolation_level
+                except conn.InternalError:
+                    iso_level = 'unknown'
                 params.update({
                     'trans_id': self.logger.get_transaction_id(alias),
                     'trans_status': conn.get_transaction_status(),
-                    'iso_level': conn.isolation_level if not conn.get_transaction_status() == TRANSACTION_STATUS_INERROR else "",
+                    'iso_level': iso_level,
                     'encoding': conn.encoding,
                 })
 
