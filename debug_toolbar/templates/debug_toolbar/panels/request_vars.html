@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n debug_toolbar_utils %}
 
 <h4>{% trans 'View information' %}</h4>
 <table>
@@ -71,7 +71,7 @@
 			{% for key, value in session %}
 				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
 					<td>{{ key|escape }}</td>
-					<td>{{ value|escape }}</td>
+					<td><code>{{ value|escape|indent_dict }}</code></td>
 				</tr>
 			{% endfor %}
 		</tbody>
