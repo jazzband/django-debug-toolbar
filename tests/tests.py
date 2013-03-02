@@ -1,3 +1,6 @@
+# coding=utf-8
+from __future__ import unicode_literals
+
 import thread
 
 from django.conf import settings
@@ -13,6 +16,7 @@ from debug_toolbar.panels.template import TemplateDebugPanel
 from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils import get_name_from_obj
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
+from debug_toolbar.templatetags.debug_toolbar_utils import indent_dict
 
 rf = RequestFactory()
 
@@ -250,6 +254,88 @@ class TemplatePanelTestCase(BaseTestCase):
         ctx = template_panel.templates[0]['context'][0]
         self.assertIn('<<queryset of auth.User>>', ctx)
         self.assertIn('<<triggers database query>>', ctx)
+
+
+class TemplateTagsTestCase(BaseTestCase):
+    def test_indent_dict(self):
+        input = '''{'step_files': {u'1': {}, u'0': {}, u'3': {}, '''\
+        + '''u'2': {}}, 'step': u'4', 'extra_data': {}, 'step_data': '''\
+        + '''{u'1': {u'1-fax': [u''], u'1-site': [u''], '''\
+        + '''u'inscription_wizard-current_step': [u'1'], '''\
+        + '''u'1-city': [u'paris'], u'1-zip_code': [u'XXXXX'], '''\
+        + '''u'submit': [u'next step'], '''\
+        + '''u'1-phone': [u'XX XX XX XX XX'], '''\
+        + '''u'csrfmiddlewaretoken': [u'X'], '''\
+        + '''u'1-address': [u'xxx xxx xxx.'], '''\
+        + '''u'1-mobile_phone': [u'XX XX XX XX XX']}, '''\
+        + '''u'0': {u'0-email': [u'xxx@xxx.xx'], '''\
+        + '''u'inscription_wizard-current_step': [u'0'], '''\
+        + '''u'submit': [u'next step'], '''\
+        + '''u'csrfmiddlewaretoken': [u'X'], '''\
+        + '''u'0-origin': [u'0']}, '''\
+        + '''u'3': {u'3-honeypot': [u''], u'3-select_paiement': [u'1'], '''\
+        + '''u'inscription_wizard-current_step': [u'3'], '''\
+        + '''u'submit': [u'next step'], u'3-reglement': [u'on'], '''\
+        + '''u'csrfmiddlewaretoken': [u'X'], '''\
+        + '''u'3-keywords': [u''], '''\
+        + '''u'files[]': [u'']}, u'2': {u'2-co_first_name': [u''], '''\
+        + '''u'inscription_wizard-current_step': [u'2'], '''\
+        + '''u'2-co_fonction': [u''], u'2-name': [u'Dupond'], '''\
+        + '''u'submit': [u'next step'], '''\
+        + '''u'2-first_name': [u'Xavier'], '''\
+        + '''u'csrfmiddlewaretoken': [u'X']}}}'''
+
+        output = '''{
+    'step_files': {
+        u'1': {},
+        u'0': {},
+        u'3': {},
+        u'2': {}
+    },
+    'step': u'4',
+    'extra_data': {},
+    'step_data': {
+        u'1': {
+            u'1-fax': [u''],
+            u'1-site': [u''],
+            u'inscription_wizard-current_step': [u'1'],
+            u'1-city': [u'paris'],
+            u'1-zip_code': [u'XXXXX'],
+            u'submit': [u'next step'],
+            u'1-phone': [u'XX XX XX XX XX'],
+            u'csrfmiddlewaretoken': [u'X'],
+            u'1-address': [u'xxx xxx xxx.'],
+            u'1-mobile_phone': [u'XX XX XX XX XX']
+        },
+        u'0': {
+            u'0-email': [u'xxx@xxx.xx'],
+            u'inscription_wizard-current_step': [u'0'],
+            u'submit': [u'next step'],
+            u'csrfmiddlewaretoken': [u'X'],
+            u'0-origin': [u'0']
+        },
+        u'3': {
+            u'3-honeypot': [u''],
+            u'3-select_paiement': [u'1'],
+            u'inscription_wizard-current_step': [u'3'],
+            u'submit': [u'next step'],
+            u'3-reglement': [u'on'],
+            u'csrfmiddlewaretoken': [u'X'],
+            u'3-keywords': [u''],
+            u'files[]': [u'']
+        },
+        u'2': {
+            u'2-co_first_name': [u''],
+            u'inscription_wizard-current_step': [u'2'],
+            u'2-co_fonction': [u''],
+            u'2-name': [u'Dupond'],
+            u'submit': [u'next step'],
+            u'2-first_name': [u'Xavier'],
+            u'csrfmiddlewaretoken': [u'X']
+        }
+    }
+}'''
+        self.assertEquals(indent_dict(input), output)
 
 
 def module_func(*args, **kwargs):
