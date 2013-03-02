@@ -258,83 +258,87 @@ class TemplatePanelTestCase(BaseTestCase):
 
 class TemplateTagsTestCase(BaseTestCase):
     def test_indent_dict(self):
-        input = '''{'step_files': {u'1': {}, u'0': {}, u'3': {}, '''\
-        + '''u'2': {}}, 'step': u'4', 'extra_data': {}, 'step_data': '''\
-        + '''{u'1': {u'1-fax': [u''], u'1-site': [u''], '''\
-        + '''u'inscription_wizard-current_step': [u'1'], '''\
-        + '''u'1-city': [u'paris'], u'1-zip_code': [u'XXXXX'], '''\
-        + '''u'submit': [u'next step'], '''\
-        + '''u'1-phone': [u'XX XX XX XX XX'], '''\
-        + '''u'csrfmiddlewaretoken': [u'X'], '''\
-        + '''u'1-address': [u'xxx xxx xxx.'], '''\
-        + '''u'1-mobile_phone': [u'XX XX XX XX XX']}, '''\
-        + '''u'0': {u'0-email': [u'xxx@xxx.xx'], '''\
-        + '''u'inscription_wizard-current_step': [u'0'], '''\
-        + '''u'submit': [u'next step'], '''\
-        + '''u'csrfmiddlewaretoken': [u'X'], '''\
-        + '''u'0-origin': [u'0']}, '''\
-        + '''u'3': {u'3-honeypot': [u''], u'3-select_paiement': [u'1'], '''\
-        + '''u'inscription_wizard-current_step': [u'3'], '''\
-        + '''u'submit': [u'next step'], u'3-reglement': [u'on'], '''\
-        + '''u'csrfmiddlewaretoken': [u'X'], '''\
-        + '''u'3-keywords': [u''], '''\
-        + '''u'files[]': [u'']}, u'2': {u'2-co_first_name': [u''], '''\
-        + '''u'inscription_wizard-current_step': [u'2'], '''\
-        + '''u'2-co_fonction': [u''], u'2-name': [u'Dupond'], '''\
-        + '''u'submit': [u'next step'], '''\
-        + '''u'2-first_name': [u'Xavier'], '''\
-        + '''u'csrfmiddlewaretoken': [u'X']}}}'''
+        input = (
+            "{'step_files': {u'1': {}, u'0': {}, u'3': {}, "
+            "u'2': {}}, 'step': u'4', 'extra_data': {}, 'step_data': "
+            "{u'1': {u'1-fax': [u''], u'1-site': [u''], "
+            "u'inscription_wizard-current_step': [u'1'], "
+            "u'1-city': [u'paris'], u'1-zip_code': [u'XXXXX'], "
+            "u'submit': [u'next step'], "
+            "u'1-phone': [u'XX XX XX XX XX'], "
+            "u'csrfmiddlewaretoken': [u'X'], "
+            "u'1-address': [u'xxx xxx xxx.'], "
+            "u'1-mobile_phone': [u'XX XX XX XX XX']}, "
+            "u'0': {u'0-email': [u'xxx@xxx.xx'], "
+            "u'inscription_wizard-current_step': [u'0'], "
+            "u'submit': [u'next step'], "
+            "u'csrfmiddlewaretoken': [u'X'], "
+            "u'0-origin': [u'0']}, "
+            "u'3': {u'3-honeypot': [u''], u'3-select_paiement': [u'1'], "
+            "u'inscription_wizard-current_step': [u'3'], "
+            "u'submit': [u'next step'], u'3-reglement': [u'on'], "
+            "u'csrfmiddlewaretoken': [u'X'], "
+            "u'3-keywords': [u''], "
+            "u'files[]': [u'']}, u'2': {u'2-co_first_name': [u''], "
+            "u'inscription_wizard-current_step': [u'2'], "
+            "u'2-co_fonction': [u''], u'2-name': [u'Dupond'], "
+            "u'submit': [u'next step'], "
+            "u'2-first_name': [u'Xavier'], "
+            "u'csrfmiddlewaretoken': [u'X']}}}"
+        )
 
-        output = '''{
-    'step_files': {
-        u'1': {},
-        u'0': {},
-        u'3': {},
-        u'2': {}
-    },
-    'step': u'4',
-    'extra_data': {},
-    'step_data': {
-        u'1': {
-            u'1-fax': [u''],
-            u'1-site': [u''],
-            u'inscription_wizard-current_step': [u'1'],
-            u'1-city': [u'paris'],
-            u'1-zip_code': [u'XXXXX'],
-            u'submit': [u'next step'],
-            u'1-phone': [u'XX XX XX XX XX'],
-            u'csrfmiddlewaretoken': [u'X'],
-            u'1-address': [u'xxx xxx xxx.'],
-            u'1-mobile_phone': [u'XX XX XX XX XX']
-        },
-        u'0': {
-            u'0-email': [u'xxx@xxx.xx'],
-            u'inscription_wizard-current_step': [u'0'],
-            u'submit': [u'next step'],
-            u'csrfmiddlewaretoken': [u'X'],
-            u'0-origin': [u'0']
-        },
-        u'3': {
-            u'3-honeypot': [u''],
-            u'3-select_paiement': [u'1'],
-            u'inscription_wizard-current_step': [u'3'],
-            u'submit': [u'next step'],
-            u'3-reglement': [u'on'],
-            u'csrfmiddlewaretoken': [u'X'],
-            u'3-keywords': [u''],
-            u'files[]': [u'']
-        },
-        u'2': {
-            u'2-co_first_name': [u''],
-            u'inscription_wizard-current_step': [u'2'],
-            u'2-co_fonction': [u''],
-            u'2-name': [u'Dupond'],
-            u'submit': [u'next step'],
-            u'2-first_name': [u'Xavier'],
-            u'csrfmiddlewaretoken': [u'X']
-        }
-    }
-}'''
+        output = (
+            "{\n"
+            "    'step_files': {\n"
+            "        u'1': {},\n"
+            "        u'0': {},\n"
+            "        u'3': {},\n"
+            "        u'2': {}\n"
+            "    },\n"
+            "    'step': u'4',\n"
+            "    'extra_data': {},\n"
+            "    'step_data': {\n"
+            "        u'1': {\n"
+            "            u'1-fax': [u''],\n"
+            "            u'1-site': [u''],\n"
+            "            u'inscription_wizard-current_step': [u'1'],\n"
+            "            u'1-city': [u'paris'],\n"
+            "            u'1-zip_code': [u'XXXXX'],\n"
+            "            u'submit': [u'next step'],\n"
+            "            u'1-phone': [u'XX XX XX XX XX'],\n"
+            "            u'csrfmiddlewaretoken': [u'X'],\n"
+            "            u'1-address': [u'xxx xxx xxx.'],\n"
+            "            u'1-mobile_phone': [u'XX XX XX XX XX']\n"
+            "        },\n"
+            "        u'0': {\n"
+            "            u'0-email': [u'xxx@xxx.xx'],\n"
+            "            u'inscription_wizard-current_step': [u'0'],\n"
+            "            u'submit': [u'next step'],\n"
+            "            u'csrfmiddlewaretoken': [u'X'],\n"
+            "            u'0-origin': [u'0']\n"
+            "        },\n"
+            "        u'3': {\n"
+            "            u'3-honeypot': [u''],\n"
+            "            u'3-select_paiement': [u'1'],\n"
+            "            u'inscription_wizard-current_step': [u'3'],\n"
+            "            u'submit': [u'next step'],\n"
+            "            u'3-reglement': [u'on'],\n"
+            "            u'csrfmiddlewaretoken': [u'X'],\n"
+            "            u'3-keywords': [u''],\n"
+            "            u'files[]': [u'']\n"
+            "        },\n"
+            "        u'2': {\n"
+            "            u'2-co_first_name': [u''],\n"
+            "            u'inscription_wizard-current_step': [u'2'],\n"
+            "            u'2-co_fonction': [u''],\n"
+            "            u'2-name': [u'Dupond'],\n"
+            "            u'submit': [u'next step'],\n"
+            "            u'2-first_name': [u'Xavier'],\n"
+            "            u'csrfmiddlewaretoken': [u'X']\n"
+            "        }\n"
+            "    }\n"
+            "}"
+        )
         self.assertEquals(indent_dict(input), output)
 
 
