@@ -6,7 +6,7 @@ from django.conf import settings
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.query import QuerySet
+from django.db.models.query import QuerySet, RawQuerySet
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 
@@ -76,9 +76,9 @@ class TemplateDebugPanel(DebugPanel):
                     elif key == 'LANGUAGES' and isinstance(value, tuple):
                         temp_layer[key] = '<<languages>>'
                     # QuerySet would trigger the database: user can run the query from SQL Panel
-                    elif isinstance(value, QuerySet):
+                    elif isinstance(value, (QuerySet, RawQuerySet)):
                         model_name = "%s.%s" % (value.model._meta.app_label, value.model.__name__)
-                        temp_layer[key] = '<<queryset of %s>>' % model_name
+                        temp_layer[key] = '<<%s of %s>>' % (value.__class__.__name__.lower(), model_name)
                     else:
                         try:
                             recording(False)
