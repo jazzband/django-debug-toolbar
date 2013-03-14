@@ -1,0 +1,47 @@
+{% load i18n %}
+<!--connection information-->
+
+<table>
+    <thead>
+        <tr>
+            <th class="key" colspan="">{% trans 'Key' %}</th>
+            <th class="Arg" colspan="">{% trans 'Arg' %}</th>
+            <th class="actions">{% trans "Value" %}</th>
+            <th class="func" colspan="">{% trans 'func name' %}</th>
+            <th class="func_path" colspan="">{% trans 'func path' %}</th>
+            <th class="time">{% trans 'Time (ms)' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for key in keys %}
+    <tr class="djDebugHoverable" >
+            <td class="key">
+                <div class="djDebugSqlWrap">
+                    <div class="djDebugSql">{{ key.command|safe }}</div>
+                </div>
+            </td>
+            <td class="Arg">
+                <div class="djDebugSqlWrap">
+                    <div class="djDebugSql">{{ key.arg|safe }}</div>
+                </div>
+            </td>
+            <td class="actions">
+                {{ key.result}}
+            </td>
+            <td class="func">
+                <div class="djDebugSqlWrap">
+                    <div class="djDebugSql">{{ key.func|safe }}</div>
+                </div>
+            </td>
+            <td class="func_path">
+                <div class="djDebugSqlWrap">
+                    <div class="djDebugSql" style="text-overflow:ellipsis;">{{ key.func_path|safe }}</div>
+                </div>
+            </td>
+            <td class="time">
+                {{ key.duration|floatformat:"2" }}
+            </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
