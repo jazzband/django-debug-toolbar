@@ -2,12 +2,18 @@
 Debug Toolbar middleware
 """
 import imp
-import thread
+try:
+    import thread
+except ImportError:
+    import _thread as thread  # py3k
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.utils.encoding import smart_unicode
+try:
+    from django.utils.encoding import smart_text
+except ImportError:
+    from django.utils.encoding import smart_unicode as smart_text
 from django.utils.importlib import import_module
 
 import debug_toolbar.urls
@@ -134,9 +140,9 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             response.content = replace_insensitive(
-                smart_unicode(response.content),
+                smart_text(response.content),
                 self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
+                smart_text(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]
