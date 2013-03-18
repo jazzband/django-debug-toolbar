@@ -10,7 +10,7 @@ from django.db import connection
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.template import Template, Context
-from django.utils import unittest
+from django.utils import six, unittest
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels.sql import SQLDebugPanel
@@ -33,12 +33,12 @@ class Settings(object):
         self._orig = {}
 
     def __enter__(self):
-        for k, v in self.overrides.iteritems():
+        for k, v in six.iteritems(self.overrides):
             self._orig[k] = getattr(settings, k, self.NotDefined)
             setattr(settings, k, v)
 
     def __exit__(self, exc_type, exc_value, traceback):
-        for k, v in self._orig.iteritems():
+        for k, v in six.iteritems(self._orig):
             if v is self.NotDefined:
                 delattr(settings, k)
             else:
