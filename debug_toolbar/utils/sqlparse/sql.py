@@ -152,9 +152,9 @@ class TokenList(Token):
                 pre = ' +-'
             else:
                 pre = ' | '
-            print '%s%s%d %s \'%s\'' % (indent, pre, idx,
+            print('%s%s%d %s \'%s\'' % (indent, pre, idx,
                                         token._get_repr_name(),
-                                        token._get_repr_value())
+                                        token._get_repr_value()))
             if (token.is_group() and (max_depth is None or depth < max_depth)):
                 token._pprint_tree(max_depth, depth + 1)
 
