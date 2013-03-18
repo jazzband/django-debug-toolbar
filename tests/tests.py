@@ -1,5 +1,8 @@
 from __future__ import with_statement
-import thread
+try:
+    import _thread
+except ImportError:
+    import thread as _thread
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -48,7 +51,7 @@ class BaseTestCase(TestCase):
         response = HttpResponse()
         toolbar = DebugToolbar(request)
 
-        DebugToolbarMiddleware.debug_toolbars[thread.get_ident()] = toolbar
+        DebugToolbarMiddleware.debug_toolbars[_thread.get_ident()] = toolbar
 
         self.request = request
         self.response = response

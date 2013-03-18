@@ -3,9 +3,9 @@ Debug Toolbar middleware
 """
 import imp
 try:
-    import thread
+    import _thread
 except ImportError:
-    import _thread as thread  # py3k
+    import thread as _thread  # py3k
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -44,7 +44,7 @@ class DebugToolbarMiddleware(object):
 
     @classmethod
     def get_current(cls):
-        return cls.debug_toolbars.get(thread.get_ident())
+        return cls.debug_toolbars.get(_thread.get_ident())
 
     def __init__(self):
         self._urlconfs = {}
@@ -104,11 +104,11 @@ class DebugToolbarMiddleware(object):
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
                 panel.process_request(request)
-            self.__class__.debug_toolbars[thread.get_ident()] = toolbar
+            self.__class__.debug_toolbars[_thread.get_ident()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
-        toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
+        toolbar = self.__class__.debug_toolbars.get(_thread.get_ident())
         if not toolbar:
             return
         result = None
@@ -120,7 +120,7 @@ class DebugToolbarMiddleware(object):
 
     def process_response(self, request, response):
         __traceback_hide__ = True
-        ident = thread.get_ident()
+        ident = _thread.get_ident()
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar or request.is_ajax():
             return response
