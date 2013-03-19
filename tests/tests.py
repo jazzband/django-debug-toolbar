@@ -107,7 +107,7 @@ class DebugToolbarTestCase(BaseTestCase):
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, six.string_types))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
@@ -122,7 +122,7 @@ class DebugToolbarTestCase(BaseTestCase):
             request.urlconf = 'tests.urls'
             middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, six.string_types))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
@@ -135,7 +135,7 @@ class DebugToolbarTestCase(BaseTestCase):
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, six.string_types))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
             self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
@@ -148,7 +148,7 @@ class DebugToolbarTestCase(BaseTestCase):
         middleware = DebugToolbarMiddleware()
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, six.string_types))
 
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel

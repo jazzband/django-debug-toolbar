@@ -10,6 +10,7 @@ except ImportError:
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.utils import six
 try:
     from django.utils.encoding import smart_text
 except ImportError:
@@ -82,7 +83,7 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         if self.show_toolbar(request):
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            if isinstance(urlconf, basestring):
+            if isinstance(urlconf, six.string_types):
                 urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
 
             if urlconf not in self._urlconfs:
