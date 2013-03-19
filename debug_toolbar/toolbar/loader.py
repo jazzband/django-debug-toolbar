@@ -58,7 +58,7 @@ class DebugToolbar(object):
         """
         context = self.template_context.copy()
         context.update({
-            'panels': self.panels,
+            'panels': list(self.panels)  # [panel for panel in self.panels]
         })
 
         return render_to_string('debug_toolbar/base.html', context)
