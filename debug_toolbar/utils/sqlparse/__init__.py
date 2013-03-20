@@ -14,6 +14,7 @@ class SQLParseError(Exception):
 
 
 # Setup namespace
+from django.utils import six
 from debug_toolbar.utils.sqlparse import engine
 from debug_toolbar.utils.sqlparse import filters
 from debug_toolbar.utils.sqlparse import formatter
@@ -52,4 +53,4 @@ def split(sql):
     """
     stack = engine.FilterStack()
     stack.split_statements = True
-    return [unicode(stmt) for stmt in stack.run(sql)]
+    return [six.text_type(stmt) for stmt in stack.run(sql)]

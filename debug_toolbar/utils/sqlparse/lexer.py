@@ -14,6 +14,8 @@
 
 import re
 
+from django.utils import six
+
 from debug_toolbar.utils.sqlparse import tokens
 from debug_toolbar.utils.sqlparse.keywords import KEYWORDS, KEYWORDS_COMMON
 
@@ -92,7 +94,7 @@ class LexerMeta(type):
                 new_state = None
             else:
                 tdef2 = tdef[2]
-                if isinstance(tdef2, str):
+                if isinstance(tdef2, bytes):
                     # an existing state
                     if tdef2 == '#pop':
                         new_state = -1
@@ -222,7 +224,7 @@ class Lexer(object):
         Also preprocess the text, i.e. expand tabs and strip it if
         wanted and applies registered filters.
         """
-        if not isinstance(text, unicode):
+        if not isinstance(text, six.text_type):
             if self.encoding == 'guess':
                 try:
                     text = text.decode('utf-8')

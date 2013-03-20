@@ -8,6 +8,7 @@ from django.core.cache import get_cache as base_get_cache
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.template import Node
+from django.utils import six
 from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _, ungettext
 
@@ -166,7 +167,7 @@ class CacheDebugPanel(DebugPanel):
             else:
                 self.hits += 1
         elif name == 'get_many':
-            for key, value in return_value.iteritems():
+            for key, value in six.iteritems(return_value):
                 if value is None:
                     self.misses += 1
                 else:
