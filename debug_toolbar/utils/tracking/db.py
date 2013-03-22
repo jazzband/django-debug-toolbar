@@ -5,7 +5,10 @@ from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils.encoding import force_unicode, smart_str
+try: # python 3 compat
+    from django.utils.encoding import force_unicode, smart_str
+except ImportError:
+    from django.utils.encoding import force_text as force_unicode, smart_bytes as smart_str
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
