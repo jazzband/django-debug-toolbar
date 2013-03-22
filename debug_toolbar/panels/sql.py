@@ -25,7 +25,6 @@ def cursor(func, self):
 
     return CursorWrapper(result, self, logger=logger)
 
-
 def get_isolation_level_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions

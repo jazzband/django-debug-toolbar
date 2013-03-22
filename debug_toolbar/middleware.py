@@ -2,12 +2,18 @@
 Debug Toolbar middleware
 """
 import imp
-import thread
-
+try: # python 3 compat
+    import thread
+except ImportError:
+    import threading as thread
+import sys
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.utils.encoding import smart_unicode
+try: # python 3 compat
+    from django.utils.encoding import smart_unicode
+except ImportError:
+    from django.utils.encoding import smart_text as smart_unicode
 from django.utils.importlib import import_module
 
 import debug_toolbar.urls
@@ -76,7 +82,8 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         if self.show_toolbar(request):
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            if isinstance(urlconf, basestring):
+            # the below condition is for python 3 compat
+            if isinstance(urlconf, basestring if sys.version_info[0] < 3 else str):
                 urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
 
             if urlconf not in self._urlconfs:

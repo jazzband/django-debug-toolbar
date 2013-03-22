@@ -1,7 +1,10 @@
 import inspect
 import os.path
 import django
-import SocketServer
+try: # python 3 compat
+    import SocketServer
+except ImportError:
+    import socketserver as SocketServer
 import sys
 
 from django.conf import settings
