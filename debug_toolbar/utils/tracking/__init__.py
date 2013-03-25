@@ -37,7 +37,7 @@ def fire_hook(hook, sender, **kwargs):
     try:
         for callback in callbacks[hook].get(id(sender), []):
             callback(sender=sender, **kwargs)
-    except Exception, e:
+    except Exception as e:
         # Log the exception, dont mess w/ the underlying function
         logging.exception(e)
 

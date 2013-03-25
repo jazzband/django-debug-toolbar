@@ -5,7 +5,12 @@ from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils.encoding import force_unicode, smart_str
+try:
+    from django.utils.encoding import force_text, smart_bytes
+except ImportError:  # django <= 1.4
+    from django.utils.encoding import force_unicode as force_text, \
+            smart_str as smart_bytes
+from django.utils import six
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
@@ -79,7 +84,7 @@ class NormalCursorWrapper(object):
         self.logger = logger
 
     def _quote_expr(self, element):
-        if isinstance(element, basestring):
+        if isinstance(element, six.string_types):
             element = element.replace("'", "''")
             return "'%s'" % element
         else:
@@ -88,12 +93,12 @@ class NormalCursorWrapper(object):
     def _quote_params(self, params):
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
-                            for key, value in params.iteritems())
+                            for key, value in six.iteritems(params))
         return map(self._quote_expr, params)
 
     def _decode(self, param):
         try:
-            return force_unicode(param, strings_only=True)
+            return force_text(param, strings_only=True)
         except UnicodeDecodeError:
             return '(encoded string)'
 
@@ -155,7 +160,7 @@ class NormalCursorWrapper(object):
                 'raw_sql': sql,
                 'params': _params,
                 'hash': sha1(settings.SECRET_KEY \
-                                        + smart_str(sql) \
+                                        + smart_bytes(sql) \
                                         + _params).hexdigest(),
                 'stacktrace': stacktrace,
                 'start_time': start,

@@ -2,6 +2,8 @@
 
 import re
 
+from django.utils import six
+
 from debug_toolbar.utils.sqlparse import tokens as T
 from debug_toolbar.utils.sqlparse import sql
 
@@ -131,7 +133,7 @@ class ReindentFilter(Filter):
     def _get_offset(self, token):
         all_ = list(self._curr_stmt.flatten())
         idx = all_.index(token)
-        raw = ''.join(unicode(x) for x in all_[:idx + 1])
+        raw = ''.join(six.text_type(x) for x in all_[:idx + 1])
         line = raw.splitlines()[-1]
         # Now take current offset into account and return relative offset.
         full_offset = len(line) - len(self.char * (self.width * self.indent))

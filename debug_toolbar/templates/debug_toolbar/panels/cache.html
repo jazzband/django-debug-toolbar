@@ -22,14 +22,14 @@
 <table>
 	<thead>
 	<tr>
-	{% for name in counts.iterkeys %}
+	{% for name in counts.keys %}
 		<th>{{ name }}</th>
 	{% endfor %}
 	</tr>
 	</thead>
 	<tbody>
 	<tr>
-	{% for value in counts.itervalues %}
+	{% for value in counts.values %}
 		<td>{{ value }}</td>
 	{% endfor %}
 	</tr>
