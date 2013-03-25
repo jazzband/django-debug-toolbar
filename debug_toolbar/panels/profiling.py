@@ -11,8 +11,7 @@ try:
 except ImportError:
     DJ_PROFILE_USE_LINE_PROFILER = False
 
-
-from cStringIO import StringIO
+from django.utils.six.moves import StringIO
 import cProfile
 from pstats import Stats
 from colorsys import hsv_to_rgb

@@ -3,9 +3,10 @@ Debug Toolbar middleware
 """
 import imp
 try:
-    import _thread
+    from django.utils.six.moves import _thread
 except ImportError:
-    import thread as _thread  # py3k
+    from django.utils.six.moves import _dummy_thread as _thread
+
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
