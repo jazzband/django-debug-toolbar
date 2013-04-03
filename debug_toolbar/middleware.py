@@ -5,7 +5,7 @@ import imp
 import thread
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
 from django.utils.importlib import import_module
@@ -112,6 +112,15 @@ class DebugToolbarMiddleware(object):
                 result = response
         return result
 
+    def _wrap_streaming_content(self, rendered_toolbar, streaming_content):
+        """
+        Wrap the stream with a new generator that looks for the replacement
+        tag. Used when the response is a generator for StreamingHttpResponse.
+        """
+        toolbar_and_tag = smart_unicode(rendered_toolbar + self.tag)
+        for chunk in streaming_content:
+            yield replace_insensitive(smart_unicode(chunk), self.tag, toolbar_and_tag)
+
     def process_response(self, request, response):
         __traceback_hide__ = True
         ident = thread.get_ident()
@@ -133,11 +142,16 @@ class DebugToolbarMiddleware(object):
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
-            response.content = replace_insensitive(
-                smart_unicode(response.content),
-                self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+            rendered_toolbar = toolbar.render_toolbar()
+            if response.streaming:
+                response.streaming_content = self._wrap_streaming_content(
+                                                rendered_toolbar, response.streaming_content)
+            else:
+                response.content = replace_insensitive(
+                    smart_unicode(response.content),
+                    self.tag,
+                    smart_unicode(rendered_toolbar + self.tag))
+                if response.get('Content-Length', None):
+                    response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]
         return response
