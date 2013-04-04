@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load debug_toolbar_utils %}
 {% if records %}
 	<table>
 		<thead>
@@ -16,7 +17,7 @@
 					<td>{{ record.level }}</td>
 					<td>{{ record.time|date:"h:i:s m/d/Y" }}</td>
 					<td>{{ record.channel|default:"-" }}</td>
-					<td>{{ record.message|linebreaksbr }}</td>
+					<td>{{ record.message|linebreaksbr|nbspindent }}</td>
 					<td>{{ record.file }}:{{ record.line }}</td>
 				</tr>
 			{% endfor %}
