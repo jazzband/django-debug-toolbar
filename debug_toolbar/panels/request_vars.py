@@ -41,6 +41,9 @@ class RequestVarsDebugPanel(DebugPanel):
         try:
             match = resolve(self.request.path)
             func, args, kwargs = match
+            # Converting the objects to its string representation
+            args = tuple([str(arg) for arg in args])
+            kwargs = dict([(key, str(arg)) for (key, arg) in kwargs.iteritems()])
             view_info['view_func'] = get_name_from_obj(func)
             view_info['view_args'] = args
             view_info['view_kwargs'] = kwargs
