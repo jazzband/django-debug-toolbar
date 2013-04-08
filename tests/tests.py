@@ -1,5 +1,6 @@
 from __future__ import with_statement
 from django.utils.six.moves import _thread
+from django.utils.six import iteritems
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -30,12 +31,12 @@ class Settings(object):
         self._orig = {}
 
     def __enter__(self):
-        for k, v in self.overrides.iteritems():
+        for k, v in iteritems(self.overrides):
             self._orig[k] = getattr(settings, k, self.NotDefined)
             setattr(settings, k, v)
 
     def __exit__(self, exc_type, exc_value, traceback):
-        for k, v in self._orig.iteritems():
+        for k, v in iteritems(self._orig):
             if v is self.NotDefined:
                 delattr(settings, k)
             else:

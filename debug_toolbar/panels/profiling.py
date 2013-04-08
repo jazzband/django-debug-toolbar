@@ -1,5 +1,6 @@
 from __future__ import division
 
+from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from debug_toolbar.panels import DebugPanel
@@ -23,7 +24,7 @@ class DjangoDebugToolbarStats(Stats):
 
     def get_root_func(self):
         if self.__root is None:
-            for func, (cc, nc, tt, ct, callers) in self.stats.iteritems():
+            for func, (cc, nc, tt, ct, callers) in iteritems(self.stats):
                 if len(callers) == 0:
                     self.__root = func
                     break
@@ -80,7 +81,7 @@ class FunctionCall(object):
         i = 0
         h, s, v = self.hsv
         count = len(self.statobj.all_callees[self.func])
-        for func, stats in self.statobj.all_callees[self.func].iteritems():
+        for func, stats in iteritems(self.statobj.all_callees[self.func]):
             i += 1
             h1 = h + (i / count) / (self.depth + 1)
             if stats[3] == 0:

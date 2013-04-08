@@ -10,6 +10,7 @@ from django.dispatch import Signal
 from django.template import Node
 from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.six import iteritems
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
@@ -166,7 +167,7 @@ class CacheDebugPanel(DebugPanel):
             else:
                 self.hits += 1
         elif name == 'get_many':
-            for key, value in return_value.iteritems():
+            for key, value in iteritems(return_value):
                 if value is None:
                     self.misses += 1
                 else:
