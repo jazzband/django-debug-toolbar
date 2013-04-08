@@ -1,17 +1,17 @@
 import inspect
 import os.path
 import django
-import SocketServer
 import sys
 
 from django.conf import settings
 from django.views.debug import linebreak_iter
+from django.utils.six.moves import socketserver
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
-socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
+socketserver_path = os.path.realpath(os.path.dirname(socketserver.__file__))
 
 
 def ms_from_timedelta(td):
