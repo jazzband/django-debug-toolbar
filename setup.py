@@ -12,11 +12,9 @@ setup(
     download_url='https://github.com/django-debug-toolbar/django-debug-toolbar/downloads',
     license='BSD',
     packages=find_packages(exclude=('tests', 'example')),
-    tests_require=[
-        'django>=1.3,<1.6',
-    ],
     install_requires=[
-        "sqlparse",
+        'sqlparse',
+        'django>=1.4.2,<1.6',
     ],
     test_suite='runtests.runtests',
     include_package_data=True,
