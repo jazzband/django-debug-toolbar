@@ -1,5 +1,6 @@
 import re
 import uuid
+import sqlparse
 
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.html import escape
@@ -8,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import sqlparse, render_stacktrace
+from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.utils.tracking.db import CursorWrapper
 from debug_toolbar.utils.tracking import replace_call
 

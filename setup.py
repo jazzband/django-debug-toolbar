@@ -15,6 +15,9 @@ setup(
     tests_require=[
         'django>=1.3,<1.6',
     ],
+    install_requires=[
+        "sqlparse",
+    ],
     test_suite='runtests.runtests',
     include_package_data=True,
     zip_safe=False,  # because we're including media that Django needs
