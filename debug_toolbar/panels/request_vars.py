@@ -1,6 +1,7 @@
 from django.core.urlresolvers import resolve
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
+from django.utils.six import iterkeys
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import get_name_from_obj
@@ -53,5 +54,5 @@ class RequestVarsDebugPanel(DebugPanel):
         if hasattr(self.request, 'session'):
             self.record_stats({
                 'session': [(k, self.request.session.get(k))
-                            for k in self.request.session.iterkeys()]
+                            for k in iterkeys(self.request.session)]
                 })

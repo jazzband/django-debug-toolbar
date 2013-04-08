@@ -5,6 +5,7 @@ import sqlparse
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
+from django.utils.six import itervalues
 
 from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
@@ -135,7 +136,7 @@ class SQLDebugPanel(DebugPanel):
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
-            for n, db in enumerate(self._databases.itervalues()):
+            for n, db in enumerate(itervalues(self._databases)):
                 rgb = [0, 0, 0]
                 color = n % 3
                 rgb[color] = 256 - n / 3 * factor
