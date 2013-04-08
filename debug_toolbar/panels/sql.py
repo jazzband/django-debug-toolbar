@@ -196,7 +196,7 @@ class SQLDebugPanel(DebugPanel):
         })
 
 
-class BoldKeywordFilter(sqlparse.filters.Filter):
+class BoldKeywordFilter():
     """sqlparse filter to bold SQL keywords"""
     def process(self, stack, stream):
         """Process the token stream"""
