@@ -2,9 +2,12 @@ import inspect
 import os.path
 import django
 import sys
+import warnings
 
+from functools import wraps
 from django.conf import settings
 from django.views.debug import linebreak_iter
+from django.utils import six
 from django.utils.six.moves import socketserver
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -40,7 +43,7 @@ def tidy_stacktrace(stack):
         # inspection.
         if '__traceback_hide__' in frame.f_locals:
             continue
-        if  hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
+        if hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if socketserver_path in s_path:
             continue
@@ -177,3 +180,33 @@ def get_stack(context=1):
         framelist.append((frame,) + getframeinfo(frame, context))
         frame = frame.f_back
     return framelist
+
+
+class deprecated(object):
+    """This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emmitted
+    when the function is used."""
+
+    def __init__(self, reason="Call to deprecated function: {name}"):
+        self.reason = reason
+
+    def __call__(self, func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            warnings.warn(
+                self.reason.format(
+                    name=getattr(func, '__qualname__', func.__name__)
+                ),
+                category=DeprecationWarning)
+            return func(*args, **kwargs)
+        return wrapper
+
+
+if six.PY3:
+    def not_on_py3(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            raise NotImplementedError()
+        return wrapper
+else:
+    not_on_py3 = deprecated(reason="{name} will not be supported on Python 3")

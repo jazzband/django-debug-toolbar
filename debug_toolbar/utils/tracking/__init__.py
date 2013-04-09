@@ -3,7 +3,10 @@ import time
 import types
 from django.utils.importlib import import_module
 
+from debug_toolbar.utils import not_on_py3
 
+
+@not_on_py3
 def post_dispatch(func):
     def wrapped(callback):
         register_hook(func, 'after', callback)
@@ -11,6 +14,7 @@ def post_dispatch(func):
     return wrapped
 
 
+@not_on_py3
 def pre_dispatch(func):
     def wrapped(callback):
         register_hook(func, 'before', callback)
@@ -18,6 +22,7 @@ def pre_dispatch(func):
     return wrapped
 
 
+@not_on_py3
 def replace_call(func):
     def inner(callback):
         def wrapped(*args, **kwargs):
@@ -42,6 +47,7 @@ def fire_hook(hook, sender, **kwargs):
         logging.exception(e)
 
 
+@not_on_py3
 def _replace_function(func, wrapped):
     if isinstance(func, types.FunctionType):
         if func.__module__ == '__builtin__':
@@ -64,6 +70,7 @@ callbacks = {
 }
 
 
+@not_on_py3
 def register_hook(func, hook, callback):
     """
     def myhook(sender, args, kwargs):
