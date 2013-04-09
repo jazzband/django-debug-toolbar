@@ -9,6 +9,7 @@ from django.conf import settings
 from django.views.debug import linebreak_iter
 from django.utils import six
 from django.utils.six.moves import socketserver, map
+from django.utils.six import text_type
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -59,7 +60,7 @@ def render_stacktrace(trace):
     stacktrace = []
     for frame in trace:
         params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
-        params_dict = dict((unicode(idx), v) for idx, v in enumerate(params))
+        params_dict = dict((text_type(idx), v) for idx, v in enumerate(params))
         try:
             stacktrace.append(u'<span class="path">%(0)s/</span>'
                               u'<span class="file">%(1)s</span>'
