@@ -8,7 +8,7 @@ from functools import wraps
 from django.conf import settings
 from django.views.debug import linebreak_iter
 from django.utils import six
-from django.utils.six.moves import socketserver
+from django.utils.six.moves import socketserver, map
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 

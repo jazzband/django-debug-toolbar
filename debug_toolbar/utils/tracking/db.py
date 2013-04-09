@@ -7,6 +7,7 @@ from django.conf import settings
 from django.template import Node
 from django.utils.encoding import force_text, smart_str
 from django.utils.six import iteritems, string_types
+from django.utils.six.moves import map
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
@@ -90,7 +91,7 @@ class NormalCursorWrapper(object):
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
                             for key, value in iteritems(params))
-        return map(self._quote_expr, params)
+        return list(map(self._quote_expr, params))
 
     def _decode(self, param):
         try:
@@ -121,7 +122,7 @@ class NormalCursorWrapper(object):
                 stacktrace = []
             _params = ''
             try:
-                _params = json.dumps(map(self._decode, params))
+                _params = json.dumps(list(map(self._decode, params)))
             except Exception:
                 pass  # object not JSON serializable
 
