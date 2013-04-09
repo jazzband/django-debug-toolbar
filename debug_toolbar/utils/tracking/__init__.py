@@ -38,6 +38,23 @@ def replace_call(func):
     return inner
 
 
+def monkey_patch_call(obj, attr):
+    func = getattr(obj, attr)
+
+    def inner(callback):
+        def wrapped(*args, **kwargs):
+            return callback(func, *args, **kwargs)
+        actual = getattr(func, '__wrapped__', func)
+        wrapped.__wrapped__ = actual
+        wrapped.__doc__ = getattr(actual, '__doc__', None)
+        wrapped.__name__ = actual.__name__
+        if hasattr(actual, '__self__'):
+            setattr(wrapped, '__self__', actual.__self__)
+        setattr(obj, attr, wrapped)
+        return wrapped
+    return inner
+
+
 def fire_hook(hook, sender, **kwargs):
     try:
         for callback in callbacks[hook].get(id(sender), []):

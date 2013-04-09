@@ -1,4 +1,6 @@
 from __future__ import with_statement
+
+from django.utils import six
 from django.utils.six.moves import _thread
 from django.utils.six import iteritems, string_types
 
@@ -273,134 +275,134 @@ def module_func(*args, **kwargs):
     """Used by dispatch tests"""
     return 'blah'
 
+if not six.PY3:
+    class TrackingTestCase(BaseTestCase):
+        @classmethod
+        def class_method(cls, *args, **kwargs):
+            return 'blah'
 
-class TrackingTestCase(BaseTestCase):
-    @classmethod
-    def class_method(cls, *args, **kwargs):
-        return 'blah'
+        def class_func(self, *args, **kwargs):
+            """Used by dispatch tests"""
+            return 'blah'
 
-    def class_func(self, *args, **kwargs):
-        """Used by dispatch tests"""
-        return 'blah'
+        def test_pre_hook(self):
+            foo = {}
 
-    def test_pre_hook(self):
-        foo = {}
+            @pre_dispatch(module_func)
+            def test(**kwargs):
+                foo.update(kwargs)
 
-        @pre_dispatch(module_func)
-        def test(**kwargs):
-            foo.update(kwargs)
+            self.assertTrue(hasattr(module_func, '__wrapped__'))
+            self.assertEqual(len(callbacks['before']), 1)
 
-        self.assertTrue(hasattr(module_func, '__wrapped__'))
-        self.assertEqual(len(callbacks['before']), 1)
+            module_func('hi', foo='bar')
 
-        module_func('hi', foo='bar')
+            self.assertTrue('sender' in foo, foo)
+            # best we can do
+            self.assertEqual(foo['sender'].__name__, 'module_func')
+            self.assertTrue('start' in foo, foo)
+            self.assertTrue(foo['start'] > 0)
+            self.assertTrue('stop' not in foo, foo)
+            self.assertTrue('args' in foo, foo)
+            self.assertTrue(len(foo['args']), 1)
+            self.assertEqual(foo['args'][0], 'hi')
+            self.assertTrue('kwargs' in foo, foo)
+            self.assertTrue(len(foo['kwargs']), 1)
+            self.assertTrue('foo' in foo['kwargs'])
+            self.assertEqual(foo['kwargs']['foo'], 'bar')
 
-        self.assertTrue('sender' in foo, foo)
-        # best we can do
-        self.assertEqual(foo['sender'].__name__, 'module_func')
-        self.assertTrue('start' in foo, foo)
-        self.assertTrue(foo['start'] > 0)
-        self.assertTrue('stop' not in foo, foo)
-        self.assertTrue('args' in foo, foo)
-        self.assertTrue(len(foo['args']), 1)
-        self.assertEqual(foo['args'][0], 'hi')
-        self.assertTrue('kwargs' in foo, foo)
-        self.assertTrue(len(foo['kwargs']), 1)
-        self.assertTrue('foo' in foo['kwargs'])
-        self.assertEqual(foo['kwargs']['foo'], 'bar')
+            callbacks['before'] = {}
 
-        callbacks['before'] = {}
+            @pre_dispatch(TrackingTestCase.class_func)
+            def test(**kwargs):
+                foo.update(kwargs)
 
-        @pre_dispatch(TrackingTestCase.class_func)
-        def test(**kwargs):
-            foo.update(kwargs)
+            self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
+            self.assertEqual(len(callbacks['before']), 1)
 
-        self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
-        self.assertEqual(len(callbacks['before']), 1)
+            self.class_func('hello', foo='bar')
 
-        self.class_func('hello', foo='bar')
+            self.assertTrue('sender' in foo, foo)
+            # best we can do
+            self.assertEqual(foo['sender'].__name__, 'class_func')
+            self.assertTrue('start' in foo, foo)
+            self.assertTrue(foo['start'] > 0)
+            self.assertTrue('stop' not in foo, foo)
+            self.assertTrue('args' in foo, foo)
+            self.assertTrue(len(foo['args']), 2)
+            self.assertEqual(foo['args'][1], 'hello')
+            self.assertTrue('kwargs' in foo, foo)
+            self.assertTrue(len(foo['kwargs']), 1)
+            self.assertTrue('foo' in foo['kwargs'])
+            self.assertEqual(foo['kwargs']['foo'], 'bar')
 
-        self.assertTrue('sender' in foo, foo)
-        # best we can do
-        self.assertEqual(foo['sender'].__name__, 'class_func')
-        self.assertTrue('start' in foo, foo)
-        self.assertTrue(foo['start'] > 0)
-        self.assertTrue('stop' not in foo, foo)
-        self.assertTrue('args' in foo, foo)
-        self.assertTrue(len(foo['args']), 2)
-        self.assertEqual(foo['args'][1], 'hello')
-        self.assertTrue('kwargs' in foo, foo)
-        self.assertTrue(len(foo['kwargs']), 1)
-        self.assertTrue('foo' in foo['kwargs'])
-        self.assertEqual(foo['kwargs']['foo'], 'bar')
+            callbacks['before'] = {}
 
-        callbacks['before'] = {}
+            @pre_dispatch(TrackingTestCase.class_method)
+            def test(**kwargs):
+                foo.update(kwargs)
 
-        @pre_dispatch(TrackingTestCase.class_method)
-        def test(**kwargs):
-            foo.update(kwargs)
+            self.assertTrue(hasattr(TrackingTestCase.class_method, '__wrapped__'))
+            self.assertEqual(len(callbacks['before']), 1)
 
-        self.assertTrue(hasattr(TrackingTestCase.class_method, '__wrapped__'))
-        self.assertEqual(len(callbacks['before']), 1)
+            TrackingTestCase.class_method()
 
-        TrackingTestCase.class_method()
+            self.assertTrue('sender' in foo, foo)
+            # best we can do
+            self.assertEqual(foo['sender'].__name__, 'class_method')
+            self.assertTrue('start' in foo, foo)
+            self.assertTrue('stop' not in foo, foo)
+            self.assertTrue('args' in foo, foo)
 
-        self.assertTrue('sender' in foo, foo)
-        # best we can do
-        self.assertEqual(foo['sender'].__name__, 'class_method')
-        self.assertTrue('start' in foo, foo)
-        self.assertTrue('stop' not in foo, foo)
-        self.assertTrue('args' in foo, foo)
+        def test_post_hook(self):
+            foo = {}
 
-    def test_post_hook(self):
-        foo = {}
+            @post_dispatch(module_func)
+            def test(**kwargs):
+                foo.update(kwargs)
 
-        @post_dispatch(module_func)
-        def test(**kwargs):
-            foo.update(kwargs)
+            self.assertTrue(hasattr(module_func, '__wrapped__'))
+            self.assertEqual(len(callbacks['after']), 1)
 
-        self.assertTrue(hasattr(module_func, '__wrapped__'))
-        self.assertEqual(len(callbacks['after']), 1)
+            module_func('hi', foo='bar')
 
-        module_func('hi', foo='bar')
+            self.assertTrue('sender' in foo, foo)
+            # best we can do
+            self.assertEqual(foo['sender'].__name__, 'module_func')
+            self.assertTrue('start' in foo, foo)
+            self.assertTrue(foo['start'] > 0)
+            self.assertTrue('stop' in foo, foo)
+            self.assertTrue(foo['stop'] > foo['start'])
+            self.assertTrue('args' in foo, foo)
+            self.assertTrue(len(foo['args']), 1)
+            self.assertEqual(foo['args'][0], 'hi')
+            self.assertTrue('kwargs' in foo, foo)
+            self.assertTrue(len(foo['kwargs']), 1)
+            self.assertTrue('foo' in foo['kwargs'])
+            self.assertEqual(foo['kwargs']['foo'], 'bar')
 
-        self.assertTrue('sender' in foo, foo)
-        # best we can do
-        self.assertEqual(foo['sender'].__name__, 'module_func')
-        self.assertTrue('start' in foo, foo)
-        self.assertTrue(foo['start'] > 0)
-        self.assertTrue('stop' in foo, foo)
-        self.assertTrue(foo['stop'] > foo['start'])
-        self.assertTrue('args' in foo, foo)
-        self.assertTrue(len(foo['args']), 1)
-        self.assertEqual(foo['args'][0], 'hi')
-        self.assertTrue('kwargs' in foo, foo)
-        self.assertTrue(len(foo['kwargs']), 1)
-        self.assertTrue('foo' in foo['kwargs'])
-        self.assertEqual(foo['kwargs']['foo'], 'bar')
+            callbacks['after'] = {}
 
-        callbacks['after'] = {}
+            @post_dispatch(TrackingTestCase.class_func)
+            def test(**kwargs):
+                foo.update(kwargs)
 
-        @post_dispatch(TrackingTestCase.class_func)
-        def test(**kwargs):
-            foo.update(kwargs)
+            self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
+            self.assertEqual(len(callbacks['after']), 1)
 
-        self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
-        self.assertEqual(len(callbacks['after']), 1)
+            self.class_func('hello', foo='bar')
 
-        self.class_func('hello', foo='bar')
-
-        self.assertTrue('sender' in foo, foo)
-        # best we can do
-        self.assertEqual(foo['sender'].__name__, 'class_func')
-        self.assertTrue('start' in foo, foo)
-        self.assertTrue(foo['start'] > 0)
-        self.assertTrue('stop' in foo, foo)
-        self.assertTrue(foo['stop'] > foo['start'])
-        self.assertTrue('args' in foo, foo)
-        self.assertTrue(len(foo['args']), 2)
-        self.assertEqual(foo['args'][1], 'hello')
-        self.assertTrue('kwargs' in foo, foo)
-        self.assertTrue(len(foo['kwargs']), 1)
-        self.assertTrue('foo' in foo['kwargs'])
-        self.assertEqual(foo['kwargs']['foo'], 'bar')
+            self.assertTrue('sender' in foo, foo)
+            # best we can do
+            self.assertEqual(foo['sender'].__name__, 'class_func')
+            self.assertTrue('start' in foo, foo)
+            self.assertTrue(foo['start'] > 0)
+            self.assertTrue('stop' in foo, foo)
+            self.assertTrue(foo['stop'] > foo['start'])
+            self.assertTrue('args' in foo, foo)
+            self.assertTrue(len(foo['args']), 2)
+            self.assertEqual(foo['args'][1], 'hello')
+            self.assertTrue('kwargs' in foo, foo)
+            self.assertTrue(len(foo['kwargs']), 1)
+            self.assertTrue('foo' in foo['kwargs'])
+            self.assertEqual(foo['kwargs']['foo'], 'bar')

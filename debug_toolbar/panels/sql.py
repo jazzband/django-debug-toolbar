@@ -12,11 +12,11 @@ from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.utils.tracking.db import CursorWrapper
-from debug_toolbar.utils.tracking import replace_call
+from debug_toolbar.utils.tracking import monkey_patch_call
 
 
 # Inject our tracking cursor
-@replace_call(BaseDatabaseWrapper.cursor)
+@monkey_patch_call(BaseDatabaseWrapper, 'cursor')
 def cursor(func, self):
     result = func(self)
 
@@ -26,6 +26,8 @@ def cursor(func, self):
     logger = djdt.get_panel(SQLDebugPanel)
 
     return CursorWrapper(result, self, logger=logger)
+
+BaseDatabaseWrapper.cursor = cursor
 
 
 def get_isolation_level_display(engine, level):
