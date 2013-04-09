@@ -5,7 +5,7 @@ from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils.encoding import force_text, smart_str
+from django.utils.encoding import force_text, smart_bytes
 from django.utils.six import iteritems, string_types
 from django.utils.six.moves import map
 
@@ -156,9 +156,9 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
-                'hash': sha1(settings.SECRET_KEY \
-                                        + smart_str(sql) \
-                                        + _params).hexdigest(),
+                'hash': sha1(smart_bytes(settings.SECRET_KEY) \
+                                        + smart_bytes(sql) \
+                                        + smart_bytes(_params)).hexdigest(),
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,
