@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 """
 Debug Toolbar middleware
 """
@@ -48,7 +49,7 @@ class DebugToolbarMiddleware(object):
         self.show_toolbar = self._show_toolbar  # default
 
         # The tag to attach the toolbar to
-        self.tag = u'</body>'
+        self.tag = '</body>'
 
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
             show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
@@ -58,7 +59,7 @@ class DebugToolbarMiddleware(object):
 
             tag = settings.DEBUG_TOOLBAR_CONFIG.get('TAG', None)
             if tag:
-                self.tag = u'</' + tag + u'>'
+                self.tag = '</' + tag + '>'
 
     def _show_toolbar(self, request):
         if getattr(settings, 'TEST', False):
