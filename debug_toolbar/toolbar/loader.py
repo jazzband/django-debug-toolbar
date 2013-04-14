@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 """
 The main DebugToolbar class that loads and renders the Toolbar.
 """
@@ -19,7 +20,7 @@ class DebugToolbar(object):
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
             'INTERCEPT_REDIRECTS': True,
-            'MEDIA_URL': u'%s/__debug__/m/' % base_url
+            'MEDIA_URL': '%s/__debug__/m/' % base_url
         }
         # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
         self.config.update(getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}))
@@ -33,7 +34,7 @@ class DebugToolbar(object):
         self.stats = {}
 
     def _get_panels(self):
-        return self._panels.values()
+        return list(self._panels.values())
     panels = property(_get_panels)
 
     def get_panel(self, cls):
