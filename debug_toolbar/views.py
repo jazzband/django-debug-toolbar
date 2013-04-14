@@ -82,7 +82,7 @@ def sql_explain(request):
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
     bdata = (settings.SECRET_KEY + sql + params).encode()
-    hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
+    hash = sha1(bdata).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
