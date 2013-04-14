@@ -45,7 +45,8 @@ def sql_select(request):
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
-    hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
+    bdata = (settings.SECRET_KEY + sql + params).encode()
+    hash = sha1(bdata).hexdigest() 
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
@@ -80,6 +81,7 @@ def sql_explain(request):
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
+    bdata = (settings.SECRET_KEY + sql + params).encode()
     hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
@@ -128,7 +130,8 @@ def sql_profile(request):
     sql = request.GET.get('sql', '')
     params = request.GET.get('params', '')
     alias = request.GET.get('alias', 'default')
-    hash = sha1(settings.SECRET_KEY + sql + params).hexdigest()
+    bdata = (settings.SECRET_KEY + sql + params).encode()
+    hash = sha1(bdata).hexdigest()
     if hash != request.GET.get('hash', ''):
         return HttpResponseBadRequest('Tamper alert')  # SQL Tampering alert
     if sql.lower().strip().startswith('select'):
