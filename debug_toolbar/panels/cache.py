@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import inspect
 import sys
 import time
@@ -60,7 +61,7 @@ class CacheStatTracker(BaseCache):
         self.cache = cache
 
     def __repr__(self):
-        return u"<CacheStatTracker for %s>" % self.cache.__repr__()
+        return "<CacheStatTracker for %s>" % self.cache.__repr__()
 
     def _get_func_info(self):
         frame = sys._getframe(3)
