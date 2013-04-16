@@ -1,5 +1,5 @@
 from __future__ import with_statement
-
+import django
 from django.utils import six
 from django.utils.six.moves import _thread
 from django.utils.six import iteritems, string_types
@@ -266,7 +266,11 @@ class TemplatePanelTestCase(BaseTestCase):
         t.render(c)
         # ensure the query was NOT logged
         self.assertEqual(len(sql_panel._queries), 0)
-        ctx = template_panel.templates[0]['context'][0]
+        tvar = template_panel.templates[0]['context']
+        if django.VERSION[0:2] >= (1, 5):
+            ctx = tvar[1]
+        else:
+            ctx = tvar[0]
         self.assertIn('<<queryset of auth.User>>', ctx)
         self.assertIn('<<triggers database query>>', ctx)
 
