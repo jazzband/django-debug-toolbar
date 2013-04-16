@@ -1,14 +1,16 @@
+from __future__ import unicode_literals
 """
 Debug Toolbar middleware
 """
 import imp
-import thread
+from django.utils.six.moves import _thread
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from django.utils.importlib import import_module
+from django.utils.six import string_types
 
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
@@ -38,7 +40,7 @@ class DebugToolbarMiddleware(object):
 
     @classmethod
     def get_current(cls):
-        return cls.debug_toolbars.get(thread.get_ident())
+        return cls.debug_toolbars.get(_thread.get_ident())
 
     def __init__(self):
         self._urlconfs = {}
@@ -47,7 +49,7 @@ class DebugToolbarMiddleware(object):
         self.show_toolbar = self._show_toolbar  # default
 
         # The tag to attach the toolbar to
-        self.tag = u'</body>'
+        self.tag = '</body>'
 
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
             show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
@@ -57,7 +59,7 @@ class DebugToolbarMiddleware(object):
 
             tag = settings.DEBUG_TOOLBAR_CONFIG.get('TAG', None)
             if tag:
-                self.tag = u'</' + tag + u'>'
+                self.tag = '</' + tag + '>'
 
     def _show_toolbar(self, request):
         if getattr(settings, 'TEST', False):
@@ -76,13 +78,13 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         if self.show_toolbar(request):
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            if isinstance(urlconf, basestring):
+            if isinstance(urlconf, string_types):
                 urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
 
             if urlconf not in self._urlconfs:
                 new_urlconf = imp.new_module('urlconf')
                 new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
-                        list(urlconf.urlpatterns)
+                    list(urlconf.urlpatterns)
 
                 if hasattr(urlconf, 'handler403'):
                     new_urlconf.handler403 = urlconf.handler403
@@ -98,11 +100,11 @@ class DebugToolbarMiddleware(object):
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
                 panel.process_request(request)
-            self.__class__.debug_toolbars[thread.get_ident()] = toolbar
+            self.__class__.debug_toolbars[_thread.get_ident()] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
-        toolbar = self.__class__.debug_toolbars.get(thread.get_ident())
+        toolbar = self.__class__.debug_toolbars.get(_thread.get_ident())
         if not toolbar:
             return
         result = None
@@ -114,7 +116,7 @@ class DebugToolbarMiddleware(object):
 
     def process_response(self, request, response):
         __traceback_hide__ = True
-        ident = thread.get_ident()
+        ident = _thread.get_ident()
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar or request.is_ajax():
             return response
@@ -134,9 +136,9 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             response.content = replace_insensitive(
-                smart_unicode(response.content),
+                smart_text(response.content),
                 self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
+                smart_text(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]

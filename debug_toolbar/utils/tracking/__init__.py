@@ -3,7 +3,10 @@ import time
 import types
 from django.utils.importlib import import_module
 
+from debug_toolbar.utils import not_on_py3
 
+
+@not_on_py3
 def post_dispatch(func):
     def wrapped(callback):
         register_hook(func, 'after', callback)
@@ -11,6 +14,7 @@ def post_dispatch(func):
     return wrapped
 
 
+@not_on_py3
 def pre_dispatch(func):
     def wrapped(callback):
         register_hook(func, 'before', callback)
@@ -18,6 +22,7 @@ def pre_dispatch(func):
     return wrapped
 
 
+@not_on_py3
 def replace_call(func):
     def inner(callback):
         def wrapped(*args, **kwargs):
@@ -33,15 +38,33 @@ def replace_call(func):
     return inner
 
 
+def monkey_patch_call(obj, attr):
+    func = getattr(obj, attr)
+
+    def inner(callback):
+        def wrapped(*args, **kwargs):
+            return callback(func, *args, **kwargs)
+        actual = getattr(func, '__wrapped__', func)
+        wrapped.__wrapped__ = actual
+        wrapped.__doc__ = getattr(actual, '__doc__', None)
+        wrapped.__name__ = actual.__name__
+        if hasattr(actual, '__self__'):
+            setattr(wrapped, '__self__', actual.__self__)
+        setattr(obj, attr, wrapped)
+        return wrapped
+    return inner
+
+
 def fire_hook(hook, sender, **kwargs):
     try:
         for callback in callbacks[hook].get(id(sender), []):
             callback(sender=sender, **kwargs)
-    except Exception, e:
+    except Exception as e:
         # Log the exception, dont mess w/ the underlying function
         logging.exception(e)
 
 
+@not_on_py3
 def _replace_function(func, wrapped):
     if isinstance(func, types.FunctionType):
         if func.__module__ == '__builtin__':
@@ -64,6 +87,7 @@ callbacks = {
 }
 
 
+@not_on_py3
 def register_hook(func, hook, callback):
     """
     def myhook(sender, args, kwargs):
