@@ -44,21 +44,18 @@
 
 					{% if query.params %}
 						{% if query.is_select %}
+							<form method="post">
+								{% for field in query.form.hidden_fields %}
+									{{ field }}
+								{% endfor %}
 
-                            <form method="post">
-                                <input type="hidden" name="sql" value="{{ query.raw_sql }}" />
-                                <input type="hidden" name="params" value="{{ query.params }}" />
-                                <input type="hidden" name="duration" value="{{ query.duration|floatformat:"2" }}" />
-                                <input type="hidden" name="hash" value="{{ query.hash }}" />
-                                <input type="hidden" name="alias" value="{{ query.alias }}" />
+								<button formaction="/__debug__/sql_select/" class="remoteCall">Sel</button>
+								<button formaction="/__debug__/sql_explain/" class="remoteCall">Expl</button>
 
-                                <button formaction="/__debug__/sql_select/" class="remoteCall">Sel</button>
-                                <button formaction="/__debug__/sql_explain/" class="remoteCall">Expl</button>
-
-                                {% ifequal query.engine 'mysql' %}
-                                    <button formaction="/__debug__/sql_profile/" class="remoteCall">Prof</button>
-                                {% endifequal %}
-                            </form>
+								{% ifequal query.engine 'mysql' %}
+									<button formaction="/__debug__/sql_profile/" class="remoteCall">Prof</button>
+								{% endifequal %}
+							</form>
 						{% endif %}
 					{% endif %}
 					</td>

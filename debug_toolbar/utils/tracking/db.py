@@ -139,9 +139,6 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
-                'hash': sha1(settings.SECRET_KEY \
-                                        + smart_str(sql) \
-                                        + _params).hexdigest(),
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,

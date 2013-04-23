@@ -1,10 +1,12 @@
 import re
 import uuid
+from copy import copy
 
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
+from debug_toolbar.forms import SQLSelectForm
 from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
@@ -170,6 +172,9 @@ class SQLDebugPanel(DebugPanel):
                     query['iso_level'] = get_isolation_level_display(query['engine'], query['iso_level'])
                 if 'trans_status' in query:
                     query['trans_status'] = get_transaction_status_display(query['engine'], query['trans_status'])
+
+                query['form'] = SQLSelectForm(auto_id=None, initial=copy(query))
+
                 if query['sql']:
                     query['sql'] = reformat_sql(query['sql'])
                 query['rgb_color'] = self._databases[alias]['rgb_color']
