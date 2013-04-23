@@ -45,9 +45,7 @@
 					{% if query.params %}
 						{% if query.is_select %}
 							<form method="post">
-								{% for field in query.form.hidden_fields %}
-									{{ field }}
-								{% endfor %}
+								{{ query.form }}
 
 								<button formaction="/__debug__/sql_select/" class="remoteCall">Sel</button>
 								<button formaction="/__debug__/sql_explain/" class="remoteCall">Expl</button>
