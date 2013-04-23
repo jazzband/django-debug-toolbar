@@ -1,20 +1,22 @@
 import re
 import uuid
+import sqlparse
 
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
+from django.utils.six import itervalues
 
 from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import sqlparse, render_stacktrace
+from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.utils.tracking.db import CursorWrapper
-from debug_toolbar.utils.tracking import replace_call
+from debug_toolbar.utils.tracking import monkey_patch_call
 
 
 # Inject our tracking cursor
-@replace_call(BaseDatabaseWrapper.cursor)
+@monkey_patch_call(BaseDatabaseWrapper, 'cursor')
 def cursor(func, self):
     result = func(self)
 
@@ -24,6 +26,8 @@ def cursor(func, self):
     logger = djdt.get_panel(SQLDebugPanel)
 
     return CursorWrapper(result, self, logger=logger)
+
+BaseDatabaseWrapper.cursor = cursor
 
 
 def get_isolation_level_display(engine, level):
@@ -134,7 +138,7 @@ class SQLDebugPanel(DebugPanel):
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
-            for n, db in enumerate(self._databases.itervalues()):
+            for n, db in enumerate(itervalues(self._databases)):
                 rgb = [0, 0, 0]
                 color = n % 3
                 rgb[color] = 256 - n / 3 * factor
@@ -195,7 +199,7 @@ class SQLDebugPanel(DebugPanel):
         })
 
 
-class BoldKeywordFilter(sqlparse.filters.Filter):
+class BoldKeywordFilter():
     """sqlparse filter to bold SQL keywords"""
     def process(self, stack, stream):
         """Process the token stream"""

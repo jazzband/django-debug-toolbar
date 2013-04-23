@@ -1,5 +1,7 @@
+from __future__ import unicode_literals
 from __future__ import division
 
+from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from debug_toolbar.panels import DebugPanel
@@ -23,7 +25,7 @@ class DjangoDebugToolbarStats(Stats):
 
     def get_root_func(self):
         if self.__root is None:
-            for func, (cc, nc, tt, ct, callers) in self.stats.iteritems():
+            for func, (cc, nc, tt, ct, callers) in iteritems(self.stats):
                 if len(callers) == 0:
                     self.__root = func
                     break
@@ -80,7 +82,7 @@ class FunctionCall(object):
         i = 0
         h, s, v = self.hsv
         count = len(self.statobj.all_callees[self.func])
-        for func, stats in self.statobj.all_callees[self.func].iteritems():
+        for func, stats in iteritems(self.statobj.all_callees[self.func]):
             i += 1
             h1 = h + (i / count) / (self.depth + 1)
             if stats[3] == 0:
@@ -155,12 +157,12 @@ class ProfilingDebugPanel(DebugPanel):
         return _('Profiling')
 
     def _unwrap_closure_and_profile(self, func):
-        if not hasattr(func, 'func_code'):
+        if not hasattr(func, '__code__'):
             return
         self.line_profiler.add_function(func)
-        if func.func_closure:
-            for cell in func.func_closure:
-                if hasattr(cell.cell_contents, 'func_code'):
+        if func.__closure__:
+            for cell in func.__closure__:
+                if hasattr(cell.cell_contents, '__code__'):
                     self._unwrap_closure_and_profile(cell.cell_contents)
 
     def process_view(self, request, view_func, view_args, view_kwargs):

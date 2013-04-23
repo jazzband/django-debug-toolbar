@@ -5,7 +5,9 @@ from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils.encoding import force_unicode, smart_str
+from django.utils.encoding import force_text, smart_bytes
+from django.utils.six import iteritems, string_types
+from django.utils.six.moves import map
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
@@ -13,12 +15,12 @@ from debug_toolbar.utils.compat.db import connections
 
 try:
     import json
-except ImportError: # python < 2.6
+except ImportError:  # python < 2.6
     from django.utils import simplejson as json
 
 try:
     from hashlib import sha1
-except ImportError: # python < 2.5
+except ImportError:  # python < 2.5
     from django.utils.hashcompat import sha_constructor as sha1
 
 # TODO:This should be set in the toolbar loader as a default and panels should
@@ -79,7 +81,7 @@ class NormalCursorWrapper(object):
         self.logger = logger
 
     def _quote_expr(self, element):
-        if isinstance(element, basestring):
+        if isinstance(element, string_types):
             element = element.replace("'", "''")
             return "'%s'" % element
         else:
@@ -88,12 +90,12 @@ class NormalCursorWrapper(object):
     def _quote_params(self, params):
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
-                            for key, value in params.iteritems())
-        return map(self._quote_expr, params)
+                            for key, value in iteritems(params))
+        return list(map(self._quote_expr, params))
 
     def _decode(self, param):
         try:
-            return force_unicode(param, strings_only=True)
+            return force_text(param, strings_only=True)
         except UnicodeDecodeError:
             return '(encoded string)'
 
@@ -120,7 +122,7 @@ class NormalCursorWrapper(object):
                 stacktrace = []
             _params = ''
             try:
-                _params = json.dumps(map(self._decode, params))
+                _params = json.dumps(list(map(self._decode, params)))
             except Exception:
                 pass  # object not JSON serializable
 
@@ -154,9 +156,9 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
-                'hash': sha1(settings.SECRET_KEY \
-                                        + smart_str(sql) \
-                                        + _params).hexdigest(),
+                'hash': sha1(smart_bytes(settings.SECRET_KEY) \
+                                        + smart_bytes(sql) \
+                                        + smart_bytes(_params)).hexdigest(),
                 'stacktrace': stacktrace,
                 'start_time': start,
                 'stop_time': stop,

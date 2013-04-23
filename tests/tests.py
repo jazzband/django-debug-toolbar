@@ -1,5 +1,8 @@
 from __future__ import with_statement
-import thread
+import django
+from django.utils import six
+from django.utils.six.moves import _thread
+from django.utils.six import iteritems, string_types
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -30,12 +33,12 @@ class Settings(object):
         self._orig = {}
 
     def __enter__(self):
-        for k, v in self.overrides.iteritems():
+        for k, v in iteritems(self.overrides):
             self._orig[k] = getattr(settings, k, self.NotDefined)
             setattr(settings, k, v)
 
     def __exit__(self, exc_type, exc_value, traceback):
-        for k, v in self._orig.iteritems():
+        for k, v in iteritems(self._orig):
             if v is self.NotDefined:
                 delattr(settings, k)
             else:
@@ -48,7 +51,7 @@ class BaseTestCase(TestCase):
         response = HttpResponse()
         toolbar = DebugToolbar(request)
 
-        DebugToolbarMiddleware.debug_toolbars[thread.get_ident()] = toolbar
+        DebugToolbarMiddleware.debug_toolbars[_thread.get_ident()] = toolbar
 
         self.request = request
         self.response = response
@@ -62,7 +65,7 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_middleware(self):
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             resp = self.client.get('/execute_sql/')
-        self.assertEquals(resp.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
 
     def test_show_toolbar_DEBUG(self):
         request = rf.get('/')
@@ -104,10 +107,10 @@ class DebugToolbarTestCase(BaseTestCase):
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, string_types))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
-            self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
+            self.assertEqual(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_string_per_request(self):
         request = rf.get('/')
@@ -119,10 +122,10 @@ class DebugToolbarTestCase(BaseTestCase):
             request.urlconf = 'tests.urls'
             middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, string_types))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
-            self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
+            self.assertEqual(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_module(self):
         request = rf.get('/')
@@ -132,10 +135,10 @@ class DebugToolbarTestCase(BaseTestCase):
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, string_types))
 
             self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
-            self.assertEquals(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
+            self.assertEqual(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_tuple_urlconf(self):
         request = rf.get('/')
@@ -145,7 +148,7 @@ class DebugToolbarTestCase(BaseTestCase):
         middleware = DebugToolbarMiddleware()
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
-            self.assertFalse(isinstance(request.urlconf, basestring))
+            self.assertFalse(isinstance(request.urlconf, string_types))
 
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel
@@ -158,27 +161,27 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_url_resolving_positional(self):
         stats = self._resolve_stats('/resolving1/a/b/')
-        self.assertEquals(stats['view_urlname'], 'positional-resolving')  # Django >= 1.3
-        self.assertEquals(stats['view_func'], 'tests.views.resolving_view')
-        self.assertEquals(stats['view_args'], ('a', 'b'))
-        self.assertEquals(stats['view_kwargs'], {})
+        self.assertEqual(stats['view_urlname'], 'positional-resolving')  # Django >= 1.3
+        self.assertEqual(stats['view_func'], 'tests.views.resolving_view')
+        self.assertEqual(stats['view_args'], ('a', 'b'))
+        self.assertEqual(stats['view_kwargs'], {})
 
     def test_url_resolving_named(self):
         stats = self._resolve_stats('/resolving2/a/b/')
-        self.assertEquals(stats['view_args'], ())
-        self.assertEquals(stats['view_kwargs'], {'arg1': 'a', 'arg2': 'b'})
+        self.assertEqual(stats['view_args'], ())
+        self.assertEqual(stats['view_kwargs'], {'arg1': 'a', 'arg2': 'b'})
 
     def test_url_resolving_mixed(self):
         stats = self._resolve_stats('/resolving3/a/')
-        self.assertEquals(stats['view_args'], ('a',))
-        self.assertEquals(stats['view_kwargs'], {'arg2': 'default'})
+        self.assertEqual(stats['view_args'], ('a',))
+        self.assertEqual(stats['view_kwargs'], {'arg2': 'default'})
 
     def test_url_resolving_bad(self):
         stats = self._resolve_stats('/non-existing-url/')
-        self.assertEquals(stats['view_urlname'], 'None')
-        self.assertEquals(stats['view_args'], 'None')
-        self.assertEquals(stats['view_kwargs'], 'None')
-        self.assertEquals(stats['view_func'], '<no view>')
+        self.assertEqual(stats['view_urlname'], 'None')
+        self.assertEqual(stats['view_args'], 'None')
+        self.assertEqual(stats['view_kwargs'], 'None')
+        self.assertEqual(stats['view_func'], '<no view>')
 
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
@@ -186,30 +189,30 @@ class DebugToolbarNameFromObjectTest(BaseTestCase):
         def x():
             return 1
         res = get_name_from_obj(x)
-        self.assertEquals(res, 'tests.tests.x')
+        self.assertEqual(res, 'tests.tests.x')
 
     def test_lambda(self):
         res = get_name_from_obj(lambda: 1)
-        self.assertEquals(res, 'tests.tests.<lambda>')
+        self.assertEqual(res, 'tests.tests.<lambda>')
 
     def test_class(self):
         class A:
             pass
         res = get_name_from_obj(A)
-        self.assertEquals(res, 'tests.tests.A')
+        self.assertEqual(res, 'tests.tests.A')
 
 
 class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
         panel = self.toolbar.get_panel(SQLDebugPanel)
-        self.assertEquals(len(panel._queries), 0)
+        self.assertEqual(len(panel._queries), 0)
 
         list(User.objects.all())
 
         # ensure query was logged
-        self.assertEquals(len(panel._queries), 1)
+        self.assertEqual(len(panel._queries), 1)
         query = panel._queries[0]
-        self.assertEquals(query[0], 'default')
+        self.assertEqual(query[0], 'default')
         self.assertTrue('sql' in query[1])
         self.assertTrue('duration' in query[1])
         self.assertTrue('stacktrace' in query[1])
@@ -232,21 +235,21 @@ class SQLPanelTestCase(BaseTestCase):
 
     def test_disable_stacktraces(self):
         panel = self.toolbar.get_panel(SQLDebugPanel)
-        self.assertEquals(len(panel._queries), 0)
+        self.assertEqual(len(panel._queries), 0)
 
         with Settings(DEBUG_TOOLBAR_CONFIG={'ENABLE_STACKTRACES': False}):
             list(User.objects.all())
 
         # ensure query was logged
-        self.assertEquals(len(panel._queries), 1)
+        self.assertEqual(len(panel._queries), 1)
         query = panel._queries[0]
-        self.assertEquals(query[0], 'default')
+        self.assertEqual(query[0], 'default')
         self.assertTrue('sql' in query[1])
         self.assertTrue('duration' in query[1])
         self.assertTrue('stacktrace' in query[1])
 
         # ensure the stacktrace is empty
-        self.assertEquals([], query[1]['stacktrace'])
+        self.assertEqual([], query[1]['stacktrace'])
 
 
 class TemplatePanelTestCase(BaseTestCase):
@@ -262,8 +265,12 @@ class TemplatePanelTestCase(BaseTestCase):
         })
         t.render(c)
         # ensure the query was NOT logged
-        self.assertEquals(len(sql_panel._queries), 0)
-        ctx = template_panel.templates[0]['context'][0]
+        self.assertEqual(len(sql_panel._queries), 0)
+        tvar = template_panel.templates[0]['context']
+        if django.VERSION[0:2] >= (1, 5):
+            ctx = tvar[1]
+        else:
+            ctx = tvar[0]
         self.assertIn('<<queryset of auth.User>>', ctx)
         self.assertIn('<<triggers database query>>', ctx)
 
@@ -273,6 +280,7 @@ def module_func(*args, **kwargs):
     return 'blah'
 
 
+@unittest.skipIf(six.PY3, "replace_call is not supported on Python 3")
 class TrackingTestCase(BaseTestCase):
     @classmethod
     def class_method(cls, *args, **kwargs):
@@ -290,23 +298,23 @@ class TrackingTestCase(BaseTestCase):
             foo.update(kwargs)
 
         self.assertTrue(hasattr(module_func, '__wrapped__'))
-        self.assertEquals(len(callbacks['before']), 1)
+        self.assertEqual(len(callbacks['before']), 1)
 
         module_func('hi', foo='bar')
 
         self.assertTrue('sender' in foo, foo)
         # best we can do
-        self.assertEquals(foo['sender'].__name__, 'module_func')
+        self.assertEqual(foo['sender'].__name__, 'module_func')
         self.assertTrue('start' in foo, foo)
         self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' not in foo, foo)
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 1)
-        self.assertEquals(foo['args'][0], 'hi')
+        self.assertEqual(foo['args'][0], 'hi')
         self.assertTrue('kwargs' in foo, foo)
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
-        self.assertEquals(foo['kwargs']['foo'], 'bar')
+        self.assertEqual(foo['kwargs']['foo'], 'bar')
 
         callbacks['before'] = {}
 
@@ -315,23 +323,23 @@ class TrackingTestCase(BaseTestCase):
             foo.update(kwargs)
 
         self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
-        self.assertEquals(len(callbacks['before']), 1)
+        self.assertEqual(len(callbacks['before']), 1)
 
         self.class_func('hello', foo='bar')
 
         self.assertTrue('sender' in foo, foo)
         # best we can do
-        self.assertEquals(foo['sender'].__name__, 'class_func')
+        self.assertEqual(foo['sender'].__name__, 'class_func')
         self.assertTrue('start' in foo, foo)
         self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' not in foo, foo)
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 2)
-        self.assertEquals(foo['args'][1], 'hello')
+        self.assertEqual(foo['args'][1], 'hello')
         self.assertTrue('kwargs' in foo, foo)
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
-        self.assertEquals(foo['kwargs']['foo'], 'bar')
+        self.assertEqual(foo['kwargs']['foo'], 'bar')
 
         callbacks['before'] = {}
 
@@ -340,13 +348,13 @@ class TrackingTestCase(BaseTestCase):
             foo.update(kwargs)
 
         self.assertTrue(hasattr(TrackingTestCase.class_method, '__wrapped__'))
-        self.assertEquals(len(callbacks['before']), 1)
+        self.assertEqual(len(callbacks['before']), 1)
 
         TrackingTestCase.class_method()
 
         self.assertTrue('sender' in foo, foo)
         # best we can do
-        self.assertEquals(foo['sender'].__name__, 'class_method')
+        self.assertEqual(foo['sender'].__name__, 'class_method')
         self.assertTrue('start' in foo, foo)
         self.assertTrue('stop' not in foo, foo)
         self.assertTrue('args' in foo, foo)
@@ -359,24 +367,24 @@ class TrackingTestCase(BaseTestCase):
             foo.update(kwargs)
 
         self.assertTrue(hasattr(module_func, '__wrapped__'))
-        self.assertEquals(len(callbacks['after']), 1)
+        self.assertEqual(len(callbacks['after']), 1)
 
         module_func('hi', foo='bar')
 
         self.assertTrue('sender' in foo, foo)
         # best we can do
-        self.assertEquals(foo['sender'].__name__, 'module_func')
+        self.assertEqual(foo['sender'].__name__, 'module_func')
         self.assertTrue('start' in foo, foo)
         self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' in foo, foo)
         self.assertTrue(foo['stop'] > foo['start'])
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 1)
-        self.assertEquals(foo['args'][0], 'hi')
+        self.assertEqual(foo['args'][0], 'hi')
         self.assertTrue('kwargs' in foo, foo)
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
-        self.assertEquals(foo['kwargs']['foo'], 'bar')
+        self.assertEqual(foo['kwargs']['foo'], 'bar')
 
         callbacks['after'] = {}
 
@@ -385,21 +393,21 @@ class TrackingTestCase(BaseTestCase):
             foo.update(kwargs)
 
         self.assertTrue(hasattr(TrackingTestCase.class_func, '__wrapped__'))
-        self.assertEquals(len(callbacks['after']), 1)
+        self.assertEqual(len(callbacks['after']), 1)
 
         self.class_func('hello', foo='bar')
 
         self.assertTrue('sender' in foo, foo)
         # best we can do
-        self.assertEquals(foo['sender'].__name__, 'class_func')
+        self.assertEqual(foo['sender'].__name__, 'class_func')
         self.assertTrue('start' in foo, foo)
         self.assertTrue(foo['start'] > 0)
         self.assertTrue('stop' in foo, foo)
         self.assertTrue(foo['stop'] > foo['start'])
         self.assertTrue('args' in foo, foo)
         self.assertTrue(len(foo['args']), 2)
-        self.assertEquals(foo['args'][1], 'hello')
+        self.assertEqual(foo['args'][1], 'hello')
         self.assertTrue('kwargs' in foo, foo)
         self.assertTrue(len(foo['kwargs']), 1)
         self.assertTrue('foo' in foo['kwargs'])
-        self.assertEquals(foo['kwargs']['foo'], 'bar')
+        self.assertEqual(foo['kwargs']['foo'], 'bar')
