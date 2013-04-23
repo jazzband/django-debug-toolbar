@@ -32,8 +32,20 @@ window.djdt = (function(window, document, jQuery) {
 				$('#djDebugToolbar li').removeClass('active');
 				return false;
 			});
-			$('#djDebug a.remoteCall').live('click', function() {
-				$('#djDebugWindow').load(this.href, function(response, status, xhr) {
+			$('#djDebug a.remoteCall').live('click', function(e) {
+				var data = '';
+				var a = $(this);
+				if (a.hasClass('remoteCallPost')) {
+					data = {};
+					var prefix = 'data-';
+					$.each(this.attributes, function(idx, attribute) {
+						if (attribute.name.indexOf(prefix) === 0) {
+							var param = attribute.name.substring(prefix.length);
+							data[param] = param ? decodeURIComponent(a.attr(attribute.name)) : undefined;
+						}
+					});
+				}
+				$('#djDebugWindow').load(this.href, data, function(response, status, xhr) {
 					if (status == "error") {
 						var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
 						$('#djDebugWindow').html(message);
