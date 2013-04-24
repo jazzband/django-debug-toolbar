@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from django.utils.html import escape
 
 from debug_toolbar.utils.sqlparse import tokens as T
 from debug_toolbar.utils.sqlparse import sql
@@ -423,3 +424,16 @@ class OutputPHPFilter(Filter):
             varname = self.varname
         stmt.tokens = tuple(self._process(stmt.tokens, varname))
         return stmt
+
+
+class BoldKeywordFilter(Filter):
+    """sqlparse filter to bold SQL keywords"""
+    def process(self, stack, stream):
+        """Process the token stream"""
+        for token_type, value in stream:
+            is_keyword = token_type in T.Keyword
+            if is_keyword:
+                yield T.Text, '<strong>'
+            yield token_type, escape(value)
+            if is_keyword:
+                yield T.Text, '</strong>'

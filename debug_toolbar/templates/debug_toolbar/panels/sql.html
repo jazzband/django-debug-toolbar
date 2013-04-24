@@ -41,13 +41,19 @@
 						{{ query.duration|floatformat:"2" }}
 					</td>
 					<td class="actions">
+
 					{% if query.params %}
 						{% if query.is_select %}
-							<a class="remoteCall" href="/__debug__/sql_select/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}&amp;alias={{ query.alias|urlencode }}">Sel</a>
-							<a class="remoteCall" href="/__debug__/sql_explain/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}&amp;alias={{ query.alias|urlencode }}">Expl</a>
-							{% ifequal query.engine 'mysql' %}
-								<a class="remoteCall" href="/__debug__/sql_profile/?sql={{ query.raw_sql|urlencode }}&amp;params={{ query.params|urlencode }}&amp;duration={{ query.duration|floatformat:"2"|urlencode }}&amp;hash={{ query.hash }}&amp;alias={{ query.alias|urlencode }}">Prof</a>
-							{% endifequal %}
+							<form method="post">
+								{{ query.form }}
+
+								<button formaction="/__debug__/sql_select/" class="remoteCall">Sel</button>
+								<button formaction="/__debug__/sql_explain/" class="remoteCall">Expl</button>
+
+								{% ifequal query.engine 'mysql' %}
+									<button formaction="/__debug__/sql_profile/" class="remoteCall">Prof</button>
+								{% endifequal %}
+							</form>
 						{% endif %}
 					{% endif %}
 					</td>
