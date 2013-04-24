@@ -6,9 +6,7 @@ views in any other way is generally not advised.
 
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt
-
 
 try:
     from hashlib import sha1

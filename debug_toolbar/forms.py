@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
+from debug_toolbar.utils.sql import reformat_sql
 
 try:
     import json
@@ -75,7 +76,6 @@ class SQLSelectForm(forms.Form):
         return hash
 
     def reformat_sql(self):
-        from debug_toolbar.panels.sql import reformat_sql
         sql, params = self.cleaned_data['sql'], self.cleaned_data['params']
         return reformat_sql(self.cursor.db.ops.last_executed_query(self.cursor, sql, params))
 

@@ -1,16 +1,15 @@
-import re
 import uuid
 from copy import copy
 
 from django.db.backends import BaseDatabaseWrapper
-from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
 from debug_toolbar.forms import SQLSelectForm
 from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import sqlparse, render_stacktrace
+from debug_toolbar.utils import render_stacktrace
+from debug_toolbar.utils.sql import reformat_sql
 from debug_toolbar.utils.tracking.db import CursorWrapper
 from debug_toolbar.utils.tracking import replace_call
 
@@ -198,28 +197,3 @@ class SQLDebugPanel(DebugPanel):
             'queries': [q for a, q in self._queries],
             'sql_time': self._sql_time,
         })
-
-
-class BoldKeywordFilter(sqlparse.filters.Filter):
-    """sqlparse filter to bold SQL keywords"""
-    def process(self, stack, stream):
-        """Process the token stream"""
-        for token_type, value in stream:
-            is_keyword = token_type in sqlparse.tokens.Keyword
-            if is_keyword:
-                yield sqlparse.tokens.Text, '<strong>'
-            yield token_type, escape(value)
-            if is_keyword:
-                yield sqlparse.tokens.Text, '</strong>'
-
-
-def swap_fields(sql):
-    return re.sub('SELECT</strong> (.*?) <strong>FROM', 'SELECT</strong> <a class="djDebugUncollapsed djDebugToggle" href="#">&bull;&bull;&bull;</a> ' +
-        '<a class="djDebugCollapsed djDebugToggle" href="#">\g<1></a> <strong>FROM', sql)
-
-
-def reformat_sql(sql):
-    stack = sqlparse.engine.FilterStack()
-    stack.preprocess.append(BoldKeywordFilter())  # add our custom filter
-    stack.postprocess.append(sqlparse.filters.SerializerUnicode())  # tokens -> strings
-    return swap_fields(''.join(stack.run(sql)))
