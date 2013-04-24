@@ -9,8 +9,13 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
 try:
+    import json
+except ImportError: # python < 2.6
+    from django.utils import simplejson as json
+
+try:
     from hashlib import sha1
-except ImportError:
+except ImportError: # python < 2.5
     from django.utils.hashcompat import sha_constructor as sha1
 
 from debug_toolbar.forms import SQLSelectForm
@@ -58,6 +63,8 @@ def sql_explain(request):
             # EXPLAIN QUERY PLAN dumps a more human-readable summary
             # See http://www.sqlite.org/lang_explain.html for details
             cursor.execute("EXPLAIN QUERY PLAN %s" % (sql,), params)
+        elif engine == "psycopg2":
+            cursor.execute("EXPLAIN ANALYZE %s" % (sql,), params)
         else:
             cursor.execute("EXPLAIN %s" % (sql,), params)
 

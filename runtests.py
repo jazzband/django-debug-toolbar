@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 import sys
+import os
 from os.path import dirname, abspath
 from optparse import OptionParser
 
 from django.conf import settings, global_settings
 
-if not settings.configured:
+# For convenience configure settings if they are not pre-configured or if we
+# haven't been provided settings to use by environment variable.
+if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
     settings.configure(
         DATABASES={
             'default': {
