@@ -229,11 +229,16 @@
 	vertical-align:top;
 	padding:2px 3px;
 }
+#djDebug .panelContent tbody td.time {
+    text-align: center;
+}
+
 #djDebug .panelContent thead th {
 	padding:1px 6px 1px 3px;
 	text-align:left;
 	font-weight:bold;
 	font-size:14px;
+    white-space: nowrap;
 }
 #djDebug .panelContent tbody th {
 	width:12em;
@@ -507,8 +512,9 @@
     width: 14px;
     padding-top: 3px;
 }
-#djdebug .panelcontent table .actions {
+#djDebug .panelContent table .actions {
     min-width: 70px;
+    white-space: nowrap;
 }
 #djdebug .panelcontent table .color {
     width: 3px;
