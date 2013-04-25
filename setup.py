@@ -14,7 +14,7 @@ setup(
     packages=find_packages(exclude=('tests', 'example')),
     install_requires=[
         'sqlparse',
-        'django>=1.4.2,<1.6',
+        'django>=1.4.5,<1.6',
     ],
     test_suite='runtests.runtests',
     include_package_data=True,
