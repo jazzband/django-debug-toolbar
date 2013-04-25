@@ -16,8 +16,8 @@ class PrintQueryWrapper(util.CursorDebugWrapper):
         finally:
             raw_sql = self.db.ops.last_executed_query(self.cursor, sql, params)
             execution_time = datetime.now() - starttime
-            print( sqlparse.format(raw_sql, reindent=True),)
-            print( ' [%.2fms]' % (ms_from_timedelta(execution_time),))
+            print(sqlparse.format(raw_sql, reindent=True),)
+            print(' [%.2fms]' % (ms_from_timedelta(execution_time),))
             print()
 
 util.CursorDebugWrapper = PrintQueryWrapper
