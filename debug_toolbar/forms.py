@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.utils.encoding import smart_str
 from django.core.exceptions import ValidationError
 
 from debug_toolbar.utils.functional import cached_property
@@ -82,7 +83,7 @@ class SQLSelectForm(forms.Form):
 
     def make_hash(self, data):
         params = settings.SECRET_KEY + data['sql'] + data['params']
-        return sha1(params).hexdigest()
+        return sha1(smart_str(params)).hexdigest()
 
     @property
     def connection(self):
