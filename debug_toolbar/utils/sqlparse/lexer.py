@@ -243,7 +243,7 @@ class Lexer(object):
                 try:
                     text = text.decode(self.encoding)
                 except UnicodeDecodeError:
-                    text = u'[UnicodeDecodeError]'
+                    text = text.decode('unicode-escape')
         if self.stripall:
             text = text.strip()
         elif self.stripnl:
