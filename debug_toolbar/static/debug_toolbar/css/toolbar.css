@@ -34,6 +34,7 @@
 	background-color:transparent;
 	font-family:sans-serif;
 	text-align:left;
+	text-shadow: none;
 }
 
 #djDebug #djDebugToolbar {
