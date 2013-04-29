@@ -236,5 +236,5 @@ Resources
 * `Code <http://github.com/django-debug-toolbar/django-debug-toolbar>`_
 * `Transifex <https://www.transifex.net/projects/p/django-debug-toolbar/>`_ (Help Translate!)
 
-The `in-development version <http://github.com/django-debug-toolbar/django-debug-toolbar/tarball/master#egg=sentry-dev>`_
+The `in-development version <http://github.com/django-debug-toolbar/django-debug-toolbar/tarball/master#egg=django-debug-toolbar-dev>`_
 of the Debug Toolbar can be installed with ``pip install django-debug-toolbar==dev`` or ``easy_install django-debug-toolbar==dev``.
