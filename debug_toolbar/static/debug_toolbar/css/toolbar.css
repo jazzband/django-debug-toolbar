@@ -25,6 +25,8 @@
 #djDebug table, #djDebug caption, #djDebug tbody, #djDebug tfoot, #djDebug thead, #djDebug tr, #djDebug th, #djDebug td {
 	margin:0;
 	padding:0;
+	min-width:0;
+	width:auto;
 	border:0;
 	outline:0;
 	font-size:12px;
@@ -35,6 +37,52 @@
 	font-family:sans-serif;
 	text-align:left;
 	text-shadow: none;
+	-webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+#djDebug button {
+	background-color: #eee;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eee), color-stop(100%, #cccccc));
+	background-image: -webkit-linear-gradient(top, #eee, #cccccc);
+	background-image: -moz-linear-gradient(top, #eee, #cccccc);
+	background-image: -ms-linear-gradient(top, #eee, #cccccc);
+	background-image: -o-linear-gradient(top, #eee, #cccccc);
+	background-image: linear-gradient(top, #eee, #cccccc);
+	border: 1px solid #ccc;
+	border-bottom: 1px solid #bbb;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #333;
+	line-height: 1;
+	padding: 0 8px;
+	text-align: center;
+	text-shadow: 0 1px 0 #eee;
+}
+
+#djDebug button:hover {
+    background-color: #ddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ddd), color-stop(100%, #bbb));
+    background-image: -webkit-linear-gradient(top, #ddd, #bbb);
+    background-image: -moz-linear-gradient(top, #ddd, #bbb);
+    background-image: -ms-linear-gradient(top, #ddd, #bbb);
+    background-image: -o-linear-gradient(top, #ddd, #bbb);
+    background-image: linear-gradient(top, #ddd, #bbb);
+    border-color: #bbb;
+    border-bottom-color: #999;
+    cursor: pointer;
+    text-shadow: 0 1px 0 #ddd;
+}
+
+#djDebug button:active {
+    border: 1px solid #aaa;
+    border-bottom: 1px solid #888;
+    -webkit-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+    -moz-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+    box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
 }
 
 #djDebug #djDebugToolbar {
