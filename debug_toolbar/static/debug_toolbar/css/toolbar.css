@@ -22,7 +22,8 @@
 #djDebug b, #djDebug u, #djDebug i, #djDebug center,
 #djDebug dl, #djDebug dt, #djDebug dd, #djDebug ol, #djDebug ul, #djDebug li,
 #djDebug fieldset, #djDebug form, #djDebug label, #djDebug legend,
-#djDebug table, #djDebug caption, #djDebug tbody, #djDebug tfoot, #djDebug thead, #djDebug tr, #djDebug th, #djDebug td {
+#djDebug table, #djDebug caption, #djDebug tbody, #djDebug tfoot, #djDebug thead, #djDebug tr, #djDebug th, #djDebug td,
+#djDebug button {
 	margin:0;
 	padding:0;
 	min-width:0;
