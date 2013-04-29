@@ -533,6 +533,7 @@
 
 #djDebug .panelContent ul.stats {
     position: relative;
+    list-style-type: none;
 }
 #djDebug .panelContent ul.stats li {
     width: 30%;
