@@ -102,14 +102,6 @@ class NormalCursorWrapper(object):
         try:
             return self.cursor.execute(sql, params)
         finally:
-            # FIXME: Sometimes connections which are not in the connections
-            # dict are used (for example in test database destroying).
-            # The code below (at least get_transaction_id(alias) needs to have
-            # the connection in the connections dict. It would be good to
-            # not have this requirement at all, but for now lets just skip
-            # these connections.
-            if self.db.alias not in connections:
-                return
             stop = datetime.now()
             duration = ms_from_timedelta(stop - start)
             enable_stacktraces = getattr(settings,
@@ -149,8 +141,8 @@ class NormalCursorWrapper(object):
             params = {
                 'engine': engine,
                 'alias': alias,
-                'sql': self.db.ops.last_executed_query(self.cursor, sql,
-                                                self._quote_params(params)),
+                'sql': self.db.ops.last_executed_query(
+                    self.cursor, sql, self._quote_params(params)),
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,

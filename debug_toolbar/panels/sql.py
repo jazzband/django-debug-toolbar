@@ -77,9 +77,11 @@ class SQLDebugPanel(DebugPanel):
         self._transaction_ids = {}
 
     def get_transaction_id(self, alias):
+        if alias not in connections:
+            return
         conn = connections[alias].connection
         if not conn:
-            return None
+            return
 
         engine = conn.__class__.__module__.split('.', 1)[0]
         if engine == 'psycopg2':
