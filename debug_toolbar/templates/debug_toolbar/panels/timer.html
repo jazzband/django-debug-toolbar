@@ -27,13 +27,14 @@
 	<table>
 		<colgroup>
 			<col style="width:20%"/>
-			<col/>
+			<col style="width:60%"/>
+			<col style="width:20%"/>
 		</colgroup>
 		<thead>
 			<tr>
 				<th>{% trans "Timing Attribute" %}</th>
 				<th class="timeline">{% trans 'Timeline' %}</th>
-				<th class="time">{% trans "Time since navigation start (+length, msec)" %}</th>
+				<th class="time">{% trans "Milliseconds since navigation start (+length)" %}</th>
 			</tr>
 		</thead>
 		<tbody id="djDebugBrowserTimingTableBody">

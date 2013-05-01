@@ -232,7 +232,7 @@ window.djdt = (function(window, document, jQuery) {
 }(window, document, $djdtjq));
 
 
-(function(window, document) {
+(function(window, document, $) {
 	function _renderPerf() {
 		// Browser timing remains hidden unless we can successfully access the performance object
 		var perf = window.performance || window.msPerformance ||
@@ -253,39 +253,31 @@ window.djdt = (function(window, document, jQuery) {
 			}
 			function addRow(stat, endStat) {
 				rowCount++;
-				var row = document.createElement('tr'),
-					keyCell = document.createElement('td'),
-					timelineCell = document.createElement('td'),
-					valueCell = document.createElement('td');
-				row.className = (rowCount % 2) ? 'djDebugOdd' : 'djDebugEven';
-				timelineCell.className = 'timeline';
+				var $row = $('<tr class="' + ((rowCount % 2) ? 'djDebugOdd' : 'djDebugEven') + '"></tr>');
 				if (endStat) {
 					// Render a start through end bar
-					keyCell.innerHTML = stat.replace('Start', '');;
-					timelineCell.innerHTML = '<div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:' + getCSSWidth(stat, endStat) + ';">&nbsp;</strong></div></div>';
-					valueCell.innerHTML = (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')';
+					$row.html('<td>' + stat.replace('Start', '') + '</td>' + 
+					          '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:' + getCSSWidth(stat, endStat) + ';">&nbsp;</strong></div></div></td>' + 
+					          '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
 				} else {
 					// Render a point in time
-					keyCell.innerHTML = stat;
-					timelineCell.innerHTML = '<div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div>';
-					valueCell.innerHTML = (perf.timing[stat] - timingOffset);
+          $row.html('<td>' + stat + '</td>' + 
+                    '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' + 
+                    '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
 				}
-				row.appendChild(keyCell);
-				row.appendChild(timelineCell);
-				row.appendChild(valueCell);
-				document.getElementById('djDebugBrowserTimingTableBody').appendChild(row);
+				$('#djDebugBrowserTimingTableBody').append($row);
 			}
 
 			// This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
 			addRow('domainLookupStart', 'domainLookupEnd');
 			addRow('connectStart', 'connectEnd');
-			addRow('requestStart', 'responseEnd') // There is no requestStart
+			addRow('requestStart', 'responseEnd') // There is no requestEnd
 			addRow('responseStart', 'responseEnd');
 			addRow('domLoading', 'domComplete'); // Spans the events below
 			addRow('domInteractive');
 			addRow('domContentLoadedEventStart', 'domContentLoadedEventEnd');
 			addRow('loadEventStart', 'loadEventEnd');
-			document.getElementById('djDebugBrowserTiming').style.display = "block";
+			$('#djDebugBrowserTiming').css("display", "block");
 		}
 	}
 
@@ -293,6 +285,6 @@ window.djdt = (function(window, document, jQuery) {
 		setTimeout(_renderPerf, 1000);
 	}
 
-	if (window.addEventListener) { window.addEventListener("load", renderPerf, false); }
-		else if (window.attachEvent) { window.attachEvent("onload", renderPerf); }
+  $(window).bind('load', renderPerf);
+
 }(window, document, $djdtjq));
