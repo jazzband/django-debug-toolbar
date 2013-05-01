@@ -263,9 +263,13 @@ class TemplatePanelTestCase(BaseTestCase):
         t.render(c)
         # ensure the query was NOT logged
         self.assertEquals(len(sql_panel._queries), 0)
-        ctx = template_panel.templates[0]['context'][0]
-        self.assertIn('<<queryset of auth.User>>', ctx)
-        self.assertIn('<<triggers database query>>', ctx)
+        ctx = template_panel.templates[0]['context']
+        filtered_ctx = filter(lambda ctx_element: (
+            '<<queryset of auth.User>>' in ctx_element and
+            '<<triggers database query>>' in ctx_element
+        ), ctx)
+        context_contains_strings = len(filtered_ctx) > 0
+        self.assertTrue(context_contains_strings)
 
 
 def module_func(*args, **kwargs):
