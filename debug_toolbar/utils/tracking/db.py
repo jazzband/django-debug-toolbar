@@ -89,7 +89,7 @@ class NormalCursorWrapper(object):
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
                             for key, value in params.iteritems())
-        return map(self._quote_expr, params)
+        return map(self._quote_expr, params) if params else None
 
     def _decode(self, param):
         try:
