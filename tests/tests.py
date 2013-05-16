@@ -1,6 +1,7 @@
 from __future__ import with_statement
 import thread
 
+import django
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import connection
@@ -164,17 +165,27 @@ class DebugToolbarTestCase(BaseTestCase):
         finally:
             DebugToolbar.render_toolbar = original_render_toolbar
 
-    def test_streaming_response_tag_found(self):
-            actual_content = list(self._get_streaming_content(1))
-            expected_content = list(get_request_generator(1))
-            expected_content[-2] = '<TOOLBAR_HERE>%s' % expected_content[-2]
-            self.assertEquals(actual_content, expected_content)
+    def _django_version_gte_15():
+        (v, subv) = django.VERSION[:2]
+        return (v > 1) or (v == 1 and subv >= 5)
 
+    @unittest.skipUnless(_django_version_gte_15(),
+                         'Test valid only with Django >= 1.5')
+    def test_streaming_response_tag_found(self):
+        actual_content = list(self._get_streaming_content(1))
+        expected_content = list(get_request_generator(1))
+        expected_content[-2] = '<TOOLBAR_HERE>%s' % expected_content[-2]
+        self.assertEquals(actual_content, expected_content)
+
+    @unittest.skipUnless(_django_version_gte_15(),
+                         'Test valid only with Django >= 1.5')
     def test_streaming_response_tag_notfound_1(self):
         self.assertEquals(
             list(self._get_streaming_content(2)),
             list(get_request_generator(2)))
 
+    @unittest.skipUnless(_django_version_gte_15(),
+                         'Test valid only with Django >= 1.5')
     def test_streaming_response_tag_notfound_2(self):
         self.assertEquals(
             list(self._get_streaming_content(3)),

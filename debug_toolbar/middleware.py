@@ -5,7 +5,7 @@ import imp
 import thread
 
 from django.conf import settings
-from django.http import HttpResponseRedirect, StreamingHttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_unicode
 from django.utils.importlib import import_module
@@ -143,7 +143,7 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             rendered_toolbar = toolbar.render_toolbar()
-            if response.streaming:
+            if hasattr(response, 'streaming') and response.streaming:
                 response.streaming_content = self._wrap_streaming_content(
                     rendered_toolbar, response.streaming_content)
             else:
