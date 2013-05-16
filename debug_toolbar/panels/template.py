@@ -78,7 +78,7 @@ class TemplateDebugPanel(DebugPanel):
                     # QuerySet would trigger the database: user can run the query from SQL Panel
                     elif isinstance(value, (QuerySet, RawQuerySet)):
                         model_meta = getattr(value.model, "_meta", "")
-                        app_level = getattr(model_meta, "app_label", "")
+                        app_label = getattr(model_meta, "app_label", "")
                         model_name = "%s.%s" % (app_label, value.model.__name__)
                         temp_layer[key] = '<<%s of %s>>' % (value.__class__.__name__.lower(), model_name)
                     else:
