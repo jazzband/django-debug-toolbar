@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     url(r'^resolving1/(.+)/(.+)/$', 'tests.views.resolving_view', name='positional-resolving'),
     url(r'^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$', 'tests.views.resolving_view'),
     url(r'^resolving3/(.+)/$', 'tests.views.resolving_view', { 'arg2' : 'default' }),
+    url(r'^streaming/$', 'tests.views.streaming_http'),
     url(r'^execute_sql/$', 'tests.views.execute_sql'),
 )

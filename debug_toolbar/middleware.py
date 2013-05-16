@@ -145,7 +145,7 @@ class DebugToolbarMiddleware(object):
             rendered_toolbar = toolbar.render_toolbar()
             if response.streaming:
                 response.streaming_content = self._wrap_streaming_content(
-                                                rendered_toolbar, response.streaming_content)
+                    rendered_toolbar, response.streaming_content)
             else:
                 response.content = replace_insensitive(
                     smart_unicode(response.content),
