@@ -282,7 +282,7 @@ window.djdt = (function(window, document, jQuery) {
 	}
 
 	function renderPerf() {
-		setTimeout(_renderPerf, 1000);
+		setTimeout(_renderPerf, 0);
 	}
 
   $(window).bind('load', renderPerf);
