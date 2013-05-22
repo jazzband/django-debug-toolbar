@@ -86,6 +86,8 @@ class NormalCursorWrapper(object):
             return repr(element)
 
     def _quote_params(self, params):
+        if params == None:
+            return None
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
                             for key, value in params.iteritems())
