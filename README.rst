@@ -180,6 +180,12 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      (The first value is ``socketserver`` on Python 3 and ``SocketServer`` on
      Python 2.)
 
+   * ``ROOT_TAG_ATTRS``
+
+     This setting is injected in the root template div in order to avoid conflicts
+     with client-side frameworks. For example, when using with Angular.js, set
+     this to 'ng-non-bindable' or 'class="ng-non-bindable"'. Defaults to ''.
+
    Example configuration::
 
        def custom_show_toolbar(request):
