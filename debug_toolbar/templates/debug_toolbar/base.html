@@ -4,7 +4,7 @@
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}debug_toolbar/css/toolbar.min.css" type="text/css">
 <script type="text/javascript" src="{{ STATIC_URL }}debug_toolbar/js/toolbar.min.js"></script>
-<div id="djDebug" style="display:none;" dir="ltr">
+<div id="djDebug" style="display:none;" dir="ltr" {{ TOOLBAR_ROOT_TAG_ATTRS }}>
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if panels %}

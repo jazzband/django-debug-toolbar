@@ -19,7 +19,8 @@ class DebugToolbar(object):
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
             'INTERCEPT_REDIRECTS': True,
-            'MEDIA_URL': u'%s/__debug__/m/' % base_url
+            'MEDIA_URL': u'%s/__debug__/m/' % base_url,
+            'ROOT_TAG_ATTRS': '',
         }
         # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
         self.config.update(getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}))
@@ -27,6 +28,7 @@ class DebugToolbar(object):
             'BASE_URL': base_url,  # for backwards compatibility
             'DEBUG_TOOLBAR_MEDIA_URL': self.config.get('MEDIA_URL'),
             'STATIC_URL': settings.STATIC_URL,
+            'TOOLBAR_ROOT_TAG_ATTRS': self.config.get('ROOT_TAG_ATTRS'),
         }
 
         self.load_panels()
