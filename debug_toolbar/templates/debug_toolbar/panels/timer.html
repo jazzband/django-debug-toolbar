@@ -1,4 +1,5 @@
 {% load i18n %}
+<h4>{% trans 'Resource Usage' %}</h4>
 <table>
 	<colgroup>
 		<col style="width:20%"/>
@@ -19,3 +20,24 @@
 		{% endfor %}
 	</tbody>
 </table>
+
+<!-- This hidden div is populated and displayed by code in toolbar.js -->
+<div id="djDebugBrowserTiming" style="display:none">
+	<h4>{% trans 'Browser Timing' %}</h4>
+	<table>
+		<colgroup>
+			<col style="width:20%"/>
+			<col style="width:60%"/>
+			<col style="width:20%"/>
+		</colgroup>
+		<thead>
+			<tr>
+				<th>{% trans "Timing Attribute" %}</th>
+				<th class="timeline">{% trans 'Timeline' %}</th>
+				<th class="time">{% trans "Milliseconds since navigation start (+length)" %}</th>
+			</tr>
+		</thead>
+		<tbody id="djDebugBrowserTimingTableBody">
+		</tbody>
+	</table>
+</div>
