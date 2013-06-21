@@ -71,7 +71,7 @@ class TimerDebugPanel(DebugPanel):
             return _('TOTAL: %0.2fms') % stats['total_time']
 
     def title(self):
-        return _('Resource Usage')
+        return _('Time')
 
     def url(self):
         return ''

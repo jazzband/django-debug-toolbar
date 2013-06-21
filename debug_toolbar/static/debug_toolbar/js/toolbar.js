@@ -1,3 +1,6 @@
+// Grab jQuery for use in any of the below
+var $djdtjq = jQuery.noConflict(true);
+
 window.djdt = (function(window, document, jQuery) {
 	jQuery.cookie = function(name, value, options) { if (typeof value != 'undefined') { options = options || {}; if (value === null) { value = ''; options.expires = -1; } var expires = ''; if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) { var date; if (typeof options.expires == 'number') { date = new Date(); date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000)); } else { date = options.expires; } expires = '; expires=' + date.toUTCString(); } var path = options.path ? '; path=' + (options.path) : ''; var domain = options.domain ? '; domain=' + (options.domain) : ''; var secure = options.secure ? '; secure' : ''; document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join(''); } else { var cookieValue = null; if (document.cookie && document.cookie != '') { var cookies = document.cookie.split(';'); for (var i = 0; i < cookies.length; i++) { var cookie = $.trim(cookies[i]); if (cookie.substring(0, name.length + 1) == (name + '=')) { cookieValue = decodeURIComponent(cookie.substring(name.length + 1)); break; } } } return cookieValue; } };
 	var $ = jQuery;
@@ -226,4 +229,62 @@ window.djdt = (function(window, document, jQuery) {
 		djdt.init();
 	});
 	return djdt;
-}(window, document, jQuery.noConflict(true)));
+}(window, document, $djdtjq));
+
+
+(function(window, document, $) {
+	function _renderPerf() {
+		// Browser timing remains hidden unless we can successfully access the performance object
+		var perf = window.performance || window.msPerformance ||
+					window.webkitPerformance || window.mozPerformance;
+		if (perf) {
+			var rowCount = 0,
+				timingOffset = perf.timing.navigationStart,
+				timingEnd = perf.timing.loadEventEnd;
+			var totalTime = timingEnd - timingOffset;
+			function getLeft(stat) {
+				return ((perf.timing[stat] - timingOffset) / (totalTime)) * 100.0;
+			}
+			function getCSSWidth(stat, endStat) {
+				var width = ((perf.timing[endStat] - perf.timing[stat]) / (totalTime)) * 100.0;
+				// Calculate relative percent (same as sql panel logic)
+				width = 100.0 * width / (100.0 - getLeft(stat));
+				return (width < 1) ? "2px" : width + "%";
+			}
+			function addRow(stat, endStat) {
+				rowCount++;
+				var $row = $('<tr class="' + ((rowCount % 2) ? 'djDebugOdd' : 'djDebugEven') + '"></tr>');
+				if (endStat) {
+					// Render a start through end bar
+					$row.html('<td>' + stat.replace('Start', '') + '</td>' + 
+					          '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:' + getCSSWidth(stat, endStat) + ';">&nbsp;</strong></div></div></td>' + 
+					          '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
+				} else {
+					// Render a point in time
+          $row.html('<td>' + stat + '</td>' + 
+                    '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' + 
+                    '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
+				}
+				$('#djDebugBrowserTimingTableBody').append($row);
+			}
+
+			// This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
+			addRow('domainLookupStart', 'domainLookupEnd');
+			addRow('connectStart', 'connectEnd');
+			addRow('requestStart', 'responseEnd') // There is no requestEnd
+			addRow('responseStart', 'responseEnd');
+			addRow('domLoading', 'domComplete'); // Spans the events below
+			addRow('domInteractive');
+			addRow('domContentLoadedEventStart', 'domContentLoadedEventEnd');
+			addRow('loadEventStart', 'loadEventEnd');
+			$('#djDebugBrowserTiming').css("display", "block");
+		}
+	}
+
+	function renderPerf() {
+		setTimeout(_renderPerf, 0);
+	}
+
+  $(window).bind('load', renderPerf);
+
+}(window, document, $djdtjq));
