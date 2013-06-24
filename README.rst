@@ -134,6 +134,12 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      If set to True (the default) then code in Django itself
      won't be shown in SQL stacktraces.
 
+   * ``HIDDEN_STACKTRACE_MODULES``
+
+     Useful for eliminating server-related entries which can result
+     in enormous DOM structures and toolbar rendering delays.
+     Default: ``('SocketServer', 'threading', 'wsgiref', 'debug_toolbar')``.
+
    * ``SHOW_TEMPLATE_CONTEXT``
 
      If set to True (the default) then a template's
@@ -156,12 +162,13 @@ The debug toolbar has two settings that can be set in ``settings.py``:
 
        def custom_show_toolbar(request):
            return True  # Always show toolbar, for example purposes only.
-     
+
        DEBUG_TOOLBAR_CONFIG = {
            'INTERCEPT_REDIRECTS': False,
            'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
            'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
            'HIDE_DJANGO_SQL': False,
+           'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
            'TAG': 'div',
            'ENABLE_STACKTRACES' : True,
        }
