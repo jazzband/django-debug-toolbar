@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
-socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
+socketserver_path = os.path.realpath(SocketServer.__file__)
 
 
 def ms_from_timedelta(td):
