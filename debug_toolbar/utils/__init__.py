@@ -6,18 +6,53 @@ import django
 import sys
 
 from django.conf import settings
-from django.views.debug import linebreak_iter
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import force_text
 from django.utils.html import escape
+from django.utils.importlib import import_module
 from django.utils.safestring import mark_safe
 from django.utils import six
-from django.utils.six.moves import socketserver
+from django.views.debug import linebreak_iter
+
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
-socketserver_path = os.path.realpath(os.path.dirname(socketserver.__file__))
 
-hide_django_sql = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True)
+config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
+hide_django_sql = config.get('HIDE_DJANGO_SQL', True)
+
+
+def get_module_path(module_string):
+    try:
+        module = import_module(module_string)
+    except ImportError as e:
+        raise ImproperlyConfigured(
+            'Error importing HIDDEN_STACKTRACE_MODULES: %s' % (e,))
+    else:
+        source_path = inspect.getsourcefile(module)
+        if source_path.endswith('__init__.py'):
+            source_path = os.path.dirname(source_path)
+        return os.path.realpath(source_path)
+
+
+hidden_paths = [
+    get_module_path(module_name)
+    for module_name in config.get(
+        'HIDDEN_STACKTRACE_MODULES', (
+            'socketserver' if six.PY3 else 'SocketServer',
+            'threading',
+            'wsgiref',
+            'debug_toolbar',
+        )
+    )
+]
+
+
+def omit_path(path):
+    for hidden_path in hidden_paths:
+        if hidden_path in path:
+            return True
+    return False
 
 
 def tidy_stacktrace(stack):
@@ -38,7 +73,7 @@ def tidy_stacktrace(stack):
             continue
         if  hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
             continue
-        if socketserver_path in s_path:
+        if omit_path(s_path):
             continue
         text = (''.join(force_text(t) for t in text)).strip() if text else ''
         trace.append((path, line_no, func_name, text))

@@ -171,6 +171,15 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      and cache calls. Enabling stacktraces can increase the CPU time used when
      executing queries. Defaults to True.
 
+  * ``HIDDEN_STACKTRACE_MODULES``
+
+     Useful for eliminating server-related entries which can result
+     in enormous DOM structures and toolbar rendering delays.
+     Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar')``.
+
+     (The first value is ``socketserver`` on Python 3 and ``SocketServer`` on
+     Python 2.)
+
    Example configuration::
 
        def custom_show_toolbar(request):
@@ -183,6 +192,7 @@ The debug toolbar has two settings that can be set in ``settings.py``:
            'HIDE_DJANGO_SQL': False,
            'TAG': 'div',
            'ENABLE_STACKTRACES' : True,
+           'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
        }
 
 ``debugsqlshell``
