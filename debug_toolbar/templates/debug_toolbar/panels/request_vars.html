@@ -90,10 +90,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for key, value in get %}
+			{% for key, list in get %}
 				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-					<td>{{ key|escape }}</td>
-					<td>{{ value|join:", "|escape }}</td>
+					<td>"{{ key|escape }}": </td>
+					<td>
+						{% spaceless %}
+							{% if list|length > 1 %}
+								[
+								{% for value in list %}
+								"{{ value|escape }}",
+								{% endfor %}
+								]
+							{% else %}
+								"{{ list.0|escape }}"
+							{% endif %}, 
+						{% endspaceless %}
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
@@ -112,10 +124,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for key, value in post %}
+			{% for key, list in post %}
 				<tr class="{% cycle 'row1' 'row2' %}">
-					<td>{{ key|escape }}</td>
-					<td>{{ value|join:", "|escape }}</td>
+					<td>"{{ key|escape }}": </td>
+					<td>
+						{% spaceless %}
+							{% if list|length > 1 %}
+								[
+								{% for value in list %}
+								"{{ value|escape }}",
+								{% endfor %}
+								]
+							{% else %}
+								"{{ list.0|escape }}"
+							{% endif %}, 
+						{% endspaceless %}
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
