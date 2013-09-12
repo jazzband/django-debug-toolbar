@@ -34,6 +34,10 @@ If you have ideas for other panels please let us know.
 Installation
 ============
 
+#. Clone the repo locally and link/copy the debug-toolbar folder into your Django project folder. Or install via pip::
+    
+        pip install django-debug-toolbar
+    
 #. Add the ``debug_toolbar`` directory to your Python path.
 
 #. Add the following middleware to your project's ``settings.py`` file::
