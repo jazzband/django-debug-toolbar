@@ -34,7 +34,14 @@ If you have ideas for other panels please let us know.
 Installation
 ============
 
-#. Add the ``debug_toolbar`` directory to your Python path.
+#. The recommended way to install the Debug Toolbar is via pip_::
+
+       $ pip install django-debug-toolbar
+
+   If you aren't familiar with pip, you may also obtain a copy of the
+   ``debug_toolbar`` directory and add it to your Python path.
+
+   .. _pip: http://www.pip-installer.org/
 
 #. Add the following middleware to your project's ``settings.py`` file::
 
@@ -143,7 +150,7 @@ The debug toolbar has two settings that can be set in ``settings.py``:
 
    * ``TAG``
 
-     If set, this will be the tag to which debug_toolbar will attach the 
+     If set, this will be the tag to which debug_toolbar will attach the
      debug toolbar. Defaults to 'body'.
 
    * ``ENABLE_STACKTRACES``
@@ -156,7 +163,7 @@ The debug toolbar has two settings that can be set in ``settings.py``:
 
        def custom_show_toolbar(request):
            return True  # Always show toolbar, for example purposes only.
-     
+
        DEBUG_TOOLBAR_CONFIG = {
            'INTERCEPT_REDIRECTS': False,
            'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
@@ -174,7 +181,7 @@ command. Each ORM call that results in a database query will be beautifully
 output in the shell::
 
     $ ./manage.py debugsqlshell
-    Python 2.6.1 (r261:67515, Jul  7 2009, 23:51:51) 
+    Python 2.6.1 (r261:67515, Jul  7 2009, 23:51:51)
     [GCC 4.2.1 (Apple Inc. build 5646)] on darwin
     Type "help", "copyright", "credits" or "license" for more information.
     (InteractiveConsole)
@@ -187,14 +194,14 @@ output in the shell::
            "page_page"."description"
     FROM "page_page"
     WHERE "page_page"."id" = 1
-    
+
     >>> print p.template.name
     SELECT "page_template"."id",
            "page_template"."name",
            "page_template"."description"
     FROM "page_template"
     WHERE "page_template"."id" = 1
-    
+
     Home
     >>> ### Using select_related to avoid 2nd database call...
     >>> p = Page.objects.select_related('template').get(pk=1)
@@ -208,7 +215,7 @@ output in the shell::
     FROM "page_page"
     INNER JOIN "page_template" ON ("page_page"."template_id" = "page_template"."id")
     WHERE "page_page"."id" = 1
-    
+
     >>> print p.template.name
     Home
 
