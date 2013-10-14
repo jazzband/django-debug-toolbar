@@ -1,6 +1,7 @@
 from __future__ import with_statement
 import thread
 
+import django
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import connection
@@ -263,7 +264,8 @@ class TemplatePanelTestCase(BaseTestCase):
         t.render(c)
         # ensure the query was NOT logged
         self.assertEquals(len(sql_panel._queries), 0)
-        ctx = template_panel.templates[0]['context'][0]
+        base_ctx_idx = 1 if django.VERSION[:2] >= (1, 5) else 0
+        ctx = template_panel.templates[0]['context'][base_ctx_idx]
         self.assertIn('<<queryset of auth.User>>', ctx)
         self.assertIn('<<triggers database query>>', ctx)
 
