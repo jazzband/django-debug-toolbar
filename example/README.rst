@@ -1,0 +1,26 @@
+README
+======
+
+About
+-----
+
+This sample project demonstrates how to use the debug toolbar. It is designed
+to run under the latest stable version of Django, currently 1.5.x.
+
+It also provides a few test pages to ensure the debug toolbar doesn't
+interfere with common JavaScript frameworks.
+
+How to
+------
+
+The test project requires a working installation of Django::
+
+    $ pip install Django
+
+Before running the example for the first time, you must create a database::
+
+    $ django-admin.py syncdb --settings=example.settings
+
+Then you can use the following command to run the example::
+
+    $ django-admin.py runserver --settings=example.settings

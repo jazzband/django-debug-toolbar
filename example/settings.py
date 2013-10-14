@@ -1,42 +1,69 @@
-import os
-PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
-os.sys.path.insert(0, os.path.dirname(PROJECT_PATH))
+"""Django settings for example project."""
 
-ADMIN_MEDIA_PREFIX = '/admin_media/'
-DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = 'example.db'
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+
+# Quick-start development settings - unsuitable for production
+
+SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+
 DEBUG = True
+
+INTERNAL_IPS = ['127.0.0.1', '::1']
+
+TEMPLATE_DEBUG = True
+
+
+# Application definition
+
 INSTALLED_APPS = (
-    'django.contrib.auth',
     'django.contrib.admin',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'debug_toolbar',
 )
-INTERNAL_IPS = ('127.0.0.1',)
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
-MEDIA_URL = '/media'
-STATIC_ROOT = os.path.join(HOME_ROOT, 'staticfiles')
-STATIC_URL = '/static/'
+
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+
 ROOT_URLCONF = 'example.urls'
-SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcd'
-SITE_ID = 1
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
-    'django.core.context_processors.media',
-    'django.core.context_processors.request',
-)
-TEMPLATE_DEBUG = DEBUG
-TEMPLATE_DIRS = (
-        os.path.join(PROJECT_PATH, 'templates'),
-      )
+
+STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'example', 'templates')]
+
+WSGI_APPLICATION = 'example.wsgi.application'
+
+
+# Cache and database
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'example', 'db.sqlite3'),
+    }
+}
+
+
+# django-debug-toolbar
+
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
     'debug_toolbar.panels.timer.TimerDebugPanel',
@@ -50,44 +77,3 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
 )
-
-CACHE_BACKEND = 'dummy://'
-#CACHE_BACKEND = 'memcached://127.0.0.1:11211'
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-    },
-    'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
-        },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers':['null'],
-            'propagate': True,
-            'level':'INFO',
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    }
-}
-
