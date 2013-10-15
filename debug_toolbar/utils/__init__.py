@@ -146,7 +146,7 @@ def getframeinfo(frame, context=1):
         start = lineno - 1 - context // 2
         try:
             lines, lnum = inspect.findsource(frame)
-        except (IOError, IndexError):
+        except (IOError, IndexError, KeyError):
             lines = index = None
         else:
             start = max(start, 1)
