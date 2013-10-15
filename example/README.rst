@@ -17,10 +17,13 @@ The test project requires a working installation of Django::
 
     $ pip install Django
 
+The following commands must be run from the root directory of a checkout of
+the debug toolbar, ie. the directory that contains ``example/``.
+
 Before running the example for the first time, you must create a database::
 
-    $ django-admin.py syncdb --settings=example.settings
+    $ PYTHONPATH=. django-admin.py syncdb --settings=example.settings
 
 Then you can use the following command to run the example::
 
-    $ django-admin.py runserver --settings=example.settings
+    $ PYTHONPATH=. django-admin.py runserver --settings=example.settings
