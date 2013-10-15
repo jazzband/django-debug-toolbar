@@ -17,6 +17,8 @@ from debug_toolbar.panels.template import TemplateDebugPanel
 from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils import get_name_from_obj
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
+from views import streaming_http
+from utils import get_request_generator
 
 rf = RequestFactory()
 
@@ -147,6 +149,47 @@ class DebugToolbarTestCase(BaseTestCase):
         with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             self.assertFalse(isinstance(request.urlconf, basestring))
+
+    def _get_streaming_content(self, version):
+        try:
+            # Mocking DebugToolbar's render_toolbar method
+            original_render_toolbar = DebugToolbar.render_toolbar
+            DebugToolbar.render_toolbar = lambda self: '<TOOLBAR_HERE>'
+            with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+                middleware = DebugToolbarMiddleware()
+                request = rf.get('/streaming/')
+                response = streaming_http(request, version=version)
+                middleware.process_request(request)
+                debug_toolbar_response = middleware.process_response(request, response)
+                return debug_toolbar_response.streaming_content
+        finally:
+            DebugToolbar.render_toolbar = original_render_toolbar
+
+    def _django_version_gte_15():
+        (v, subv) = django.VERSION[:2]
+        return (v > 1) or (v == 1 and subv >= 5)
+
+    @unittest.skipUnless(_django_version_gte_15(),
+                         'Test valid only with Django >= 1.5')
+    def test_streaming_response_tag_found(self):
+        actual_content = list(self._get_streaming_content(1))
+        expected_content = list(get_request_generator(1))
+        expected_content[-2] = '<TOOLBAR_HERE>%s' % expected_content[-2]
+        self.assertEquals(actual_content, expected_content)
+
+    @unittest.skipUnless(_django_version_gte_15(),
+                         'Test valid only with Django >= 1.5')
+    def test_streaming_response_tag_notfound_1(self):
+        self.assertEquals(
+            list(self._get_streaming_content(2)),
+            list(get_request_generator(2)))
+
+    @unittest.skipUnless(_django_version_gte_15(),
+                         'Test valid only with Django >= 1.5')
+    def test_streaming_response_tag_notfound_2(self):
+        self.assertEquals(
+            list(self._get_streaming_content(3)),
+            list(get_request_generator(3)))
 
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel
