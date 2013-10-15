@@ -142,6 +142,7 @@ window.djdt = (function(window, document, jQuery) {
 				// If a panel is open, close that
 				if ($('.panelContent').is(':visible')) {
 					$('.panelContent').hide();
+					$('#djDebugToolbar li').removeClass('active');
 					return;
 				}
 				// Otherwise, just minimize the toolbar
