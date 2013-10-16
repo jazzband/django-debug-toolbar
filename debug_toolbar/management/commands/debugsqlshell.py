@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from datetime import datetime
 
 from django.db.backends import util
@@ -14,9 +16,9 @@ class PrintQueryWrapper(util.CursorDebugWrapper):
             return self.cursor.execute(sql, params)
         finally:
             raw_sql = self.db.ops.last_executed_query(self.cursor, sql, params)
-            execution_time = datetime.now() - starttime
-            print sqlparse.format(raw_sql, reindent=True),
-            print ' [%.2fms]' % (ms_from_timedelta(execution_time),)
-            print
+            execution_time = ms_from_timedelta(datetime.now() - starttime)
+            formatted_sql = sqlparse.format(raw_sql, reindent=True)
+            print('%s [%.2fms]' % (formatted_sql, execution_time))
+
 
 util.CursorDebugWrapper = PrintQueryWrapper
