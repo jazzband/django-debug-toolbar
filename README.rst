@@ -29,7 +29,14 @@ There is also one Django management command currently:
 
 If you have ideas for other panels please let us know.
 
-* Note: The Debug Toolbar only works on Django 1.3 and newer.
+Requirements
+============
+
+The current version of the Debug Toolbar is 0.9.4. It works on Django 1.3 and
+1.4.
+
+The next version will work on Django 1.4 and 1.5. In addition, it will require
+Python 2.6 or later.
 
 Installation
 ============

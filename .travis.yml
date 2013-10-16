@@ -3,9 +3,8 @@ python:
   - "2.6"
   - "2.7"
 env:
-  - DJANGO_VERSION=1.3.7
-  - DJANGO_VERSION=1.4.5
-  - DJANGO_VERSION=1.5.1
+  - DJANGO_VERSION=1.4.8
+  - DJANGO_VERSION=1.5.4
 install:
   - pip install Django==$DJANGO_VERSION
 script: python setup.py test
