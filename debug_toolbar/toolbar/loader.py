@@ -90,7 +90,7 @@ def load_panel_classes():
         panel_module, panel_classname = panel_path[:dot], panel_path[dot + 1:]
         try:
             mod = import_module(panel_module)
-        except ImportError, e:
+        except ImportError as e:
             raise ImproperlyConfigured(
                 'Error importing debug panel %s: "%s"' %
                 (panel_module, e))
