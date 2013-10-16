@@ -32,12 +32,12 @@ class Settings(object):
         self._orig = {}
 
     def __enter__(self):
-        for k, v in self.overrides.iteritems():
+        for k, v in self.overrides.items():
             self._orig[k] = getattr(settings, k, self.NotDefined)
             setattr(settings, k, v)
 
     def __exit__(self, exc_type, exc_value, traceback):
-        for k, v in self._orig.iteritems():
+        for k, v in self._orig.items():
             if v is self.NotDefined:
                 delattr(settings, k)
             else:

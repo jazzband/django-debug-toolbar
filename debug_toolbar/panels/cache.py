@@ -168,7 +168,7 @@ class CacheDebugPanel(DebugPanel):
             else:
                 self.hits += 1
         elif name == 'get_many':
-            for key, value in return_value.iteritems():
+            for key, value in return_value.items():
                 if value is None:
                     self.misses += 1
                 else:
