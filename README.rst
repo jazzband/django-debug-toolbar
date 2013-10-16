@@ -159,6 +159,12 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      and cache calls. Enabling stacktraces can increase the CPU time used when
      executing queries. Defaults to True.
 
+   * ``ROOT_TAG_ATTRS``
+
+     This setting is injected in the root template div in order to avoid conflicts
+     with client-side frameworks. For example, when using with Angular.js, set
+     this to 'ng-non-bindable' or 'class="ng-non-bindable"'. Defaults to ''.
+
    Example configuration::
 
        def custom_show_toolbar(request):
