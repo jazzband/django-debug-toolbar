@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import inspect
 import os.path
 import django
@@ -58,11 +60,11 @@ def render_stacktrace(trace):
         params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
         params_dict = dict((unicode(idx), v) for idx, v in enumerate(params))
         try:
-            stacktrace.append(u'<span class="path">%(0)s/</span>'
-                              u'<span class="file">%(1)s</span>'
-                              u' in <span class="func">%(3)s</span>'
-                              u'(<span class="lineno">%(2)s</span>)\n'
-                              u'  <span class="code">%(4)s</span>'
+            stacktrace.append('<span class="path">%(0)s/</span>'
+                              '<span class="file">%(1)s</span>'
+                              ' in <span class="func">%(3)s</span>'
+                              '(<span class="lineno">%(2)s</span>)\n'
+                              '  <span class="code">%(4)s</span>'
                               % params_dict)
         except KeyError:
             # This frame doesn't have the expected format, so skip it and move on to the next one
