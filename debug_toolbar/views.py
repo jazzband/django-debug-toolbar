@@ -92,7 +92,7 @@ def sql_profile(request):
             cursor.execute("SELECT * FROM information_schema.profiling WHERE query_id=(SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)")
             headers = [d[0] for d in cursor.description]
             result = cursor.fetchall()
-        except:
+        except Exception:
             result_error = "Profiling is either not available or not supported by your database."
         cursor.close()
         context = {
