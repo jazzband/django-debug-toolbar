@@ -10,7 +10,7 @@ import threading
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import force_text
 from django.utils.importlib import import_module
 
 import debug_toolbar.urls
@@ -138,9 +138,9 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             response.content = replace_insensitive(
-                smart_unicode(response.content),
+                force_text(response.content),
                 self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
+                force_text(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         del self.__class__.debug_toolbars[ident]
