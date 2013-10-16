@@ -4,6 +4,8 @@ debug toolbar is displayed, and typically can do Bad Things, so hooking up these
 views in any other way is generally not advised.
 """
 
+from __future__ import unicode_literals
+
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt

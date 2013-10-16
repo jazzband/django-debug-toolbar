@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf import settings
 from django.core.signals import (request_started, request_finished,
     got_request_exception)

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from os.path import normpath
 from pprint import pformat
 

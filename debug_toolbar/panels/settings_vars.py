@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf import settings
 from django.views.debug import get_safe_settings
 from django.utils.translation import ugettext_lazy as _
