@@ -2,6 +2,7 @@ from __future__ import division, unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.utils.six.moves import cStringIO
 from debug_toolbar.panels import DebugPanel
 
 try:
@@ -11,7 +12,6 @@ except ImportError:
     DJ_PROFILE_USE_LINE_PROFILER = False
 
 
-from cStringIO import StringIO
 import cProfile
 from pstats import Stats
 from colorsys import hsv_to_rgb
@@ -128,7 +128,7 @@ class FunctionCall(object):
         if self._line_stats_text is None and DJ_PROFILE_USE_LINE_PROFILER:
             lstats = self.statobj.line_stats
             if self.func in lstats.timings:
-                out = StringIO()
+                out = cStringIO.StringIO()
                 fn, lineno, name = self.func
                 show_func(fn, lineno, name, lstats.timings[self.func], lstats.unit, stream=out)
                 self._line_stats_text = out.getvalue()

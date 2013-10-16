@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import inspect
 import os.path
 import django
-import SocketServer
 import sys
 
 from django.conf import settings
@@ -11,10 +10,11 @@ from django.views.debug import linebreak_iter
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils import six
+from django.utils.six.moves import socketserver
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
-socketserver_path = os.path.realpath(os.path.dirname(SocketServer.__file__))
+socketserver_path = os.path.realpath(os.path.dirname(socketserver.__file__))
 
 
 def ms_from_timedelta(td):
@@ -31,7 +31,7 @@ def tidy_stacktrace(stack):
     """
     Clean up stacktrace and remove all entries that:
     1. Are part of Django (except contrib apps)
-    2. Are part of SocketServer (used by Django's dev server)
+    2. Are part of socketserver (used by Django's dev server)
     3. Are the last entry (which is part of our stacktracing code)
 
     ``stack`` should be a list of frame tuples from ``inspect.stack()``
