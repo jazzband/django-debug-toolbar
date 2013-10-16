@@ -31,7 +31,7 @@
 <h4>{% blocktrans count context_processors|length as context_processors_count %}Context processor{% plural %}Context processors{% endblocktrans %}</h4>
 {% if context_processors %}
 <dl>
-{% for key, value in context_processors.iteritems %}
+{% for key, value in context_processors.items %}
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
 		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>

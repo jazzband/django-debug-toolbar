@@ -139,7 +139,7 @@ class SQLDebugPanel(DebugPanel):
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
-            for n, db in enumerate(self._databases.itervalues()):
+            for n, db in enumerate(self._databases.values()):
                 rgb = [0, 0, 0]
                 color = n % 3
                 rgb[color] = 256 - n / 3 * factor

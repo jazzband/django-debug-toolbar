@@ -55,5 +55,5 @@ class RequestVarsDebugPanel(DebugPanel):
         if hasattr(self.request, 'session'):
             self.record_stats({
                 'session': [(k, self.request.session.get(k))
-                            for k in self.request.session.iterkeys()]
+                            for k in self.request.session.keys()]
                 })

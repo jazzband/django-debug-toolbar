@@ -23,7 +23,7 @@ class DjangoDebugToolbarStats(Stats):
 
     def get_root_func(self):
         if self.__root is None:
-            for func, (cc, nc, tt, ct, callers) in self.stats.iteritems():
+            for func, (cc, nc, tt, ct, callers) in self.stats.items():
                 if len(callers) == 0:
                     self.__root = func
                     break
@@ -80,7 +80,7 @@ class FunctionCall(object):
         i = 0
         h, s, v = self.hsv
         count = len(self.statobj.all_callees[self.func])
-        for func, stats in self.statobj.all_callees[self.func].iteritems():
+        for func, stats in self.statobj.all_callees[self.func].items():
             i += 1
             h1 = h + (i / count) / (self.depth + 1)
             if stats[3] == 0:
