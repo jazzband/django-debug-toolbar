@@ -1,11 +1,11 @@
 import uuid
 from copy import copy
 
+from django.db import connections
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
 from debug_toolbar.forms import SQLSelectForm
-from debug_toolbar.utils.compat.db import connections
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import render_stacktrace

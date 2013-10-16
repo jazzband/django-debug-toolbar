@@ -120,23 +120,19 @@ def template_source(request):
     if template_name is None:
         return HttpResponseBadRequest('"template" key is required')
 
-    try:  # Django 1.2 ...
-        from django.template.loader import find_template_loader, make_origin
-        loaders = []
-        for loader_name in settings.TEMPLATE_LOADERS:
-            loader = find_template_loader(loader_name)
-            if loader is not None:
-                loaders.append(loader)
-        for loader in loaders:
-            try:
-                source, display_name = loader.load_template_source(template_name)
-                origin = make_origin(display_name, loader, template_name, settings.TEMPLATE_DIRS)
-                break
-            except TemplateDoesNotExist:
-                source = "Template Does Not Exist: %s" % (template_name,)
-    except (ImportError, AttributeError):  # Django 1.1 ...
-        from django.template.loader import find_template_source
-        source, origin = find_template_source(template_name)
+    from django.template.loader import find_template_loader, make_origin
+    loaders = []
+    for loader_name in settings.TEMPLATE_LOADERS:
+        loader = find_template_loader(loader_name)
+        if loader is not None:
+            loaders.append(loader)
+    for loader in loaders:
+        try:
+            source, display_name = loader.load_template_source(template_name)
+            origin = make_origin(display_name, loader, template_name, settings.TEMPLATE_DIRS)
+            break
+        except TemplateDoesNotExist:
+            source = "Template Does Not Exist: %s" % (template_name,)
 
     try:
         from pygments import highlight
