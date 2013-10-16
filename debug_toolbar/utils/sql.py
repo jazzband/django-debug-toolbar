@@ -1,6 +1,22 @@
 import re
-from debug_toolbar.utils import sqlparse
-from debug_toolbar.utils.sqlparse.filters import BoldKeywordFilter
+
+from django.utils.html import escape
+
+import sqlparse
+from sqlparse import tokens as T
+
+
+class BoldKeywordFilter:
+    """sqlparse filter to bold SQL keywords"""
+    def process(self, stack, stream):
+        """Process the token stream"""
+        for token_type, value in stream:
+            is_keyword = token_type in T.Keyword
+            if is_keyword:
+                yield T.Text, '<strong>'
+            yield token_type, escape(value)
+            if is_keyword:
+                yield T.Text, '</strong>'
 
 
 def reformat_sql(sql):

@@ -2,7 +2,9 @@ from datetime import datetime
 
 from django.db.backends import util
 
-from debug_toolbar.utils import ms_from_timedelta, sqlparse
+import sqlparse
+
+from debug_toolbar.utils import ms_from_timedelta
 
 
 class PrintQueryWrapper(util.CursorDebugWrapper):
