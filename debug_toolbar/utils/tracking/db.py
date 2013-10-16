@@ -8,7 +8,7 @@ from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
@@ -86,7 +86,7 @@ class NormalCursorWrapper(object):
 
     def _decode(self, param):
         try:
-            return force_unicode(param, strings_only=True)
+            return force_text(param, strings_only=True)
         except UnicodeDecodeError:
             return '(encoded string)'
 

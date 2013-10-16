@@ -10,6 +10,7 @@ from django.conf import settings
 from django.views.debug import linebreak_iter
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils import six
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
@@ -58,7 +59,7 @@ def render_stacktrace(trace):
     stacktrace = []
     for frame in trace:
         params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
-        params_dict = dict((unicode(idx), v) for idx, v in enumerate(params))
+        params_dict = dict((six.text_type(idx), v) for idx, v in enumerate(params))
         try:
             stacktrace.append('<span class="path">%(0)s/</span>'
                               '<span class="file">%(1)s</span>'
