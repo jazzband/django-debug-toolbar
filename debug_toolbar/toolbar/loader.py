@@ -42,10 +42,7 @@ class DebugToolbar(object):
         """
         global panel_classes
         for panel_class in panel_classes:
-            try:
-                panel_instance = panel_class(context=self.template_context)
-            except:
-                raise  # Bubble up problem loading panel
+            panel_instance = panel_class(context=self.template_context)
 
             self._panels[panel_class] = panel_instance
 

@@ -42,7 +42,7 @@ def send_signal(method):
                         template_info = get_template_info(node.source)
                         break
                 cur_frame = cur_frame.f_back
-        except:
+        except Exception:
             pass
         del cur_frame
         cache_called.send(sender=self.__class__, time_taken=t,

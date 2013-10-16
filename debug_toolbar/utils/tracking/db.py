@@ -119,7 +119,7 @@ class NormalCursorWrapper(object):
                             template_info = get_template_info(node.source)
                             break
                     cur_frame = cur_frame.f_back
-            except:
+            except Exception:
                 pass
             del cur_frame
 
