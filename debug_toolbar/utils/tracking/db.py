@@ -1,25 +1,16 @@
 import sys
 
 from datetime import datetime
+import json
 from threading import local
 
 from django.conf import settings
 from django.template import Node
-from django.utils.encoding import force_unicode, smart_str
+from django.utils.encoding import force_unicode
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
-from debug_toolbar.utils.compat.db import connections
 
-try:
-    import json
-except ImportError: # python < 2.6
-    from django.utils import simplejson as json
-
-try:
-    from hashlib import sha1
-except ImportError: # python < 2.5
-    from django.utils.hashcompat import sha_constructor as sha1
 
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary

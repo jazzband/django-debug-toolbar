@@ -8,16 +8,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
-try:
-    import json
-except ImportError: # python < 2.6
-    from django.utils import simplejson as json
-
-try:
-    from hashlib import sha1
-except ImportError: # python < 2.5
-    from django.utils.hashcompat import sha_constructor as sha1
-
 from debug_toolbar.forms import SQLSelectForm
 
 

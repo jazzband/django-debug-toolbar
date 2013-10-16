@@ -1,14 +1,11 @@
 """
 The main DebugToolbar class that loads and renders the Toolbar.
 """
-import os
-import os.path
 
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
-from django.utils.safestring import mark_safe
 
 
 class DebugToolbar(object):

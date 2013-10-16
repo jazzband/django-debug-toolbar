@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.conf.urls import patterns, include
 from django.contrib import admin
 from django.views.generic import TemplateView
