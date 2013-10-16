@@ -5,3 +5,4 @@ django_debug_toolbar.egg-info
 example/db.sqlite3
 /dist
 /build
+/.tox
