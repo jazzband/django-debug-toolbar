@@ -9,6 +9,7 @@ from threading import local
 from django.conf import settings
 from django.template import Node
 from django.utils.encoding import force_text
+from django.utils import six
 
 from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
                                 get_template_info, get_stack
@@ -72,7 +73,7 @@ class NormalCursorWrapper(object):
         self.logger = logger
 
     def _quote_expr(self, element):
-        if isinstance(element, basestring):
+        if isinstance(element, six.string_types):
             element = element.replace("'", "''")
             return "'%s'" % element
         else:
