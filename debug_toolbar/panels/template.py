@@ -19,14 +19,9 @@ from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 from django.test.utils import instrumented_test_render
 from django.template import Template
 
-if not hasattr(Template, '_render'):  # Django < 1.2
-    if Template.render != instrumented_test_render:
-        Template.original_render = Template.render
-        Template.render = instrumented_test_render
-else:
-    if Template._render != instrumented_test_render:
-        Template.original_render = Template._render
-        Template._render = instrumented_test_render
+if Template._render != instrumented_test_render:
+    Template.original_render = Template._render
+    Template._render = instrumented_test_render
 
 
 # MONSTER monkey-patch

@@ -159,7 +159,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_url_resolving_positional(self):
         stats = self._resolve_stats('/resolving1/a/b/')
-        self.assertEquals(stats['view_urlname'], 'positional-resolving')  # Django >= 1.3
+        self.assertEquals(stats['view_urlname'], 'positional-resolving')
         self.assertEquals(stats['view_func'], 'tests.views.resolving_view')
         self.assertEquals(stats['view_args'], ('a', 'b'))
         self.assertEquals(stats['view_kwargs'], {})

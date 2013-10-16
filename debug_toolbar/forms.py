@@ -1,22 +1,14 @@
+import json
+import hashlib
+
 from django import forms
 from django.conf import settings
+from django.db import connections
 from django.utils.encoding import smart_str
+from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
 
-from debug_toolbar.utils.functional import cached_property
 from debug_toolbar.utils.sql import reformat_sql
-
-try:
-    import json
-except ImportError:
-    from django.utils import simplejson as json
-
-try:
-    from hashlib import sha1
-except ImportError:
-    from django.utils.hashcompat import sha_constructor as sha1
-
-from debug_toolbar.utils.compat.db import connections
 
 
 class SQLSelectForm(forms.Form):
@@ -83,7 +75,7 @@ class SQLSelectForm(forms.Form):
 
     def make_hash(self, data):
         params = settings.SECRET_KEY + data['sql'] + data['params']
-        return sha1(smart_str(params)).hexdigest()
+        return hashlib.sha1(smart_str(params)).hexdigest()
 
     @property
     def connection(self):
