@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import force_text
 from django.utils.importlib import import_module
+from django.utils import six
 
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
@@ -80,7 +81,7 @@ class DebugToolbarMiddleware(object):
         __traceback_hide__ = True
         if self.show_toolbar(request):
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            if isinstance(urlconf, basestring):
+            if isinstance(urlconf, six.string_types):
                 urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
 
             if urlconf not in self._urlconfs:
