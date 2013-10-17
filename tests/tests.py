@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import threading
+
 import django
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -8,7 +10,6 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.template import Template, Context
 from django.utils import six
-from django.utils.six.moves import _thread
 from django.utils import unittest
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
@@ -50,7 +51,7 @@ class BaseTestCase(TestCase):
         response = HttpResponse()
         toolbar = DebugToolbar(request)
 
-        DebugToolbarMiddleware.debug_toolbars[_thread.get_ident()] = toolbar
+        DebugToolbarMiddleware.debug_toolbars[threading.current_thread().ident] = toolbar
 
         self.request = request
         self.response = response

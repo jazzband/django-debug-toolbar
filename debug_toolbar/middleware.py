@@ -43,7 +43,7 @@ class DebugToolbarMiddleware(object):
 
     @classmethod
     def get_current(cls):
-        return cls.debug_toolbars.get(threading.currentThread().ident)
+        return cls.debug_toolbars.get(threading.current_thread().ident)
 
     def __init__(self):
         self._urlconfs = {}
@@ -103,11 +103,11 @@ class DebugToolbarMiddleware(object):
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
                 panel.process_request(request)
-            self.__class__.debug_toolbars[threading.currentThread().ident] = toolbar
+            self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True
-        toolbar = self.__class__.debug_toolbars.get(threading.currentThread().ident)
+        toolbar = self.__class__.debug_toolbars.get(threading.current_thread().ident)
         if not toolbar:
             return
         result = None
@@ -119,7 +119,7 @@ class DebugToolbarMiddleware(object):
 
     def process_response(self, request, response):
         __traceback_hide__ = True
-        ident = threading.currentThread().ident
+        ident = threading.current_thread().ident
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar or request.is_ajax() or getattr(response, 'streaming', False):
             return response
