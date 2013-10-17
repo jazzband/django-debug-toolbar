@@ -20,18 +20,21 @@ def pre_dispatch(func):
     return wrapped
 
 
-def replace_call(func):
+def replace_method(klass, method_name):
+    original = getattr(klass, method_name)
+
     def inner(callback):
         def wrapped(*args, **kwargs):
-            return callback(func, *args, **kwargs)
+            return callback(original, *args, **kwargs)
 
-        actual = getattr(func, '__wrapped__', func)
+        actual = getattr(original, '__wrapped__', original)
         wrapped.__wrapped__ = actual
         wrapped.__doc__ = getattr(actual, '__doc__', None)
         wrapped.__name__ = actual.__name__
 
-        _replace_function(func, wrapped)
+        setattr(klass, method_name, wrapped)
         return wrapped
+
     return inner
 
 
