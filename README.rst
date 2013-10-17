@@ -10,6 +10,12 @@ The Django Debug Toolbar is a configurable set of panels that display various
 debug information about the current request/response and when clicked, display
 more details about the panel's content.
 
+Here's a screenshot:
+
+.. image:: https://raw.github.com/django-debug-toolbar/django-debug-toolbar/master/example/django-debug-toolbar.png
+   :width: 908
+   :height: 557
+
 Currently, the following panels have been written and are working:
 
 - Django version
