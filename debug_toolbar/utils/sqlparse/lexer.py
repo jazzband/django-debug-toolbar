@@ -240,7 +240,10 @@ class Lexer(object):
                 enc = chardet.detect(text)
                 text = text.decode(enc['encoding'])
             else:
-                text = text.decode(self.encoding)
+                try:
+                    text = text.decode(self.encoding)
+                except UnicodeDecodeError:
+                    text = text.decode('unicode-escape')
         if self.stripall:
             text = text.strip()
         elif self.stripnl:
