@@ -13,7 +13,7 @@ setup(
     license='BSD',
     packages=find_packages(exclude=('tests', 'example')),
     install_requires=[
-        'django>=1.4,<1.6',
+        'django>=1.4.2,<1.6',
         'sqlparse',
     ],
     test_suite='runtests.runtests',

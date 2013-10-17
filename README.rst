@@ -35,8 +35,8 @@ Requirements
 The current version of the Debug Toolbar is 0.9.4. It works on Django 1.3 and
 1.4.
 
-The next version will work on Django 1.4 and 1.5. In addition, it will require
-Python 2.6 or later.
+The next version will work on Django 1.4 (1.4.2 or later) and 1.5. In
+addition, it will require Python 2.6 or later.
 
 Installation
 ============
