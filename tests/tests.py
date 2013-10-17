@@ -18,6 +18,8 @@ from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.utils import get_name_from_obj
 from debug_toolbar.utils.tracking import pre_dispatch, post_dispatch, callbacks
 
+from forms import TestForm
+
 rf = RequestFactory()
 
 
@@ -172,7 +174,8 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_url_resolving_mixed(self):
         stats = self._resolve_stats('/resolving3/a/')
         self.assertEquals(stats['view_args'], ('a',))
-        self.assertEquals(stats['view_kwargs'], {'arg2': 'default'})
+        self.assertEquals(stats['view_kwargs'], {
+            'arg2': 'default', 'arg3': '1', 'arg4': str(TestForm) })
 
     def test_url_resolving_bad(self):
         stats = self._resolve_stats('/non-existing-url/')
