@@ -155,12 +155,12 @@ class ProfilingDebugPanel(DebugPanel):
         return _('Profiling')
 
     def _unwrap_closure_and_profile(self, func):
-        if not hasattr(func, 'func_code'):
+        if not hasattr(func, '__code__'):
             return
         self.line_profiler.add_function(func)
-        if func.func_closure:
-            for cell in func.func_closure:
-                if hasattr(cell.cell_contents, 'func_code'):
+        if func.__closure__:
+            for cell in func.__closure__:
+                if hasattr(cell.cell_contents, '__code__'):
                     self._unwrap_closure_and_profile(cell.cell_contents)
 
     def process_view(self, request, view_func, view_args, view_kwargs):

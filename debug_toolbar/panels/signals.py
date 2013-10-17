@@ -89,9 +89,9 @@ class SignalDebugPanel(DebugPanel):
 
                 receiver = getattr(receiver, '__wraps__', receiver)
                 receiver_name = getattr(receiver, '__name__', str(receiver))
-                if getattr(receiver, 'im_self', None) is not None:
-                    text = "%s.%s" % (getattr(receiver.im_self, '__class__', type).__name__, receiver_name)
-                elif getattr(receiver, 'im_class', None) is not None:
+                if getattr(receiver, '__self__', None) is not None:
+                    text = "%s.%s" % (getattr(receiver.__self__, '__class__', type).__name__, receiver_name)
+                elif getattr(receiver, 'im_class', None) is not None:   # Python 2 only
                     text = "%s.%s" % (receiver.im_class.__name__, receiver_name)
                 else:
                     text = "%s" % receiver_name

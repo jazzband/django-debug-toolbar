@@ -52,10 +52,10 @@ def _replace_function(func, wrapped):
         else:
             module = import_module(func.__module__)
             setattr(module, func.__name__, wrapped)
-    elif getattr(func, 'im_self', None):
-        setattr(func.im_self, func.__name__, classmethod(wrapped))
+    elif getattr(func, '__self__', None):
+        setattr(func.__self__, func.__name__, classmethod(wrapped))
     elif hasattr(func, 'im_class'):
-        # for unbound methods
+        # for unbound methods - Python 2 only
         setattr(func.im_class, func.__name__, wrapped)
     else:
         raise NotImplementedError
