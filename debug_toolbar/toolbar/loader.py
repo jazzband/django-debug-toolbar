@@ -32,7 +32,7 @@ class DebugToolbar(object):
         self.stats = {}
 
     def _get_panels(self):
-        return self._panels.values()
+        return list(self._panels.values())
     panels = property(_get_panels)
 
     def get_panel(self, cls):
