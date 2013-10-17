@@ -13,13 +13,12 @@ from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.utils.sql import reformat_sql
 from debug_toolbar.utils.tracking.db import CursorWrapper
-from debug_toolbar.utils.tracking import replace_call
+from debug_toolbar.utils.tracking import replace_method
 
 
-# Inject our tracking cursor
-@replace_call(BaseDatabaseWrapper.cursor)
-def cursor(func, self):
-    result = func(self)
+@replace_method(BaseDatabaseWrapper, 'cursor')
+def cursor(original, self):
+    result = original(self)
 
     djdt = DebugToolbarMiddleware.get_current()
     if not djdt:
