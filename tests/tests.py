@@ -23,28 +23,6 @@ from debug_toolbar.utils import get_name_from_obj
 rf = RequestFactory()
 
 
-class Settings(object):
-    """Allows you to define settings that are required for this function to work"""
-
-    NotDefined = object()
-
-    def __init__(self, **overrides):
-        self.overrides = overrides
-        self._orig = {}
-
-    def __enter__(self):
-        for k, v in self.overrides.items():
-            self._orig[k] = getattr(settings, k, self.NotDefined)
-            setattr(settings, k, v)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        for k, v in self._orig.items():
-            if v is self.NotDefined:
-                delattr(settings, k)
-            else:
-                setattr(settings, k, v)
-
-
 class BaseTestCase(TestCase):
     def setUp(self):
         request = rf.get('/')
@@ -63,7 +41,7 @@ class DebugToolbarTestCase(BaseTestCase):
     urls = 'tests.urls'
 
     def test_middleware(self):
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             resp = self.client.get('/execute_sql/')
         self.assertEqual(resp.status_code, 200)
 
@@ -71,20 +49,20 @@ class DebugToolbarTestCase(BaseTestCase):
         request = rf.get('/')
         middleware = DebugToolbarMiddleware()
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             self.assertTrue(middleware._show_toolbar(request))
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=False):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=False):
             self.assertFalse(middleware._show_toolbar(request))
 
     def test_show_toolbar_TEST(self):
         request = rf.get('/')
         middleware = DebugToolbarMiddleware()
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], TEST=True, DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], TEST=True, DEBUG=True):
             self.assertFalse(middleware._show_toolbar(request))
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], TEST=False, DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], TEST=False, DEBUG=True):
             self.assertTrue(middleware._show_toolbar(request))
 
     def test_show_toolbar_INTERNAL_IPS(self):
@@ -93,10 +71,10 @@ class DebugToolbarTestCase(BaseTestCase):
         request.META = {'REMOTE_ADDR': '127.0.0.1'}
         middleware = DebugToolbarMiddleware()
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             self.assertTrue(middleware._show_toolbar(request))
 
-        with Settings(INTERNAL_IPS=[], DEBUG=True):
+        with self.settings(INTERNAL_IPS=[], DEBUG=True):
             self.assertFalse(middleware._show_toolbar(request))
 
     def test_request_urlconf_string(self):
@@ -104,7 +82,7 @@ class DebugToolbarTestCase(BaseTestCase):
         request.urlconf = 'tests.urls'
         middleware = DebugToolbarMiddleware()
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
 
             self.assertFalse(isinstance(request.urlconf, six.string_types))
@@ -117,7 +95,7 @@ class DebugToolbarTestCase(BaseTestCase):
         request.urlconf = 'debug_toolbar.urls'
         middleware = DebugToolbarMiddleware()
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             request.urlconf = 'tests.urls'
             middleware.process_request(request)
@@ -132,7 +110,7 @@ class DebugToolbarTestCase(BaseTestCase):
         request.urlconf = __import__('tests.urls').urls
         middleware = DebugToolbarMiddleware()
 
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
 
             self.assertFalse(isinstance(request.urlconf, six.string_types))
@@ -146,14 +124,14 @@ class DebugToolbarTestCase(BaseTestCase):
         urls.urlpatterns = tuple(urls.urlpatterns)
         request.urlconf = urls
         middleware = DebugToolbarMiddleware()
-        with Settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
+        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
             middleware.process_request(request)
             self.assertFalse(isinstance(request.urlconf, six.string_types))
 
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel
         self.request.path = path
-        with Settings(DEBUG=True):
+        with self.settings(DEBUG=True):
             panel = self.toolbar.get_panel(RequestVarsDebugPanel)
             panel.process_request(self.request)
             panel.process_response(self.request, self.response)
@@ -237,7 +215,7 @@ class SQLPanelTestCase(BaseTestCase):
         panel = self.toolbar.get_panel(SQLDebugPanel)
         self.assertEqual(len(panel._queries), 0)
 
-        with Settings(DEBUG_TOOLBAR_CONFIG={'ENABLE_STACKTRACES': False}):
+        with self.settings(DEBUG_TOOLBAR_CONFIG={'ENABLE_STACKTRACES': False}):
             list(User.objects.all())
 
         # ensure query was logged
