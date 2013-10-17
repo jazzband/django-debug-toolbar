@@ -213,6 +213,18 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]['stacktrace']) > 0)
 
+    def test_non_ascii_query(self):
+        panel = self.toolbar.get_panel(SQLDebugPanel)
+        self.assertEqual(len(panel._queries), 0)
+
+        # non-ASCII query
+        list(User.objects.extra(where=["username = 'café'"]))
+        self.assertEqual(len(panel._queries), 1)
+
+        # non-ASCII parameters
+        list(User.objects.filter(username='café'))
+        self.assertEqual(len(panel._queries), 2)
+
     @unittest.skipUnless(connection.vendor=='postgresql',
                          'Test valid only on PostgreSQL')
     def test_erroneous_query(self):

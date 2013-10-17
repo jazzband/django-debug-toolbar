@@ -7,6 +7,7 @@ import sys
 
 from django.conf import settings
 from django.views.debug import linebreak_iter
+from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils import six
@@ -39,10 +40,7 @@ def tidy_stacktrace(stack):
             continue
         if socketserver_path in s_path:
             continue
-        if not text:
-            text = ''
-        else:
-            text = (''.join(text)).strip()
+        text = (''.join(force_text(t) for t in text)).strip() if text else ''
         trace.append((path, line_no, func_name, text))
     return trace
 
