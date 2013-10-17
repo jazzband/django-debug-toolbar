@@ -7,7 +7,7 @@ views in any other way is generally not advised.
 from __future__ import unicode_literals
 
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.forms import SQLSelectForm
@@ -33,7 +33,7 @@ def sql_select(request):
             'headers': headers,
             'alias': form.cleaned_data['alias'],
         }
-        return render_to_response('debug_toolbar/panels/sql_select.html', context)
+        return render(request, 'debug_toolbar/panels/sql_select.html', context)
     return HttpResponseBadRequest('Form errors')
 
 
@@ -70,7 +70,7 @@ def sql_explain(request):
             'headers': headers,
             'alias': form.cleaned_data['alias'],
         }
-        return render_to_response('debug_toolbar/panels/sql_explain.html', context)
+        return render(request, 'debug_toolbar/panels/sql_explain.html', context)
     return HttpResponseBadRequest('Form errors')
 
 
@@ -105,7 +105,7 @@ def sql_profile(request):
             'headers': headers,
             'alias': form.cleaned_data['alias'],
         }
-        return render_to_response('debug_toolbar/panels/sql_profile.html', context)
+        return render(request, 'debug_toolbar/panels/sql_profile.html', context)
     return HttpResponseBadRequest('Form errors')
 
 
@@ -147,7 +147,7 @@ def template_source(request):
     except ImportError:
         pass
 
-    return render_to_response('debug_toolbar/panels/template_source.html', {
+    return render(request, 'debug_toolbar/panels/template_source.html', {
         'source': source,
         'template_name': template_name
     })
