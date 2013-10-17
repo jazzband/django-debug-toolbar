@@ -135,7 +135,7 @@ class DebugToolbarMiddleware(object):
             for panel in toolbar.panels:
                 panel.process_response(request, response)
             response.content = replace_insensitive(
-                force_text(response.content),
+                force_text(response.content, encoding=settings.DEFAULT_CHARSET),
                 self.tag,
                 force_text(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):

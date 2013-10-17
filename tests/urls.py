@@ -12,10 +12,10 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    # This pattern should be last to ensure tests still work
-    url(r'^resolving1/(.+)/(.+)/$', 'tests.views.resolving_view', name='positional-resolving'),
-    url(r'^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$', 'tests.views.resolving_view'),
-    url(r'^resolving3/(.+)/$', 'tests.views.resolving_view', { 'arg2' : 'default' }),
-    url(r'^execute_sql/$', 'tests.views.execute_sql'),
+urlpatterns = patterns('tests.views',
+    url(r'^resolving1/(.+)/(.+)/$', 'resolving_view', name='positional-resolving'),
+    url(r'^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$', 'resolving_view'),
+    url(r'^resolving3/(.+)/$', 'resolving_view', { 'arg2' : 'default' }),
+    url(r'^regular/(?P<title>.*)/$', 'regular_view'),
+    url(r'^execute_sql/$', 'execute_sql'),
 )

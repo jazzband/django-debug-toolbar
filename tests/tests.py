@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from __future__ import unicode_literals
 
 import threading
@@ -160,6 +162,19 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(stats['view_args'], 'None')
         self.assertEqual(stats['view_kwargs'], 'None')
         self.assertEqual(stats['view_func'], '<no view>')
+
+    def test_non_utf8_charset(self):
+        with self.settings(DEBUG=True,
+                           DEFAULT_CHARSET='iso-8859-1',
+                           INTERNAL_IPS=['127.0.0.1']):
+
+            response = self.client.get('/regular/ASCII/')
+            self.assertContains(response, 'ASCII')      # template
+            self.assertContains(response, 'djDebug')    # toolbar
+
+            response = self.client.get('/regular/LÀTÍN/')
+            self.assertContains(response, 'LÀTÍN')      # template
+            self.assertContains(response, 'djDebug')    # toolbar
 
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
