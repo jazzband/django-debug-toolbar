@@ -16,14 +16,6 @@ from django.utils.six.moves import socketserver
 django_path = os.path.realpath(os.path.dirname(django.__file__))
 socketserver_path = os.path.realpath(os.path.dirname(socketserver.__file__))
 
-
-def ms_from_timedelta(td):
-    """
-    Given a timedelta object, returns a float representing milliseconds
-    """
-    return (td.seconds * 1000) + (td.microseconds / 1000.0)
-
-
 hide_django_sql = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('HIDE_DJANGO_SQL', True)
 
 

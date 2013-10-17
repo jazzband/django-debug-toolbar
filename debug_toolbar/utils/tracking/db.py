@@ -2,17 +2,16 @@ from __future__ import unicode_literals
 
 import sys
 
-from datetime import datetime
 import json
 from threading import local
+from time import time
 
 from django.conf import settings
 from django.template import Node
 from django.utils.encoding import force_text
 from django.utils import six
 
-from debug_toolbar.utils import ms_from_timedelta, tidy_stacktrace, \
-                                get_template_info, get_stack
+from debug_toolbar.utils import tidy_stacktrace, get_template_info, get_stack
 
 
 # TODO:This should be set in the toolbar loader as a default and panels should
@@ -94,12 +93,12 @@ class NormalCursorWrapper(object):
             return '(encoded string)'
 
     def execute(self, sql, params=()):
-        start = datetime.now()
+        start_time = time()
         try:
             return self.cursor.execute(sql, params)
         finally:
-            stop = datetime.now()
-            duration = ms_from_timedelta(stop - start)
+            stop_time = time()
+            duration = (stop_time - start_time) * 1000
             enable_stacktraces = getattr(settings,
                 'DEBUG_TOOLBAR_CONFIG', {}).get('ENABLE_STACKTRACES', True)
             if enable_stacktraces:
@@ -143,8 +142,8 @@ class NormalCursorWrapper(object):
                 'raw_sql': sql,
                 'params': _params,
                 'stacktrace': stacktrace,
-                'start_time': start,
-                'stop_time': stop,
+                'start_time': start_time,
+                'stop_time': stop_time,
                 'is_slow': (duration > SQL_WARNING_THRESHOLD),
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
