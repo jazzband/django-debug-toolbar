@@ -129,11 +129,10 @@ The debug toolbar has two settings that can be set in ``settings.py``:
 
    * ``INTERCEPT_REDIRECTS``
 
-     If set to True (default), the debug toolbar will
-     show an intermediate page upon redirect so you can view any debug
-     information prior to redirecting. This page will provide a link to the
-     redirect destination you can follow when ready. If set to False, redirects
-     will proceed as normal.
+     If set to True, the debug toolbar will show an intermediate page upon
+     redirect so you can view any debug information prior to redirecting. This
+     page will provide a link to the redirect destination you can follow when
+     ready. If set to False (default), redirects will proceed as normal.
 
    * ``SHOW_TOOLBAR_CALLBACK``
 
@@ -178,7 +177,7 @@ The debug toolbar has two settings that can be set in ``settings.py``:
            return True  # Always show toolbar, for example purposes only.
 
        DEBUG_TOOLBAR_CONFIG = {
-           'INTERCEPT_REDIRECTS': False,
+           'INTERCEPT_REDIRECTS': True,
            'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
            'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
            'HIDE_DJANGO_SQL': False,

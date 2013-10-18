@@ -17,7 +17,7 @@ class DebugToolbar(object):
         self._panels = SortedDict()
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {
-            'INTERCEPT_REDIRECTS': True,
+            'INTERCEPT_REDIRECTS': False,
             'MEDIA_URL': '%s/__debug__/m/' % base_url
         }
         # Check if settings has a DEBUG_TOOLBAR_CONFIG and updated config
