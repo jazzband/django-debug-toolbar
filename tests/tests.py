@@ -194,8 +194,6 @@ class DebugToolbarIntegrationTestCase(TestCase):
 
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
-        with open('/tmp/blah.html', 'wb') as f:
-            f.write(response.content)
         ET.fromstring(response.content)     # shouldn't raise ParseError
 
 
