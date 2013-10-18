@@ -34,6 +34,19 @@ def replace_insensitive(string, target, replacement):
         return string
 
 
+def show_toolbar(request):
+    """
+    Default function to determine whether to show the toolbar on a given page.
+    """
+    if getattr(settings, 'TEST', False):
+        return False
+
+    if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
+        return False
+
+    return bool(settings.DEBUG)
+
+
 class DebugToolbarMiddleware(object):
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
@@ -49,7 +62,7 @@ class DebugToolbarMiddleware(object):
         self._urlconfs = {}
 
         # Set method to use to decide to show toolbar
-        self.show_toolbar = self._show_toolbar  # default
+        self.show_toolbar = show_toolbar
 
         # The tag to attach the toolbar to
         self.tag = '</body>'
@@ -63,15 +76,6 @@ class DebugToolbarMiddleware(object):
             tag = settings.DEBUG_TOOLBAR_CONFIG.get('TAG', None)
             if tag:
                 self.tag = '</' + tag + '>'
-
-    def _show_toolbar(self, request):
-        if getattr(settings, 'TEST', False):
-            return False
-
-        remote_addr = request.META.get('REMOTE_ADDR', None)
-
-        # if not internal ip, and not DEBUG
-        return remote_addr in settings.INTERNAL_IPS and bool(settings.DEBUG)
 
     def process_request(self, request):
         __traceback_hide__ = True

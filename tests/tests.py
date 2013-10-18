@@ -17,7 +17,7 @@ from django.template import Template, Context
 from django.utils import six
 from django.utils import unittest
 
-from debug_toolbar.middleware import DebugToolbarMiddleware
+from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels.logger import (LoggingPanel,
     MESSAGE_IF_STRING_REPRESENTATION_INVALID)
 from debug_toolbar.panels.sql import SQLDebugPanel
@@ -45,46 +45,26 @@ class BaseTestCase(TestCase):
         self.toolbar.stats = {}
 
 
+
+@override_settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'])
 class DebugToolbarTestCase(BaseTestCase):
 
     urls = 'tests.urls'
 
-    def test_middleware(self):
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            resp = self.client.get('/execute_sql/')
-        self.assertEqual(resp.status_code, 200)
+    def test_show_toolbar(self):
+        self.assertTrue(show_toolbar(self.request))
 
     def test_show_toolbar_DEBUG(self):
-        request = rf.get('/')
-        middleware = DebugToolbarMiddleware()
-
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            self.assertTrue(middleware._show_toolbar(request))
-
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=False):
-            self.assertFalse(middleware._show_toolbar(request))
+        with self.settings(DEBUG=False):
+            self.assertFalse(show_toolbar(self.request))
 
     def test_show_toolbar_TEST(self):
-        request = rf.get('/')
-        middleware = DebugToolbarMiddleware()
-
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], TEST=True, DEBUG=True):
-            self.assertFalse(middleware._show_toolbar(request))
-
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], TEST=False, DEBUG=True):
-            self.assertTrue(middleware._show_toolbar(request))
+        with self.settings(TEST=True):
+            self.assertFalse(show_toolbar(self.request))
 
     def test_show_toolbar_INTERNAL_IPS(self):
-        request = rf.get('/')
-
-        request.META = {'REMOTE_ADDR': '127.0.0.1'}
-        middleware = DebugToolbarMiddleware()
-
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            self.assertTrue(middleware._show_toolbar(request))
-
-        with self.settings(INTERNAL_IPS=[], DEBUG=True):
-            self.assertFalse(middleware._show_toolbar(request))
+        with self.settings(INTERNAL_IPS=[]):
+            self.assertFalse(show_toolbar(self.request))
 
     def test_request_urlconf_string(self):
         request = rf.get('/')
@@ -175,6 +155,10 @@ class DebugToolbarTestCase(BaseTestCase):
 class DebugToolbarIntegrationTestCase(TestCase):
 
     urls = 'tests.urls'
+
+    def test_middleware(self):
+        response = self.client.get('/execute_sql/')
+        self.assertEqual(response.status_code, 200)
 
     @override_settings(DEFAULT_CHARSET='iso-8859-1')
     def test_non_utf8_charset(self):
