@@ -13,7 +13,7 @@ def execute_sql(request):
 
 
 def regular_view(request, title):
-    content = '<html><head><title>%s</title><body></body></html>' % title
+    content = '<html><head><title>%s</title></head><body></body></html>' % title
     return HttpResponse(content)
 
 
@@ -26,4 +26,4 @@ def set_session(request):
     request.session['où'] = 'où'
     if not six.PY3:
         request.session['là'.encode('utf-8')] = 'là'.encode('utf-8')
-    return HttpResponse('<html><head><title></title><body></body></html>')
+    return HttpResponse('<html><head></head><body></body></html>')

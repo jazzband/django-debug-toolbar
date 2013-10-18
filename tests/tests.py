@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import logging
 import threading
+from xml.etree import ElementTree as ET
 
 import django
 from django.conf import settings
@@ -190,6 +191,12 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertContains(response, 'où')
         if not six.PY3:
             self.assertContains(response, 'là')
+
+    def test_xml_validation(self):
+        response = self.client.get('/regular/XML/')
+        with open('/tmp/blah.html', 'wb') as f:
+            f.write(response.content)
+        ET.fromstring(response.content)     # shouldn't raise ParseError
 
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
