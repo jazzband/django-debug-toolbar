@@ -9,6 +9,8 @@ except ImportError:
 from django.utils.translation import ungettext, ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
+MESSAGE_IF_STRING_REPRESENTATION_INVALID = '[Could not get log message]'
+
 
 class LogCollector(object):
     def __init__(self):
@@ -49,8 +51,13 @@ class ThreadTrackingHandler(logging.Handler):
         self.collector = collector
 
     def emit(self, record):
+        try:
+            message = record.getMessage()
+        except Exception:
+            message = MESSAGE_IF_STRING_REPRESENTATION_INVALID
+
         record = {
-            'message': record.getMessage(),
+            'message': message,
             'time': datetime.datetime.fromtimestamp(record.created),
             'level': record.levelname,
             'file': record.pathname,
