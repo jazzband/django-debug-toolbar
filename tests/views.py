@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import six
 
+from .models import NonAsciiRepr
+
 
 def execute_sql(request):
     list(User.objects.all())
@@ -14,9 +16,6 @@ def execute_sql(request):
 
 
 def non_ascii_context(request):
-    class NonAsciiRepr(object):
-        def __repr__(self):
-            return 'nôt åscíì' if six.PY3 else 'nôt åscíì'.encode('utf-8')
     return render(request, 'basic.html', {'title': NonAsciiRepr()})
 
 
