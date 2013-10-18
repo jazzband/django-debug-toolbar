@@ -26,6 +26,7 @@ rf = RequestFactory()
 
 
 class BaseTestCase(TestCase):
+
     def setUp(self):
         request = rf.get('/')
         response = HttpResponse()
@@ -40,6 +41,7 @@ class BaseTestCase(TestCase):
 
 
 class DebugToolbarTestCase(BaseTestCase):
+
     urls = 'tests.urls'
 
     def test_middleware(self):
@@ -176,8 +178,16 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertContains(response, 'LÀTÍN')      # template
             self.assertContains(response, 'djDebug')    # toolbar
 
+    def test_non_ascii_session(self):
+        with self.settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1']):
+            response = self.client.get('/set_session/')
+            self.assertContains(response, 'où')
+            if not six.PY3:
+                self.assertContains(response, 'là')
+
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
+
     def test_func(self):
         def x():
             return 1
@@ -196,6 +206,7 @@ class DebugToolbarNameFromObjectTest(BaseTestCase):
 
 
 class SQLPanelTestCase(BaseTestCase):
+
     def test_recording(self):
         panel = self.toolbar.get_panel(SQLDebugPanel)
         self.assertEqual(len(panel._queries), 0)
@@ -258,6 +269,7 @@ class SQLPanelTestCase(BaseTestCase):
 
 
 class TemplatePanelTestCase(BaseTestCase):
+
     def test_queryset_hook(self):
         template_panel = self.toolbar.get_panel(TemplateDebugPanel)
         sql_panel = self.toolbar.get_panel(SQLDebugPanel)

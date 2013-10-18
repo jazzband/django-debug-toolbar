@@ -13,6 +13,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('tests.views',
+    url(r'^set_session/$', 'set_session'),
     url(r'^resolving1/(.+)/(.+)/$', 'resolving_view', name='positional-resolving'),
     url(r'^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$', 'resolving_view'),
     url(r'^resolving3/(.+)/$', 'resolving_view', { 'arg2' : 'default' }),
