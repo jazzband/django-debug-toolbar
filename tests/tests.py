@@ -192,6 +192,10 @@ class DebugToolbarIntegrationTestCase(TestCase):
         if not six.PY3:
             self.assertContains(response, 'là')
 
+    def test_object_with_non_ascii_repr_in_context(self):
+        response = self.client.get('/non_ascii_context/')
+        self.assertContains(response, 'nôt åscíì')
+
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError

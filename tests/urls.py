@@ -18,5 +18,6 @@ urlpatterns = patterns('tests.views',
     url(r'^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$', 'resolving_view'),
     url(r'^resolving3/(.+)/$', 'resolving_view', { 'arg2' : 'default' }),
     url(r'^regular/(?P<title>.*)/$', 'regular_view'),
+    url(r'^non_ascii_context/$', 'non_ascii_context'),
     url(r'^execute_sql/$', 'execute_sql'),
 )

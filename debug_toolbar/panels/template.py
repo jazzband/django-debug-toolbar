@@ -7,6 +7,7 @@ from django import http
 from django.conf import settings
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet, RawQuerySet
 from debug_toolbar.panels import DebugPanel
@@ -92,7 +93,7 @@ class TemplateDebugPanel(DebugPanel):
                 context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
                 pass
-        kwargs['context'] = context_list
+        kwargs['context'] = [force_text(item) for item in context_list]
         self.templates.append(kwargs)
 
     def nav_title(self):
