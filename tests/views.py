@@ -23,6 +23,11 @@ def regular_view(request, title):
     return render(request, 'basic.html', {'title': title})
 
 
+def new_user(request):
+    User.objects.create_user(username='joe')
+    return render(request, 'basic.html', {'title': 'new user'})
+
+
 def resolving_view(request, arg1, arg2):
     # see test_url_resolving in tests.py
     return HttpResponse()
