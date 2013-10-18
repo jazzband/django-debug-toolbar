@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
+from django.test.utils import override_settings
 from django.template import Template, Context
 from django.utils import six
 from django.utils import unittest
@@ -168,25 +169,27 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(stats['view_kwargs'], 'None')
         self.assertEqual(stats['view_func'], '<no view>')
 
+
+@override_settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'])
+class DebugToolbarIntegrationTestCase(TestCase):
+
+    urls = 'tests.urls'
+
+    @override_settings(DEFAULT_CHARSET='iso-8859-1')
     def test_non_utf8_charset(self):
-        with self.settings(DEBUG=True,
-                           DEFAULT_CHARSET='iso-8859-1',
-                           INTERNAL_IPS=['127.0.0.1']):
+        response = self.client.get('/regular/ASCII/')
+        self.assertContains(response, 'ASCII')      # template
+        self.assertContains(response, 'djDebug')    # toolbar
 
-            response = self.client.get('/regular/ASCII/')
-            self.assertContains(response, 'ASCII')      # template
-            self.assertContains(response, 'djDebug')    # toolbar
-
-            response = self.client.get('/regular/LÀTÍN/')
-            self.assertContains(response, 'LÀTÍN')      # template
-            self.assertContains(response, 'djDebug')    # toolbar
+        response = self.client.get('/regular/LÀTÍN/')
+        self.assertContains(response, 'LÀTÍN')      # template
+        self.assertContains(response, 'djDebug')    # toolbar
 
     def test_non_ascii_session(self):
-        with self.settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1']):
-            response = self.client.get('/set_session/')
-            self.assertContains(response, 'où')
-            if not six.PY3:
-                self.assertContains(response, 'là')
+        response = self.client.get('/set_session/')
+        self.assertContains(response, 'où')
+        if not six.PY3:
+            self.assertContains(response, 'là')
 
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
