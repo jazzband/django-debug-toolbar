@@ -9,7 +9,7 @@ from xml.etree import ElementTree as ET
 import django
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db import connection
+from django.db import connection, IntegrityError
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
@@ -188,6 +188,18 @@ class DebugToolbarIntegrationTestCase(TestCase):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError
 
+    def test_view_executed_once(self):
+        with self.settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'],
+                DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel']):
+            self.assertEqual(User.objects.count(), 0)
+
+            response = self.client.get('/new_user/')
+            self.assertContains(response, 'Profiling')
+            self.assertEqual(User.objects.count(), 1)
+
+            with self.assertRaises(IntegrityError):
+                response = self.client.get('/new_user/')
+            self.assertEqual(User.objects.count(), 1)
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
 

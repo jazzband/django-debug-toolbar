@@ -23,5 +23,6 @@ urlpatterns = patterns('tests.views',
     url(r'^regular/(?P<title>.*)/$', 'regular_view'),
     url(r'^non_ascii_context/$', 'non_ascii_context'),
     url(r'^non_ascii_request/$', 'regular_view', {'title': NonAsciiRepr()}),
+    url(r'^new_user/$', 'new_user'),
     url(r'^execute_sql/$', 'execute_sql'),
 )
