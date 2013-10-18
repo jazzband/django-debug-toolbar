@@ -19,7 +19,7 @@ def sql_select(request):
     form = SQLSelectForm(request.POST or None)
 
     if form.is_valid():
-        sql = form.cleaned_data['sql']
+        sql = form.cleaned_data['raw_sql']
         params = form.cleaned_data['params']
         cursor = form.cursor
         cursor.execute(sql, params)
@@ -43,7 +43,7 @@ def sql_explain(request):
     form = SQLSelectForm(request.POST or None)
 
     if form.is_valid():
-        sql = form.cleaned_data['sql']
+        sql = form.cleaned_data['raw_sql']
         params = form.cleaned_data['params']
         cursor = form.cursor
 
@@ -80,7 +80,7 @@ def sql_profile(request):
     form = SQLSelectForm(request.POST or None)
 
     if form.is_valid():
-        sql = form.cleaned_data['sql']
+        sql = form.cleaned_data['raw_sql']
         params = form.cleaned_data['params']
         cursor = form.cursor
         result = None

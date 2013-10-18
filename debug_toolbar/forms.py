@@ -17,12 +17,14 @@ class SQLSelectForm(forms.Form):
     """
     Validate params
 
-        sql: urlencoded sql with positional arguments
+        sql: The sql statement with interpolated params
+        raw_sql: The sql statement with placeholders
         params: JSON encoded parameter values
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
     sql = forms.CharField()
+    raw_sql = forms.CharField()
     params = forms.CharField()
     alias = forms.CharField(required=False, initial='default')
     duration = forms.FloatField()
@@ -39,8 +41,8 @@ class SQLSelectForm(forms.Form):
         for name in self.fields:
             self.fields[name].widget = forms.HiddenInput()
 
-    def clean_sql(self):
-        value = self.cleaned_data['sql']
+    def clean_raw_sql(self):
+        value = self.cleaned_data['raw_sql']
 
         if not value.lower().strip().startswith('select'):
             raise ValidationError("Only 'select' queries are allowed.")
@@ -72,8 +74,7 @@ class SQLSelectForm(forms.Form):
         return hash
 
     def reformat_sql(self):
-        sql, params = self.cleaned_data['sql'], self.cleaned_data['params']
-        return reformat_sql(self.cursor.db.ops.last_executed_query(self.cursor, sql, params))
+        return reformat_sql(self.cleaned_data['sql'])
 
     def make_hash(self, data):
         params = force_text(settings.SECRET_KEY) + data['sql'] + data['params']
