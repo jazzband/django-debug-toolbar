@@ -58,10 +58,6 @@ class DebugToolbarTestCase(BaseTestCase):
         with self.settings(DEBUG=False):
             self.assertFalse(show_toolbar(self.request))
 
-    def test_show_toolbar_TEST(self):
-        with self.settings(TEST=True):
-            self.assertFalse(show_toolbar(self.request))
-
     def test_show_toolbar_INTERNAL_IPS(self):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
