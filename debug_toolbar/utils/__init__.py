@@ -22,9 +22,9 @@ config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
 hide_django_sql = config.get('HIDE_DJANGO_SQL', True)
 
 
-def get_module_path(module_string):
+def get_module_path(module_name):
     try:
-        module = import_module(module_string)
+        module = import_module(module_name)
     except ImportError as e:
         raise ImproperlyConfigured(
             'Error importing HIDDEN_STACKTRACE_MODULES: %s' % (e,))
@@ -49,10 +49,7 @@ hidden_paths = [
 
 
 def omit_path(path):
-    for hidden_path in hidden_paths:
-        if hidden_path in path:
-            return True
-    return False
+    return any(path.startswith(hidden_path) for hidden_path in hidden_paths)
 
 
 def tidy_stacktrace(stack):
