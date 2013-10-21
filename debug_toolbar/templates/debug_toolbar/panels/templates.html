@@ -1,4 +1,3 @@
-{% load url from future %}
 {% load i18n %}
 <h4>{% blocktrans count template_dirs|length as template_count %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
 {% if template_dirs %}
@@ -15,7 +14,7 @@
 {% if templates %}
 <dl>
 {% for template in templates %}
-	<dt><strong><a class="remoteCall toggleTemplate" href="{% url 'template_source' %}?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
+	<dt><strong><a class="remoteCall toggleTemplate" href="{{ template_source_url }}?template={{ template.template.name }}">{{ template.template.name|addslashes }}</a></strong></dt>
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	{% if template.context %}
 	<dd>

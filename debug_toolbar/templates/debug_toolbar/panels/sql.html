@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load url from future %}
 {% load debug_toolbar_utils %}
 <div class="clearfix">
 	<ul class="stats">
@@ -48,11 +47,11 @@
 							<form method="post">
 								{{ query.form }}
 
-								<button formaction="{% url 'sql_select' %}" class="remoteCall">Sel</button>
-								<button formaction="{% url 'sql_explain' %}" class="remoteCall">Expl</button>
+								<button formaction="{{ sql_select_url }}" class="remoteCall">Sel</button>
+								<button formaction="{{ sql_explain_url }}" class="remoteCall">Expl</button>
 
 								{% ifequal query.engine 'mysql' %}
-									<button formaction="{% url 'sql_profile' %}" class="remoteCall">Prof</button>
+									<button formaction="{{ sql_profile }}" class="remoteCall">Prof</button>
 								{% endifequal %}
 							</form>
 						{% endif %}

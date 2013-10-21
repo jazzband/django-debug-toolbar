@@ -5,6 +5,7 @@ from pprint import pformat
 
 from django import http
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.utils.encoding import force_text
@@ -108,6 +109,7 @@ class TemplateDebugPanel(DebugPanel):
 
     def process_request(self, request):
         self.request = request
+        self.context['template_source_url'] = reverse('template_source', urlconf=request.urlconf)
 
     def process_response(self, request, response):
         context_processors = dict(
