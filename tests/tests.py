@@ -9,6 +9,7 @@ from xml.etree import ElementTree as ET
 import django
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core import management
 from django.db import connection, IntegrityError
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
@@ -342,3 +343,11 @@ class LoggingPanelTestCase(BaseTestCase):
         self.assertEqual(1, len(records))
         self.assertEqual(MESSAGE_IF_STRING_REPRESENTATION_INVALID,
                          records[0]['message'])
+
+
+class DebugSQLShellTestCase(TestCase):
+
+    def test_command_exists(self):
+        command_name = 'debugsqlshell'
+        app_name = management.get_commands()[command_name]
+        management.load_command_class(app_name, command_name)

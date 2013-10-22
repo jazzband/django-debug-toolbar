@@ -2,6 +2,8 @@ from __future__ import print_function, unicode_literals
 
 from time import time
 
+# 'debugsqlshell' is the same as the 'shell'.
+from django.core.management.commands.shell import Command
 from django.db.backends import util
 
 import sqlparse
