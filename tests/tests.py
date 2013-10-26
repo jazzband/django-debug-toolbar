@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import logging
+import sys
 import threading
 from xml.etree import ElementTree as ET
 
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import management
 from django.db import connection, IntegrityError
+from django.db.backends import util
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
@@ -347,7 +349,23 @@ class LoggingPanelTestCase(BaseTestCase):
 
 class DebugSQLShellTestCase(TestCase):
 
-    def test_command_exists(self):
+    def setUp(self):
+        self.original_cursor_wrapper = util.CursorDebugWrapper
+        # Since debugsqlshell monkey-patches django.db.backends.util, we can
+        # test it simply by loading it, without executing it. But we have to
+        # undo the monkey-patch on exit.
         command_name = 'debugsqlshell'
         app_name = management.get_commands()[command_name]
         management.load_command_class(app_name, command_name)
+
+    def tearDown(self):
+        util.CursorDebugWrapper = self.original_cursor_wrapper
+
+    @override_settings(DEBUG=True)
+    def test_command(self):
+        original_stdout, sys.stdout = sys.stdout, six.StringIO()
+        try:
+            User.objects.count()
+            self.assertIn("SELECT COUNT(*)\n", sys.stdout.getvalue())
+        finally:
+            sys.stdout = original_stdout
