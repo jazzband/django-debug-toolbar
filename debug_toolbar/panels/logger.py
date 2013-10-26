@@ -15,7 +15,8 @@ MESSAGE_IF_STRING_REPRESENTATION_INVALID = '[Could not get log message]'
 class LogCollector(object):
     def __init__(self):
         if threading is None:
-            raise NotImplementedError("threading module is not available, "
+            raise NotImplementedError(
+                "threading module is not available, "
                 "the logging panel cannot be used without it")
         self.records = {}  # a dictionary that maps threads to log records
 

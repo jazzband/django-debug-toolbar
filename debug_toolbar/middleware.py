@@ -18,13 +18,15 @@ import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
-threading._DummyThread._Thread__stop = lambda x: 1  # Handles python threading module bug - http://bugs.python.org/issue14308
+# Handles python threading module bug - http://bugs.python.org/issue14308
+threading._DummyThread._Thread__stop = lambda x: 1
 
 
 def replace_insensitive(string, target, replacement):
     """
-    Similar to string.replace() but is case insensitive
-    Code borrowed from: http://forums.devshed.com/python-programming-11/case-insensitive-string-replace-490921.html
+    Similar to string.replace() but is case insensitive.
+    Code borrowed from:
+    http://forums.devshed.com/python-programming-11/case-insensitive-string-replace-490921.html
     """
     no_case = string.lower()
     index = no_case.rfind(target.lower())
@@ -75,7 +77,7 @@ class DebugToolbarMiddleware(object):
                 self.tag = '</' + tag + '>'
 
     def process_request(self, request):
-        __traceback_hide__ = True
+        __traceback_hide__ = True                                       # noqa
         if self.show_toolbar(request):
             urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
             if isinstance(urlconf, six.string_types):
@@ -83,8 +85,8 @@ class DebugToolbarMiddleware(object):
 
             if urlconf not in self._urlconfs:
                 new_urlconf = imp.new_module('urlconf')
-                new_urlconf.urlpatterns = debug_toolbar.urls.urlpatterns + \
-                        list(urlconf.urlpatterns)
+                new_urlconf.urlpatterns = (debug_toolbar.urls.urlpatterns +
+                                           list(urlconf.urlpatterns))
 
                 if hasattr(urlconf, 'handler403'):
                     new_urlconf.handler403 = urlconf.handler403
@@ -103,7 +105,7 @@ class DebugToolbarMiddleware(object):
             self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        __traceback_hide__ = True
+        __traceback_hide__ = True                                       # noqa
         toolbar = self.__class__.debug_toolbars.get(threading.current_thread().ident)
         if not toolbar:
             return
@@ -115,7 +117,7 @@ class DebugToolbarMiddleware(object):
         return result
 
     def process_response(self, request, response):
-        __traceback_hide__ = True
+        __traceback_hide__ = True                                       # noqa
         ident = threading.current_thread().ident
         toolbar = self.__class__.debug_toolbars.get(ident)
         if not toolbar or request.is_ajax() or getattr(response, 'streaming', False):

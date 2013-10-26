@@ -16,8 +16,8 @@ from debug_toolbar.utils import tidy_stacktrace, get_template_info, get_stack
 
 # TODO:This should be set in the toolbar loader as a default and panels should
 # get a copy of the toolbar object with access to its config dictionary
-SQL_WARNING_THRESHOLD = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}) \
-                            .get('SQL_WARNING_THRESHOLD', 500)
+DEBUG_TOOLBAR_CONFIG = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
+SQL_WARNING_THRESHOLD = DEBUG_TOOLBAR_CONFIG.get('SQL_WARNING_THRESHOLD', 500)
 
 
 class SQLQueryTriggered(Exception):
@@ -82,7 +82,7 @@ class NormalCursorWrapper(object):
             return params
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
-                            for key, value in params.items())
+                        for key, value in params.items())
         return list(map(self._quote_expr, params))
 
     def _decode(self, param):
@@ -98,8 +98,8 @@ class NormalCursorWrapper(object):
         finally:
             stop_time = time()
             duration = (stop_time - start_time) * 1000
-            enable_stacktraces = getattr(settings,
-                'DEBUG_TOOLBAR_CONFIG', {}).get('ENABLE_STACKTRACES', True)
+            debug_toolbar_config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
+            enable_stacktraces = debug_toolbar_config.get('ENABLE_STACKTRACES', True)
             if enable_stacktraces:
                 stacktrace = tidy_stacktrace(reversed(get_stack()))
             else:

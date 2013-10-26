@@ -89,10 +89,6 @@ class TimerDebugPanel(DebugPanel):
             (_('Total CPU time'), _('%(total)0.3f msec') % stats),
             (_('Elapsed time'), _('%(total_time)0.3f msec') % stats),
             (_('Context switches'), _('%(vcsw)d voluntary, %(ivcsw)d involuntary') % stats),
-#            ('Memory use', '%d max RSS, %d shared, %d unshared' % (stats['rss'], stats.['srss'],
-#                                                                   stats['urss'] + stats['usrss'])),
-#            ('Page faults', '%d no i/o, %d requiring i/o' % (stats['minflt'], stats['majflt'])),
-#            ('Disk operations', '%d in, %d out, %d swapout' % (stats['blkin'], stats['blkout'], stats['swap'])),
         )
         context = self.context.copy()
         context.update({'rows': rows})

@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('',                                              # noqa
     (r'^$', TemplateView.as_view(template_name='index.html')),
     (r'^jquery/$', TemplateView.as_view(template_name='jquery/index.html')),
     (r'^mootools/$', TemplateView.as_view(template_name='mootools/index.html')),

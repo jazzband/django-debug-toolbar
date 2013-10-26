@@ -1,5 +1,6 @@
 from django.conf import global_settings
-DATABASES={
+
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # Edit the below settings before use...
@@ -9,7 +10,8 @@ DATABASES={
         'PASSWORD': '',
     }
 }
-INSTALLED_APPS=[
+
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
@@ -20,9 +22,13 @@ INSTALLED_APPS=[
 
     'tests',
 ]
-MIDDLEWARE_CLASSES=global_settings.MIDDLEWARE_CLASSES + (
+
+MIDDLEWARE_CLASSES = global_settings.MIDDLEWARE_CLASSES + (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
-ROOT_URLCONF=''
-DEBUG=False
-SITE_ID=1
+
+ROOT_URLCONF = ''
+
+DEBUG = False
+
+SITE_ID = 1

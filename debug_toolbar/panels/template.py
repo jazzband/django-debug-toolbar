@@ -75,8 +75,10 @@ class TemplateDebugPanel(DebugPanel):
                         temp_layer[key] = '<<languages>>'
                     # QuerySet would trigger the database: user can run the query from SQL Panel
                     elif isinstance(value, (QuerySet, RawQuerySet)):
-                        model_name = "%s.%s" % (value.model._meta.app_label, value.model.__name__)
-                        temp_layer[key] = '<<%s of %s>>' % (value.__class__.__name__.lower(), model_name)
+                        model_name = "%s.%s" % (
+                            value.model._meta.app_label, value.model.__name__)
+                        temp_layer[key] = '<<%s of %s>>' % (
+                            value.__class__.__name__.lower(), model_name)
                     else:
                         try:
                             recording(False)

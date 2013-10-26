@@ -20,8 +20,8 @@ from django.utils import six
 from django.utils import unittest
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
-from debug_toolbar.panels.logger import (LoggingPanel,
-    MESSAGE_IF_STRING_REPRESENTATION_INVALID)
+from debug_toolbar.panels.logger import (
+    LoggingPanel, MESSAGE_IF_STRING_REPRESENTATION_INVALID)
 from debug_toolbar.panels.sql import SQLDebugPanel
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 from debug_toolbar.panels.template import TemplateDebugPanel
@@ -45,7 +45,6 @@ class BaseTestCase(TestCase):
         self.response = response
         self.toolbar = toolbar
         self.toolbar.stats = {}
-
 
 
 @override_settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'])
@@ -74,8 +73,9 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertFalse(isinstance(request.urlconf, six.string_types))
 
-            self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
-            self.assertEqual(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
+            patterns = request.urlconf.urlpatterns
+            self.assertTrue(hasattr(patterns[1], '_callback_str'))
+            self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_string_per_request(self):
         request = rf.get('/')
@@ -89,8 +89,9 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertFalse(isinstance(request.urlconf, six.string_types))
 
-            self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
-            self.assertEqual(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
+            patterns = request.urlconf.urlpatterns
+            self.assertTrue(hasattr(patterns[1], '_callback_str'))
+            self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_module(self):
         request = rf.get('/')
@@ -102,8 +103,9 @@ class DebugToolbarTestCase(BaseTestCase):
 
             self.assertFalse(isinstance(request.urlconf, six.string_types))
 
-            self.assertTrue(hasattr(request.urlconf.urlpatterns[1], '_callback_str'))
-            self.assertEqual(request.urlconf.urlpatterns[-1]._callback_str, 'tests.views.execute_sql')
+            patterns = request.urlconf.urlpatterns
+            self.assertTrue(hasattr(patterns[1], '_callback_str'))
+            self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_tuple_urlconf(self):
         request = rf.get('/')
@@ -191,8 +193,11 @@ class DebugToolbarIntegrationTestCase(TestCase):
         ET.fromstring(response.content)     # shouldn't raise ParseError
 
     def test_view_executed_once(self):
-        with self.settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'],
+        with self.settings(
+                DEBUG=True,
+                INTERNAL_IPS=['127.0.0.1'],
                 DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel']):
+
             self.assertEqual(User.objects.count(), 0)
 
             response = self.client.get('/new_user/')
@@ -206,6 +211,7 @@ class DebugToolbarIntegrationTestCase(TestCase):
                 else:
                     response = self.client.get('/new_user/')
             self.assertEqual(User.objects.count(), 1)
+
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
 
@@ -257,7 +263,7 @@ class SQLPanelTestCase(BaseTestCase):
         list(User.objects.filter(username='café'))
         self.assertEqual(len(panel._queries), 2)
 
-    @unittest.skipUnless(connection.vendor=='postgresql',
+    @unittest.skipUnless(connection.vendor == 'postgresql',
                          'Test valid only on PostgreSQL')
     def test_erroneous_query(self):
         """

@@ -18,7 +18,8 @@ from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
                                  get_template_info, get_stack)
 
 
-cache_called = Signal(providing_args=["time_taken", "name", "return_value", "args", "kwargs", "trace"])
+cache_called = Signal(providing_args=[
+    "time_taken", "name", "return_value", "args", "kwargs", "trace"])
 
 
 def send_signal(method):
@@ -27,8 +28,8 @@ def send_signal(method):
         value = method(self, *args, **kwargs)
         t = time.time() - t
 
-        enable_stacktraces = getattr(settings,
-            'DEBUG_TOOLBAR_CONFIG', {}).get('ENABLE_STACKTRACES', True)
+        debug_toolbar_config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
+        enable_stacktraces = debug_toolbar_config.get('ENABLE_STACKTRACES', True)
         if enable_stacktraces:
             stacktrace = tidy_stacktrace(reversed(get_stack()))
         else:
@@ -160,8 +161,8 @@ class CacheDebugPanel(DebugPanel):
         cache_called.connect(self._store_call_info)
 
     def _store_call_info(self, sender, name=None, time_taken=0,
-            return_value=None, args=None, kwargs=None, trace=None,
-            template_info=None, backend=None, **kw):
+                         return_value=None, args=None, kwargs=None,
+                         trace=None, template_info=None, backend=None, **kw):
         if name == 'get':
             if return_value is None:
                 self.misses += 1

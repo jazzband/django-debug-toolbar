@@ -35,11 +35,11 @@ class RequestVarsDebugPanel(DebugPanel):
             'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
         })
         view_info = {
-             'view_func': _('<no view>'),
-             'view_args': 'None',
-             'view_kwargs': 'None',
-             'view_urlname': 'None',
-         }
+            'view_func': _('<no view>'),
+            'view_args': 'None',
+            'view_kwargs': 'None',
+            'view_urlname': 'None',
+        }
         try:
             match = resolve(self.request.path)
             func, args, kwargs = match
@@ -56,4 +56,4 @@ class RequestVarsDebugPanel(DebugPanel):
             self.record_stats({
                 'session': [(k, self.request.session.get(k))
                             for k in self.request.session.keys()]
-                })
+            })

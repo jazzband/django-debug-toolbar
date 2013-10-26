@@ -10,4 +10,3 @@ register = template.Library()
 def dotted_number(number):
     number = float(number)
     return format(number, '.', 6)
-

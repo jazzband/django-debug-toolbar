@@ -171,9 +171,11 @@ class SQLDebugPanel(DebugPanel):
 
                 query['alias'] = alias
                 if 'iso_level' in query:
-                    query['iso_level'] = get_isolation_level_display(query['engine'], query['iso_level'])
+                    query['iso_level'] = get_isolation_level_display(query['engine'],
+                                                                     query['iso_level'])
                 if 'trans_status' in query:
-                    query['trans_status'] = get_transaction_status_display(query['engine'], query['trans_status'])
+                    query['trans_status'] = get_transaction_status_display(query['engine'],
+                                                                           query['trans_status'])
 
                 query['form'] = SQLSelectForm(auto_id=None, initial=copy(query))
 
@@ -182,7 +184,8 @@ class SQLDebugPanel(DebugPanel):
                 query['rgb_color'] = self._databases[alias]['rgb_color']
                 try:
                     query['width_ratio'] = (query['duration'] / self._sql_time) * 100
-                    query['width_ratio_relative'] = 100.0 * query['width_ratio'] / (100.0 - width_ratio_tally)
+                    query['width_ratio_relative'] = (
+                        100.0 * query['width_ratio'] / (100.0 - width_ratio_tally))
                 except ZeroDivisionError:
                     query['width_ratio'] = 0
                     query['width_ratio_relative'] = 0

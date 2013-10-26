@@ -46,7 +46,9 @@ def runtests(*test_args, **kwargs):
         test_args = ['tests']
     parent = dirname(abspath(__file__))
     sys.path.insert(0, parent)
-    test_runner = DjangoTestSuiteRunner(verbosity=kwargs.get('verbosity', 1), interactive=kwargs.get('interactive', False), failfast=kwargs.get('failfast'))
+    test_runner = DjangoTestSuiteRunner(verbosity=kwargs.get('verbosity', 1),
+                                        interactive=kwargs.get('interactive', False),
+                                        failfast=kwargs.get('failfast'))
     failures = test_runner.run_tests(test_args)
     sys.exit(failures)
 

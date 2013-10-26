@@ -69,12 +69,15 @@ class FunctionCall(object):
 
             file_path, file_name = file_name.rsplit(os.sep, 1)
 
-            return mark_safe('<span class="path">{0}/</span><span class="file">{1}</span> in <span class="func">{3}</span>(<span class="lineno">{2}</span>)'.format(
-                file_path,
-                file_name,
-                line_num,
-                method,
-            ))
+            return mark_safe(
+                '<span class="path">{0}/</span>'
+                '<span class="file">{1}</span>'
+                ' in <span class="func">{3}</span>'
+                '(<span class="lineno">{2}</span>)'.format(
+                    file_path,
+                    file_name,
+                    line_num,
+                    method))
 
     def subfuncs(self):
         i = 0
@@ -164,7 +167,7 @@ class ProfilingDebugPanel(DebugPanel):
                     self._unwrap_closure_and_profile(cell.cell_contents)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        __traceback_hide__ = True
+        __traceback_hide__ = True                                       # noqa
         self.profiler = cProfile.Profile()
         args = (request,) + view_args
         if DJ_PROFILE_USE_LINE_PROFILER:
@@ -184,13 +187,13 @@ class ProfilingDebugPanel(DebugPanel):
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
                 if (subfunc.stats[3] >= cum_time or
-                   (hasattr(self.stats, 'line_stats') and
-                   (subfunc.func in self.stats.line_stats.timings))):
+                        (hasattr(self.stats, 'line_stats') and
+                            (subfunc.func in self.stats.line_stats.timings))):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
 
     def process_response(self, request, response):
-        __traceback_hide__ = True
+        __traceback_hide__ = True                                       # noqa
         if not hasattr(self, 'profiler'):
             return None
         self.profiler.create_stats()

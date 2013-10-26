@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='django-debug-toolbar',
     version='0.9.4',
-    description='A configurable set of panels that display various debug information about the current request/response.',
+    description='A configurable set of panels that display various debug '
+                'information about the current request/response.',
     long_description=open('README.rst').read(),
     author='Rob Hudson',
     author_email='rob@cogit8.org',

@@ -1,6 +1,9 @@
 # Make file to compress and join all JS files
 all: compress_js compress_css
 
+flake8:
+	flake8 *.py debug_toolbar example tests
+
 test:
 	pip install Django
 	python runtests.py

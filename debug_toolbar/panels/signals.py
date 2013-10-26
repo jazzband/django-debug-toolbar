@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.core.signals import (request_started, request_finished,
-    got_request_exception)
-from django.db.models.signals import (class_prepared, pre_init, post_init,
-    pre_save, post_save, pre_delete, post_delete, post_syncdb)
+from django.core.signals import (
+    request_started, request_finished, got_request_exception)
+from django.db.models.signals import (
+    class_prepared, pre_init, post_init, pre_save, post_save,
+    pre_delete, post_delete, post_syncdb)
 from django.dispatch.dispatcher import WEAKREF_TYPES
 from django.utils.translation import ugettext_lazy as _, ungettext
 from django.utils.importlib import import_module
@@ -13,7 +14,7 @@ from django.utils.importlib import import_module
 try:
     from django.db.backends.signals import connection_created
 except ImportError:
-    connection_created = None  # noqa
+    connection_created = None
 
 from debug_toolbar.panels import DebugPanel
 
@@ -90,9 +91,11 @@ class SignalDebugPanel(DebugPanel):
                 receiver = getattr(receiver, '__wraps__', receiver)
                 receiver_name = getattr(receiver, '__name__', str(receiver))
                 if getattr(receiver, '__self__', None) is not None:
-                    text = "%s.%s" % (getattr(receiver.__self__, '__class__', type).__name__, receiver_name)
+                    receiver_class_name = getattr(receiver.__self__, '__class__', type).__name__
+                    text = "%s.%s" % (receiver_class_name, receiver_name)
                 elif getattr(receiver, 'im_class', None) is not None:   # Python 2 only
-                    text = "%s.%s" % (receiver.im_class.__name__, receiver_name)
+                    receiver_class_name = receiver.im_class.__name__
+                    text = "%s.%s" % (receiver_class_name, receiver_name)
                 else:
                     text = "%s" % receiver_name
                 receivers.append(text)

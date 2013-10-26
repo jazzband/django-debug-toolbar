@@ -68,7 +68,7 @@ def tidy_stacktrace(stack):
         # inspection.
         if '__traceback_hide__' in frame.f_locals:
             continue
-        if  hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
+        if hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if omit_path(s_path):
             continue
