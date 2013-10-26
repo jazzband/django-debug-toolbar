@@ -87,48 +87,43 @@ msgstr[1] "%(num_receivers)d receivers of %(num_signals)d signals"
 
 #: panels/sql.py:35
 msgid "Autocommit"
-msgstr ""
+msgstr "Autocommit"
 
 #: panels/sql.py:36
 msgid "Read uncommitted"
-msgstr ""
+msgstr "Read uncommitted"
 
 #: panels/sql.py:37
 msgid "Read committed"
-msgstr ""
+msgstr "Read committed"
 
 #: panels/sql.py:38
 msgid "Repeatable read"
-msgstr ""
+msgstr "Repeatable read"
 
 #: panels/sql.py:39
-#, fuzzy
 msgid "Serializable"
-msgstr "Variable"
+msgstr "Serializable"
 
 #: panels/sql.py:50
 msgid "Idle"
-msgstr ""
+msgstr "Idle"
 
 #: panels/sql.py:51
-#, fuzzy
 msgid "Active"
-msgstr "Action"
+msgstr "Active"
 
 #: panels/sql.py:52
-#, fuzzy
 msgid "In transaction"
-msgstr "Transaction status:"
+msgstr "In transaction"
 
 #: panels/sql.py:53
-#, fuzzy
 msgid "In error"
-msgstr "Error"
+msgstr "In error"
 
 #: panels/sql.py:54
-#, fuzzy
 msgid "Unknown"
-msgstr "(unknown)"
+msgstr "Unknown"
 
 #: panels/sql.py:120
 msgid "SQL"
@@ -136,7 +131,7 @@ msgstr "SQL"
 
 #: panels/staticfiles.py:18 panels/staticfiles.py:21
 msgid "Static files"
-msgstr ""
+msgstr "Static files"
 
 #: panels/template.py:102
 msgid "Templates"
@@ -480,23 +475,23 @@ msgstr "Empty set"
 #: templates/debug_toolbar/panels/staticfiles.html:5
 msgid "Static path"
 msgid_plural "Static paths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Static path"
+msgstr[1] "Static paths"
 
 #: templates/debug_toolbar/panels/staticfiles.html:13
-#, fuzzy, python-format
+#, python-format
 msgid "%(file_count)s file"
 msgid_plural "%(file_count)s files"
-msgstr[0] "%(count)s message"
-msgstr[1] "%(count)s messages"
+msgstr[0] "%(file_count)s file"
+msgstr[1] "%(file_count)s files"
 
 #: templates/debug_toolbar/panels/staticfiles.html:17
 msgid "Path"
-msgstr ""
+msgstr "Path"
 
 #: templates/debug_toolbar/panels/staticfiles.html:18
 msgid "Storage"
-msgstr ""
+msgstr "Storage"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template Source"
@@ -506,7 +501,7 @@ msgstr "Template Source"
 msgid "Template path"
 msgid_plural "Template paths"
 msgstr[0] "Template path"
-msgstr[1] "Template path"
+msgstr[1] "Template paths"
 
 #: templates/debug_toolbar/panels/templates.html:10
 #: templates/debug_toolbar/panels/templates.html:28
@@ -518,7 +513,7 @@ msgstr "None"
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Template"
-msgstr[1] "Template"
+msgstr[1] "Templates"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
@@ -529,7 +524,7 @@ msgstr "Toggle Context"
 msgid "Context processor"
 msgid_plural "Context processors"
 msgstr[0] "Context processor"
-msgstr[1] "Context processor"
+msgstr[1] "Context processors"
 
 #: templates/debug_toolbar/panels/timer.html:9
 msgid "Resource"
@@ -537,11 +532,8 @@ msgstr "Resource"
 
 #: templates/debug_toolbar/panels/versions.html:5
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
 msgstr "Version"
-
-#~ msgid "Package"
-#~ msgstr "Package"
