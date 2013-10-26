@@ -73,8 +73,7 @@ class NormalCursorWrapper(object):
 
     def _quote_expr(self, element):
         if isinstance(element, six.string_types):
-            element = element.replace("'", "''")
-            return "'%s'" % element
+            return "'%s'" % force_text(element).replace("'", "''")
         else:
             return repr(element)
 

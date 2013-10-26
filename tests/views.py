@@ -23,8 +23,8 @@ def regular_view(request, title):
     return render(request, 'basic.html', {'title': title})
 
 
-def new_user(request):
-    User.objects.create_user(username='joe')
+def new_user(request, username='joe'):
+    User.objects.create_user(username=username)
     return render(request, 'basic.html', {'title': 'new user'})
 
 

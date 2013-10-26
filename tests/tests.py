@@ -169,6 +169,10 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertContains(response, 'LÀTÍN')      # template
         self.assertContains(response, 'djDebug')    # toolbar
 
+    def test_non_ascii_bytes_in_db_params(self):
+        response = self.client.get('/non_ascii_bytes_in_db_params/')
+        self.assertContains(response, 'djàngó')
+
     def test_non_ascii_session(self):
         response = self.client.get('/set_session/')
         self.assertContains(response, 'où')

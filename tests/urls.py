@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 URLpatterns for the debug toolbar.
 
@@ -22,6 +24,7 @@ urlpatterns = patterns('tests.views',
     url(r'^resolving3/(.+)/$', 'resolving_view', { 'arg2' : 'default' }),
     url(r'^regular/(?P<title>.*)/$', 'regular_view'),
     url(r'^non_ascii_context/$', 'non_ascii_context'),
+    url(r'^non_ascii_bytes_in_db_params/$', 'new_user', {'username': 'djàngó'.encode('utf-8')}),
     url(r'^non_ascii_request/$', 'regular_view', {'title': NonAsciiRepr()}),
     url(r'^new_user/$', 'new_user'),
     url(r'^execute_sql/$', 'execute_sql'),
