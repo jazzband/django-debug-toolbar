@@ -171,7 +171,7 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      and cache calls. Enabling stacktraces can increase the CPU time used when
      executing queries. Defaults to True.
 
-  * ``HIDDEN_STACKTRACE_MODULES``
+   * ``HIDDEN_STACKTRACE_MODULES``
 
      Useful for eliminating server-related entries which can result
      in enormous DOM structures and toolbar rendering delays.
