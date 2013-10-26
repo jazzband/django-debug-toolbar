@@ -85,6 +85,8 @@ class TemplateDebugPanel(DebugPanel):
                             temp_layer[key] = '<<triggers database query>>'
                         except UnicodeEncodeError:
                             temp_layer[key] = '<<unicode encode error>>'
+                        except Exception:
+                            temp_layer[key] = '<<unhandled exception>>'
                         else:
                             temp_layer[key] = value
                         finally:
