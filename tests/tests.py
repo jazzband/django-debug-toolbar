@@ -11,7 +11,7 @@ import django
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import management
-from django.db import connection, IntegrityError
+from django.db import connection, IntegrityError, transaction
 from django.db.backends import util
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
@@ -197,7 +197,11 @@ class DebugToolbarIntegrationTestCase(TestCase):
             self.assertEqual(User.objects.count(), 1)
 
             with self.assertRaises(IntegrityError):
-                response = self.client.get('/new_user/')
+                if hasattr(transaction, 'atomic'):      # Django >= 1.6
+                    with transaction.atomic():
+                        response = self.client.get('/new_user/')
+                else:
+                    response = self.client.get('/new_user/')
             self.assertEqual(User.objects.count(), 1)
 
 class DebugToolbarNameFromObjectTest(BaseTestCase):
@@ -366,6 +370,6 @@ class DebugSQLShellTestCase(TestCase):
         original_stdout, sys.stdout = sys.stdout, six.StringIO()
         try:
             User.objects.count()
-            self.assertIn("SELECT COUNT(*)\n", sys.stdout.getvalue())
+            self.assertIn("SELECT COUNT(*)", sys.stdout.getvalue())
         finally:
             sys.stdout = original_stdout
