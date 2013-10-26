@@ -1,12 +1,5 @@
 # coding: utf-8
 
-"""
-URLpatterns for the debug toolbar.
-
-These should not be loaded explicitly; the debug toolbar middleware will patch
-this into the urlconf for the request.
-"""
-
 from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
