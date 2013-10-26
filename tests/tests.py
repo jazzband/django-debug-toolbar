@@ -8,7 +8,6 @@ import threading
 from xml.etree import ElementTree as ET
 
 import django
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import management
 from django.db import connection, IntegrityError, transaction

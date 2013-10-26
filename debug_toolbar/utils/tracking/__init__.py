@@ -1,10 +1,5 @@
 from __future__ import unicode_literals
 
-import logging
-import time
-import types
-from django.utils.importlib import import_module
-
 
 def replace_method(klass, method_name):
     original = getattr(klass, method_name)
