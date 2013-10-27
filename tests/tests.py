@@ -172,13 +172,18 @@ class DebugToolbarIntegrationTestCase(TestCase):
 
     def test_non_ascii_bytes_in_db_params(self):
         response = self.client.get('/non_ascii_bytes_in_db_params/')
-        self.assertContains(response, 'djàngó')
+        if six.PY3:
+            self.assertContains(response, 'djàngó')
+        else:
+            self.assertContains(response, 'dj\\xe0ng\\xf3')
 
     def test_non_ascii_session(self):
         response = self.client.get('/set_session/')
-        self.assertContains(response, 'où')
-        if not six.PY3:
-            self.assertContains(response, 'là')
+        if six.PY3:
+            self.assertContains(response, 'où')
+        else:
+            self.assertContains(response, 'o\\xf9')
+            self.assertContains(response, 'l\\xc3\\xa0')
 
     def test_object_with_non_ascii_repr_in_context(self):
         response = self.client.get('/non_ascii_context/')
