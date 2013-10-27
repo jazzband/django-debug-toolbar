@@ -14,12 +14,10 @@ from django.utils.safestring import mark_safe
 from django.utils import six
 from django.views.debug import linebreak_iter
 
+from .settings import CONFIG
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))
-
-config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
-hide_django_sql = config.get('HIDE_DJANGO_SQL', True)
 
 
 def get_module_path(module_name):
@@ -37,14 +35,7 @@ def get_module_path(module_name):
 
 hidden_paths = [
     get_module_path(module_name)
-    for module_name in config.get(
-        'HIDDEN_STACKTRACE_MODULES', (
-            'socketserver' if six.PY3 else 'SocketServer',
-            'threading',
-            'wsgiref',
-            'debug_toolbar',
-        )
-    )
+    for module_name in CONFIG['HIDDEN_STACKTRACE_MODULES']
 ]
 
 
@@ -68,7 +59,7 @@ def tidy_stacktrace(stack):
         # inspection.
         if '__traceback_hide__' in frame.f_locals:
             continue
-        if hide_django_sql and django_path in s_path and not 'django/contrib' in s_path:
+        if CONFIG['HIDE_DJANGO_SQL'] and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if omit_path(s_path):
             continue

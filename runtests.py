@@ -34,6 +34,20 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         SITE_ID=1,
     )
 
+
+# Refresh the debug toolbar's configuration when overriding settings.
+from debug_toolbar.utils.settings import CONFIG, CONFIG_DEFAULTS
+from django.dispatch import receiver
+from django.test.signals import setting_changed
+
+
+@receiver(setting_changed)
+def update_connections_time_zone(**kwargs):
+    if kwargs['setting'] == 'DEBUG_TOOLBAR_CONFIG':
+        CONFIG.update(CONFIG_DEFAULTS)
+        CONFIG.update(kwargs['value'] or {})
+
+
 from django.test.simple import DjangoTestSuiteRunner
 
 

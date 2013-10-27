@@ -16,6 +16,7 @@ from django.utils import six
 
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
+from debug_toolbar.utils.settings import CONFIG
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 # Handles python threading module bug - http://bugs.python.org/issue14308
@@ -60,21 +61,11 @@ class DebugToolbarMiddleware(object):
     def __init__(self):
         self._urlconfs = {}
 
-        # Set method to use to decide to show toolbar
-        self.show_toolbar = show_toolbar
+        # The method to call to decide to show the toolbar
+        self.show_toolbar = CONFIG['SHOW_TOOLBAR_CALLBACK'] or show_toolbar
 
         # The tag to attach the toolbar to
-        self.tag = '</body>'
-
-        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
-            show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
-                'SHOW_TOOLBAR_CALLBACK', None)
-            if show_toolbar_callback:
-                self.show_toolbar = show_toolbar_callback
-
-            tag = settings.DEBUG_TOOLBAR_CONFIG.get('TAG', None)
-            if tag:
-                self.tag = '</' + tag + '>'
+        self.tag = '</%s>' % CONFIG['TAG']
 
     def process_request(self, request):
         __traceback_hide__ = True                                       # noqa

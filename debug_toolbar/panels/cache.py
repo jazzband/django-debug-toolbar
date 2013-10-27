@@ -16,6 +16,7 @@ from django.utils.translation import ugettext_lazy as _, ungettext
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
                                  get_template_info, get_stack)
+from debug_toolbar.utils.settings import CONFIG
 
 
 cache_called = Signal(providing_args=[
@@ -28,9 +29,7 @@ def send_signal(method):
         value = method(self, *args, **kwargs)
         t = time.time() - t
 
-        debug_toolbar_config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
-        enable_stacktraces = debug_toolbar_config.get('ENABLE_STACKTRACES', True)
-        if enable_stacktraces:
+        if CONFIG['ENABLE_STACKTRACES']:
             stacktrace = tidy_stacktrace(reversed(get_stack()))
         else:
             stacktrace = []

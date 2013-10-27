@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.core.signals import (
     request_started, request_finished, got_request_exception)
 from django.db.models.signals import (
@@ -17,6 +16,7 @@ except ImportError:
     connection_created = None
 
 from debug_toolbar.panels import DebugPanel
+from debug_toolbar.utils.settings import CONFIG
 
 
 class SignalDebugPanel(DebugPanel):
@@ -66,11 +66,7 @@ class SignalDebugPanel(DebugPanel):
     @property
     def signals(self):
         signals = self.SIGNALS.copy()
-        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
-            extra_signals = settings.DEBUG_TOOLBAR_CONFIG.get('EXTRA_SIGNALS', [])
-        else:
-            extra_signals = []
-        for signal in extra_signals:
+        for signal in CONFIG['EXTRA_SIGNALS']:
             mod_path, signal_name = signal.rsplit('.', 1)
             signals_mod = import_module(mod_path)
             signals[signal_name] = getattr(signals_mod, signal_name)

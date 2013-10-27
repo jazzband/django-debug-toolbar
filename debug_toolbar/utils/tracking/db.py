@@ -12,12 +12,7 @@ from django.utils.encoding import force_text
 from django.utils import six
 
 from debug_toolbar.utils import tidy_stacktrace, get_template_info, get_stack
-
-
-# TODO:This should be set in the toolbar loader as a default and panels should
-# get a copy of the toolbar object with access to its config dictionary
-DEBUG_TOOLBAR_CONFIG = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
-SQL_WARNING_THRESHOLD = DEBUG_TOOLBAR_CONFIG.get('SQL_WARNING_THRESHOLD', 500)
+from debug_toolbar.utils.settings import CONFIG
 
 
 class SQLQueryTriggered(Exception):
@@ -98,9 +93,7 @@ class NormalCursorWrapper(object):
         finally:
             stop_time = time()
             duration = (stop_time - start_time) * 1000
-            debug_toolbar_config = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
-            enable_stacktraces = debug_toolbar_config.get('ENABLE_STACKTRACES', True)
-            if enable_stacktraces:
+            if CONFIG['ENABLE_STACKTRACES']:
                 stacktrace = tidy_stacktrace(reversed(get_stack()))
             else:
                 stacktrace = []
@@ -143,7 +136,7 @@ class NormalCursorWrapper(object):
                 'stacktrace': stacktrace,
                 'start_time': start_time,
                 'stop_time': stop_time,
-                'is_slow': (duration > SQL_WARNING_THRESHOLD),
+                'is_slow': (duration > CONFIG.get('SQL_WARNING_THRESHOLD', 500)),
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
             }
