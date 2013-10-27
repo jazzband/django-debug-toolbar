@@ -5,7 +5,6 @@ import os.path
 import django
 import sys
 
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import force_text
 from django.utils.html import escape

@@ -6,7 +6,6 @@ import json
 from threading import local
 from time import time
 
-from django.conf import settings
 from django.template import Node
 from django.utils.encoding import force_text
 from django.utils import six

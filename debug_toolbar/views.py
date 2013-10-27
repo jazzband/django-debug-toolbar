@@ -132,7 +132,7 @@ def template_source(request):
     if template_name is None:
         return HttpResponseBadRequest('"template" key is required')
 
-    from django.template.loader import find_template_loader, make_origin
+    from django.template.loader import find_template_loader
     loaders = []
     for loader_name in settings.TEMPLATE_LOADERS:
         loader = find_template_loader(loader_name)
@@ -141,7 +141,6 @@ def template_source(request):
     for loader in loaders:
         try:
             source, display_name = loader.load_template_source(template_name)
-            origin = make_origin(display_name, loader, template_name, settings.TEMPLATE_DIRS)
             break
         except TemplateDoesNotExist:
             source = "Template Does Not Exist: %s" % (template_name,)
