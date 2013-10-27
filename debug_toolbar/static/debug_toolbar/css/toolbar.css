@@ -195,11 +195,12 @@
 #djDebug code {
 	display:block;
 	font-family:Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", monospace;
+	font-size: 12px;
 	white-space:pre;
 	overflow:auto;
 }
 
-#djDebug tr.djDebugOdd {
+#djDebug .djDebugOdd {
 	background-color:#f5f5f5;
 }
 

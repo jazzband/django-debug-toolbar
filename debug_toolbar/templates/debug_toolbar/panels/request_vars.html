@@ -5,31 +5,23 @@
 	<thead>
 		<tr>
 			<th>{% trans 'View Function' %}</th>
+			<th>{% trans 'Arguments' %}</th>
+			<th>{% trans 'Keyword Arguments' %}</th>
 			<th>{% trans 'URL Name' %}</th>
-			<th>{% trans 'args' %}</th>
-			<th>{% trans 'kwargs' %}</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>{{ view_func }}</td>
-			<td>{{ view_urlname }}</td>
-			<td>{{ view_args|default:"None" }}</td>
-			<td>
-			{% if view_kwargs.items %}
-				{% for k, v in view_kwargs.items %}
-					{{ k }}={{ v }}{% if not forloop.last %}, {% endif %}
-				{% endfor %}
-			{% else %}
-				None
-			{% endif %}
-			</td>
+			<td class="djDebugOdd"><code>{{ view_func }}</code></td>
+			<td class="djDebugEven"><code>{{ view_args|pprint }}</code></td>
+			<td class="djDebugOdd"><code>{{ view_kwargs|pprint }}</code></td>
+			<td class="djDebugEven"><code>{{ view_urlname }}</code></td>
 		</tr>
 	</tbody>
 </table>
 
-<h4>{% trans 'COOKIES Variables' %}</h4>
 {% if cookies %}
+	<h4>{% trans "COOKIES Variables" %}</h4>
 	<table>
 		<colgroup>
 			<col style="width:20%"/>
@@ -44,18 +36,18 @@
 		<tbody>
 			{% for key, value in cookies %}
 				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-					<td>{{ key|escape }}</td>
-					<td>{{ value|escape }}</td>
+					<td><code>{{ key|pprint }}</code></td>
+					<td><code>{{ value|pprint }}</code></td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 {% else %}
-	<p>{% trans "No COOKIE data" %}</p>
+	<h4>{% trans "No COOKIE data" %}</h4>
 {% endif %}
 
-<h4>{% trans 'SESSION Variables' %}</h4>
 {% if session %}
+	<h4>{% trans "SESSION Variables" %}</h4>
 	<table>
 		<colgroup>
 			<col style="width:20%"/>
@@ -70,19 +62,23 @@
 		<tbody>
 			{% for key, value in session %}
 				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-					<td>{{ key|escape }}</td>
-					<td>{{ value|escape }}</td>
+					<td><code>{{ key|pprint }}</code></td>
+					<td><code>{{ value|pprint }}</code></td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 {% else %}
-	<p>{% trans "No SESSION data" %}</p>
+	<h4>{% trans "No SESSION data" %}</h4>
 {% endif %}
 
-<h4>{% trans 'GET Variables' %}</h4>
 {% if get %}
+	<h4>{% trans "GET Variables" %}</h4>
 	<table>
+		<colgroup>
+			<col style="width:20%"/>
+			<col/>
+		</colgroup>
 		<thead>
 			<tr>
 				<th>{% trans "Variable" %}</th>
@@ -92,20 +88,23 @@
 		<tbody>
 			{% for key, value in get %}
 				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
-					<td>{{ key|escape }}</td>
-					<td>{{ value|join:", "|escape }}</td>
+					<td><code>{{ key|pprint }}</code></td>
+					<td><code>{{ value|pprint }}</code></td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 {% else %}
-	<p>{% trans "No GET data" %}</p>
+	<h4>{% trans "No GET data" %}</h4>
 {% endif %}
 
-<h4>{% trans 'POST Variables' %}</h4>
 {% if post %}
+	<h4>{% trans "POST Variables" %}</h4>
 	<table>
-		<thead>
+		<colgroup>
+			<col style="width:20%"/>
+			<col/>
+		</colgr
 			<tr>
 				<th>{% trans "Variable" %}</th>
 				<th>{% trans "Value" %}</th>
@@ -114,12 +113,12 @@
 		<tbody>
 			{% for key, value in post %}
 				<tr class="{% cycle 'row1' 'row2' %}">
-					<td>{{ key|escape }}</td>
-					<td>{{ value|join:", "|escape }}</td>
+					<td><code>{{ key|pprint }}</code></td>
+					<td><code>{{ value|pprint }}</code></td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 {% else %}
-	<p>{% trans "No POST data" %}</p>
+	<h4>{% trans "No POST data" %}</h4>
 {% endif %}
