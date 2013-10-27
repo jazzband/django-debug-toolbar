@@ -186,6 +186,11 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      with client-side frameworks. For example, when using with Angular.js, set
      this to 'ng-non-bindable' or 'class="ng-non-bindable"'. Defaults to ''.
 
+   * ``SQL_WARNING_THRESHOLD``
+
+     The SQL panel highlights queries that took more that this amount of time,
+     in milliseconds, to execute. The default is 500.
+
    Example configuration::
 
        def custom_show_toolbar(request):

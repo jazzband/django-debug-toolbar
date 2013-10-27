@@ -19,6 +19,7 @@ CONFIG_DEFAULTS = {
         'debug_toolbar',
     ),
     'ROOT_TAG_ATTRS': '',
+    'SQL_WARNING_THRESHOLD': 500,   # milliseconds
 }
 
 

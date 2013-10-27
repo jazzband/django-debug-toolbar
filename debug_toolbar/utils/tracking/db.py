@@ -135,7 +135,7 @@ class NormalCursorWrapper(object):
                 'stacktrace': stacktrace,
                 'start_time': start_time,
                 'stop_time': stop_time,
-                'is_slow': (duration > CONFIG.get('SQL_WARNING_THRESHOLD', 500)),
+                'is_slow': duration > CONFIG['SQL_WARNING_THRESHOLD'],
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
             }
