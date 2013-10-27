@@ -18,3 +18,7 @@ compress_css:
 translatable_strings:
 	cd debug_toolbar && django-admin.py makemessages -l en --no-wrap --no-obsolete
 	@echo "Please commit changes and run 'tx push -s' (or wait for Transifex to pick them)"
+
+update_translations:
+	tx pull
+	cd debug_toolbar && django-admin.py compilemessages
