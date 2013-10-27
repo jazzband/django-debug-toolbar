@@ -9,7 +9,7 @@ setup(
     author='Rob Hudson',
     author_email='rob@cogit8.org',
     url='https://github.com/django-debug-toolbar/django-debug-toolbar',
-    download_url='https://github.com/django-debug-toolbar/django-debug-toolbar/downloads',
+    download_url='https://pypi.python.org/pypi/django-debug-toolbar',
     license='BSD',
     packages=find_packages(exclude=('tests', 'example')),
     install_requires=[
