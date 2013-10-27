@@ -12,6 +12,10 @@ sqlparse
 flake8
 tox
 
+# Documentation
+
+Sphinx
+
 # Other tools
 
 transifex-client==0.9.1
