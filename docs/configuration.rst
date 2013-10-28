@@ -103,6 +103,6 @@ The debug toolbar has two settings that can be set in ``settings.py``.
            'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
            'HIDE_DJANGO_SQL': False,
            'TAG': 'div',
-           'ENABLE_STACKTRACES' : True,
+           'ENABLE_STACKTRACES': True,
            'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
        }
