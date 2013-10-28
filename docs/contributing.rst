@@ -1,6 +1,14 @@
 Contributing
 ============
 
+Bug reports and feature requests
+--------------------------------
+
+You can report bugs and request features in the `bug tracker
+<http://github.com/django-debug-toolbar/django-debug-toolbar/issues>`_.
+
+Please search the existing database for duplicates before filing an issue.
+
 Code
 ----
 
@@ -14,18 +22,31 @@ the libraries required for working on the Debug Toolbar::
 
 .. _virtualenv: http://www.virtualenv.org/
 
-Once you've done this, you can run the test suite on all supported version of
-Django and Python::
+Tests
+-----
+
+Once you've set up a development environment as explained above, you can run
+the test suite::
+
+    $ make test
+
+You can also run the test suite on all supported versions of Django and
+Python::
 
     $ tox
 
-Bug reports and feature requests
---------------------------------
+This is strongly recommended before committing changes to Python code.
 
-You can report bugs and request features in the `bug tracker
-<http://github.com/django-debug-toolbar/django-debug-toolbar/issues>`_.
+At this time, there isn't an easy way to test against databases other than
+SQLite. The JaveScript code isn't tested either.
 
-Please search the existing database for duplicates before filing an issue.
+Style
+-----
+
+Python code for the Django Debug Toolbar follows PEP8. Line length is limited
+to 100 characters. You can check for style violations with::
+
+    $ make flake8
 
 Patches
 -------
@@ -37,6 +58,10 @@ The Debug Toolbar includes a limited but growing test suite. If you fix a bug
 or add a feature code, please consider adding proper coverage in the test
 suite, especially if it has a chance for a regression.
 
+If you change a CSS or a JavaScript file, you should update both the original
+file and the minified version in the same commit. Use ``make compress_css``
+and ``make compress_js`` to minify files.
+
 Translations
 ------------
 
@@ -45,6 +70,9 @@ Translation efforts are coordinated on `Transifex
 
 Help translate the Debug Toolbar in your language!
 
+Prior to a release, the English ``.po`` file must be updated with ``make
+translatable_strings``. Once translators have updated the translations on
+Transifex, all ``.po`` files must be updated with ``make update_translations``.
 
 Mailing list
 ------------

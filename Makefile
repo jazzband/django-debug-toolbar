@@ -5,7 +5,6 @@ flake8:
 	flake8 *.py debug_toolbar example tests
 
 test:
-	pip install Django
 	python runtests.py
 
 compress_js:
