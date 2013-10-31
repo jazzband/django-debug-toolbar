@@ -14,16 +14,19 @@
 			{% endif %}
 			{% for panel in panels %}
 				<li class="djDebugPanelButton">
-					{% if panel.has_content %}
+					<input type="checkbox" data-cookie="{{ panel.dom_id }}"{% if panel.enabled %} checked="checked"{% endif %} title="{% trans "Toogle Panel" %}" />
+					{% if panel.has_content and panel.enabled %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}
-					    <div class="contentless">
+					    <div class="contentless{% if panel.disabled %} disabled{% endif %}">
 					{% endif %}
 					{{ panel.nav_title }}
+					{% if panel.enabled %}
 					{% with panel.nav_subtitle as subtitle %}
 						{% if subtitle %}<br /><small>{{ subtitle }}</small>{% endif %}
 					{% endwith %}
-					{% if panel.has_content %}
+					{% endif %}
+					{% if panel.has_content and panel.enabled %}
 						</a>
 					{% else %}
 					    </div>
@@ -36,7 +39,7 @@
 		<a title="{% trans "Show Toolbar" %}" id="djShowToolBarButton" href="#">&#171;</a>
 	</div>
 	{% for panel in panels %}
-		{% if panel.has_content %}
+		{% if panel.has_content and panel.enabled %}
 			<div id="{{ panel.dom_id }}" class="panelContent">
 				<div class="djDebugPanelTitle">
 					<a href="" class="djDebugClose">{% trans "Close" %}</a>

@@ -35,6 +35,12 @@ window.djdt = (function(window, document, jQuery) {
 				$('#djDebugToolbar li').removeClass('active');
 				return false;
 			});
+			$('#djDebug .djDebugPanelButton input[type=checkbox]').live('click', function() {
+				$.cookie($(this).attr('data-cookie'), 'off', {
+					path: '/',
+					expires: $(this).prop('checked') ? -1 : 10
+				});
+			});
 
 			$('#djDebug .remoteCall').live('click', function() {
 				var self = $(this);
@@ -257,13 +263,13 @@ window.djdt = (function(window, document, jQuery) {
 				var $row = $('<tr class="' + ((rowCount % 2) ? 'djDebugOdd' : 'djDebugEven') + '"></tr>');
 				if (endStat) {
 					// Render a start through end bar
-					$row.html('<td>' + stat.replace('Start', '') + '</td>' + 
-					          '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:' + getCSSWidth(stat, endStat) + ';">&nbsp;</strong></div></div></td>' + 
+					$row.html('<td>' + stat.replace('Start', '') + '</td>' +
+					          '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:' + getCSSWidth(stat, endStat) + ';">&nbsp;</strong></div></div></td>' +
 					          '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
 				} else {
 					// Render a point in time
-          $row.html('<td>' + stat + '</td>' + 
-                    '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' + 
+          $row.html('<td>' + stat + '</td>' +
+                    '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' +
                     '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
 				}
 				$('#djDebugBrowserTimingTableBody').append($row);

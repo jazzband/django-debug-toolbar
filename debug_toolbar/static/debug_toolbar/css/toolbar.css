@@ -120,6 +120,11 @@
 	width:auto;
 }
 
+#djDebug #djDebugToolbar input[type=checkbox] {
+	float: right;
+	margin: 10px;
+}
+
 #djDebug #djDebugToolbar li>a,
 #djDebug #djDebugToolbar li>div.contentless  {
 	font-weight:normal;
@@ -129,6 +134,10 @@
 	font-size:16px;
 	padding:10px 10px 5px 25px;
 	color:#fff;
+}
+#djDebug #djDebugToolbar li>div.disabled {
+	font-style: italic;
+	color: #999;
 }
 
 #djDebug #djDebugToolbar li a:hover {
