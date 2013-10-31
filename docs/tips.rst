@@ -6,8 +6,8 @@ Performance considerations
 
 The Debug Toolbar adds some overhead to the rendering of each page. Depending
 on your project, this overhead may slow down page loads significantly. If that
-makes development impractical, you can tune some settings to disable the most
-expensive features and restore decent response times.
+makes development impractical, you can disable the most expensive features to
+restore decent response times.
 
 The SQL panel may be the culprit if your view performs many SQL queries. You
 should attempt to minimize the number of SQL queries, but this isn't always
@@ -24,6 +24,8 @@ large contexts and your templates have complex inheritance or inclusion
 schemes. In that case, you should set ``SHOW_TEMPLATE_CONTEXT`` to ``False``
 in the ``DEBUG_TOOLBAR_CONFIG`` setting.
 
-Finally, if you don't need the panels that are slowing down your application,
-you can customize the ``DEBUG_TOOLBAR_PANELS`` setting to include only the
-panels you actually use.
+If you don't need the panels that are slowing down your application, you can
+disable them temporarily by deselecting the checkbox at the top right of each
+panel. Depending on implementation details, there may be a residual overhead.
+To remove them entirely, you can customize the ``DEBUG_TOOLBAR_PANELS``
+setting to include only the panels you actually use.
