@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import resolve
 from django.http import Http404
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
@@ -55,5 +56,5 @@ class RequestVarsDebugPanel(DebugPanel):
         if hasattr(self.request, 'session'):
             self.record_stats({
                 'session': [(k, self.request.session.get(k))
-                            for k in sorted(self.request.session.keys())]
+                            for k in sorted(self.request.session.keys(), key=force_text)]
             })
