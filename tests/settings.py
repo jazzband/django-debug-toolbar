@@ -8,11 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
-DEBUG = True
-
 INTERNAL_IPS = ['127.0.0.1', '::1']
-
-TEMPLATE_DEBUG = True
 
 
 # Application definition

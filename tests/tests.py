@@ -47,7 +47,7 @@ class BaseTestCase(TestCase):
         self.toolbar.stats = {}
 
 
-@override_settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'])
+@override_settings(DEBUG=True)
 class DebugToolbarTestCase(BaseTestCase):
 
     urls = 'tests.urls'
@@ -68,44 +68,41 @@ class DebugToolbarTestCase(BaseTestCase):
         request.urlconf = 'tests.urls'
         middleware = DebugToolbarMiddleware()
 
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            middleware.process_request(request)
+        middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, six.string_types))
+        self.assertFalse(isinstance(request.urlconf, six.string_types))
 
-            patterns = request.urlconf.urlpatterns
-            self.assertTrue(hasattr(patterns[1], '_callback_str'))
-            self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
+        patterns = request.urlconf.urlpatterns
+        self.assertTrue(hasattr(patterns[1], '_callback_str'))
+        self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_string_per_request(self):
         request = rf.get('/')
         request.urlconf = 'debug_toolbar.urls'
         middleware = DebugToolbarMiddleware()
 
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            middleware.process_request(request)
-            request.urlconf = 'tests.urls'
-            middleware.process_request(request)
+        middleware.process_request(request)
+        request.urlconf = 'tests.urls'
+        middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, six.string_types))
+        self.assertFalse(isinstance(request.urlconf, six.string_types))
 
-            patterns = request.urlconf.urlpatterns
-            self.assertTrue(hasattr(patterns[1], '_callback_str'))
-            self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
+        patterns = request.urlconf.urlpatterns
+        self.assertTrue(hasattr(patterns[1], '_callback_str'))
+        self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_module(self):
         request = rf.get('/')
         request.urlconf = __import__('tests.urls').urls
         middleware = DebugToolbarMiddleware()
 
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            middleware.process_request(request)
+        middleware.process_request(request)
 
-            self.assertFalse(isinstance(request.urlconf, six.string_types))
+        self.assertFalse(isinstance(request.urlconf, six.string_types))
 
-            patterns = request.urlconf.urlpatterns
-            self.assertTrue(hasattr(patterns[1], '_callback_str'))
-            self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
+        patterns = request.urlconf.urlpatterns
+        self.assertTrue(hasattr(patterns[1], '_callback_str'))
+        self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_tuple_urlconf(self):
         request = rf.get('/')
@@ -113,18 +110,18 @@ class DebugToolbarTestCase(BaseTestCase):
         urls.urlpatterns = tuple(urls.urlpatterns)
         request.urlconf = urls
         middleware = DebugToolbarMiddleware()
-        with self.settings(INTERNAL_IPS=['127.0.0.1'], DEBUG=True):
-            middleware.process_request(request)
-            self.assertFalse(isinstance(request.urlconf, six.string_types))
+
+        middleware.process_request(request)
+
+        self.assertFalse(isinstance(request.urlconf, six.string_types))
 
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel
         self.request.path = path
-        with self.settings(DEBUG=True):
-            panel = self.toolbar.get_panel(RequestVarsDebugPanel)
-            panel.process_request(self.request)
-            panel.process_response(self.request, self.response)
-            return self.toolbar.stats['requestvars']
+        panel = self.toolbar.get_panel(RequestVarsDebugPanel)
+        panel.process_request(self.request)
+        panel.process_response(self.request, self.response)
+        return self.toolbar.stats['requestvars']
 
     def test_url_resolving_positional(self):
         stats = self._resolve_stats('/resolving1/a/b/')
@@ -151,7 +148,7 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(stats['view_func'], '<no view>')
 
 
-@override_settings(DEBUG=True, INTERNAL_IPS=['127.0.0.1'])
+@override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(TestCase):
 
     urls = 'tests.urls'
@@ -199,8 +196,6 @@ class DebugToolbarIntegrationTestCase(TestCase):
 
     def test_view_executed_once(self):
         with self.settings(
-                DEBUG=True,
-                INTERNAL_IPS=['127.0.0.1'],
                 DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel']):
 
             self.assertEqual(User.objects.count(), 0)
@@ -365,6 +360,7 @@ class LoggingPanelTestCase(BaseTestCase):
                          records[0]['message'])
 
 
+@override_settings(DEBUG=True)
 class DebugSQLShellTestCase(TestCase):
 
     def setUp(self):
@@ -379,7 +375,6 @@ class DebugSQLShellTestCase(TestCase):
     def tearDown(self):
         util.CursorDebugWrapper = self.original_cursor_wrapper
 
-    @override_settings(DEBUG=True)
     def test_command(self):
         original_stdout, sys.stdout = sys.stdout, six.StringIO()
         try:
