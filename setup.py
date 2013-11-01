@@ -16,7 +16,6 @@ setup(
         'django>=1.4.2,<1.6',
         'sqlparse',
     ],
-    test_suite='runtests.runtests',
     include_package_data=True,
     zip_safe=False,                 # because we're including static files
     classifiers=[
