@@ -28,9 +28,10 @@ Installation
    Tying into middleware allows each panel to be instantiated on request and
    rendering to happen on response.
 
-   The order of ``MIDDLEWARE_CLASSES`` is important: the Debug Toolbar
-   middleware must come after any other middleware that encodes the
-   response's content (such as GZipMiddleware).
+   The order of ``MIDDLEWARE_CLASSES`` is important. You should include the
+   Debug Toolbar middleware as early as possible in the list. However, it must
+   come after any other middleware that encodes the response's content, such
+   as ``GZipMiddleware``.
 
    .. note::
 

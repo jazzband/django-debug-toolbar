@@ -30,12 +30,17 @@ Path: ``debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel``
 
 A list of settings in settings.py.
 
-Header
-~~~~~~
+Headers
+~~~~~~~
 
 Path: ``debug_toolbar.panels.headers.HeaderDebugPanel``
 
-Common HTTP headers.
+This panels shows the HTTP request and response headers, as well as a
+selection of values from the WSGI environment.
+
+Note that headers set by middleware placed before the debug toolbar middleware
+in ``MIDDLEWARE_CLASSES`` won't be visible in the panel. The WSGI server
+itself may also add response headers such as ``Date`` and ``Server``.
 
 Request
 ~~~~~~~

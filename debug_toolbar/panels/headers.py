@@ -46,16 +46,18 @@ class HeaderDebugPanel(DebugPanel):
 
     def process_request(self, request):
         wsgi_env = list(sorted(request.META.items()))
-        self.headers = OrderedDict(
+        self.request_headers = OrderedDict(
             (unmangle(k), v) for (k, v) in wsgi_env if k.startswith('HTTP_'))
-        if 'Cookie' in self.headers:
-            self.headers['Cookie'] = '<< see Request Vars panel >>'
+        if 'Cookie' in self.request_headers:
+            self.request_headers['Cookie'] = '=> see Request Vars panel'
         self.environ = OrderedDict(
             (k, v) for (k, v) in wsgi_env if k in self.environ_filter)
 
     def process_response(self, request, response):
+        self.response_headers = OrderedDict(sorted(response.items()))
         self.record_stats({
-            'headers': self.headers,
+            'request_headers': self.request_headers,
+            'response_headers': self.response_headers,
             'environ': self.environ,
         })
 

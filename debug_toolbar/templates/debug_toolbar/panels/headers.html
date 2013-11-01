@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<h4>{% trans "HTTP Headers" %}</h4>
+<h4>{% trans "Request Headers" %}</h4>
 
 <table>
 	<thead>
@@ -10,7 +10,26 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for key, value in headers.items %}
+		{% for key, value in request_headers.items %}
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<td>{{ key|escape }}</td>
+				<td>{{ value|escape }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h4>{% trans "Response Headers" %}</h4>
+
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Key" %}</th>
+			<th>{% trans "Value" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for key, value in response_headers.items %}
 			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
 				<td>{{ key|escape }}</td>
 				<td>{{ value|escape }}</td>
