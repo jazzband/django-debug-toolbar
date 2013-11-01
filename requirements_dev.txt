@@ -18,6 +18,6 @@ Sphinx
 
 # Other tools
 
-transifex-client==0.9.1
-wheel==0.22.0
-yuicompressor==2.4.8
+transifex-client
+wheel
+yuicompressor
