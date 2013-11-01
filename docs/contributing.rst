@@ -22,11 +22,16 @@ the libraries required for working on the Debug Toolbar::
 
 .. _virtualenv: http://www.virtualenv.org/
 
+You can run now run the example application::
+
+    $ make example
+
 Tests
 -----
 
 Once you've set up a development environment as explained above, you can run
-the test suite::
+the test suite for the versions of Django and Python installed in that
+environment::
 
     $ make test
 
