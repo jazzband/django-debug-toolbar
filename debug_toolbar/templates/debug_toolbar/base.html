@@ -14,7 +14,7 @@
 			{% endif %}
 			{% for panel in panels %}
 				<li class="djDebugPanelButton">
-					<input type="checkbox" data-cookie="{{ panel.dom_id }}"{% if panel.enabled %} checked="checked"{% endif %} title="{% trans "Toogle Panel" %}" />
+					<input type="checkbox" data-cookie="{{ panel.dom_id }}"{% if panel.enabled %} checked="checked"{% endif %} title="{% trans "Toogle Panel for next and successive requests" %}" />
 					{% if panel.has_content and panel.enabled %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}
