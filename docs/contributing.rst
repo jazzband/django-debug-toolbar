@@ -35,6 +35,10 @@ environment::
 
     $ make test
 
+You can enable coverage measurement during tests::
+
+    $ make coverage
+
 You can also run the test suite on all supported versions of Django and
 Python::
 

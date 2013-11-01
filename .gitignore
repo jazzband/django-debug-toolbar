@@ -1,9 +1,11 @@
 *.pyc
 *.DS_Store
 *~
+build
+.coverage
+dist
 django_debug_toolbar.egg-info
 docs/_build
 example/db.sqlite3
-/dist
-/build
-/.tox
+htmlcov
+.tox

@@ -9,6 +9,7 @@ sqlparse
 
 # Testing
 
+coverage
 flake8
 tox
 
