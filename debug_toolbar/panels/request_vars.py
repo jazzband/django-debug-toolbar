@@ -30,9 +30,9 @@ class RequestVarsDebugPanel(DebugPanel):
 
     def process_response(self, request, response):
         self.record_stats({
-            'get': [(k, self.request.GET.getlist(k)) for k in self.request.GET],
-            'post': [(k, self.request.POST.getlist(k)) for k in self.request.POST],
-            'cookies': [(k, self.request.COOKIES.get(k)) for k in self.request.COOKIES],
+            'get': [(k, self.request.GET.getlist(k)) for k in sorted(self.request.GET)],
+            'post': [(k, self.request.POST.getlist(k)) for k in sorted(self.request.POST)],
+            'cookies': [(k, self.request.COOKIES.get(k)) for k in sorted(self.request.COOKIES)],
         })
         view_info = {
             'view_func': _('<no view>'),
@@ -55,5 +55,5 @@ class RequestVarsDebugPanel(DebugPanel):
         if hasattr(self.request, 'session'):
             self.record_stats({
                 'session': [(k, self.request.session.get(k))
-                            for k in self.request.session.keys()]
+                            for k in sorted(self.request.session.keys())]
             })
