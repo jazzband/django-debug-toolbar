@@ -1,5 +1,9 @@
 from __future__ import unicode_literals
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
@@ -11,20 +15,15 @@ class HeaderDebugPanel(DebugPanel):
     name = 'Header'
     template = 'debug_toolbar/panels/headers.html'
     has_content = True
-    # List of headers we want to display
-    header_filter = (
+    # List of environment variables we want to display
+    environ_filter = set((
+        'CONTENT_LENGTH',
         'CONTENT_TYPE',
-        'HTTP_ACCEPT',
-        'HTTP_ACCEPT_CHARSET',
-        'HTTP_ACCEPT_ENCODING',
-        'HTTP_ACCEPT_LANGUAGE',
-        'HTTP_CACHE_CONTROL',
-        'HTTP_CONNECTION',
-        'HTTP_HOST',
-        'HTTP_KEEP_ALIVE',
-        'HTTP_REFERER',
-        'HTTP_USER_AGENT',
+        'DJANGO_SETTINGS_MODULE',
+        'GATEWAY_INTERFACE',
         'QUERY_STRING',
+        'PATH_INFO',
+        'PYTHONPATH',
         'REMOTE_ADDR',
         'REMOTE_HOST',
         'REQUEST_METHOD',
@@ -33,23 +32,33 @@ class HeaderDebugPanel(DebugPanel):
         'SERVER_PORT',
         'SERVER_PROTOCOL',
         'SERVER_SOFTWARE',
-    )
+        'TZ',
+    ))
 
     def nav_title(self):
-        return _('HTTP Headers')
+        return _('Headers')
 
     def title(self):
-        return _('HTTP Headers')
+        return _('Headers')
 
     def url(self):
         return ''
 
     def process_request(self, request):
-        self.headers = dict(
-            [(k, request.META[k]) for k in self.header_filter if k in request.META]
-        )
+        wsgi_env = list(sorted(request.META.items()))
+        self.headers = OrderedDict(
+            (unmangle(k), v) for (k, v) in wsgi_env if k.startswith('HTTP_'))
+        if 'Cookie' in self.headers:
+            self.headers['Cookie'] = '<< see Request Vars panel >>'
+        self.environ = OrderedDict(
+            (k, v) for (k, v) in wsgi_env if k in self.environ_filter)
 
     def process_response(self, request, response):
         self.record_stats({
-            'headers': self.headers
+            'headers': self.headers,
+            'environ': self.environ,
         })
+
+
+def unmangle(wsgi_key):
+    return wsgi_key[5:].replace('_', '-').title()
