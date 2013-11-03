@@ -137,13 +137,13 @@ def template_source(request):
     for loader_name in settings.TEMPLATE_LOADERS:
         loader = find_template_loader(loader_name)
         if loader is not None:
-            loaders.append(loader)
-    for loader in loaders:
+            loaders.append((loader_name, loader))
+    for loader_name, loader in loaders:
         try:
             source, display_name = loader.load_template_source(template_name)
             break
-        except TemplateDoesNotExist:
-            source = "Template Does Not Exist: %s" % (template_name,)
+        except (TemplateDoesNotExist, NotImplementedError) as exc:
+            source = "Template Does Not Exist: %s (%s raised: %s)" % (template_name, loader_name, repr(exc))
 
     try:
         from pygments import highlight

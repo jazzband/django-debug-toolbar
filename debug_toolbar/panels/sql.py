@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import uuid
 from copy import copy
 
+from django.core.urlresolvers import reverse
 from django.db import connections
 from django.db.backends import BaseDatabaseWrapper
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
@@ -133,6 +134,11 @@ class SQLDebugPanel(DebugPanel):
 
     def url(self):
         return ''
+
+    def process_request(self, request):
+        self.context['sql_select_url'] = reverse('sql_select', urlconf=request.urlconf)
+        self.context['sql_explain_url'] = reverse('sql_explain', urlconf=request.urlconf)
+        self.context['sql_profile_url'] = reverse('sql_profile', urlconf=request.urlconf)
 
     def process_response(self, request, response):
         if self._queries:
