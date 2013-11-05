@@ -1,8 +1,12 @@
-// Grab jQuery for use in any of the below
-var $djdtjq = jQuery.noConflict(true);
-
-window.djdt = (function(window, document, jQuery) {
-	jQuery.cookie = function(name, value, options) { if (typeof value != 'undefined') { options = options || {}; if (value === null) { value = ''; options.expires = -1; } var expires = ''; if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) { var date; if (typeof options.expires == 'number') { date = new Date(); date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000)); } else { date = options.expires; } expires = '; expires=' + date.toUTCString(); } var path = options.path ? '; path=' + (options.path) : ''; var domain = options.domain ? '; domain=' + (options.domain) : ''; var secure = options.secure ? '; secure' : ''; document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join(''); } else { var cookieValue = null; if (document.cookie && document.cookie != '') { var cookies = document.cookie.split(';'); for (var i = 0; i < cookies.length; i++) { var cookie = $.trim(cookies[i]); if (cookie.substring(0, name.length + 1) == (name + '=')) { cookieValue = decodeURIComponent(cookie.substring(name.length + 1)); break; } } } return cookieValue; } };
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as anonymous module.
+        define(['jquery', 'jquery.cookie'], factory);
+    } else {
+        // Browser globals.
+        window.djdt = factory(jQuery);
+    }
+}(function (jQuery) {
 	var $ = jQuery;
 	var COOKIE_NAME = 'djdt';
 	var djdt = {
@@ -232,15 +236,8 @@ window.djdt = (function(window, document, jQuery) {
 			}
 		}
 	};
-	$(document).ready(function() {
-		djdt.init();
-	});
-	return djdt;
-}(window, document, $djdtjq));
 
-
-(function(window, document, $) {
-	function _renderPerf() {
+	function renderPerf() {
 		// Browser timing remains hidden unless we can successfully access the performance object
 		var perf = window.performance || window.msPerformance ||
 					window.webkitPerformance || window.mozPerformance;
@@ -288,10 +285,12 @@ window.djdt = (function(window, document, jQuery) {
 		}
 	}
 
-	function renderPerf() {
-		setTimeout(_renderPerf, 0);
-	}
+	$(window).bind('load', function() {
+		setTimeout(renderPerf, 0);
+	});
+	$(document).ready(function() {
+		djdt.init();
+	});
 
-  $(window).bind('load', renderPerf);
-
-}(window, document, $djdtjq));
+	return djdt;
+}));
