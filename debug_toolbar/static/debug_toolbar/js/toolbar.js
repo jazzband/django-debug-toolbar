@@ -240,12 +240,12 @@
     function renderPerf() {
         // Browser timing remains hidden unless we can successfully access the performance object
         var perf = window.performance || window.msPerformance ||
-                    window.webkitPerformance || window.mozPerformance;
+                   window.webkitPerformance || window.mozPerformance;
         if (perf) {
             var rowCount = 0,
                 timingOffset = perf.timing.navigationStart,
-                timingEnd = perf.timing.loadEventEnd;
-            var totalTime = timingEnd - timingOffset;
+                timingEnd = perf.timing.loadEventEnd,
+                totalTime = timingEnd - timingOffset;
             function getLeft(stat) {
                 return ((perf.timing[stat] - timingOffset) / (totalTime)) * 100.0;
             }
@@ -265,9 +265,9 @@
                               '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
                 } else {
                     // Render a point in time
-          $row.html('<td>' + stat + '</td>' +
-                    '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' +
-                    '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
+                     $row.html('<td>' + stat + '</td>' +
+                               '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' +
+                               '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
                 }
                 $('#djDebugBrowserTimingTableBody').append($row);
             }
@@ -275,7 +275,7 @@
             // This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
             addRow('domainLookupStart', 'domainLookupEnd');
             addRow('connectStart', 'connectEnd');
-            addRow('requestStart', 'responseEnd') // There is no requestEnd
+            addRow('requestStart', 'responseEnd'); // There is no requestEnd
             addRow('responseStart', 'responseEnd');
             addRow('domLoading', 'domComplete'); // Spans the events below
             addRow('domInteractive');
