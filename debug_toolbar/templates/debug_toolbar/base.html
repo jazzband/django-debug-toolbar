@@ -3,7 +3,14 @@
 @media print { #djDebug {display:none;}}
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}debug_toolbar/css/toolbar.min.css" type="text/css" />
-<script>window.jQuery || document.write('<script src="{{ STATIC_URL }}debug_toolbar/js/jquery.js"><\/script>')</script>
+<script>
+if(!window.jQuery) {
+	var script = document.createElement('script');
+	script.src = "{{ STATIC_URL }}debug_toolbar/js/jquery.js";
+	var exist = document.getElementsByTagName('script')[0];
+	exist.parentNode.insertBefore(script, exist);
+}
+</script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/jquery.cookie.js"></script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.js"></script>
 <div id="djDebug" style="display:none;" dir="ltr" {{ TOOLBAR_ROOT_TAG_ATTRS|safe }}>
