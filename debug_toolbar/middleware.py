@@ -68,9 +68,9 @@ class DebugToolbarMiddleware(object):
     def process_request(self, request):
         __traceback_hide__ = True                                       # noqa
         if self.show_toolbar(request):
-            if request.urlconf not in self._urlconfs:
+            if hasattr(request, 'urlconf') and request.urlconf not in self._urlconfs:
                 resolver = get_resolver(request.urlconf)
-                resolver.urlconf_module.urlpatterns = debug_toolbar.urls.urlpatterns + resolver.url_patterns
+                resolver.urlconf_module.urlpatterns = debug_toolbar.urls.urlpatterns + list(resolver.url_patterns)
                 self._urlconfs[request.urlconf] = True
 
             toolbar = DebugToolbar(request)
