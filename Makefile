@@ -22,10 +22,6 @@ coverage:
 		coverage run --branch --source=debug_toolbar `which django-admin.py` test tests
 	coverage html
 
-compress_js:
-	yuicompressor debug_toolbar/static/debug_toolbar/js/jquery.js > debug_toolbar/static/debug_toolbar/js/toolbar.min.js
-	yuicompressor debug_toolbar/static/debug_toolbar/js/toolbar.js >> debug_toolbar/static/debug_toolbar/js/toolbar.min.js
-
 compress_css:
 	yuicompressor --type css debug_toolbar/static/debug_toolbar/css/toolbar.css > debug_toolbar/static/debug_toolbar/css/toolbar.min.css
 
