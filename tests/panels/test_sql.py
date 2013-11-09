@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.utils import DatabaseError
+from django.utils import six
 from django.utils import unittest
 
 from debug_toolbar.panels.sql import SQLDebugPanel
@@ -35,13 +36,22 @@ class SQLPanelTestCase(BaseTestCase):
         panel = self.toolbar.get_panel(SQLDebugPanel)
         self.assertEqual(len(panel._queries), 0)
 
-        # non-ASCII query
-        list(User.objects.extra(where=["username = 'café'"]))
+        # non-ASCII text query
+        list(User.objects.extra(where=["username = 'apéro'"]))
         self.assertEqual(len(panel._queries), 1)
 
-        # non-ASCII parameters
-        list(User.objects.filter(username='café'))
+        # non-ASCII text parameters
+        list(User.objects.filter(username='thé'))
         self.assertEqual(len(panel._queries), 2)
+
+        # non-ASCII bytes parameters
+        list(User.objects.filter(username='café'.encode('utf-8')))
+        self.assertEqual(len(panel._queries), 3)
+
+        panel.process_response(self.request, self.response)
+
+        # ensure the panel renders correctly
+        self.assertIn('café', panel.content())
 
     @unittest.skipUnless(connection.vendor == 'postgresql',
                          'Test valid only on PostgreSQL')
