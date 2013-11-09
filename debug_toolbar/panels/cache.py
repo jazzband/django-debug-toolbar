@@ -201,9 +201,6 @@ class CacheDebugPanel(DebugPanel):
                          'Cache calls from %(count)d backends',
                          count) % dict(count=count)
 
-    def url(self):
-        return ''
-
     def process_response(self, request, response):
         self.record_stats({
             'total_calls': len(self.calls),

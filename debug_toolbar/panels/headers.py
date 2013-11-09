@@ -41,9 +41,6 @@ class HeaderDebugPanel(DebugPanel):
     def title(self):
         return _('Headers')
 
-    def url(self):
-        return ''
-
     def process_request(self, request):
         wsgi_env = list(sorted(request.META.items()))
         self.request_headers = OrderedDict(

@@ -23,9 +23,6 @@ class RequestVarsDebugPanel(DebugPanel):
     def title(self):
         return _('Request Vars')
 
-    def url(self):
-        return ''
-
     def process_request(self, request):
         self.request = request
 

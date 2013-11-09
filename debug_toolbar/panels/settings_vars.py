@@ -22,9 +22,6 @@ class SettingsVarsDebugPanel(DebugPanel):
     def title(self):
         return _('Settings from <code>%s</code>') % settings.SETTINGS_MODULE
 
-    def url(self):
-        return ''
-
     def process_response(self, request, response):
         self.record_stats({
             'settings': SortedDict(sorted(get_safe_settings().items(), key=lambda s: s[0])),

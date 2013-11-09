@@ -37,9 +37,6 @@ class DebugPanel(object):
         """Title showing in panel"""
         raise NotImplementedError
 
-    def url(self):
-        raise NotImplementedError
-
     def content(self):
         if self.has_content:
             context = self.context.copy()
@@ -59,6 +56,7 @@ class DebugPanel(object):
         return toolbar.stats.get(self.slug, {})
 
     # Standard middleware methods
+
     def process_request(self, request):
         pass
 

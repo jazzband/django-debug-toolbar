@@ -108,9 +108,6 @@ class TemplateDebugPanel(DebugPanel):
         num_templates = len(self.templates)
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
 
-    def url(self):
-        return ''
-
     def process_request(self, request):
         self.request = request
 

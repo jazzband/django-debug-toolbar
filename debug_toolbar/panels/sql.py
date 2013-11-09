@@ -131,9 +131,6 @@ class SQLDebugPanel(DebugPanel):
                   'SQL Queries from %(count)d connections',
                   count) % dict(count=count)
 
-    def url(self):
-        return ''
-
     def process_response(self, request, response):
         if self._queries:
             width_ratio_tally = 0

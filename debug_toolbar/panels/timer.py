@@ -75,9 +75,6 @@ class TimerDebugPanel(DebugPanel):
     def title(self):
         return _('Time')
 
-    def url(self):
-        return ''
-
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
 

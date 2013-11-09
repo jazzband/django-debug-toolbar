@@ -151,9 +151,6 @@ class ProfilingDebugPanel(DebugPanel):
     def nav_title(self):
         return _('Profiling')
 
-    def url(self):
-        return ''
-
     def title(self):
         return _('Profiling')
 

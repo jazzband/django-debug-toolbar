@@ -134,6 +134,3 @@ class LoggingPanel(DebugPanel):
 
     def title(self):
         return _('Log Messages')
-
-    def url(self):
-        return ''

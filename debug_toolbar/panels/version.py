@@ -25,9 +25,6 @@ class VersionDebugPanel(DebugPanel):
     def nav_subtitle(self):
         return 'Django %s' % django.get_version()
 
-    def url(self):
-        return ''
-
     def title(self):
         return _('Versions')
 

@@ -60,9 +60,6 @@ class SignalDebugPanel(DebugPanel):
     def title(self):
         return _("Signals")
 
-    def url(self):
-        return ''
-
     @property
     def signals(self):
         signals = self.SIGNALS.copy()
