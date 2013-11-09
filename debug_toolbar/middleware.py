@@ -4,15 +4,13 @@ Debug Toolbar middleware
 
 from __future__ import unicode_literals
 
-import imp
 import threading
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import get_resolver, get_urlconf
 from django.shortcuts import render
 from django.utils.encoding import force_text
-from django.utils.importlib import import_module
-from django.utils import six
 
 import debug_toolbar.urls
 from debug_toolbar.toolbar.loader import DebugToolbar
@@ -59,7 +57,7 @@ class DebugToolbarMiddleware(object):
         return cls.debug_toolbars.get(threading.current_thread().ident)
 
     def __init__(self):
-        self._urlconfs = {}
+        self._urlconfs = set()
 
         # The method to call to decide to show the toolbar
         self.show_toolbar = CONFIG['SHOW_TOOLBAR_CALLBACK'] or show_toolbar
@@ -70,25 +68,12 @@ class DebugToolbarMiddleware(object):
     def process_request(self, request):
         __traceback_hide__ = True                                       # noqa
         if self.show_toolbar(request):
-            urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-            if isinstance(urlconf, six.string_types):
-                urlconf = import_module(getattr(request, 'urlconf', settings.ROOT_URLCONF))
+            urlconf = get_urlconf()
 
-            if urlconf not in self._urlconfs:
-                new_urlconf = imp.new_module('urlconf')
-                new_urlconf.urlpatterns = (debug_toolbar.urls.urlpatterns +
-                                           list(urlconf.urlpatterns))
-
-                if hasattr(urlconf, 'handler403'):
-                    new_urlconf.handler403 = urlconf.handler403
-                if hasattr(urlconf, 'handler404'):
-                    new_urlconf.handler404 = urlconf.handler404
-                if hasattr(urlconf, 'handler500'):
-                    new_urlconf.handler500 = urlconf.handler500
-
-                self._urlconfs[urlconf] = new_urlconf
-
-            request.urlconf = self._urlconfs[urlconf]
+            if urlconf and urlconf not in self._urlconfs:
+                resolver = get_resolver(urlconf)
+                resolver.urlconf_module.urlpatterns = debug_toolbar.urls.urlpatterns + list(resolver.url_patterns)
+                self._urlconfs.add(urlconf)
 
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:

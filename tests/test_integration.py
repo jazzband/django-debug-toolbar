@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from xml.etree import ElementTree as ET
 
 from django.contrib.auth.models import User
+from django.core.urlresolvers import set_urlconf, get_resolver, get_urlconf
 from django.db import IntegrityError, transaction
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
@@ -37,29 +38,25 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_request_urlconf_string(self):
         request = rf.get('/')
-        request.urlconf = 'tests.urls'
+        set_urlconf('tests.urls')
         middleware = DebugToolbarMiddleware()
 
         middleware.process_request(request)
 
-        self.assertFalse(isinstance(request.urlconf, six.string_types))
-
-        patterns = request.urlconf.urlpatterns
+        patterns = get_resolver(get_urlconf()).url_patterns
         self.assertTrue(hasattr(patterns[1], '_callback_str'))
         self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
     def test_request_urlconf_string_per_request(self):
         request = rf.get('/')
-        request.urlconf = 'debug_toolbar.urls'
+        set_urlconf('debug_toolbar.urls')
         middleware = DebugToolbarMiddleware()
 
         middleware.process_request(request)
-        request.urlconf = 'tests.urls'
+        set_urlconf('tests.urls')
         middleware.process_request(request)
 
-        self.assertFalse(isinstance(request.urlconf, six.string_types))
-
-        patterns = request.urlconf.urlpatterns
+        patterns = get_resolver(get_urlconf()).url_patterns
         self.assertTrue(hasattr(patterns[1], '_callback_str'))
         self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
 
