@@ -137,18 +137,6 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertContains(response, 'LÀTÍN')      # template
         self.assertContains(response, 'djDebug')    # toolbar
 
-    def test_non_ascii_session(self):
-        response = self.client.get('/set_session/')
-        if six.PY3:
-            self.assertContains(response, 'où')
-        else:
-            self.assertContains(response, 'o\\xf9')
-            self.assertContains(response, 'l\\xc3\\xa0')
-
-    def test_object_with_non_ascii_repr_in_request_vars(self):
-        response = self.client.get('/non_ascii_request/')
-        self.assertContains(response, 'nôt åscíì')
-
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError

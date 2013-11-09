@@ -26,10 +26,3 @@ def new_user(request, username='joe'):
 def resolving_view(request, arg1, arg2):
     # see test_url_resolving in tests.py
     return HttpResponse()
-
-
-def set_session(request):
-    request.session['où'] = 'où'
-    if not six.PY3:
-        request.session['là'.encode('utf-8')] = 'là'.encode('utf-8')
-    return render(request, 'basic.html')
