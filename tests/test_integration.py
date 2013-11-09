@@ -145,10 +145,6 @@ class DebugToolbarIntegrationTestCase(TestCase):
             self.assertContains(response, 'o\\xf9')
             self.assertContains(response, 'l\\xc3\\xa0')
 
-    def test_object_with_non_ascii_repr_in_context(self):
-        response = self.client.get('/non_ascii_context/')
-        self.assertContains(response, 'nôt åscíì')
-
     def test_object_with_non_ascii_repr_in_request_vars(self):
         response = self.client.get('/non_ascii_request/')
         self.assertContains(response, 'nôt åscíì')

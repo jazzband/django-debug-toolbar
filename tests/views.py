@@ -14,11 +14,6 @@ def execute_sql(request):
     list(User.objects.all())
     return HttpResponse()
 
-
-def non_ascii_context(request):
-    return render(request, 'basic.html', {'title': NonAsciiRepr()})
-
-
 def regular_view(request, title):
     return render(request, 'basic.html', {'title': title})
 
