@@ -11,7 +11,7 @@ class DebugPanel(object):
     """
     # name = 'Base'
     # template = 'debug_toolbar/panels/base.html'
-    has_content = False  # If content returns something, set to true in subclass
+    has_content = False  # If content returns something, set to True in subclass
 
     # We'll maintain a local context instance so we can expose our template
     # context variables to panels which need them:

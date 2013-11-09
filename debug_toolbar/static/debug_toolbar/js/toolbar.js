@@ -28,6 +28,23 @@
                     $(this).parent().removeClass('active');
                 } else {
                     $('.panelContent').hide(); // Hide any that are already open
+                    var inner = current.find('.djDebugPanelContent .scroll').first();
+                    if ($(inner).empty()) {
+                        var ajax_data = {
+                            data: {
+                                toolbar_id: $('#djDebug').data('toolbar-id'),
+                                panel_id: this.className
+                            },
+                            type: 'GET',
+                            url: $('#djDebug').data('render-panel-url')
+                        };
+                        $.ajax(ajax_data).done(function(data){
+                            inner.html(data);
+                        }).fail(function(xhr){
+                            var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+                            $('#djDebugWindow').html(message).show();
+                        });
+                    }
                     current.show();
                     $('#djDebugToolbar li').removeClass('active');
                     $(this).parent().addClass('active');

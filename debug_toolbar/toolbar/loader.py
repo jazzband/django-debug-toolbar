@@ -46,7 +46,6 @@ class DebugToolbar(object):
         global panel_classes
         for panel_class in panel_classes:
             panel_instance = panel_class(self, context=self.template_context)
-
             self._panels[panel_class] = panel_instance
 
     def render_toolbar(self):
@@ -56,8 +55,8 @@ class DebugToolbar(object):
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
+            'toolbar_id': save_toolbar(self),
         })
-
         return render_to_string('debug_toolbar/base.html', context)
 
 
@@ -101,3 +100,23 @@ def load_panel_classes():
                 'Toolbar Panel module "%s" does not define a "%s" class' %
                 (panel_module, panel_classname))
         panel_classes.append(panel_class)
+
+
+toolbar_counter = 0
+toolbar_maxsize = 10            # keep data for the last 10 requests
+toolbar_results = SortedDict()
+
+
+def save_toolbar(toolbar):
+    global toolbar_counter, toolbar_results
+    toolbar_counter += 1
+    toolbar_results[toolbar_counter] = toolbar
+    for _ in range(len(toolbar_results) - toolbar_maxsize):
+        # When we drop support for Python 2.6 and switch to
+        # collections.OrderedDict, use popitem(last=False).
+        del toolbar_results[toolbar_results.keyOrder[0]]
+    return toolbar_counter
+
+
+def get_saved_toolbar(toolbar_id):
+    return toolbar_results.get(toolbar_id)
