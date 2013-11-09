@@ -45,7 +45,7 @@ class DebugToolbar(object):
         """
         global panel_classes
         for panel_class in panel_classes:
-            panel_instance = panel_class(context=self.template_context)
+            panel_instance = panel_class(self, context=self.template_context)
 
             self._panels[panel_class] = panel_instance
 
