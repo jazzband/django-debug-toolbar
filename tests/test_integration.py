@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from xml.etree import ElementTree as ET
 
-from django.contrib.auth.models import User
-from django.db import IntegrityError, transaction
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
 from django.utils import six
@@ -158,21 +156,3 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError
-
-    def test_view_executed_once(self):
-        with self.settings(
-                DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel']):
-
-            self.assertEqual(User.objects.count(), 0)
-
-            response = self.client.get('/new_user/')
-            self.assertContains(response, 'Profiling')
-            self.assertEqual(User.objects.count(), 1)
-
-            with self.assertRaises(IntegrityError):
-                if hasattr(transaction, 'atomic'):      # Django >= 1.6
-                    with transaction.atomic():
-                        response = self.client.get('/new_user/')
-                else:
-                    response = self.client.get('/new_user/')
-            self.assertEqual(User.objects.count(), 1)
