@@ -5,14 +5,12 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils import six
-
-from .models import NonAsciiRepr
 
 
 def execute_sql(request):
     list(User.objects.all())
     return HttpResponse()
+
 
 def regular_view(request, title):
     return render(request, 'basic.html', {'title': title})

@@ -7,7 +7,6 @@ from django.utils import six
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 
 from ..base import BaseTestCase
-from ..models import NonAsciiRepr
 
 
 class RequestVarsDebugPanelTestCase(BaseTestCase):

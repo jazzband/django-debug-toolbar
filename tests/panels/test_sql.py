@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.utils import DatabaseError
-from django.utils import six
 from django.utils import unittest
 
 from debug_toolbar.panels.sql import SQLDebugPanel

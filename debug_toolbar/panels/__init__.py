@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
 class DebugPanel(object):
