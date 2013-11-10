@@ -202,7 +202,7 @@ class CacheDebugPanel(DebugPanel):
     def enable_instrumentation(self):
         # This isn't thread-safe because cache connections aren't thread-local
         # in Django, unlike database connections.
-        cache.cache = CacheStatTracker(cache.cache)
+        cache.cache = CacheStatTracker(original_cache)
         cache.get_cache = get_cache
 
     def disable_instrumentation(self):

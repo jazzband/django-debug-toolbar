@@ -119,12 +119,16 @@ class SQLDebugPanel(DebugPanel):
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.
         for connection in connections.all():
-            old_cursor = connection.cursor
-            connection.cursor = lambda: CursorWrapper(old_cursor(), connection, self)
+            if not hasattr(connection, '_djdt_cursor'):
+                connection._djdt_cursor = connection.cursor
+                connection.cursor = lambda: CursorWrapper(
+                    connection._djdt_cursor(), connection, self)
 
     def disable_instrumentation(self):
         for connection in connections.all():
-            del connection.cursor
+            if hasattr(connection, '_djdt_cursor'):
+                del connection._djdt_cursor
+                del connection.cursor
 
     def process_response(self, request, response):
         if self._queries:

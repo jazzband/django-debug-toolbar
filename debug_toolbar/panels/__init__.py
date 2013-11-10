@@ -51,7 +51,7 @@ class DebugPanel(object):
         """Title showing in panel"""
         raise NotImplementedError
 
-    # Enable and disable (expensive) instrumentation
+    # Enable and disable (expensive) instrumentation, must be idempotent
 
     def enable_instrumentation(self):
         pass
