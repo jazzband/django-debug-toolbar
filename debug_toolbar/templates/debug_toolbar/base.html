@@ -3,9 +3,9 @@
 @media print { #djDebug {display:none;}}
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}debug_toolbar/css/toolbar.min.css" type="text/css" />
-<script>
+<script>//<![CDATA[
 if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar/js/jquery.js"></scr'+'ipt>');
-</script>
+//]]></script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/jquery.cookie.js"></script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.js"></script>
 <div id="djDebug" style="display:none;" dir="ltr" {{ TOOLBAR_ROOT_TAG_ATTRS|safe }}>
