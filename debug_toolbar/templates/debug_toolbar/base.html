@@ -24,7 +24,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 					{% if panel.has_content and panel.enabled %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}
-						<div class="contentless{% if panel.disabled %} disabled{% endif %}">
+						<div class="contentless{% if not panel.enabled %} disabled{% endif %}">
 					{% endif %}
 					{{ panel.nav_title }}
 					{% if panel.enabled %}

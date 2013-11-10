@@ -54,10 +54,6 @@ class DebugToolbarMiddleware(object):
     """
     debug_toolbars = {}
 
-    @classmethod
-    def get_current(cls):
-        return cls.debug_toolbars.get(threading.current_thread().ident)
-
     def __init__(self):
         self._urlconfs = {}
 
@@ -92,10 +88,10 @@ class DebugToolbarMiddleware(object):
 
             toolbar = DebugToolbar(request)
             for panel in toolbar.panels:
-                panel.disabled = panel.dom_id() in request.COOKIES
-                panel.enabled = not panel.disabled
-                if panel.disabled:
+                panel.enabled = panel.dom_id() not in request.COOKIES
+                if not panel.enabled:
                     continue
+                panel.enable_instrumentation()
                 panel.process_request(request)
             self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
 
@@ -106,7 +102,7 @@ class DebugToolbarMiddleware(object):
             return
         result = None
         for panel in toolbar.panels:
-            if panel.disabled:
+            if not panel.enabled:
                 continue
             response = panel.process_view(request, view_func, view_args, view_kwargs)
             if response:
@@ -131,12 +127,13 @@ class DebugToolbarMiddleware(object):
                     {'redirect_to': redirect_to}
                 )
                 response.cookies = cookies
+        for panel in toolbar.panels:
+            if not panel.enabled:
+                continue
+            panel.process_response(request, response)
+            panel.disable_instrumentation()
         if ('gzip' not in response.get('Content-Encoding', '') and
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
-            for panel in toolbar.panels:
-                if panel.disabled:
-                    continue
-                panel.process_response(request, response)
             response.content = replace_insensitive(
                 force_text(response.content, encoding=settings.DEFAULT_CHARSET),
                 self.tag,

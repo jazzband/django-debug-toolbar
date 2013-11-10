@@ -6,7 +6,7 @@ import time
 
 from django.conf import settings
 from django.core import cache
-from django.core.cache import get_cache as base_get_cache
+from django.core.cache import cache as original_cache, get_cache as original_get_cache
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.template import Node
@@ -123,6 +123,10 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
+def get_cache(*args, **kwargs):
+    return CacheStatTracker(original_get_cache(*args, **kwargs))
+
+
 class CacheDebugPanel(DebugPanel):
     """
     Panel that displays the cache statistics.
@@ -195,6 +199,16 @@ class CacheDebugPanel(DebugPanel):
                          'Cache calls from %(count)d backends',
                          count) % dict(count=count)
 
+    def enable_instrumentation(self):
+        # This isn't thread-safe because cache connections aren't thread-local
+        # in Django, unlike database connections.
+        cache.cache = CacheStatTracker(cache.cache)
+        cache.get_cache = get_cache
+
+    def disable_instrumentation(self):
+        cache.cache = original_cache
+        cache.get_cache = original_get_cache
+
     def process_response(self, request, response):
         self.record_stats({
             'total_calls': len(self.calls),
@@ -204,12 +218,3 @@ class CacheDebugPanel(DebugPanel):
             'misses': self.misses,
             'counts': self.counts,
         })
-
-
-def get_cache_debug(*args, **kwargs):
-    base_cache = base_get_cache(*args, **kwargs)
-    return CacheStatTracker(base_cache)
-
-
-cache.cache = CacheStatTracker(cache.cache)
-cache.get_cache = get_cache_debug
