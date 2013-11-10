@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from xml.etree import ElementTree as ET
 
-from django.contrib.auth.models import User
-from django.db import IntegrityError, transaction
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
 from django.utils import six
@@ -139,47 +137,6 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertContains(response, 'LÀTÍN')      # template
         self.assertContains(response, 'djDebug')    # toolbar
 
-    def test_non_ascii_bytes_in_db_params(self):
-        response = self.client.get('/non_ascii_bytes_in_db_params/')
-        if six.PY3:
-            self.assertContains(response, 'djàngó')
-        else:
-            self.assertContains(response, 'dj\\xe0ng\\xf3')
-
-    def test_non_ascii_session(self):
-        response = self.client.get('/set_session/')
-        if six.PY3:
-            self.assertContains(response, 'où')
-        else:
-            self.assertContains(response, 'o\\xf9')
-            self.assertContains(response, 'l\\xc3\\xa0')
-
-    def test_object_with_non_ascii_repr_in_context(self):
-        response = self.client.get('/non_ascii_context/')
-        self.assertContains(response, 'nôt åscíì')
-
-    def test_object_with_non_ascii_repr_in_request_vars(self):
-        response = self.client.get('/non_ascii_request/')
-        self.assertContains(response, 'nôt åscíì')
-
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError
-
-    def test_view_executed_once(self):
-        with self.settings(
-                DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel']):
-
-            self.assertEqual(User.objects.count(), 0)
-
-            response = self.client.get('/new_user/')
-            self.assertContains(response, 'Profiling')
-            self.assertEqual(User.objects.count(), 1)
-
-            with self.assertRaises(IntegrityError):
-                if hasattr(transaction, 'atomic'):      # Django >= 1.6
-                    with transaction.atomic():
-                        response = self.client.get('/new_user/')
-                else:
-                    response = self.client.get('/new_user/')
-            self.assertEqual(User.objects.count(), 1)

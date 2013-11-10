@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
 class DebugPanel(object):
@@ -11,14 +10,15 @@ class DebugPanel(object):
     """
     # name = 'Base'
     # template = 'debug_toolbar/panels/base.html'
-    has_content = False  # If content returns something, set to true in subclass
+    has_content = False  # If content returns something, set to True in subclass
 
     # We'll maintain a local context instance so we can expose our template
     # context variables to panels which need them:
     context = {}
 
     # Panel methods
-    def __init__(self, context={}):
+    def __init__(self, toolbar, context={}):
+        self.toolbar = toolbar
         self.context.update(context)
         self.slug = slugify(self.name)
 
@@ -44,16 +44,14 @@ class DebugPanel(object):
             return render_to_string(self.template, context)
 
     def record_stats(self, stats):
-        toolbar = DebugToolbarMiddleware.get_current()
-        panel_stats = toolbar.stats.get(self.slug)
+        panel_stats = self.toolbar.stats.get(self.slug)
         if panel_stats:
             panel_stats.update(stats)
         else:
-            toolbar.stats[self.slug] = stats
+            self.toolbar.stats[self.slug] = stats
 
     def get_stats(self):
-        toolbar = DebugToolbarMiddleware.get_current()
-        return toolbar.stats.get(self.slug, {})
+        return self.toolbar.stats.get(self.slug, {})
 
     # Standard middleware methods
 

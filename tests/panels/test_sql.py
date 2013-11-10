@@ -14,15 +14,18 @@ from ..base import BaseTestCase
 
 class SQLPanelTestCase(BaseTestCase):
 
+    def setUp(self):
+        super(SQLPanelTestCase, self).setUp()
+        self.panel = self.toolbar.get_panel(SQLDebugPanel)
+
     def test_recording(self):
-        panel = self.toolbar.get_panel(SQLDebugPanel)
-        self.assertEqual(len(panel._queries), 0)
+        self.assertEqual(len(self.panel._queries), 0)
 
         list(User.objects.all())
 
         # ensure query was logged
-        self.assertEqual(len(panel._queries), 1)
-        query = panel._queries[0]
+        self.assertEqual(len(self.panel._queries), 1)
+        query = self.panel._queries[0]
         self.assertEqual(query[0], 'default')
         self.assertTrue('sql' in query[1])
         self.assertTrue('duration' in query[1])
@@ -32,16 +35,24 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertTrue(len(query[1]['stacktrace']) > 0)
 
     def test_non_ascii_query(self):
-        panel = self.toolbar.get_panel(SQLDebugPanel)
-        self.assertEqual(len(panel._queries), 0)
+        self.assertEqual(len(self.panel._queries), 0)
 
-        # non-ASCII query
-        list(User.objects.extra(where=["username = 'café'"]))
-        self.assertEqual(len(panel._queries), 1)
+        # non-ASCII text query
+        list(User.objects.extra(where=["username = 'apéro'"]))
+        self.assertEqual(len(self.panel._queries), 1)
 
-        # non-ASCII parameters
-        list(User.objects.filter(username='café'))
-        self.assertEqual(len(panel._queries), 2)
+        # non-ASCII text parameters
+        list(User.objects.filter(username='thé'))
+        self.assertEqual(len(self.panel._queries), 2)
+
+        # non-ASCII bytes parameters
+        list(User.objects.filter(username='café'.encode('utf-8')))
+        self.assertEqual(len(self.panel._queries), 3)
+
+        self.panel.process_response(self.request, self.response)
+
+        # ensure the panel renders correctly
+        self.assertIn('café', self.panel.content())
 
     @unittest.skipUnless(connection.vendor == 'postgresql',
                          'Test valid only on PostgreSQL')
@@ -55,15 +66,14 @@ class SQLPanelTestCase(BaseTestCase):
             self.assertTrue('erroneous query' in str(e))
 
     def test_disable_stacktraces(self):
-        panel = self.toolbar.get_panel(SQLDebugPanel)
-        self.assertEqual(len(panel._queries), 0)
+        self.assertEqual(len(self.panel._queries), 0)
 
         with self.settings(DEBUG_TOOLBAR_CONFIG={'ENABLE_STACKTRACES': False}):
             list(User.objects.all())
 
         # ensure query was logged
-        self.assertEqual(len(panel._queries), 1)
-        query = panel._queries[0]
+        self.assertEqual(len(self.panel._queries), 1)
+        query = self.panel._queries[0]
         self.assertEqual(query[0], 'default')
         self.assertTrue('sql' in query[1])
         self.assertTrue('duration' in query[1])

@@ -10,25 +10,26 @@ from ..base import BaseTestCase
 
 class LoggingPanelTestCase(BaseTestCase):
 
-    def test_happy_case(self):
-        logger = logging.getLogger(__name__)
-        logger.info('Nothing to see here, move along!')
+    def setUp(self):
+        super(LoggingPanelTestCase, self).setUp()
+        self.panel = self.toolbar.get_panel(LoggingPanel)
+        self.logger = logging.getLogger(__name__)
 
-        logging_panel = self.toolbar.get_panel(LoggingPanel)
-        logging_panel.process_response(None, None)
-        records = logging_panel.get_stats()['records']
+    def test_happy_case(self):
+        self.logger.info('Nothing to see here, move along!')
+
+        self.panel.process_response(self.request, self.response)
+        records = self.panel.get_stats()['records']
 
         self.assertEqual(1, len(records))
         self.assertEqual('Nothing to see here, move along!',
                          records[0]['message'])
 
     def test_formatting(self):
-        logger = logging.getLogger(__name__)
-        logger.info('There are %d %s', 5, 'apples')
+        self.logger.info('There are %d %s', 5, 'apples')
 
-        logging_panel = self.toolbar.get_panel(LoggingPanel)
-        logging_panel.process_response(None, None)
-        records = logging_panel.get_stats()['records']
+        self.panel.process_response(self.request, self.response)
+        records = self.panel.get_stats()['records']
 
         self.assertEqual(1, len(records))
         self.assertEqual('There are 5 apples',
@@ -39,14 +40,11 @@ class LoggingPanelTestCase(BaseTestCase):
             def __str__(self):
                 raise Exception('Please not stringify me!')
 
-        logger = logging.getLogger(__name__)
-
         # should not raise exception, but fail silently
-        logger.debug('This class is misbehaving: %s', BadClass())
+        self.logger.debug('This class is misbehaving: %s', BadClass())
 
-        logging_panel = self.toolbar.get_panel(LoggingPanel)
-        logging_panel.process_response(None, None)
-        records = logging_panel.get_stats()['records']
+        self.panel.process_response(self.request, self.response)
+        records = self.panel.get_stats()['records']
 
         self.assertEqual(1, len(records))
         self.assertEqual(MESSAGE_IF_STRING_REPRESENTATION_INVALID,

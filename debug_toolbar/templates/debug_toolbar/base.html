@@ -8,7 +8,9 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 //]]></script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/jquery.cookie.js"></script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.js"></script>
-<div id="djDebug" style="display:none;" dir="ltr" {{ TOOLBAR_ROOT_TAG_ATTRS|safe }}>
+<div id="djDebug" style="display:none;" dir="ltr"
+     data-toolbar-id="{{ toolbar_id }}" data-render-panel-url="/__debug__/render_panel/"
+     {{ TOOLBAR_ROOT_TAG_ATTRS|safe }}>
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if panels %}
@@ -22,7 +24,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 					{% if panel.has_content and panel.enabled %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}
-					    <div class="contentless{% if panel.disabled %} disabled{% endif %}">
+						<div class="contentless{% if panel.disabled %} disabled{% endif %}">
 					{% endif %}
 					{{ panel.nav_title }}
 					{% if panel.enabled %}
@@ -33,7 +35,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 					{% if panel.has_content and panel.enabled %}
 						</a>
 					{% else %}
-					    </div>
+						</div>
 					{% endif %}
 				</li>
 			{% endfor %}
@@ -50,9 +52,8 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 					<h3>{{ panel.title|safe }}</h3>
 				</div>
 				<div class="djDebugPanelContent">
-				    <div class="scroll">
-				        {{ panel.content|safe }}
-				    </div>
+					<div class="scroll">
+					</div>
 				</div>
 			</div>
 		{% endif %}

@@ -6,11 +6,30 @@ views in any other way is generally not advised.
 
 from __future__ import unicode_literals
 
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
+from django.utils.html import escape
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.forms import SQLSelectForm
+from debug_toolbar.toolbar.loader import get_saved_toolbar
+
+
+def render_panel(request):
+    """Render the contents of a panel"""
+    toolbar = get_saved_toolbar(int(request.GET['toolbar_id']))
+    if toolbar is None:
+        content = _("Data for this panel isn't available anymore. "
+                    "Please reload the page and retry.")
+        content = "<p>%s</p>" % escape(content)
+    else:
+        panel_id = request.GET['panel_id']
+        for panel in toolbar.panels:
+            if panel.dom_id() == panel_id:
+                content = panel.content()
+                break
+    return HttpResponse(content)
 
 
 @csrf_exempt
