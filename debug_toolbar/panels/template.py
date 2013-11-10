@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from os.path import normpath
 from pprint import pformat
 
+import django
 from django import http
 from django.conf import settings
 from django.template.context import get_standard_processors
@@ -28,14 +29,17 @@ if Template._render != instrumented_test_render:
     Template._render = instrumented_test_render
 
 
-# MONSTER monkey-patch
-old_template_init = Template.__init__
+if django.VERSION[:2] < (1, 7):
+    # Monkey-patch versions of Django where Template doesn't store origin.
+    # See https://code.djangoproject.com/ticket/16096.
 
+    old_template_init = Template.__init__
 
-def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
-    old_template_init(self, template_string, origin, name)
-    self.origin = origin
-Template.__init__ = new_template_init
+    def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
+        old_template_init(self, template_string, origin, name)
+        self.origin = origin
+
+    Template.__init__ = new_template_init
 
 
 class TemplateDebugPanel(DebugPanel):
