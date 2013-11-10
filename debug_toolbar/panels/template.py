@@ -6,11 +6,13 @@ from pprint import pformat
 import django
 from django import http
 from django.conf import settings
+from django.db.models.query import QuerySet, RawQuerySet
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.utils.encoding import force_text
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.query import QuerySet, RawQuerySet
+
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils.tracking.db import recording, SQLQueryTriggered
 from debug_toolbar.utils.settings import CONFIG
@@ -62,7 +64,8 @@ class TemplateDebugPanel(DebugPanel):
         template, context = kwargs['template'], kwargs['context']
 
         # Skip templates that we are generating through the debug toolbar.
-        if template.name and template.name.startswith('debug_toolbar/'):
+        if (isinstance(template.name, six.string_types) and
+                template.name.startswith('debug_toolbar/')):
             return
 
         context_list = []
