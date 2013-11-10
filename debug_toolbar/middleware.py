@@ -54,10 +54,6 @@ class DebugToolbarMiddleware(object):
     """
     debug_toolbars = {}
 
-    @classmethod
-    def get_current(cls):
-        return cls.debug_toolbars.get(threading.current_thread().ident)
-
     def __init__(self):
         self._urlconfs = {}
 
