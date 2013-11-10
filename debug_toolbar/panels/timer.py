@@ -32,8 +32,10 @@ class TimerDebugPanel(DebugPanel):
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
 
     def process_response(self, request, response):
-        stats = {'total_time': (time.time() - self._start_time) * 1000}
-        if self.has_resource:
+        stats = {}
+        if hasattr(self, '_start_time'):
+            stats['total_time'] = (time.time() - self._start_time) * 1000
+        if hasattr(self, '_start_rusage'):
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
             stats['utime'] = 1000 * self._elapsed_ru('ru_utime')
             stats['stime'] = 1000 * self._elapsed_ru('ru_stime')
@@ -62,15 +64,17 @@ class TimerDebugPanel(DebugPanel):
     def nav_subtitle(self):
         stats = self.get_stats()
 
-        if self.has_resource:
+        if hasattr(self, '_start_rusage'):
             utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
             stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
             return _('CPU: %(cum)0.2fms (%(total)0.2fms)') % {
                 'cum': (utime + stime) * 1000.0,
                 'total': stats['total_time']
             }
-        else:
+        elif 'total_time' in stats:
             return _('TOTAL: %0.2fms') % stats['total_time']
+        else:
+            return ''
 
     def title(self):
         return _('Time')

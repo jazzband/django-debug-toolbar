@@ -23,14 +23,11 @@ class RequestVarsDebugPanel(DebugPanel):
     def title(self):
         return _('Request Vars')
 
-    def process_request(self, request):
-        self.request = request
-
     def process_response(self, request, response):
         self.record_stats({
-            'get': [(k, self.request.GET.getlist(k)) for k in sorted(self.request.GET)],
-            'post': [(k, self.request.POST.getlist(k)) for k in sorted(self.request.POST)],
-            'cookies': [(k, self.request.COOKIES.get(k)) for k in sorted(self.request.COOKIES)],
+            'get': [(k, request.GET.getlist(k)) for k in sorted(request.GET)],
+            'post': [(k, request.POST.getlist(k)) for k in sorted(request.POST)],
+            'cookies': [(k, request.COOKIES.get(k)) for k in sorted(request.COOKIES)],
         })
         view_info = {
             'view_func': _('<no view>'),
@@ -39,7 +36,7 @@ class RequestVarsDebugPanel(DebugPanel):
             'view_urlname': 'None',
         }
         try:
-            match = resolve(self.request.path)
+            match = resolve(request.path)
             func, args, kwargs = match
             view_info['view_func'] = get_name_from_obj(func)
             view_info['view_args'] = args
@@ -50,8 +47,8 @@ class RequestVarsDebugPanel(DebugPanel):
             pass
         self.record_stats(view_info)
 
-        if hasattr(self.request, 'session'):
+        if hasattr(request, 'session'):
             self.record_stats({
-                'session': [(k, self.request.session.get(k))
-                            for k in sorted(self.request.session.keys(), key=force_text)]
+                'session': [(k, request.session.get(k))
+                            for k in sorted(request.session.keys(), key=force_text)]
             })

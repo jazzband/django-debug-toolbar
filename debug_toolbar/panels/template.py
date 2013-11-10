@@ -120,14 +120,11 @@ class TemplateDebugPanel(DebugPanel):
         num_templates = len(self.templates)
         return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
 
-    def process_request(self, request):
-        self.request = request
-
     def process_response(self, request, response):
         context_processors = dict(
             [
                 ("%s.%s" % (k.__module__, k.__name__),
-                    pformat(k(self.request))) for k in get_standard_processors()
+                    pformat(k(request))) for k in get_standard_processors()
             ]
         )
         template_context = []

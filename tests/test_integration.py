@@ -12,6 +12,7 @@ from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 
 from .base import BaseTestCase
+from .views import regular_view
 
 
 rf = RequestFactory()
@@ -116,6 +117,15 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(stats['view_args'], 'None')
         self.assertEqual(stats['view_kwargs'], 'None')
         self.assertEqual(stats['view_func'], '<no view>')
+
+    # Django doesn't guarantee that process_request, process_view and
+    # process_response always get called in this order.
+
+    def test_middleware_view_only(self):
+        DebugToolbarMiddleware().process_view(self.request, regular_view, ('title',), {})
+
+    def test_middleware_response_only(self):
+        DebugToolbarMiddleware().process_response(self.request, self.response)
 
 
 @override_settings(DEBUG=True)
