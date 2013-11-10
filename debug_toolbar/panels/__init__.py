@@ -22,31 +22,44 @@ class DebugPanel(object):
     context = {}
 
     # Panel methods
+
     def __init__(self, toolbar, context={}):
         self.toolbar = toolbar
         self.context.update(context)
         self.slug = slugify(self.name)
-
-    def dom_id(self):
-        return 'djDebug%sPanel' % (self.name.replace(' ', ''))
-
-    def nav_title(self):
-        """Title showing in toolbar"""
-        raise NotImplementedError
-
-    def nav_subtitle(self):
-        """Subtitle showing until title in toolbar"""
-        return ''
-
-    def title(self):
-        """Title showing in panel"""
-        raise NotImplementedError
 
     def content(self):
         if self.has_content:
             context = self.context.copy()
             context.update(self.get_stats())
             return render_to_string(self.template, context)
+
+    def dom_id(self):
+        return 'djDebug%sPanel' % (self.name.replace(' ', ''))
+
+    # Titles and subtitles
+
+    def nav_title(self):
+        """Title showing in sidebar"""
+        raise NotImplementedError
+
+    def nav_subtitle(self):
+        """Subtitle showing under title in sidebar"""
+        return ''
+
+    def title(self):
+        """Title showing in panel"""
+        raise NotImplementedError
+
+    # Enable and disable (expensive) instrumentation
+
+    def enable_instrumentation(self):
+        pass
+
+    def disable_instrumentation(self):
+        pass
+
+    # Store and retrieve stats (shared between panels)
 
     def record_stats(self, stats):
         panel_stats = self.toolbar.stats.get(self.slug)

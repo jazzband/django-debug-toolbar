@@ -17,6 +17,11 @@ class SQLPanelTestCase(BaseTestCase):
     def setUp(self):
         super(SQLPanelTestCase, self).setUp()
         self.panel = self.toolbar.get_panel(SQLDebugPanel)
+        self.panel.enable_instrumentation()
+
+    def tearDown(self):
+        self.panel.disable_instrumentation()
+        super(SQLPanelTestCase, self).tearDown()
 
     def test_recording(self):
         self.assertEqual(len(self.panel._queries), 0)

@@ -73,6 +73,9 @@ logging_handler = ThreadTrackingHandler(collector)
 logging.root.setLevel(logging.NOTSET)
 logging.root.addHandler(logging_handler)  # register with logging
 
+# We don't use enable/disable_instrumentation because we can't make these
+# functions thread-safe and (hopefully) logging isn't too expensive.
+
 try:
     import logbook
     logbook_supported = True

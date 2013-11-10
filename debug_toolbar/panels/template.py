@@ -18,9 +18,9 @@ from debug_toolbar.utils.settings import CONFIG
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
 
-# Monkeypatch instrumented test renderer from django.test.utils - we could use
-# django.test.utils.setup_test_environment for this but that would also set up
-# e-mail interception, which we don't want
+# Monkey-patch to enable the template_rendered signal. The receiver returns
+# immediately when the panel is disabled to keep the overhead small.
+
 from django.test.utils import instrumented_test_render
 from django.template import Template
 
@@ -56,13 +56,17 @@ class TemplateDebugPanel(DebugPanel):
         template_rendered.connect(self._store_template_info)
 
     def _store_template_info(self, sender, **kwargs):
-        t = kwargs['template']
-        if t.name and t.name.startswith('debug_toolbar/'):
-            return  # skip templates that we are generating through the debug toolbar.
-        context_data = kwargs['context']
+        if not self.enabled:
+            return
+
+        template, context = kwargs['template'], kwargs['context']
+
+        # Skip templates that we are generating through the debug toolbar.
+        if template.name and template.name.startswith('debug_toolbar/'):
+            return
 
         context_list = []
-        for context_layer in context_data.dicts:
+        for context_layer in context.dicts:
             temp_layer = {}
             if hasattr(context_layer, 'items'):
                 for key, value in context_layer.items():
@@ -102,6 +106,7 @@ class TemplateDebugPanel(DebugPanel):
                 context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
                 pass
+
         kwargs['context'] = [force_text(item) for item in context_list]
         self.templates.append(kwargs)
 

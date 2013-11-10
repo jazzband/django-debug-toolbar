@@ -4,28 +4,13 @@ import uuid
 from copy import copy
 
 from django.db import connections
-from django.db.backends import BaseDatabaseWrapper
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
 from debug_toolbar.forms import SQLSelectForm
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.utils.sql import reformat_sql
 from debug_toolbar.utils.tracking.db import CursorWrapper
-from debug_toolbar.utils.tracking import replace_method
-
-
-@replace_method(BaseDatabaseWrapper, 'cursor')
-def cursor(original, self):
-    result = original(self)
-
-    djdt = DebugToolbarMiddleware.get_current()
-    if not djdt:
-        return result
-    logger = djdt.get_panel(SQLDebugPanel)
-
-    return CursorWrapper(result, self, logger=logger)
 
 
 def get_isolation_level_display(engine, level):
@@ -130,6 +115,16 @@ class SQLDebugPanel(DebugPanel):
         return __('SQL Queries from %(count)d connection',
                   'SQL Queries from %(count)d connections',
                   count) % dict(count=count)
+
+    def enable_instrumentation(self):
+        # This is thread-safe because database connections are thread-local.
+        for connection in connections.all():
+            old_cursor = connection.cursor
+            connection.cursor = lambda: CursorWrapper(old_cursor(), connection, self)
+
+    def disable_instrumentation(self):
+        for connection in connections.all():
+            del connection.cursor
 
     def process_response(self, request, response):
         if self._queries:

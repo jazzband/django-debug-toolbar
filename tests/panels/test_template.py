@@ -18,6 +18,12 @@ class TemplateDebugPanelTestCase(BaseTestCase):
     def setUp(self):
         super(TemplateDebugPanelTestCase, self).setUp()
         self.panel = self.toolbar.get_panel(TemplateDebugPanel)
+        self.sql_panel = self.toolbar.get_panel(SQLDebugPanel)
+        self.sql_panel.enable_instrumentation()
+
+    def tearDown(self):
+        self.sql_panel.disable_instrumentation()
+        super(TemplateDebugPanelTestCase, self).tearDown()
 
     def test_queryset_hook(self):
         t = Template("No context variables here!")
@@ -30,8 +36,7 @@ class TemplateDebugPanelTestCase(BaseTestCase):
         t.render(c)
 
         # ensure the query was NOT logged
-        sql_panel = self.toolbar.get_panel(SQLDebugPanel)
-        self.assertEqual(len(sql_panel._queries), 0)
+        self.assertEqual(len(self.sql_panel._queries), 0)
 
         base_ctx_idx = 1 if django.VERSION[:2] >= (1, 5) else 0
         ctx = self.panel.templates[0]['context'][base_ctx_idx]
