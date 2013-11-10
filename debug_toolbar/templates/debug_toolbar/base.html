@@ -42,7 +42,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 		</ul>
 	</div>
 	<div style="display:none;" id="djDebugToolbarHandle">
-		<a title="{% trans "Show Toolbar" %}" id="djShowToolBarButton" href="#">&#171;</a>
+		<span title="{% trans "Show Toolbar" %}" id="djShowToolBarButton">&#171;</span>
 	</div>
 	{% for panel in panels %}
 		{% if panel.has_content and panel.enabled %}

@@ -8,9 +8,8 @@
     }
 }(function (jQuery) {
     var $ = jQuery;
-    var COOKIE_NAME = 'djdt';
     var djdt = {
-        jQuery: jQuery,
+        handleDragged: false,
         events: {
             ready: []
         },
@@ -157,7 +156,31 @@
                 return false;
             });
             $('#djShowToolBarButton').click(function() {
-                djdt.show_toolbar();
+                if (djdt.handleDragged) {
+                    djdt.handleDragged = false;
+                } else {
+                    djdt.show_toolbar();
+                }
+                return false;
+            });
+            var handle = $('#djDebugToolbarHandle');
+            $('#djShowToolBarButton').on('mousedown', function (event) {
+                var baseY = handle.offset().top - event.pageY;
+                $(document).on('mousemove', function (event) {
+                    var offset = handle.offset();
+                    offset.top = baseY + event.pageY;
+                    handle.offset(offset);
+                    djdt.handleDragged = true;
+                });
+                return false;
+            });
+            $(document).on('mouseup', function () {
+                $(document).off('mousemove');
+                var top = handle.offset().top;
+                $.cookie('djdttop', top, {
+                    path: '/',
+                    expires: 10
+                });
                 return false;
             });
             $(document).bind('close.djDebug', function() {
@@ -178,7 +201,11 @@
                     return;
                 }
             });
-            if ($.cookie(COOKIE_NAME)) {
+            var handleTop = $.cookie('djdttop');
+            if (handleTop) {
+                handle.css({top: handleTop + 'px'});
+            }
+            if ($.cookie('djdt')) {
                 djdt.hide_toolbar(false);
             } else {
                 djdt.show_toolbar(false);
@@ -216,7 +243,7 @@
             // Unbind keydown
             $(document).unbind('keydown.djDebug');
             if (setCookie) {
-                $.cookie(COOKIE_NAME, 'hide', {
+                $.cookie('djdt', 'hide', {
                     path: '/',
                     expires: 10
                 });
@@ -235,7 +262,7 @@
             } else {
                 $('#djDebugToolbar').show();
             }
-            $.cookie(COOKIE_NAME, null, {
+            $.cookie('djdt', null, {
                 path: '/',
                 expires: -1
             });
