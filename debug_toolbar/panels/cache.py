@@ -71,14 +71,8 @@ class CacheStatTracker(BaseCache):
     def __contains__(self, key):
         return self.cache.__contains__(key)
 
-    def make_key(self, *args, **kwargs):
-        return self.cache.make_key(*args, **kwargs)
-
-    def validate_key(self, *args, **kwargs):
-        self.cache.validate_key(*args, **kwargs)
-
-    def clear(self):
-        return self.cache.clear()
+    def __getattr__(self, name):
+        return getattr(self.cache, name)
 
     @send_signal
     def add(self, *args, **kwargs):
