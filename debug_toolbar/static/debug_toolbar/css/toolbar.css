@@ -174,7 +174,7 @@
 	opacity:0.75;
 }
 
-#djDebug a#djShowToolBarButton {
+#djDebug #djShowToolBarButton {
 	display:block;
 	height:75px;
 	width:30px;
@@ -193,12 +193,12 @@
 	opacity:0.5;
 }
 
-#djDebug a#djShowToolBarButton:hover {
+#djDebug #djShowToolBarButton:hover {
 	background-color:#111;
-	padding-right:6px;
 	border-top-color:#FFE761;
 	border-left-color:#FFE761;
 	border-bottom-color:#FFE761;
+	cursor:move;
 	opacity:1.0;
 }
 
