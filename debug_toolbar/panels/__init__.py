@@ -10,7 +10,12 @@ class DebugPanel(object):
     """
     # name = 'Base'
     # template = 'debug_toolbar/panels/base.html'
-    has_content = False  # If content returns something, set to True in subclass
+
+    # If content returns something, set to True in subclass
+    has_content = False
+
+    # This can be set to False in instances if the panel is disabled.
+    enabled = True
 
     # We'll maintain a local context instance so we can expose our template
     # context variables to panels which need them:
