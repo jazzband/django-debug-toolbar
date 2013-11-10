@@ -18,7 +18,7 @@
         init: function() {
             $('#djDebug').show();
             var current = null;
-            $('#djDebugPanelList li a').live('click', function() {
+            $('#djDebugPanelList li a').on('click', function() {
                 if (!this.className) {
                     return false;
                 }
@@ -51,19 +51,19 @@
                 }
                 return false;
             });
-            $('#djDebug a.djDebugClose').live('click', function() {
+            $('#djDebug a.djDebugClose').on('click', function() {
                 $(document).trigger('close.djDebug');
                 $('#djDebugToolbar li').removeClass('active');
                 return false;
             });
-            $('#djDebug .djDebugPanelButton input[type=checkbox]').live('click', function() {
+            $('#djDebug .djDebugPanelButton input[type=checkbox]').on('click', function() {
                 $.cookie($(this).attr('data-cookie'), 'off', {
                     path: '/',
                     expires: $(this).prop('checked') ? -1 : 10
                 });
             });
 
-            $('#djDebug .remoteCall').live('click', function() {
+            $('#djDebug .remoteCall').on('click', function() {
                 var self = $(this);
                 var name = self[0].tagName.toLowerCase();
                 var ajax_data = {};
@@ -89,7 +89,7 @@
                         $('#djDebugWindow').html(message).show();
                 });
 
-                $('#djDebugWindow a.djDebugBack').live('click', function() {
+                $('#djDebugWindow a.djDebugBack').on('click', function() {
                     $(this).parent().parent().hide();
                     return false;
                 });
@@ -97,17 +97,17 @@
                 return false;
             });
 
-            $('#djDebugTemplatePanel a.djTemplateShowContext').live('click', function() {
+            $('#djDebugTemplatePanel a.djTemplateShowContext').on('click', function() {
                 djdt.toggle_arrow($(this).children('.toggleArrow'));
                 djdt.toggle_content($(this).parent().next());
                 return false;
             });
-            $('#djDebug a.djDebugToggle').live('click', function(e) {
+            $('#djDebug a.djDebugToggle').on('click', function(e) {
                 e.preventDefault();
                 $(this).parent().find('.djDebugCollapsed').toggle();
                 $(this).parent().find('.djDebugUncollapsed').toggle();
             });
-            $('#djDebug a.djToggleSwitch').live('click', function(e) {
+            $('#djDebug a.djToggleSwitch').on('click', function(e) {
                 e.preventDefault();
                 var btn = $(this);
                 var id = btn.attr('data-toggle-id');
@@ -143,7 +143,7 @@
                 var depth = parseInt(row.attr('depth'), 10) + 1;
                 return subcalls.filter('[depth='+depth+']');
             }
-            $('.djDebugProfileRow .djDebugProfileToggle').live('click', function(){
+            $('.djDebugProfileRow .djDebugProfileToggle').on('click', function(){
                 var row = $(this).closest('.djDebugProfileRow');
                 var subcalls = getSubcalls(row);
                 if (subcalls.css('display') == 'none') {
