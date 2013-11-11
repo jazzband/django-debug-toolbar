@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url
+from django.conf.urls import include, patterns, url
 from django.contrib import admin
 
 from .models import NonAsciiRepr
@@ -18,4 +18,5 @@ urlpatterns = patterns('tests.views',                                   # noqa
     url(r'^non_ascii_request/$', 'regular_view', {'title': NonAsciiRepr()}),
     url(r'^new_user/$', 'new_user'),
     url(r'^execute_sql/$', 'execute_sql'),
+    url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
 )

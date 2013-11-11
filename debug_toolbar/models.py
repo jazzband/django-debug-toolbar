@@ -20,6 +20,11 @@ def is_toolbar_middleware(middleware_path):
     return issubclass(middleware_cls, DebugToolbarMiddleware)
 
 
+def is_toolbar_middleware_installed():
+    return any(is_toolbar_middleware(middleware)
+               for middleware in settings.MIDDLEWARE_CLASSES)
+
+
 def prepend_to_setting(setting_name, value):
     """Insert value at the beginning of a list or tuple setting."""
     values = getattr(settings, setting_name)
@@ -28,23 +33,33 @@ def prepend_to_setting(setting_name, value):
     setattr(settings, setting_name, value + values)
 
 
-if not settings.INTERNAL_IPS:
-    prepend_to_setting('INTERNAL_IPS', '127.0.0.1')
-    prepend_to_setting('INTERNAL_IPS', '::1')
+def patch_internal_ips():
+    if not settings.INTERNAL_IPS:
+        prepend_to_setting('INTERNAL_IPS', '127.0.0.1')
+        prepend_to_setting('INTERNAL_IPS', '::1')
 
 
-if not any(is_toolbar_middleware(middleware)
-           for middleware in settings.MIDDLEWARE_CLASSES):
-    prepend_to_setting('MIDDLEWARE_CLASSES',
-                       'debug_toolbar.middleware.DebugToolbarMiddleware')
-
-try:
-    reverse('djdt:render_panel')
-except NoReverseMatch:
-    urlconf_module = import_module(settings.ROOT_URLCONF)
-    urlconf_module.urlpatterns += patterns('',
-        url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
-    )
+def patch_middleware_classes():
+    if not is_toolbar_middleware_installed():
+        prepend_to_setting('MIDDLEWARE_CLASSES',
+                           'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 
-load_panel_classes()
+def patch_root_urlconf():
+    try:
+        reverse('djdt:render_panel')
+    except NoReverseMatch:
+        urlconf_module = import_module(settings.ROOT_URLCONF)
+        urlconf_module.urlpatterns += patterns('',                      # noqa
+            url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
+        )
+
+
+if settings.DEBUG:
+    patch_internal_ips()
+    patch_middleware_classes()
+    patch_root_urlconf()
+
+
+if is_toolbar_middleware_installed():
+    load_panel_classes()
