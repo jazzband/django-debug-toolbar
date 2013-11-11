@@ -19,3 +19,15 @@ for middleware_path in settings.MIDDLEWARE_CLASSES:
     if issubclass(middleware_cls, DebugToolbarMiddleware):
         load_panel_classes()
         break
+
+def prepend_to_setting(setting_name, value):
+    """Insert value at the beginning of a list or tuple setting."""
+    values = getattr(settings, setting_name)
+    # Make a list [value] or tuple (value,)
+    value = type(values)((value,))
+    setattr(settings, setting_name, value + values)
+
+
+if not settings.INTERNAL_IPS:
+    prepend_to_setting('INTERNAL_IPS', '127.0.0.1')
+    prepend_to_setting('INTERNAL_IPS', '::1')
