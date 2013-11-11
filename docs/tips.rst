@@ -1,6 +1,19 @@
 Tips
 ====
 
+The toolbar isn't displayed!
+----------------------------
+
+The Debug Toolbar will only display itself if the mimetype of the response is
+either ``text/html`` or ``application/xhtml+xml`` and contains a closing
+``</body>`` tag.
+
+Be aware of middleware ordering and other middleware that may intercept
+requests and return responses. Putting the debug toolbar middleware *after*
+the Flatpage middleware, for example, means the toolbar will not show up on
+flatpages.
+
+
 Performance considerations
 --------------------------
 
