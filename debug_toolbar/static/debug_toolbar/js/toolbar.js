@@ -156,9 +156,7 @@
                 return false;
             });
             $('#djShowToolBarButton').click(function() {
-                if (djdt.handleDragged) {
-                    djdt.handleDragged = false;
-                } else {
+                if (!djdt.handleDragged) {
                     djdt.show_toolbar();
                 }
                 return false;
@@ -176,11 +174,16 @@
             });
             $(document).on('mouseup', function () {
                 $(document).off('mousemove');
-                var top = handle.offset().top;
-                $.cookie('djdttop', top, {
-                    path: '/',
-                    expires: 10
-                });
+                if (djdt.handleDragged) {
+                    var top = handle.offset().top;
+                    $.cookie('djdttop', top, {
+                        path: '/',
+                        expires: 10
+                    });
+                    setTimeout(function () {
+                        djdt.handleDragged = false;
+                    }, 10);
+                }
                 return false;
             });
             $(document).bind('close.djDebug', function() {
@@ -201,10 +204,6 @@
                     return;
                 }
             });
-            var handleTop = $.cookie('djdttop');
-            if (handleTop) {
-                handle.css({top: handleTop + 'px'});
-            }
             if ($.cookie('djdt')) {
                 djdt.hide_toolbar(false);
             } else {
@@ -240,6 +239,11 @@
             // finally close toolbar
             $('#djDebugToolbar').hide('fast');
             $('#djDebugToolbarHandle').show();
+            // set handle position
+            var handleTop = $.cookie('djdttop');
+            if (handleTop) {
+                $('#djDebugToolbarHandle').css({top: handleTop + 'px'});
+            }
             // Unbind keydown
             $(document).unbind('keydown.djDebug');
             if (setCookie) {
