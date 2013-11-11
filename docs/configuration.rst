@@ -106,3 +106,7 @@ The debug toolbar has two settings that can be set in ``settings.py``.
            'ENABLE_STACKTRACES': True,
            'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
        }
+
+   * ``RESULTS_CACHE_SIZE``
+
+     The toolbar keeps up to this many results in memory. Defaults to 10.

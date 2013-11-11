@@ -20,6 +20,7 @@ CONFIG_DEFAULTS = {
     ),
     'ROOT_TAG_ATTRS': '',
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
+    'RESULTS_CACHE_SIZE': 10,
 }
 
 

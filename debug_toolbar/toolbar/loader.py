@@ -100,7 +100,6 @@ def load_panel_classes():
 
 
 toolbar_counter = 0
-toolbar_maxsize = 10            # keep data for the last 10 requests
 toolbar_results = SortedDict()
 
 
@@ -108,7 +107,7 @@ def save_toolbar(toolbar):
     global toolbar_counter, toolbar_results
     toolbar_counter += 1
     toolbar_results[toolbar_counter] = toolbar
-    for _ in range(len(toolbar_results) - toolbar_maxsize):
+    for _ in range(len(toolbar_results) - CONFIG['RESULTS_CACHE_SIZE']):
         # When we drop support for Python 2.6 and switch to
         # collections.OrderedDict, use popitem(last=False).
         del toolbar_results[toolbar_results.keyOrder[0]]
