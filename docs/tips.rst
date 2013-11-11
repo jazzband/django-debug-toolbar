@@ -13,32 +13,59 @@ requests and return responses. Putting the debug toolbar middleware *after*
 the Flatpage middleware, for example, means the toolbar will not show up on
 flatpages.
 
-
 Performance considerations
 --------------------------
 
-The Debug Toolbar adds some overhead to the rendering of each page. Depending
-on your project, this overhead may slow down page loads significantly. If that
-makes development impractical, you can disable the most expensive features to
-restore decent response times.
+The Debug Toolbar is designed to introduce as little overhead as possible in
+the rendering of pages. However, depending on your project, the overhad may
+become noticeable. In extreme cases, it can make development impractical.
+Here's a breakdown of the performance issues you can run into and their
+solutions.
+
+Problems
+~~~~~~~~
+
+The Debug Toolbar works in two phases. First, it gathers data while Django
+handles a request and stores this data in memory. Second, when you open a
+panel in the browser, it fetches the data on the server and displays it.
+
+If you're seeing excessive CPU or memory consumption while browsing your site,
+you must optimize the "gathering" phase. If displaying a panel is slow, you
+must optimize the "rendering" phase.
+
+Culprits
+~~~~~~~~
 
 The SQL panel may be the culprit if your view performs many SQL queries. You
 should attempt to minimize the number of SQL queries, but this isn't always
-possible, for instance if you're using a CMS and have turned off caching for
-development. In that case, setting ``ENABLE_STACKTRACES`` to ``False`` in the
-``DEBUG_TOOLBAR_CONFIG`` setting will help.
+possible, for instance if you're using a CMS and have disabled caching for
+development.
 
 The cache panel is very similar to the SQL panel, except it isn't always a bad
-practice to make many cache queries in a view. Setting ``ENABLE_STACKTRACES``
-to ``False`` will help there too.
+practice to make many cache queries in a view.
 
-The template panel may be slow if your views or context processors return
-large contexts and your templates have complex inheritance or inclusion
-schemes. In that case, you should set ``SHOW_TEMPLATE_CONTEXT`` to ``False``
-in the ``DEBUG_TOOLBAR_CONFIG`` setting.
+The template panel becomes slow your views or context processors return large
+contexts and your templates have complex inheritance or inclusion schemes.
 
-If you don't need the panels that are slowing down your application, you can
-disable them temporarily by deselecting the checkbox at the top right of each
-panel. Depending on implementation details, there may be a residual overhead.
-To remove them entirely, you can customize the ``DEBUG_TOOLBAR_PANELS``
-setting to include only the panels you actually use.
+Solutions
+~~~~~~~~~
+
+If the "gathering" phase is too slow, you can disable problematic panels
+temporarily by deselecting the checkbox at the top right of each panel. That
+change will apply to the next request. If you don't use some panels at all,
+you can remove them permanently by customizing the ``DEBUG_TOOLBAR_PANELS``
+setting.
+
+By default, data gathered during the last 10 requests is kept in memory. This
+allows you to use the toolbar on a page even if you have browsed to a few
+other pages since you first loaded that page. You can reduce memory
+consumption by setting the ``PANELS_CACHE_SIZE`` configuration option to a
+lower value. At worst, the toolbar will tell you that the data you're looking
+for isn't available anymore.
+
+If the "rendering" phase is too slow, refrain from clicking on problematic
+panels :) Or reduce the amount of data gathered and rendered by these panels
+by disabling some configuration options that are enabled by default:
+
+- ``ENABLE_STACKTRACES`` for the SQL and cache panels,
+- ``SHOW_TEMPLATE_CONTEXT`` for the template panel.
