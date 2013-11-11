@@ -18,13 +18,10 @@ class DebugToolbar(object):
         self.request = request
         self._panels = SortedDict()
         base_url = self.request.META.get('SCRIPT_NAME', '')
-        self.config = {
-            'MEDIA_URL': '%s/__debug__/m/' % base_url,
-        }
+        self.config = {}
         self.config.update(CONFIG)
         self.template_context = {
             'BASE_URL': base_url,  # for backwards compatibility
-            'DEBUG_TOOLBAR_MEDIA_URL': self.config['MEDIA_URL'],
             'STATIC_URL': settings.STATIC_URL,
             'TOOLBAR_ROOT_TAG_ATTRS': self.config['ROOT_TAG_ATTRS'],
         }

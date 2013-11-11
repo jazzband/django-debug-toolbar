@@ -6,7 +6,6 @@ from xml.etree import ElementTree as ET
 
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
-from django.utils import six
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
