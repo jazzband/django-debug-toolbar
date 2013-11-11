@@ -1,66 +1,102 @@
 Installation
 ============
 
-#. The recommended way to install the Debug Toolbar is via pip_::
+Getting the code
+----------------
 
-       $ pip install django-debug-toolbar
+The recommended way to install the Debug Toolbar is via pip_::
 
-   If you aren't familiar with pip, you may also obtain a copy of the
-   ``debug_toolbar`` directory and add it to your Python path.
+    $ pip install django-debug-toolbar
 
-   .. _pip: http://www.pip-installer.org/
+If you aren't familiar with pip, you may also obtain a copy of the
+``debug_toolbar`` directory and add it to your Python path.
 
+.. _pip: http://www.pip-installer.org/
 
-   To test an upcoming release, you can install the `in-development version
-   <http://github.com/django-debug-toolbar/django-debug-toolbar/tarball/master#egg=django-debug-toolbar-dev>`_
-   instead with the following command::
+To test an upcoming release, you can install the `in-development version
+<http://github.com/django-debug-toolbar/django-debug-toolbar/tarball/master#egg=django-debug-toolbar-dev>`_
+instead with the following command::
 
-        $ pip install django-debug-toolbar==dev
+     $ pip install django-debug-toolbar==dev
 
-#. Add the following middleware to your project's ``settings.py`` file::
+Quick setup
+-----------
 
-       MIDDLEWARE_CLASSES = (
-           # ...
-           'debug_toolbar.middleware.DebugToolbarMiddleware',
-           # ...
-       )
+Add ``debug_toolbar`` to your ``INSTALLED_APPS`` setting::
 
-   Tying into middleware allows each panel to be instantiated on request and
-   rendering to happen on response.
+    INSTALLED_APPS = (
+        # ...
+        'debug_toolbar',
+    )
 
-   The order of ``MIDDLEWARE_CLASSES`` is important. You should include the
-   Debug Toolbar middleware as early as possible in the list. However, it must
-   come after any other middleware that encodes the response's content, such
-   as ``GZipMiddleware``.
+For a simple Django project, that's all you need!
 
-   .. note::
+The Debug Toolbar will automatically adjust a few settings when you start the
+development server. This happens only when the ``DEBUG`` setting is ``True``.
 
-      The debug toolbar will only display itself if the mimetype of the
-      response is either ``text/html`` or ``application/xhtml+xml`` and
-      contains a closing ``</body>`` tag.
+If the automatic setup doesn't work for your project, if you want to learn
+what it does, or if you prefer defining your settings explicitly, read below.
 
-   .. note ::
+.. note::
 
-      Be aware of middleware ordering and other middleware that may intercept
-      requests and return responses. Putting the debug toolbar middleware
-      *after* the Flatpage middleware, for example, means the toolbar will not
-      show up on flatpages.
+    The automatic setup relies on ``debug_toolbar.models`` being imported when
+    the server starts. Django doesn't provide a better hook to execute code
+    during the start-up sequence. This works with Django's built-in
+    development server ``runserver`` because it validates models before
+    serving requests. You should use the explicit setup with other servers.
 
-#. Make sure your IP is listed in the ``INTERNAL_IPS`` setting. If you are
-   working locally this will be::
+Explicit setup
+--------------
 
-       INTERNAL_IPS = ('127.0.0.1',)
+URLconf
+~~~~~~~
 
-   .. note::
+Add the Debug Toolbar's URLs to your project's URLconf as follows::
 
-      This is required because of the built-in requirements of the
-      ``show_toolbar`` method. See below for how to define a method to
-      determine your own logic for displaying the toolbar.
+    from django.conf import settings
+    from django.conf.urls import include, patterns, url
 
-#. Add ``debug_toolbar`` to your ``INSTALLED_APPS`` setting so Django can
-   find the template files associated with the Debug Toolbar::
+    if settings.DEBUG:
+        urlpatterns += patterns('',
+            url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
+        )
 
-       INSTALLED_APPS = (
-           # ...
-           'debug_toolbar',
-       )
+This example uses the ``__debug__`` prefix, but you can use any prefix that
+doesn't clash with your application's URLs.
+
+It is mandatory to use the ``djdt`` namespace as shown above. This avoids
+conflicts when reversing URLs by name.
+
+If the URLs aren't included in your root URLconf, the Debug Toolbar
+automatically appends them.
+
+Middleware
+~~~~~~~~~~
+
+The Debug Toolbar is mostly implemented in a middleware. Enable it in your
+settings module as follows::
+
+    MIDDLEWARE_CLASSES = (
+        # ...
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        # ...
+    )
+
+The order of ``MIDDLEWARE_CLASSES`` is important. You should include the Debug
+Toolbar middleware as early as possible in the list. However, it must come
+after any other middleware that encodes the response's content, such as
+``GZipMiddleware``.
+
+If ``MIDDLEWARE_CLASSES`` doesn't contain the middleware, the Debug Toolbar
+automatically adds it the beginning of the list.
+
+Internal IPs
+~~~~~~~~~~~~
+
+The Debug Toolbar is shown only if your IP is listed in the ``INTERNAL_IPS``
+setting. (You can change this logic with the ``SHOW_TOOLBAR_CALLBACK``
+option.) For local development, you should add ``'127.0.0.1'`` to
+``INTERNAL_IPS``.
+
+If ``INTERNAL_IPS`` is empty, the Debug Toolbar automatically sets it to
+``'127.0.0.1'`` and ``'::1'``.
