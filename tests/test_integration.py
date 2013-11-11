@@ -34,58 +34,6 @@ class DebugToolbarTestCase(BaseTestCase):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
 
-    def test_request_urlconf_string(self):
-        request = rf.get('/')
-        request.urlconf = 'tests.urls'
-        middleware = DebugToolbarMiddleware()
-
-        middleware.process_request(request)
-
-        self.assertFalse(isinstance(request.urlconf, six.string_types))
-
-        patterns = request.urlconf.urlpatterns
-        self.assertTrue(hasattr(patterns[1], '_callback_str'))
-        self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
-
-    def test_request_urlconf_string_per_request(self):
-        request = rf.get('/')
-        request.urlconf = 'debug_toolbar.urls'
-        middleware = DebugToolbarMiddleware()
-
-        middleware.process_request(request)
-        request.urlconf = 'tests.urls'
-        middleware.process_request(request)
-
-        self.assertFalse(isinstance(request.urlconf, six.string_types))
-
-        patterns = request.urlconf.urlpatterns
-        self.assertTrue(hasattr(patterns[1], '_callback_str'))
-        self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
-
-    def test_request_urlconf_module(self):
-        request = rf.get('/')
-        request.urlconf = __import__('tests.urls').urls
-        middleware = DebugToolbarMiddleware()
-
-        middleware.process_request(request)
-
-        self.assertFalse(isinstance(request.urlconf, six.string_types))
-
-        patterns = request.urlconf.urlpatterns
-        self.assertTrue(hasattr(patterns[1], '_callback_str'))
-        self.assertEqual(patterns[-1]._callback_str, 'tests.views.execute_sql')
-
-    def test_tuple_urlconf(self):
-        request = rf.get('/')
-        urls = __import__('tests.urls').urls
-        urls.urlpatterns = tuple(urls.urlpatterns)
-        request.urlconf = urls
-        middleware = DebugToolbarMiddleware()
-
-        middleware.process_request(request)
-
-        self.assertFalse(isinstance(request.urlconf, six.string_types))
-
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel
         self.request.path = path

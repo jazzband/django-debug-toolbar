@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.conf.urls import include, patterns, url
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.importlib import import_module
 
 from debug_toolbar.toolbar.loader import load_panel_classes
@@ -35,6 +37,14 @@ if not any(is_toolbar_middleware(middleware)
            for middleware in settings.MIDDLEWARE_CLASSES):
     prepend_to_setting('MIDDLEWARE_CLASSES',
                        'debug_toolbar.middleware.DebugToolbarMiddleware')
+
+try:
+    reverse('djdt:render_panel')
+except NoReverseMatch:
+    urlconf_module = import_module(settings.ROOT_URLCONF)
+    urlconf_module.urlpatterns += patterns('',
+        url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
+    )
 
 
 load_panel_classes()
