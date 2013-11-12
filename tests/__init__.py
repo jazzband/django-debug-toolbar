@@ -1,7 +1,7 @@
 # Refresh the debug toolbar's configuration when overriding settings.
 
 from debug_toolbar.utils.settings import CONFIG, CONFIG_DEFAULTS
-from debug_toolbar.toolbar.loader import load_panel_classes, panel_classes  # noqa
+from debug_toolbar.toolbar import load_panel_classes, panel_classes  # noqa
 
 from django.dispatch import receiver
 from django.test.signals import setting_changed

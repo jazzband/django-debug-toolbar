@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.forms import SQLSelectForm
-from debug_toolbar.toolbar.loader import get_saved_toolbar
+from debug_toolbar.toolbar import get_saved_toolbar
 
 
 def render_panel(request):

@@ -5,7 +5,7 @@ from django.conf.urls import include, patterns, url
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.importlib import import_module
 
-from debug_toolbar.toolbar.loader import load_panel_classes
+from debug_toolbar.toolbar import load_panel_classes
 from debug_toolbar.middleware import DebugToolbarMiddleware
 
 

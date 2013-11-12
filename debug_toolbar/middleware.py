@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.encoding import force_text
 
-from debug_toolbar.toolbar.loader import DebugToolbar
+from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar.utils.settings import CONFIG
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')

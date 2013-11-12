@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
-from debug_toolbar.toolbar.loader import DebugToolbar
+from debug_toolbar.toolbar import DebugToolbar
 
 rf = RequestFactory()
 
