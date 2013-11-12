@@ -1,112 +1,160 @@
 Configuration
 =============
 
-The debug toolbar has two settings that can be set in ``settings.py``.
+The debug toolbar provides two settings that you can add in your project's
+settings module to customize its behavior.
 
-#. Optional: Add a tuple called ``DEBUG_TOOLBAR_PANELS`` to your ``settings.py``
-   file that specifies the full Python path to the panel that you want included
-   in the Toolbar. This setting looks very much like the ``MIDDLEWARE_CLASSES``
-   setting. For example::
+DEBUG_TOOLBAR_PANELS
+--------------------
 
-       DEBUG_TOOLBAR_PANELS = (
-           'debug_toolbar.panels.version.VersionDebugPanel',
-           'debug_toolbar.panels.timer.TimerDebugPanel',
-           'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-           'debug_toolbar.panels.headers.HeaderDebugPanel',
-           'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-           'debug_toolbar.panels.template.TemplateDebugPanel',
-           'debug_toolbar.panels.sql.SQLDebugPanel',
-           'debug_toolbar.panels.signals.SignalDebugPanel',
-           'debug_toolbar.panels.logger.LoggingPanel',
-       )
+This setting specifies the full Python path to each panel that you want
+included in the toolbar. It works like Django's ``MIDDLEWARE_CLASSES``
+setting. The default value is::
 
-   You can change the ordering of this tuple to customize the order of the
-   panels you want to display, or add/remove panels. If you have custom panels
-   you can include them in this way -- just provide the full Python path to
-   your panel.
+    DEBUG_TOOLBAR_PANELS = (
+        'debug_toolbar.panels.version.VersionDebugPanel',
+        'debug_toolbar.panels.timer.TimerDebugPanel',
+        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+        'debug_toolbar.panels.headers.HeaderDebugPanel',
+        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+        'debug_toolbar.panels.sql.SQLDebugPanel',
+        'debug_toolbar.panels.template.TemplateDebugPanel',
+        'debug_toolbar.panels.cache.CacheDebugPanel',
+        'debug_toolbar.panels.signals.SignalDebugPanel',
+        'debug_toolbar.panels.logger.LoggingPanel',
+    )
 
-#. Optional: There are a few configuration options to the debug toolbar that
-   can be placed in a dictionary called ``DEBUG_TOOLBAR_CONFIG``:
+This setting allows you to:
 
-   * ``INTERCEPT_REDIRECTS``
+* add built-in panels that aren't enabled by default,
+* add third-party panels,
+* remove built-in panels,
+* change the order of panels.
 
-     If set to True, the debug toolbar will show an intermediate page upon
-     redirect so you can view any debug information prior to redirecting. This
-     page will provide a link to the redirect destination you can follow when
-     ready. If set to False (default), redirects will proceed as normal.
+DEBUG_TOOLBAR_CONFIG
+--------------------
 
-   * ``SHOW_TOOLBAR_CALLBACK``
+This dictionary contains all other configuration options. Some apply to the
+toolbar itself, others are specific to some panels.
 
-     If not set or set to None, the debug_toolbar
-     middleware will use its built-in show_toolbar method for determining whether
-     the toolbar should show or not. The default checks are that DEBUG must be
-     set to True and the IP of the request must be in INTERNAL_IPS. You can
-     provide your own method for displaying the toolbar which contains your
-     custom logic. This method should return True or False.
+Toolbar options
+~~~~~~~~~~~~~~~
 
-   * ``EXTRA_SIGNALS``
+* ``INTERCEPT_REDIRECTS``
 
-     An array of custom signals that might be in your project,
-     defined as the python path to the signal.
+  Default: ``False``
 
-   * ``HIDE_DJANGO_SQL``
+  If set to ``True``, the debug toolbar will show an intermediate page upon
+  redirect so you can view any debug information prior to redirecting. This
+  page will provide a link to the redirect destination you can follow when
+  ready. If set to ``False``, redirects will proceed as normal.
 
-     If set to True (the default) then code in Django itself
-     won't be shown in SQL stacktraces.
+* ``RESULTS_CACHE_SIZE``
 
-   * ``SHOW_TEMPLATE_CONTEXT``
+  Default: ``10``
 
-     If set to True (the default) then a template's
-     context will be included with it in the Template debug panel. Turning this
-     off is useful when you have large template contexts, or you have template
-     contexts with lazy datastructures that you don't want to be evaluated.
+  The toolbar keeps up to this many results in memory.
 
-   * ``TAG``
+* ``ROOT_TAG_ATTRS``
 
-     If set, this will be the tag to which debug_toolbar will attach the
-     debug toolbar. Defaults to 'body'.
+  Default: ``''``
 
-   * ``ENABLE_STACKTRACES``
+  This setting is injected in the root template div in order to avoid
+  conflicts with client-side frameworks. For example, when using the debug
+  toolbar with Angular.js, set this to ``'ng-non-bindable'`` or
+  ``'class="ng-non-bindable"'``.
 
-     If set, this will show stacktraces for SQL queries
-     and cache calls. Enabling stacktraces can increase the CPU time used when
-     executing queries. Defaults to True.
+* ``SHOW_TOOLBAR_CALLBACK``
 
-   * ``HIDDEN_STACKTRACE_MODULES``
+  Default: ``None``
 
-     Useful for eliminating server-related entries which can result
-     in enormous DOM structures and toolbar rendering delays.
-     Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar')``.
+  If set to ``None``, the debug toolbar middleware will use its built-in
+  ``show_toolbar`` method for determining whether the toolbar should show or
+  not. The default checks are that ``DEBUG`` must be set to ``True`` and the
+  IP of the request must be in ``INTERNAL_IPS``. You can provide your own
+  method for displaying the toolbar which contains your custom logic. This
+  method should return ``True`` or ``False``.
 
-     (The first value is ``socketserver`` on Python 3 and ``SocketServer`` on
-     Python 2.)
+* ``TAG``
 
-   * ``ROOT_TAG_ATTRS``
+  Default: ``'body'``
 
-     This setting is injected in the root template div in order to avoid conflicts
-     with client-side frameworks. For example, when using with Angular.js, set
-     this to 'ng-non-bindable' or 'class="ng-non-bindable"'. Defaults to ''.
+  If set, this will be the closing tag to which the debug toolbar will attach
+  itself.
 
-   * ``SQL_WARNING_THRESHOLD``
+Panel options
+~~~~~~~~~~~~~
 
-     The SQL panel highlights queries that took more that this amount of time,
-     in milliseconds, to execute. The default is 500.
+* ``EXTRA_SIGNALS``
 
-   Example configuration::
+  Default: ``[]``
 
-       def custom_show_toolbar(request):
-           return True  # Always show toolbar, for example purposes only.
+  Panel: signals
 
-       DEBUG_TOOLBAR_CONFIG = {
-           'INTERCEPT_REDIRECTS': True,
-           'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
-           'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
-           'HIDE_DJANGO_SQL': False,
-           'TAG': 'div',
-           'ENABLE_STACKTRACES': True,
-           'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
-       }
+  A list of custom signals that might be in your project, defined as the
+  Python path to the signal.
 
-   * ``RESULTS_CACHE_SIZE``
+* ``ENABLE_STACKTRACES``
 
-     The toolbar keeps up to this many results in memory. Defaults to 10.
+  Default: ``True``
+
+  Panels: cache, SQL
+
+  If set to ``True``, this will show stacktraces for SQL queries and cache
+  calls. Enabling stacktraces can increase the CPU time used when executing
+  queries.
+
+* ``HIDDEN_STACKTRACE_MODULES``
+
+  Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar')``. The
+  first value is ``socketserver`` on Python 3 and ``SocketServer`` on Python
+  2.
+
+  Panels: cache, SQL
+
+  Useful for eliminating server-related entries which can result
+  in enormous DOM structures and toolbar rendering delays.
+
+* ``HIDE_DJANGO_SQL``
+
+  Default: ``True``
+
+  Panels: cache, SQL
+
+  If set to ``True`` then code in Django itself won't be shown in
+  stacktraces.
+
+* ``SHOW_TEMPLATE_CONTEXT``
+
+  Default: ``True``
+
+  Panel: templates
+
+  If set to ``True`` then a template's context will be included with it in the
+  template debug panel. Turning this off is useful when you have large
+  template contexts, or you have template contexts with lazy datastructures
+  that you don't want to be evaluated.
+
+* ``SQL_WARNING_THRESHOLD``
+
+  Default: ``500``
+
+  Panel: SQL
+
+  The SQL panel highlights queries that took more that this amount of time,
+  in milliseconds, to execute.
+
+Here's an example::
+
+    def custom_show_toolbar(request):
+        return True  # Always show toolbar, for example purposes only.
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': True,
+        'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+        'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
+        'HIDE_DJANGO_SQL': False,
+        'TAG': 'div',
+        'ENABLE_STACKTRACES': True,
+        'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
+    }
