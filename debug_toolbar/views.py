@@ -13,12 +13,12 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.forms import SQLSelectForm
-from debug_toolbar.toolbar import get_saved_toolbar
+from debug_toolbar.toolbar import DebugToolbar
 
 
 def render_panel(request):
     """Render the contents of a panel"""
-    toolbar = get_saved_toolbar(int(request.GET['toolbar_id']))
+    toolbar = DebugToolbar.fetch(int(request.GET['storage_id']))
     if toolbar is None:
         content = _("Data for this panel isn't available anymore. "
                     "Please reload the page and retry.")

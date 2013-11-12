@@ -31,7 +31,7 @@
                     if ($(inner).empty()) {
                         var ajax_data = {
                             data: {
-                                toolbar_id: $('#djDebug').data('toolbar-id'),
+                                storage_id: $('#djDebug').data('storage-id'),
                                 panel_id: this.className
                             },
                             type: 'GET',

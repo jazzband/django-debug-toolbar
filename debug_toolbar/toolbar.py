@@ -52,9 +52,29 @@ class DebugToolbar(object):
         context = self.template_context.copy()
         context.update({
             'panels': self.panels,
-            'toolbar_id': save_toolbar(self),
+            'storage_id': self.store(),
         })
         return render_to_string('debug_toolbar/base.html', context)
+
+    # Handle storing toolbars in memory and fetching them later on
+
+    _counter = 0
+    _storage = SortedDict()
+
+    def store(self):
+        cls = type(self)
+        cls._counter += 1
+        cls._storage[cls._counter] = self
+        for _ in range(len(cls._storage) - CONFIG['RESULTS_CACHE_SIZE']):
+            # When we drop support for Python 2.6 and switch to
+            # collections.OrderedDict, use popitem(last=False).
+            del cls._storage[cls._storage.keyOrder[0]]
+        return cls._counter
+
+    @classmethod
+    def fetch(cls, storage_id):
+        return cls._storage.get(storage_id)
+
 
 
 panel_classes = []
@@ -97,22 +117,3 @@ def load_panel_classes():
                 'Toolbar Panel module "%s" does not define a "%s" class' %
                 (panel_module, panel_classname))
         panel_classes.append(panel_class)
-
-
-toolbar_counter = 0
-toolbar_results = SortedDict()
-
-
-def save_toolbar(toolbar):
-    global toolbar_counter, toolbar_results
-    toolbar_counter += 1
-    toolbar_results[toolbar_counter] = toolbar
-    for _ in range(len(toolbar_results) - CONFIG['RESULTS_CACHE_SIZE']):
-        # When we drop support for Python 2.6 and switch to
-        # collections.OrderedDict, use popitem(last=False).
-        del toolbar_results[toolbar_results.keyOrder[0]]
-    return toolbar_counter
-
-
-def get_saved_toolbar(toolbar_id):
-    return toolbar_results.get(toolbar_id)
