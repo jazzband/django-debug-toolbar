@@ -37,6 +37,12 @@ class DebugPanel(object):
     def dom_id(self):
         return 'djDebug%sPanel' % (self.name.replace(' ', ''))
 
+    # URLs for panel-specific views
+
+    @classmethod
+    def get_urls(cls):
+        return []
+
     # Titles and subtitles
 
     def nav_title(self):

@@ -5,6 +5,7 @@ from django.conf.urls import include, patterns, url
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.importlib import import_module
 
+import debug_toolbar
 from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
@@ -50,7 +51,7 @@ def patch_root_urlconf():
     except NoReverseMatch:
         urlconf_module = import_module(settings.ROOT_URLCONF)
         urlconf_module.urlpatterns += patterns('',                      # noqa
-            url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
+            url(r'^__debug__/', include(debug_toolbar.urls)),
         )
 
 

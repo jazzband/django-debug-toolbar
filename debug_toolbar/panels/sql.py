@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import uuid
 from copy import copy
 
+from django.conf.urls import patterns, url
 from django.db import connections
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
@@ -102,6 +103,14 @@ class SQLDebugPanel(DebugPanel):
             self._databases[alias]['num_queries'] += 1
         self._sql_time += kwargs['duration']
         self._num_queries += 1
+
+    @classmethod
+    def get_urls(cls):
+        return patterns('debug_toolbar.views',                          # noqa
+            url(r'^sql_select/$', 'sql_select', name='sql_select'),
+            url(r'^sql_explain/$', 'sql_explain', name='sql_explain'),
+            url(r'^sql_profile/$', 'sql_profile', name='sql_profile'),
+        )
 
     def nav_title(self):
         return _('SQL')

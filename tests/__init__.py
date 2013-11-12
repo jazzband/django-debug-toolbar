@@ -20,3 +20,4 @@ def update_toolbar_panels(**kwargs):
     if kwargs['setting'] == 'DEBUG_TOOLBAR_PANELS':
         dt_settings.PANELS = kwargs['value'] or dt_settings.PANELS_DEFAULTS
         DebugToolbar._panel_classes = None
+        # Not implemented: invalidate debug_toolbar.urls

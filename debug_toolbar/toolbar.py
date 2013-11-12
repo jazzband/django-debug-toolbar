@@ -5,6 +5,7 @@ The main DebugToolbar class that loads and renders the Toolbar.
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
@@ -107,3 +108,19 @@ class DebugToolbar(object):
                 panel_classes.append(panel_class)
             cls._panel_classes = panel_classes
         return cls._panel_classes
+
+    _urlpatterns = None
+
+    @classmethod
+    def get_urls(cls):
+        if cls._urlpatterns is None:
+            # Load URLs in a temporary variable for thread safety.
+            # Global URLs
+            urlpatterns = patterns('debug_toolbar.views',               # noqa
+                url(r'^render_panel/$', 'render_panel', name='render_panel'),
+            )
+            # Per-panel URLs
+            for panel_class in cls.get_panel_classes():
+                urlpatterns += panel_class.get_urls()
+            cls._urlpatterns = urlpatterns
+        return cls._urlpatterns

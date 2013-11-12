@@ -57,15 +57,14 @@ Add the Debug Toolbar's URLs to your project's URLconf as follows::
     from django.conf.urls import include, patterns, url
 
     if settings.DEBUG:
+        import debug_toolbar
         urlpatterns += patterns('',
-            url(r'^__debug__/', include('debug_toolbar.urls', namespace='djdt', app_name='djdt')),
+            url(r'^__debug__/', include(debug_toolbar.urls)),
         )
 
 This example uses the ``__debug__`` prefix, but you can use any prefix that
-doesn't clash with your application's URLs.
-
-It is mandatory to use the ``djdt`` namespace as shown above. This avoids
-conflicts when reversing URLs by name.
+doesn't clash with your application's URLs. Note the lack of quotes around
+``debug_toolbar.urls``.
 
 If the URLs aren't included in your root URLconf, the Debug Toolbar
 automatically appends them.

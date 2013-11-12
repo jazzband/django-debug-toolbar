@@ -6,6 +6,7 @@ from pprint import pformat
 import django
 from django import http
 from django.conf import settings
+from django.conf.urls import patterns, url
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
@@ -112,6 +113,12 @@ class TemplateDebugPanel(DebugPanel):
 
         kwargs['context'] = [force_text(item) for item in context_list]
         self.templates.append(kwargs)
+
+    @classmethod
+    def get_urls(cls):
+        return patterns('debug_toolbar.views',                          # noqa
+            url(r'^template_source/$', 'template_source', name='template_source'),
+        )
 
     def nav_title(self):
         return _('Templates')
