@@ -5,7 +5,6 @@ from django.conf.urls import include, patterns, url
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.importlib import import_module
 
-from debug_toolbar.toolbar import load_panel_classes
 from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
@@ -59,7 +58,3 @@ if settings.DEBUG:
     patch_internal_ips()
     patch_middleware_classes()
     patch_root_urlconf()
-
-
-if is_toolbar_middleware_installed():
-    load_panel_classes()

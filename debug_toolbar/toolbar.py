@@ -5,11 +5,12 @@ The main DebugToolbar class that loads and renders the Toolbar.
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 
-from debug_toolbar.utils.settings import CONFIG
+from debug_toolbar.utils import settings as dt_settings
 
 
 class DebugToolbar(object):
@@ -19,7 +20,7 @@ class DebugToolbar(object):
         self._panels = SortedDict()
         base_url = self.request.META.get('SCRIPT_NAME', '')
         self.config = {}
-        self.config.update(CONFIG)
+        self.config.update(dt_settings.CONFIG)
         self.template_context = {
             'BASE_URL': base_url,  # for backwards compatibility
             'STATIC_URL': settings.STATIC_URL,
@@ -40,8 +41,7 @@ class DebugToolbar(object):
         """
         Populate debug panels
         """
-        global panel_classes
-        for panel_class in panel_classes:
+        for panel_class in self.get_panel_classes():
             panel_instance = panel_class(self, context=self.template_context)
             self._panels[panel_class] = panel_instance
 
@@ -65,7 +65,7 @@ class DebugToolbar(object):
         cls = type(self)
         cls._counter += 1
         cls._storage[cls._counter] = self
-        for _ in range(len(cls._storage) - CONFIG['RESULTS_CACHE_SIZE']):
+        for _ in range(len(cls._storage) - dt_settings.CONFIG['RESULTS_CACHE_SIZE']):
             # When we drop support for Python 2.6 and switch to
             # collections.OrderedDict, use popitem(last=False).
             del cls._storage[cls._storage.keyOrder[0]]
@@ -75,45 +75,35 @@ class DebugToolbar(object):
     def fetch(cls, storage_id):
         return cls._storage.get(storage_id)
 
+    # Manually implement class-level caching of the list of panels because
+    # it's more obvious than going through an abstraction.
 
+    _panel_classes = None
 
-panel_classes = []
-
-
-def load_panel_classes():
-    from django.conf import settings
-    from django.core.exceptions import ImproperlyConfigured
-
-    # Check if settings has a DEBUG_TOOLBAR_PANELS, otherwise use default
-    panels = getattr(settings, 'DEBUG_TOOLBAR_PANELS', (
-        'debug_toolbar.panels.version.VersionDebugPanel',
-        'debug_toolbar.panels.timer.TimerDebugPanel',
-        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-        'debug_toolbar.panels.headers.HeaderDebugPanel',
-        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-        'debug_toolbar.panels.sql.SQLDebugPanel',
-        'debug_toolbar.panels.template.TemplateDebugPanel',
-        'debug_toolbar.panels.cache.CacheDebugPanel',
-        'debug_toolbar.panels.signals.SignalDebugPanel',
-        'debug_toolbar.panels.logger.LoggingPanel',
-    ))
-    for panel_path in panels:
-        try:
-            dot = panel_path.rindex('.')
-        except ValueError:
-            raise ImproperlyConfigured(
-                "%s isn't a debug panel module" % panel_path)
-        panel_module, panel_classname = panel_path[:dot], panel_path[dot + 1:]
-        try:
-            mod = import_module(panel_module)
-        except ImportError as e:
-            raise ImproperlyConfigured(
-                'Error importing debug panel %s: "%s"' %
-                (panel_module, e))
-        try:
-            panel_class = getattr(mod, panel_classname)
-        except AttributeError:
-            raise ImproperlyConfigured(
-                'Toolbar Panel module "%s" does not define a "%s" class' %
-                (panel_module, panel_classname))
-        panel_classes.append(panel_class)
+    @classmethod
+    def get_panel_classes(cls):
+        if cls._panel_classes is None:
+            # Load panels in a temporary variable for thread safety.
+            panel_classes = []
+            for panel_path in dt_settings.PANELS:
+                # This logic could be replaced with import_by_path in Django 1.6.
+                try:
+                    panel_module, panel_classname = panel_path.rsplit('.', 1)
+                except ValueError:
+                    raise ImproperlyConfigured(
+                        "%s isn't a debug panel module" % panel_path)
+                try:
+                    mod = import_module(panel_module)
+                except ImportError as e:
+                    raise ImproperlyConfigured(
+                        'Error importing debug panel %s: "%s"' %
+                        (panel_module, e))
+                try:
+                    panel_class = getattr(mod, panel_classname)
+                except AttributeError:
+                    raise ImproperlyConfigured(
+                        'Toolbar Panel module "%s" does not define a "%s" class' %
+                        (panel_module, panel_classname))
+                panel_classes.append(panel_class)
+            cls._panel_classes = panel_classes
+        return cls._panel_classes

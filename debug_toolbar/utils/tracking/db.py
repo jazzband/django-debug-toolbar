@@ -11,7 +11,7 @@ from django.utils.encoding import force_text
 from django.utils import six
 
 from debug_toolbar.utils import tidy_stacktrace, get_template_info, get_stack
-from debug_toolbar.utils.settings import CONFIG
+from debug_toolbar.utils import settings as dt_settings
 
 
 class SQLQueryTriggered(Exception):
@@ -92,7 +92,7 @@ class NormalCursorWrapper(object):
         finally:
             stop_time = time()
             duration = (stop_time - start_time) * 1000
-            if CONFIG['ENABLE_STACKTRACES']:
+            if dt_settings.CONFIG['ENABLE_STACKTRACES']:
                 stacktrace = tidy_stacktrace(reversed(get_stack()))
             else:
                 stacktrace = []
@@ -135,7 +135,7 @@ class NormalCursorWrapper(object):
                 'stacktrace': stacktrace,
                 'start_time': start_time,
                 'stop_time': stop_time,
-                'is_slow': duration > CONFIG['SQL_WARNING_THRESHOLD'],
+                'is_slow': duration > dt_settings.CONFIG['SQL_WARNING_THRESHOLD'],
                 'is_select': sql.lower().strip().startswith('select'),
                 'template_info': template_info,
             }

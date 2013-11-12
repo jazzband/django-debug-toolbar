@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.utils.encoding import force_text
 
 from debug_toolbar.toolbar import DebugToolbar
-from debug_toolbar.utils.settings import CONFIG
+from debug_toolbar.utils import settings as dt_settings
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 # Handles python threading module bug - http://bugs.python.org/issue14308
@@ -52,10 +52,10 @@ class DebugToolbarMiddleware(object):
 
     def __init__(self):
         # The method to call to decide to show the toolbar
-        self.show_toolbar = CONFIG['SHOW_TOOLBAR_CALLBACK'] or show_toolbar
+        self.show_toolbar = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK'] or show_toolbar
 
         # The tag to attach the toolbar to
-        self.tag = '</%s>' % CONFIG['TAG']
+        self.tag = '</%s>' % dt_settings.CONFIG['TAG']
 
     def process_request(self, request):
         __traceback_hide__ = True                                       # noqa
