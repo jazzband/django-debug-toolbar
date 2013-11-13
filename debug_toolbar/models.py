@@ -2,7 +2,8 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.conf.urls import include, patterns, url
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import (
+    reverse, NoReverseMatch, _resolver_cache, _ns_resolver_cache)
 from django.utils.importlib import import_module
 
 import debug_toolbar
@@ -53,6 +54,8 @@ def patch_root_urlconf():
         urlconf_module.urlpatterns += patterns('',                      # noqa
             url(r'^__debug__/', include(debug_toolbar.urls)),
         )
+        _resolver_cache.clear()
+        _ns_resolver_cache.clear()
 
 
 if settings.DEBUG:
