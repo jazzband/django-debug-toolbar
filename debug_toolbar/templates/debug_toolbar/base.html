@@ -53,6 +53,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 				</div>
 				<div class="djDebugPanelContent">
 					<div class="scroll">
+						{% if not storage_id %}{{ panel.content }}{% endif %}
 					</div>
 				</div>
 			</div>

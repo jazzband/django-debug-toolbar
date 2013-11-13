@@ -52,3 +52,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }
+
+
+# Debug Toolbar configuration
+
+DEBUG_TOOLBAR_CONFIG = {
+    # Django's test client sets wsgi.multiprocess to True inappropriately
+    'RENDER_PANELS': False,
+}

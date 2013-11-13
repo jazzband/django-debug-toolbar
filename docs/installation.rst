@@ -41,9 +41,8 @@ what it does, or if you prefer defining your settings explicitly, read below.
 
     The automatic setup relies on ``debug_toolbar.models`` being imported when
     the server starts. Django doesn't provide a better hook to execute code
-    during the start-up sequence. This works with Django's built-in
-    development server ``runserver`` because it validates models before
-    serving requests. You should use the explicit setup with other servers.
+    during the start-up sequence. This works with ``manage.py runserver``
+    because it validates models before serving requests.
 
 Explicit setup
 --------------

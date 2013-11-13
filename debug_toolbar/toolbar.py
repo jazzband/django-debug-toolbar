@@ -51,16 +51,21 @@ class DebugToolbar(object):
         Renders the overall Toolbar with panels inside.
         """
         context = self.template_context.copy()
-        context.update({
-            'panels': self.panels,
-            'storage_id': self.store(),
-        })
+        context['panels'] = self.panels
+        if not self.should_render_panels():
+            context['storage_id'] = self.store()
         return render_to_string('debug_toolbar/base.html', context)
 
     # Handle storing toolbars in memory and fetching them later on
 
     _counter = 0
     _storage = SortedDict()
+
+    def should_render_panels(self):
+        render_panels = dt_settings.CONFIG['RENDER_PANELS']
+        if render_panels is None:
+            render_panels = self.request.META['wsgi.multiprocess']
+        return render_panels
 
     def store(self):
         cls = type(self)
