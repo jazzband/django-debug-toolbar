@@ -27,17 +27,20 @@
                     $(this).parent().removeClass('active');
                 } else {
                     $('.panelContent').hide(); // Hide any that are already open
-                    var inner = current.find('.djDebugPanelContent .scroll').first();
-                    if ($(inner).empty()) {
+                    var inner = current.find('.djDebugPanelContent .scroll').first(),
+                        storage_id = $('#djDebug').data('storage-id'),
+                        render_panel_url = $('#djDebug').data('render-panel-url');
+                    if (storage_id !== '' && inner.data('loaded') !== 'true') {
                         var ajax_data = {
                             data: {
-                                storage_id: $('#djDebug').data('storage-id'),
+                                storage_id: storage_id,
                                 panel_id: this.className
                             },
                             type: 'GET',
-                            url: $('#djDebug').data('render-panel-url')
+                            url: render_panel_url
                         };
                         $.ajax(ajax_data).done(function(data){
+                            inner.data('loaded', 'true');
                             inner.html(data);
                         }).fail(function(xhr){
                             var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
