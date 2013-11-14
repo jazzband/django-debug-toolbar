@@ -77,7 +77,8 @@ class SQLSelectForm(forms.Form):
         return reformat_sql(self.cleaned_data['sql'])
 
     def make_hash(self, data):
-        params = force_text(settings.SECRET_KEY) + data['sql'] + data['params']
+        params = (force_text(settings.SECRET_KEY) +
+                  force_text(data['sql']) + force_text(data['params']))
         return hashlib.sha1(params.encode('utf-8')).hexdigest()
 
     @property
