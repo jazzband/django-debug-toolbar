@@ -59,7 +59,6 @@ class DebugToolbarMiddleware(object):
         self.tag = '</%s>' % dt_settings.CONFIG['TAG']
 
     def process_request(self, request):
-        __traceback_hide__ = True                                       # noqa
         if not self.show_toolbar(request):
             return
         response = None
@@ -74,7 +73,6 @@ class DebugToolbarMiddleware(object):
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        __traceback_hide__ = True                                       # noqa
         toolbar = self.__class__.debug_toolbars.get(threading.current_thread().ident)
         if not toolbar:
             return
@@ -86,7 +84,6 @@ class DebugToolbarMiddleware(object):
         return response
 
     def process_response(self, request, response):
-        __traceback_hide__ = True                                       # noqa
         toolbar = self.__class__.debug_toolbars.pop(threading.current_thread().ident, None)
         if not toolbar or getattr(response, 'streaming', False):
             return response

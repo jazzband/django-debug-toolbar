@@ -164,7 +164,6 @@ class ProfilingDebugPanel(DebugPanel):
                     self._unwrap_closure_and_profile(cell.cell_contents)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        __traceback_hide__ = True                                       # noqa
         self.profiler = cProfile.Profile()
         args = (request,) + view_args
         if DJ_PROFILE_USE_LINE_PROFILER:
@@ -190,7 +189,6 @@ class ProfilingDebugPanel(DebugPanel):
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
 
     def process_response(self, request, response):
-        __traceback_hide__ = True                                       # noqa
         if not hasattr(self, 'profiler'):
             return None
         self.profiler.create_stats()

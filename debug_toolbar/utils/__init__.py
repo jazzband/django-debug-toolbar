@@ -56,8 +56,6 @@ def tidy_stacktrace(stack):
         s_path = os.path.realpath(path)
         # Support hiding of frames -- used in various utilities that provide
         # inspection.
-        if '__traceback_hide__' in frame.f_locals:
-            continue
         if CONFIG['HIDE_DJANGO_SQL'] and django_path in s_path and not 'django/contrib' in s_path:
             continue
         if omit_path(s_path):
