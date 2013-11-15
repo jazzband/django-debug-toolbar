@@ -40,6 +40,9 @@ def show_toolbar(request):
     if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
         return False
 
+    if request.is_ajax():
+        return False
+
     return bool(settings.DEBUG)
 
 
@@ -87,7 +90,7 @@ class DebugToolbarMiddleware(object):
     def process_response(self, request, response):
         __traceback_hide__ = True                                       # noqa
         toolbar = self.__class__.debug_toolbars.pop(threading.current_thread().ident, None)
-        if not toolbar or request.is_ajax() or getattr(response, 'streaming', False):
+        if not toolbar or getattr(response, 'streaming', False):
             return response
         if isinstance(response, HttpResponseRedirect):
             if not toolbar.config['INTERCEPT_REDIRECTS']:

@@ -84,10 +84,11 @@ Toolbar options
 
   If set to ``None``, the debug toolbar middleware will use its built-in
   ``show_toolbar`` method for determining whether the toolbar should show or
-  not. The default checks are that ``DEBUG`` must be set to ``True`` and the
-  IP of the request must be in ``INTERNAL_IPS``. You can provide your own
-  method for displaying the toolbar which contains your custom logic. This
-  method should return ``True`` or ``False``.
+  not. The default checks are that ``DEBUG`` must be set to ``True``, the IP
+  of the request must be in ``INTERNAL_IPS``, and the request must no be an
+  AJAX request. You can provide your own method for displaying the toolbar
+  which contains your custom logic. This method should return ``True`` or
+  ``False``.
 
 * ``TAG``
 
