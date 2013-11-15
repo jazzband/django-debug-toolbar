@@ -59,34 +59,34 @@ class DebugToolbarMiddleware(object):
 
     def process_request(self, request):
         __traceback_hide__ = True                                       # noqa
-        if self.show_toolbar(request):
-            toolbar = DebugToolbar(request)
-            for panel in toolbar.panels:
-                panel.enabled = panel.dom_id() not in request.COOKIES
-                if not panel.enabled:
-                    continue
-                panel.enable_instrumentation()
-                panel.process_request(request)
-            self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
+        if not self.show_toolbar(request):
+            return
+        response = None
+        toolbar = DebugToolbar(request)
+        for panel in toolbar.enabled_panels:
+            panel.enable_instrumentation()
+        for panel in toolbar.enabled_panels:
+            response = panel.process_request(request)
+            if response:
+                break
+        self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
+        return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         __traceback_hide__ = True                                       # noqa
         toolbar = self.__class__.debug_toolbars.get(threading.current_thread().ident)
         if not toolbar:
             return
-        result = None
-        for panel in toolbar.panels:
-            if not panel.enabled:
-                continue
+        response = None
+        for panel in toolbar.enabled_panels:
             response = panel.process_view(request, view_func, view_args, view_kwargs)
             if response:
-                result = response
-        return result
+                break
+        return response
 
     def process_response(self, request, response):
         __traceback_hide__ = True                                       # noqa
-        ident = threading.current_thread().ident
-        toolbar = self.__class__.debug_toolbars.get(ident)
+        toolbar = self.__class__.debug_toolbars.pop(threading.current_thread().ident, None)
         if not toolbar or request.is_ajax() or getattr(response, 'streaming', False):
             return response
         if isinstance(response, HttpResponseRedirect):
@@ -101,10 +101,11 @@ class DebugToolbarMiddleware(object):
                     {'redirect_to': redirect_to}
                 )
                 response.cookies = cookies
-        for panel in toolbar.panels:
-            if not panel.enabled:
-                continue
-            panel.process_response(request, response)
+        for panel in reversed(toolbar.enabled_panels):
+            new_response = panel.process_response(request, response)
+            if new_response:
+                response = new_response
+        for panel in reversed(toolbar.enabled_panels):
             panel.disable_instrumentation()
         if ('gzip' not in response.get('Content-Encoding', '') and
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
@@ -114,5 +115,4 @@ class DebugToolbarMiddleware(object):
                 force_text(toolbar.render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
-        del self.__class__.debug_toolbars[ident]
         return response

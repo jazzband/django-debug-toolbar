@@ -20,7 +20,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 			{% endif %}
 			{% for panel in panels %}
 				<li class="djDebugPanelButton">
-					<input type="checkbox" data-cookie="{{ panel.dom_id }}"{% if panel.enabled %} checked="checked"{% endif %} title="{% trans "Toogle Panel for next and successive requests" %}" />
+					<input type="checkbox" data-cookie="{{ panel.dom_id }}" {% if panel.enabled %}checked="checked" title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %} />
 					{% if panel.has_content and panel.enabled %}
 						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
 					{% else %}

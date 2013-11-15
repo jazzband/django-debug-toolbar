@@ -35,6 +35,10 @@ class DebugToolbar(object):
         return list(self._panels.values())
     panels = property(_get_panels)
 
+    def _get_enabled_panels(self):
+        return [panel for panel in self._panels.values() if panel.enabled]
+    enabled_panels = property(_get_enabled_panels)
+
     def get_panel(self, cls):
         return self._panels[cls]
 

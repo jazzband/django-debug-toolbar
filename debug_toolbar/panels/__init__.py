@@ -14,9 +14,6 @@ class DebugPanel(object):
     # If content returns something, set to True in subclass
     has_content = False
 
-    # This can be set to False in instances if the panel is disabled.
-    enabled = True
-
     # We'll maintain a local context instance so we can expose our template
     # context variables to panels which need them:
     context = {}
@@ -36,6 +33,9 @@ class DebugPanel(object):
 
     def dom_id(self):
         return 'djDebug%sPanel' % (self.name.replace(' ', ''))
+
+    def enabled(self):
+        return self.toolbar.request.COOKIES.get(self.dom_id(), 'on') == 'on'
 
     # URLs for panel-specific views
 

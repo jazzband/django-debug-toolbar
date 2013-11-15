@@ -58,9 +58,9 @@
                 return false;
             });
             $('#djDebug .djDebugPanelButton input[type=checkbox]').live('click', function() {
-                $.cookie($(this).attr('data-cookie'), 'off', {
+                $.cookie($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
                     path: '/',
-                    expires: $(this).prop('checked') ? -1 : 10
+                    expires: 10,
                 });
             });
 
