@@ -84,6 +84,21 @@ Path: ``debug_toolbar.panels.logger.LoggingPanel``
 
 Logging output via Python's built-in :mod:`logging`, or via the `logbook <http://logbook.pocoo.org>`_ module.
 
+Redirects
+~~~~~~~~~
+
+Path: ``debug_toolbar.panels.redirects.InterceptRedirectsPanel``
+
+When this panel is enabled, the debug toolbar will show an intermediate page
+upon redirect so you can view any debug information prior to redirecting. This
+page will provide a link to the redirect destination you can follow when
+ready.
+
+Since this behavior is annoying when you aren't debugging a redirect, this
+panel is included but inactive by default. You can activate it by default with
+the ``INTERCEPT_REDIRECTS`` configuration option.
+
+
 Non-default built-in panels
 ---------------------------
 

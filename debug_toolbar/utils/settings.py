@@ -48,6 +48,7 @@ PANELS_DEFAULTS = (
     'debug_toolbar.panels.cache.CacheDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar.panels.redirects.InterceptRedirectsPanel',
 )
 
 

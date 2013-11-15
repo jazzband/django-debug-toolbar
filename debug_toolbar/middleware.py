@@ -7,8 +7,6 @@ from __future__ import unicode_literals
 import threading
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.utils.encoding import force_text
 
 from debug_toolbar.toolbar import DebugToolbar
@@ -92,18 +90,6 @@ class DebugToolbarMiddleware(object):
         toolbar = self.__class__.debug_toolbars.pop(threading.current_thread().ident, None)
         if not toolbar or getattr(response, 'streaming', False):
             return response
-        if isinstance(response, HttpResponseRedirect):
-            if not toolbar.config['INTERCEPT_REDIRECTS']:
-                return response
-            redirect_to = response.get('Location', None)
-            if redirect_to:
-                cookies = response.cookies
-                response = render(
-                    request,
-                    'debug_toolbar/redirect.html',
-                    {'redirect_to': redirect_to}
-                )
-                response.cookies = cookies
         for panel in reversed(toolbar.enabled_panels):
             new_response = panel.process_response(request, response)
             if new_response:

@@ -22,6 +22,7 @@ setting. The default value is::
         'debug_toolbar.panels.cache.CacheDebugPanel',
         'debug_toolbar.panels.signals.SignalDebugPanel',
         'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar.panels.redirects.InterceptRedirectsPanel',
     )
 
 This setting allows you to:
@@ -53,15 +54,6 @@ Toolbar options
   The default value of ``None`` tells the toolbar to automatically do the
   right thing depending on whether the WSGI container runs multiple processes.
   This setting allows you to force a different behavior if needed.
-
-* ``INTERCEPT_REDIRECTS``
-
-  Default: ``False``
-
-  If set to ``True``, the debug toolbar will show an intermediate page upon
-  redirect so you can view any debug information prior to redirecting. This
-  page will provide a link to the redirect destination you can follow when
-  ready. If set to ``False``, redirects will proceed as normal.
 
 * ``RESULTS_CACHE_SIZE``
 
@@ -138,6 +130,14 @@ Panel options
 
   If set to ``True`` then code in Django itself won't be shown in
   stacktraces.
+
+* ``INTERCEPT_REDIRECTS``
+
+  Default: ``False``
+
+  Panel: redirects
+
+  If set to ``True``, the redirect panel will be active by default.
 
 * ``SHOW_TEMPLATE_CONTEXT``
 
