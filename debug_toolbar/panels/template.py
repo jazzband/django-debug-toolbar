@@ -5,12 +5,16 @@ from pprint import pformat
 
 import django
 from django import http
+from django.http import HttpResponseBadRequest
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.db.models.query import QuerySet, RawQuerySet
+from django.shortcuts import render
+from django.template import TemplateDoesNotExist
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
@@ -116,8 +120,8 @@ class TemplateDebugPanel(DebugPanel):
 
     @classmethod
     def get_urls(cls):
-        return patterns('debug_toolbar.views',                          # noqa
-            url(r'^template_source/$', 'template_source', name='template_source'),
+        return patterns('debug_toolbar.panels.template',                # noqa
+            url(r'^template_source/$', template_source, name='template_source'),
         )
 
     def nav_title(self):
@@ -157,3 +161,42 @@ class TemplateDebugPanel(DebugPanel):
             'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
             'context_processors': context_processors,
         })
+
+
+def template_source(request):
+    """
+    Return the source of a template, syntax-highlighted by Pygments if
+    it's available.
+    """
+    template_name = request.GET.get('template', None)
+    if template_name is None:
+        return HttpResponseBadRequest('"template" key is required')
+
+    from django.template.loader import find_template_loader
+    loaders = []
+    for loader_name in settings.TEMPLATE_LOADERS:
+        loader = find_template_loader(loader_name)
+        if loader is not None:
+            loaders.append(loader)
+    for loader in loaders:
+        try:
+            source, display_name = loader.load_template_source(template_name)
+            break
+        except TemplateDoesNotExist:
+            source = "Template Does Not Exist: %s" % (template_name,)
+
+    try:
+        from pygments import highlight
+        from pygments.lexers import HtmlDjangoLexer
+        from pygments.formatters import HtmlFormatter
+
+        source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
+        source = mark_safe(source)
+        source.pygmentized = True
+    except ImportError:
+        pass
+
+    return render(request, 'debug_toolbar/panels/template_source.html', {
+        'source': source,
+        'template_name': template_name
+    })
