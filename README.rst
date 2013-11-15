@@ -30,3 +30,8 @@ available at http://django-debug-toolbar.readthedocs.org/.
 
 The Django Debug Toolbar is released under the BSD license, like Django
 itself. If you like it, please consider contributing!
+
+The Django Debug Toolbar was originally created by Rob Hudson <rob@cogit8.org>
+in August 2008 and was further developed by many contributors_.
+
+.. _contributors: https://github.com/django-debug-toolbar/django-debug-toolbar/graphs/contributors
