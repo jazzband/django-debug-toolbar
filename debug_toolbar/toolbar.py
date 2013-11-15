@@ -4,6 +4,8 @@ The main DebugToolbar class that loads and renders the Toolbar.
 
 from __future__ import unicode_literals
 
+import uuid
+
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
@@ -62,7 +64,6 @@ class DebugToolbar(object):
 
     # Handle storing toolbars in memory and fetching them later on
 
-    _counter = 0
     _storage = SortedDict()
 
     def should_render_panels(self):
@@ -72,14 +73,14 @@ class DebugToolbar(object):
         return render_panels
 
     def store(self):
+        storage_id = uuid.uuid4().hex
         cls = type(self)
-        cls._counter += 1
-        cls._storage[cls._counter] = self
+        cls._storage[storage_id] = self
         for _ in range(len(cls._storage) - dt_settings.CONFIG['RESULTS_CACHE_SIZE']):
             # When we drop support for Python 2.6 and switch to
             # collections.OrderedDict, use popitem(last=False).
             del cls._storage[cls._storage.keyOrder[0]]
-        return cls._counter
+        return storage_id
 
     @classmethod
     def fetch(cls, storage_id):
