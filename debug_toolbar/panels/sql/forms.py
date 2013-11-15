@@ -10,7 +10,7 @@ from django.utils.encoding import force_text
 from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
 
-from debug_toolbar.utils.sql import reformat_sql
+from debug_toolbar.panels.sql.utils import reformat_sql
 
 
 class SQLSelectForm(forms.Form):
