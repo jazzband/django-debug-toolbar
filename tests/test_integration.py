@@ -8,7 +8,6 @@ from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
-from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
 
 from .base import BaseTestCase
 from .views import regular_view
@@ -36,7 +35,7 @@ class DebugToolbarTestCase(BaseTestCase):
     def _resolve_stats(self, path):
         # takes stats from RequestVars panel
         self.request.path = path
-        panel = self.toolbar.get_panel(RequestVarsDebugPanel)
+        panel = self.toolbar.get_panel_by_id('RequestVarsDebugPanel')
         panel.process_request(self.request)
         panel.process_response(self.request, self.response)
         return self.toolbar.stats['requestvars']

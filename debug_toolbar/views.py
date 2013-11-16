@@ -15,9 +15,6 @@ def render_panel(request):
                     "Please reload the page and retry.")
         content = "<p>%s</p>" % escape(content)
     else:
-        panel_id = request.GET['panel_id']
-        for panel in toolbar.panels:
-            if panel.dom_id() == panel_id:
-                content = panel.content()
-                break
+        panel = toolbar.get_panel_by_id(request.GET['panel_id'])
+        content = panel.content()
     return HttpResponse(content)

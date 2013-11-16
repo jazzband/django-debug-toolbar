@@ -31,11 +31,13 @@ class DebugPanel(object):
             context.update(self.get_stats())
             return render_to_string(self.template, context)
 
-    def dom_id(self):
-        return 'djDebug%sPanel' % (self.name.replace(' ', ''))
+    @property
+    def panel_id(self):
+        return self.__class__.__name__
 
+    @property
     def enabled(self):
-        return self.toolbar.request.COOKIES.get(self.dom_id(), 'on') == 'on'
+        return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, 'on') == 'on'
 
     # URLs for panel-specific views
 

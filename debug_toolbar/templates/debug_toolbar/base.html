@@ -20,9 +20,9 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 			{% endif %}
 			{% for panel in panels %}
 				<li class="djDebugPanelButton">
-					<input type="checkbox" data-cookie="{{ panel.dom_id }}" {% if panel.enabled %}checked="checked" title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %} />
+					<input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked="checked" title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %} />
 					{% if panel.has_content and panel.enabled %}
-						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.dom_id }}">
+						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.panel_id }}">
 					{% else %}
 						<div class="contentless{% if not panel.enabled %} disabled{% endif %}">
 					{% endif %}
@@ -46,7 +46,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="{{ STATIC_URL }}debug_toolbar
 	</div>
 	{% for panel in panels %}
 		{% if panel.has_content and panel.enabled %}
-			<div id="{{ panel.dom_id }}" class="panelContent">
+			<div id="{{ panel.panel_id }}" class="panelContent">
 				<div class="djDebugPanelTitle">
 					<a href="" class="djDebugClose">{% trans "Close" %}</a>
 					<h3>{{ panel.title|safe }}</h3>

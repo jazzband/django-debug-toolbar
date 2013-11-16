@@ -18,7 +18,7 @@ class InterceptRedirectsPanel(DebugPanel):
 
     def enabled(self):
         default = 'on' if self.toolbar.config['INTERCEPT_REDIRECTS'] else 'off'
-        return self.toolbar.request.COOKIES.get(self.dom_id(), default) == 'on'
+        return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, default) == 'on'
 
     def process_response(self, request, response):
         if isinstance(response, HttpResponseRedirect):

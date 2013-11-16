@@ -29,28 +29,34 @@ class DebugToolbar(object):
             'STATIC_URL': settings.STATIC_URL,
             'TOOLBAR_ROOT_TAG_ATTRS': self.config['ROOT_TAG_ATTRS'],
         }
-
-        self.load_panels()
         self.stats = {}
-
-    def _get_panels(self):
-        return list(self._panels.values())
-    panels = property(_get_panels)
-
-    def _get_enabled_panels(self):
-        return [panel for panel in self._panels.values() if panel.enabled()]
-    enabled_panels = property(_get_enabled_panels)
-
-    def get_panel(self, cls):
-        return self._panels[cls]
-
-    def load_panels(self):
-        """
-        Populate debug panels
-        """
         for panel_class in self.get_panel_classes():
             panel_instance = panel_class(self, context=self.template_context)
-            self._panels[panel_class] = panel_instance
+            self._panels[panel_instance.panel_id] = panel_instance
+
+    # Manage panels
+
+    @property
+    def panels(self):
+        """
+        Get a list of all available panels.
+        """
+        return list(self._panels.values())
+
+    @property
+    def enabled_panels(self):
+        """
+        Get a list of panels enabled for the current request.
+        """
+        return [panel for panel in self._panels.values() if panel.enabled]
+
+    def get_panel_by_id(self, panel_id):
+        """
+        Get the panel with the given id, which is the class name by default.
+        """
+        return self._panels[panel_id]
+
+    # Handle rendering the toolbar in HTML
 
     def render_toolbar(self):
         """
@@ -86,8 +92,8 @@ class DebugToolbar(object):
     def fetch(cls, storage_id):
         return cls._storage.get(storage_id)
 
-    # Manually implement class-level caching of the list of panels because
-    # it's more obvious than going through an abstraction.
+    # Manually implement class-level caching of panel classes and url patterns
+    # because it's more obvious than going through an abstraction.
 
     _panel_classes = None
 

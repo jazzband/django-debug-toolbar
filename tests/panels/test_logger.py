@@ -2,8 +2,7 @@ from __future__ import unicode_literals
 
 import logging
 
-from debug_toolbar.panels.logger import (
-    LoggingPanel, MESSAGE_IF_STRING_REPRESENTATION_INVALID)
+from debug_toolbar.panels.logger import MESSAGE_IF_STRING_REPRESENTATION_INVALID
 
 from ..base import BaseTestCase
 
@@ -12,7 +11,7 @@ class LoggingPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(LoggingPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel(LoggingPanel)
+        self.panel = self.toolbar.get_panel_by_id('LoggingPanel')
         self.logger = logging.getLogger(__name__)
 
     def test_happy_case(self):

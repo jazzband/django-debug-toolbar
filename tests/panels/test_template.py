@@ -6,9 +6,6 @@ import django
 from django.contrib.auth.models import User
 from django.template import Template, Context
 
-from debug_toolbar.panels.template import TemplateDebugPanel
-from debug_toolbar.panels.sql import SQLDebugPanel
-
 from ..base import BaseTestCase
 from ..models import NonAsciiRepr
 
@@ -17,8 +14,8 @@ class TemplateDebugPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(TemplateDebugPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel(TemplateDebugPanel)
-        self.sql_panel = self.toolbar.get_panel(SQLDebugPanel)
+        self.panel = self.toolbar.get_panel_by_id('TemplateDebugPanel')
+        self.sql_panel = self.toolbar.get_panel_by_id('SQLDebugPanel')
         self.sql_panel.enable_instrumentation()
 
     def tearDown(self):

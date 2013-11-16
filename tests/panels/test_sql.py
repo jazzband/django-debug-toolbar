@@ -7,8 +7,6 @@ from django.db import connection
 from django.db.utils import DatabaseError
 from django.utils import unittest
 
-from debug_toolbar.panels.sql import SQLDebugPanel
-
 from ..base import BaseTestCase
 
 
@@ -16,7 +14,7 @@ class SQLPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(SQLPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel(SQLDebugPanel)
+        self.panel = self.toolbar.get_panel_by_id('SQLDebugPanel')
         self.panel.enable_instrumentation()
 
     def tearDown(self):

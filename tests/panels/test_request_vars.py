@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from django.utils import six
 
-from debug_toolbar.panels.request_vars import RequestVarsDebugPanel
-
 from ..base import BaseTestCase
 
 
@@ -13,7 +11,7 @@ class RequestVarsDebugPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(RequestVarsDebugPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel(RequestVarsDebugPanel)
+        self.panel = self.toolbar.get_panel_by_id('RequestVarsDebugPanel')
 
     def test_non_ascii_session(self):
         self.request.session = {'où': 'où'}
