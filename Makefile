@@ -1,9 +1,4 @@
-# Make file to compress and join all JS files
-all: compress_js compress_css
-
-
-
-.PHONY: flake8 example test compress_js compress_css translatable_strings update_translations
+.PHONY: flake8 example test coverage translatable_strings update_translations
 
 flake8:
 	flake8 debug_toolbar example tests
@@ -21,9 +16,6 @@ coverage:
 	DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \
 		coverage run --branch --source=debug_toolbar `which django-admin.py` test tests
 	coverage html
-
-compress_css:
-	yuicompressor --type css debug_toolbar/static/debug_toolbar/css/toolbar.css > debug_toolbar/static/debug_toolbar/css/toolbar.min.css
 
 translatable_strings:
 	cd debug_toolbar && django-admin.py makemessages -l en --no-wrap --no-obsolete

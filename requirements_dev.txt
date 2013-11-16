@@ -21,4 +21,3 @@ Sphinx
 
 transifex-client
 wheel
-yuicompressor
