@@ -90,12 +90,25 @@ Translation efforts are coordinated on `Transifex
 
 Help translate the Debug Toolbar in your language!
 
-Prior to a release, the English ``.po`` file must be updated with ``make
-translatable_strings``. Once translators have updated the translations on
-Transifex, all ``.po`` files must be updated with ``make update_translations``.
-
 Mailing list
 ------------
 
 This project doesn't have a mailing list at this time. If you wish to discuss
 a topic, please open an issue on GitHub.
+
+Making a release
+----------------
+
+Prior to a release, the English ``.po`` file must be updated with ``make
+translatable_strings`` and pushed to Transifex. Once translators have done
+their job, ``.po`` files must be downloaded with ``make update_translations``.
+
+The release itself requires the following steps:
+
+#. Bump version numbers in docs/conf.py, README.rst and setup.py and commit.
+   Tag the new version.
+
+#. ``python setup.py sdist bdist_wheel upload``. You should to test that the
+   packages install correctly before uploading them. (How?)
+
+#. Push the commit and the tag.
