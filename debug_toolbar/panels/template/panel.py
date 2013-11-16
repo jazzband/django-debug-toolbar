@@ -16,7 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
-from debug_toolbar.utils import settings as dt_settings
 
 # Code taken and adapted from Simon Willison and Django Snippets:
 # http://www.djangosnippets.org/snippets/766/
@@ -147,7 +146,7 @@ class TemplateDebugPanel(DebugPanel):
                 template.origin_name = 'No origin'
             info['template'] = template
             # Clean up context for better readability
-            if dt_settings.CONFIG['SHOW_TEMPLATE_CONTEXT']:
+            if self.toolbar.config['SHOW_TEMPLATE_CONTEXT']:
                 context_list = template_data.get('context', [])
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)

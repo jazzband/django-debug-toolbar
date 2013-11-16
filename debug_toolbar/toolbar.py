@@ -20,19 +20,17 @@ class DebugToolbar(object):
 
     def __init__(self, request):
         self.request = request
-        self._panels = SortedDict()
-        base_url = self.request.META.get('SCRIPT_NAME', '')
-        self.config = {}
-        self.config.update(dt_settings.CONFIG)
+        self.config = dt_settings.CONFIG.copy()
         self.template_context = {
-            'BASE_URL': base_url,  # for backwards compatibility
             'STATIC_URL': settings.STATIC_URL,
-            'TOOLBAR_ROOT_TAG_ATTRS': self.config['ROOT_TAG_ATTRS'],
+            'toolbar': self,
         }
-        self.stats = {}
+        self._panels = SortedDict()
         for panel_class in self.get_panel_classes():
             panel_instance = panel_class(self, context=self.template_context)
             self._panels[panel_instance.panel_id] = panel_instance
+        self.stats = {}
+        self.storage_id = None
 
     # Manage panels
 
@@ -62,10 +60,9 @@ class DebugToolbar(object):
         """
         Renders the overall Toolbar with panels inside.
         """
-        context = self.template_context.copy()
-        context['panels'] = self.panels
         if not self.should_render_panels():
-            context['storage_id'] = self.store()
+            self.store()
+        context = self.template_context.copy()
         return render_to_string('debug_toolbar/base.html', context)
 
     # Handle storing toolbars in memory and fetching them later on
@@ -73,20 +70,19 @@ class DebugToolbar(object):
     _storage = SortedDict()
 
     def should_render_panels(self):
-        render_panels = dt_settings.CONFIG['RENDER_PANELS']
+        render_panels = self.config['RENDER_PANELS']
         if render_panels is None:
             render_panels = self.request.META['wsgi.multiprocess']
         return render_panels
 
     def store(self):
-        storage_id = uuid.uuid4().hex
+        self.storage_id = uuid.uuid4().hex
         cls = type(self)
-        cls._storage[storage_id] = self
-        for _ in range(len(cls._storage) - dt_settings.CONFIG['RESULTS_CACHE_SIZE']):
+        cls._storage[self.storage_id] = self
+        for _ in range(len(cls._storage) - self.config['RESULTS_CACHE_SIZE']):
             # When we drop support for Python 2.6 and switch to
             # collections.OrderedDict, use popitem(last=False).
             del cls._storage[cls._storage.keyOrder[0]]
-        return storage_id
 
     @classmethod
     def fetch(cls, storage_id):

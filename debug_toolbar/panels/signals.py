@@ -16,7 +16,6 @@ except ImportError:
     connection_created = None
 
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import settings as dt_settings
 
 
 class SignalDebugPanel(DebugPanel):
@@ -63,7 +62,7 @@ class SignalDebugPanel(DebugPanel):
     @property
     def signals(self):
         signals = self.SIGNALS.copy()
-        for signal in dt_settings.CONFIG['EXTRA_SIGNALS']:
+        for signal in self.toolbar.config['EXTRA_SIGNALS']:
             mod_path, signal_name = signal.rsplit('.', 1)
             signals_mod = import_module(mod_path)
             signals[signal_name] = getattr(signals_mod, signal_name)
