@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.encoding import force_text
 
 from debug_toolbar.toolbar import DebugToolbar
-from debug_toolbar.utils import settings as dt_settings
+from debug_toolbar import settings as dt_settings
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 # Handles python threading module bug - http://bugs.python.org/issue14308

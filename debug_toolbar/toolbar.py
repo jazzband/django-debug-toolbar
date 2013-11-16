@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 
-from debug_toolbar.utils import settings as dt_settings
+from debug_toolbar import settings as dt_settings
 
 
 class DebugToolbar(object):

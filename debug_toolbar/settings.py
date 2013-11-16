@@ -5,7 +5,7 @@ from django.utils import six
 
 
 # Always import this module as follows:
-# from debug_toolbar.utils import settings [as dt_settings]
+# from debug_toolbar import settings [as dt_settings]
 
 # Don't import directly CONFIG or PANELs, or you will miss changes performed
 # with override_settings in tests.

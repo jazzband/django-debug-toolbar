@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _, ungettext
 from debug_toolbar.panels import DebugPanel
 from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
                                  get_template_info, get_stack)
-from debug_toolbar.utils import settings as dt_settings
+from debug_toolbar import settings as dt_settings
 
 
 cache_called = Signal(providing_args=[
