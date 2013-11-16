@@ -11,6 +11,7 @@ sqlparse
 
 coverage
 flake8
+selenium
 tox
 
 # Documentation

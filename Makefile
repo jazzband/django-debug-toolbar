@@ -11,6 +11,10 @@ test:
 	DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \
 		django-admin.py test tests
 
+test_selenium:
+	DJANGO_SELENIUM_TESTS=true DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \
+		django-admin.py test tests
+
 coverage:
 	coverage erase
 	DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \

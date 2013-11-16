@@ -2,10 +2,19 @@
 
 from __future__ import unicode_literals
 
+import os
 from xml.etree import ElementTree as ET
 
-from django.test import TestCase, RequestFactory
+try:
+    from selenium import webdriver
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.support.wait import WebDriverWait
+except ImportError:
+    webdriver = None
+
+from django.test import LiveServerTestCase, RequestFactory, TestCase
 from django.test.utils import override_settings
+from django.utils.unittest import skipIf, skipUnless
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
@@ -92,3 +101,29 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError
+
+
+@skipIf(webdriver is None, "selenium isn't installed")
+@skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")
+@override_settings(DEBUG=True)
+class DebugToolbarLiveTestCase(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(DebugToolbarLiveTestCase, cls).setUpClass()
+        cls.selenium = webdriver.Firefox()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(DebugToolbarLiveTestCase, cls).tearDownClass()
+
+    def test_basic(self):
+        self.selenium.get(self.live_server_url + '/regular/basic/')
+        version_button = self.selenium.find_element_by_class_name('VersionDebugPanel')
+        version_panel = self.selenium.find_element_by_id('VersionDebugPanel')
+        with self.assertRaises(NoSuchElementException):
+            version_panel.find_element_by_tag_name('table')
+        version_button.click()      # load contents of the version panel
+        WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: version_panel.find_element_by_tag_name('table'))

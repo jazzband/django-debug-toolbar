@@ -46,8 +46,19 @@ Python::
 
 This is strongly recommended before committing changes to Python code.
 
+The test suite includes frontend tests written with Selenium. Since they're
+annoyingly slow, they're disabled by default. You can run them as follows::
+
+    $ make test_selenium
+
+or by setting the ``DJANGO_SELENIUM_TESTS`` environment variable::
+
+    $ DJANGO_SELENIUM_TESTS=true make test
+    $ DJANGO_SELENIUM_TESTS=true make coverage
+    $ DJANGO_SELENIUM_TESTS=true tox
+
 At this time, there isn't an easy way to test against databases other than
-SQLite. The JaveScript code isn't tested either.
+SQLite.
 
 Style
 -----

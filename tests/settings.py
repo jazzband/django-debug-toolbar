@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'tests',
 ]
 
+MEDIA_URL = '/media/'   # Avoids https://code.djangoproject.com/ticket/21451
+
 MIDDLEWARE_CLASSES = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
