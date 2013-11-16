@@ -1,5 +1,4 @@
-{% load i18n %}{% load url from future %}
-{% load debug_toolbar_utils %}
+{% load i18n l10n %}{% load url from future %}
 <div class="clearfix">
 	<ul class="stats">
 		{% for alias, info in databases %}
@@ -35,7 +34,7 @@
 						</div>
 					</td>
 					<td class="timeline">
-						<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset|dotted_number }}%;"><strong style="width:{{ query.width_ratio_relative|dotted_number }}%;">{{ query.width_ratio }}%</strong></div></div>
+						<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset|unlocalize }}%;"><strong style="width:{{ query.width_ratio_relative|unlocalize }}%;">{{ query.width_ratio }}%</strong></div></div>
 					</td>
 					<td class="time">
 						{{ query.duration|floatformat:"2" }}
