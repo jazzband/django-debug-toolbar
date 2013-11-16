@@ -120,10 +120,30 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
 
     def test_basic(self):
         self.selenium.get(self.live_server_url + '/regular/basic/')
-        version_button = self.selenium.find_element_by_class_name('VersionDebugPanel')
         version_panel = self.selenium.find_element_by_id('VersionDebugPanel')
+
+        # Version panel isn't loaded
         with self.assertRaises(NoSuchElementException):
             version_panel.find_element_by_tag_name('table')
-        version_button.click()      # load contents of the version panel
-        WebDriverWait(self.selenium, timeout=10).until(
+
+        # Click to show the version panel
+        self.selenium.find_element_by_class_name('VersionDebugPanel').click()
+
+        # Version panel loads
+        table = WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: version_panel.find_element_by_tag_name('table'))
+        self.assertIn("Name", table.text)
+        self.assertIn("Version", table.text)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={'RESULTS_CACHE_SIZE': 0})
+    def test_expired_storage(self):
+        self.selenium.get(self.live_server_url + '/regular/basic/')
+        version_panel = self.selenium.find_element_by_id('VersionDebugPanel')
+
+        # Click to show the version panel
+        self.selenium.find_element_by_class_name('VersionDebugPanel').click()
+
+        # Version panel doesn't loads
+        error = WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: version_panel.find_element_by_tag_name('p'))
+        self.assertIn("Data for this panel isn't available anymore.", error.text)
