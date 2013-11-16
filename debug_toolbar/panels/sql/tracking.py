@@ -37,8 +37,21 @@ state = ThreadLocalState()
 recording = state.recording  # export function
 
 
-def CursorWrapper(*args, **kwds):  # behave like a class
-    return state.Wrapper(*args, **kwds)
+def wrap_cursor(connection, panel):
+    if not hasattr(connection, '_djdt_cursor'):
+        connection._djdt_cursor = connection.cursor
+
+        def cursor():
+            return state.Wrapper(connection._djdt_cursor(), connection, panel)
+
+        connection.cursor = cursor
+        return cursor
+
+
+def unwrap_cursor(connection):
+    if hasattr(connection, '_djdt_cursor'):
+        del connection._djdt_cursor
+        del connection.cursor
 
 
 class ExceptionCursorWrapper(object):

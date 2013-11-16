@@ -11,7 +11,7 @@ from debug_toolbar.panels import DebugPanel
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.panels.sql.utils import reformat_sql
-from debug_toolbar.panels.sql.tracking import CursorWrapper
+from debug_toolbar.panels.sql.tracking import wrap_cursor, unwrap_cursor
 
 
 def get_isolation_level_display(engine, level):
@@ -128,16 +128,11 @@ class SQLDebugPanel(DebugPanel):
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.
         for connection in connections.all():
-            if not hasattr(connection, '_djdt_cursor'):
-                connection._djdt_cursor = connection.cursor
-                connection.cursor = lambda: CursorWrapper(
-                    connection._djdt_cursor(), connection, self)
+            wrap_cursor(connection, self)
 
     def disable_instrumentation(self):
         for connection in connections.all():
-            if hasattr(connection, '_djdt_cursor'):
-                del connection._djdt_cursor
-                del connection.cursor
+            unwrap_cursor(connection)
 
     def process_response(self, request, response):
         if self._queries:
