@@ -19,8 +19,6 @@ rf = RequestFactory()
 @override_settings(DEBUG=True)
 class DebugToolbarTestCase(BaseTestCase):
 
-    urls = 'tests.urls'
-
     def test_show_toolbar(self):
         self.assertTrue(show_toolbar(self.request))
 
@@ -76,8 +74,6 @@ class DebugToolbarTestCase(BaseTestCase):
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(TestCase):
-
-    urls = 'tests.urls'
 
     def test_middleware(self):
         response = self.client.get('/execute_sql/')

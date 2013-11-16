@@ -10,8 +10,6 @@ from django.test.utils import override_settings
                    DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel'])
 class ProfilingPanelIntegrationTestCase(TestCase):
 
-    urls = 'tests.urls'
-
     def test_view_executed_once(self):
 
         self.assertEqual(User.objects.count(), 0)
