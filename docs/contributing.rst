@@ -24,7 +24,15 @@ the libraries required for working on the Debug Toolbar::
 
 You can run now run the example application::
 
+    $ DJANGO_SETTINGS_MODULE=example.settings django-admin.py syncdb
+    $ DJANGO_SETTINGS_MODULE=example.settings django-admin.py runserver
+
+For convenience, there's an alias for the second command::
+
     $ make example
+
+Look at ``example/settings.py`` for running the example with another database
+than SQLite.
 
 Tests
 -----

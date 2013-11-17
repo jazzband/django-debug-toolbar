@@ -49,6 +49,30 @@ DATABASES = {
     }
 }
 
+# To use another database, set the DJANGO_DATABASE_ENGINE environment variable.
+if os.environ.get('DJANGO_DATABASE_ENGINE', '').lower() == 'postgresql':
+    # % su postgres
+    # % createuser debug_toolbar
+    # % createdb debug_toolbar -O debug_toolbar
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'debug_toolbar',
+            'USER': 'debug_toolbar',
+        }
+    }
+if os.environ.get('DJANGO_DATABASE_ENGINE', '').lower() == 'mysql':
+    # % mysql
+    # mysql> CREATE DATABASE debug_toolbar;
+    # mysql> GRANT ALL PRIVILEGES ON debug_toolbar.* TO 'debug_toolbar'@'localhost';
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'debug_toolbar',
+            'USER': 'debug_toolbar',
+        }
+    }
+
 
 # django-debug-toolbar
 
