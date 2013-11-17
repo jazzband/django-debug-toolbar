@@ -4,20 +4,20 @@ flake8:
 	flake8 debug_toolbar example tests
 
 example:
-	DJANGO_SETTINGS_MODULE=example.settings PYTHONPATH=. \
+	DJANGO_SETTINGS_MODULE=example.settings \
 		django-admin.py runserver
 
 test:
-	DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \
+	DJANGO_SETTINGS_MODULE=tests.settings \
 		django-admin.py test tests
 
 test_selenium:
-	DJANGO_SELENIUM_TESTS=true DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \
+	DJANGO_SELENIUM_TESTS=true DJANGO_SETTINGS_MODULE=tests.settings \
 		django-admin.py test tests
 
 coverage:
 	coverage erase
-	DJANGO_SETTINGS_MODULE=tests.settings PYTHONPATH=. \
+	DJANGO_SETTINGS_MODULE=tests.settings \
 		coverage run --branch --source=debug_toolbar `which django-admin.py` test tests
 	coverage html
 
