@@ -2,9 +2,10 @@ from __future__ import unicode_literals
 
 import inspect
 import os.path
-import django
+import re
 import sys
 
+import django
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import force_text
 from django.utils.html import escape
@@ -160,14 +161,27 @@ def getframeinfo(frame, context=1):
         try:
             lines, lnum = inspect.findsource(frame)
         except Exception:   # findsource raises platform-dependant exceptions
-            lines = index = None
+            first_lines = lines = index = None
         else:
             start = max(start, 1)
             start = max(0, min(start, len(lines) - context))
+            first_lines = lines[:2]
             lines = lines[start:(start + context)]
             index = lineno - 1 - start
     else:
-        lines = index = None
+        first_lines = lines = index = None
+
+    # Code taken from Django's ExceptionReporter._get_lines_from_file
+    if first_lines and isinstance(first_lines[0], bytes):
+        encoding = 'ascii'
+        for line in first_lines[:2]:
+            # File coding may be specified. Match pattern from PEP-263
+            # (http://www.python.org/dev/peps/pep-0263/)
+            match = re.search(br'coding[:=]\s*([-\w.]+)', line)
+            if match:
+                encoding = match.group(1).decode('ascii')
+                break
+        lines = [line.decode(encoding, 'replace') for line in lines]
 
     if hasattr(inspect, 'Traceback'):
         return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
