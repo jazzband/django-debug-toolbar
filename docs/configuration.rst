@@ -70,6 +70,12 @@ Toolbar options
   toolbar with Angular.js, set this to ``'ng-non-bindable'`` or
   ``'class="ng-non-bindable"'``.
 
+* ``SHOW_COLLAPSED``
+
+  Default: ``False``
+
+  If changed to ``True``, the toolbar will be collapsed by default.
+
 * ``SHOW_TOOLBAR_CALLBACK``
 
   Default: ``None``

@@ -93,6 +93,8 @@ class DebugToolbarMiddleware(object):
                 response = new_response
         for panel in reversed(toolbar.enabled_panels):
             panel.disable_instrumentation()
+        if toolbar.config['SHOW_COLLAPSED'] and 'djdt' not in request.COOKIES:
+            response.set_cookie('djdt', 'hide', 864000)
         if ('gzip' not in response.get('Content-Encoding', '') and
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
             response.content = replace_insensitive(

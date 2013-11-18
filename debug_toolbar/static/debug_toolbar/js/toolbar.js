@@ -180,7 +180,7 @@
                     return;
                 }
             });
-            if ($.cookie('djdt')) {
+            if ($.cookie('djdt') == 'hide') {
                 djdt.hide_toolbar(false);
             } else {
                 djdt.show_toolbar(false);
@@ -235,9 +235,9 @@
             } else {
                 $('#djDebugToolbar').show();
             }
-            $.cookie('djdt', null, {
+            $.cookie('djdt', 'show', {
                 path: '/',
-                expires: -1
+                expires: 10
             });
         },
         ready: function(callback){

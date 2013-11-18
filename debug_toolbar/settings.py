@@ -15,6 +15,7 @@ CONFIG_DEFAULTS = {
     'INTERCEPT_REDIRECTS': False,
     'SHOW_TOOLBAR_CALLBACK': None,
     'EXTRA_SIGNALS': [],
+    'SHOW_COLLAPSED': False,
     'HIDE_DJANGO_SQL': True,
     'SHOW_TEMPLATE_CONTEXT': True,
     'TAG': 'body',
