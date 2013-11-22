@@ -131,7 +131,7 @@ class FunctionCall(object):
         if self._line_stats_text is None and DJ_PROFILE_USE_LINE_PROFILER:
             lstats = self.statobj.line_stats
             if self.func in lstats.timings:
-                out = cStringIO.StringIO()
+                out = cStringIO()
                 fn, lineno, name = self.func
                 show_func(fn, lineno, name, lstats.timings[self.func], lstats.unit, stream=out)
                 self._line_stats_text = out.getvalue()
@@ -142,7 +142,7 @@ class FunctionCall(object):
 
 class ProfilingDebugPanel(DebugPanel):
     """
-    Panel that displays the Django version.
+    Panel that displays profiling information.
     """
     name = 'Profiling'
     template = 'debug_toolbar/panels/profiling.html'
@@ -191,6 +191,7 @@ class ProfilingDebugPanel(DebugPanel):
     def process_response(self, request, response):
         if not hasattr(self, 'profiler'):
             return None
+        # Could be delayed until the panel content is requested (perf. optim.)
         self.profiler.create_stats()
         self.stats = DjangoDebugToolbarStats(self.profiler)
         if DJ_PROFILE_USE_LINE_PROFILER:
