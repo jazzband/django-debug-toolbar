@@ -2,18 +2,13 @@ from __future__ import unicode_literals
 
 from django.core.signals import (
     request_started, request_finished, got_request_exception)
+from django.db.backends.signals import connection_created
 from django.db.models.signals import (
     class_prepared, pre_init, post_init, pre_save, post_save,
     pre_delete, post_delete, post_syncdb)
 from django.dispatch.dispatcher import WEAKREF_TYPES
 from django.utils.translation import ugettext_lazy as _, ungettext
 from django.utils.importlib import import_module
-
-
-try:
-    from django.db.backends.signals import connection_created
-except ImportError:
-    connection_created = None
 
 from debug_toolbar.panels import DebugPanel
 
