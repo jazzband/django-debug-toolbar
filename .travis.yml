@@ -16,5 +16,5 @@ matrix:
       env: DJANGO_VERSION=1.4.10
 install:
   - pip install -e .
-  - pip install Django==$DJANGO_VERSION line_profiler sqlparse
+  - pip install Django==$DJANGO_VERSION line_profiler==1.0b3 sqlparse
 script: make test
