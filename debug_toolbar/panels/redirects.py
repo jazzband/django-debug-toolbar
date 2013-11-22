@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.core.handlers.wsgi import STATUS_CODE_TEXT
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
@@ -22,14 +21,15 @@ class InterceptRedirectsPanel(DebugPanel):
         return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, default) == 'on'
 
     def process_response(self, request, response):
-        if isinstance(response, HttpResponseRedirect):
+        if 300 <= int(response.status_code) < 400:
             redirect_to = response.get('Location', None)
             if redirect_to:
-                try:
-                    status_text = STATUS_CODE_TEXT[response.status_code]
-                except KeyError:
-                    status_text = 'UNKNOWN STATUS CODE'
-                status_line = '%s %s' % (response.status_code, status_text.title())
+                try:        # Django >= 1.6
+                    reason_phrase = response.reason_phrase
+                except AttributeError:
+                    reason_phrase = STATUS_CODE_TEXT.get(response.status_code,
+                                                         'UNKNOWN STATUS CODE')
+                status_line = '%s %s' % (response.status_code, reason_phrase)
                 cookies = response.cookies
                 context = {'redirect_to': redirect_to, 'status_line': status_line}
                 response = render(request, 'debug_toolbar/redirect.html', context)

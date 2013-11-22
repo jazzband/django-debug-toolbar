@@ -5,6 +5,7 @@ if django.VERSION[:2] < (1, 6):     # unittest-style discovery isn't available
     from .panels.test_cache import *                                    # noqa
     from .panels.test_logger import *                                   # noqa
     from .panels.test_profiling import *                                # noqa
+    from .panels.test_redirects import *                                # noqa
     from .panels.test_request_vars import *                             # noqa
     from .panels.test_sql import *                                      # noqa
     from .panels.test_template import *                                 # noqa

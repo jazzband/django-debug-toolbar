@@ -43,7 +43,6 @@ class ProfilingPanelTestCase(BaseTestCase):
             profiling.DJ_PROFILE_USE_LINE_PROFILER = _use_line_profiler
 
 
-
 @override_settings(DEBUG=True,
                    DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel'])
 class ProfilingPanelIntegrationTestCase(TestCase):
