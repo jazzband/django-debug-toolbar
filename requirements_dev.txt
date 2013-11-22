@@ -7,6 +7,10 @@
 Django
 sqlparse
 
+# Optional runtime dependencies
+
+line_profiler
+
 # Testing
 
 coverage
