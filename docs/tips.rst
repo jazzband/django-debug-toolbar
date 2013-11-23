@@ -13,6 +13,20 @@ requests and return responses. Putting the debug toolbar middleware *after*
 the Flatpage middleware, for example, means the toolbar will not show up on
 flatpages.
 
+Using the toolbar offline
+-------------------------
+
+The Debug Toolbar depends on the jQuery_ library. If jQuery isn't already
+loaded in your page, the toolbar loads it from the Google Hosted Libraries
+CDN. Your browser will keep it in cache, allowing you to use the toolbar even
+if you disconnect from the Internet temporarily.
+
+If you want to use the Debug Toolbar without an Internet connection at all, or
+if you refuse to depend on Google's services, you should include your own copy
+of jQuery on every page.
+
+.. _jQuery: http://jquery.com/
+
 Performance considerations
 --------------------------
 
