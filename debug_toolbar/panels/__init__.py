@@ -25,7 +25,6 @@ class Panel(object):
     def __init__(self, toolbar, context={}):
         self.toolbar = toolbar
         self.context.update(context)
-        self.slug = slugify(self.name)
 
     def content(self):
         if self.has_content:
@@ -69,17 +68,13 @@ class Panel(object):
     def disable_instrumentation(self):
         pass
 
-    # Store and retrieve stats (shared between panels)
+    # Store and retrieve stats (shared between panels for no good reason)
 
     def record_stats(self, stats):
-        panel_stats = self.toolbar.stats.get(self.slug)
-        if panel_stats:
-            panel_stats.update(stats)
-        else:
-            self.toolbar.stats[self.slug] = stats
+        self.toolbar.stats.setdefault(self.panel_id, {}).update(stats)
 
     def get_stats(self):
-        return self.toolbar.stats.get(self.slug, {})
+        return self.toolbar.stats.get(self.panel_id, {})
 
     # Standard middleware methods
 
