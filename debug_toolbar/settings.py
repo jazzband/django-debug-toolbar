@@ -20,7 +20,7 @@ CONFIG_DEFAULTS = {
     'RESULTS_STORE_SIZE': 10,
     'ROOT_TAG_EXTRA_ATTRS': '',
     'SHOW_COLLAPSED': False,
-    'SHOW_TOOLBAR_CALLBACK': None,
+    'SHOW_TOOLBAR_CALLBACK': 'debug_toolbar.middleware.show_toolbar',
     # Panel options
     'EXTRA_SIGNALS': [],
     'ENABLE_STACKTRACES': True,
@@ -36,7 +36,6 @@ CONFIG_DEFAULTS = {
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
 }
 
-CONFIG = CONFIG_DEFAULTS.copy()
 USER_CONFIG = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
 # Backward-compatibility for 1.0, remove in 2.0.
 _RENAMED_CONFIG = {
@@ -60,7 +59,18 @@ if 'TAG' in USER_CONFIG:
         "TAG was replaced by INSERT_BEFORE. Update your "
         "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
     USER_CONFIG['INSERT_BEFORE'] = '</%s>' % USER_CONFIG.pop('TAG')
+
+CONFIG = CONFIG_DEFAULTS.copy()
 CONFIG.update(USER_CONFIG)
+if isinstance(CONFIG['SHOW_TOOLBAR_CALLBACK'], six.string_types):
+    # Replace this with import_by_path in Django >= 1.6.
+    mod_path, func_name = CONFIG['SHOW_TOOLBAR_CALLBACK'].rsplit('.', 1)
+    mod = import_module(mod_path)
+    CONFIG['SHOW_TOOLBAR_CALLBACK'] = getattr(mod, func_name)
+else:
+    warnings.warn(
+        "SHOW_TOOLBAR_CALLBACK is now a dotted path. Update your "
+        "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
 
 
 PANELS_DEFAULTS = [

@@ -37,12 +37,8 @@ class DebugToolbarMiddleware(object):
     """
     debug_toolbars = {}
 
-    def __init__(self):
-        self.show_toolbar = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK'] or show_toolbar
-        self.insert_before = dt_settings.CONFIG['INSERT_BEFORE']
-
     def process_request(self, request):
-        if not self.show_toolbar(request):
+        if not dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK'](request):
             return
         response = None
         toolbar = DebugToolbar(request)
@@ -82,7 +78,7 @@ class DebugToolbarMiddleware(object):
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
             content = force_text(response.content, encoding=settings.DEFAULT_CHARSET)
             try:
-                insert_at = content.lower().rindex(self.insert_before.lower())
+                insert_at = content.lower().rindex(dt_settings.CONFIG['INSERT_BEFORE'].lower())
             except ValueError:
                 pass
             else:
