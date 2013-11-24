@@ -9,27 +9,16 @@ class Panel(object):
     """
     Base class for panels.
     """
-    # name = 'Base'
-    # template = 'debug_toolbar/panels/base.html'
-
-    # If content returns something, set to True in subclass
-    has_content = False
 
     # We'll maintain a local context instance so we can expose our template
-    # context variables to panels which need them:
+    # context variables to panels which need them. (But see issue #450.)
     context = {}
 
-    # Panel methods
+    # Private panel methods
 
     def __init__(self, toolbar, context={}):
         self.toolbar = toolbar
         self.context.update(context)
-
-    def content(self):
-        if self.has_content:
-            context = self.context.copy()
-            context.update(self.get_stats())
-            return render_to_string(self.template, context)
 
     @property
     def panel_id(self):
@@ -39,52 +28,146 @@ class Panel(object):
     def enabled(self):
         return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, 'on') == 'on'
 
+    # Titles and content
+
+    @property
+    def nav_title(self):
+        """
+        Title shown in the side bar. Defaults to :attr:`title`.
+        """
+        return self.title
+
+    @property
+    def nav_subtitle(self):
+        """
+        Subtitle shown in the side bar. Defaults to the empty string.
+        """
+        return ''
+
+    @property
+    def has_content(self):
+        """
+        ``True`` if the panel can be displayed in full screen, ``False`` if
+        it's only shown in the side bar. Defaults to ``True``.
+        """
+        return True
+
+    @property
+    def title(self):
+        """
+        Title shown in the panel when it's displayed in full screen.
+
+        Mandatory, unless the panel sets :attr:`has_content` to ``False``.
+        """
+        raise NotImplementedError
+
+    @property
+    def template(self):
+        """
+        Template used to render :attr:`content`.
+
+        Mandatory, unless the panel sets :attr:`has_content` to ``False`` or
+        overrides `attr`:content`.
+        """
+        raise NotImplementedError
+
+    @property
+    def content(self):
+        """
+        Content of the panel when it's displayed in full screen.
+
+        By default this renders the template defined by :attr:`template`.
+        Statistics stored with :meth:`record_stats` are available in the
+        template's context.
+        """
+        if self.has_content:
+            context = self.context.copy()
+            context.update(self.get_stats())
+            return render_to_string(self.template, context)
+
     # URLs for panel-specific views
 
     @classmethod
     def get_urls(cls):
+        """
+        Return URLpatterns, if the panel has its own views.
+        """
         return []
-
-    # Titles and subtitles
-
-    def nav_title(self):
-        """Title showing in sidebar"""
-        raise NotImplementedError
-
-    def nav_subtitle(self):
-        """Subtitle showing under title in sidebar"""
-        return ''
-
-    def title(self):
-        """Title showing in panel"""
-        raise NotImplementedError
 
     # Enable and disable (expensive) instrumentation, must be idempotent
 
     def enable_instrumentation(self):
-        pass
+        """
+        Enable instrumentation to gather data for this panel.
+
+        This usually means monkey-patching (!) or registering signal
+        receivers. Any instrumentation with a non-negligible effect on
+        performance should be installed by this method rather than at import
+        time.
+
+        Unless the toolbar or this panel is disabled, this method will be
+        called early in :class:`DebugToolbarMiddleware.process_request`. It
+        should be idempotent.
+        """
 
     def disable_instrumentation(self):
-        pass
+        """
+        Disable instrumentation to gather data for this panel.
+
+        This is the opposite of :meth:`enable_instrumentation`.
+
+        Unless the toolbar or this panel is disabled, this method will be
+        called late in :class:`DebugToolbarMiddleware.process_response`. It
+        should be idempotent.
+        """
 
     # Store and retrieve stats (shared between panels for no good reason)
 
     def record_stats(self, stats):
+        """
+        Store data gathered by the panel. ``stats`` is a :class:`dict`.
+
+        Each call to ``record_stats`` updates the statistics dictionary.
+        """
         self.toolbar.stats.setdefault(self.panel_id, {}).update(stats)
 
     def get_stats(self):
+        """
+        Access data stored by the panel. Returns a :class:`dict`.
+        """
         return self.toolbar.stats.get(self.panel_id, {})
 
     # Standard middleware methods
 
     def process_request(self, request):
-        pass
+        """
+        Like process_request_ in Django's middleware.
+
+        Write panel logic related to the request there. Save data with
+        :meth:`record_stats`.
+
+        .. _process_request: https://docs.djangoproject.com/en/stable/topics/http/middleware/#process-request
+        """
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        pass
+        """
+        Like process_view_ in Django's middleware.
+
+        Write panel logic related to the view there. Save data with
+        :meth:`record_stats`.
+
+        .. _process_view: https://docs.djangoproject.com/en/stable/topics/http/middleware/#process-request
+        """
 
     def process_response(self, request, response):
-        pass
+        """
+        Like process_response_ in Django's middleware.
+
+        Write panel logic related to the response there. Post-process data
+        gathered while the view executed. Save data with :meth:`record_stats`.
+
+        .. _process_response: https://docs.djangoproject.com/en/stable/topics/http/middleware/#process-request
+        """
 
 
 # Backward-compatibility for 1.0, remove in 2.0.

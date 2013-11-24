@@ -212,3 +212,43 @@ URL: https://github.com/playfire/django-debug-toolbar-user-panel
 Path: ``debug_toolbar_user_panel.panels.UserPanel``
 
 Easily switch between logged in users, see properties of current user.
+
+API for third-party panels
+--------------------------
+
+Third-party panels must subclass :class:`~debug_toolbar.panels.Panel`,
+according to the public API described below. Unless noted otherwise, all
+methods are optional.
+
+Panels can ship their own templates, static files and views. They're no public
+CSS or JavaScript API at this time, but they can assume jQuery is available.
+
+.. autoclass:: debug_toolbar.panels.Panel(*args, **kwargs)
+
+    .. autoattribute:: debug_toolbar.panels.Panel.nav_title
+
+    .. autoattribute:: debug_toolbar.panels.Panel.nav_subtitle
+
+    .. autoattribute:: debug_toolbar.panels.Panel.has_content
+
+    .. autoattribute:: debug_toolbar.panels.Panel.title
+
+    .. autoattribute:: debug_toolbar.panels.Panel.template
+
+    .. autoattribute:: debug_toolbar.panels.Panel.content
+
+    .. automethod:: debug_toolbar.panels.Panel.get_urls
+
+    .. automethod:: debug_toolbar.panels.Panel.enable_instrumentation
+
+    .. automethod:: debug_toolbar.panels.Panel.disable_instrumentation
+
+    .. automethod:: debug_toolbar.panels.Panel.record_stats
+
+    .. automethod:: debug_toolbar.panels.Panel.get_stats
+
+    .. automethod:: debug_toolbar.panels.Panel.process_request
+
+    .. automethod:: debug_toolbar.panels.Panel.process_view
+
+    .. automethod:: debug_toolbar.panels.Panel.process_response
