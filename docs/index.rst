@@ -9,4 +9,5 @@ Django Debug Toolbar
    tips
    panels
    commands
+   changes
    contributing

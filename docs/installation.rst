@@ -39,6 +39,9 @@ For a simple Django project, that's all you need!
 The Debug Toolbar will automatically adjust a few settings when you start the
 development server. This happens only when the ``DEBUG`` setting is ``True``.
 
+If you're upgrading from a previous version, you should review the
+:doc:`change log <changes>` and look for specific upgrade instructions.
+
 If the automatic setup doesn't work for your project, if you want to learn
 what it does, or if you prefer defining your settings explicitly, read below.
 
