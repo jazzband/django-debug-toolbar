@@ -8,6 +8,7 @@ import threading
 
 from django.conf import settings
 from django.utils.encoding import force_text
+from django.utils.importlib import import_module
 
 from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar import settings as dt_settings
@@ -38,7 +39,11 @@ class DebugToolbarMiddleware(object):
     debug_toolbars = {}
 
     def process_request(self, request):
-        if not dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK'](request):
+        func_path = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK']
+        # Replace this with import_by_path in Django >= 1.6.
+        mod_path, func_name = func_path.rsplit('.', 1)
+        show_toolbar = getattr(import_module(mod_path), func_name)
+        if not show_toolbar(request):
             return
         response = None
         toolbar = DebugToolbar(request)

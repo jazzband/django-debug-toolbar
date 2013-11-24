@@ -62,12 +62,7 @@ if 'TAG' in USER_CONFIG:
 
 CONFIG = CONFIG_DEFAULTS.copy()
 CONFIG.update(USER_CONFIG)
-if isinstance(CONFIG['SHOW_TOOLBAR_CALLBACK'], six.string_types):
-    # Replace this with import_by_path in Django >= 1.6.
-    mod_path, func_name = CONFIG['SHOW_TOOLBAR_CALLBACK'].rsplit('.', 1)
-    mod = import_module(mod_path)
-    CONFIG['SHOW_TOOLBAR_CALLBACK'] = getattr(mod, func_name)
-else:
+if not isinstance(CONFIG['SHOW_TOOLBAR_CALLBACK'], six.string_types):
     warnings.warn(
         "SHOW_TOOLBAR_CALLBACK is now a dotted path. Update your "
         "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
