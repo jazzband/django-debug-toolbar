@@ -9,7 +9,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 <script src="{{ STATIC_URL }}debug_toolbar/js/jquery.cookie.js"></script>
 <script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.js"></script>
 <div id="djDebug" style="display:none;" dir="ltr"
-     data-storage-id="{{ toolbar.storage_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
+     data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
      {{ toolbar.config.ROOT_TAG_ATTRS|safe }}>
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
@@ -53,7 +53,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 				</div>
 				<div class="djDebugPanelContent">
 					<div class="scroll">
-						{% if not toolbar.storage_id %}{{ panel.content }}{% endif %}
+						{% if not toolbar.store_id %}{{ panel.content }}{% endif %}
 					</div>
 				</div>
 			</div>

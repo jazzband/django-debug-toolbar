@@ -30,7 +30,7 @@ class DebugToolbar(object):
             panel_instance = panel_class(self, context=self.template_context)
             self._panels[panel_instance.panel_id] = panel_instance
         self.stats = {}
-        self.storage_id = None
+        self.store_id = None
 
     # Manage panels
 
@@ -67,7 +67,7 @@ class DebugToolbar(object):
 
     # Handle storing toolbars in memory and fetching them later on
 
-    _storage = SortedDict()
+    _store = SortedDict()
 
     def should_render_panels(self):
         render_panels = self.config['RENDER_PANELS']
@@ -76,17 +76,17 @@ class DebugToolbar(object):
         return render_panels
 
     def store(self):
-        self.storage_id = uuid.uuid4().hex
+        self.store_id = uuid.uuid4().hex
         cls = type(self)
-        cls._storage[self.storage_id] = self
-        for _ in range(len(cls._storage) - self.config['RESULTS_CACHE_SIZE']):
+        cls._store[self.store_id] = self
+        for _ in range(len(cls._store) - self.config['RESULTS_CACHE_SIZE']):
             # When we drop support for Python 2.6 and switch to
             # collections.OrderedDict, use popitem(last=False).
-            del cls._storage[cls._storage.keyOrder[0]]
+            del cls._store[cls._store.keyOrder[0]]
 
     @classmethod
-    def fetch(cls, storage_id):
-        return cls._storage.get(storage_id)
+    def fetch(cls, store_id):
+        return cls._store.get(store_id)
 
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.

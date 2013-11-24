@@ -27,12 +27,12 @@
                 } else {
                     $('.panelContent').hide(); // Hide any that are already open
                     var inner = current.find('.djDebugPanelContent .scroll'),
-                        storage_id = $('#djDebug').data('storage-id'),
+                        store_id = $('#djDebug').data('store-id'),
                         render_panel_url = $('#djDebug').data('render-panel-url');
-                    if (storage_id !== '' && inner.children().length === 0) {
+                    if (store_id !== '' && inner.children().length === 0) {
                         var ajax_data = {
                             data: {
-                                storage_id: storage_id,
+                                store_id: store_id,
                                 panel_id: this.className
                             },
                             type: 'GET',

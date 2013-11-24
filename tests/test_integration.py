@@ -136,7 +136,7 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
         self.assertIn("Version", table.text)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={'RESULTS_CACHE_SIZE': 0})
-    def test_expired_storage(self):
+    def test_expired_store(self):
         self.selenium.get(self.live_server_url + '/regular/basic/')
         version_panel = self.selenium.find_element_by_id('VersionsPanel')
 
