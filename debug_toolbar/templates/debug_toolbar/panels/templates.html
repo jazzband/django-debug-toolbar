@@ -1,4 +1,4 @@
-{% load i18n %}{% load url from future %}
+{% load i18n %}{% load static from staticfiles %}{% load url from future %}
 <h4>{% blocktrans count template_dirs|length as template_count %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
 {% if template_dirs %}
 	<ol>
@@ -43,4 +43,4 @@
 	<p>{% trans 'None' %}</p>
 {% endif %}
 
-<script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.template.js"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.template.js' %}"></script>

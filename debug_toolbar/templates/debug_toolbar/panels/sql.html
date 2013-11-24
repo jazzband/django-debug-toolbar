@@ -1,4 +1,4 @@
-{% load i18n l10n %}{% load url from future %}
+{% load i18n l10n %}{% load static from staticfiles %}{% load url from future %}
 <div class="clearfix">
 	<ul class="stats">
 		{% for alias, info in databases %}
@@ -92,4 +92,4 @@
 	<p>{% trans "No SQL queries were recorded during this request." %}</p>
 {% endif %}
 
-<script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.sql.js"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.sql.js' %}"></script>

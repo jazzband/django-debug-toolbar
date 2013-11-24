@@ -1,13 +1,13 @@
-{% load i18n %}{% load url from future %}
+{% load i18n %}{% load static from staticfiles %}{% load url from future %}
 <style type="text/css">
 @media print { #djDebug {display:none;}}
 </style>
-<link rel="stylesheet" href="{{ STATIC_URL }}debug_toolbar/css/toolbar.css" type="text/css" />
+<link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
 <script>//<![CDATA[
 if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></scr'+'ipt>');
 //]]></script>
-<script src="{{ STATIC_URL }}debug_toolbar/js/jquery.cookie.js"></script>
-<script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.js"></script>
+<script src="{% static 'debug_toolbar/js/jquery.cookie.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" style="display:none;" dir="ltr"
      data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>

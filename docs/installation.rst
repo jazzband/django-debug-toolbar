@@ -22,12 +22,17 @@ instead with the following command::
 Quick setup
 -----------
 
-Add ``debug_toolbar`` to your ``INSTALLED_APPS`` setting::
+Make sure that ``'django.contrib.staticfiles'`` is set up properly and add
+``'debug_toolbar'`` to your ``INSTALLED_APPS`` setting::
 
     INSTALLED_APPS = (
         # ...
+        'django.contrib.staticfiles',
+        # ...
         'debug_toolbar',
     )
+
+    STATIC_URL = '/static/'
 
 For a simple Django project, that's all you need!
 

@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %}{% load static from staticfiles %}
 <h4>{% trans 'Resource Usage' %}</h4>
 <table>
 	<colgroup>
@@ -41,4 +41,4 @@
 		</tbody>
 	</table>
 </div>
-<script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.timer.js"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.timer.js' %}"></script>

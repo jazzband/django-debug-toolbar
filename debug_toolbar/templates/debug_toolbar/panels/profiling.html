@@ -1,5 +1,4 @@
-{% load i18n %}
-
+{% load i18n %}{% load static from staticfiles %}
 <table width="100%">
 	<thead>
 		<tr>
@@ -42,4 +41,4 @@
 	</tbody>
 </table>
 
-<script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.profiling.js"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.profiling.js' %}"></script>

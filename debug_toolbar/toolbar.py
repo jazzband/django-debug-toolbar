@@ -6,7 +6,6 @@ from __future__ import absolute_import, unicode_literals
 
 import uuid
 
-from django.conf import settings
 from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
@@ -21,10 +20,7 @@ class DebugToolbar(object):
     def __init__(self, request):
         self.request = request
         self.config = dt_settings.CONFIG.copy()
-        self.template_context = {
-            'STATIC_URL': settings.STATIC_URL,
-            'toolbar': self,
-        }
+        self.template_context = {'toolbar': self}
         self._panels = SortedDict()
         for panel_class in self.get_panel_classes():
             panel_instance = panel_class(self, context=self.template_context)
