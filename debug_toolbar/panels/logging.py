@@ -105,35 +105,28 @@ if logbook_supported:
 
 
 class LoggingPanel(Panel):
-    name = 'Logging'
     template = 'debug_toolbar/panels/logging.html'
-    has_content = True
 
     def __init__(self, *args, **kwargs):
         super(LoggingPanel, self).__init__(*args, **kwargs)
         self._records = {}
 
-    def process_request(self, request):
-        collector.clear_records()
+    nav_title = _("Logging")
 
-    def process_response(self, request, response):
-        records = self.get_and_delete()
-        self.record_stats({'records': records})
-
-    def get_and_delete(self):
-        records = collector.get_records()
-        self._records[threading.currentThread()] = records
-        collector.clear_records()
-        return records
-
-    def nav_title(self):
-        return _("Logging")
-
+    @property
     def nav_subtitle(self):
         records = self._records[threading.currentThread()]
         record_count = len(records)
         return ungettext('%(count)s message', '%(count)s messages',
                          record_count) % {'count': record_count}
 
-    def title(self):
-        return _('Log Messages')
+    title = _('Log Messages')
+
+    def process_request(self, request):
+        collector.clear_records()
+
+    def process_response(self, request, response):
+        records = collector.get_records()
+        self._records[threading.currentThread()] = records
+        collector.clear_records()
+        self.record_stats({'records': records})

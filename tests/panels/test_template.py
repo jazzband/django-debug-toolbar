@@ -46,4 +46,4 @@ class TemplatesPanelTestCase(BaseTestCase):
         c = Context({'object': NonAsciiRepr()})
         t.render(c)
         self.panel.process_response(self.request, self.response)
-        self.assertIn('nôt åscíì', self.panel.content())
+        self.assertIn('nôt åscíì', self.panel.content)

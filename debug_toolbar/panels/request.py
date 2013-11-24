@@ -13,15 +13,9 @@ class RequestPanel(Panel):
     """
     A panel to display request variables (POST/GET, session, cookies).
     """
-    name = 'Request'
     template = 'debug_toolbar/panels/request.html'
-    has_content = True
 
-    def nav_title(self):
-        return _('Request')
-
-    def title(self):
-        return _('Request')
+    title = _('Request')
 
     def process_response(self, request, response):
         self.record_stats({

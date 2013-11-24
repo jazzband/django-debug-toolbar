@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.core.handlers.wsgi import STATUS_CODE_TEXT
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import Panel
 
@@ -11,14 +11,15 @@ class RedirectsPanel(Panel):
     """
     Panel that intercepts redirects and displays a page with debug info.
     """
-    name = 'Redirects'
-
-    has_content = False
 
     @property
     def enabled(self):
         default = 'on' if self.toolbar.config['INTERCEPT_REDIRECTS'] else 'off'
         return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, default) == 'on'
+
+    has_content = False
+
+    nav_title = _('Intercept redirects')
 
     def process_response(self, request, response):
         if 300 <= int(response.status_code) < 400:
@@ -36,5 +37,3 @@ class RedirectsPanel(Panel):
                 response.cookies = cookies
         return response
 
-    def nav_title(self):
-        return _('Intercept redirects')

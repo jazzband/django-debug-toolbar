@@ -55,7 +55,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.panel.process_response(self.request, self.response)
 
         # ensure the panel renders correctly
-        self.assertIn('café', self.panel.content())
+        self.assertIn('café', self.panel.content)
 
     @unittest.skipUnless(connection.vendor == 'postgresql',
                          'Test valid only on PostgreSQL')

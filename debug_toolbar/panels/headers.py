@@ -12,11 +12,8 @@ class HeadersPanel(Panel):
     """
     A panel to display HTTP headers.
     """
-    name = 'Headers'
-    template = 'debug_toolbar/panels/headers.html'
-    has_content = True
     # List of environment variables we want to display
-    environ_filter = set((
+    ENVIRON_FILTER = set((
         'CONTENT_LENGTH',
         'CONTENT_TYPE',
         'DJANGO_SETTINGS_MODULE',
@@ -35,11 +32,9 @@ class HeadersPanel(Panel):
         'TZ',
     ))
 
-    def nav_title(self):
-        return _('Headers')
+    title = _('Headers')
 
-    def title(self):
-        return _('Headers')
+    template = 'debug_toolbar/panels/headers.html'
 
     def process_request(self, request):
         wsgi_env = list(sorted(request.META.items()))
@@ -48,7 +43,7 @@ class HeadersPanel(Panel):
         if 'Cookie' in self.request_headers:
             self.request_headers['Cookie'] = '=> see Request panel'
         self.environ = OrderedDict(
-            (k, v) for (k, v) in wsgi_env if k in self.environ_filter)
+            (k, v) for (k, v) in wsgi_env if k in self.ENVIRON_FILTER)
         self.record_stats({
             'request_headers': self.request_headers,
             'environ': self.environ,

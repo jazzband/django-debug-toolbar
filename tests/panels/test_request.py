@@ -19,7 +19,7 @@ class RequestPanelTestCase(BaseTestCase):
             self.request.session['là'.encode('utf-8')] = 'là'.encode('utf-8')
         self.panel.process_request(self.request)
         self.panel.process_response(self.request, self.response)
-        content = self.panel.content()
+        content = self.panel.content
         if six.PY3:
             self.assertIn('où', content)
         else:
@@ -30,4 +30,4 @@ class RequestPanelTestCase(BaseTestCase):
         self.request.path = '/non_ascii_request/'
         self.panel.process_request(self.request)
         self.panel.process_response(self.request, self.response)
-        self.assertIn('nôt åscíì', self.panel.content())
+        self.assertIn('nôt åscíì', self.panel.content)

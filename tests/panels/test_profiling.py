@@ -28,7 +28,7 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.panel.process_view(self.request, regular_view, ('profiling',), {})
         self.panel.process_response(self.request, self.response)
         self.assertIn('func_list', self.panel.get_stats())
-        self.assertIn('regular_view', self.panel.content())
+        self.assertIn('regular_view', self.panel.content)
 
     # These two tests fail randomly for a reason I don't understand.
 

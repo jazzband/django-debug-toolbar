@@ -14,9 +14,7 @@ from debug_toolbar.panels import Panel
 
 
 class SignalsPanel(Panel):
-    name = "Signals"
     template = 'debug_toolbar/panels/signals.html'
-    has_content = True
 
     SIGNALS = {
         'request_started': request_started,
@@ -33,9 +31,6 @@ class SignalsPanel(Panel):
         'post_syncdb': post_syncdb,
     }
 
-    def nav_title(self):
-        return _("Signals")
-
     def nav_subtitle(self):
         signals = self.get_stats()['signals']
         num_receivers = sum(len(s[2]) for s in signals)
@@ -51,8 +46,7 @@ class SignalsPanel(Panel):
                          num_receivers) % {'num_receivers': num_receivers,
                                            'num_signals': num_signals}
 
-    def title(self):
-        return _("Signals")
+    title = _("Signals")
 
     @property
     def signals(self):

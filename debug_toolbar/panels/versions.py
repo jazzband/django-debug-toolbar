@@ -15,18 +15,13 @@ class VersionsPanel(Panel):
     """
     Shows versions of Python, Django, and installed apps if possible.
     """
-    name = 'Versions'
-    template = 'debug_toolbar/panels/versions.html'
-    has_content = True
-
-    def nav_title(self):
-        return _('Versions')
-
+    @property
     def nav_subtitle(self):
         return 'Django %s' % django.get_version()
 
-    def title(self):
-        return _('Versions')
+    title = _('Versions')
+
+    template = 'debug_toolbar/panels/versions.html'
 
     def process_response(self, request, response):
         versions = [('Python', '%d.%d.%d' % sys.version_info[:3])]

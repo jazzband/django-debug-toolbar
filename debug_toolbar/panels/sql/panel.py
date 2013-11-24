@@ -49,10 +49,6 @@ class SQLPanel(Panel):
     Panel that displays information about the SQL queries run while processing
     the request.
     """
-    name = 'SQL'
-    template = 'debug_toolbar/panels/sql.html'
-    has_content = True
-
     def __init__(self, *args, **kwargs):
         super(SQLPanel, self).__init__(*args, **kwargs)
         self._offset = dict((k, len(connections[k].queries)) for k in connections)
@@ -104,6 +100,24 @@ class SQLPanel(Panel):
         self._sql_time += kwargs['duration']
         self._num_queries += 1
 
+    # Implement the Panel API
+
+    nav_title = _('SQL')
+
+    @property
+    def nav_subtitle(self):
+        return __("%d query in %.2fms", "%d queries in %.2fms",
+                  self._num_queries) % (self._num_queries, self._sql_time)
+
+    @property
+    def title(self):
+        count = len(self._databases)
+        return __('SQL queries from %(count)d connection',
+                  'SQL queries from %(count)d connections',
+                  count) % {'count': count}
+
+    template = 'debug_toolbar/panels/sql.html'
+
     @classmethod
     def get_urls(cls):
         return patterns('debug_toolbar.panels.sql.views',               # noqa
@@ -111,19 +125,6 @@ class SQLPanel(Panel):
             url(r'^sql_explain/$', 'sql_explain', name='sql_explain'),
             url(r'^sql_profile/$', 'sql_profile', name='sql_profile'),
         )
-
-    def nav_title(self):
-        return _('SQL')
-
-    def nav_subtitle(self):
-        return __("%d query in %.2fms", "%d queries in %.2fms",
-                  self._num_queries) % (self._num_queries, self._sql_time)
-
-    def title(self):
-        count = len(self._databases)
-        return __('SQL Queries from %(count)d connection',
-                  'SQL Queries from %(count)d connections',
-                  count) % dict(count=count)
 
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.

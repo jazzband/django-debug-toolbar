@@ -131,9 +131,7 @@ class CachePanel(Panel):
     """
     Panel that displays the cache statistics.
     """
-    name = 'Cache'
     template = 'debug_toolbar/panels/cache.html'
-    has_content = True
 
     def __init__(self, *args, **kwargs):
         super(CachePanel, self).__init__(*args, **kwargs)
@@ -183,9 +181,11 @@ class CachePanel(Panel):
             'backend': backend
         })
 
-    def nav_title(self):
-        return _('Cache')
+    # Implement the Panel API
 
+    nav_title = _('Cache')
+
+    @property
     def nav_subtitle(self):
         cache_calls = len(self.calls)
         return ungettext('%(cache_calls)d call in %(time).2fms',
@@ -193,6 +193,7 @@ class CachePanel(Panel):
                          cache_calls) % {'cache_calls': cache_calls,
                                          'time': self.total_time}
 
+    @property
     def title(self):
         count = len(getattr(settings, 'CACHES', ['default']))
         return ungettext('Cache calls from %(count)d backend',

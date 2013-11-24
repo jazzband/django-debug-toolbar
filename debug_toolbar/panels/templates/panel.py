@@ -48,10 +48,6 @@ class TemplatesPanel(Panel):
     """
     A panel that lists all templates used during processing of a response.
     """
-    name = 'Templates'
-    template = 'debug_toolbar/panels/templates.html'
-    has_content = True
-
     def __init__(self, *args, **kwargs):
         super(TemplatesPanel, self).__init__(*args, **kwargs)
         self.templates = []
@@ -113,18 +109,22 @@ class TemplatesPanel(Panel):
         kwargs['context'] = [force_text(item) for item in context_list]
         self.templates.append(kwargs)
 
+    # Implement the Panel API
+
+    nav_title = _('Templates')
+
+    @property
+    def title(self):
+        num_templates = len(self.templates)
+        return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
+
+    template = 'debug_toolbar/panels/templates.html'
+
     @classmethod
     def get_urls(cls):
         return patterns('debug_toolbar.panels.templates.views',         # noqa
             url(r'^template_source/$', 'template_source', name='template_source'),
         )
-
-    def nav_title(self):
-        return _('Templates')
-
-    def title(self):
-        num_templates = len(self.templates)
-        return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
 
     def process_response(self, request, response):
         context_processors = dict(

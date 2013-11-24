@@ -144,15 +144,9 @@ class ProfilingPanel(Panel):
     """
     Panel that displays profiling information.
     """
-    name = 'Profiling'
+    title = _('Profiling')
+
     template = 'debug_toolbar/panels/profiling.html'
-    has_content = True
-
-    def nav_title(self):
-        return _('Profiling')
-
-    def title(self):
-        return _('Profiling')
 
     def _unwrap_closure_and_profile(self, func):
         if not hasattr(func, '__code__'):

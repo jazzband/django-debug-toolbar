@@ -12,12 +12,9 @@ class SettingsPanel(Panel):
     """
     A panel to display all variables in django.conf.settings
     """
-    name = 'Settings'
     template = 'debug_toolbar/panels/settings.html'
-    has_content = True
 
-    def nav_title(self):
-        return _('Settings')
+    nav_title = _('Settings')
 
     def title(self):
         return _('Settings from <code>%s</code>') % settings.SETTINGS_MODULE
