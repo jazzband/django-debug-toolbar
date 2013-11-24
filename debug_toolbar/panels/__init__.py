@@ -2,7 +2,6 @@ from __future__ import absolute_import, unicode_literals
 
 import warnings
 
-from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
 
