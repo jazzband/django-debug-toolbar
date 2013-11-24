@@ -141,32 +141,26 @@ class Panel(object):
 
     def process_request(self, request):
         """
-        Like process_request_ in Django's middleware.
+        Like process_request in Django's middleware.
 
         Write panel logic related to the request there. Save data with
         :meth:`record_stats`.
-
-        .. _process_request: https://docs.djangoproject.com/en/stable/topics/http/middleware/#process-request
         """
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         """
-        Like process_view_ in Django's middleware.
+        Like process_view in Django's middleware.
 
         Write panel logic related to the view there. Save data with
         :meth:`record_stats`.
-
-        .. _process_view: https://docs.djangoproject.com/en/stable/topics/http/middleware/#process-request
         """
 
     def process_response(self, request, response):
         """
-        Like process_response_ in Django's middleware.
+        Like process_response in Django's middleware.
 
         Write panel logic related to the response there. Post-process data
         gathered while the view executed. Save data with :meth:`record_stats`.
-
-        .. _process_response: https://docs.djangoproject.com/en/stable/topics/http/middleware/#process-request
         """
 
 

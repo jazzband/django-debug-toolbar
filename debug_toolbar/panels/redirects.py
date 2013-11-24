@@ -36,4 +36,3 @@ class RedirectsPanel(Panel):
                 response = render(request, 'debug_toolbar/redirect.html', context)
                 response.cookies = cookies
         return response
-
