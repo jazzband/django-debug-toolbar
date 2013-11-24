@@ -17,20 +17,6 @@ _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 threading._DummyThread._Thread__stop = lambda x: 1
 
 
-def replace_insensitive(string, target, replacement):
-    """
-    Similar to string.replace() but is case insensitive.
-    Code borrowed from:
-    http://forums.devshed.com/python-programming-11/case-insensitive-string-replace-490921.html
-    """
-    no_case = string.lower()
-    index = no_case.rfind(target.lower())
-    if index >= 0:
-        return string[:index] + replacement + string[index + len(target):]
-    else:  # no results so return the original string
-        return string
-
-
 def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
@@ -94,10 +80,14 @@ class DebugToolbarMiddleware(object):
             response.set_cookie('djdt', 'hide', 864000)
         if ('gzip' not in response.get('Content-Encoding', '') and
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
-            response.content = replace_insensitive(
-                force_text(response.content, encoding=settings.DEFAULT_CHARSET),
-                self.insert_before,
-                force_text(toolbar.render_toolbar() + self.insert_before))
+            content = force_text(response.content, encoding=settings.DEFAULT_CHARSET)
+            try:
+                insert_at = content.lower().rindex(self.insert_before.lower())
+            except ValueError:
+                pass
+            else:
+                toolbar_content = toolbar.render_toolbar()
+                response.content = content[:insert_at] + toolbar_content + content[insert_at:]
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         return response
