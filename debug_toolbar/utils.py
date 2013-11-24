@@ -54,12 +54,7 @@ def tidy_stacktrace(stack):
     """
     trace = []
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
-        s_path = os.path.realpath(path)
-        # Support hiding of frames -- used in various utilities that provide
-        # inspection.
-        if CONFIG['HIDE_DJANGO_SQL'] and django_path in s_path and not 'django/contrib' in s_path:
-            continue
-        if omit_path(s_path):
+        if omit_path(os.path.realpath(path)):
             continue
         text = (''.join(force_text(t) for t in text)).strip() if text else ''
         trace.append((path, line_no, func_name, text))

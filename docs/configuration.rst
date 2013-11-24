@@ -117,20 +117,11 @@ Panel options
   calls. Enabling stacktraces can increase the CPU time used when executing
   queries.
 
-* ``HIDE_DJANGO_SQL``
-
-  Default: ``True``
-
-  Panels: cache, SQL
-
-  If set to ``True`` then code in Django itself won't be shown in
-  stacktraces.
-
 * ``HIDE_IN_STACKTRACES``
 
-  Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar')``. The
-  first value is ``socketserver`` on Python 3 and ``SocketServer`` on Python
-  2.
+  Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar',
+  'django')``. The first value is ``socketserver`` on Python 3 and
+  ``SocketServer`` on Python 2.
 
   Panels: cache, SQL
 

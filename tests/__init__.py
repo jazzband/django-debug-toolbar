@@ -15,6 +15,7 @@ def update_toolbar_config(**kwargs):
         dt_settings.CONFIG.update(kwargs['value'] or {})
         # This doesn't account for deprecated configuration options.
 
+
 @receiver(setting_changed)
 def update_toolbar_panels(**kwargs):
     if kwargs['setting'] == 'DEBUG_TOOLBAR_PANELS':

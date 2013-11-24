@@ -24,12 +24,12 @@ CONFIG_DEFAULTS = {
     # Panel options
     'EXTRA_SIGNALS': [],
     'ENABLE_STACKTRACES': True,
-    'HIDE_DJANGO_SQL': True,
     'HIDE_IN_STACKTRACES': (
         'socketserver' if six.PY3 else 'SocketServer',
         'threading',
         'wsgiref',
         'debug_toolbar',
+        'django',
     ),
     'INTERCEPT_REDIRECTS': False,
     'SHOW_TEMPLATE_CONTEXT': True,
@@ -50,11 +50,16 @@ for old_name, new_name in _RENAMED_CONFIG.items():
             "%r was renamed to %r. Update your DEBUG_TOOLBAR_CONFIG "
             "setting." % (old_name, new_name), DeprecationWarning)
         USER_CONFIG[new_name] = USER_CONFIG.pop(old_name)
+if 'HIDE_DJANGO_SQL' in USER_CONFIG:
+    warnings.warn(
+        "HIDE_DJANGO_SQL was removed. Update your "
+        "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
+    USER_CONFIG.pop('HIDE_DJANGO_SQL')
 if 'TAG' in USER_CONFIG:
-     warnings.warn(
+    warnings.warn(
         "TAG was replaced by INSERT_BEFORE. Update your "
         "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
-     USER_CONFIG['INSERT_BEFORE'] = '</%s>' % USER_CONFIG.pop('TAG')
+    USER_CONFIG['INSERT_BEFORE'] = '</%s>' % USER_CONFIG.pop('TAG')
 CONFIG.update(USER_CONFIG)
 
 
