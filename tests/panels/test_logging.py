@@ -1,8 +1,8 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import logging
 
-from debug_toolbar.panels.logger import MESSAGE_IF_STRING_REPRESENTATION_INVALID
+from debug_toolbar.panels.logging import MESSAGE_IF_STRING_REPRESENTATION_INVALID
 
 from ..base import BaseTestCase
 

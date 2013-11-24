@@ -1,12 +1,14 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
+import warnings
 
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
 
-class DebugPanel(object):
+class Panel(object):
     """
-    Base class for debug panels.
+    Base class for panels.
     """
     # name = 'Base'
     # template = 'debug_toolbar/panels/base.html'
@@ -89,3 +91,11 @@ class DebugPanel(object):
 
     def process_response(self, request, response):
         pass
+
+
+# Backward-compatibility for 1.0, remove in 2.0.
+class DebugPanel(Panel):
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn("DebugPanel was renamed to Panel.", DeprecationWarning)
+        super(DebugPanel, self).__init__(*args, **kwargs)

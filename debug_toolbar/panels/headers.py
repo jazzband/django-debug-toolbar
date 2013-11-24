@@ -1,18 +1,18 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 try:
     from collections import OrderedDict
 except ImportError:
     from django.utils.datastructures import SortedDict as OrderedDict
 from django.utils.translation import ugettext_lazy as _
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 
-class HeaderDebugPanel(DebugPanel):
+class HeadersPanel(Panel):
     """
     A panel to display HTTP headers.
     """
-    name = 'Header'
+    name = 'Headers'
     template = 'debug_toolbar/panels/headers.html'
     has_content = True
     # List of environment variables we want to display
@@ -46,7 +46,7 @@ class HeaderDebugPanel(DebugPanel):
         self.request_headers = OrderedDict(
             (unmangle(k), v) for (k, v) in wsgi_env if k.startswith('HTTP_'))
         if 'Cookie' in self.request_headers:
-            self.request_headers['Cookie'] = '=> see Request Vars panel'
+            self.request_headers['Cookie'] = '=> see Request panel'
         self.environ = OrderedDict(
             (k, v) for (k, v) in wsgi_env if k in self.environ_filter)
         self.record_stats({

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from django.core.signals import (
     request_started, request_finished, got_request_exception)
@@ -10,10 +10,10 @@ from django.dispatch.dispatcher import WEAKREF_TYPES
 from django.utils.translation import ugettext_lazy as _, ungettext
 from django.utils.importlib import import_module
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 
-class SignalDebugPanel(DebugPanel):
+class SignalsPanel(Panel):
     name = "Signals"
     template = 'debug_toolbar/panels/signals.html'
     has_content = True

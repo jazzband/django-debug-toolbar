@@ -1,19 +1,19 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from django.conf import settings
 from django.views.debug import get_safe_settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.datastructures import SortedDict
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 
-class SettingsVarsDebugPanel(DebugPanel):
+class SettingsPanel(Panel):
     """
     A panel to display all variables in django.conf.settings
     """
-    name = 'SettingsVars'
-    template = 'debug_toolbar/panels/settings_vars.html'
+    name = 'Settings'
+    template = 'debug_toolbar/panels/settings.html'
     has_content = True
 
     def nav_title(self):

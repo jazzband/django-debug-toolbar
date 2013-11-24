@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth.models import User
 from django.db import connection
@@ -14,7 +14,7 @@ class SQLPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(SQLPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id('SQLDebugPanel')
+        self.panel = self.toolbar.get_panel_by_id('SQLPanel')
         self.panel.enable_instrumentation()
 
     def tearDown(self):

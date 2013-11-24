@@ -1,9 +1,9 @@
-from __future__ import division, unicode_literals
+from __future__ import absolute_import, division, unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.utils.six.moves import cStringIO
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 try:
     from line_profiler import LineProfiler, show_func
@@ -140,7 +140,7 @@ class FunctionCall(object):
         return self._line_stats_text
 
 
-class ProfilingDebugPanel(DebugPanel):
+class ProfilingPanel(Panel):
     """
     Panel that displays profiling information.
     """

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from os.path import normpath
 from pprint import pformat
@@ -14,7 +14,7 @@ from django.utils.encoding import force_text
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
 
 # Code taken and adapted from Simon Willison and Django Snippets:
@@ -44,16 +44,16 @@ if django.VERSION[:2] < (1, 7):
     Template.__init__ = new_template_init
 
 
-class TemplateDebugPanel(DebugPanel):
+class TemplatesPanel(Panel):
     """
     A panel that lists all templates used during processing of a response.
     """
-    name = 'Template'
+    name = 'Templates'
     template = 'debug_toolbar/panels/templates.html'
     has_content = True
 
     def __init__(self, *args, **kwargs):
-        super(TemplateDebugPanel, self).__init__(*args, **kwargs)
+        super(TemplatesPanel, self).__init__(*args, **kwargs)
         self.templates = []
         template_rendered.connect(self._store_template_info)
 
@@ -75,7 +75,7 @@ class TemplateDebugPanel(DebugPanel):
                 for key, value in context_layer.items():
                     # Replace any request elements - they have a large
                     # unicode representation and the request data is
-                    # already made available from the Request Vars panel.
+                    # already made available from the Request panel.
                     if isinstance(value, http.HttpRequest):
                         temp_layer[key] = '<<request>>'
                     # Replace the debugging sql_queries element. The SQL
@@ -115,7 +115,7 @@ class TemplateDebugPanel(DebugPanel):
 
     @classmethod
     def get_urls(cls):
-        return patterns('debug_toolbar.panels.template.views',          # noqa
+        return patterns('debug_toolbar.panels.templates.views',         # noqa
             url(r'^template_source/$', 'template_source', name='template_source'),
         )
 

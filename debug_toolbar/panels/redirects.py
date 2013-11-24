@@ -1,13 +1,13 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from django.core.handlers.wsgi import STATUS_CODE_TEXT
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 
-class InterceptRedirectsPanel(DebugPanel):
+class RedirectsPanel(Panel):
     """
     Panel that intercepts redirects and displays a page with debug info.
     """

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import datetime
 import logging
@@ -7,7 +7,7 @@ try:
 except ImportError:
     threading = None
 from django.utils.translation import ungettext, ugettext_lazy as _
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 MESSAGE_IF_STRING_REPRESENTATION_INVALID = '[Could not get log message]'
 
@@ -104,9 +104,9 @@ if logbook_supported:
     logbook_handler.push_application()  # register with logbook
 
 
-class LoggingPanel(DebugPanel):
+class LoggingPanel(Panel):
     name = 'Logging'
-    template = 'debug_toolbar/panels/logger.html'
+    template = 'debug_toolbar/panels/logging.html'
     has_content = True
 
     def __init__(self, *args, **kwargs):

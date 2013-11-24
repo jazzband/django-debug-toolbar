@@ -2,7 +2,7 @@
 The main DebugToolbar class that loads and renders the Toolbar.
 """
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import uuid
 

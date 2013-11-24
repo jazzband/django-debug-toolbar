@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import inspect
 import sys
@@ -13,7 +13,7 @@ from django.template import Node
 from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _, ungettext
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
                                  get_template_info, get_stack)
 from debug_toolbar import settings as dt_settings
@@ -127,7 +127,7 @@ def get_cache(*args, **kwargs):
     return CacheStatTracker(original_get_cache(*args, **kwargs))
 
 
-class CacheDebugPanel(DebugPanel):
+class CachePanel(Panel):
     """
     Panel that displays the cache statistics.
     """
@@ -136,7 +136,7 @@ class CacheDebugPanel(DebugPanel):
     has_content = True
 
     def __init__(self, *args, **kwargs):
-        super(CacheDebugPanel, self).__init__(*args, **kwargs)
+        super(CachePanel, self).__init__(*args, **kwargs)
         self.total_time = 0
         self.hits = 0
         self.misses = 0

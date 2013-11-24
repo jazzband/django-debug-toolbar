@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import os
 from xml.etree import ElementTree as ET
@@ -40,12 +40,12 @@ class DebugToolbarTestCase(BaseTestCase):
             self.assertFalse(show_toolbar(self.request))
 
     def _resolve_stats(self, path):
-        # takes stats from RequestVars panel
+        # takes stats from Request panel
         self.request.path = path
-        panel = self.toolbar.get_panel_by_id('RequestVarsDebugPanel')
+        panel = self.toolbar.get_panel_by_id('RequestPanel')
         panel.process_request(self.request)
         panel.process_response(self.request, self.response)
-        return self.toolbar.stats['requestvars']
+        return self.toolbar.stats['request']
 
     def test_url_resolving_positional(self):
         stats = self._resolve_stats('/resolving1/a/b/')
@@ -120,14 +120,14 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
 
     def test_basic(self):
         self.selenium.get(self.live_server_url + '/regular/basic/')
-        version_panel = self.selenium.find_element_by_id('VersionDebugPanel')
+        version_panel = self.selenium.find_element_by_id('VersionsPanel')
 
-        # Version panel isn't loaded
+        # Versions panel isn't loaded
         with self.assertRaises(NoSuchElementException):
             version_panel.find_element_by_tag_name('table')
 
-        # Click to show the version panel
-        self.selenium.find_element_by_class_name('VersionDebugPanel').click()
+        # Click to show the versions panel
+        self.selenium.find_element_by_class_name('VersionsPanel').click()
 
         # Version panel loads
         table = WebDriverWait(self.selenium, timeout=10).until(
@@ -138,10 +138,10 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
     @override_settings(DEBUG_TOOLBAR_CONFIG={'RESULTS_CACHE_SIZE': 0})
     def test_expired_storage(self):
         self.selenium.get(self.live_server_url + '/regular/basic/')
-        version_panel = self.selenium.find_element_by_id('VersionDebugPanel')
+        version_panel = self.selenium.find_element_by_id('VersionsPanel')
 
         # Click to show the version panel
-        self.selenium.find_element_by_class_name('VersionDebugPanel').click()
+        self.selenium.find_element_by_class_name('VersionsPanel').click()
 
         # Version panel doesn't loads
         error = WebDriverWait(self.selenium, timeout=10).until(

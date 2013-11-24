@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import uuid
 from copy import copy
@@ -7,7 +7,7 @@ from django.conf.urls import patterns, url
 from django.db import connections
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.panels.sql.utils import reformat_sql
@@ -44,7 +44,7 @@ def get_transaction_status_display(engine, level):
     return choices.get(level)
 
 
-class SQLDebugPanel(DebugPanel):
+class SQLPanel(Panel):
     """
     Panel that displays information about the SQL queries run while processing
     the request.
@@ -54,7 +54,7 @@ class SQLDebugPanel(DebugPanel):
     has_content = True
 
     def __init__(self, *args, **kwargs):
-        super(SQLDebugPanel, self).__init__(*args, **kwargs)
+        super(SQLPanel, self).__init__(*args, **kwargs)
         self._offset = dict((k, len(connections[k].queries)) for k in connections)
         self._sql_time = 0
         self._num_queries = 0

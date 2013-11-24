@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 try:
     import resource
@@ -7,10 +7,10 @@ except ImportError:
 import time
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 
-class TimerDebugPanel(DebugPanel):
+class TimerPanel(Panel):
     """
     Panel that displays the time a response took in milliseconds.
     """
@@ -59,7 +59,7 @@ class TimerDebugPanel(DebugPanel):
         self.record_stats(stats)
 
     def nav_title(self):
-        return _('Time')
+        return _('Timer')
 
     def nav_subtitle(self):
         stats = self.get_stats()

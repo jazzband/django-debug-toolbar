@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import django
 from django.http import HttpResponse
@@ -13,7 +13,7 @@ class RedirectsPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(RedirectsPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id('InterceptRedirectsPanel')
+        self.panel = self.toolbar.get_panel_by_id('RedirectsPanel')
 
     def test_regular_response(self):
         response = self.panel.process_response(self.request, self.response)

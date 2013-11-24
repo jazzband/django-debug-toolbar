@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import sys
 
@@ -8,14 +8,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
 
-from debug_toolbar.panels import DebugPanel
+from debug_toolbar.panels import Panel
 
 
-class VersionDebugPanel(DebugPanel):
+class VersionsPanel(Panel):
     """
-    Panel that displays the Django version.
+    Shows versions of Python, Django, and installed apps if possible.
     """
-    name = 'Version'
+    name = 'Versions'
     template = 'debug_toolbar/panels/versions.html'
     has_content = True
 

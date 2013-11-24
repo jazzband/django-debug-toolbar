@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
@@ -17,12 +17,12 @@ from ..base import BaseTestCase
 from ..views import regular_view
 
 
-@override_settings(DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel'])
+@override_settings(DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingPanel'])
 class ProfilingPanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(ProfilingPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id('ProfilingDebugPanel')
+        self.panel = self.toolbar.get_panel_by_id('ProfilingPanel')
 
     def _test_render_with_or_without_line_profiler(self):
         self.panel.process_view(self.request, regular_view, ('profiling',), {})
@@ -44,7 +44,7 @@ class ProfilingPanelTestCase(BaseTestCase):
 
 
 @override_settings(DEBUG=True,
-                   DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingDebugPanel'])
+                   DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingPanel'])
 class ProfilingPanelIntegrationTestCase(TestCase):
 
     def test_view_executed_once(self):

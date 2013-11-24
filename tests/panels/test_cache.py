@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from django.core import cache
 
@@ -11,7 +11,7 @@ class CachePanelTestCase(BaseTestCase):
 
     def setUp(self):
         super(CachePanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id('CacheDebugPanel')
+        self.panel = self.toolbar.get_panel_by_id('CachePanel')
         self.panel.enable_instrumentation()
 
     def tearDown(self):

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import django
 from django.contrib.auth.models import User
@@ -10,17 +10,17 @@ from ..base import BaseTestCase
 from ..models import NonAsciiRepr
 
 
-class TemplateDebugPanelTestCase(BaseTestCase):
+class TemplatesPanelTestCase(BaseTestCase):
 
     def setUp(self):
-        super(TemplateDebugPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id('TemplateDebugPanel')
-        self.sql_panel = self.toolbar.get_panel_by_id('SQLDebugPanel')
+        super(TemplatesPanelTestCase, self).setUp()
+        self.panel = self.toolbar.get_panel_by_id('TemplatesPanel')
+        self.sql_panel = self.toolbar.get_panel_by_id('SQLPanel')
         self.sql_panel.enable_instrumentation()
 
     def tearDown(self):
         self.sql_panel.disable_instrumentation()
-        super(TemplateDebugPanelTestCase, self).tearDown()
+        super(TemplatesPanelTestCase, self).tearDown()
 
     def test_queryset_hook(self):
         t = Template("No context variables here!")

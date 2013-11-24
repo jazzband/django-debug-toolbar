@@ -12,28 +12,28 @@ The following panels are enabled by default.
 Version
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.version.VersionDebugPanel``
+Path: ``debug_toolbar.panels.versions.VersionsPanel``
 
-Django version.
+Shows versions of Python, Django, and installed apps if possible.
 
 Timer
 ~~~~~
 
-Path: ``debug_toolbar.panels.timer.TimerDebugPanel``
+Path: ``debug_toolbar.panels.timer.TimerPanel``
 
 Request timer.
 
 Settings
 ~~~~~~~~
 
-Path: ``debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel``
+Path: ``debug_toolbar.panels.settings.SettingsPanel``
 
 A list of settings in settings.py.
 
 Headers
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.headers.HeaderDebugPanel``
+Path: ``debug_toolbar.panels.headers.HeadersPanel``
 
 This panels shows the HTTP request and response headers, as well as a
 selection of values from the WSGI environment.
@@ -45,49 +45,49 @@ itself may also add response headers such as ``Date`` and ``Server``.
 Request
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.request_vars.RequestVarsDebugPanel``
+Path: ``debug_toolbar.panels.request.RequestPanel``
 
 GET/POST/cookie/session variable display.
 
 SQL
 ~~~
 
-Path: ``debug_toolbar.panels.sql.SQLDebugPanel``
+Path: ``debug_toolbar.panels.sql.SQLPanel``
 
 SQL queries including time to execute and links to EXPLAIN each query.
 
 Template
 ~~~~~~~~
 
-Path: ``debug_toolbar.panels.template.TemplateDebugPanel``
+Path: ``debug_toolbar.panels.templates.TemplatesPanel``
 
 Templates and context used, and their template paths.
 
 Cache
 ~~~~~
 
-Path: ``debug_toolbar.panels.cache.CacheDebugPanel``
+Path: ``debug_toolbar.panels.cache.CachePanel``
 
 Cache queries.
 
 Signal
 ~~~~~~
 
-Path: ``debug_toolbar.panels.signals.SignalDebugPanel``
+Path: ``debug_toolbar.panels.signals.SignalsPanel``
 
 List of signals, their args and receivers.
 
 Logging
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.logger.LoggingPanel``
+Path: ``debug_toolbar.panels.logging.LoggingPanel``
 
 Logging output via Python's built-in :mod:`logging`, or via the `logbook <http://logbook.pocoo.org>`_ module.
 
 Redirects
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.redirects.InterceptRedirectsPanel``
+Path: ``debug_toolbar.panels.redirects.RedirectsPanel``
 
 When this panel is enabled, the debug toolbar will show an intermediate page
 upon redirect so you can view any debug information prior to redirecting. This
@@ -108,7 +108,7 @@ The following panels are disabled by default. You must add them to the
 Profiling
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.profiling.ProfilingDebugPanel``
+Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
 
 Profiling information for the view function.
 
