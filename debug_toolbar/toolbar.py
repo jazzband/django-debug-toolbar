@@ -79,7 +79,7 @@ class DebugToolbar(object):
         self.store_id = uuid.uuid4().hex
         cls = type(self)
         cls._store[self.store_id] = self
-        for _ in range(len(cls._store) - self.config['RESULTS_CACHE_SIZE']):
+        for _ in range(len(cls._store) - self.config['RESULTS_STORE_SIZE']):
             # When we drop support for Python 2.6 and switch to
             # collections.OrderedDict, use popitem(last=False).
             del cls._store[cls._store.keyOrder[0]]

@@ -14,30 +14,48 @@ from django.utils import six
 
 
 CONFIG_DEFAULTS = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': None,
-    'EXTRA_SIGNALS': [],
+    # Toolbar options
+    'INSERT_BEFORE': '</body>',
+    'RENDER_PANELS': None,
+    'RESULTS_STORE_SIZE': 10,
+    'ROOT_TAG_EXTRA_ATTRS': '',
     'SHOW_COLLAPSED': False,
-    'HIDE_DJANGO_SQL': True,
-    'SHOW_TEMPLATE_CONTEXT': True,
-    'TAG': 'body',
+    'SHOW_TOOLBAR_CALLBACK': None,
+    # Panel options
+    'EXTRA_SIGNALS': [],
     'ENABLE_STACKTRACES': True,
-    'HIDDEN_STACKTRACE_MODULES': (
+    'HIDE_DJANGO_SQL': True,
+    'HIDE_IN_STACKTRACES': (
         'socketserver' if six.PY3 else 'SocketServer',
         'threading',
         'wsgiref',
         'debug_toolbar',
     ),
-    'ROOT_TAG_ATTRS': '',
+    'INTERCEPT_REDIRECTS': False,
+    'SHOW_TEMPLATE_CONTEXT': True,
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
-    'RESULTS_CACHE_SIZE': 10,
-    'RENDER_PANELS': None,
 }
 
-
-CONFIG = {}
-CONFIG.update(CONFIG_DEFAULTS)
-CONFIG.update(getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}))
+CONFIG = CONFIG_DEFAULTS.copy()
+USER_CONFIG = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
+# Backward-compatibility for 1.0, remove in 2.0.
+_RENAMED_CONFIG = {
+    'RESULTS_STORE_SIZE': 'RESULTS_CACHE_SIZE',
+    'ROOT_TAG_ATTRS': 'ROOT_TAG_EXTRA_ATTRS',
+    'HIDDEN_STACKTRACE_MODULES': 'HIDE_IN_STACKTRACES'
+}
+for old_name, new_name in _RENAMED_CONFIG.items():
+    if old_name in USER_CONFIG:
+        warnings.warn(
+            "%r was renamed to %r. Update your DEBUG_TOOLBAR_CONFIG "
+            "setting." % (old_name, new_name), DeprecationWarning)
+        USER_CONFIG[new_name] = USER_CONFIG.pop(old_name)
+if 'TAG' in USER_CONFIG:
+     warnings.warn(
+        "TAG was replaced by INSERT_BEFORE. Update your "
+        "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
+     USER_CONFIG['INSERT_BEFORE'] = '</%s>' % USER_CONFIG.pop('TAG')
+CONFIG.update(USER_CONFIG)
 
 
 PANELS_DEFAULTS = [

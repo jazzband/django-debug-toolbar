@@ -52,11 +52,8 @@ class DebugToolbarMiddleware(object):
     debug_toolbars = {}
 
     def __init__(self):
-        # The method to call to decide to show the toolbar
         self.show_toolbar = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK'] or show_toolbar
-
-        # The tag to attach the toolbar to
-        self.tag = '</%s>' % dt_settings.CONFIG['TAG']
+        self.insert_before = dt_settings.CONFIG['INSERT_BEFORE']
 
     def process_request(self, request):
         if not self.show_toolbar(request):
@@ -99,8 +96,8 @@ class DebugToolbarMiddleware(object):
                 response.get('Content-Type', '').split(';')[0] in _HTML_TYPES):
             response.content = replace_insensitive(
                 force_text(response.content, encoding=settings.DEFAULT_CHARSET),
-                self.tag,
-                force_text(toolbar.render_toolbar() + self.tag))
+                self.insert_before,
+                force_text(toolbar.render_toolbar() + self.insert_before))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         return response

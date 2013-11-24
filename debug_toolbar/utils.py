@@ -25,7 +25,7 @@ def get_module_path(module_name):
         module = import_module(module_name)
     except ImportError as e:
         raise ImproperlyConfigured(
-            'Error importing HIDDEN_STACKTRACE_MODULES: %s' % (e,))
+            'Error importing HIDE_IN_STACKTRACES: %s' % (e,))
     else:
         source_path = inspect.getsourcefile(module)
         if source_path.endswith('__init__.py'):
@@ -35,7 +35,7 @@ def get_module_path(module_name):
 
 hidden_paths = [
     get_module_path(module_name)
-    for module_name in CONFIG['HIDDEN_STACKTRACE_MODULES']
+    for module_name in CONFIG['HIDE_IN_STACKTRACES']
 ]
 
 

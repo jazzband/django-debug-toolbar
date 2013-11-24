@@ -10,7 +10,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 <script src="{{ STATIC_URL }}debug_toolbar/js/toolbar.js"></script>
 <div id="djDebug" style="display:none;" dir="ltr"
      data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
-     {{ toolbar.config.ROOT_TAG_ATTRS|safe }}>
+     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if toolbar.panels %}

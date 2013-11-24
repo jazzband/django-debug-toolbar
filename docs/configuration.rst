@@ -41,6 +41,13 @@ toolbar itself, others are specific to some panels.
 Toolbar options
 ~~~~~~~~~~~~~~~
 
+* ``INSERT_BEFORE``
+
+  Default: ``'</body>'``
+
+  The toolbar searches for this string in the HTML and inserts itself just
+  before.
+
 * ``RENDER_PANELS``
 
   Default: ``None``
@@ -55,13 +62,13 @@ Toolbar options
   right thing depending on whether the WSGI container runs multiple processes.
   This setting allows you to force a different behavior if needed.
 
-* ``RESULTS_CACHE_SIZE``
+* ``RESULTS_STORE_SIZE``
 
   Default: ``10``
 
   The toolbar keeps up to this many results in memory.
 
-* ``ROOT_TAG_ATTRS``
+* ``ROOT_TAG_EXTRA_ATTRS``
 
   Default: ``''``
 
@@ -88,13 +95,6 @@ Toolbar options
   which contains your custom logic. This method should return ``True`` or
   ``False``.
 
-* ``TAG``
-
-  Default: ``'body'``
-
-  If set, this will be the closing tag to which the debug toolbar will attach
-  itself.
-
 Panel options
 ~~~~~~~~~~~~~
 
@@ -117,7 +117,16 @@ Panel options
   calls. Enabling stacktraces can increase the CPU time used when executing
   queries.
 
-* ``HIDDEN_STACKTRACE_MODULES``
+* ``HIDE_DJANGO_SQL``
+
+  Default: ``True``
+
+  Panels: cache, SQL
+
+  If set to ``True`` then code in Django itself won't be shown in
+  stacktraces.
+
+* ``HIDE_IN_STACKTRACES``
 
   Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar')``. The
   first value is ``socketserver`` on Python 3 and ``SocketServer`` on Python
@@ -127,15 +136,6 @@ Panel options
 
   Useful for eliminating server-related entries which can result
   in enormous DOM structures and toolbar rendering delays.
-
-* ``HIDE_DJANGO_SQL``
-
-  Default: ``True``
-
-  Panels: cache, SQL
-
-  If set to ``True`` then code in Django itself won't be shown in
-  stacktraces.
 
 * ``INTERCEPT_REDIRECTS``
 
@@ -177,5 +177,5 @@ Here's an example::
         'HIDE_DJANGO_SQL': False,
         'TAG': 'div',
         'ENABLE_STACKTRACES': True,
-        'HIDDEN_STACKTRACE_MODULES': ('gunicorn', 'newrelic'),
+        'HIDE_IN_STACKTRACES': ('gunicorn', 'newrelic'),
     }
