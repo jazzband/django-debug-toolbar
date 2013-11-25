@@ -39,7 +39,7 @@ class HeadersPanel(Panel):
     def process_request(self, request):
         wsgi_env = list(sorted(request.META.items()))
         self.request_headers = OrderedDict(
-            (unmangle(k), v) for (k, v) in wsgi_env if k.startswith('HTTP_'))
+            (unmangle(k), v) for (k, v) in wsgi_env if is_http_header(k))
         if 'Cookie' in self.request_headers:
             self.request_headers['Cookie'] = '=> see Request panel'
         self.environ = OrderedDict(
@@ -54,6 +54,12 @@ class HeadersPanel(Panel):
         self.record_stats({
             'response_headers': self.response_headers,
         })
+
+
+def is_http_header(wsgi_key):
+    # The WSGI spec says that keys should be str objects in the environ dict,
+    # but this isn't true in practice. See issues #449 and #482.
+    return isinstance(wsgi_key, str) and wsgi_key.startswith('HTTP_')
 
 
 def unmangle(wsgi_key):
