@@ -4,6 +4,14 @@ Configuration
 The debug toolbar provides two settings that you can add in your project's
 settings module to customize its behavior.
 
+.. note:: Do you really need a customized configuration?
+
+    The debug toolbar ships with a default configuration that is considered
+    sane for the vast majority of Django projects. Don't copy-paste blindly
+    the default values shown below into you settings module! It's useless and
+    it'll prevent you from taking advantage of better defaults that may be
+    introduced in future releases.
+
 DEBUG_TOOLBAR_PANELS
 --------------------
 
@@ -154,17 +162,14 @@ Panel options
   The SQL panel highlights queries that took more that this amount of time,
   in milliseconds, to execute.
 
-Here's an example::
+Here's what a slightly customized toolbar configuration might look like::
 
-    def custom_show_toolbar(request):
-        return True  # Always show toolbar, for example purposes only.
-
-    DEBUG_TOOLBAR_CONFIG = {
+    # This example is unlikely to be appropriate for your project.
+    CONFIG_DEFAULTS = {
+        # Toolbar options
+        'RESULTS_STORE_SIZE': 3,
+        'SHOW_COLLAPSED': True,
+        # Panel options
         'INTERCEPT_REDIRECTS': True,
-        'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
-        'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
-        'HIDE_DJANGO_SQL': False,
-        'TAG': 'div',
-        'ENABLE_STACKTRACES': True,
-        'HIDE_IN_STACKTRACES': ('gunicorn', 'newrelic'),
+        'SQL_WARNING_THRESHOLD': 100,   # milliseconds
     }
