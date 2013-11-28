@@ -31,7 +31,7 @@ Performance considerations
 --------------------------
 
 The Debug Toolbar is designed to introduce as little overhead as possible in
-the rendering of pages. However, depending on your project, the overhad may
+the rendering of pages. However, depending on your project, the overhead may
 become noticeable. In extreme cases, it can make development impractical.
 Here's a breakdown of the performance issues you can run into and their
 solutions.
