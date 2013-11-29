@@ -98,10 +98,10 @@ class NormalCursorWrapper(object):
         except UnicodeDecodeError:
             return '(encoded string)'
 
-    def execute(self, sql, params=()):
+    def _record(self, method, sql, params):
         start_time = time()
         try:
-            return self.cursor.execute(sql, params)
+            return method(sql, params)
         finally:
             stop_time = time()
             duration = (stop_time - start_time) * 1000
@@ -171,8 +171,11 @@ class NormalCursorWrapper(object):
             # We keep `sql` to maintain backwards compatibility
             self.logger.record(**params)
 
+    def execute(self, sql, params=()):
+        return self._record(self.cursor.execute, sql, params)
+
     def executemany(self, sql, param_list):
-        return self.cursor.executemany(sql, param_list)
+        return self._record(self.cursor.executemany, sql, param_list)
 
     def __getattr__(self, attr):
         return getattr(self.cursor, attr)
