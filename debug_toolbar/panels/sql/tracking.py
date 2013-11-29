@@ -171,6 +171,9 @@ class NormalCursorWrapper(object):
             # We keep `sql` to maintain backwards compatibility
             self.logger.record(**params)
 
+    def callproc(self, procname, params=()):
+        return self._record(self.cursor.callproc, procname, params)
+
     def execute(self, sql, params=()):
         return self._record(self.cursor.execute, sql, params)
 
