@@ -68,40 +68,13 @@ class ThreadTrackingHandler(logging.Handler):
         self.collector.add_record(record)
 
 
+# We don't use enable/disable_instrumentation because logging is global.
+# We can't add thread-local logging handlers. Hopefully logging is cheap.
+
 collector = LogCollector()
 logging_handler = ThreadTrackingHandler(collector)
 logging.root.setLevel(logging.NOTSET)
-logging.root.addHandler(logging_handler)  # register with logging
-
-# We don't use enable/disable_instrumentation because we can't make these
-# functions thread-safe and (hopefully) logging isn't too expensive.
-
-try:
-    import logbook
-    logbook_supported = True
-except ImportError:
-    # logbook support is optional, so fail silently
-    logbook_supported = False
-
-if logbook_supported:
-    class LogbookThreadTrackingHandler(logbook.handlers.Handler):
-        def __init__(self, collector):
-            logbook.handlers.Handler.__init__(self, bubble=True)
-            self.collector = collector
-
-        def emit(self, record):
-            record = {
-                'message': record.message,
-                'time': record.time,
-                'level': record.level_name,
-                'file': record.filename,
-                'line': record.lineno,
-                'channel': record.channel,
-            }
-            self.collector.add_record(record)
-
-    logbook_handler = LogbookThreadTrackingHandler(collector)
-    logbook_handler.push_application()  # register with logbook
+logging.root.addHandler(logging_handler)
 
 
 class LoggingPanel(Panel):

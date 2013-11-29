@@ -82,7 +82,7 @@ Logging
 
 Path: ``debug_toolbar.panels.logging.LoggingPanel``
 
-Logging output via Python's built-in :mod:`logging`, or via the `logbook <http://logbook.pocoo.org>`_ module.
+Logging output via Python's built-in :mod:`logging` module.
 
 Redirects
 ~~~~~~~~~
