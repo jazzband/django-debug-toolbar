@@ -155,6 +155,18 @@ Retrieves and displays information you specify using the ``debug`` statement.
 Inspector panel also logs to the console by default, but may be instructed not
 to.
 
+Line Profiler
+~~~~~~~~~~~~~
+
+URL: https://github.com/dmclain/django-debug-toolbar-line-profiler
+
+Path: ``debug_toolbar_line_profiler.panel.ProfilingPanel``
+
+This package provides a profiling panel that incorporates output from
+line_profiler_.
+
+.. _line_profiler: http://pythonhosted.org/line_profiler/
+
 Memcache
 ~~~~~~~~
 

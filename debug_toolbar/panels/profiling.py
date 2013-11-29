@@ -2,15 +2,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
-from django.utils.six.moves import cStringIO
 from debug_toolbar.panels import Panel
-
-try:
-    from line_profiler import LineProfiler, show_func
-    DJ_PROFILE_USE_LINE_PROFILER = True
-except ImportError:
-    DJ_PROFILE_USE_LINE_PROFILER = False
-
 
 import cProfile
 from pstats import Stats
@@ -43,7 +35,6 @@ class FunctionCall(object):
         self.id = id
         self.parent_ids = parent_ids
         self.hsv = hsv
-        self._line_stats_text = None
 
     def parent_classes(self):
         return self.parent_classes
@@ -127,18 +118,6 @@ class FunctionCall(object):
     def indent(self):
         return 16 * self.depth
 
-    def line_stats_text(self):
-        if self._line_stats_text is None and DJ_PROFILE_USE_LINE_PROFILER:
-            lstats = self.statobj.line_stats
-            if self.func in lstats.timings:
-                out = cStringIO()
-                fn, lineno, name = self.func
-                show_func(fn, lineno, name, lstats.timings[self.func], lstats.unit, stream=out)
-                self._line_stats_text = out.getvalue()
-            else:
-                self._line_stats_text = False
-        return self._line_stats_text
-
 
 class ProfilingPanel(Panel):
     """
@@ -148,37 +127,17 @@ class ProfilingPanel(Panel):
 
     template = 'debug_toolbar/panels/profiling.html'
 
-    def _unwrap_closure_and_profile(self, func):
-        if not hasattr(func, '__code__'):
-            return
-        self.line_profiler.add_function(func)
-        if func.__closure__:
-            for cell in func.__closure__:
-                if hasattr(cell.cell_contents, '__code__'):
-                    self._unwrap_closure_and_profile(cell.cell_contents)
-
     def process_view(self, request, view_func, view_args, view_kwargs):
         self.profiler = cProfile.Profile()
         args = (request,) + view_args
-        if DJ_PROFILE_USE_LINE_PROFILER:
-            self.line_profiler = LineProfiler()
-            self._unwrap_closure_and_profile(view_func)
-            self.line_profiler.enable_by_count()
-            out = self.profiler.runcall(view_func, *args, **view_kwargs)
-            self.line_profiler.disable_by_count()
-        else:
-            self.line_profiler = None
-            out = self.profiler.runcall(view_func, *args, **view_kwargs)
-        return out
+        return self.profiler.runcall(view_func, *args, **view_kwargs)
 
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
         func_list.append(func)
         func.has_subfuncs = False
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
-                if (subfunc.stats[3] >= cum_time or
-                        (hasattr(self.stats, 'line_stats') and
-                            (subfunc.func in self.stats.line_stats.timings))):
+                if subfunc.stats[3] >= cum_time:
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
 
@@ -188,8 +147,6 @@ class ProfilingPanel(Panel):
         # Could be delayed until the panel content is requested (perf. optim.)
         self.profiler.create_stats()
         self.stats = DjangoDebugToolbarStats(self.profiler)
-        if DJ_PROFILE_USE_LINE_PROFILER:
-            self.stats.line_stats = self.line_profiler.get_stats()
         self.stats.calc_callees()
 
         root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
