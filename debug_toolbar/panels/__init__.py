@@ -9,16 +9,10 @@ class Panel(object):
     """
     Base class for panels.
     """
-
-    # We'll maintain a local context instance so we can expose our template
-    # context variables to panels which need them. (But see issue #450.)
-    context = {}
-
-    # Private panel methods
-
-    def __init__(self, toolbar, context={}):
+    def __init__(self, toolbar):
         self.toolbar = toolbar
-        self.context.update(context)
+
+    # Private panel properties
 
     @property
     def panel_id(self):
@@ -81,9 +75,7 @@ class Panel(object):
         template's context.
         """
         if self.has_content:
-            context = self.context.copy()
-            context.update(self.get_stats())
-            return render_to_string(self.template, context)
+            return render_to_string(self.template, self.get_stats())
 
     # URLs for panel-specific views
 

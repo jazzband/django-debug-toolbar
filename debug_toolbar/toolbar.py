@@ -20,10 +20,9 @@ class DebugToolbar(object):
     def __init__(self, request):
         self.request = request
         self.config = dt_settings.CONFIG.copy()
-        self.template_context = {'toolbar': self}
         self._panels = SortedDict()
         for panel_class in self.get_panel_classes():
-            panel_instance = panel_class(self, context=self.template_context)
+            panel_instance = panel_class(self)
             self._panels[panel_instance.panel_id] = panel_instance
         self.stats = {}
         self.store_id = None
@@ -58,8 +57,7 @@ class DebugToolbar(object):
         """
         if not self.should_render_panels():
             self.store()
-        context = self.template_context.copy()
-        return render_to_string('debug_toolbar/base.html', context)
+        return render_to_string('debug_toolbar/base.html', {'toolbar': self})
 
     # Handle storing toolbars in memory and fetching them later on
 

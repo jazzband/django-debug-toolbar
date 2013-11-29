@@ -45,9 +45,7 @@ class TimerPanel(Panel):
             (_('Elapsed time'), _('%(total_time)0.3f msec') % stats),
             (_('Context switches'), _('%(vcsw)d voluntary, %(ivcsw)d involuntary') % stats),
         )
-        context = self.context.copy()
-        context.update({'rows': rows})
-        return render_to_string(self.template, context)
+        return render_to_string(self.template, {'rows': rows})
 
     def process_request(self, request):
         self._start_time = time.time()
