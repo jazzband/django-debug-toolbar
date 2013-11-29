@@ -1,5 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 from os.path import normpath
 from pprint import pformat
 
@@ -8,8 +12,10 @@ from django import http
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.db.models.query import QuerySet, RawQuerySet
+from django.template import Context, RequestContext, Template
 from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
+from django.test.utils import instrumented_test_render
 from django.utils.encoding import force_text
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
@@ -17,23 +23,47 @@ from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
 
-# Code taken and adapted from Simon Willison and Django Snippets:
-# http://www.djangosnippets.org/snippets/766/
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
 # immediately when the panel is disabled to keep the overhead small.
 
-from django.test.utils import instrumented_test_render
-from django.template import Template
+# Code taken and adapted from Simon Willison and Django Snippets:
+# http://www.djangosnippets.org/snippets/766/
 
 if Template._render != instrumented_test_render:
     Template.original_render = Template._render
     Template._render = instrumented_test_render
 
 
+# Monkey-patch to store items added by template context processors. The
+# overhead is sufficiently small to justify enabling it unconditionally.
+
+def _request_context__init__(
+        self, request, dict_=None, processors=None, current_app=None,
+        use_l10n=None, use_tz=None):
+    Context.__init__(
+        self, dict_, current_app=current_app,
+        use_l10n=use_l10n, use_tz=use_tz)
+    if processors is None:
+        processors = ()
+    else:
+        processors = tuple(processors)
+    self.context_processors = OrderedDict()
+    updates = dict()
+    for processor in get_standard_processors() + processors:
+        name = '%s.%s' % (processor.__module__, processor.__name__)
+        context = processor(request)
+        self.context_processors[name] = context
+        updates.update(context)
+    self.update(updates)
+
+RequestContext.__init__ = _request_context__init__
+
+
+# Monkey-patch versions of Django where Template doesn't store origin.
+# See https://code.djangoproject.com/ticket/16096.
+
 if django.VERSION[:2] < (1, 7):
-    # Monkey-patch versions of Django where Template doesn't store origin.
-    # See https://code.djangoproject.com/ticket/16096.
 
     old_template_init = Template.__init__
 
@@ -107,6 +137,7 @@ class TemplatesPanel(Panel):
                 pass
 
         kwargs['context'] = [force_text(item) for item in context_list]
+        kwargs['context_processors'] = getattr(context, 'context_processors', None)
         self.templates.append(kwargs)
 
     # Implement the Panel API
@@ -127,12 +158,6 @@ class TemplatesPanel(Panel):
         )
 
     def process_response(self, request, response):
-        context_processors = dict(
-            [
-                ("%s.%s" % (k.__module__, k.__name__),
-                    pformat(k(request))) for k in get_standard_processors()
-            ]
-        )
         template_context = []
         for template_data in self.templates:
             info = {}
@@ -150,6 +175,12 @@ class TemplatesPanel(Panel):
                 context_list = template_data.get('context', [])
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
+
+        # Fetch context_processors from any template
+        if self.templates:
+            context_processors = self.templates[0]['context_processors']
+        else:
+            context_processors = None
 
         self.record_stats({
             'templates': template_context,

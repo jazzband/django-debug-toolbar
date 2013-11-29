@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 
 import django
 from django.contrib.auth.models import User
-from django.template import Template, Context
+from django.template import Context, RequestContext, Template
 
 from ..base import BaseTestCase
 from ..models import NonAsciiRepr
@@ -47,3 +47,15 @@ class TemplatesPanelTestCase(BaseTestCase):
         t.render(c)
         self.panel.process_response(self.request, self.response)
         self.assertIn('nôt åscíì', self.panel.content)
+
+    def test_custom_context_processor(self):
+        self.panel.process_request(self.request)
+        t = Template("{{ content }}")
+        c = RequestContext(self.request, processors=[context_processor])
+        t.render(c)
+        self.panel.process_response(self.request, self.response)
+        self.assertIn('tests.panels.test_template.context_processor', self.panel.content)
+
+
+def context_processor(request):
+    return {'content': 'set by processor'}
