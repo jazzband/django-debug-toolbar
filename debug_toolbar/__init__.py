@@ -11,7 +11,7 @@ except Exception:
     VERSION = 'unknown'
 
 
-from .toolbar import DebugToolbar
+# Code that discovers files or modules in INSTALLED_APPS imports this module.
+# Reference URLpatterns with a string to avoid the risk of circular imports.
 
-
-urls = DebugToolbar.get_urls(), 'djdt', 'djdt'
+urls = 'debug_toolbar.toolbar', 'djdt', 'djdt'
