@@ -21,7 +21,8 @@ instead with the following command::
 Quick setup
 -----------
 
-Make sure that ``'django.contrib.staticfiles'`` is set up properly and add
+Make sure that ``'django.contrib.staticfiles'`` is `set up properly
+<https://docs.djangoproject.com/en/stable/howto/static-files/>`_ and add
 ``'debug_toolbar'`` to your ``INSTALLED_APPS`` setting::
 
     INSTALLED_APPS = (
@@ -36,7 +37,7 @@ Make sure that ``'django.contrib.staticfiles'`` is set up properly and add
 For a simple Django project, that's all you need!
 
 The Debug Toolbar will automatically adjust a few settings when you start the
-development server. This happens only when the ``DEBUG`` setting is ``True``.
+development server, provided the ``DEBUG`` setting is ``True``.
 
 If you're upgrading from a previous version, you should review the
 :doc:`change log <changes>` and look for specific upgrade instructions.
