@@ -122,3 +122,6 @@ else:
                 "%r was renamed to %r. Update your DEBUG_TOOLBAR_PANELS "
                 "setting." % (old_panel, new_panel), DeprecationWarning)
             PANELS[index] = new_panel
+
+
+PATCH_SETTINGS = getattr(settings, 'DEBUG_TOOLBAR_PATCH_SETTINGS', settings.DEBUG)

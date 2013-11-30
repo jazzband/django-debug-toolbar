@@ -6,6 +6,7 @@ from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
 from django.utils.importlib import import_module
 
 import debug_toolbar
+from debug_toolbar import settings as dt_settings
 from debug_toolbar.middleware import DebugToolbarMiddleware
 
 
@@ -56,7 +57,7 @@ def patch_root_urlconf():
         clear_url_caches()
 
 
-if settings.DEBUG:
+if dt_settings.PATCH_SETTINGS:
     patch_internal_ips()
     patch_middleware_classes()
     patch_root_urlconf()

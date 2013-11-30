@@ -51,8 +51,20 @@ what it does, or if you prefer defining your settings explicitly, read below.
     during the start-up sequence. This works with ``manage.py runserver``
     because it validates models before serving requests.
 
+.. warning::
+
+    The automatic setup imports your project's URLconf in order to add the
+    Debug Toolbar's URLs. This may trigger circular imports when the URLconf
+    imports views that import models. If you're hitting an :exc:`ImportError`,
+    follow the explicit setup instructions.
+
 Explicit setup
 --------------
+
+First, tell the toolbar not to adjust your settings automatically by adding
+this line in your settings module::
+
+    DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 URLconf
 ~~~~~~~
