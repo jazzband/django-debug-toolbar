@@ -13,11 +13,10 @@ If you aren't familiar with pip, you may also obtain a copy of the
 
 .. _pip: http://www.pip-installer.org/
 
-To test an upcoming release, you can install the `in-development version
-<http://github.com/django-debug-toolbar/django-debug-toolbar/tarball/master#egg=django-debug-toolbar-dev>`_
+To test an upcoming release, you can install the in-development version
 instead with the following command::
 
-     $ pip install django-debug-toolbar==dev
+     $ pip install -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 
 Quick setup
 -----------
