@@ -32,7 +32,7 @@ class HeadersPanel(Panel):
         'TZ',
     ))
 
-    title = _('Headers')
+    title = _("Headers")
 
     template = 'debug_toolbar/panels/headers.html'
 

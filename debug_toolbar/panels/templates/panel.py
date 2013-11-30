@@ -142,12 +142,12 @@ class TemplatesPanel(Panel):
 
     # Implement the Panel API
 
-    nav_title = _('Templates')
+    nav_title = _("Templates")
 
     @property
     def title(self):
         num_templates = len(self.templates)
-        return _('Templates (%(num_templates)s rendered)') % {'num_templates': num_templates}
+        return _("Templates (%(num_templates)s rendered)") % {'num_templates': num_templates}
 
     template = 'debug_toolbar/panels/templates.html'
 

@@ -14,7 +14,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 	<div style="display:none;" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if toolbar.panels %}
-			<li><a id="djHideToolBarButton" href="#" title="{% trans "Hide Toolbar" %}">{% trans "Hide" %} &#187;</a></li>
+			<li><a id="djHideToolBarButton" href="#" title="{% trans "Hide toolbar" %}">{% trans "Hide" %} &#187;</a></li>
 			{% else %}
 			<li id="djDebugButton">DEBUG</li>
 			{% endif %}
@@ -42,7 +42,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 		</ul>
 	</div>
 	<div style="display:none;" id="djDebugToolbarHandle">
-		<span title="{% trans "Show Toolbar" %}" id="djShowToolBarButton">&#171;</span>
+		<span title="{% trans "Show toolbar" %}" id="djShowToolBarButton">&#171;</span>
 	</div>
 	{% for panel in toolbar.panels %}
 		{% if panel.has_content and panel.enabled %}

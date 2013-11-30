@@ -15,7 +15,7 @@ class RequestPanel(Panel):
     """
     template = 'debug_toolbar/panels/request.html'
 
-    title = _('Request')
+    title = _("Request")
 
     def process_response(self, request, response):
         self.record_stats({
@@ -24,7 +24,7 @@ class RequestPanel(Panel):
             'cookies': [(k, request.COOKIES.get(k)) for k in sorted(request.COOKIES)],
         })
         view_info = {
-            'view_func': _('<no view>'),
+            'view_func': _("<no view>"),
             'view_args': 'None',
             'view_kwargs': 'None',
             'view_urlname': 'None',
@@ -36,7 +36,7 @@ class RequestPanel(Panel):
             view_info['view_args'] = args
             view_info['view_kwargs'] = kwargs
             view_info['view_urlname'] = getattr(match, 'url_name',
-                                                _('<unavailable>'))
+                                                _("<unavailable>"))
         except Http404:
             pass
         self.record_stats(view_info)

@@ -20,18 +20,18 @@ class TimerPanel(Panel):
         if hasattr(self, '_start_rusage'):
             utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
             stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
-            return _('CPU: %(cum)0.2fms (%(total)0.2fms)') % {
+            return _("CPU: %(cum)0.2fms (%(total)0.2fms)") % {
                 'cum': (utime + stime) * 1000.0,
                 'total': stats['total_time']
             }
         elif 'total_time' in stats:
-            return _('TOTAL: %0.2fms') % stats['total_time']
+            return _("Total: %0.2fms") % stats['total_time']
         else:
             return ''
 
     has_content = resource is not None
 
-    title = _('Time')
+    title = _("Time")
 
     template = 'debug_toolbar/panels/timer.html'
 
@@ -39,11 +39,11 @@ class TimerPanel(Panel):
     def content(self):
         stats = self.get_stats()
         rows = (
-            (_('User CPU time'), _('%(utime)0.3f msec') % stats),
-            (_('System CPU time'), _('%(stime)0.3f msec') % stats),
-            (_('Total CPU time'), _('%(total)0.3f msec') % stats),
-            (_('Elapsed time'), _('%(total_time)0.3f msec') % stats),
-            (_('Context switches'), _('%(vcsw)d voluntary, %(ivcsw)d involuntary') % stats),
+            (_("User CPU time"), _("%(utime)0.3f msec") % stats),
+            (_("System CPU time"), _("%(stime)0.3f msec") % stats),
+            (_("Total CPU time"), _("%(total)0.3f msec") % stats),
+            (_("Elapsed time"), _("%(total_time)0.3f msec") % stats),
+            (_("Context switches"), _("%(vcsw)d voluntary, %(ivcsw)d involuntary") % stats),
         )
         return render_to_string(self.template, {'rows': rows})
 

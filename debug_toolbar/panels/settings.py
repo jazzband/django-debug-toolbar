@@ -14,10 +14,10 @@ class SettingsPanel(Panel):
     """
     template = 'debug_toolbar/panels/settings.html'
 
-    nav_title = _('Settings')
+    nav_title = _("Settings")
 
     def title(self):
-        return _('Settings from <code>%s</code>') % settings.SETTINGS_MODULE
+        return _("Settings from <code>%s</code>") % settings.SETTINGS_MODULE
 
     def process_response(self, request, response):
         self.record_stats({

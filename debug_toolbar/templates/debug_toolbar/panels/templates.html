@@ -18,14 +18,14 @@
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	{% if template.context %}
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans "Toggle context" %}</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><code>{{ template.context }}</code></div>
 	</dd>
 	{% endif %}
 {% endfor %}
 </dl>
 {% else %}
-	<p>{% trans 'None' %}</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
 
 <h4>{% blocktrans count context_processors|length as context_processors_count %}Context processor{% plural %}Context processors{% endblocktrans %}</h4>
@@ -34,13 +34,13 @@
 {% for key, value in context_processors.items %}
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans 'Toggle Context' %}</a></div>
+		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans "Toggle context" %}</a></div>
 		<div class="djTemplateHideContextDiv" style="display:none;"><code>{{ value|escape }}</code></div>
 	</dd>
 {% endfor %}
 </dl>
 {% else %}
-	<p>{% trans 'None' %}</p>
+	<p>{% trans "None" %}</p>
 {% endif %}
 
 <script src="{% static 'debug_toolbar/js/toolbar.template.js' %}"></script>

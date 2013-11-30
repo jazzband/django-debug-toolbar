@@ -90,10 +90,10 @@ class LoggingPanel(Panel):
     def nav_subtitle(self):
         records = self._records[threading.currentThread()]
         record_count = len(records)
-        return ungettext('%(count)s message', '%(count)s messages',
+        return ungettext("%(count)s message", "%(count)s messages",
                          record_count) % {'count': record_count}
 
-    title = _('Log Messages')
+    title = _("Log messages")
 
     def process_request(self, request):
         collector.clear_records()

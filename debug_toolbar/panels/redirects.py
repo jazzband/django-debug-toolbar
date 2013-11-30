@@ -19,7 +19,7 @@ class RedirectsPanel(Panel):
 
     has_content = False
 
-    nav_title = _('Intercept redirects')
+    nav_title = _("Intercept redirects")
 
     def process_response(self, request, response):
         if 300 <= int(response.status_code) < 400:

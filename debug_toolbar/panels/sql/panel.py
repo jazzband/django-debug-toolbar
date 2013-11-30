@@ -18,11 +18,11 @@ def get_isolation_level_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions
         choices = {
-            psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: _('Autocommit'),
-            psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: _('Read uncommitted'),
-            psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED: _('Read committed'),
-            psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: _('Repeatable read'),
-            psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: _('Serializable'),
+            psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: _("Autocommit"),
+            psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: _("Read uncommitted"),
+            psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED: _("Read committed"),
+            psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: _("Repeatable read"),
+            psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: _("Serializable"),
         }
     else:
         raise ValueError(engine)
@@ -33,11 +33,11 @@ def get_transaction_status_display(engine, level):
     if engine == 'psycopg2':
         import psycopg2.extensions
         choices = {
-            psycopg2.extensions.TRANSACTION_STATUS_IDLE: _('Idle'),
-            psycopg2.extensions.TRANSACTION_STATUS_ACTIVE: _('Active'),
-            psycopg2.extensions.TRANSACTION_STATUS_INTRANS: _('In transaction'),
-            psycopg2.extensions.TRANSACTION_STATUS_INERROR: _('In error'),
-            psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN: _('Unknown'),
+            psycopg2.extensions.TRANSACTION_STATUS_IDLE: _("Idle"),
+            psycopg2.extensions.TRANSACTION_STATUS_ACTIVE: _("Active"),
+            psycopg2.extensions.TRANSACTION_STATUS_INTRANS: _("In transaction"),
+            psycopg2.extensions.TRANSACTION_STATUS_INERROR: _("In error"),
+            psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN: _("Unknown"),
         }
     else:
         raise ValueError(engine)
@@ -102,7 +102,7 @@ class SQLPanel(Panel):
 
     # Implement the Panel API
 
-    nav_title = _('SQL')
+    nav_title = _("SQL")
 
     @property
     def nav_subtitle(self):

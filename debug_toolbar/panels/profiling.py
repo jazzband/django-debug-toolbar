@@ -123,7 +123,7 @@ class ProfilingPanel(Panel):
     """
     Panel that displays profiling information.
     """
-    title = _('Profiling')
+    title = _("Profiling")
 
     template = 'debug_toolbar/panels/profiling.html'
 

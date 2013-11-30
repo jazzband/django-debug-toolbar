@@ -19,7 +19,7 @@ class VersionsPanel(Panel):
     def nav_subtitle(self):
         return 'Django %s' % django.get_version()
 
-    title = _('Versions')
+    title = _("Versions")
 
     template = 'debug_toolbar/panels/versions.html'
 
