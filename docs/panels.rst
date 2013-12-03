@@ -108,7 +108,7 @@ The following panels are disabled by default. You must add them to the
 Profiling
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
+Path: ``debug_toolbar.panels.profiling.ProfilingDebugPanel``
 
 Profiling information for the view function.
 
