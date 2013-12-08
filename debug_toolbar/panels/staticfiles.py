@@ -75,7 +75,7 @@ class StaticFilesPanel(panels.Panel):
 
     @property
     def title(self):
-        return (_("Static files (%(num_found)s found)") %
+        return (_("Static files (%(num_found)s found, %(num_used)s used)") %
                 {'num_found': self.num_found, 'num_used': self.num_used})
 
     def __init__(self, *args, **kwargs):
