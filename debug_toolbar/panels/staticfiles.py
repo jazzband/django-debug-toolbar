@@ -75,6 +75,8 @@ class DebugConfiguredStorage(LazyObject):
 
         self._wrapped = DebugStaticFilesStorage(collector)
 
+_original_storage = storage.staticfiles_storage
+
 
 class StaticFilesPanel(panels.Panel):
     """
@@ -94,11 +96,10 @@ class StaticFilesPanel(panels.Panel):
         self._paths = {}
 
     def enable_instrumentation(self):
-        self._unpatched_staticfiles_storage = storage.staticfiles_storage
         storage.staticfiles_storage = staticfiles.staticfiles_storage = DebugConfiguredStorage()
 
     def disable_instrumentation(self):
-        storage.staticfiles_storage = staticfiles.staticfiles_storage = self._unpatched_staticfiles_storage
+        storage.staticfiles_storage = staticfiles.staticfiles_storage = _original_storage
 
     @property
     def has_content(self):
