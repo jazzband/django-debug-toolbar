@@ -19,7 +19,7 @@ class StaticFilesPanelTestCase(BaseTestCase):
         self.panel.process_request(self.request)
         self.panel.process_response(self.request, self.response)
         self.assertIn('django.contrib.staticfiles.finders.'
-                      'AppDirectoriesFinder (87 files)', self.panel.content)
+                      'AppDirectoriesFinder', self.panel.content)
         self.assertIn('django.contrib.staticfiles.finders.'
                       'FileSystemFinder (1 file)', self.panel.content)
         self.assertEqual(self.panel.num_used, 0)
