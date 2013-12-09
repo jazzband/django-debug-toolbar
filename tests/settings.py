@@ -40,6 +40,8 @@ ROOT_URLCONF = 'tests.urls'
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'tests', 'additional_static')]
+
 
 # Cache and database
 

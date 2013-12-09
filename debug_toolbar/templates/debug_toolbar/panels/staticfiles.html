@@ -37,7 +37,7 @@
 
 
 {% for finder, payload in staticfiles_finders.items %}
-<h4>{{ finder }} ({{ payload|length }} files)</h4>
+<h4>{{ finder }} ({% blocktrans count payload|length as payload_count %}{{ payload_count }} file{% plural %}{{ payload_count }} files{% endblocktrans %})</h4>
 <table>
     <thead>
         <tr>

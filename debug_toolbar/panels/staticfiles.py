@@ -20,7 +20,9 @@ from debug_toolbar.utils import ThreadCollector
 
 
 class StaticFile(object):
-
+    """
+    Representing the different properties of a static file.
+    """
     def __init__(self, path):
         self.path = path
 
@@ -47,6 +49,11 @@ collector = FileCollector()
 
 
 class DebugConfiguredStorage(LazyObject):
+    """
+    A staticfiles storage class to be used for collecting which paths
+    are resolved by using the {% static %} template tag (which uses the
+    `url` method).
+    """
     def _setup(self):
 
         configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
@@ -81,7 +88,6 @@ class StaticFilesPanel(panels.Panel):
     def __init__(self, *args, **kwargs):
         super(StaticFilesPanel, self).__init__(*args, **kwargs)
         self.num_found = 0
-        self.ignore_patterns = []
         self._paths = {}
 
     @property
@@ -100,29 +106,14 @@ class StaticFilesPanel(panels.Panel):
     @property
     def nav_subtitle(self):
         num_used = self.num_used
-        return ungettext("%(num_used)s file used", "%(num_used)s files used",
+        return ungettext("%(num_used)s file used",
+                         "%(num_used)s files used",
                          num_used) % {'num_used': num_used}
 
     def process_request(self, request):
         collector.clear_collection()
 
     def process_response(self, request, response):
-        staticfiles_finders = SortedDict()
-        for finder in finders.get_finders():
-            for path, finder_storage in finder.list(self.ignore_patterns):
-                if getattr(finder_storage, 'prefix', None):
-                    prefixed_path = join(finder_storage.prefix, path)
-                else:
-                    prefixed_path = path
-                finder_path = '.'.join([finder.__class__.__module__,
-                                        finder.__class__.__name__])
-                real_path = finder_storage.path(path)
-                payload = (prefixed_path, real_path)
-                staticfiles_finders.setdefault(finder_path, []).append(payload)
-                self.num_found += 1
-
-        dirs = getattr(settings, 'STATICFILES_DIRS', ())
-
         used_paths = collector.get_collection()
         self._paths[threading.currentThread()] = used_paths
 
@@ -130,13 +121,48 @@ class StaticFilesPanel(panels.Panel):
             'num_found': self.num_found,
             'num_used': self.num_used,
             'staticfiles': used_paths,
-            'staticfiles_apps': self.get_static_apps(),
-            'staticfiles_dirs': [normpath(d) for d in dirs],
-            'staticfiles_finders': staticfiles_finders,
+            'staticfiles_apps': self.get_staticfiles_apps(),
+            'staticfiles_dirs': self.get_staticfiles_dirs(),
+            'staticfiles_finders': self.get_staticfiles_finders(),
         })
 
-    def get_static_apps(self):
+    def get_staticfiles_finders(self):
+        """
+        Returns a sorted mapping between the finder path and the list
+        of relative and file system paths which that finder was able
+        to find.
+        """
+        finders_mapping = SortedDict()
+        for finder in finders.get_finders():
+            for path, finder_storage in finder.list([]):
+                if getattr(finder_storage, 'prefix', None):
+                    prefixed_path = join(finder_storage.prefix, path)
+                else:
+                    prefixed_path = path
+                finder_cls = finder.__class__
+                finder_path = '.'.join([finder_cls.__module__,
+                                        finder_cls.__name__])
+                real_path = finder_storage.path(path)
+                payload = (prefixed_path, real_path)
+                finders_mapping.setdefault(finder_path, []).append(payload)
+                self.num_found += 1
+        return finders_mapping
+
+    def get_staticfiles_dirs(self):
+        """
+        Returns a list of paths to inspect for additional static files
+        """
+        dirs = getattr(settings, 'STATICFILES_DIRS', ())
+        return [normpath(d) for d in dirs]
+
+    def get_staticfiles_apps(self):
+        """
+        Returns a list of app paths that have a static directory
+        """
+        apps = []
         for finder in finders.get_finders():
             if isinstance(finder, finders.AppDirectoriesFinder):
-                return finder.apps
-        return []
+                for app in finder.apps:
+                    if app not in apps:
+                        apps.append(app)
+        return apps
