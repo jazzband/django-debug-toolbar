@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 from os.path import normpath, join
 try:
     import threading
@@ -11,8 +11,9 @@ from django.core.files.storage import get_storage_class
 from django.contrib.staticfiles import finders, storage
 from django.contrib.staticfiles.templatetags import staticfiles
 
-from django.utils.translation import ungettext, ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import LazyObject
+from django.utils.translation import ungettext, ugettext_lazy as _
 try:
     from collections import OrderedDict
 except ImportError:
@@ -22,6 +23,7 @@ from debug_toolbar import panels
 from debug_toolbar.utils import ThreadCollector
 
 
+@python_2_unicode_compatible
 class StaticFile(object):
     """
     Representing the different properties of a static file.
