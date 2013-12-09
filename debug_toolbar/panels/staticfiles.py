@@ -31,7 +31,7 @@ class StaticFile(object):
     def __init__(self, path):
         self.path = path
 
-    def __unicode__(self):
+    def __str__(self):
         return self.path
 
     def real_path(self):
@@ -75,8 +75,6 @@ class DebugConfiguredStorage(LazyObject):
 
         self._wrapped = DebugStaticFilesStorage(collector)
 
-storage.staticfiles_storage = staticfiles.staticfiles_storage = DebugConfiguredStorage()
-
 
 class StaticFilesPanel(panels.Panel):
     """
@@ -94,6 +92,13 @@ class StaticFilesPanel(panels.Panel):
         super(StaticFilesPanel, self).__init__(*args, **kwargs)
         self.num_found = 0
         self._paths = {}
+
+    def enable_instrumentation(self):
+        self._unpatched_staticfiles_storage = storage.staticfiles_storage
+        storage.staticfiles_storage = staticfiles.staticfiles_storage = DebugConfiguredStorage()
+
+    def disable_instrumentation(self):
+        storage.staticfiles_storage = staticfiles.staticfiles_storage = self._unpatched_staticfiles_storage
 
     @property
     def has_content(self):
