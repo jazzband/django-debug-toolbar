@@ -12,8 +12,11 @@ from django.contrib.staticfiles import finders, storage
 from django.contrib.staticfiles.templatetags import staticfiles
 
 from django.utils.translation import ungettext, ugettext_lazy as _
-from django.utils.datastructures import SortedDict
 from django.utils.functional import LazyObject
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 
 from debug_toolbar import panels
 from debug_toolbar.utils import ThreadCollector
@@ -132,7 +135,7 @@ class StaticFilesPanel(panels.Panel):
         of relative and file system paths which that finder was able
         to find.
         """
-        finders_mapping = SortedDict()
+        finders_mapping = OrderedDict()
         for finder in finders.get_finders():
             for path, finder_storage in finder.list([]):
                 if getattr(finder_storage, 'prefix', None):

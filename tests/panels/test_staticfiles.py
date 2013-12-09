@@ -3,8 +3,6 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.conf import settings
-from django.contrib.staticfiles.templatetags import staticfiles
-from django.template import Context, RequestContext, Template
 
 from ..base import BaseTestCase
 
