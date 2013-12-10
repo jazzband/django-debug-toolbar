@@ -6,8 +6,10 @@ from __future__ import absolute_import, unicode_literals
 
 import uuid
 
+from django.conf import settings
 from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
+from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
@@ -57,7 +59,17 @@ class DebugToolbar(object):
         """
         if not self.should_render_panels():
             self.store()
-        return render_to_string('debug_toolbar/base.html', {'toolbar': self})
+        try:
+            context = {'toolbar': self}
+            return render_to_string('debug_toolbar/base.html', context)
+        except TemplateSyntaxError:
+            if 'django.contrib.staticfiles' not in settings.INSTALLED_APPS:
+                raise ImproperlyConfigured(
+                    "The debug toolbar requires the staticfiles contrib app. "
+                    "Add 'django.contrib.staticfiles' to INSTALLED_APPS and "
+                    "define STATIC_URL in your settings.")
+            else:
+                raise
 
     # Handle storing toolbars in memory and fetching them later on
 
