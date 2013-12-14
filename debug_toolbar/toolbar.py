@@ -11,8 +11,11 @@ from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
-from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 
 from debug_toolbar import settings as dt_settings
 
@@ -22,7 +25,7 @@ class DebugToolbar(object):
     def __init__(self, request):
         self.request = request
         self.config = dt_settings.CONFIG.copy()
-        self._panels = SortedDict()
+        self._panels = OrderedDict()
         for panel_class in self.get_panel_classes():
             panel_instance = panel_class(self)
             self._panels[panel_instance.panel_id] = panel_instance
@@ -73,7 +76,7 @@ class DebugToolbar(object):
 
     # Handle storing toolbars in memory and fetching them later on
 
-    _store = SortedDict()
+    _store = OrderedDict()
 
     def should_render_panels(self):
         render_panels = self.config['RENDER_PANELS']

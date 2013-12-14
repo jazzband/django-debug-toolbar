@@ -10,8 +10,11 @@ from django.core.cache import cache as original_cache, get_cache as original_get
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.template import Node
-from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _, ungettext
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
@@ -139,7 +142,7 @@ class CachePanel(Panel):
         self.hits = 0
         self.misses = 0
         self.calls = []
-        self.counts = SortedDict((
+        self.counts = OrderedDict((
             ('add', 0),
             ('get', 0),
             ('set', 0),

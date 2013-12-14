@@ -13,6 +13,7 @@ coverage
 flake8
 selenium
 tox
+django-discover-runner
 
 # Documentation
 

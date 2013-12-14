@@ -63,6 +63,13 @@ Path: ``debug_toolbar.panels.templates.TemplatesPanel``
 
 Templates and context used, and their template paths.
 
+Static files
+~~~~~~~~~~~~
+
+Path: ``debug_toolbar.panels.staticfiles.StaticFilesPanel``
+
+Used static files and their locations (via the staticfiles finders).
+
 Cache
 ~~~~~
 
