@@ -120,3 +120,6 @@ The release itself requires the following steps:
    packages install correctly before uploading them. (How?)
 
 #. Push the commit and the tag.
+
+#. Change the default version of the docs to point to the latest release:
+   https://readthedocs.org/dashboard/django-debug-toolbar/versions/

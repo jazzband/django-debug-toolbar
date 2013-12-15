@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-01 09:40+0100\n"
+"POT-Creation-Date: 2013-12-15 13:11+0100\n"
 "PO-Revision-Date: 2012-03-31 20:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -22,18 +22,18 @@ msgid ""
 "retry."
 msgstr ""
 
-#: panels/cache.py:186
+#: panels/cache.py:189
 msgid "Cache"
 msgstr ""
 
-#: panels/cache.py:191
+#: panels/cache.py:194
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/cache.py:199
+#: panels/cache.py:202
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
@@ -44,18 +44,18 @@ msgstr[1] ""
 msgid "Headers"
 msgstr ""
 
-#: panels/logging.py:87
+#: panels/logging.py:64
 msgid "Logging"
 msgstr ""
 
-#: panels/logging.py:93
+#: panels/logging.py:70
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/logging.py:96
+#: panels/logging.py:73
 msgid "Log messages"
 msgstr ""
 
@@ -79,11 +79,11 @@ msgstr ""
 msgid "<unavailable>"
 msgstr ""
 
-#: panels/settings.py:17
+#: panels/settings.py:20
 msgid "Settings"
 msgstr ""
 
-#: panels/settings.py:20
+#: panels/settings.py:23
 #, python-format
 msgid "Settings from <code>%s</code>"
 msgstr ""
@@ -105,6 +105,22 @@ msgstr[1] ""
 #: panels/signals.py:49
 msgid "Signals"
 msgstr ""
+
+#: panels/staticfiles.py:90
+#, python-format
+msgid "Static files (%(num_found)s found, %(num_used)s used)"
+msgstr ""
+
+#: panels/staticfiles.py:115
+msgid "Static files"
+msgstr ""
+
+#: panels/staticfiles.py:120
+#, python-format
+msgid "%(num_used)s file used"
+msgid_plural "%(num_used)s files used"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/timer.py:23
 #, python-format
@@ -168,7 +184,7 @@ msgstr ""
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 msgstr ""
 
-#: panels/versions.py:22
+#: panels/versions.py:25
 msgid "Versions"
 msgstr ""
 
@@ -216,11 +232,11 @@ msgstr ""
 msgid "SQL"
 msgstr ""
 
-#: panels/templates/panel.py:145
+#: panels/templates/panel.py:141
 msgid "Templates"
 msgstr ""
 
-#: panels/templates/panel.py:150
+#: panels/templates/panel.py:146
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
 msgstr ""
@@ -360,6 +376,7 @@ msgid "Message"
 msgstr ""
 
 #: templates/debug_toolbar/panels/logging.html:10
+#: templates/debug_toolbar/panels/staticfiles.html:45
 msgid "Location"
 msgstr ""
 
@@ -534,6 +551,44 @@ msgstr ""
 msgid "Empty set"
 msgstr ""
 
+#: templates/debug_toolbar/panels/staticfiles.html:4
+msgid "Static file path"
+msgid_plural "Static file paths"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:12
+#: templates/debug_toolbar/panels/staticfiles.html:23
+#: templates/debug_toolbar/panels/staticfiles.html:35
+#: templates/debug_toolbar/panels/templates.html:10
+#: templates/debug_toolbar/panels/templates.html:28
+#: templates/debug_toolbar/panels/templates.html:43
+msgid "None"
+msgstr ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:15
+msgid "Static file app"
+msgid_plural "Static file apps"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:26
+msgid "Static file"
+msgid_plural "Static files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:40
+#, python-format
+msgid "%(payload_count)s file"
+msgid_plural "%(payload_count)s files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:44
+msgid "Path"
+msgstr ""
+
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
 msgstr ""
@@ -543,12 +598,6 @@ msgid "Template path"
 msgid_plural "Template paths"
 msgstr[0] ""
 msgstr[1] ""
-
-#: templates/debug_toolbar/panels/templates.html:10
-#: templates/debug_toolbar/panels/templates.html:28
-#: templates/debug_toolbar/panels/templates.html:43
-msgid "None"
-msgstr ""
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"

@@ -4,9 +4,12 @@ import sys
 
 import django
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
-from django.utils.datastructures import SortedDict
 from django.utils.importlib import import_module
+from django.utils.translation import ugettext_lazy as _
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 
 from debug_toolbar.panels import Panel
 
@@ -46,6 +49,6 @@ class VersionsPanel(Panel):
             versions = sorted(versions, key=lambda version: version[0])
 
         self.record_stats({
-            'versions': SortedDict(versions),
+            'versions': OrderedDict(versions),
             'paths': sys.path,
         })

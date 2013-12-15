@@ -8,42 +8,19 @@ except ImportError:
     threading = None
 from django.utils.translation import ungettext, ugettext_lazy as _
 from debug_toolbar.panels import Panel
+from debug_toolbar.utils import ThreadCollector
 
 MESSAGE_IF_STRING_REPRESENTATION_INVALID = '[Could not get log message]'
 
 
-class LogCollector(object):
-    def __init__(self):
-        if threading is None:
-            raise NotImplementedError(
-                "threading module is not available, "
-                "the logging panel cannot be used without it")
-        self.records = {}  # a dictionary that maps threads to log records
+class LogCollector(ThreadCollector):
 
-    def add_record(self, record, thread=None):
+    def collect(self, item, thread=None):
         # Avoid logging SQL queries since they are already in the SQL panel
         # TODO: Make this check whether SQL panel is enabled
-        if record.get('channel', '') == 'django.db.backends':
+        if item.get('channel', '') == 'django.db.backends':
             return
-
-        self.get_records(thread).append(record)
-
-    def get_records(self, thread=None):
-        """
-        Returns a list of records for the provided thread, of if none is provided,
-        returns a list for the current thread.
-        """
-        if thread is None:
-            thread = threading.currentThread()
-        if thread not in self.records:
-            self.records[thread] = []
-        return self.records[thread]
-
-    def clear_records(self, thread=None):
-        if thread is None:
-            thread = threading.currentThread()
-        if thread in self.records:
-            del self.records[thread]
+        super(LogCollector, self).collect(item, thread)
 
 
 class ThreadTrackingHandler(logging.Handler):
@@ -65,7 +42,7 @@ class ThreadTrackingHandler(logging.Handler):
             'line': record.lineno,
             'channel': record.name,
         }
-        self.collector.add_record(record)
+        self.collector.collect(record)
 
 
 # We don't use enable/disable_instrumentation because logging is global.
@@ -96,10 +73,10 @@ class LoggingPanel(Panel):
     title = _("Log messages")
 
     def process_request(self, request):
-        collector.clear_records()
+        collector.clear_collection()
 
     def process_response(self, request, response):
-        records = collector.get_records()
+        records = collector.get_collection()
         self._records[threading.currentThread()] = records
-        collector.clear_records()
+        collector.clear_collection()
         self.record_stats({'records': records})

@@ -51,9 +51,9 @@ def patch_root_urlconf():
         reverse('djdt:render_panel')
     except NoReverseMatch:
         urlconf_module = import_module(settings.ROOT_URLCONF)
-        urlconf_module.urlpatterns += patterns('',                      # noqa
+        urlconf_module.urlpatterns = patterns('',                      # noqa
             url(r'^__debug__/', include(debug_toolbar.urls)),
-        )
+        ) + urlconf_module.urlpatterns
         clear_url_caches()
 
 
