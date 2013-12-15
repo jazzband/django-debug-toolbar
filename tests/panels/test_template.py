@@ -15,11 +15,13 @@ class TemplatesPanelTestCase(BaseTestCase):
     def setUp(self):
         super(TemplatesPanelTestCase, self).setUp()
         self.panel = self.toolbar.get_panel_by_id('TemplatesPanel')
+        self.panel.enable_instrumentation()
         self.sql_panel = self.toolbar.get_panel_by_id('SQLPanel')
         self.sql_panel.enable_instrumentation()
 
     def tearDown(self):
         self.sql_panel.disable_instrumentation()
+        self.panel.disable_instrumentation()
         super(TemplatesPanelTestCase, self).tearDown()
 
     def test_queryset_hook(self):

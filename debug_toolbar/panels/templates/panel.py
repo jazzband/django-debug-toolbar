@@ -81,12 +81,8 @@ class TemplatesPanel(Panel):
     def __init__(self, *args, **kwargs):
         super(TemplatesPanel, self).__init__(*args, **kwargs)
         self.templates = []
-        template_rendered.connect(self._store_template_info)
 
     def _store_template_info(self, sender, **kwargs):
-        if not self.enabled:
-            return
-
         template, context = kwargs['template'], kwargs['context']
 
         # Skip templates that we are generating through the debug toolbar.
@@ -156,6 +152,12 @@ class TemplatesPanel(Panel):
         return patterns('debug_toolbar.panels.templates.views',         # noqa
             url(r'^template_source/$', 'template_source', name='template_source'),
         )
+
+    def enable_instrumentation(self):
+        template_rendered.connect(self._store_template_info)
+
+    def disable_instrumentation(self):
+        template_rendered.disconnect(self._store_template_info)
 
     def process_response(self, request, response):
         template_context = []
