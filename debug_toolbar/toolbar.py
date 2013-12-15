@@ -89,9 +89,12 @@ class DebugToolbar(object):
         cls = type(self)
         cls._store[self.store_id] = self
         for _ in range(len(cls._store) - self.config['RESULTS_STORE_SIZE']):
-            # When we drop support for Python 2.6 and switch to
-            # collections.OrderedDict, use popitem(last=False).
-            del cls._store[cls._store.keyOrder[0]]
+            try:
+                # collections.OrderedDict
+                cls._store.popitem(last=False)
+            except TypeError:
+                # django.utils.datastructures.SortedDict
+                del cls._store[cls._store.keyOrder[0]]
 
     @classmethod
     def fetch(cls, store_id):
