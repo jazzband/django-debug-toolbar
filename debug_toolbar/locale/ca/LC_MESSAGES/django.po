@@ -3,13 +3,14 @@
 # 
 # 
 # Translators:
+# Libre El Chaval <el.libre@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 12:13+0000\n"
-"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
+"PO-Revision-Date: 2013-12-15 14:20+0000\n"
+"Last-Translator: Libre El Chaval <el.libre@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/django-debug-toolbar/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +26,7 @@ msgstr ""
 
 #: panels/cache.py:189
 msgid "Cache"
-msgstr ""
+msgstr "Caxè"
 
 #: panels/cache.py:194
 #, python-format
@@ -43,11 +44,11 @@ msgstr[1] ""
 
 #: panels/headers.py:35
 msgid "Headers"
-msgstr ""
+msgstr "Encapçalaments"
 
 #: panels/logging.py:64
 msgid "Logging"
-msgstr ""
+msgstr "Entrant"
 
 #: panels/logging.py:70
 #, python-format
@@ -58,7 +59,7 @@ msgstr[1] ""
 
 #: panels/logging.py:73
 msgid "Log messages"
-msgstr ""
+msgstr "Registre de missatges"
 
 #: panels/profiling.py:126
 msgid "Profiling"
@@ -70,7 +71,7 @@ msgstr ""
 
 #: panels/request.py:18
 msgid "Request"
-msgstr ""
+msgstr "Demanar"
 
 #: panels/request.py:27
 msgid "<no view>"
@@ -82,7 +83,7 @@ msgstr ""
 
 #: panels/settings.py:20
 msgid "Settings"
-msgstr ""
+msgstr "Configuració"
 
 #: panels/settings.py:23
 #, python-format
@@ -105,7 +106,7 @@ msgstr[1] ""
 
 #: panels/signals.py:49
 msgid "Signals"
-msgstr ""
+msgstr "Senyals"
 
 #: panels/staticfiles.py:90
 #, python-format
@@ -131,14 +132,14 @@ msgstr ""
 #: panels/timer.py:28
 #, python-format
 msgid "Total: %0.2fms"
-msgstr ""
+msgstr "Total: %0.2fms"
 
 #: panels/timer.py:34 templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr ""
+msgstr "Hora"
 
 #: panels/timer.py:42
 msgid "User CPU time"
@@ -169,7 +170,7 @@ msgstr ""
 
 #: panels/timer.py:45
 msgid "Elapsed time"
-msgstr ""
+msgstr "Temps emprat"
 
 #: panels/timer.py:45
 #, python-format
@@ -187,7 +188,7 @@ msgstr ""
 
 #: panels/versions.py:25
 msgid "Versions"
-msgstr ""
+msgstr "Versions"
 
 #: panels/sql/panel.py:21
 msgid "Autocommit"
@@ -207,7 +208,7 @@ msgstr ""
 
 #: panels/sql/panel.py:25
 msgid "Serializable"
-msgstr ""
+msgstr "Seriable"
 
 #: panels/sql/panel.py:36
 msgid "Idle"
@@ -215,11 +216,11 @@ msgstr ""
 
 #: panels/sql/panel.py:37
 msgid "Active"
-msgstr ""
+msgstr "Actiu"
 
 #: panels/sql/panel.py:38
 msgid "In transaction"
-msgstr ""
+msgstr "En transacció"
 
 #: panels/sql/panel.py:39
 msgid "In error"
@@ -227,15 +228,15 @@ msgstr ""
 
 #: panels/sql/panel.py:40
 msgid "Unknown"
-msgstr ""
+msgstr "Desconegut"
 
 #: panels/sql/panel.py:105
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/templates/panel.py:141
 msgid "Templates"
-msgstr ""
+msgstr "Plantilles"
 
 #: panels/templates/panel.py:146
 #, python-format
@@ -244,11 +245,11 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide toolbar"
-msgstr ""
+msgstr "Amagar barra d'eina"
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide"
-msgstr ""
+msgstr "Amagar"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
@@ -260,15 +261,15 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:45
 msgid "Show toolbar"
-msgstr ""
+msgstr "Mostrar barra d'eines"
 
 #: templates/debug_toolbar/base.html:51
 msgid "Close"
-msgstr ""
+msgstr "Tancar"
 
 #: templates/debug_toolbar/redirect.html:8
 msgid "Location:"
-msgstr ""
+msgstr "Ubicació:"
 
 #: templates/debug_toolbar/redirect.html:10
 msgid ""
@@ -279,15 +280,15 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
-msgstr ""
+msgstr "Resum"
 
 #: templates/debug_toolbar/panels/cache.html:6
 msgid "Total calls"
-msgstr ""
+msgstr "Total crides"
 
 #: templates/debug_toolbar/panels/cache.html:7
 msgid "Total time"
-msgstr ""
+msgstr "Total temps"
 
 #: templates/debug_toolbar/panels/cache.html:8
 msgid "Cache hits"
@@ -299,20 +300,20 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
-msgstr ""
+msgstr "Comandes"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
-msgstr ""
+msgstr "Crides"
 
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:20
 msgid "Time (ms)"
-msgstr ""
+msgstr "Temps (ms)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
-msgstr ""
+msgstr "Tipus"
 
 #: templates/debug_toolbar/panels/cache.html:45
 #: templates/debug_toolbar/panels/request.html:8
@@ -326,7 +327,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:47
 msgid "Backend"
-msgstr ""
+msgstr "Administració"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
@@ -336,7 +337,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr ""
+msgstr "Clau"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -348,7 +349,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "Valor"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
@@ -366,20 +367,20 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr ""
+msgstr "Nivell"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr ""
+msgstr "Missatge"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:45
 msgid "Location"
-msgstr ""
+msgstr "Ubicació"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
@@ -387,7 +388,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
-msgstr ""
+msgstr "Cridar"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "CumTime"
@@ -396,19 +397,19 @@ msgstr ""
 #: templates/debug_toolbar/panels/profiling.html:7
 #: templates/debug_toolbar/panels/profiling.html:9
 msgid "Per"
-msgstr ""
+msgstr "Per"
 
 #: templates/debug_toolbar/panels/profiling.html:8
 msgid "TotTime"
-msgstr ""
+msgstr "TempsTotal"
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr ""
+msgstr "Recomptar"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr ""
+msgstr "Veure informació"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
@@ -427,7 +428,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/request.html:84
 #: templates/debug_toolbar/panels/request.html:109
 msgid "Variable"
-msgstr ""
+msgstr "Variable"
 
 #: templates/debug_toolbar/panels/request.html:46
 msgid "No cookies"
@@ -447,7 +448,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:98
 msgid "No GET data"
-msgstr ""
+msgstr "Sense dades GET"
 
 #: templates/debug_toolbar/panels/request.html:102
 msgid "POST data"
@@ -455,15 +456,15 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:123
 msgid "No POST data"
-msgstr ""
+msgstr "Sense dades POST"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr ""
+msgstr "Configuració"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr ""
+msgstr "Senyal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing"
@@ -471,7 +472,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Destinataris"
 
 #: templates/debug_toolbar/panels/sql.html:7
 #, python-format
@@ -482,20 +483,20 @@ msgstr[1] ""
 
 #: templates/debug_toolbar/panels/sql.html:18
 msgid "Query"
-msgstr ""
+msgstr "Petició"
 
 #: templates/debug_toolbar/panels/sql.html:19
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
-msgstr ""
+msgstr "Línia temporal"
 
 #: templates/debug_toolbar/panels/sql.html:21
 msgid "Action"
-msgstr ""
+msgstr "Acció"
 
 #: templates/debug_toolbar/panels/sql.html:64
 msgid "Connection:"
-msgstr ""
+msgstr "Connexió:"
 
 #: templates/debug_toolbar/panels/sql.html:66
 msgid "Isolation level:"
@@ -507,7 +508,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:83
 msgid "(unknown)"
-msgstr ""
+msgstr "(desconegut)"
 
 #: templates/debug_toolbar/panels/sql.html:92
 msgid "No SQL queries were recorded during this request."
@@ -518,7 +519,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_select.html:3
 #: templates/debug_toolbar/panels/template_source.html:3
 msgid "Back"
-msgstr ""
+msgstr "Tornar"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
@@ -528,13 +529,13 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr ""
+msgstr "SQL Executat"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr ""
+msgstr "Base de dades"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
@@ -542,7 +543,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql_profile.html:37
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
@@ -565,7 +566,7 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr ""
+msgstr "Cap"
 
 #: templates/debug_toolbar/panels/staticfiles.html:15
 msgid "Static file app"
@@ -604,7 +605,7 @@ msgstr[1] ""
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "Plantilles"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
@@ -623,7 +624,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr ""
+msgstr "Font"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
@@ -639,8 +640,8 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:5
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
-msgstr ""
+msgstr "Versió"

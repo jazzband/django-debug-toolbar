@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 12:13+0000\n"
-"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
+"PO-Revision-Date: 2013-12-19 18:50+0000\n"
+"Last-Translator: Fábio <bnafta@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/django-debug-toolbar/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -89,7 +89,7 @@ msgstr "Configurações"
 #: panels/settings.py:23
 #, python-format
 msgid "Settings from <code>%s</code>"
-msgstr "Configurações de <code>%s</code>"
+msgstr "Configurações em: <code>%s</code>"
 
 #: panels/signals.py:41
 #, python-format
@@ -112,18 +112,18 @@ msgstr "Sinais"
 #: panels/staticfiles.py:90
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr ""
+msgstr "Arquivos estáticos (%(num_found)s encontrados, %(num_used)s sendo utilizados)"
 
 #: panels/staticfiles.py:115
 msgid "Static files"
-msgstr ""
+msgstr "Arquivos estáticos"
 
 #: panels/staticfiles.py:120
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_used)s arquivo utilizado"
+msgstr[1] "%(num_used)s arquivos utilizados"
 
 #: panels/timer.py:23
 #, python-format
@@ -332,7 +332,7 @@ msgstr "Backend"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
-msgstr "Cabeçalhos de requisição"
+msgstr "Cabeçalhos de Requisição"
 
 #: templates/debug_toolbar/panels/headers.html:8
 #: templates/debug_toolbar/panels/headers.html:27
@@ -354,7 +354,7 @@ msgstr "Valor"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
-msgstr "Cabeçalhos de resposta"
+msgstr "Cabeçalhos de Resposta"
 
 #: templates/debug_toolbar/panels/headers.html:41
 msgid "WSGI environ"
@@ -406,7 +406,7 @@ msgstr "TotTime"
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr "Contar"
+msgstr "Contagem"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
@@ -557,8 +557,8 @@ msgstr "Conjunto vazio"
 #: templates/debug_toolbar/panels/staticfiles.html:4
 msgid "Static file path"
 msgid_plural "Static file paths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Caminho do arquivo estático"
+msgstr[1] "Caminho dos arquivos estáticos"
 
 #: templates/debug_toolbar/panels/staticfiles.html:12
 #: templates/debug_toolbar/panels/staticfiles.html:23
@@ -572,25 +572,25 @@ msgstr "Nenhum"
 #: templates/debug_toolbar/panels/staticfiles.html:15
 msgid "Static file app"
 msgid_plural "Static file apps"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Arquivo estático de app"
+msgstr[1] "Arquivos estáticos de apps"
 
 #: templates/debug_toolbar/panels/staticfiles.html:26
 msgid "Static file"
 msgid_plural "Static files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Arquivo estático"
+msgstr[1] "Arquivos estáticos"
 
 #: templates/debug_toolbar/panels/staticfiles.html:40
 #, python-format
 msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(payload_count)s arquivo"
+msgstr[1] "%(payload_count)s arquivos"
 
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Path"
-msgstr ""
+msgstr "Caminho"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
@@ -599,14 +599,14 @@ msgstr "Origem do Template:"
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
 msgid_plural "Template paths"
-msgstr[0] ""
-msgstr[1] "Caminho do Template"
+msgstr[0] "Caminho do Template"
+msgstr[1] "Caminho do Templates"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] "Template"
+msgstr[0] "Template"
+msgstr[1] "Templates"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
