@@ -3,19 +3,21 @@
 # 
 # 
 # Translators:
+# Alex Nordlund <deep.alexander@gmail.com>, 2012-2013
+# Alex Nordlund <deep.alexander@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 12:13+0000\n"
+"PO-Revision-Date: 2013-12-15 12:40+0000\n"
 "Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
-"Language-Team: Turkish (http://www.transifex.com/projects/p/django-debug-toolbar/language/tr/)\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/django-debug-toolbar/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: views.py:14
 msgid ""
@@ -25,7 +27,7 @@ msgstr ""
 
 #: panels/cache.py:189
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: panels/cache.py:194
 #, python-format
@@ -53,8 +55,8 @@ msgstr ""
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s meddelande"
+msgstr[1] "%(count)s meddelanden"
 
 #: panels/logging.py:73
 msgid "Log messages"
@@ -62,7 +64,7 @@ msgstr ""
 
 #: panels/profiling.py:126
 msgid "Profiling"
-msgstr ""
+msgstr "Profilering"
 
 #: panels/redirects.py:22
 msgid "Intercept redirects"
@@ -82,7 +84,7 @@ msgstr ""
 
 #: panels/settings.py:20
 msgid "Settings"
-msgstr ""
+msgstr "Inställningar"
 
 #: panels/settings.py:23
 #, python-format
@@ -105,7 +107,7 @@ msgstr[1] ""
 
 #: panels/signals.py:49
 msgid "Signals"
-msgstr ""
+msgstr "Signaler"
 
 #: panels/staticfiles.py:90
 #, python-format
@@ -114,7 +116,7 @@ msgstr ""
 
 #: panels/staticfiles.py:115
 msgid "Static files"
-msgstr ""
+msgstr "Statiska filer"
 
 #: panels/staticfiles.py:120
 #, python-format
@@ -138,7 +140,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: panels/timer.py:42
 msgid "User CPU time"
@@ -187,7 +189,7 @@ msgstr ""
 
 #: panels/versions.py:25
 msgid "Versions"
-msgstr ""
+msgstr "Versioner"
 
 #: panels/sql/panel.py:21
 msgid "Autocommit"
@@ -207,7 +209,7 @@ msgstr ""
 
 #: panels/sql/panel.py:25
 msgid "Serializable"
-msgstr ""
+msgstr "Variabel"
 
 #: panels/sql/panel.py:36
 msgid "Idle"
@@ -215,7 +217,7 @@ msgstr ""
 
 #: panels/sql/panel.py:37
 msgid "Active"
-msgstr ""
+msgstr "Åtgärd"
 
 #: panels/sql/panel.py:38
 msgid "In transaction"
@@ -223,19 +225,19 @@ msgstr ""
 
 #: panels/sql/panel.py:39
 msgid "In error"
-msgstr ""
+msgstr "Felmeddelande"
 
 #: panels/sql/panel.py:40
 msgid "Unknown"
-msgstr ""
+msgstr "(okänd)"
 
 #: panels/sql/panel.py:105
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/templates/panel.py:141
 msgid "Templates"
-msgstr ""
+msgstr "Mallar"
 
 #: panels/templates/panel.py:146
 #, python-format
@@ -248,7 +250,7 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide"
-msgstr ""
+msgstr "Dölj"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
@@ -264,7 +266,7 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:51
 msgid "Close"
-msgstr ""
+msgstr "Stäng"
 
 #: templates/debug_toolbar/redirect.html:8
 msgid "Location:"
@@ -279,7 +281,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
-msgstr ""
+msgstr "Sammanfattning"
 
 #: templates/debug_toolbar/panels/cache.html:6
 msgid "Total calls"
@@ -308,7 +310,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:20
 msgid "Time (ms)"
-msgstr ""
+msgstr "Tid (ms)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
@@ -336,7 +338,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr ""
+msgstr "Nyckel"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -348,7 +350,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "Värde"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
@@ -366,7 +368,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr ""
+msgstr "Nivå"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
@@ -374,12 +376,12 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr ""
+msgstr "Meddelande"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:45
 msgid "Location"
-msgstr ""
+msgstr "Plats"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
@@ -404,11 +406,11 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr ""
+msgstr "Räkna"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr ""
+msgstr "Visa informationen"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
@@ -427,7 +429,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/request.html:84
 #: templates/debug_toolbar/panels/request.html:109
 msgid "Variable"
-msgstr ""
+msgstr "Variabel"
 
 #: templates/debug_toolbar/panels/request.html:46
 msgid "No cookies"
@@ -447,7 +449,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:98
 msgid "No GET data"
-msgstr ""
+msgstr "Ingen GET data"
 
 #: templates/debug_toolbar/panels/request.html:102
 msgid "POST data"
@@ -455,15 +457,15 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:123
 msgid "No POST data"
-msgstr ""
+msgstr "Ingen POST data"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr ""
+msgstr "Inställning"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr ""
+msgstr "Signal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing"
@@ -471,7 +473,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Mottagare"
 
 #: templates/debug_toolbar/panels/sql.html:7
 #, python-format
@@ -482,7 +484,7 @@ msgstr[1] ""
 
 #: templates/debug_toolbar/panels/sql.html:18
 msgid "Query"
-msgstr ""
+msgstr "Fråga"
 
 #: templates/debug_toolbar/panels/sql.html:19
 #: templates/debug_toolbar/panels/timer.html:36
@@ -491,11 +493,11 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:21
 msgid "Action"
-msgstr ""
+msgstr "Åtgärd"
 
 #: templates/debug_toolbar/panels/sql.html:64
 msgid "Connection:"
-msgstr ""
+msgstr "Anslutning:"
 
 #: templates/debug_toolbar/panels/sql.html:66
 msgid "Isolation level:"
@@ -507,7 +509,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:83
 msgid "(unknown)"
-msgstr ""
+msgstr "(okänd)"
 
 #: templates/debug_toolbar/panels/sql.html:92
 msgid "No SQL queries were recorded during this request."
@@ -518,7 +520,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_select.html:3
 #: templates/debug_toolbar/panels/template_source.html:3
 msgid "Back"
-msgstr ""
+msgstr "Bakåt"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
@@ -528,13 +530,13 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr ""
+msgstr "Utförd SQL"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr ""
+msgstr "Databas"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
@@ -542,7 +544,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql_profile.html:37
 msgid "Error"
-msgstr ""
+msgstr "Felmeddelande"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
@@ -550,7 +552,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
-msgstr ""
+msgstr "Tomt set"
 
 #: templates/debug_toolbar/panels/staticfiles.html:4
 msgid "Static file path"
@@ -565,7 +567,7 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr ""
+msgstr "Inget"
 
 #: templates/debug_toolbar/panels/staticfiles.html:15
 msgid "Static file app"
@@ -577,7 +579,7 @@ msgstr[1] ""
 msgid "Static file"
 msgid_plural "Static files"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "Statiska filer"
 
 #: templates/debug_toolbar/panels/staticfiles.html:40
 #, python-format
@@ -588,7 +590,7 @@ msgstr[1] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Path"
-msgstr ""
+msgstr "Sökväg"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
@@ -603,8 +605,8 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mall"
+msgstr[1] "Mallar"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
@@ -623,7 +625,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr ""
+msgstr "Resurs"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
@@ -639,8 +641,8 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:5
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
-msgstr ""
+msgstr "Version"

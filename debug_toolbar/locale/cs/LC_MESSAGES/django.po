@@ -3,364 +3,347 @@
 # 
 # 
 # Translators:
+# Vlada Macek <macek@sandbox.cz>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 12:13+0000\n"
-"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
-"Language-Team: Arabic (http://www.transifex.com/projects/p/django-debug-toolbar/language/ar/)\n"
+"PO-Revision-Date: 2013-12-16 08:50+0000\n"
+"Last-Translator: Vlada Macek <macek@sandbox.cz>\n"
+"Language-Team: Czech (http://www.transifex.com/projects/p/django-debug-toolbar/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ar\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: views.py:14
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
-msgstr ""
+msgstr "Data pro tento panel již nejsou k dispozici. Obnovte stránku a zkuste to znova."
 
 #: panels/cache.py:189
 msgid "Cache"
-msgstr ""
+msgstr "Mezipaměť"
 
 #: panels/cache.py:194
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(cache_calls)d volání během %(time).2fms"
+msgstr[1] "%(cache_calls)d volání během %(time).2fms"
+msgstr[2] "%(cache_calls)d volání během %(time).2fms"
 
 #: panels/cache.py:202
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Volání mezipaměti z %(count)d backendu"
+msgstr[1] "Volání mezipaměti z %(count)d backendů"
+msgstr[2] "Volání mezipaměti z %(count)d backendů"
 
 #: panels/headers.py:35
 msgid "Headers"
-msgstr ""
+msgstr "Záhlaví"
 
 #: panels/logging.py:64
 msgid "Logging"
-msgstr ""
+msgstr "Protokol"
 
 #: panels/logging.py:70
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(count)s zpráva"
+msgstr[1] "%(count)s zprávy"
+msgstr[2] "%(count)s zpráv"
 
 #: panels/logging.py:73
 msgid "Log messages"
-msgstr ""
+msgstr "Zprávy protokolu"
 
 #: panels/profiling.py:126
 msgid "Profiling"
-msgstr ""
+msgstr "Profilování"
 
 #: panels/redirects.py:22
 msgid "Intercept redirects"
-msgstr ""
+msgstr "Zachycení přesměrování"
 
 #: panels/request.py:18
 msgid "Request"
-msgstr ""
+msgstr "Požadavek"
 
 #: panels/request.py:27
 msgid "<no view>"
-msgstr ""
+msgstr "<žádný pohled>"
 
 #: panels/request.py:39
 msgid "<unavailable>"
-msgstr ""
+msgstr "<není k dispozici>"
 
 #: panels/settings.py:20
 msgid "Settings"
-msgstr ""
+msgstr "Settings"
 
 #: panels/settings.py:23
 #, python-format
 msgid "Settings from <code>%s</code>"
-msgstr ""
+msgstr "Nastavení z modulu <code>%s</code>"
 
 #: panels/signals.py:41
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(num_receivers)d příjemce 1 signálu"
+msgstr[1] "%(num_receivers)d příjemci 1 signálu"
+msgstr[2] "%(num_receivers)d příjemců 1 signálu"
 
 #: panels/signals.py:44
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(num_receivers)d příjemce %(num_signals)d signálů"
+msgstr[1] "%(num_receivers)d příjemci %(num_signals)d signálů"
+msgstr[2] "%(num_receivers)d příjemců %(num_signals)d signálů"
 
 #: panels/signals.py:49
 msgid "Signals"
-msgstr ""
+msgstr "Signály"
 
 #: panels/staticfiles.py:90
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr ""
+msgstr "Statické soubory (nalezeno: %(num_found)s, použito: %(num_used)s)"
 
 #: panels/staticfiles.py:115
 msgid "Static files"
-msgstr ""
+msgstr "Statické soubory"
 
 #: panels/staticfiles.py:120
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(num_used)s soubor použit"
+msgstr[1] "%(num_used)s soubory použity"
+msgstr[2] "%(num_used)s souborů použito"
 
 #: panels/timer.py:23
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
-msgstr ""
+msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
 
 #: panels/timer.py:28
 #, python-format
 msgid "Total: %0.2fms"
-msgstr ""
+msgstr "Celkem: %0.2fms"
 
 #: panels/timer.py:34 templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: panels/timer.py:42
 msgid "User CPU time"
-msgstr ""
+msgstr "Uživatelský čas CPU"
 
 #: panels/timer.py:42
 #, python-format
 msgid "%(utime)0.3f msec"
-msgstr ""
+msgstr "%(utime)0.3f msec"
 
 #: panels/timer.py:43
 msgid "System CPU time"
-msgstr ""
+msgstr "Systémový čas CPU"
 
 #: panels/timer.py:43
 #, python-format
 msgid "%(stime)0.3f msec"
-msgstr ""
+msgstr "%(stime)0.3f msec"
 
 #: panels/timer.py:44
 msgid "Total CPU time"
-msgstr ""
+msgstr "Celkový čas CPU"
 
 #: panels/timer.py:44
 #, python-format
 msgid "%(total)0.3f msec"
-msgstr ""
+msgstr "%(total)0.3f msec"
 
 #: panels/timer.py:45
 msgid "Elapsed time"
-msgstr ""
+msgstr "Uplynulý čas"
 
 #: panels/timer.py:45
 #, python-format
 msgid "%(total_time)0.3f msec"
-msgstr ""
+msgstr "%(total_time)0.3f msec"
 
 #: panels/timer.py:46
 msgid "Context switches"
-msgstr ""
+msgstr "Přepnutí kontextu"
 
 #: panels/timer.py:46
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
-msgstr ""
+msgstr "%(vcsw)d dobrovolně, %(ivcsw)d nedobrovolně"
 
 #: panels/versions.py:25
 msgid "Versions"
-msgstr ""
+msgstr "Verze"
 
 #: panels/sql/panel.py:21
 msgid "Autocommit"
-msgstr ""
+msgstr "Autocommit"
 
 #: panels/sql/panel.py:22
 msgid "Read uncommitted"
-msgstr ""
+msgstr "Read uncommitted"
 
 #: panels/sql/panel.py:23
 msgid "Read committed"
-msgstr ""
+msgstr "Read committed"
 
 #: panels/sql/panel.py:24
 msgid "Repeatable read"
-msgstr ""
+msgstr "Repeatable read"
 
 #: panels/sql/panel.py:25
 msgid "Serializable"
-msgstr ""
+msgstr "Serializable"
 
 #: panels/sql/panel.py:36
 msgid "Idle"
-msgstr ""
+msgstr "V klidu (idle)"
 
 #: panels/sql/panel.py:37
 msgid "Active"
-msgstr ""
+msgstr "Aktivní"
 
 #: panels/sql/panel.py:38
 msgid "In transaction"
-msgstr ""
+msgstr "Uvnitř transakce"
 
 #: panels/sql/panel.py:39
 msgid "In error"
-msgstr ""
+msgstr "V chybovém stavu"
 
 #: panels/sql/panel.py:40
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámé"
 
 #: panels/sql/panel.py:105
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/templates/panel.py:141
 msgid "Templates"
-msgstr ""
+msgstr "Šablony"
 
 #: panels/templates/panel.py:146
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
-msgstr ""
+msgstr "Šablony (renderovaných: %(num_templates)s)"
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide toolbar"
-msgstr ""
+msgstr "Skrýt lištu"
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide"
-msgstr ""
+msgstr "Skrýt"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
-msgstr ""
+msgstr "Vypnout pro následné požadavky"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Enable for next and successive requests"
-msgstr ""
+msgstr "Zapnout pro následné požadavky"
 
 #: templates/debug_toolbar/base.html:45
 msgid "Show toolbar"
-msgstr ""
+msgstr "Zobrazit lištu"
 
 #: templates/debug_toolbar/base.html:51
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: templates/debug_toolbar/redirect.html:8
 msgid "Location:"
-msgstr ""
+msgstr "Adresa:"
 
 #: templates/debug_toolbar/redirect.html:10
 msgid ""
 "The Django Debug Toolbar has intercepted a redirect to the above URL for "
 "debug viewing purposes. You can click the above link to continue with the "
 "redirect as normal."
-msgstr ""
+msgstr "Aplikace Django Debug Toolbar zachytila přesměrování na výše uvedenou adresu URL za účelem ladicího zobrazení. Chcete-li přesměrování dokončit, klepněte na odkaz výše."
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
-msgstr ""
+msgstr "Souhrn"
 
 #: templates/debug_toolbar/panels/cache.html:6
 msgid "Total calls"
-msgstr ""
+msgstr "Celkem volání"
 
 #: templates/debug_toolbar/panels/cache.html:7
 msgid "Total time"
-msgstr ""
+msgstr "Celkový čas"
 
 #: templates/debug_toolbar/panels/cache.html:8
 msgid "Cache hits"
-msgstr ""
+msgstr "Nalezení v mezipaměti"
 
 #: templates/debug_toolbar/panels/cache.html:9
 msgid "Cache misses"
-msgstr ""
+msgstr "Nebylo v mezipaměti"
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
-msgstr ""
+msgstr "Příkazy"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
-msgstr ""
+msgstr "Volání"
 
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:20
 msgid "Time (ms)"
-msgstr ""
+msgstr "Čas (ms)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: templates/debug_toolbar/panels/cache.html:45
 #: templates/debug_toolbar/panels/request.html:8
 msgid "Arguments"
-msgstr ""
+msgstr "Argumenty"
 
 #: templates/debug_toolbar/panels/cache.html:46
 #: templates/debug_toolbar/panels/request.html:9
 msgid "Keyword arguments"
-msgstr ""
+msgstr "Klíčované argumenty"
 
 #: templates/debug_toolbar/panels/cache.html:47
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
-msgstr ""
+msgstr "Záhlaví požadavku"
 
 #: templates/debug_toolbar/panels/headers.html:8
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr ""
+msgstr "Klíč"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -372,223 +355,217 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
-msgstr ""
+msgstr "Záhlaví odezvy"
 
 #: templates/debug_toolbar/panels/headers.html:41
 msgid "WSGI environ"
-msgstr ""
+msgstr "Prostředí WSGI"
 
 #: templates/debug_toolbar/panels/headers.html:43
 msgid ""
 "Since the WSGI environ inherits the environment of the server, only a "
 "significant subset is shown below."
-msgstr ""
+msgstr "Níže je zobrazena pouze podstatná část proměnných prostředí, protože WSGI je dědí od serveru."
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr ""
+msgstr "Úroveň"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
-msgstr ""
+msgstr "Kanál"
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr ""
+msgstr "Zpráva"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:45
 msgid "Location"
-msgstr ""
+msgstr "Adresa"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
-msgstr ""
+msgstr "Nebyly protokolovány žádné zprávy."
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
-msgstr ""
+msgstr "Volání"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "CumTime"
-msgstr ""
+msgstr "KumulČas"
 
 #: templates/debug_toolbar/panels/profiling.html:7
 #: templates/debug_toolbar/panels/profiling.html:9
 msgid "Per"
-msgstr ""
+msgstr "Celk. za volání"
 
 #: templates/debug_toolbar/panels/profiling.html:8
 msgid "TotTime"
-msgstr ""
+msgstr "CelkČas"
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr ""
+msgstr "Počet"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr ""
+msgstr "Informace o pohledových funkcích"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
-msgstr ""
+msgstr "Pohledová funkce"
 
 #: templates/debug_toolbar/panels/request.html:10
 msgid "URL name"
-msgstr ""
+msgstr "Název URL"
 
 #: templates/debug_toolbar/panels/request.html:24
 msgid "Cookies"
-msgstr ""
+msgstr "Soubory cookie"
 
 #: templates/debug_toolbar/panels/request.html:32
 #: templates/debug_toolbar/panels/request.html:58
 #: templates/debug_toolbar/panels/request.html:84
 #: templates/debug_toolbar/panels/request.html:109
 msgid "Variable"
-msgstr ""
+msgstr "Proměnná"
 
 #: templates/debug_toolbar/panels/request.html:46
 msgid "No cookies"
-msgstr ""
+msgstr "Žádné soubory cookie"
 
 #: templates/debug_toolbar/panels/request.html:50
 msgid "Session data"
-msgstr ""
+msgstr "Data sezení"
 
 #: templates/debug_toolbar/panels/request.html:72
 msgid "No session data"
-msgstr ""
+msgstr "Žádná data sezení"
 
 #: templates/debug_toolbar/panels/request.html:76
 msgid "GET data"
-msgstr ""
+msgstr "Data typu GET"
 
 #: templates/debug_toolbar/panels/request.html:98
 msgid "No GET data"
-msgstr ""
+msgstr "Žádná data typu GET"
 
 #: templates/debug_toolbar/panels/request.html:102
 msgid "POST data"
-msgstr ""
+msgstr "Data typu POST"
 
 #: templates/debug_toolbar/panels/request.html:123
 msgid "No POST data"
-msgstr ""
+msgstr "Žádná data typu POST"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr ""
+msgstr "Nastavení"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr ""
+msgstr "Signál"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing"
-msgstr ""
+msgstr "Poskytuje"
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Příjemci"
 
 #: templates/debug_toolbar/panels/sql.html:7
 #, python-format
 msgid "%(num)s query"
 msgid_plural "%(num)s queries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(num)s dotaz"
+msgstr[1] "%(num)s dotazy"
+msgstr[2] "%(num)s dotazů"
 
 #: templates/debug_toolbar/panels/sql.html:18
 msgid "Query"
-msgstr ""
+msgstr "Dotaz"
 
 #: templates/debug_toolbar/panels/sql.html:19
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
-msgstr ""
+msgstr "Časová osa"
 
 #: templates/debug_toolbar/panels/sql.html:21
 msgid "Action"
-msgstr ""
+msgstr "Akce"
 
 #: templates/debug_toolbar/panels/sql.html:64
 msgid "Connection:"
-msgstr ""
+msgstr "Spojení:"
 
 #: templates/debug_toolbar/panels/sql.html:66
 msgid "Isolation level:"
-msgstr ""
+msgstr "Úroveň izolace:"
 
 #: templates/debug_toolbar/panels/sql.html:69
 msgid "Transaction status:"
-msgstr ""
+msgstr "Stav transakce:"
 
 #: templates/debug_toolbar/panels/sql.html:83
 msgid "(unknown)"
-msgstr ""
+msgstr "(neznámé)"
 
 #: templates/debug_toolbar/panels/sql.html:92
 msgid "No SQL queries were recorded during this request."
-msgstr ""
+msgstr "Pro tento požadavek nebyl zaznamenán žádný dotaz SQL."
 
 #: templates/debug_toolbar/panels/sql_explain.html:3
 #: templates/debug_toolbar/panels/sql_profile.html:3
 #: templates/debug_toolbar/panels/sql_select.html:3
 #: templates/debug_toolbar/panels/template_source.html:3
 msgid "Back"
-msgstr ""
+msgstr "Zpět"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
-msgstr ""
+msgstr "Vysvětlené SQL"
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr ""
+msgstr "Spuštěné SQL"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr ""
+msgstr "Databáze"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
-msgstr ""
+msgstr "Profilované SQL"
 
 #: templates/debug_toolbar/panels/sql_profile.html:37
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
-msgstr ""
+msgstr "Vybrané SQL"
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
-msgstr ""
+msgstr "Prázdná sada"
 
 #: templates/debug_toolbar/panels/staticfiles.html:4
 msgid "Static file path"
 msgid_plural "Static file paths"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Cesta ke statickým souborům"
+msgstr[1] "Cesty ke statickým souborům"
+msgstr[2] "Cesty ke statickým souborům"
 
 #: templates/debug_toolbar/panels/staticfiles.html:12
 #: templates/debug_toolbar/panels/staticfiles.html:23
@@ -597,106 +574,88 @@ msgstr[5] ""
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr ""
+msgstr "Žádné"
 
 #: templates/debug_toolbar/panels/staticfiles.html:15
 msgid "Static file app"
 msgid_plural "Static file apps"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Aplikace se statickými soubory"
+msgstr[1] "Aplikace se statickými soubory"
+msgstr[2] "Aplikace se statickými soubory"
 
 #: templates/debug_toolbar/panels/staticfiles.html:26
 msgid "Static file"
 msgid_plural "Static files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Statický soubor"
+msgstr[1] "Statické soubory"
+msgstr[2] "Statické soubory"
 
 #: templates/debug_toolbar/panels/staticfiles.html:40
 #, python-format
 msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "%(payload_count)s soubor"
+msgstr[1] "%(payload_count)s soubory"
+msgstr[2] "%(payload_count)s souborů"
 
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
-msgstr ""
+msgstr "Zdroj šablony:"
 
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
 msgid_plural "Template paths"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Cesta k šabloně"
+msgstr[1] "Cesty k šablonám"
+msgstr[2] "Cesty k šablonám"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Šablona"
+msgstr[1] "Šablony"
+msgstr[2] "Šablony"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
 msgid "Toggle context"
-msgstr ""
+msgstr "Zap./vyp. kontext"
 
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
 msgid_plural "Context processors"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Procesor kontextu"
+msgstr[1] "Procesory kontextu"
+msgstr[2] "Procesory kontextu"
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
-msgstr ""
+msgstr "Využití zdrojů"
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr ""
+msgstr "Prostředek"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
-msgstr ""
+msgstr "Časování prohlížeče"
 
 #: templates/debug_toolbar/panels/timer.html:35
 msgid "Timing attribute"
-msgstr ""
+msgstr "Atribut"
 
 #: templates/debug_toolbar/panels/timer.html:37
 msgid "Milliseconds since navigation start (+length)"
-msgstr ""
+msgstr "Milisekund od začátku navigace (+délka)"
 
 #: templates/debug_toolbar/panels/versions.html:5
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
-msgstr ""
+msgstr "Verze"

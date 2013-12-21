@@ -3,19 +3,20 @@
 # 
 # 
 # Translators:
+# nanook <klaus.dahlen@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 12:13+0000\n"
+"PO-Revision-Date: 2013-12-15 12:40+0000\n"
 "Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
-"Language-Team: Macedonian (http://www.transifex.com/projects/p/django-debug-toolbar/language/mk/)\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/django-debug-toolbar/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: mk\n"
-"Plural-Forms: nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: views.py:14
 msgid ""
@@ -25,14 +26,14 @@ msgstr ""
 
 #: panels/cache.py:189
 msgid "Cache"
-msgstr ""
+msgstr "Välimuisti"
 
 #: panels/cache.py:194
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cache_calls)d kutsu %(time).2fms"
+msgstr[1] "%(cache_calls)d kutsua %(time).2fms"
 
 #: panels/cache.py:202
 #, python-format
@@ -47,14 +48,14 @@ msgstr ""
 
 #: panels/logging.py:64
 msgid "Logging"
-msgstr ""
+msgstr "Loki"
 
 #: panels/logging.py:70
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s viesti"
+msgstr[1] "%(count)s viestiä"
 
 #: panels/logging.py:73
 msgid "Log messages"
@@ -62,7 +63,7 @@ msgstr ""
 
 #: panels/profiling.py:126
 msgid "Profiling"
-msgstr ""
+msgstr "Profilointi"
 
 #: panels/redirects.py:22
 msgid "Intercept redirects"
@@ -82,30 +83,30 @@ msgstr ""
 
 #: panels/settings.py:20
 msgid "Settings"
-msgstr ""
+msgstr "Asetukset"
 
 #: panels/settings.py:23
 #, python-format
 msgid "Settings from <code>%s</code>"
-msgstr ""
+msgstr "Asetukset tiedostosta <code>%s</code>"
 
 #: panels/signals.py:41
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_receivers)d vastaanotin 1 signaalille"
+msgstr[1] "%(num_receivers)d vastaanotinta 1 signaalille"
 
 #: panels/signals.py:44
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_receivers)d vastaanotin %(num_signals)d signaalille"
+msgstr[1] "%(num_receivers)d vastaanotinta %(num_signals)d signaalille"
 
 #: panels/signals.py:49
 msgid "Signals"
-msgstr ""
+msgstr "Signaalit"
 
 #: panels/staticfiles.py:90
 #, python-format
@@ -114,7 +115,7 @@ msgstr ""
 
 #: panels/staticfiles.py:115
 msgid "Static files"
-msgstr ""
+msgstr "Staattiset tiedostot"
 
 #: panels/staticfiles.py:120
 #, python-format
@@ -126,7 +127,7 @@ msgstr[1] ""
 #: panels/timer.py:23
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
-msgstr ""
+msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
 
 #: panels/timer.py:28
 #, python-format
@@ -138,47 +139,47 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr ""
+msgstr "Aika"
 
 #: panels/timer.py:42
 msgid "User CPU time"
-msgstr ""
+msgstr "Käyttäjän CPU-aika"
 
 #: panels/timer.py:42
 #, python-format
 msgid "%(utime)0.3f msec"
-msgstr ""
+msgstr "%(utime)0.3f msek"
 
 #: panels/timer.py:43
 msgid "System CPU time"
-msgstr ""
+msgstr "Järjestelmän CPU-aika"
 
 #: panels/timer.py:43
 #, python-format
 msgid "%(stime)0.3f msec"
-msgstr ""
+msgstr "%(stime)0.3f msek"
 
 #: panels/timer.py:44
 msgid "Total CPU time"
-msgstr ""
+msgstr "CPU-aika yhteensä"
 
 #: panels/timer.py:44
 #, python-format
 msgid "%(total)0.3f msec"
-msgstr ""
+msgstr "%(total)0.3f msek"
 
 #: panels/timer.py:45
 msgid "Elapsed time"
-msgstr ""
+msgstr "Kulunut aika"
 
 #: panels/timer.py:45
 #, python-format
 msgid "%(total_time)0.3f msec"
-msgstr ""
+msgstr "%(total_time)0.3f msek"
 
 #: panels/timer.py:46
 msgid "Context switches"
-msgstr ""
+msgstr "Kontekstin vivut"
 
 #: panels/timer.py:46
 #, python-format
@@ -187,11 +188,11 @@ msgstr ""
 
 #: panels/versions.py:25
 msgid "Versions"
-msgstr ""
+msgstr "Versiot"
 
 #: panels/sql/panel.py:21
 msgid "Autocommit"
-msgstr ""
+msgstr "Autocommit"
 
 #: panels/sql/panel.py:22
 msgid "Read uncommitted"
@@ -207,7 +208,7 @@ msgstr ""
 
 #: panels/sql/panel.py:25
 msgid "Serializable"
-msgstr ""
+msgstr "Muuttuja"
 
 #: panels/sql/panel.py:36
 msgid "Idle"
@@ -215,32 +216,32 @@ msgstr ""
 
 #: panels/sql/panel.py:37
 msgid "Active"
-msgstr ""
+msgstr "Tapahtuma"
 
 #: panels/sql/panel.py:38
 msgid "In transaction"
-msgstr ""
+msgstr "Tapahtuman tila:"
 
 #: panels/sql/panel.py:39
 msgid "In error"
-msgstr ""
+msgstr "Virhe"
 
 #: panels/sql/panel.py:40
 msgid "Unknown"
-msgstr ""
+msgstr "(tuntematon)"
 
 #: panels/sql/panel.py:105
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/templates/panel.py:141
 msgid "Templates"
-msgstr ""
+msgstr "Asettelupohjat"
 
 #: panels/templates/panel.py:146
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
-msgstr ""
+msgstr "Asetttelupohjat (%(num_templates)s renderöity)"
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide toolbar"
@@ -248,7 +249,7 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide"
-msgstr ""
+msgstr "Piilota"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
@@ -264,7 +265,7 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:51
 msgid "Close"
-msgstr ""
+msgstr "Sulje"
 
 #: templates/debug_toolbar/redirect.html:8
 msgid "Location:"
@@ -308,11 +309,11 @@ msgstr ""
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:20
 msgid "Time (ms)"
-msgstr ""
+msgstr "Aika (ms)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 #: templates/debug_toolbar/panels/cache.html:45
 #: templates/debug_toolbar/panels/request.html:8
@@ -336,7 +337,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr ""
+msgstr "Avain"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -348,7 +349,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "Arvo"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
@@ -366,49 +367,49 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr ""
+msgstr "Taso"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
-msgstr ""
+msgstr "Kanava"
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr ""
+msgstr "Viesti"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:45
 msgid "Location"
-msgstr ""
+msgstr "Sijainti"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
-msgstr ""
+msgstr "Ei viestejä lokissa"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
-msgstr ""
+msgstr "Kutsu"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "CumTime"
-msgstr ""
+msgstr "CumTime"
 
 #: templates/debug_toolbar/panels/profiling.html:7
 #: templates/debug_toolbar/panels/profiling.html:9
 msgid "Per"
-msgstr ""
+msgstr "/"
 
 #: templates/debug_toolbar/panels/profiling.html:8
 msgid "TotTime"
-msgstr ""
+msgstr "TotTime"
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr ""
+msgstr "Määrä"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr ""
+msgstr "Näkymän tiedot"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
@@ -427,7 +428,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/request.html:84
 #: templates/debug_toolbar/panels/request.html:109
 msgid "Variable"
-msgstr ""
+msgstr "Muuttuja"
 
 #: templates/debug_toolbar/panels/request.html:46
 msgid "No cookies"
@@ -447,7 +448,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:98
 msgid "No GET data"
-msgstr ""
+msgstr "Ei GET-dataa"
 
 #: templates/debug_toolbar/panels/request.html:102
 msgid "POST data"
@@ -455,15 +456,15 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:123
 msgid "No POST data"
-msgstr ""
+msgstr "Ei POST-dataa"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr ""
+msgstr "Asetus"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr ""
+msgstr "Signaali"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing"
@@ -471,54 +472,54 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Vastaanottimet"
 
 #: templates/debug_toolbar/panels/sql.html:7
 #, python-format
 msgid "%(num)s query"
 msgid_plural "%(num)s queries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s kysely"
+msgstr[1] "%(num)s kyselyä"
 
 #: templates/debug_toolbar/panels/sql.html:18
 msgid "Query"
-msgstr ""
+msgstr "Kysely"
 
 #: templates/debug_toolbar/panels/sql.html:19
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
-msgstr ""
+msgstr "Aikajana"
 
 #: templates/debug_toolbar/panels/sql.html:21
 msgid "Action"
-msgstr ""
+msgstr "Tapahtuma"
 
 #: templates/debug_toolbar/panels/sql.html:64
 msgid "Connection:"
-msgstr ""
+msgstr "Yhteys:"
 
 #: templates/debug_toolbar/panels/sql.html:66
 msgid "Isolation level:"
-msgstr ""
+msgstr "Eristystaso:"
 
 #: templates/debug_toolbar/panels/sql.html:69
 msgid "Transaction status:"
-msgstr ""
+msgstr "Tapahtuman status:"
 
 #: templates/debug_toolbar/panels/sql.html:83
 msgid "(unknown)"
-msgstr ""
+msgstr "(tuntematon)"
 
 #: templates/debug_toolbar/panels/sql.html:92
 msgid "No SQL queries were recorded during this request."
-msgstr ""
+msgstr "Tämän pyynnön aikana ei tehty yhtään SQL-kyselyä."
 
 #: templates/debug_toolbar/panels/sql_explain.html:3
 #: templates/debug_toolbar/panels/sql_profile.html:3
 #: templates/debug_toolbar/panels/sql_select.html:3
 #: templates/debug_toolbar/panels/template_source.html:3
 msgid "Back"
-msgstr ""
+msgstr "Takaisin"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
@@ -528,13 +529,13 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr ""
+msgstr "Suoritettu SQL"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr ""
+msgstr "Tietokanta"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
@@ -542,7 +543,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql_profile.html:37
 msgid "Error"
-msgstr ""
+msgstr "Virhe"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
@@ -550,7 +551,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
-msgstr ""
+msgstr "Tyhjä joukko"
 
 #: templates/debug_toolbar/panels/staticfiles.html:4
 msgid "Static file path"
@@ -565,7 +566,7 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr ""
+msgstr "None"
 
 #: templates/debug_toolbar/panels/staticfiles.html:15
 msgid "Static file app"
@@ -577,7 +578,7 @@ msgstr[1] ""
 msgid "Static file"
 msgid_plural "Static files"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "Staattiset tiedostot"
 
 #: templates/debug_toolbar/panels/staticfiles.html:40
 #, python-format
@@ -588,7 +589,7 @@ msgstr[1] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Path"
-msgstr ""
+msgstr "Polku"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
@@ -597,14 +598,14 @@ msgstr ""
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
 msgid_plural "Template paths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sivupohjan polku"
+msgstr[1] "Sivupohjan polku"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sivupohja"
+msgstr[1] "Sivupohja"
 
 #: templates/debug_toolbar/panels/templates.html:21
 #: templates/debug_toolbar/panels/templates.html:37
@@ -614,8 +615,8 @@ msgstr ""
 #: templates/debug_toolbar/panels/templates.html:31
 msgid "Context processor"
 msgid_plural "Context processors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kontekstiprosessori"
+msgstr[1] "Kontekstiprosessori"
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
@@ -623,7 +624,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr ""
+msgstr "Resurssi"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
@@ -639,8 +640,8 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:5
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
-msgstr ""
+msgstr "Versio"

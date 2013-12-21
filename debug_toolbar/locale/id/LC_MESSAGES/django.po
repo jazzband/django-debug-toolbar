@@ -3,19 +3,19 @@
 # 
 # 
 # Translators:
-# Shinya Okano <tokibito@gmail.com>, 2012
+# Muhammad Panji <sumodirjo@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 12:13+0000\n"
+"PO-Revision-Date: 2013-12-15 12:40+0000\n"
 "Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
-"Language-Team: Japanese (http://www.transifex.com/projects/p/django-debug-toolbar/language/ja/)\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/django-debug-toolbar/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
+"Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: views.py:14
@@ -52,7 +52,7 @@ msgstr ""
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] ""
+msgstr[0] "%(count)s pesan"
 
 #: panels/logging.py:73
 msgid "Log messages"
@@ -80,12 +80,12 @@ msgstr ""
 
 #: panels/settings.py:20
 msgid "Settings"
-msgstr ""
+msgstr "Pengaturan"
 
 #: panels/settings.py:23
 #, python-format
 msgid "Settings from <code>%s</code>"
-msgstr ""
+msgstr "Pengaturan dari <code>%s</code>"
 
 #: panels/signals.py:41
 #, python-format
@@ -101,7 +101,7 @@ msgstr[0] ""
 
 #: panels/signals.py:49
 msgid "Signals"
-msgstr ""
+msgstr "Sinyal"
 
 #: panels/staticfiles.py:90
 #, python-format
@@ -110,7 +110,7 @@ msgstr ""
 
 #: panels/staticfiles.py:115
 msgid "Static files"
-msgstr ""
+msgstr "Berkas statik"
 
 #: panels/staticfiles.py:120
 #, python-format
@@ -121,7 +121,7 @@ msgstr[0] ""
 #: panels/timer.py:23
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
-msgstr ""
+msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
 
 #: panels/timer.py:28
 #, python-format
@@ -133,11 +133,11 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr ""
+msgstr "Waktu"
 
 #: panels/timer.py:42
 msgid "User CPU time"
-msgstr ""
+msgstr "CPU time pengguna"
 
 #: panels/timer.py:42
 #, python-format
@@ -146,7 +146,7 @@ msgstr ""
 
 #: panels/timer.py:43
 msgid "System CPU time"
-msgstr ""
+msgstr "CPU time sistem"
 
 #: panels/timer.py:43
 #, python-format
@@ -155,7 +155,7 @@ msgstr ""
 
 #: panels/timer.py:44
 msgid "Total CPU time"
-msgstr ""
+msgstr "CPU time total"
 
 #: panels/timer.py:44
 #, python-format
@@ -164,7 +164,7 @@ msgstr ""
 
 #: panels/timer.py:45
 msgid "Elapsed time"
-msgstr ""
+msgstr "Waktu terlampaui"
 
 #: panels/timer.py:45
 #, python-format
@@ -182,7 +182,7 @@ msgstr ""
 
 #: panels/versions.py:25
 msgid "Versions"
-msgstr ""
+msgstr "Versi"
 
 #: panels/sql/panel.py:21
 msgid "Autocommit"
@@ -202,7 +202,7 @@ msgstr ""
 
 #: panels/sql/panel.py:25
 msgid "Serializable"
-msgstr ""
+msgstr "Variabel"
 
 #: panels/sql/panel.py:36
 msgid "Idle"
@@ -210,11 +210,11 @@ msgstr ""
 
 #: panels/sql/panel.py:37
 msgid "Active"
-msgstr ""
+msgstr "Aksi"
 
 #: panels/sql/panel.py:38
 msgid "In transaction"
-msgstr ""
+msgstr "Status transaksi:"
 
 #: panels/sql/panel.py:39
 msgid "In error"
@@ -222,15 +222,15 @@ msgstr ""
 
 #: panels/sql/panel.py:40
 msgid "Unknown"
-msgstr ""
+msgstr "(tidak diketahui)"
 
 #: panels/sql/panel.py:105
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/templates/panel.py:141
 msgid "Templates"
-msgstr ""
+msgstr "Template"
 
 #: panels/templates/panel.py:146
 #, python-format
@@ -243,7 +243,7 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:17
 msgid "Hide"
-msgstr ""
+msgstr "Menyembunyikan"
 
 #: templates/debug_toolbar/base.html:23
 msgid "Disable for next and successive requests"
@@ -259,7 +259,7 @@ msgstr ""
 
 #: templates/debug_toolbar/base.html:51
 msgid "Close"
-msgstr ""
+msgstr "Menutup"
 
 #: templates/debug_toolbar/redirect.html:8
 msgid "Location:"
@@ -303,11 +303,11 @@ msgstr ""
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:20
 msgid "Time (ms)"
-msgstr ""
+msgstr "Waktu (milidetik)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
-msgstr ""
+msgstr "Jenis"
 
 #: templates/debug_toolbar/panels/cache.html:45
 #: templates/debug_toolbar/panels/request.html:8
@@ -331,7 +331,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr ""
+msgstr "Kunci"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -343,7 +343,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "Nilai"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
@@ -361,49 +361,49 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr ""
+msgstr "Tingkat"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr ""
+msgstr "Pesan"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:45
 msgid "Location"
-msgstr ""
+msgstr "Lokasi"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
-msgstr ""
+msgstr "Tidak ada pesan yang dicatat"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
-msgstr ""
+msgstr "Panggil"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "CumTime"
-msgstr ""
+msgstr "CumTime"
 
 #: templates/debug_toolbar/panels/profiling.html:7
 #: templates/debug_toolbar/panels/profiling.html:9
 msgid "Per"
-msgstr ""
+msgstr "Per"
 
 #: templates/debug_toolbar/panels/profiling.html:8
 msgid "TotTime"
-msgstr ""
+msgstr "TotTime"
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr ""
+msgstr "Hitung"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr ""
+msgstr "Lihat informasi"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
@@ -422,7 +422,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/request.html:84
 #: templates/debug_toolbar/panels/request.html:109
 msgid "Variable"
-msgstr ""
+msgstr "Variabel"
 
 #: templates/debug_toolbar/panels/request.html:46
 msgid "No cookies"
@@ -442,7 +442,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:98
 msgid "No GET data"
-msgstr ""
+msgstr "Tidak ada data GET"
 
 #: templates/debug_toolbar/panels/request.html:102
 msgid "POST data"
@@ -450,15 +450,15 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/request.html:123
 msgid "No POST data"
-msgstr ""
+msgstr "Tidak ada data POST"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr ""
+msgstr "Pengaturan"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr ""
+msgstr "Sinyal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Providing"
@@ -466,7 +466,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
-msgstr ""
+msgstr "Penerima"
 
 #: templates/debug_toolbar/panels/sql.html:7
 #, python-format
@@ -485,23 +485,23 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:21
 msgid "Action"
-msgstr ""
+msgstr "Aksi"
 
 #: templates/debug_toolbar/panels/sql.html:64
 msgid "Connection:"
-msgstr ""
+msgstr "Koneksi:"
 
 #: templates/debug_toolbar/panels/sql.html:66
 msgid "Isolation level:"
-msgstr ""
+msgstr "Tingkat isolasi:"
 
 #: templates/debug_toolbar/panels/sql.html:69
 msgid "Transaction status:"
-msgstr ""
+msgstr "Status transaksi:"
 
 #: templates/debug_toolbar/panels/sql.html:83
 msgid "(unknown)"
-msgstr ""
+msgstr "(tidak diketahui)"
 
 #: templates/debug_toolbar/panels/sql.html:92
 msgid "No SQL queries were recorded during this request."
@@ -512,7 +512,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_select.html:3
 #: templates/debug_toolbar/panels/template_source.html:3
 msgid "Back"
-msgstr ""
+msgstr "Kembali"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
@@ -522,13 +522,13 @@ msgstr ""
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr ""
+msgstr "SQL Tereksekusi"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr ""
+msgstr "Basis data"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
@@ -544,7 +544,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
-msgstr ""
+msgstr "Himpunan kosong"
 
 #: templates/debug_toolbar/panels/staticfiles.html:4
 msgid "Static file path"
@@ -558,7 +558,7 @@ msgstr[0] ""
 #: templates/debug_toolbar/panels/templates.html:28
 #: templates/debug_toolbar/panels/templates.html:43
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: templates/debug_toolbar/panels/staticfiles.html:15
 msgid "Static file app"
@@ -568,7 +568,7 @@ msgstr[0] ""
 #: templates/debug_toolbar/panels/staticfiles.html:26
 msgid "Static file"
 msgid_plural "Static files"
-msgstr[0] ""
+msgstr[0] "Berkas statik"
 
 #: templates/debug_toolbar/panels/staticfiles.html:40
 #, python-format
@@ -587,7 +587,7 @@ msgstr ""
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
 msgid_plural "Template paths"
-msgstr[0] ""
+msgstr[0] "Template path"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
@@ -610,7 +610,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr ""
+msgstr "Sumber daya"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
@@ -630,4 +630,4 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"
-msgstr ""
+msgstr "Versi"
