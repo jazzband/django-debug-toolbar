@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-debug-toolbar',
-    version='1.0b',
+    version='1.0',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
     long_description=open('README.rst').read(),
@@ -19,7 +19,7 @@ setup(
     include_package_data=True,
     zip_safe=False,                 # because we're including static files
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
