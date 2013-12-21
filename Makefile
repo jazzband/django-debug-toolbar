@@ -26,5 +26,5 @@ translatable_strings:
 	@echo "Please commit changes and run 'tx push -s' (or wait for Transifex to pick them)"
 
 update_translations:
-	tx pull
+	tx pull -a --minimum-perc=10
 	cd debug_toolbar && django-admin.py compilemessages
