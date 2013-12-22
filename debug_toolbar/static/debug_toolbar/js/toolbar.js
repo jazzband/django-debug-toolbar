@@ -1,7 +1,7 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as anonymous module.
-        define(['jquery', 'jquery.cookie'], factory);
+        define('django-debug-toolbar', ['jquery', 'jquery.cookie'], factory);
     } else {
         // Browser globals.
         window.djdt = factory(jQuery);
