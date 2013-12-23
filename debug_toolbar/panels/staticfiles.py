@@ -163,8 +163,11 @@ class StaticFilesPanel(panels.Panel):
         """
         Returns a list of paths to inspect for additional static files
         """
-        dirs = getattr(settings, 'STATICFILES_DIRS', ())
-        return [normpath(d) for d in dirs]
+        dirs = []
+        for finder in finders.get_finders():
+            if isinstance(finder, finders.FileSystemFinder):
+                dirs.extend(finder.locations)
+        return [(prefix, normpath(dir)) for prefix, dir in dirs]
 
     def get_staticfiles_apps(self):
         """

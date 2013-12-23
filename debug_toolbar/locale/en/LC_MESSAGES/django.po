@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-15 13:11+0100\n"
+"POT-Creation-Date: 2013-12-23 12:40+0100\n"
 "PO-Revision-Date: 2012-03-31 20:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -556,6 +556,11 @@ msgid "Static file path"
 msgid_plural "Static file paths"
 msgstr[0] ""
 msgstr[1] ""
+
+#: templates/debug_toolbar/panels/staticfiles.html:8
+#, python-format
+msgid "(prefix %(prefix)s)"
+msgstr ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:12
 #: templates/debug_toolbar/panels/staticfiles.html:23
