@@ -4,8 +4,8 @@
 <h4>{% blocktrans count staticfiles_dirs|length as dirs_count %}Static file path{% plural %}Static file paths{% endblocktrans %}</h4>
 {% if staticfiles_dirs %}
     <ol>
-    {% for staticfiles_dir in staticfiles_dirs %}
-        <li>{{ staticfiles_dir }}</li>
+    {% for prefix, staticfiles_dir in staticfiles_dirs %}
+    <li>{{ staticfiles_dir }}{% if prefix %} ({% trans "prefix" %} {{ prefix }}){% endif %}</li>
     {% endfor %}
     </ol>
 {% else %}

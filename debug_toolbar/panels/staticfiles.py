@@ -6,6 +6,7 @@ except ImportError:
     threading = None
 
 from django.conf import settings
+from django.utils import six
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
 from django.contrib.staticfiles import finders, storage
@@ -161,10 +162,16 @@ class StaticFilesPanel(panels.Panel):
 
     def get_staticfiles_dirs(self):
         """
-        Returns a list of paths to inspect for additional static files
+        Returns a list of tuples (prefix, path) to inspect for additional static files
         """
+        result = []
         dirs = getattr(settings, 'STATICFILES_DIRS', ())
-        return [normpath(d) for d in dirs]
+        for d in dirs:
+            if isinstance(d, six.string_types):
+                result.append(('', normpath(d)))
+            else:
+                result.append((d[0], normpath(d[1])))
+        return result
 
     def get_staticfiles_apps(self):
         """
