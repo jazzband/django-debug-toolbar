@@ -55,9 +55,11 @@ what it does, or if you prefer defining your settings explicitly, read below.
 .. warning::
 
     The automatic setup imports your project's URLconf in order to add the
-    Debug Toolbar's URLs. This may trigger circular imports when the URLconf
-    imports views that import models. If you're hitting an :exc:`ImportError`,
-    follow the explicit setup instructions.
+    Debug Toolbar's URLs. This may trigger circular imports, for instance when
+    the URLconf imports views that import models. If the development server
+    crashes with a long stack trace after hitting an :exc:`ImportError` or an
+    :exc:`~django.core.exceptions.ImproperlyConfigured` exception, follow the
+    explicit setup instructions.
 
 Explicit setup
 --------------
