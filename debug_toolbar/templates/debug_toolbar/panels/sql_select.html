@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %}{% load static from staticfiles %}
 <div class="djDebugPanelTitle">
 	<a class="djDebugClose djDebugBack" href="">{% trans "Back" %}</a>
 	<h3>{% trans "SQL selected" %}</h3>
@@ -37,3 +37,5 @@
 		{% endif %}
 	</div>
 </div>
+
+<script src="{% static 'debug_toolbar/js/toolbar.sql.js' %}"></script>
