@@ -4,6 +4,7 @@
 </style>
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
 <script>//<![CDATA[
+if(!!window.$) window.__$_orig = window.$;
 if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></scr'+'ipt>');
 //]]></script>
 <script src="{% static 'debug_toolbar/js/jquery.cookie.js' %}"></script>
@@ -61,3 +62,6 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 	{% endfor %}
 	<div id="djDebugWindow" class="panelContent"></div>
 </div>
+<script>//<![CDATA[
+if(!!window.__$_orig) window.$ = window.__$_orig;
+//]]></script>
