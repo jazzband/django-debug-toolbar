@@ -6,7 +6,7 @@ except ImportError:
     resource = None
 import time
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import Panel
 
 
