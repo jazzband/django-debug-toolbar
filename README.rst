@@ -19,7 +19,7 @@ Here's a screenshot of the toolbar in action:
 In addition to the built-in panels, a number of third-party panels are
 contributed by the community.
 
-The current version of the Debug Toolbar is 1.0. It works on Django 1.4, 1.5
+The current version of the Debug Toolbar is 1.0.1. It works on Django 1.4, 1.5
 and 1.6.
 
 If you're using Django 1.4, you will need Django ≥ 1.4.2 and Python ≥ 2.6.5.
