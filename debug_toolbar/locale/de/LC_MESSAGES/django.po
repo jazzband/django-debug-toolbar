@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-15 20:10+0000\n"
+"POT-Creation-Date: 2013-12-23 12:40+0100\n"
+"PO-Revision-Date: 2013-12-24 08:56+0000\n"
 "Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/django-debug-toolbar/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -558,6 +558,11 @@ msgid "Static file path"
 msgid_plural "Static file paths"
 msgstr[0] "Pfad mit statischen Dateien"
 msgstr[1] "Pfade mit statischen Dateien"
+
+#: templates/debug_toolbar/panels/staticfiles.html:8
+#, python-format
+msgid "(prefix %(prefix)s)"
+msgstr ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:12
 #: templates/debug_toolbar/panels/staticfiles.html:23

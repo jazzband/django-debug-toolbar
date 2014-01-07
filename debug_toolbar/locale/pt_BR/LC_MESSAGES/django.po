@@ -3,14 +3,14 @@
 # 
 # 
 # Translators:
-# Fábio <bnafta@gmail.com>, 2013
+# Fábio <bnafta@gmail.com>, 2013-2014
 # Percy Pérez-Pinedo, 2009
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-15 13:11+0100\n"
-"PO-Revision-Date: 2013-12-19 18:50+0000\n"
+"POT-Creation-Date: 2013-12-23 12:40+0100\n"
+"PO-Revision-Date: 2014-01-01 13:00+0000\n"
 "Last-Translator: Fábio <bnafta@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/django-debug-toolbar/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -559,6 +559,11 @@ msgid "Static file path"
 msgid_plural "Static file paths"
 msgstr[0] "Caminho do arquivo estático"
 msgstr[1] "Caminho dos arquivos estáticos"
+
+#: templates/debug_toolbar/panels/staticfiles.html:8
+#, python-format
+msgid "(prefix %(prefix)s)"
+msgstr "(prefixo %(prefix)s)"
 
 #: templates/debug_toolbar/panels/staticfiles.html:12
 #: templates/debug_toolbar/panels/staticfiles.html:23
