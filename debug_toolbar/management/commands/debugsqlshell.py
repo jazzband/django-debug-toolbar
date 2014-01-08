@@ -4,12 +4,15 @@ from time import time
 
 # 'debugsqlshell' is the same as the 'shell'.
 from django.core.management.commands.shell import Command               # noqa
-from django.db.backends import util
+try:
+    from django.db.backends import utils
+except ImportError:
+    from django.db.backends import util as utils
 
 import sqlparse
 
 
-class PrintQueryWrapper(util.CursorDebugWrapper):
+class PrintQueryWrapper(utils.CursorDebugWrapper):
     def execute(self, sql, params=()):
         start_time = time()
         try:
@@ -22,4 +25,4 @@ class PrintQueryWrapper(util.CursorDebugWrapper):
             print('%s [%.2fms]' % (formatted_sql, duration))
 
 
-util.CursorDebugWrapper = PrintQueryWrapper
+utils.CursorDebugWrapper = PrintQueryWrapper

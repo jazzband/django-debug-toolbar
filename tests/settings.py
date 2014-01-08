@@ -40,6 +40,8 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'tests.urls'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'tests', 'static')
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
