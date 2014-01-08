@@ -23,12 +23,16 @@ Quick setup
 
 Make sure that ``'django.contrib.staticfiles'`` is `set up properly
 <https://docs.djangoproject.com/en/stable/howto/static-files/>`_ and add
-``'debug_toolbar'`` to your ``INSTALLED_APPS`` setting::
+``'debug_toolbar.apps.DebugToolbarConfig'`` (Django ≥ 1.7) or
+``'debug_toolbar'`` (Django < 1.7) to your ``INSTALLED_APPS`` setting::
 
     INSTALLED_APPS = (
         # ...
         'django.contrib.staticfiles',
         # ...
+        # If you're using Django 1.7.x or later
+        'debug_toolbar.apps.DebugToolbarConfig',
+        # If you're using Django 1.6.x or earlier
         'debug_toolbar',
     )
 
