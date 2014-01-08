@@ -6,7 +6,6 @@ except ImportError:
     threading = None
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
 from django.contrib.staticfiles import finders, storage
 from django.contrib.staticfiles.templatetags import staticfiles
@@ -100,13 +99,6 @@ class StaticFilesPanel(panels.Panel):
 
     def disable_instrumentation(self):
         storage.staticfiles_storage = staticfiles.staticfiles_storage = _original_storage
-
-    @property
-    def has_content(self):
-        if "django.contrib.staticfiles" not in settings.INSTALLED_APPS:
-            raise ImproperlyConfigured("Could not find staticfiles in "
-                                       "INSTALLED_APPS setting.")
-        return True
 
     @property
     def num_used(self):

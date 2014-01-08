@@ -6,6 +6,7 @@ from __future__ import absolute_import, unicode_literals
 
 import uuid
 
+import django
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
@@ -66,7 +67,14 @@ class DebugToolbar(object):
             context = {'toolbar': self}
             return render_to_string('debug_toolbar/base.html', context)
         except TemplateSyntaxError:
-            if 'django.contrib.staticfiles' not in settings.INSTALLED_APPS:
+            if django.VERSION[:2] >= (1, 7):
+                from django.apps import apps
+                staticfiles_installed = apps.is_installed(
+                    'django.contrib.staticfiles')
+            else:
+                staticfiles_installed = ('django.contrib.staticfiles'
+                                         in settings.INSTALLED_APPS)
+            if not staticfiles_installed:
                 raise ImproperlyConfigured(
                     "The debug toolbar requires the staticfiles contrib app. "
                     "Add 'django.contrib.staticfiles' to INSTALLED_APPS and "
