@@ -1,6 +1,6 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
+        define('django-debug-timer', ['jquery'], factory);
     } else {
         factory(jQuery);
     }
