@@ -80,6 +80,12 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_middleware_response_only(self):
         DebugToolbarMiddleware().process_response(self.request, self.response)
 
+    def test_middleware_response_insertion(self):
+        resp = regular_view(self.request, "İ")
+        DebugToolbarMiddleware().process_response(self.request, resp)
+        # check toolbar insertion before "</body>"
+        self.assertContains(resp, '</div>\n</body>')
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(TestCase):
