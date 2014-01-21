@@ -172,7 +172,9 @@ class CachePanel(Panel):
                     self.misses += 1
                 else:
                     self.hits += 1
-        self.total_time += time_taken * 1000
+        time_taken *= 1000
+
+        self.total_time += time_taken
         self.counts[name] += 1
         self.calls.append({
             'time': time_taken,
