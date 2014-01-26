@@ -15,3 +15,6 @@ except Exception:
 # Reference URLpatterns with a string to avoid the risk of circular imports.
 
 urls = 'debug_toolbar.toolbar', 'djdt', 'djdt'
+
+
+default_app_config = 'debug_toolbar.apps.DebugToolbarConfig'
