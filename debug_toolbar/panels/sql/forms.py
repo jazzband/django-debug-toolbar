@@ -77,9 +77,11 @@ class SQLSelectForm(forms.Form):
         return reformat_sql(self.cleaned_data['sql'])
 
     def make_hash(self, data):
-        params = (force_text(settings.SECRET_KEY) +
-                  force_text(data['sql']) + force_text(data['params']))
-        return hashlib.sha1(params.encode('utf-8')).hexdigest()
+        items = [settings.SECRET_KEY, data['sql'], data['params']]
+        # Replace lines endings with spaces to preserve the hash value
+        # even when the browser normalizes \r\n to \n in inputs.
+        items = [force_text(' '.join(item.splitlines())) for item in items]
+        return hashlib.sha1(sum(items, '').encode('utf-8')).hexdigest()
 
     @property
     def connection(self):
