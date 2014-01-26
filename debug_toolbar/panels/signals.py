@@ -6,7 +6,11 @@ from django.db.backends.signals import connection_created
 from django.db.models.signals import (
     class_prepared, pre_init, post_init, pre_save, post_save,
     pre_delete, post_delete, post_syncdb)
-from django.dispatch.dispatcher import WEAKREF_TYPES
+try:
+    from django.dispatch.dispatcher import WEAKREF_TYPES
+except ImportError:
+    import weakref
+    WEAKREF_TYPES = weakref.ReferenceType,
 from django.utils.translation import ugettext_lazy as _, ungettext
 from django.utils.importlib import import_module
 
@@ -63,7 +67,8 @@ class SignalsPanel(Panel):
             if signal is None:
                 continue
             receivers = []
-            for (receiverkey, r_senderkey), receiver in signal.receivers:
+            for receiver in signal.receivers:
+                receiver = receiver[1]
                 if isinstance(receiver, WEAKREF_TYPES):
                     receiver = receiver()
                 if receiver is None:
