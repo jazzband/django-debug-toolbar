@@ -81,7 +81,7 @@ class SQLSelectForm(forms.Form):
         # Replace lines endings with spaces to preserve the hash value
         # even when the browser normalizes \r\n to \n in inputs.
         items = [force_text(' '.join(item.splitlines())) for item in items]
-        return hashlib.sha1(sum(items, '').encode('utf-8')).hexdigest()
+        return hashlib.sha1(''.join(items).encode('utf-8')).hexdigest()
 
     @property
     def connection(self):
