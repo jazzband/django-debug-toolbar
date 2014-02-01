@@ -21,7 +21,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 				<li class="djDebugPanelButton">
 					<input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked="checked" title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %} />
 					{% if panel.has_content and panel.enabled %}
-						<a href="{{ panel.url|default:"#" }}" title="{{ panel.title }}" class="{{ panel.panel_id }}">
+						<a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}">
 					{% else %}
 						<div class="contentless{% if not panel.enabled %} disabled{% endif %}">
 					{% endif %}
