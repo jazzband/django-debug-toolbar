@@ -35,3 +35,25 @@ def swap_fields(sql):
             r'<a class="djDebugCollapsed djDebugToggle" href="#">\1</a> '
             r'<strong>FROM')
     return re.sub(expr, subs, sql)
+
+
+def contrasting_color_generator():
+    """
+    Generate constrasting colors by varying most significant bit of RGB first,
+    and then vary subsebequent bits systematically.
+    """
+    def rgb_to_hex(rgb):
+        return '#%02x%02x%02x' % tuple(rgb)
+
+    triples = [(1, 0, 0), (0, 1, 0), (0, 0, 1),
+               (1, 1, 0), (0, 1, 1), (1, 0, 1), (1, 1, 1)]
+    n = 128
+    so_far = [[0, 0, 0]]
+    while (1):
+        copy_so_far = list(so_far)
+        for triple in triples:
+            for previous in copy_so_far:
+                rgb = [n * triple[i] + previous[i] for i in range(3)]
+                so_far.append(rgb)
+                yield rgb_to_hex(rgb)
+        n = n / 2
