@@ -4,11 +4,10 @@
         define(['djdt.jquery'], factory);
     } else {
         // Browser globals.
-        window.djdt = factory(djdt.jQuery);
+        window.djdt = factory(djdtjQuery);
     }
 }(function ($) {
     var djdt = {
-        jQuery: $,
         handleDragged: false,
         events: {
             ready: []

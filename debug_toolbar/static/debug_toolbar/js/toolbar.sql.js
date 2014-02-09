@@ -2,7 +2,7 @@
     if (typeof define === 'function' && define.amd) {
         define(['djdt.jquery'], factory);
     } else {
-        factory(djdt.jQuery);
+        factory(djdtjQuery);
     }
 }(function ($) {
     $('#djDebug a.djDebugToggle').on('click', function(e) {

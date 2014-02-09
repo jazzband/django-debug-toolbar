@@ -2,7 +2,7 @@
     if (typeof define === 'function' && define.amd) {
         define(['djdt.jquery'], factory);
     } else {
-        factory(djdt.jQuery);
+        factory(djdtjQuery);
     }
 }(function ($) {
     // Browser timing remains hidden unless we can successfully access the performance object

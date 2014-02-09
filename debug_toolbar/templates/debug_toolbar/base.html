@@ -3,8 +3,7 @@
 @media print { #djDebug {display:none;}}
 </style>
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script>var djdt = {jQuery: jQuery.noConflict(true)};</script>
+<script src="{% static 'debug_toolbar/js/jquery.js' %}"></script>
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" style="display:none;" dir="ltr"
      data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
