@@ -140,7 +140,7 @@
             var handle = $('#djDebugToolbarHandle');
             $('#djShowToolBarButton').on('mousedown', function (event) {
                 var baseY = handle.offset().top - event.pageY;
-                $(document).on('mousemove', function (event) {
+                $(document).on('mousemove.djDebug', function (event) {
                     var offset = handle.offset();
                     offset.top = baseY + event.pageY;
                     handle.offset(offset);
@@ -149,7 +149,7 @@
                 return false;
             });
             $(document).on('mouseup', function () {
-                $(document).off('mousemove');
+                $(document).off('mousemove.djDebug');
                 if (djdt.handleDragged) {
                     var top = handle.offset().top;
                     djdt.cookie.set('djdttop', top, {
