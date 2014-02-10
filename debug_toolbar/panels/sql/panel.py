@@ -198,9 +198,8 @@ class SQLPanel(Panel):
                 query['stacktrace'] = render_stacktrace(query['stacktrace'])
                 i += 1
 
-                if not trace_colors.get(query['stacktrace']):
-                    c = colors.next()
-                    trace_colors[query['stacktrace']] = c
+                if query['stacktrace'] not in trace_colors:
+                    trace_colors[query['stacktrace']] = colors.next()
                 query['trace_color'] = trace_colors[query['stacktrace']]
 
             if trans_id:
