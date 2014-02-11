@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import uuid
 from copy import copy
+from collections import defaultdict
 
 from django.conf.urls import patterns, url
 from django.db import connections
@@ -137,7 +138,7 @@ class SQLPanel(Panel):
 
     def process_response(self, request, response):
         colors = contrasting_color_generator()
-        trace_colors = {}
+        trace_colors = defaultdict(lambda: next(colors))
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
@@ -198,8 +199,6 @@ class SQLPanel(Panel):
                 query['stacktrace'] = render_stacktrace(query['stacktrace'])
                 i += 1
 
-                if query['stacktrace'] not in trace_colors:
-                    trace_colors[query['stacktrace']] = colors.next()
                 query['trace_color'] = trace_colors[query['stacktrace']]
 
             if trans_id:
