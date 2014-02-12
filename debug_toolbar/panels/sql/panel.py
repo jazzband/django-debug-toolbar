@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import uuid
 from copy import copy
+from collections import defaultdict
 
 from django.conf.urls import patterns, url
 from django.db import connections
@@ -10,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.utils import render_stacktrace
-from debug_toolbar.panels.sql.utils import reformat_sql
+from debug_toolbar.panels.sql.utils import reformat_sql, contrasting_color_generator
 from debug_toolbar.panels.sql.tracking import wrap_cursor, unwrap_cursor
 
 
@@ -136,6 +137,8 @@ class SQLPanel(Panel):
             unwrap_cursor(connection)
 
     def process_response(self, request, response):
+        colors = contrasting_color_generator()
+        trace_colors = defaultdict(lambda: next(colors))
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
@@ -195,6 +198,8 @@ class SQLPanel(Panel):
                 width_ratio_tally += query['width_ratio']
                 query['stacktrace'] = render_stacktrace(query['stacktrace'])
                 i += 1
+
+                query['trace_color'] = trace_colors[query['stacktrace']]
 
             if trans_id:
                 self._queries[(i - 1)][1]['ends_trans'] = True
