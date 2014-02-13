@@ -4,6 +4,7 @@ Debug Toolbar middleware
 
 from __future__ import absolute_import, unicode_literals
 
+import re
 import threading
 
 from django.conf import settings
@@ -106,13 +107,19 @@ class DebugToolbarMiddleware(object):
 
         # Insert the toolbar in the response.
         content = force_text(response.content, encoding=settings.DEFAULT_CHARSET)
-        try:
-            insert_at = content.lower().rindex(dt_settings.CONFIG['INSERT_BEFORE'].lower())
-        except ValueError:
-            pass
-        else:
-            toolbar_content = toolbar.render_toolbar()
-            response.content = content[:insert_at] + toolbar_content + content[insert_at:]
+        insert_before = dt_settings.CONFIG['INSERT_BEFORE']
+        try:                    # Python >= 2.7
+            pattern = re.escape(insert_before)
+            bits = re.split(pattern, content, flags=re.IGNORECASE)
+        except TypeError:       # Python < 2.7
+            pattern = '(.+?)(%s|$)' % re.escape(insert_before)
+            matches = re.findall(pattern, content, flags=re.DOTALL | re.IGNORECASE)
+            bits = [m[0] for m in matches if m[1] == insert_before]
+            # When the body ends with a newline, there's two trailing groups.
+            bits.append(''.join(m[0] for m in matches if m[1] == ''))
+        if len(bits) > 1:
+            bits[-2] += toolbar.render_toolbar()
+            response.content = insert_before.join(bits)
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         return response
