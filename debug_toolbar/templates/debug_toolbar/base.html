@@ -51,7 +51,7 @@ if(!window.jQuery) document.write('<scr'+'ipt src="//ajax.googleapis.com/ajax/li
 					<h3>{{ panel.title|safe }}</h3>
 				</div>
 				<div class="djDebugPanelContent">
-					<img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="loader">
+					<img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="loader" />
 					<div class="scroll">
 						{% if not toolbar.store_id %}{{ panel.content }}{% endif %}
 					</div>
