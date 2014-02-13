@@ -39,6 +39,7 @@
                             url: render_panel_url
                         };
                         $.ajax(ajax_data).done(function(data){
+                            inner.prev().remove();  // Remove AJAX loader
                             inner.html(data);
                         }).fail(function(xhr){
                             var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';

@@ -257,6 +257,11 @@
 	padding:5px 0 0 20px;
 }
 
+#djDebug .djDebugPanelContent .loader {
+	display:block;
+	margin:80px auto;
+}
+
 #djDebug .djDebugPanelContent .scroll {
 	height:100%;
 	overflow:auto;
