@@ -57,6 +57,13 @@ toolbar itself, others are specific to some panels.
 Toolbar options
 ~~~~~~~~~~~~~~~
 
+* ``DEFAULT_DISABLED_PANELS``
+
+  Default: ``('RedirectsPanel', )``
+
+  A collection of panel class names that are disabled (but still displayed)
+  by default.
+
 * ``INSERT_BEFORE``
 
   Default: ``'</body>'``

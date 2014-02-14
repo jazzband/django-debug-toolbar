@@ -12,11 +12,6 @@ class RedirectsPanel(Panel):
     Panel that intercepts redirects and displays a page with debug info.
     """
 
-    @property
-    def enabled(self):
-        default = 'on' if self.toolbar.config['INTERCEPT_REDIRECTS'] else 'off'
-        return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, default) == 'on'
-
     has_content = False
 
     nav_title = _("Intercept redirects")

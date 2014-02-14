@@ -4,6 +4,8 @@ import warnings
 
 from django.template.loader import render_to_string
 
+from debug_toolbar import settings as dt_settings
+
 
 class Panel(object):
     """
@@ -20,7 +22,13 @@ class Panel(object):
 
     @property
     def enabled(self):
-        return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, 'on') == 'on'
+        # Check to see if settings has a default value for it
+        if self.panel_id in dt_settings.CONFIG['DEFAULT_DISABLED_PANELS']:
+            default = 'off'
+        else:
+            default = 'on'
+        # The user's cookies should override the default value
+        return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, default) == 'on'
 
     # Titles and content
 
