@@ -59,10 +59,10 @@ Toolbar options
 
 * ``DEFAULT_DISABLED_PANELS``
 
-  Default: ``('RedirectsPanel', )``
+  Default: ``{'debug_toolbar.panels.redirects.RedirectsPanel'}``
 
-  A collection of panel class names that are disabled (but still displayed)
-  by default.
+  This setting is a set of the full Python paths to each panel that you
+  want disabled (but still displayed) by default.
 
 * ``INSERT_BEFORE``
 
