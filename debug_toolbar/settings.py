@@ -16,7 +16,7 @@ from django.utils import six
 
 CONFIG_DEFAULTS = {
     # Toolbar options
-    'DEFAULT_DISABLED_PANELS': {'debug_toolbar.panels.redirects.RedirectsPanel'},
+    'DEFAULT_DISABLED_PANELS': set(['debug_toolbar.panels.redirects.RedirectsPanel']),
     'INSERT_BEFORE': '</body>',
     'RENDER_PANELS': None,
     'RESULTS_STORE_SIZE': 10,
