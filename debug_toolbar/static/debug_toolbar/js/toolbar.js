@@ -160,8 +160,8 @@
                     setTimeout(function () {
                         djdt.handleDragged = false;
                     }, 10);
+                    return false;
                 }
-                return false;
             });
             $(document).bind('close.djDebug', function() {
                 // If a sub-panel is open, close that
