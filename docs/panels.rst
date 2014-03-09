@@ -103,7 +103,7 @@ ready.
 
 Since this behavior is annoying when you aren't debugging a redirect, this
 panel is included but inactive by default. You can activate it by default with
-the ``INTERCEPT_REDIRECTS`` configuration option.
+the ``DISABLE_PANELS`` configuration option.
 
 
 Non-default built-in panels

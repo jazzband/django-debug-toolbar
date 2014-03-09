@@ -57,7 +57,7 @@ toolbar itself, others are specific to some panels.
 Toolbar options
 ~~~~~~~~~~~~~~~
 
-* ``DEFAULT_DISABLED_PANELS``
+* ``DISABLE_PANELS``
 
   Default: ``set(['debug_toolbar.panels.redirects.RedirectsPanel'])``
 
@@ -149,14 +149,6 @@ Panel options
   Useful for eliminating server-related entries which can result
   in enormous DOM structures and toolbar rendering delays.
 
-* ``INTERCEPT_REDIRECTS``
-
-  Default: ``False``
-
-  Panel: redirects
-
-  If set to ``True``, the redirect panel will be active by default.
-
 * ``SHOW_TEMPLATE_CONTEXT``
 
   Default: ``True``
@@ -185,6 +177,5 @@ Here's what a slightly customized toolbar configuration might look like::
         'RESULTS_STORE_SIZE': 3,
         'SHOW_COLLAPSED': True,
         # Panel options
-        'INTERCEPT_REDIRECTS': True,
         'SQL_WARNING_THRESHOLD': 100,   # milliseconds
     }

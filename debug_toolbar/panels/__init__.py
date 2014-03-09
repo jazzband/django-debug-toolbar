@@ -24,7 +24,7 @@ class Panel(object):
     @property
     def enabled(self):
         # Check to see if settings has a default value for it
-        if get_name_from_obj(self) in dt_settings.CONFIG['DEFAULT_DISABLED_PANELS']:
+        if get_name_from_obj(self) in dt_settings.CONFIG['DISABLE_PANELS']:
             default = 'off'
         else:
             default = 'on'
