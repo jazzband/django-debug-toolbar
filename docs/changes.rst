@@ -1,6 +1,30 @@
 Change log
 ==========
 
+1.1
+---
+
+This is the first version compatible with Django 1.7.
+
+New features
+~~~~~~~~~~~~
+
+* The SQL panel colors queries depending on the stack level.
+
+Bugfixes
+~~~~~~~~
+
+* Support languages where lowercase and uppercase strings may have different
+  lengths.
+* Allow using cursor as context managers.
+* Various JavaScript improvements.
+
+Deprecated features
+~~~~~~~~~~~~~~~~~~~
+
+* The `INTERCEPT_REDIRECT` setting is superseded by the more generic
+  `DISABLE_PANELS`.
+
 1.0
 ---
 
