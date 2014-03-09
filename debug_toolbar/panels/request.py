@@ -17,6 +17,14 @@ class RequestPanel(Panel):
 
     title = _("Request")
 
+    @property
+    def nav_subtitle(self):
+        """
+        Show abbreviated name of view function as subtitle
+        """
+        view_func = self.get_stats().get('view_func', '')
+        return view_func.rsplit('.', 1)[-1]
+
     def process_response(self, request, response):
         self.record_stats({
             'get': [(k, request.GET.getlist(k)) for k in sorted(request.GET)],

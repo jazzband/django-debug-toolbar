@@ -145,6 +145,12 @@ class TemplatesPanel(Panel):
         num_templates = len(self.templates)
         return _("Templates (%(num_templates)s rendered)") % {'num_templates': num_templates}
 
+    @property
+    def nav_subtitle(self):
+        if self.templates:
+            return self.templates[0]['template'].name
+        return ''
+
     template = 'debug_toolbar/panels/templates.html'
 
     @classmethod
