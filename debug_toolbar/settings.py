@@ -16,6 +16,7 @@ from django.utils import six
 
 CONFIG_DEFAULTS = {
     # Toolbar options
+    'DEFAULT_DISABLED_PANELS': set(['debug_toolbar.panels.redirects.RedirectsPanel']),
     'INSERT_BEFORE': '</body>',
     'RENDER_PANELS': None,
     'RESULTS_STORE_SIZE': 10,
@@ -32,7 +33,6 @@ CONFIG_DEFAULTS = {
         'debug_toolbar',
         'django',
     ),
-    'INTERCEPT_REDIRECTS': False,
     'SHOW_TEMPLATE_CONTEXT': True,
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
 }
@@ -123,6 +123,30 @@ else:
                 "%r was renamed to %r. Update your DEBUG_TOOLBAR_PANELS "
                 "setting." % (old_panel, new_panel), DeprecationWarning)
             PANELS[index] = new_panel
+
+
+if 'INTERCEPT_REDIRECTS' in USER_CONFIG:
+    warnings.warn(
+        "INTERCEPT_REDIRECTS is deprecated. Please use the "
+        "DEFAULT_DISABLED_PANELS config in the"
+        "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
+    if USER_CONFIG['INTERCEPT_REDIRECTS']:
+        if 'debug_toolbar.panels.redirects.RedirectsPanel' \
+                in CONFIG['DEFAULT_DISABLED_PANELS']:
+            # RedirectsPanel should be enabled
+            try:
+                CONFIG['DEFAULT_DISABLED_PANELS'].remove(
+                    'debug_toolbar.panels.redirects.RedirectsPanel'
+                )
+            except KeyError:
+                # We wanted to remove it, but it didn't exist. This is fine
+                pass
+    elif not 'debug_toolbar.panels.redirects.RedirectsPanel' \
+            in CONFIG['DEFAULT_DISABLED_PANELS']:
+        # RedirectsPanel should be disabled
+        CONFIG['DEFAULT_DISABLED_PANELS'].add(
+            'debug_toolbar.panels.redirects.RedirectsPanel'
+        )
 
 
 PATCH_SETTINGS = getattr(settings, 'DEBUG_TOOLBAR_PATCH_SETTINGS', settings.DEBUG)
