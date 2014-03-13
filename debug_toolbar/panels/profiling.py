@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, unicode_literals
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from debug_toolbar.panels import Panel
+from debug_toolbar import settings as dt_settings
 
 import cProfile
 from pstats import Stats
@@ -152,6 +153,9 @@ class ProfilingPanel(Panel):
         root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
 
         func_list = []
-        self.add_node(func_list, root, 10, root.stats[3] / 8)
+        self.add_node(func_list,
+                      root,
+                      dt_settings.CONFIG['PROFILER_MAX_DEPTH'],
+                      root.stats[3] / 8)
 
         self.record_stats({'func_list': func_list})

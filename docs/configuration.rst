@@ -149,6 +149,15 @@ Panel options
   Useful for eliminating server-related entries which can result
   in enormous DOM structures and toolbar rendering delays.
 
+* ``PROFILER_MAX_DEPTH``
+
+  Default: ``10``
+
+  Panel: profiling
+
+  This setting affects the depth of function calls in the profiler's
+  analysis.
+
 * ``SHOW_TEMPLATE_CONTEXT``
 
   Default: ``True``
