@@ -4,10 +4,12 @@ import logging
 
 from debug_toolbar.panels.logging import (
     collector, MESSAGE_IF_STRING_REPRESENTATION_INVALID)
+from django.test.utils import override_settings
 
 from ..base import BaseTestCase
 
 
+@override_settings(DEBUG=True)
 class LoggingPanelTestCase(BaseTestCase):
 
     def setUp(self):

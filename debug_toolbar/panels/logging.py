@@ -46,14 +46,30 @@ class ThreadTrackingHandler(logging.Handler):
         self.collector.collect(record)
 
 collector = LogCollector()
+collector_enabled = False
 
-# Check to make sure DEBUG is enabled to prevent silent memory leaks.
-if settings.DEBUG:
-    # We don't use enable/disable_instrumentation because logging is global.
-    # We can't add thread-local logging handlers. Hopefully logging is cheap.
-    logging_handler = ThreadTrackingHandler(collector)
-    logging.root.setLevel(logging.NOTSET)
-    logging.root.addHandler(logging_handler)
+
+def enable_collector():
+    """
+    Enable the LogCollector if it has not already been enabled and DEBUG is True.
+    """
+    global collector_enabled
+
+    if collector_enabled:
+        return
+
+    # Check to make sure DEBUG is enabled to prevent silent memory leaks.
+    if settings.DEBUG:
+        # We don't use enable/disable_instrumentation because logging is global.
+        # We can't add thread-local logging handlers. Hopefully logging is cheap.
+        logging_handler = ThreadTrackingHandler(collector)
+        logging.root.setLevel(logging.NOTSET)
+        logging.root.addHandler(logging_handler)
+        collector_enabled = True
+
+
+# Enable logging immediately if DEBUG is enabled
+enable_collector()
 
 
 class LoggingPanel(Panel):
@@ -75,9 +91,15 @@ class LoggingPanel(Panel):
     title = _("Log messages")
 
     def process_request(self, request):
+        # The state of DEBUG can be changed after the app is first initialized; ensure
+        # that the collector is in the right state.
+        enable_collector()
         collector.clear_collection()
 
     def process_response(self, request, response):
+        # The state of DEBUG can be changed after the app is first initialized; ensure
+        # that the collector is in the right state.
+        enable_collector()
         records = collector.get_collection()
         self._records[threading.currentThread()] = records
         collector.clear_collection()
