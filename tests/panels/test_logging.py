@@ -16,6 +16,9 @@ class LoggingPanelTestCase(BaseTestCase):
         super(LoggingPanelTestCase, self).setUp()
         self.panel = self.toolbar.get_panel_by_id('LoggingPanel')
         self.logger = logging.getLogger(__name__)
+        # DEBUG may be set to False initially, preventing the default tracking
+        # from executing. Force an enable here to ensure that logging is activated.
+        collector.enable_logging()
         collector.clear_collection()
 
     def test_happy_case(self):
