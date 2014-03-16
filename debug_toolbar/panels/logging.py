@@ -6,6 +6,7 @@ try:
     import threading
 except ImportError:
     threading = None
+from django.conf import settings
 from django.utils.translation import ungettext, ugettext_lazy as _
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import ThreadCollector
@@ -45,13 +46,14 @@ class ThreadTrackingHandler(logging.Handler):
         self.collector.collect(record)
 
 
-# We don't use enable/disable_instrumentation because logging is global.
-# We can't add thread-local logging handlers. Hopefully logging is cheap.
-
-collector = LogCollector()
-logging_handler = ThreadTrackingHandler(collector)
-logging.root.setLevel(logging.NOTSET)
-logging.root.addHandler(logging_handler)
+# Check to make sure DEBUG is enabled to prevent silent memory leaks.
+if settings.DEBUG:
+    # We don't use enable/disable_instrumentation because logging is global.
+    # We can't add thread-local logging handlers. Hopefully logging is cheap.
+    collector = LogCollector()
+    logging_handler = ThreadTrackingHandler(collector)
+    logging.root.setLevel(logging.NOTSET)
+    logging.root.addHandler(logging_handler)
 
 
 class LoggingPanel(Panel):

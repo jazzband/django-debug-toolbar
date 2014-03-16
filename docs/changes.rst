@@ -11,6 +11,7 @@ New features
 
 * The SQL panel colors queries depending on the stack level.
 * The Profiler panel allows configuring the maximum depth.
+* The Logging panel will not attempt to collect data when DEBUG is False.
 
 Bugfixes
 ~~~~~~~~
