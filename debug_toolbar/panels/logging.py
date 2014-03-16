@@ -45,12 +45,12 @@ class ThreadTrackingHandler(logging.Handler):
         }
         self.collector.collect(record)
 
+collector = LogCollector()
 
 # Check to make sure DEBUG is enabled to prevent silent memory leaks.
 if settings.DEBUG:
     # We don't use enable/disable_instrumentation because logging is global.
     # We can't add thread-local logging handlers. Hopefully logging is cheap.
-    collector = LogCollector()
     logging_handler = ThreadTrackingHandler(collector)
     logging.root.setLevel(logging.NOTSET)
     logging.root.addHandler(logging_handler)
