@@ -89,8 +89,6 @@ class LoggingPanel(Panel):
     title = _("Log messages")
 
     def process_request(self, request):
-        # The state of DEBUG can be changed after the app is first initialized; ensure
-        # that the collector is in the right state.
         collector.clear_collection()
 
     def process_response(self, request, response):
