@@ -131,14 +131,10 @@ class NormalCursorWrapper(object):
 
             alias = getattr(self.db, 'alias', 'default')
             conn = self.db.connection
-            # HACK: avoid imports
-            if conn:
-                engine = conn.__class__.__module__.split('.', 1)[0]
-            else:
-                engine = 'unknown'
+            vendor = getattr(conn, 'vendor', 'unknown')
 
             params = {
-                'engine': engine,
+                'vendor': vendor,
                 'alias': alias,
                 'sql': self.db.ops.last_executed_query(
                     self.cursor, sql, self._quote_params(params)),
@@ -153,7 +149,7 @@ class NormalCursorWrapper(object):
                 'template_info': template_info,
             }
 
-            if engine == 'psycopg2':
+            if vendor == 'postgresql':
                 # If an erroneous query was ran on the connection, it might
                 # be in a state where checking isolation_level raises an
                 # exception.

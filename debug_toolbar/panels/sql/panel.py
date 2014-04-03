@@ -15,8 +15,8 @@ from debug_toolbar.panels.sql.utils import reformat_sql, contrasting_color_gener
 from debug_toolbar.panels.sql.tracking import wrap_cursor, unwrap_cursor
 
 
-def get_isolation_level_display(engine, level):
-    if engine == 'psycopg2':
+def get_isolation_level_display(vendor, level):
+    if vendor == 'postgresql':
         import psycopg2.extensions
         choices = {
             psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: _("Autocommit"),
@@ -26,12 +26,12 @@ def get_isolation_level_display(engine, level):
             psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: _("Serializable"),
         }
     else:
-        raise ValueError(engine)
+        raise ValueError(vendor)
     return choices.get(level)
 
 
-def get_transaction_status_display(engine, level):
-    if engine == 'psycopg2':
+def get_transaction_status_display(vendor, level):
+    if vendor == 'postgresql':
         import psycopg2.extensions
         choices = {
             psycopg2.extensions.TRANSACTION_STATUS_IDLE: _("Idle"),
@@ -41,7 +41,7 @@ def get_transaction_status_display(engine, level):
             psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN: _("Unknown"),
         }
     else:
-        raise ValueError(engine)
+        raise ValueError(vendor)
     return choices.get(level)
 
 
@@ -67,11 +67,10 @@ class SQLPanel(Panel):
         if not conn:
             return
 
-        engine = conn.__class__.__module__.split('.', 1)[0]
-        if engine == 'psycopg2':
+        if conn.vendor == 'postgresql':
             cur_status = conn.get_transaction_status()
         else:
-            raise ValueError(engine)
+            raise ValueError(conn.vendor)
 
         last_status = self._transaction_status.get(alias)
         self._transaction_status[alias] = cur_status
@@ -175,10 +174,10 @@ class SQLPanel(Panel):
 
                 query['alias'] = alias
                 if 'iso_level' in query:
-                    query['iso_level'] = get_isolation_level_display(query['engine'],
+                    query['iso_level'] = get_isolation_level_display(query['vendor'],
                                                                      query['iso_level'])
                 if 'trans_status' in query:
-                    query['trans_status'] = get_transaction_status_display(query['engine'],
+                    query['trans_status'] = get_transaction_status_display(query['vendor'],
                                                                            query['trans_status'])
 
                 query['form'] = SQLSelectForm(auto_id=None, initial=copy(query))

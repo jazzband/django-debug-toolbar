@@ -39,17 +39,15 @@ def sql_explain(request):
     if form.is_valid():
         sql = form.cleaned_data['raw_sql']
         params = form.cleaned_data['params']
+        vendor = form.connection.vendor
         cursor = form.cursor
 
-        conn = form.connection
-        engine = conn.__class__.__module__.split('.', 1)[0]
-
-        if engine == "sqlite3":
+        if vendor == 'sqlite':
             # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
             # EXPLAIN QUERY PLAN dumps a more human-readable summary
             # See http://www.sqlite.org/lang_explain.html for details
             cursor.execute("EXPLAIN QUERY PLAN %s" % (sql,), params)
-        elif engine == "psycopg2":
+        elif vendor == 'postgresql':
             cursor.execute("EXPLAIN ANALYZE %s" % (sql,), params)
         else:
             cursor.execute("EXPLAIN %s" % (sql,), params)

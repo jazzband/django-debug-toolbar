@@ -18,6 +18,7 @@ Bugfixes
 * Support languages where lowercase and uppercase strings may have different
   lengths.
 * Allow using cursor as context managers.
+* Make the SQL explain more helpful on SQLite.
 * Various JavaScript improvements.
 
 Deprecated features
