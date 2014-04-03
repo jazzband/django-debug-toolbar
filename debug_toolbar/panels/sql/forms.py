@@ -80,7 +80,7 @@ class SQLSelectForm(forms.Form):
         items = [settings.SECRET_KEY, data['sql'], data['params']]
         # Replace lines endings with spaces to preserve the hash value
         # even when the browser normalizes \r\n to \n in inputs.
-        items = [force_text(' '.join(item.splitlines())) for item in items]
+        items = [' '.join(force_text(item).splitlines()) for item in items]
         return hashlib.sha1(''.join(items).encode('utf-8')).hexdigest()
 
     @property
