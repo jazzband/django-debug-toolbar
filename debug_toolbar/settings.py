@@ -142,8 +142,8 @@ if 'INTERCEPT_REDIRECTS' in USER_CONFIG:
             except KeyError:
                 # We wanted to remove it, but it didn't exist. This is fine
                 pass
-    elif not 'debug_toolbar.panels.redirects.RedirectsPanel' \
-            in CONFIG['DISABLE_PANELS']:
+    elif 'debug_toolbar.panels.redirects.RedirectsPanel' \
+            not in CONFIG['DISABLE_PANELS']:
         # RedirectsPanel should be disabled
         CONFIG['DISABLE_PANELS'].add(
             'debug_toolbar.panels.redirects.RedirectsPanel'
