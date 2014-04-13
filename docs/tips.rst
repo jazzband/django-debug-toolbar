@@ -58,7 +58,7 @@ development.
 The cache panel is very similar to the SQL panel, except it isn't always a bad
 practice to make many cache queries in a view.
 
-The template panel becomes slow your views or context processors return large
+The template panel becomes slow if your views or context processors return large
 contexts and your templates have complex inheritance or inclusion schemes.
 
 Solutions
