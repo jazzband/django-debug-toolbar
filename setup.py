@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
+from io import open
 
 setup(
     name='django-debug-toolbar',
     version='1.1',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst', encoding='utf-8').read(),
     author='Rob Hudson',
     author_email='rob@cogit8.org',
     url='https://github.com/django-debug-toolbar/django-debug-toolbar',
