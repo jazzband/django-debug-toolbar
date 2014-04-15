@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import django
+from django.conf import settings
 from django.http import HttpResponse
 from django.test.utils import override_settings
 from django.utils import unittest
@@ -31,6 +32,20 @@ class RedirectsPanelTestCase(BaseTestCase):
         self.assertFalse(response is redirect)
         self.assertContains(response, '302 FOUND')
         self.assertContains(response, 'http://somewhere/else/')
+
+    def test_redirect_breaks_procesor(self):
+        middlewares = settings.MIDDLEWARE_CLASSES + ['tests.middlewares.CustomMiddleware']
+        context_processors = settings.TEMPLATE_CONTEXT_PROCESSORS + \
+                          ('tests.context_processors.custom',)
+
+        with self.settings(MIDDLEWARE_CLASSES=middlewares,
+                           TEMPLATE_CONTEXT_PROCESSORS=context_processors):
+            redirect = HttpResponse(status=302)
+            redirect['Location'] = 'http://somewhere/else/'
+            response = self.panel.process_response(self.request, redirect)
+            self.assertFalse(response is redirect)
+            self.assertContains(response, '302 FOUND')
+            self.assertContains(response, 'http://somewhere/else/')
 
     def test_unknown_status_code(self):
         redirect = HttpResponse(status=369)

@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.core.handlers.wsgi import STATUS_CODE_TEXT
-from django.shortcuts import render
+from django.shortcuts import render_to_response
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -28,6 +28,6 @@ class RedirectsPanel(Panel):
                 status_line = '%s %s' % (response.status_code, reason_phrase)
                 cookies = response.cookies
                 context = {'redirect_to': redirect_to, 'status_line': status_line}
-                response = render(request, 'debug_toolbar/redirect.html', context)
+                response = render_to_response('debug_toolbar/redirect.html', context)
                 response.cookies = cookies
         return response
