@@ -18,6 +18,7 @@ from django.utils.unittest import skipIf, skipUnless
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
+from . import update_toolbar_config
 from .base import BaseTestCase
 from .views import regular_view
 
@@ -38,6 +39,33 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_show_toolbar_INTERNAL_IPS(self):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
+
+    # The below test_should_render_panels_*() methods test the return values of
+    # DebugToolbar.should_render_panels() under various conditions.  The method
+    # should never raise an Exception, and should return a bool that depends on
+    # settings.DEBUG_TOOLBAR_CONFIG['RENDER_PANELS'] and request.META.
+
+    def test_should_render_panels(self):
+        """
+        Tests that, with the installed settings, the return value of
+        DebugToolbar.should_render_panels() is a bool, and that the method does
+        not raise an Exception.
+        """
+        self.assertTrue(isinstance(self.toolbar.should_render_panels(), bool))
+
+    def test_should_render_panels_RENDER_PANELS_None_wsgi_multiprocess_None(self):
+        """
+        Tests the return value of DebugToolbar.should_render_panels() when
+        settings.DEBUG_TOOLBAR_CONFIG['RENDER_PANELS'] is None and
+        'wsgi.multiprocess' is not in request.META. The method should correctly
+        handle the absence of that key and should never raise a KeyError, and
+        should return True.
+        """
+        self.toolbar.config['RENDER_PANELS'] = None
+        self.toolbar.request.META.pop('wsgi.multiprocess', None)
+        self.assertTrue(self.toolbar.should_render_panels())
+
+    # End of test_should_render_panels_*() methods.
 
     def _resolve_stats(self, path):
         # takes stats from Request panel

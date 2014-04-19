@@ -89,7 +89,7 @@ class DebugToolbar(object):
     def should_render_panels(self):
         render_panels = self.config['RENDER_PANELS']
         if render_panels is None:
-            render_panels = self.request.META['wsgi.multiprocess']
+            render_panels = self.request.META.get('wsgi.multiprocess', True)
         return render_panels
 
     def store(self):
