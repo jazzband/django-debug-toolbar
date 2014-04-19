@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.http import HttpResponseBadRequest
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render_to_response
 from django.template import TemplateDoesNotExist
 from django.template.loader import find_template_loader
 from django.utils.safestring import mark_safe
@@ -40,7 +40,8 @@ def template_source(request):
     except ImportError:
         pass
 
-    return render(request, 'debug_toolbar/panels/template_source.html', {
+    # Using render_to_response avoids running global context processors.
+    return render_to_response('debug_toolbar/panels/template_source.html', {
         'source': source,
         'template_name': template_name
     })
