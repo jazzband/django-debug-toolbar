@@ -1,3 +1,2 @@
-
-def custom(req):
-    msg = req.myattr
+def custom(request):
+    request.non_existing_attribute

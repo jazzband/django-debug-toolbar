@@ -34,9 +34,12 @@ class RedirectsPanelTestCase(BaseTestCase):
         self.assertContains(response, 'http://somewhere/else/')
 
     def test_redirect_breaks_procesor(self):
-        middlewares = settings.MIDDLEWARE_CLASSES + ['tests.middlewares.CustomMiddleware']
-        context_processors = settings.TEMPLATE_CONTEXT_PROCESSORS + \
-                          ('tests.context_processors.custom',)
+        middlewares = settings.MIDDLEWARE_CLASSES + [
+            'tests.middlewares.CustomMiddleware',
+        ]
+        context_processors = settings.TEMPLATE_CONTEXT_PROCESSORS + (
+            'tests.context_processors.custom',
+        )
 
         with self.settings(MIDDLEWARE_CLASSES=middlewares,
                            TEMPLATE_CONTEXT_PROCESSORS=context_processors):
