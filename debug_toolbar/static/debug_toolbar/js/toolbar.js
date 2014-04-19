@@ -1,7 +1,12 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        // AMD. Register as anonymous module.
-        define(['jquery'], factory);
+        if (typeof require === 'function') {
+          // RequireJS, use jQuery from its config
+          require(['jquery'], factory);
+        } else {
+          // AMD, but not RequireJS. Register as anonymous module.
+          define(['jquery'], factory);
+        }
     } else {
         // Browser globals.
         window.djdt = factory(jQuery);
