@@ -1,8 +1,8 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
+        define(['djdt.jquery'], factory);
     } else {
-        factory(jQuery);
+        factory(djdtjQuery);
     }
 }(function ($) {
     function getSubcalls(row) {

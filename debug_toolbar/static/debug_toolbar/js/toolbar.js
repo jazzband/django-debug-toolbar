@@ -1,10 +1,10 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as anonymous module.
-        define(['jquery'], factory);
+        define(['djdt.jquery'], factory);
     } else {
         // Browser globals.
-        window.djdt = factory(jQuery);
+        window.djdt = factory(djdtjQuery);
     }
 }(function ($) {
     var djdt = {

@@ -1,8 +1,8 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
+        define(['djdt.jquery'], factory);
     } else {
-        factory(jQuery);
+        factory(djdtjQuery);
     }
 }(function ($) {
     // Browser timing remains hidden unless we can successfully access the performance object
