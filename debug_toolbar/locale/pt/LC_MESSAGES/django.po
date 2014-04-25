@@ -3,13 +3,14 @@
 # 
 # 
 # Translators:
+# joseduraes <jdmduraes@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-23 12:40+0100\n"
-"PO-Revision-Date: 2013-12-24 08:56+0000\n"
-"Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
+"POT-Creation-Date: 2014-04-25 21:52+0200\n"
+"PO-Revision-Date: 2014-04-25 19:53+0000\n"
+"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/django-debug-toolbar/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,24 +18,28 @@ msgstr ""
 "Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: apps.py:11
+msgid "Debug Toolbar"
+msgstr ""
+
 #: views.py:14
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
 msgstr ""
 
-#: panels/cache.py:189
+#: panels/cache.py:191
 msgid "Cache"
 msgstr ""
 
-#: panels/cache.py:194
+#: panels/cache.py:196
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/cache.py:202
+#: panels/cache.py:204
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
@@ -60,25 +65,25 @@ msgstr[1] ""
 msgid "Log messages"
 msgstr ""
 
-#: panels/profiling.py:126
+#: panels/profiling.py:127
 msgid "Profiling"
 msgstr ""
 
-#: panels/redirects.py:22
+#: panels/redirects.py:17
 msgid "Intercept redirects"
-msgstr ""
+msgstr "Intercetar redirecionamentos"
 
 #: panels/request.py:18
 msgid "Request"
-msgstr ""
+msgstr "Pedido"
 
-#: panels/request.py:27
+#: panels/request.py:35
 msgid "<no view>"
 msgstr ""
 
-#: panels/request.py:39
+#: panels/request.py:47
 msgid "<unavailable>"
-msgstr ""
+msgstr "<indisponível>"
 
 #: panels/settings.py:20
 msgid "Settings"
@@ -89,34 +94,34 @@ msgstr "Configurações"
 msgid "Settings from <code>%s</code>"
 msgstr ""
 
-#: panels/signals.py:41
+#: panels/signals.py:45
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/signals.py:44
+#: panels/signals.py:48
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/signals.py:49
+#: panels/signals.py:53
 msgid "Signals"
 msgstr "Sinais"
 
-#: panels/staticfiles.py:90
+#: panels/staticfiles.py:89
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
 msgstr ""
 
-#: panels/staticfiles.py:115
+#: panels/staticfiles.py:107
 msgid "Static files"
-msgstr ""
+msgstr "Ficheiros estáticos"
 
-#: panels/staticfiles.py:120
+#: panels/staticfiles.py:112
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
@@ -131,7 +136,7 @@ msgstr ""
 #: panels/timer.py:28
 #, python-format
 msgid "Total: %0.2fms"
-msgstr ""
+msgstr "Total: %0.2fms"
 
 #: panels/timer.py:34 templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
@@ -189,45 +194,45 @@ msgstr ""
 msgid "Versions"
 msgstr "Versões"
 
-#: panels/sql/panel.py:21
+#: panels/sql/panel.py:22
 msgid "Autocommit"
 msgstr ""
 
-#: panels/sql/panel.py:22
+#: panels/sql/panel.py:23
 msgid "Read uncommitted"
 msgstr ""
 
-#: panels/sql/panel.py:23
+#: panels/sql/panel.py:24
 msgid "Read committed"
 msgstr ""
 
-#: panels/sql/panel.py:24
+#: panels/sql/panel.py:25
 msgid "Repeatable read"
 msgstr ""
 
-#: panels/sql/panel.py:25
+#: panels/sql/panel.py:26
 msgid "Serializable"
 msgstr "Variável"
 
-#: panels/sql/panel.py:36
+#: panels/sql/panel.py:37
 msgid "Idle"
 msgstr ""
 
-#: panels/sql/panel.py:37
+#: panels/sql/panel.py:38
 msgid "Active"
 msgstr "Acção"
 
-#: panels/sql/panel.py:38
+#: panels/sql/panel.py:39
 msgid "In transaction"
 msgstr ""
 
-#: panels/sql/panel.py:39
+#: panels/sql/panel.py:40
 msgid "In error"
 msgstr "Erro"
 
-#: panels/sql/panel.py:40
+#: panels/sql/panel.py:41
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: panels/sql/panel.py:105
 msgid "SQL"
@@ -242,33 +247,33 @@ msgstr "Templates"
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "Templates (%(num_templates)s renderizados)"
 
-#: templates/debug_toolbar/base.html:17
+#: templates/debug_toolbar/base.html:19
 msgid "Hide toolbar"
-msgstr ""
+msgstr "Ocultar barra"
 
-#: templates/debug_toolbar/base.html:17
+#: templates/debug_toolbar/base.html:19
 msgid "Hide"
 msgstr "Ocultar"
 
-#: templates/debug_toolbar/base.html:23
+#: templates/debug_toolbar/base.html:25
 msgid "Disable for next and successive requests"
-msgstr ""
+msgstr "Desactivar para o seguinte e sucessivos pedidos"
 
-#: templates/debug_toolbar/base.html:23
+#: templates/debug_toolbar/base.html:25
 msgid "Enable for next and successive requests"
-msgstr ""
+msgstr "Activar para o próximo e sucessivos pedidos"
 
-#: templates/debug_toolbar/base.html:45
+#: templates/debug_toolbar/base.html:47
 msgid "Show toolbar"
-msgstr ""
+msgstr "Mostrar barra"
 
-#: templates/debug_toolbar/base.html:51
+#: templates/debug_toolbar/base.html:53
 msgid "Close"
 msgstr "Fechar"
 
 #: templates/debug_toolbar/redirect.html:8
 msgid "Location:"
-msgstr ""
+msgstr "Localização"
 
 #: templates/debug_toolbar/redirect.html:10
 msgid ""
@@ -279,7 +284,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
-msgstr ""
+msgstr "Resumo"
 
 #: templates/debug_toolbar/panels/cache.html:6
 msgid "Total calls"
@@ -299,7 +304,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
-msgstr ""
+msgstr "Comandos"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
@@ -451,7 +456,7 @@ msgstr "Sem dados GET"
 
 #: templates/debug_toolbar/panels/request.html:102
 msgid "POST data"
-msgstr ""
+msgstr "dados POST"
 
 #: templates/debug_toolbar/panels/request.html:123
 msgid "No POST data"
@@ -503,15 +508,15 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:69
 msgid "Transaction status:"
-msgstr ""
+msgstr "Estado da transacção:"
 
 #: templates/debug_toolbar/panels/sql.html:83
 msgid "(unknown)"
-msgstr ""
+msgstr "(desconhecido)"
 
 #: templates/debug_toolbar/panels/sql.html:92
 msgid "No SQL queries were recorded during this request."
-msgstr ""
+msgstr "Nenhuma query SQL foi registada durante este pedido."
 
 #: templates/debug_toolbar/panels/sql_explain.html:3
 #: templates/debug_toolbar/panels/sql_profile.html:3
@@ -561,7 +566,7 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/staticfiles.html:8
 #, python-format
 msgid "(prefix %(prefix)s)"
-msgstr ""
+msgstr "(prefixo %(prefix)s)"
 
 #: templates/debug_toolbar/panels/staticfiles.html:12
 #: templates/debug_toolbar/panels/staticfiles.html:23
@@ -581,8 +586,8 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/staticfiles.html:26
 msgid "Static file"
 msgid_plural "Static files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ficheiro estático"
+msgstr[1] "Ficheiros estáticos"
 
 #: templates/debug_toolbar/panels/staticfiles.html:40
 #, python-format
@@ -644,7 +649,7 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:5
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: templates/debug_toolbar/panels/versions.html:6
 msgid "Version"

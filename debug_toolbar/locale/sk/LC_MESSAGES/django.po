@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-23 12:40+0100\n"
-"PO-Revision-Date: 2013-12-29 21:50+0000\n"
-"Last-Translator: Juraj Bubniak <translations@jbub.eu>\n"
+"POT-Creation-Date: 2014-04-25 21:52+0200\n"
+"PO-Revision-Date: 2014-04-25 19:53+0000\n"
+"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/django-debug-toolbar/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,17 +20,21 @@ msgstr ""
 "Language: sk\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
+#: apps.py:11
+msgid "Debug Toolbar"
+msgstr ""
+
 #: views.py:14
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
 msgstr "Dáta pre tento panel už nie sú k dispozícii. Načítajte si prosím stránku a skúste to znova."
 
-#: panels/cache.py:189
+#: panels/cache.py:191
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:194
+#: panels/cache.py:196
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
@@ -38,7 +42,7 @@ msgstr[0] "%(cache_calls)d volanie za %(time).2fms"
 msgstr[1] "%(cache_calls)d volaní za %(time).2fms"
 msgstr[2] "%(cache_calls)d volaní za %(time).2fms"
 
-#: panels/cache.py:202
+#: panels/cache.py:204
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
@@ -66,11 +70,11 @@ msgstr[2] "%(count)s správ"
 msgid "Log messages"
 msgstr "Správy zápisu"
 
-#: panels/profiling.py:126
+#: panels/profiling.py:127
 msgid "Profiling"
 msgstr "Analýza"
 
-#: panels/redirects.py:22
+#: panels/redirects.py:17
 msgid "Intercept redirects"
 msgstr "Zachytiť presmerovania"
 
@@ -78,11 +82,11 @@ msgstr "Zachytiť presmerovania"
 msgid "Request"
 msgstr "Požiadavka"
 
-#: panels/request.py:27
+#: panels/request.py:35
 msgid "<no view>"
 msgstr "<ziadne zobrazenie>"
 
-#: panels/request.py:39
+#: panels/request.py:47
 msgid "<unavailable>"
 msgstr "<nedostupny>"
 
@@ -95,7 +99,7 @@ msgstr "Nastavenia"
 msgid "Settings from <code>%s</code>"
 msgstr "Nastavenia z <code>%s</code>"
 
-#: panels/signals.py:41
+#: panels/signals.py:45
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
@@ -103,7 +107,7 @@ msgstr[0] "%(num_receivers)d príjemca 1 signálu"
 msgstr[1] "%(num_receivers)d príjemcov 1 signálu"
 msgstr[2] "%(num_receivers)d príjemcov 1 signálu"
 
-#: panels/signals.py:44
+#: panels/signals.py:48
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
@@ -111,20 +115,20 @@ msgstr[0] "%(num_receivers)d príjemca %(num_signals)d signálov"
 msgstr[1] "%(num_receivers)d príjemcov %(num_signals)d signálov"
 msgstr[2] "%(num_receivers)d príjemcov %(num_signals)d signálov"
 
-#: panels/signals.py:49
+#: panels/signals.py:53
 msgid "Signals"
 msgstr "Signály"
 
-#: panels/staticfiles.py:90
+#: panels/staticfiles.py:89
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
 msgstr "Statické súbory (%(num_found)s nájdených, %(num_used)s použitých)"
 
-#: panels/staticfiles.py:115
+#: panels/staticfiles.py:107
 msgid "Static files"
 msgstr "Statické súbory"
 
-#: panels/staticfiles.py:120
+#: panels/staticfiles.py:112
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
@@ -198,43 +202,43 @@ msgstr "%(vcsw)d dobrovoľných, %(ivcsw)d nedobrovoľných"
 msgid "Versions"
 msgstr "Verzie"
 
-#: panels/sql/panel.py:21
+#: panels/sql/panel.py:22
 msgid "Autocommit"
 msgstr "Autocommit"
 
-#: panels/sql/panel.py:22
+#: panels/sql/panel.py:23
 msgid "Read uncommitted"
 msgstr "Read uncommitted"
 
-#: panels/sql/panel.py:23
+#: panels/sql/panel.py:24
 msgid "Read committed"
 msgstr "Read committed"
 
-#: panels/sql/panel.py:24
+#: panels/sql/panel.py:25
 msgid "Repeatable read"
 msgstr "Opakovateľné čítanie"
 
-#: panels/sql/panel.py:25
+#: panels/sql/panel.py:26
 msgid "Serializable"
 msgstr "Premenná"
 
-#: panels/sql/panel.py:36
+#: panels/sql/panel.py:37
 msgid "Idle"
 msgstr "Nečinný"
 
-#: panels/sql/panel.py:37
+#: panels/sql/panel.py:38
 msgid "Active"
 msgstr "Akcia"
 
-#: panels/sql/panel.py:38
+#: panels/sql/panel.py:39
 msgid "In transaction"
 msgstr "Stav transakcie:"
 
-#: panels/sql/panel.py:39
+#: panels/sql/panel.py:40
 msgid "In error"
 msgstr "Chyba"
 
-#: panels/sql/panel.py:40
+#: panels/sql/panel.py:41
 msgid "Unknown"
 msgstr "(neznámy)"
 
@@ -251,27 +255,27 @@ msgstr "Šablóny"
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "Šablóny (%(num_templates)s spracovaných)"
 
-#: templates/debug_toolbar/base.html:17
+#: templates/debug_toolbar/base.html:19
 msgid "Hide toolbar"
 msgstr "Skryť panel nástrojov"
 
-#: templates/debug_toolbar/base.html:17
+#: templates/debug_toolbar/base.html:19
 msgid "Hide"
 msgstr "Skryť"
 
-#: templates/debug_toolbar/base.html:23
+#: templates/debug_toolbar/base.html:25
 msgid "Disable for next and successive requests"
 msgstr "Zakázať pre ďalšie a nasledujúce požiadavky"
 
-#: templates/debug_toolbar/base.html:23
+#: templates/debug_toolbar/base.html:25
 msgid "Enable for next and successive requests"
 msgstr "Povoliť pre ďalšie a nasledujúce požiadavky"
 
-#: templates/debug_toolbar/base.html:45
+#: templates/debug_toolbar/base.html:47
 msgid "Show toolbar"
 msgstr "Zobraziť panel nástrojov"
 
-#: templates/debug_toolbar/base.html:51
+#: templates/debug_toolbar/base.html:53
 msgid "Close"
 msgstr "Zatvoriť"
 
