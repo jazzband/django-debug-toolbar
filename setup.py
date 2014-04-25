@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='django-debug-toolbar',
-    version='1.1',
+    version='1.2',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
     long_description=open('README.rst', encoding='utf-8').read(),
@@ -33,6 +33,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )
