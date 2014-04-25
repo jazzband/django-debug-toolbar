@@ -1,6 +1,23 @@
 Change log
 ==========
 
+1.2
+---
+
+New features
+~~~~~~~~~~~~
+
+* The ``JQUERY_URL`` setting defines where the toolbar loads jQuery from.
+
+Bugfixes
+~~~~~~~~
+
+* The toolbar now always loads a private copy of jQuery in order to avoid
+  using an incompatible version. It no longer attemps to integrate with AMD.
+
+  This private copy is available in ``djdt.jQuery``. Third-party panels are
+  encouraged to use it because it should be as stable as the toolbar itself.
+
 1.1
 ---
 
@@ -24,8 +41,8 @@ Bugfixes
 Deprecated features
 ~~~~~~~~~~~~~~~~~~~
 
-* The `INTERCEPT_REDIRECT` setting is superseded by the more generic
-  `DISABLE_PANELS`.
+* The ``INTERCEPT_REDIRECTS`` setting is superseded by the more generic
+  ``DISABLE_PANELS``.
 
 1.0
 ---

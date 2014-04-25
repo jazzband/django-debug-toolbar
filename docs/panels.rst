@@ -240,7 +240,8 @@ according to the public API described below. Unless noted otherwise, all
 methods are optional.
 
 Panels can ship their own templates, static files and views. They're no public
-CSS or JavaScript API at this time, but they can assume jQuery is available.
+CSS or JavaScript API at this time, but they can assume jQuery is available in
+``djdt.jQuery``.
 
 .. autoclass:: debug_toolbar.panels.Panel(*args, **kwargs)
 

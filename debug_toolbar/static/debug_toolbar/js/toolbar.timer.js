@@ -1,10 +1,4 @@
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-    } else {
-        factory(jQuery);
-    }
-}(function ($) {
+(function ($) {
     // Browser timing remains hidden unless we can successfully access the performance object
     var perf = window.performance || window.msPerformance ||
                window.webkitPerformance || window.mozPerformance;
@@ -51,4 +45,4 @@
     addRow('domContentLoadedEventStart', 'domContentLoadedEventEnd');
     addRow('loadEventStart', 'loadEventEnd');
     $('#djDebugBrowserTiming').css("display", "block");
-}));
+})(djdt.jQuery);

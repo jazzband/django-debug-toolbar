@@ -1,10 +1,4 @@
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-    } else {
-        factory(jQuery);
-    }
-}(function ($) {
+(function ($) {
     var uarr = String.fromCharCode(0x25b6),
         darr = String.fromCharCode(0x25bc);
 
@@ -14,4 +8,4 @@
         $(this).parent().next().toggle();
         return false;
     });
-}));
+})(djdt.jQuery);

@@ -71,6 +71,14 @@ Toolbar options
   The toolbar searches for this string in the HTML and inserts itself just
   before.
 
+* ``JQUERY_URL``
+
+  Default: ``'//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'``
+
+  URL of the copy of jQuery that will be used by the toolbar. Set it to a
+  locally-hosted version of jQuery for offline development. Make it empty to
+  rely on a version of jQuery that already exists on every page of your site.
+
 * ``RENDER_PANELS``
 
   Default: ``None``
@@ -113,7 +121,7 @@ Toolbar options
   This is the dotted path to a function used for determining whether the
   toolbar should show or not. The default checks are that ``DEBUG`` must be
   set to ``True``, the IP of the request must be in ``INTERNAL_IPS``, and the
-  request must no be an AJAX request. You can provide your own function 
+  request must no be an AJAX request. You can provide your own function
   ``callback(request)`` which returns ``True`` or ``False``.
 
 Panel options
