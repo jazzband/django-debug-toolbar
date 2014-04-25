@@ -132,12 +132,18 @@
             });
             var handle = $('#djDebugToolbarHandle');
             $('#djShowToolBarButton').on('mousedown', function (event) {
-                var baseY = handle.offset().top - event.pageY;
+                var startPageY = event.pageY;
+                var baseY = handle.offset().top - startPageY;
                 $(document).on('mousemove.djDebug', function (event) {
-                    var offset = handle.offset();
-                    offset.top = baseY + event.pageY;
-                    handle.offset(offset);
-                    djdt.handleDragged = true;
+                    // Chrome can send spurious mousemove events, so don't do anything unless the
+                    // cursor really moved.  Otherwise, it will be impossible to expand the toolbar
+                    // due to djdt.handleDragged being set to true.
+                    if (djdt.handleDragged || event.pageY != startPageY) {
+                        var offset = handle.offset();
+                        offset.top = baseY + event.pageY;
+                        handle.offset(offset);
+                        djdt.handleDragged = true;
+                    }
                 });
                 return false;
             });
