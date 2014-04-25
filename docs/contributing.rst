@@ -86,10 +86,6 @@ The Debug Toolbar includes a limited but growing test suite. If you fix a bug
 or add a feature code, please consider adding proper coverage in the test
 suite, especially if it has a chance for a regression.
 
-If you change a CSS or a JavaScript file, you should update both the original
-file and the minified version in the same commit. Use ``make compress_css``
-and ``make compress_js`` to minify files.
-
 Translations
 ------------
 
