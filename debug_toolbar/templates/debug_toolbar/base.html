@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
 {% if toolbar.config.JQUERY_URL %}
 <script src="{{ toolbar.config.JQUERY_URL }}"></script>
-<script>var djdt = {jQuery: jQuery.noConflict(true)};</script>
-{% else %}
 <script>var djdt = {jQuery: jQuery};</script>
+{% else %}
+<script>var djdt = {jQuery: jQuery.noConflict(true)};</script>
 {% endif %}
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" style="display:none;" dir="ltr"
