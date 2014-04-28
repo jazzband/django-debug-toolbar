@@ -64,6 +64,9 @@ what it does, or if you prefer defining your settings explicitly, read below.
     crashes with a long stack trace after hitting an :exc:`ImportError` or an
     :exc:`~django.core.exceptions.ImproperlyConfigured` exception, follow the
     explicit setup instructions.
+    
+    Also, debug_toolbar is not compatible with django.middleware.gzip.GZipMiddleware
+    disable it in dev if you want to have debug_toolbar works !
 
 Explicit setup
 --------------
