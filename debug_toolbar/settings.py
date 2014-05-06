@@ -130,7 +130,7 @@ else:
 if 'INTERCEPT_REDIRECTS' in USER_CONFIG:
     warnings.warn(
         "INTERCEPT_REDIRECTS is deprecated. Please use the "
-        "DISABLE_PANELS config in the"
+        "DISABLE_PANELS config in the "
         "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
     if USER_CONFIG['INTERCEPT_REDIRECTS']:
         if 'debug_toolbar.panels.redirects.RedirectsPanel' \
