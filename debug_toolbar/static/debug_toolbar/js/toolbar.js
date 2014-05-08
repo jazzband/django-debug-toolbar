@@ -37,8 +37,6 @@
                             var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
                             $('#djDebugWindow').html(message).show();
                         });
-                    } else {
-                        inner.prev().remove();  // Remove AJAX loader
                     }
                     current.show();
                     $('#djDebugToolbar li').removeClass('active');
