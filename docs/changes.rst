@@ -1,6 +1,15 @@
 Change log
 ==========
 
+1.2.1
+-----
+
+Bugfixes
+~~~~~~~~
+
+* Don't show AJAX loader for preloaded panels.
+* Now we undefine "define" to avoid requirejs conflict. Fixes #591.
+
 1.2
 ---
 
