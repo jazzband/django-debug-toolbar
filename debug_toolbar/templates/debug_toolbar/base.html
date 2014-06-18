@@ -28,7 +28,7 @@
 					{% if panel.has_content and panel.enabled %}
 						<a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}">
 					{% else %}
-						<div class="contentless{% if not panel.enabled %} disabled{% endif %}">
+						<div class="djdt-contentless{% if not panel.enabled %} djdt-disabled{% endif %}">
 					{% endif %}
 					{{ panel.nav_title }}
 					{% if panel.enabled %}
@@ -50,21 +50,21 @@
 	</div>
 	{% for panel in toolbar.panels %}
 		{% if panel.has_content and panel.enabled %}
-			<div id="{{ panel.panel_id }}" class="panelContent">
+			<div id="{{ panel.panel_id }}" class="djdt-panelContent">
 				<div class="djDebugPanelTitle">
 					<a href="" class="djDebugClose">{% trans "Close" %}</a>
 					<h3>{{ panel.title|safe }}</h3>
 				</div>
 				<div class="djDebugPanelContent">
 					{% if toolbar.store_id %}
-					<img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="loader" />
-					<div class="scroll"></div>
+					<img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="djdt-loader" />
+					<div class="djdt-scroll"></div>
 					{% else %}
-					<div class="scroll">{{ panel.content }}</div>
+					<div class="djdt-scroll">{{ panel.content }}</div>
 					{% endif %}
 				</div>
 			</div>
 		{% endif %}
 	{% endfor %}
-	<div id="djDebugWindow" class="panelContent"></div>
+	<div id="djDebugWindow" class="djdt-panelContent"></div>
 </div>

@@ -15,10 +15,10 @@
                 current = $('#djDebug #' + this.className);
                 if (current.is(':visible')) {
                     $(document).trigger('close.djDebug');
-                    $(this).parent().removeClass('active');
+                    $(this).parent().removeClass('djdt-active');
                 } else {
-                    $('.panelContent').hide(); // Hide any that are already open
-                    var inner = current.find('.djDebugPanelContent .scroll'),
+                    $('.djdt-panelContent').hide(); // Hide any that are already open
+                    var inner = current.find('.djDebugPanelContent .djdt-scroll'),
                         store_id = $('#djDebug').data('store-id'),
                         render_panel_url = $('#djDebug').data('render-panel-url');
                     if (store_id !== '' && inner.children().length === 0) {
@@ -39,14 +39,14 @@
                         });
                     }
                     current.show();
-                    $('#djDebugToolbar li').removeClass('active');
-                    $(this).parent().addClass('active');
+                    $('#djDebugToolbar li').removeClass('djdt-active');
+                    $(this).parent().addClass('djdt-active');
                 }
                 return false;
             });
             $(document).on('click', '#djDebug a.djDebugClose', function() {
                 $(document).trigger('close.djDebug');
-                $('#djDebugToolbar li').removeClass('active');
+                $('#djDebugToolbar li').removeClass('djdt-active');
                 return false;
             });
             $(document).on('click', '#djDebug .djDebugPanelButton input[type=checkbox]', function() {
@@ -168,9 +168,9 @@
                     return;
                 }
                 // If a panel is open, close that
-                if ($('.panelContent').is(':visible')) {
-                    $('.panelContent').hide();
-                    $('#djDebugToolbar li').removeClass('active');
+                if ($('.djdt-panelContent').is(':visible')) {
+                    $('.djdt-panelContent').hide();
+                    $('#djDebugToolbar li').removeClass('djdt-active');
                     return;
                 }
                 // Otherwise, just minimize the toolbar
@@ -202,8 +202,8 @@
             // close any sub panels
             $('#djDebugWindow').hide();
             // close all panels
-            $('.panelContent').hide();
-            $('#djDebugToolbar li').removeClass('active');
+            $('.djdt-panelContent').hide();
+            $('#djDebugToolbar li').removeClass('djdt-active');
             // finally close toolbar
             $('#djDebugToolbar').hide('fast');
             $('#djDebugToolbarHandle').show();

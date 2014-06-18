@@ -71,11 +71,11 @@ def render_stacktrace(trace):
         params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
         params_dict = dict((six.text_type(idx), v) for idx, v in enumerate(params))
         try:
-            stacktrace.append('<span class="path">%(0)s/</span>'
-                              '<span class="file">%(1)s</span>'
-                              ' in <span class="func">%(3)s</span>'
-                              '(<span class="lineno">%(2)s</span>)\n'
-                              '  <span class="code">%(4)s</span>'
+            stacktrace.append('<span class="djdt-path">%(0)s/</span>'
+                              '<span class="djdt-file">%(1)s</span>'
+                              ' in <span class="djdt-func">%(3)s</span>'
+                              '(<span class="djdt-lineno">%(2)s</span>)\n'
+                              '  <span class="djdt-code">%(4)s</span>'
                               % params_dict)
         except KeyError:
             # This frame doesn't have the expected format, so skip it and move on to the next one
