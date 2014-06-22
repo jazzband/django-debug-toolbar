@@ -50,7 +50,7 @@
 	<tbody>
 	{% for call in calls %}
 		<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}" id="cacheMain_{{ forloop.counter }}">
-			<td class="toggle">
+			<td class="djdt-toggle">
 				<a class="djToggleSwitch" data-toggle-name="cacheMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="javascript:void(0)">+</a>
 			</td>
 			<td>{{ call.time|floatformat:"4" }}</td>
@@ -61,7 +61,7 @@
 		</tr>
 		<tr class="djUnselected djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %} djToggleDetails_{{ forloop.counter }}" id="cacheDetails_{{ forloop.counter }}">
 			<td colspan="1"></td>
-			<td colspan="5"><pre class="stack">{{ call.trace }}</pre></td>
+			<td colspan="5"><pre class="djdt-stack">{{ call.trace }}</pre></td>
 		</tr>
 	{% endfor %}
 	</tbody>

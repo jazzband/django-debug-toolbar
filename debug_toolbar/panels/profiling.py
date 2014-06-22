@@ -62,10 +62,10 @@ class FunctionCall(object):
             file_path, file_name = file_name.rsplit(os.sep, 1)
 
             return mark_safe(
-                '<span class="path">{0}/</span>'
-                '<span class="file">{1}</span>'
-                ' in <span class="func">{3}</span>'
-                '(<span class="lineno">{2}</span>)'.format(
+                '<span class="djdt-path">{0}/</span>'
+                '<span class="djdt-file">{1}</span>'
+                ' in <span class="djdt-func">{3}</span>'
+                '(<span class="djdt-lineno">{2}</span>)'.format(
                     file_path,
                     file_name,
                     line_num,
