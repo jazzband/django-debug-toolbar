@@ -150,7 +150,7 @@
             $(document).on('mouseup', function () {
                 $(document).off('mousemove.djDebug');
                 if (djdt.handleDragged) {
-                    var top = handle.offset().top;
+                    var top = handle.offset().top - window.pageYOffset;
                     djdt.cookie.set('djdttop', top, {
                         path: '/',
                         expires: 10
