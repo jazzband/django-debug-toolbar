@@ -61,6 +61,11 @@ what it does, or if you prefer defining your settings explicitly, read below.
     :exc:`~django.core.exceptions.ImproperlyConfigured` exception, follow the
     explicit setup instructions.
 
+    When the automatic setup is used, the Debug Toolbar is not compatible with
+    :class:`~django.middleware.gzip.GZipMiddleware`. Please disable that
+    middleware during development or use the explicit setup to allow the
+    toolbar to function properly.
+
 Explicit setup
 --------------
 
@@ -105,7 +110,7 @@ settings module as follows::
 The order of ``MIDDLEWARE_CLASSES`` is important. You should include the Debug
 Toolbar middleware as early as possible in the list. However, it must come
 after any other middleware that encodes the response's content, such as
-``GZipMiddleware``.
+:class:`~django.middleware.gzip.GZipMiddleware`.
 
 If ``MIDDLEWARE_CLASSES`` doesn't contain the middleware, the Debug Toolbar
 automatically adds it the beginning of the list.
