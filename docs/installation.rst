@@ -65,6 +65,11 @@ what it does, or if you prefer defining your settings explicitly, read below.
     :exc:`~django.core.exceptions.ImproperlyConfigured` exception, follow the
     explicit setup instructions.
 
+    The Debug Toolbar is not compatible with
+    :class:`django.middleware.gzip.GZipMiddleware` using the default
+    configuration. Please disable it during development or use the explicit
+    setup to allow the toolbar to function properly.
+
 Explicit setup
 --------------
 
