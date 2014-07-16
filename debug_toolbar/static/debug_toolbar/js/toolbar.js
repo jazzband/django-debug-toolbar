@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, publicAPI) {
     var djdt = {
         handleDragged: false,
         events: {
@@ -280,5 +280,11 @@
             }
         }
     };
+    $.extend(publicAPI, {
+        show_toolbar: djdt.show_toolbar,
+        hide_toolbar: djdt.hide_toolbar,
+        close: djdt.close,
+        cookie: djdt.cookie
+    });
     $(document).ready(djdt.init);
-})(djdt.jQuery);
+})(djdt.jQuery, djdt);
