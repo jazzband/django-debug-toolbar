@@ -278,7 +278,6 @@ JavaScript API
 Panel templates should include any JavaScript files they need. There are a few
 common methods available, as well as the toolbar's version of jQuery.
 
-
 .. js:function:: djdt.close
 
     Triggers the event to close any active panels.
@@ -291,21 +290,18 @@ common methods available, as well as the toolbar's version of jQuery.
 
 .. js:function:: djdt.cookie.set
 
-    This is the toolbar's version of jQuery.
+    This is a helper function to set a value stored in the cookies.
 
     :param string key: The key to be used.
 
     :param string value: The value to be set.
 
-    :param Object options: The key for the value to be fetched. It should contain
-    the properties ``expires`` and ``path``.
+    :param Object options: The options for the value to be set. It should contain
+        the properties ``expires`` and ``path``.
 
 .. js:function:: djdt.hide_toolbar
 
     Closes any panels and hides the toolbar.
-
-    :param boolean setCookie: Whether or not it should set the display cookie for
-    the toolbar.
 
 .. js:function:: djdt.jQuery
 
@@ -314,6 +310,3 @@ common methods available, as well as the toolbar's version of jQuery.
 .. js:function:: djdt.show_toolbar
 
     Shows the toolbar.
-
-    :param boolean animate: Whether or not it should use an animation when calling
-    ``show`` on the toolbar.
