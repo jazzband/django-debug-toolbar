@@ -112,20 +112,20 @@ Profiling
 
 Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
 
-Profiling information for processing the request.
+Profiling information for the processing of the request.
 
 If the ``debug_toolbar.middleware.DebugToolbarMiddleware`` is first in
 ``MIDDLEWARE_CLASSES`` then the other middlewares' ``process_view`` methods
 will not be executed. This is because ``ProfilingPanel.process_view`` will
-return a ``HttpResponse`` which causes the other middlewares' calls to
-``process_view`` to be skipped.
+return a ``HttpResponse`` which causes the other middlewares'
+``process_view`` methods to be skipped.
 
 Note that if the quick setup is used, the ``DebugToolbarMiddleware`` will
 be inserted first in ``MIDDLEWARE_CLASSES``.
 
-If you need to instrument code run by middleware, then you should either
-disable the ``ProfilingPanel``. If you need to use the profiling panel and
-need the other middlewares' code to execute, then move
+If you need to instrument code run by middleware, then you should
+disable the ``ProfilingPanel``. Another option, or if you need to use the
+profiling panel and need the other middlewares' code to execute, then move
 ``DebugToolbarMiddleware`` to the end of ``MIDDLEWARE_CLASSES``.
 
 

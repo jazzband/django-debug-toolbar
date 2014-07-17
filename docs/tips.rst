@@ -13,9 +13,10 @@ requests and return responses. Putting the debug toolbar middleware *after*
 the Flatpage middleware, for example, means the toolbar will not show up on
 flatpages.
 
-My middleware isn't working correctly
--------------------------------------
-Using the Debug Toolbar in it's default configuration and using the profiling
+Middleware isn't working correctly
+----------------------------------
+
+Using the Debug Toolbar in its default configuration and with the profiling
 panel will cause middlewares after
 ``debug_toolbar.middleware.DebugToolbarMiddleware`` to not execute their
 ``process_view`` functions. This can be resolved by disabling the profiling
