@@ -139,9 +139,7 @@
                     // cursor really moved.  Otherwise, it will be impossible to expand the toolbar
                     // due to djdt.handleDragged being set to true.
                     if (djdt.handleDragged || event.pageY != startPageY) {
-                        var offset = handle.offset();
-                        offset.top = baseY + event.pageY;
-                        handle.offset(offset);
+                        handle.offset({top: baseY + event.pageY});
                         djdt.handleDragged = true;
                     }
                 });
