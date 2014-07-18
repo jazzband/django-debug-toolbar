@@ -240,8 +240,7 @@ according to the public API described below. Unless noted otherwise, all
 methods are optional.
 
 Panels can ship their own templates, static files and views. They're no public
-CSS or JavaScript API at this time, but they can assume jQuery is available in
-``djdt.jQuery``.
+CSS API at this time.
 
 .. autoclass:: debug_toolbar.panels.Panel(*args, **kwargs)
 
@@ -272,3 +271,42 @@ CSS or JavaScript API at this time, but they can assume jQuery is available in
     .. automethod:: debug_toolbar.panels.Panel.process_view
 
     .. automethod:: debug_toolbar.panels.Panel.process_response
+
+JavaScript API
+~~~~~~~~~~~~~~
+
+Panel templates should include any JavaScript files they need. There are a few
+common methods available, as well as the toolbar's version of jQuery.
+
+.. js:function:: djdt.close
+
+    Triggers the event to close any active panels.
+
+.. js:function:: djdt.cookie.get
+
+    This is a helper function to fetch values stored in the cookies.
+
+    :param string key: The key for the value to be fetched.
+
+.. js:function:: djdt.cookie.set
+
+    This is a helper function to set a value stored in the cookies.
+
+    :param string key: The key to be used.
+
+    :param string value: The value to be set.
+
+    :param Object options: The options for the value to be set. It should contain
+        the properties ``expires`` and ``path``.
+
+.. js:function:: djdt.hide_toolbar
+
+    Closes any panels and hides the toolbar.
+
+.. js:function:: djdt.jQuery
+
+    This is the toolbar's version of jQuery.
+
+.. js:function:: djdt.show_toolbar
+
+    Shows the toolbar.
