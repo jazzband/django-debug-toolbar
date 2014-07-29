@@ -202,6 +202,15 @@ Path: ``neo4j_panel.Neo4jPanel``
 
 Trace neo4j rest API calls in your django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
 
+Request History
+~~~~~~~~~~~~~~~
+
+URL: https://github.com/djsutho/django-debug-toolbar-request-history
+
+Path: ``ddt_request_history.panels.request_history.RequestHistoryPanel``
+
+Switch between requests to view their stats. Also adds support for viewing stats for ajax requests.
+
 Sites
 ~~~~~
 
