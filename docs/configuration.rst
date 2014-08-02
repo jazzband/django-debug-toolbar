@@ -148,14 +148,42 @@ Panel options
 
 * ``HIDE_IN_STACKTRACES``
 
-  Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar',
-  'django')``. The first value is ``socketserver`` on Python 3 and
+  Default::
+
+      HIDE_IN_STACKTRACES = (
+          'socketserver',
+          'threading',
+          'wsgiref',
+          'debug_toolbar',
+          'django.apps',
+          'django.conf',
+          'django.core',
+          'django.db',
+          'django.dispatch',
+          'django.forms',
+          'django.http',
+          'django.middleware',
+          'django.shortcuts',
+          'django.template',
+          'django.templatetags',
+          'django.test',
+          'django.utils',
+          'django.views',
+      )
+
+  The first value is ``socketserver`` on Python 3 and
   ``SocketServer`` on Python 2.
 
   Panels: cache, SQL
 
   Useful for eliminating server-related entries which can result
   in enormous DOM structures and toolbar rendering delays.
+
+
+.. note::
+
+    Depending on which version of Django you are using ``'django.apps'``
+    or ``'django.shortcuts'`` will not be included.
 
 * ``PROFILER_MAX_DEPTH``
 

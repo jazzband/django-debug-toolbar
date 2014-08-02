@@ -5,6 +5,7 @@ import warnings
 from django.conf import settings
 from django.utils.importlib import import_module
 from django.utils import six
+import django
 
 
 # Always import this module as follows:
@@ -32,12 +33,29 @@ CONFIG_DEFAULTS = {
         'threading',
         'wsgiref',
         'debug_toolbar',
-        'django',
+        'django.conf',
+        'django.core',
+        'django.db',
+        'django.dispatch',
+        'django.forms',
+        'django.http',
+        'django.middleware',
+        'django.template',
+        'django.templatetags',
+        'django.test',
+        'django.utils',
+        'django.views',
     ),
     'PROFILER_MAX_DEPTH': 10,
     'SHOW_TEMPLATE_CONTEXT': True,
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
 }
+
+for module in ['apps', 'shortcuts']:
+    # Look for any module of django that's not in all versions.
+    if hasattr(django, module):
+        CONFIG_DEFAULTS['HIDE_IN_STACKTRACES'] += (
+            "django.{}".format(module),)
 
 USER_CONFIG = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {})
 # Backward-compatibility for 1.0, remove in 2.0.
