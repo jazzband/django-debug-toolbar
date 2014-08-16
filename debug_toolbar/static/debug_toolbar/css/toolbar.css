@@ -370,7 +370,6 @@
 */
 
 #djDebug .djdt-panelContent .djDebugClose {
-	text-indent:-9999999px;
 	display:block;
 	position:absolute;
 	top:4px;
