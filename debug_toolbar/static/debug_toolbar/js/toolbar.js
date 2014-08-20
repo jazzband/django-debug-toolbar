@@ -34,7 +34,7 @@
                             inner.prev().remove();  // Remove AJAX loader
                             inner.html(data);
                         }).fail(function(xhr){
-                            var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+                            var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
                             $('#djDebugWindow').html(message).show();
                         });
                     }
@@ -79,7 +79,7 @@
                 $.ajax(ajax_data).done(function(data){
                     $('#djDebugWindow').html(data).show();
                 }).fail(function(xhr){
-                        var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href="">Back</a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+                        var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
                         $('#djDebugWindow').html(message).show();
                 });
 
