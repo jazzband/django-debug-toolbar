@@ -12,7 +12,7 @@ setup(
     url='https://github.com/django-debug-toolbar/django-debug-toolbar',
     download_url='https://pypi.python.org/pypi/django-debug-toolbar',
     license='BSD',
-    packages=find_packages(exclude=('tests', 'example')),
+    packages=find_packages(exclude=('tests.*', 'tests', 'example')),
     install_requires=[
         'django>=1.4.2',
         'sqlparse',
