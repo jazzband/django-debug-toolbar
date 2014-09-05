@@ -150,7 +150,6 @@ if 'INTERCEPT_REDIRECTS' in USER_CONFIG:
             'debug_toolbar.panels.redirects.RedirectsPanel'
         )
 
-
 PATCH_SETTINGS = getattr(settings, 'DEBUG_TOOLBAR_PATCH_SETTINGS', settings.DEBUG)
 
 
@@ -158,8 +157,28 @@ PATCH_SETTINGS = getattr(settings, 'DEBUG_TOOLBAR_PATCH_SETTINGS', settings.DEBU
 # imports are placed inside functions to make it safe to import this module.
 
 
-def is_toolbar_middleware(middleware_path):
+def check_middleware():
+    from django.middleware.gzip import GZipMiddleware
     from debug_toolbar.middleware import DebugToolbarMiddleware
+    gzip_index = None
+    debug_toolbar_index = None
+
+    # Determine the indexes which gzip and/or the toolbar are installed at
+    for i, middleware in enumerate(settings.MIDDLEWARE_CLASSES):
+        if is_middleware_class(GZipMiddleware, middleware):
+            gzip_index = i
+        elif is_middleware_class(DebugToolbarMiddleware, middleware):
+            debug_toolbar_index = i
+    # If the toolbar appears before the gzip index, raise a warning
+    if gzip_index is not None and debug_toolbar_index < gzip_index:
+        warnings.warn(
+            "Please use an explicit setup with the "
+            "debug_toolbar.middleware.DebugToolbarMiddleware "
+            "after django.middleware.gzip.GZipMiddlware "
+            "in MIDDLEWARE_CLASSES.", Warning)
+
+
+def is_middleware_class(middleware_class, middleware_path):
     # This could be replaced by import_by_path in Django >= 1.6.
     try:
         mod_path, cls_name = middleware_path.rsplit('.', 1)
@@ -167,11 +186,12 @@ def is_toolbar_middleware(middleware_path):
         middleware_cls = getattr(mod, cls_name)
     except (AttributeError, ImportError, ValueError):
         return
-    return issubclass(middleware_cls, DebugToolbarMiddleware)
+    return issubclass(middleware_cls, middleware_class)
 
 
 def is_toolbar_middleware_installed():
-    return any(is_toolbar_middleware(middleware)
+    from debug_toolbar.middleware import DebugToolbarMiddleware
+    return any(is_middleware_class(DebugToolbarMiddleware, middleware)
                for middleware in settings.MIDDLEWARE_CLASSES)
 
 

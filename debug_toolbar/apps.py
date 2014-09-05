@@ -13,3 +13,4 @@ class DebugToolbarConfig(AppConfig):
     def ready(self):
         if dt_settings.PATCH_SETTINGS:
             dt_settings.patch_all()
+        dt_settings.check_middleware()
