@@ -18,10 +18,15 @@ from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
 from django.utils.encoding import force_text
 from django.utils import six
+try:
+    from django.utils.module_loading import import_by_path
+except ImportError:
+    import_by_path = None
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
+from debug_toolbar.panels.templates.decorators import load_template_decorator
 
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
@@ -73,6 +78,11 @@ if django.VERSION[:2] < (1, 7):
 
     Template.__init__ = new_template_init
 
+if import_by_path:
+    for loader_path in settings.TEMPLATE_LOADERS:
+        loader = import_by_path(loader_path)
+        loader.load_template = load_template_decorator(loader.load_template)
+
 
 class TemplatesPanel(Panel):
     """
@@ -84,7 +94,6 @@ class TemplatesPanel(Panel):
 
     def _store_template_info(self, sender, **kwargs):
         template, context = kwargs['template'], kwargs['context']
-
         # Skip templates that we are generating through the debug toolbar.
         if (isinstance(template.name, six.string_types) and
                 template.name.startswith('debug_toolbar/')):
@@ -131,7 +140,6 @@ class TemplatesPanel(Panel):
                 context_list.append(pformat(temp_layer))
             except UnicodeEncodeError:
                 pass
-
         kwargs['context'] = [force_text(item) for item in context_list]
         kwargs['context_processors'] = getattr(context, 'context_processors', None)
         self.templates.append(kwargs)
