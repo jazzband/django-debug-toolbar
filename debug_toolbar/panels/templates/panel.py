@@ -79,6 +79,8 @@ if django.VERSION[:2] < (1, 7):
     Template.__init__ = new_template_init
 
 if import_by_path:
+    # If we have import_by_path, decorate the load_template method
+    # for all the template loaders.
     for loader_path in settings.TEMPLATE_LOADERS:
         loader = import_by_path(loader_path)
         loader.load_template = load_template_decorator(loader.load_template)

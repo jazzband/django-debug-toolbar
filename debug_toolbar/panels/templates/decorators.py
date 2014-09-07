@@ -1,5 +1,5 @@
 from django.test.signals import template_rendered
-from debug_toolbar.panels.templates.utils import SimpleOrigin
+from django.template import Origin
 
 
 def render_decorator(func, template):
@@ -27,12 +27,12 @@ def load_template_decorator(func):
         if len(result) > 0 and hasattr(result[0], 'render'):
             template = result[0]
             if not getattr(template.render, '_decorated', False):
-                # If the template instance doesn't have an origin property
-                # set it with a simple origin class
+                # If the template instance doesn't have an origin
+                # property set it.
                 if not hasattr(template, 'origin'):
                     template_source = self.load_template_source(
                         template_name, template_dirs)[1]
-                    template.origin = SimpleOrigin(template_source)
+                    template.origin = Origin(template_source)
                 template.render = render_decorator(template.render, template)
         return result
     return load_template
