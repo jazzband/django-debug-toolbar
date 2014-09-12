@@ -9,6 +9,7 @@ try:
     from selenium.common.exceptions import NoSuchElementException
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.webdriver.common.by import By
+    from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.action_chains import ActionChains
 except ImportError:
     webdriver = None
@@ -258,3 +259,80 @@ class InitTestCase(LiveServerTestCase):
             self.selenium.find_element_by_id('djDebugToolbar').is_displayed())
         self.assertTrue(
             self.selenium.find_element_by_id('djShowToolBarButton').is_displayed())
+
+
+@skipIf(webdriver is None, "selenium isn't installed")
+@skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")
+@override_settings(DEBUG=True)
+class APITestCase(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(APITestCase, cls).setUpClass()
+        cls.selenium = webdriver.Firefox()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(APITestCase, cls).tearDownClass()
+
+    def setUp(self):
+        self.selenium.get(self.live_server_url + '/execute_sql/')
+
+    def tearDown(self):
+        self.selenium.delete_all_cookies()
+        self.selenium.refresh()
+
+    def test_show_toolbar(self):
+        self.selenium.execute_script("djdt.close()")
+        # Verify that it closes the toolbar.
+        self.assertTrue(WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium:
+            selenium.find_element_by_id('djDebugToolbarHandle').is_displayed())
+        )
+        self.selenium.execute_script("djdt.show_toolbar()")
+        self.assertFalse(
+            self.selenium.find_element_by_id('djDebugToolbarHandle').is_displayed()
+        )
+        self.assertTrue(WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium:
+            selenium.find_element_by_id('djDebugToolbar').is_displayed())
+        )
+        cookie = self.selenium.get_cookie('djdt')
+        self.assertEquals(cookie['name'], 'djdt')
+        self.assertEquals(cookie['value'], 'show')
+        action = ActionChains(self.selenium)
+        action.key_down(Keys.ESCAPE, self.selenium.find_element_by_tag_name('body'))
+        action.perform()
+        # Verify that it closes the toolbar.
+        self.assertTrue(WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium:
+            selenium.find_element_by_id('djDebugToolbarHandle').is_displayed())
+        )
+
+    def test_hide_toolbar(self):
+        self.selenium.find_element_by_class_name('SQLPanel').click()
+        sql_panel = self.selenium.find_element_by_id('SQLPanel')
+        toolbar = self.selenium.find_element_by_id('djDebugToolbar')
+        self.selenium.find_element_by_class_name('remoteCall').click()
+        debug_window = self.selenium.find_element_by_id('djDebugWindow')
+        WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: debug_window.find_element_by_class_name('djdt-scroll'))
+        self.assertTrue(debug_window.is_displayed())
+
+        # Hide the toolbar
+        self.selenium.execute_script('djdt.hide_toolbar(false)')
+        self.assertTrue(WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: not debug_window.is_displayed())
+        )
+        self.assertTrue(WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: not toolbar.is_displayed())
+        )
+        self.assertFalse(sql_panel.is_displayed())
+        cookie = self.selenium.get_cookie('djdt')
+        self.assertEquals(cookie['value'], 'show')
+        # Run the function again, but with set_cookie = true
+        self.selenium.execute_script('djdt.hide_toolbar(true)')
+        cookie = self.selenium.get_cookie('djdt')
+        self.assertEquals(cookie['name'], 'djdt')
+        self.assertEquals(cookie['value'], 'hide')
