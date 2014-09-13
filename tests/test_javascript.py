@@ -2,7 +2,9 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import calendar
 import os
+from datetime import timedelta
 
 try:
     from selenium import webdriver
@@ -16,6 +18,7 @@ except ImportError:
 
 from django.test import LiveServerTestCase
 from django.test.utils import override_settings
+from django.utils import timezone
 from django.utils.unittest import skipIf, skipUnless
 
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -46,10 +49,11 @@ class InitTestCase(LiveServerTestCase):
             "#djDebugPanelList li a.{}".format(self.panel_class)
         )
         self.panel = self.selenium.find_element_by_id(self.panel_class)
+        WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: self.panel_trigger.is_displayed())
 
     def tearDown(self):
         self.selenium.delete_all_cookies()
-        self.selenium.refresh()
 
     def test_show_toolbar(self):
         toolbar = self.selenium.find_element_by_id('djDebug')
@@ -278,10 +282,16 @@ class APITestCase(LiveServerTestCase):
 
     def setUp(self):
         self.selenium.get(self.live_server_url + '/execute_sql/')
+        self.panel_class = "HeadersPanel"
+        self.panel_trigger = self.selenium.find_element(
+            By.CSS_SELECTOR,
+            "#djDebugPanelList li a.{}".format(self.panel_class)
+        )
+        WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: self.panel_trigger.is_displayed())
 
     def tearDown(self):
         self.selenium.delete_all_cookies()
-        self.selenium.refresh()
 
     def test_show_toolbar(self):
         self.selenium.execute_script("djdt.close()")
@@ -336,3 +346,57 @@ class APITestCase(LiveServerTestCase):
         cookie = self.selenium.get_cookie('djdt')
         self.assertEquals(cookie['name'], 'djdt')
         self.assertEquals(cookie['value'], 'hide')
+
+    def test_cookie_get_none(self):
+        null_cookie = self.selenium.execute_script(
+            "return djdt.cookie.get('test')"
+        )
+        self.assertIsNone(null_cookie)
+
+    def test_cookie_get(self):
+        key = str("test")
+        value = str("val")
+        path = str("/")
+        expires = calendar.timegm(
+            (timezone.now() + timedelta(days=10)).timetuple()
+        )
+        domain = str("localhost")
+        self.selenium.add_cookie({
+            "name": key,
+            "value": value,
+            "expiry": expires,
+            "path": path,
+            "domain": domain,
+        })
+        actual_value = self.selenium.execute_script(
+            "return djdt.cookie.get('{}')".format(key)
+        )
+        self.assertEquals(actual_value, value)
+
+    def test_cookie_set(self):
+        key = str("test")
+        value = str("val")
+        path = str("/")
+        expires = 3
+        domain = str("localhost")
+        expires_lower_bound = timezone.now().date() + timedelta(days=expires)
+        expires_upper_bound = expires_lower_bound + timedelta(days=1)
+        self.selenium.execute_script(
+            "djdt.cookie.set('{}','{}',{{'path':'{}','expires':{},'domain':'{}'}})"
+            .format(key, value, path, expires, domain)
+        )
+        cookie = self.selenium.get_cookie(key)
+        self.assertEquals(cookie['name'], key)
+        self.assertEquals(cookie['value'], value)
+        self.assertEquals(cookie['path'], path)
+        self.assertEquals(cookie['domain'], domain)
+        # Verify the expiration date is close to the value we passed in.
+        # The method calculates the current time, so it's difficult to compare.
+        self.assertGreaterEqual(
+            cookie['expiry'],
+            calendar.timegm(expires_lower_bound.timetuple())
+        )
+        self.assertLessEqual(
+            cookie['expiry'],
+            calendar.timegm(expires_upper_bound.timetuple())
+        )
