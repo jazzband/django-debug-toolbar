@@ -42,6 +42,7 @@ class InitTestCase(LiveServerTestCase):
         super(InitTestCase, cls).tearDownClass()
 
     def setUp(self):
+        self.selenium.delete_all_cookies()
         self.selenium.get(self.live_server_url + '/execute_sql/')
         self.panel_class = "HeadersPanel"
         self.panel_trigger = self.selenium.find_element(
@@ -51,9 +52,6 @@ class InitTestCase(LiveServerTestCase):
         self.panel = self.selenium.find_element_by_id(self.panel_class)
         WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: self.panel_trigger.is_displayed())
-
-    def tearDown(self):
-        self.selenium.delete_all_cookies()
 
     def test_show_toolbar(self):
         toolbar = self.selenium.find_element_by_id('djDebug')
@@ -281,6 +279,7 @@ class APITestCase(LiveServerTestCase):
         super(APITestCase, cls).tearDownClass()
 
     def setUp(self):
+        self.selenium.delete_all_cookies()
         self.selenium.get(self.live_server_url + '/execute_sql/')
         self.panel_class = "HeadersPanel"
         self.panel_trigger = self.selenium.find_element(
@@ -290,17 +289,14 @@ class APITestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: self.panel_trigger.is_displayed())
 
-    def tearDown(self):
-        self.selenium.delete_all_cookies()
-
     def test_show_toolbar(self):
-        self.selenium.execute_script("djdt.close()")
+        self.selenium.execute_script("djdt.hide_toolbar(false)")
         # Verify that it closes the toolbar.
         self.assertTrue(WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium:
             selenium.find_element_by_id('djDebugToolbarHandle').is_displayed())
         )
-        self.selenium.execute_script("djdt.show_toolbar()")
+        self.selenium.execute_script("djdt.show_toolbar(true)")
         self.assertFalse(
             self.selenium.find_element_by_id('djDebugToolbarHandle').is_displayed()
         )
