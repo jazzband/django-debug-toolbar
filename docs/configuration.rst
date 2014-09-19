@@ -121,7 +121,7 @@ Toolbar options
   This is the dotted path to a function used for determining whether the
   toolbar should show or not. The default checks are that ``DEBUG`` must be
   set to ``True``, the IP of the request must be in ``INTERNAL_IPS``, and the
-  request must no be an AJAX request. You can provide your own function
+  request must not be an AJAX request. You can provide your own function
   ``callback(request)`` which returns ``True`` or ``False``.
 
 Panel options
