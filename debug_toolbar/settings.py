@@ -199,16 +199,16 @@ def patch_middleware_classes():
 
 
 def patch_root_urlconf():
-    from django.conf.urls import include, patterns, url
+    from django.conf.urls import include, url
     from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
     import debug_toolbar
     try:
         reverse('djdt:render_panel')
     except NoReverseMatch:
         urlconf_module = import_module(settings.ROOT_URLCONF)
-        urlconf_module.urlpatterns = patterns('',                      # noqa
+        urlconf_module.urlpatterns = [
             url(r'^__debug__/', include(debug_toolbar.urls)),
-        ) + urlconf_module.urlpatterns
+        ] + urlconf_module.urlpatterns
         clear_url_caches()
 
 

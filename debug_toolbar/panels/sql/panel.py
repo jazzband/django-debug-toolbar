@@ -4,7 +4,7 @@ import uuid
 from copy import copy
 from collections import defaultdict
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.db import connections
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
@@ -13,6 +13,7 @@ from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.utils import render_stacktrace
 from debug_toolbar.panels.sql.utils import reformat_sql, contrasting_color_generator
 from debug_toolbar.panels.sql.tracking import wrap_cursor, unwrap_cursor
+from debug_toolbar.panels.sql import views
 
 
 def get_isolation_level_display(vendor, level):
@@ -120,11 +121,11 @@ class SQLPanel(Panel):
 
     @classmethod
     def get_urls(cls):
-        return patterns('debug_toolbar.panels.sql.views',               # noqa
-            url(r'^sql_select/$', 'sql_select', name='sql_select'),
-            url(r'^sql_explain/$', 'sql_explain', name='sql_explain'),
-            url(r'^sql_profile/$', 'sql_profile', name='sql_profile'),
-        )
+        return [
+            url(r'^sql_select/$', views.sql_select, name='sql_select'),
+            url(r'^sql_explain/$', views.sql_explain, name='sql_explain'),
+            url(r'^sql_profile/$', views.sql_profile, name='sql_profile'),
+        ]
 
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.

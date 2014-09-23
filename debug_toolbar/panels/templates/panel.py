@@ -10,7 +10,7 @@ from pprint import pformat
 import django
 from django import http
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import Context, RequestContext, Template
 from django.template.context import get_standard_processors
@@ -22,6 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
+from debug_toolbar.panels.templates import views
 
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
@@ -155,9 +156,9 @@ class TemplatesPanel(Panel):
 
     @classmethod
     def get_urls(cls):
-        return patterns('debug_toolbar.panels.templates.views',         # noqa
-            url(r'^template_source/$', 'template_source', name='template_source'),
-        )
+        return [
+            url(r'^template_source/$', views.template_source, name='template_source'),
+        ]
 
     def enable_instrumentation(self):
         template_rendered.connect(self._store_template_info)
