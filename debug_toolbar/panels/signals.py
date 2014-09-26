@@ -1,5 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 
+try:
+    from importlib import import_module
+except ImportError:  # python 2.6
+    from django.utils.importlib import import_module
+
 from django.core.signals import (
     request_started, request_finished, got_request_exception)
 from django.db.backends.signals import connection_created
@@ -12,7 +17,6 @@ except ImportError:
     import weakref
     WEAKREF_TYPES = weakref.ReferenceType,
 from django.utils.translation import ugettext_lazy as _, ungettext
-from django.utils.importlib import import_module
 
 from debug_toolbar.panels import Panel
 

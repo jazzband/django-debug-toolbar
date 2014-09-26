@@ -1,5 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
+try:
+    from importlib import import_module
+except ImportError:  # python 2.6
+    from django.utils.importlib import import_module
 import inspect
 import os.path
 import re
@@ -13,7 +17,6 @@ import django
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import force_text
 from django.utils.html import escape
-from django.utils.importlib import import_module
 from django.utils.safestring import mark_safe
 from django.utils import six
 from django.views.debug import linebreak_iter

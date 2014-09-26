@@ -4,12 +4,15 @@ Debug Toolbar middleware
 
 from __future__ import absolute_import, unicode_literals
 
+try:
+    from importlib import import_module
+except ImportError:  # python 2.6
+    from django.utils.importlib import import_module
 import re
 import threading
 
 from django.conf import settings
 from django.utils.encoding import force_text
-from django.utils.importlib import import_module
 
 from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar import settings as dt_settings
