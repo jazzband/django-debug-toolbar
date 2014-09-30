@@ -15,7 +15,13 @@ try:
 except ImportError:
     webdriver = None
 
-from django.test import LiveServerTestCase
+try:
+    from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
+        as LiveServerTestCase
+except ImportError:
+    # When we're using < Django 1.7
+    from django.test import LiveServerTestCase
+
 from django.test.utils import override_settings
 from django.utils import timezone
 from django.utils.unittest import skipIf, skipUnless
@@ -76,7 +82,7 @@ class InitTestCase(ToolbarTestCase):
         # Verify that the panels parent had the djdt-active class added
         trigger_count = self.selenium.execute_script(
             "return djdt.jQuery('#djDebugToolbar').find('.djdt-active')"
-            ".find('.{}').length".format(panel_name)
+            ".find('.{0}').length".format(panel_name)
         )
         self.assertEquals(trigger_count, 1)
 
@@ -90,7 +96,7 @@ class InitTestCase(ToolbarTestCase):
         # Verify that the panels parent had the djdt-active class removed
         trigger_count = self.selenium.execute_script(
             "return djdt.jQuery('#djDebugToolbar').find('.djdt-active')"
-            ".find('.{}').length".format(panel_name)
+            ".find('.{0}').length".format(panel_name)
         )
         self.assertEquals(trigger_count, 0)
         self.assertFalse(panel.is_displayed())
@@ -129,7 +135,7 @@ class InitTestCase(ToolbarTestCase):
         checkbox = panel_trigger.find_element_by_xpath('..')\
             .find_element_by_css_selector("input[type=checkbox]")
         cookie_name = checkbox.get_attribute("data-cookie")
-        self.assertEquals(cookie_name, "djdt{}".format(panel_name))
+        self.assertEquals(cookie_name, "djdt{0}".format(panel_name))
         cookie = self.selenium.get_cookie(cookie_name)
         self.assertIsNone(cookie)
         # Click on the checkbox to turn off
@@ -186,11 +192,11 @@ class InitTestCase(ToolbarTestCase):
             panel = self.selenium.find_element_by_id(panel_name)
             toggle_switch = panel.find_element_by_class_name('djToggleSwitch')
             id_javascript_selector = (
-                "return djdt.jQuery('#{}').find('.djToggleSwitch').attr('{}')")
+                "return djdt.jQuery('#{0}').find('.djToggleSwitch').attr('{1}')")
             target_id = self.selenium.execute_script(
                 id_javascript_selector.format(panel_name, 'data-toggle-id')
             )
-            toggle_class = "djToggleDetails_{}".format(target_id)
+            toggle_class = "djToggleDetails_{0}".format(target_id)
             toggled_element = panel.find_element_by_class_name(toggle_class)
             toggled = "djUnselected"
             untoggled = "djSelected"
@@ -382,7 +388,7 @@ class APITestCase(ToolbarTestCase):
             "domain": domain,
         })
         actual_value = self.selenium.execute_script(
-            "return djdt.cookie.get('{}')".format(key)
+            "return djdt.cookie.get('{0}')".format(key)
         )
         self.assertEquals(actual_value, value)
 
@@ -395,8 +401,8 @@ class APITestCase(ToolbarTestCase):
         expires_lower_bound = timezone.now().date() + timedelta(days=expires)
         expires_upper_bound = expires_lower_bound + timedelta(days=1)
         self.selenium.execute_script(
-            "djdt.cookie.set('{}','{}',"
-            "{{'path':'{}','expires':{},'domain':'{}'}})"
+            "djdt.cookie.set('{0}','{1}',"
+            "{{'path':'{2}','expires':{3},'domain':'{4}'}})"
             .format(key, value, path, expires, domain)
         )
         cookie = self.selenium.get_cookie(key)
