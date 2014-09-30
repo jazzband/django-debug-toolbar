@@ -65,6 +65,9 @@ or by setting the ``DJANGO_SELENIUM_TESTS`` environment variable::
     $ DJANGO_SELENIUM_TESTS=true make coverage
     $ DJANGO_SELENIUM_TESTS=true tox
 
+If you are making changes to the frontend logic, it's recommended that you
+write a test for it and run these tests before commit changes.
+
 At this time, there isn't an easy way to test against databases other than
 SQLite.
 

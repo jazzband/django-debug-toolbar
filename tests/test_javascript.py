@@ -13,7 +13,8 @@ try:
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.action_chains import ActionChains
 except ImportError:
-    webdriver = None
+    webdriver, NoSuchElementException, WebDriverWait, Keys, ActionChains = (
+        None, None, None, None, None)
 
 try:
     from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
@@ -28,13 +29,15 @@ from django.utils.unittest import skipIf, skipUnless
 
 from debug_toolbar.settings import PANELS_DEFAULTS
 
+from .selenium_utils import create_web_driver
+
 
 class ToolbarTestCase(LiveServerTestCase):
     """Helper class that provides a few methods for fetching elements."""
     @classmethod
     def setUpClass(cls):
         super(ToolbarTestCase, cls).setUpClass()
-        cls.selenium = webdriver.Firefox()
+        cls.selenium = create_web_driver()
 
     @classmethod
     def tearDownClass(cls):
