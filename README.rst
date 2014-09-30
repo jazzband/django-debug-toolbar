@@ -33,7 +33,4 @@ itself. If you like it, please consider contributing!
 The Django Debug Toolbar was originally created by Rob Hudson <rob@cogit8.org>
 in August 2008 and was further developed by many contributors_.
 
-**There's no active maintainer at this time. You're welcome to file issues and
-pull requests but you may receive no answer until a new maintainer steps up.**
-
 .. _contributors: https://github.com/django-debug-toolbar/django-debug-toolbar/graphs/contributors
