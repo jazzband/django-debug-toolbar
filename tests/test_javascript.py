@@ -187,41 +187,41 @@ class InitTestCase(ToolbarTestCase):
             )
 
     def test_toggle_switch_click(self):
-        for panel_name in ['SQLPanel', 'ProfilingPanel']:
-            self.selenium.find_element_by_class_name(panel_name).click()
-            panel = self.selenium.find_element_by_id(panel_name)
-            toggle_switch = panel.find_element_by_class_name('djToggleSwitch')
-            id_javascript_selector = (
-                "return djdt.jQuery('#{0}').find('.djToggleSwitch').attr('{1}')")
-            target_id = self.selenium.execute_script(
-                id_javascript_selector.format(panel_name, 'data-toggle-id')
-            )
-            toggle_class = "djToggleDetails_{0}".format(target_id)
-            toggled_element = panel.find_element_by_class_name(toggle_class)
-            toggled = "djUnselected"
-            untoggled = "djSelected"
-            if panel_name == "ProfilingPanel":
-                # Profiling panel is reversed.
-                toggled, untoggled = untoggled, toggled
+        panel_name = 'SQLPanel'
+        self.selenium.find_element_by_class_name(panel_name).click()
+        panel = self.selenium.find_element_by_id(panel_name)
+        toggle_switch = panel.find_element_by_class_name('djToggleSwitch')
+        id_javascript_selector = (
+            "return djdt.jQuery('#{0}').find('.djToggleSwitch').attr('{1}')")
+        target_id = self.selenium.execute_script(
+            id_javascript_selector.format(panel_name, 'data-toggle-id')
+        )
+        toggle_class = "djToggleDetails_{0}".format(target_id)
+        toggled_element = panel.find_element_by_class_name(toggle_class)
+        toggled = "djUnselected"
+        untoggled = "djSelected"
+        if panel_name == "ProfilingPanel":
+            # Profiling panel is reversed.
+            toggled, untoggled = untoggled, toggled
 
-            self.assertNotIn(
-                untoggled,
-                toggled_element.get_attribute('className')
-            )
-            if panel_name != "ProfilingPanel":
-                self.assertIn(
-                    toggled,
-                    toggled_element.get_attribute('className')
-                )
-            toggle_switch.click()
+        self.assertNotIn(
+            untoggled,
+            toggled_element.get_attribute('className')
+        )
+        if panel_name != "ProfilingPanel":
             self.assertIn(
-                untoggled,
-                toggled_element.get_attribute('className')
-            )
-            self.assertNotIn(
                 toggled,
                 toggled_element.get_attribute('className')
             )
+        toggle_switch.click()
+        self.assertIn(
+            untoggled,
+            toggled_element.get_attribute('className')
+        )
+        self.assertNotIn(
+            toggled,
+            toggled_element.get_attribute('className')
+        )
 
     def test_hide_toolbar_button(self):
         panel_name = "HeadersPanel"
@@ -235,6 +235,12 @@ class InitTestCase(ToolbarTestCase):
         panel_name = "HeadersPanel"
         panel_trigger = self.get_panel_trigger(panel_name)
         self.selenium.find_element_by_id("djHideToolBarButton").click()
+
+        self.get_web_driver_wait().until(
+            lambda selenium:
+            self.selenium.find_element_by_id(
+                'djShowToolBarButton').is_displayed()
+        )
         show_button = self.selenium.find_element_by_id('djShowToolBarButton')
         self.assertTrue(show_button.is_displayed())
         self.assertFalse(panel_trigger.is_displayed())
