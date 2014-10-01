@@ -7,14 +7,13 @@ import os
 from datetime import timedelta
 
 try:
-    from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.common.action_chains import ActionChains
 except ImportError:
-    webdriver, NoSuchElementException, WebDriverWait, Keys, ActionChains = (
-        None, None, None, None, None)
+    NoSuchElementException, WebDriverWait, Keys, ActionChains = (
+        None, None, None, None)
 
 try:
     from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
@@ -30,6 +29,9 @@ from django.utils.unittest import skipIf, skipUnless
 from debug_toolbar.settings import PANELS_DEFAULTS
 
 from .selenium_utils import create_web_driver
+
+
+webdriver = create_web_driver()
 
 
 class ToolbarTestCase(LiveServerTestCase):

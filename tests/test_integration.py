@@ -6,11 +6,10 @@ import os
 from xml.etree import ElementTree as ET
 
 try:
-    from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
-    webdriver, NoSuchElementException, WebDriverWait = None, None, None
+    NoSuchElementException, WebDriverWait = None, None
 
 try:
     from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
@@ -29,6 +28,7 @@ from .views import regular_view
 from .selenium_utils import create_web_driver
 
 
+webdriver = create_web_driver()
 rf = RequestFactory()
 
 

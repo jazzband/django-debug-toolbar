@@ -13,6 +13,9 @@ def create_web_driver():
     if not webdriver:
         return EnvironmentError(
             "Your environment must have selenium installed to use this.")
+    if os.environ.get("TRAVIS_PULL_REQUEST"):
+        # Travis doesn't run selenium tests for pull requests.
+        return None
     username = os.environ.get("SAUCE_USERNAME")
     access_key = os.environ.get("SAUCE_ACCESS_KEY")
     capabilities = webdriver.DesiredCapabilities.FIREFOX
@@ -23,9 +26,7 @@ def create_web_driver():
     })
     hub_url = "{0}:{1}@localhost:4445".format(username, access_key)
     if username:
-        driver = webdriver.Remote(
+        return webdriver.Remote(
             desired_capabilities=capabilities,
             command_executor="http://{0}/wd/hub".format(hub_url))
-    else:
-        driver = webdriver.Firefox()
-    return driver
+    return webdriver.Firefox()
