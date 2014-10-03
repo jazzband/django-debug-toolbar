@@ -6,17 +6,18 @@ python:
   - "3.3"
   - "3.4"
 env:
-  - DJANGO_VERSION=1.4.10
-  - DJANGO_VERSION=1.5.5
-  - DJANGO_VERSION=1.6.1
+  - DJANGO_VERSION=1.4.16
+  - DJANGO_VERSION=1.5.11
+  - DJANGO_VERSION=1.6.8
+  - DJANGO_VERSION=1.7
 matrix:
   exclude:
     - python: "3.2"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO_VERSION=1.4.16
     - python: "3.3"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO_VERSION=1.4.16
     - python: "3.4"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO_VERSION=1.4.16
 install:
   - pip install -e .
   - pip install Django==$DJANGO_VERSION django-discover-runner sqlparse selenium
