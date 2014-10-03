@@ -9,7 +9,7 @@ from django.shortcuts import render
 
 def execute_sql(request):
     list(User.objects.all())
-    return HttpResponse()
+    return render(request, 'basic.html', {'title': 'execute_sql'})
 
 
 def regular_view(request, title):

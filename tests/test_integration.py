@@ -6,11 +6,10 @@ import os
 from xml.etree import ElementTree as ET
 
 try:
-    from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
-    webdriver = None
+    NoSuchElementException, WebDriverWait = None, None
 
 try:
     from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
@@ -26,8 +25,10 @@ from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
 from .base import BaseTestCase
 from .views import regular_view
+from .selenium_utils import create_web_driver
 
 
+webdriver = create_web_driver()
 rf = RequestFactory()
 
 
@@ -123,7 +124,7 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(DebugToolbarLiveTestCase, cls).setUpClass()
-        cls.selenium = webdriver.Firefox()
+        cls.selenium = create_web_driver()
 
     @classmethod
     def tearDownClass(cls):

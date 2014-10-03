@@ -6,18 +6,25 @@ python:
   - "3.3"
   - "3.4"
 env:
-  - DJANGO_VERSION=1.4.10
-  - DJANGO_VERSION=1.5.5
-  - DJANGO_VERSION=1.6.1
+  - DJANGO_VERSION=1.4.16
+  - DJANGO_VERSION=1.5.11
+  - DJANGO_VERSION=1.6.8
+  - DJANGO_VERSION=1.7
 matrix:
   exclude:
     - python: "3.2"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO_VERSION=1.4.16
     - python: "3.3"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO_VERSION=1.4.16
     - python: "3.4"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO_VERSION=1.4.16
 install:
   - pip install -e .
-  - pip install Django==$DJANGO_VERSION django-discover-runner sqlparse
-script: make test
+  - pip install Django==$DJANGO_VERSION django-discover-runner sqlparse selenium
+script: make test_selenium
+addons:
+  sauce_connect:
+    # username
+    secure: "FS6Fb96fI3sO+ZxLoPwU4Ex2QuC750Wvwo+cRULWdm0dyVOLskd1F9inT+JhVQ4cmF1vCAJVIQcSo/eUGxJKVxe2AxMuBTqVaxdkvVy9s0teHO2PIUC+x6eO6NrIKvhTwnbgJjHZghbtirBAkHHe8khViCPvSses6xS0A+8I8dY="
+    # access key
+    secure: "PYe8lXoGVr7nrYNpVOZJNg02MF3vuDRlYiSieJUkbJfyXRUlcGLZ6g9VUwDaPyua7f8yMMc3a1jzUqeAhMyOK0f3XY+Nf/yliQ5UsMrFOihk5LbNVGhBFTC7IkO0/0pLgtGjjtv9WTr9BXx5TlBBvtbVcnyaFkex6PPItX70ZwE="
