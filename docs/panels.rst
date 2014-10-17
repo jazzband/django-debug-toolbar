@@ -63,6 +63,10 @@ Path: ``debug_toolbar.panels.templates.TemplatesPanel``
 
 Templates and context used, and their template paths.
 
+Note that when using Django 1.5 or earlier, this panel will not work
+with template engines other than Django's. If you're using Django 1.6+
+the template panel will work with other template engines such as Jinja2.
+
 Static files
 ~~~~~~~~~~~~
 
