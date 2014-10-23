@@ -54,6 +54,9 @@ def _request_context__init__(
         name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
         self.context_processors[name] = context
+        if context is list and len(context) == 1:
+            updates.update(context[0])
+            continue
         updates.update(context)
     self.update(updates)
 
