@@ -51,6 +51,7 @@ def _request_context__init__(
     self.context_processors = OrderedDict()
     updates = dict()
     for processor in get_standard_processors() + processors:
+        name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
         self.context_processors[name] = context
         if isinstance(context, dict):
