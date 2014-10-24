@@ -51,15 +51,11 @@ def _request_context__init__(
     self.context_processors = OrderedDict()
     updates = dict()
     for processor in get_standard_processors() + processors:
-        name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
         self.context_processors[name] = context
-        if context is list:
-            for c in context:
-                if c: updates.update(c)
-            continue
-        if context:
-            updates.update(context)
+        if isinstance(context, dict):
+            for k, v in context.iteritems():
+                updates[k] = v
     self.update(updates)
 
 RequestContext.__init__ = _request_context__init__
