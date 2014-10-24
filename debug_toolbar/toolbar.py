@@ -12,7 +12,7 @@ import uuid
 
 import django
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
@@ -151,11 +151,12 @@ class DebugToolbar(object):
     @classmethod
     def get_urls(cls):
         if cls._urlpatterns is None:
+            from . import views
             # Load URLs in a temporary variable for thread safety.
             # Global URLs
-            urlpatterns = patterns('debug_toolbar.views',               # noqa
-                url(r'^render_panel/$', 'render_panel', name='render_panel'),
-            )
+            urlpatterns = [
+                url(r'^render_panel/$', views.render_panel, name='render_panel'),
+            ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():
                 urlpatterns += panel_class.get_urls()
