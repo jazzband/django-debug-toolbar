@@ -1,12 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
-import sys
-
 import json
 from threading import local
 from time import time
 
-from django.template import Node
 from django.utils.encoding import force_text
 from django.utils import six
 
@@ -115,19 +112,7 @@ class NormalCursorWrapper(object):
             except Exception:
                 pass  # object not JSON serializable
 
-            template_info = None
-            cur_frame = sys._getframe().f_back
-            try:
-                while cur_frame is not None:
-                    if cur_frame.f_code.co_name == 'render':
-                        node = cur_frame.f_locals['self']
-                        if isinstance(node, Node):
-                            template_info = get_template_info(node.source)
-                            break
-                    cur_frame = cur_frame.f_back
-            except Exception:
-                pass
-            del cur_frame
+            template_info = get_template_info()
 
             alias = getattr(self.db, 'alias', 'default')
             conn = self.db.connection

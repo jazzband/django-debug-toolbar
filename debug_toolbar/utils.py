@@ -15,6 +15,7 @@ except ImportError:
 
 import django
 from django.core.exceptions import ImproperlyConfigured
+from django.template import Node
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -86,7 +87,34 @@ def render_stacktrace(trace):
     return mark_safe('\n'.join(stacktrace))
 
 
-def get_template_info(source, context_lines=3):
+def get_template_info():
+    template_info = None
+    cur_frame = sys._getframe().f_back
+    try:
+        while cur_frame is not None:
+            in_utils_module = cur_frame.f_code.co_filename.endswith(
+                "/debug_toolbar/utils.py"
+            )
+            is_get_template_context = (
+                cur_frame.f_code.co_name == get_template_context.__name__
+            )
+            if in_utils_module and is_get_template_context:
+                # If the method in the stack trace is this one
+                # then break from the loop as it's being check recursively.
+                break
+            elif cur_frame.f_code.co_name == 'render':
+                node = cur_frame.f_locals['self']
+                if isinstance(node, Node):
+                    template_info = get_template_context(node.source)
+                    break
+            cur_frame = cur_frame.f_back
+    except Exception:
+        pass
+    del cur_frame
+    return template_info
+
+
+def get_template_context(source, context_lines=3):
     line = 0
     upto = 0
     source_lines = []

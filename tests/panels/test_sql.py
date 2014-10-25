@@ -2,10 +2,13 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import django
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.utils import DatabaseError
+from django.shortcuts import render
 from django.utils import unittest
+from django.test.utils import override_settings
 
 from ..base import BaseTestCase
 
@@ -84,3 +87,30 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure the stacktrace is empty
         self.assertEqual([], query[1]['stacktrace'])
+
+    @unittest.skipIf(django.VERSION < (1, 5),
+                     "Django 1.4 loads the TEMPLATE_LOADERS before "
+                     "override_settings can modify the settings.")
+    @override_settings(DEBUG=True, TEMPLATE_DEBUG=True,
+                       TEMPLATE_LOADERS=('tests.loaders.LoaderWithSQL',))
+    def test_regression_infinite_recursion(self):
+        """
+        Test case for when the template loader runs a SQL query that causes
+        an infinite recursion in the SQL panel.
+        """
+        self.assertEqual(len(self.panel._queries), 0)
+
+        render(self.request, "basic.html", {})
+
+        # ensure queries were logged
+        # It's more than one because the SQL run in the loader is run every time
+        # the template is rendered which is more than once.
+        self.assertEqual(len(self.panel._queries), 3)
+        query = self.panel._queries[0]
+        self.assertEqual(query[0], 'default')
+        self.assertTrue('sql' in query[1])
+        self.assertTrue('duration' in query[1])
+        self.assertTrue('stacktrace' in query[1])
+
+        # ensure the stacktrace is populated
+        self.assertTrue(len(query[1]['stacktrace']) > 0)

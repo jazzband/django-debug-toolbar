@@ -9,7 +9,6 @@ from django.core import cache
 from django.core.cache import cache as original_cache, get_cache as original_get_cache
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
-from django.template import Node
 from django.utils.translation import ugettext_lazy as _, ungettext
 try:
     from collections import OrderedDict
@@ -37,19 +36,7 @@ def send_signal(method):
         else:
             stacktrace = []
 
-        template_info = None
-        cur_frame = sys._getframe().f_back
-        try:
-            while cur_frame is not None:
-                if cur_frame.f_code.co_name == 'render':
-                    node = cur_frame.f_locals['self']
-                    if isinstance(node, Node):
-                        template_info = get_template_info(node.source)
-                        break
-                cur_frame = cur_frame.f_back
-        except Exception:
-            pass
-        del cur_frame
+        template_info = get_template_info()
         cache_called.send(sender=self.__class__, time_taken=t,
                           name=method.__name__, return_value=value,
                           args=args, kwargs=kwargs, trace=stacktrace,
