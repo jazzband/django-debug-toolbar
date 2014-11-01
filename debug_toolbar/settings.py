@@ -68,10 +68,6 @@ if 'TAG' in USER_CONFIG:
 
 CONFIG = CONFIG_DEFAULTS.copy()
 CONFIG.update(USER_CONFIG)
-if not isinstance(CONFIG['SHOW_TOOLBAR_CALLBACK'], six.string_types):
-    warnings.warn(
-        "SHOW_TOOLBAR_CALLBACK is now a dotted path. Update your "
-        "DEBUG_TOOLBAR_CONFIG setting.", DeprecationWarning)
 
 
 PANELS_DEFAULTS = [

@@ -13,6 +13,7 @@ import threading
 
 from django.conf import settings
 from django.utils.encoding import force_text
+from django.utils import six
 
 from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar import settings as dt_settings
@@ -42,13 +43,20 @@ class DebugToolbarMiddleware(object):
     """
     debug_toolbars = {}
 
+    def __init__(self):
+        # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
+        # setup, resolve it to the corresponding callable.
+        func_or_path = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK']
+        if isinstance(func_or_path, six.string_types):
+            # Replace this with import_by_path in Django >= 1.6.
+            mod_path, func_name = func_or_path.rsplit('.', 1)
+            self.show_toolbar = getattr(import_module(mod_path), func_name)
+        else:
+            self.show_toolbar = func_or_path
+
     def process_request(self, request):
         # Decide whether the toolbar is active for this request.
-        func_path = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK']
-        # Replace this with import_by_path in Django >= 1.6.
-        mod_path, func_name = func_path.rsplit('.', 1)
-        show_toolbar = getattr(import_module(mod_path), func_name)
-        if not show_toolbar(request):
+        if not self.show_toolbar(request):
             return
 
         toolbar = DebugToolbar(request)
