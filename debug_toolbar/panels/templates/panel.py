@@ -55,7 +55,8 @@ def _request_context__init__(
         name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
         self.context_processors[name] = context
-        updates.update(context)
+        if isinstance(context, dict):
+            updates.update(context)
     self.update(updates)
 
 RequestContext.__init__ = _request_context__init__
