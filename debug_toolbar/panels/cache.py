@@ -6,10 +6,18 @@ import time
 
 from django.conf import settings
 from django.core import cache
-from django.core.cache import cache as original_cache, get_cache as original_get_cache
+from django.core.cache import (
+    cache as original_cache,
+    get_cache as original_get_cache)
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.utils.translation import ugettext_lazy as _, ungettext
+
+try:
+    from django.core.cache import CacheHandler, caches as original_caches
+except ImportError:  # Django < 1.7
+    CacheHandler = None
+    original_caches = None
 try:
     from collections import OrderedDict
 except ImportError:
@@ -119,6 +127,17 @@ def get_cache(*args, **kwargs):
     return CacheStatTracker(original_get_cache(*args, **kwargs))
 
 
+def get_cache_handler():
+    if CacheHandler is None:
+        return None
+
+    class CacheHandlerPatch(CacheHandler):
+        def __getitem__(self, alias):
+            actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
+            return CacheStatTracker(actual_cache)
+    return CacheHandlerPatch()
+
+
 class CachePanel(Panel):
     """
     Panel that displays the cache statistics.
@@ -197,11 +216,17 @@ class CachePanel(Panel):
     def enable_instrumentation(self):
         # This isn't thread-safe because cache connections aren't thread-local
         # in Django, unlike database connections.
-        cache.cache = CacheStatTracker(original_cache)
         cache.get_cache = get_cache
+        if CacheHandler is None:
+            cache.cache = CacheStatTracker(original_cache)
+        else:
+            cache.caches = get_cache_handler()
 
     def disable_instrumentation(self):
-        cache.cache = original_cache
+        if CacheHandler is None:
+            cache.cache = original_cache
+        else:
+            cache.caches = original_caches
         cache.get_cache = original_get_cache
 
     def process_response(self, request, response):
