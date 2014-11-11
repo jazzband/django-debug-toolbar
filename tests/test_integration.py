@@ -159,3 +159,28 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
         error = WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: version_panel.find_element_by_tag_name('p'))
         self.assertIn("Data for this panel isn't available anymore.", error.text)
+
+    @override_settings(TEMPLATE_LOADERS=[(
+        'django.template.loaders.cached.Loader', (
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+        ),
+    )])
+    def test_django_cached_template_loader(self):
+        self.selenium.get(self.live_server_url + '/regular/basic/')
+        version_panel = self.selenium.find_element_by_id('TemplatesPanel')
+
+        # Click to show the versions panel
+        self.selenium.find_element_by_class_name('TemplatesPanel').click()
+
+        # Version panel loads
+        trigger = WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: version_panel.find_element_by_css_selector(
+                '.remoteCall'))
+        trigger.click()
+
+        # Verify the code is displayed
+        WebDriverWait(self.selenium, timeout=10).until(
+            lambda selenium: self.selenium.find_element_by_css_selector(
+                '#djDebugWindow code'))
+

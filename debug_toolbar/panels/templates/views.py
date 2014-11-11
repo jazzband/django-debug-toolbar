@@ -21,7 +21,13 @@ def template_source(request):
     for loader_name in settings.TEMPLATE_LOADERS:
         loader = find_template_loader(loader_name)
         if loader is not None:
-            loaders.append(loader)
+            # When the loader has loaders associated with it,
+            # append those loaders to the list. This occurs with
+            # django.template.loaders.cached.Loader
+            if hasattr(loader, 'loaders'):
+                loaders += loader.loaders
+            else:
+                loaders.append(loader)
     for loader in loaders:
         try:
             source, display_name = loader.load_template_source(template_name)
