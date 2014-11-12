@@ -12,6 +12,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import datetime
 import sys
 import os
 
@@ -50,7 +51,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Django Debug Toolbar'
-copyright = u'2013, Django Debug Toolbar developers and contributors'
+copyright = u'{}, Django Debug Toolbar developers and contributors'
+copyright = copyright.format(datetime.date.today().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
