@@ -4,7 +4,10 @@ from django.http import HttpResponseBadRequest
 from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import TemplateDoesNotExist
-from django.template.loader import find_template_loader
+try:
+    from django.template.loaders.utils import find_template_loader
+except ImportError:  # django < 1.8
+    from django.template.loader import find_template_loader
 from django.utils.safestring import mark_safe
 
 
