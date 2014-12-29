@@ -1,4 +1,5 @@
 language: python
+sudo: false
 python:
   - "2.6"
   - "2.7"
@@ -6,18 +7,22 @@ python:
   - "3.3"
   - "3.4"
 env:
-  - DJANGO_VERSION=1.4.10
-  - DJANGO_VERSION=1.5.5
-  - DJANGO_VERSION=1.6.1
+  - DJANGO="Django>=1.4.0,<1.5.0"
+  - DJANGO="Django>=1.5.0,<1.6.0"
+  - DJANGO="Django>=1.6.0,<1.7.0"
+  - DJANGO="Django>=1.7.0,<1.8.0"
 matrix:
   exclude:
     - python: "3.2"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO="Django>=1.4.0,<1.5.0"
     - python: "3.3"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO="Django>=1.4.0,<1.5.0"
     - python: "3.4"
-      env: DJANGO_VERSION=1.4.10
+      env: DJANGO="Django>=1.4.0,<1.5.0"
+      
+    - python: "2.6"
+      env: DJANGO="Django>=1.7.0,<1.8.0"
 install:
   - pip install -e .
-  - pip install Django==$DJANGO_VERSION django-discover-runner sqlparse
+  - travis_retry pip install $DJANGO django-discover-runner sqlparse
 script: make test
