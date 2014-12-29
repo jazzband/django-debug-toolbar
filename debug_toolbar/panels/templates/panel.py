@@ -13,7 +13,6 @@ from django.conf import settings
 from django.conf.urls import url
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import Context, RequestContext, Template
-from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
 from django.utils.encoding import force_text
@@ -24,6 +23,11 @@ from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
 from debug_toolbar.panels.templates import views
 
+try:
+    from django.template.engine import Engine
+except ImportError:
+    Engine = None
+    from django.template.context import get_standard_processors
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
 # immediately when the panel is disabled to keep the overhead small.
@@ -51,7 +55,11 @@ def _request_context__init__(
         processors = tuple(processors)
     self.context_processors = OrderedDict()
     updates = dict()
-    for processor in get_standard_processors() + processors:
+    if Engine:
+        std_processors = Engine.get_default().template_context_processors
+    else:
+        std_processors = get_standard_processors()
+    for processor in std_processors + processors:
         name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
         self.context_processors[name] = context
@@ -191,8 +199,13 @@ class TemplatesPanel(Panel):
         else:
             context_processors = None
 
+        if Engine:
+            template_dirs = Engine.get_default().dirs
+        else:
+            template_dirs = settings.TEMPLATE_DIRS
+
         self.record_stats({
             'templates': template_context,
-            'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
+            'template_dirs': [normpath(x) for x in template_dirs],
             'context_processors': context_processors,
         })
