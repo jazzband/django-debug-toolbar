@@ -5,11 +5,11 @@
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
 {% if toolbar.config.JQUERY_URL %}
 <!-- Prevent our copy of jQuery from registering as an AMD module on sites that use RequireJS. -->
-<script>var _djdt_define_backup = window.define; window.define = undefined;</script>
+<script src="{% static 'debug_toolbar/js/jquery_pre.js' %}"></script>
 <script src="{{ toolbar.config.JQUERY_URL }}"></script>
-<script>var djdt = {jQuery: jQuery.noConflict(true)}; window.define = _djdt_define_backup;</script>
+<script src="{% static 'debug_toolbar/js/jquery_post.js' %}"></script>
 {% else %}
-<script>var djdt = {jQuery: jQuery};</script>
+<script src="{% static 'debug_toolbar/js/jquery_existing.js' %}"></script>
 {% endif %}
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" style="display:none;" dir="ltr"
