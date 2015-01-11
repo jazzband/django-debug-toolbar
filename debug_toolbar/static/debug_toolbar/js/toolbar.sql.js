@@ -4,4 +4,7 @@
         $(this).parent().find('.djDebugCollapsed').toggle();
         $(this).parent().find('.djDebugUncollapsed').toggle();
     });
+    djdt.applyStyle('background-color');
+    djdt.applyStyle('left');
+    djdt.applyStyle('width');
 })(djdt.jQuery);
