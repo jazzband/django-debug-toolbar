@@ -24,14 +24,17 @@
         if (endStat) {
             // Render a start through end bar
             $row.html('<td>' + stat.replace('Start', '') + '</td>' +
-                      '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:' + getCSSWidth(stat, endStat) + ';">&nbsp;</strong></div></div></td>' +
+                      '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&nbsp;</strong></div></div></td>' +
                       '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
+            $row.find('strong').css({width: getCSSWidth(stat, endStat)});
         } else {
             // Render a point in time
              $row.html('<td>' + stat + '</td>' +
-                       '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart" style="left:' + getLeft(stat) + '%;"><strong style="width:2px;">&nbsp;</strong></div></div></td>' +
+                       '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&nbsp;</strong></div></div></td>' +
                        '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
+             $row.find('strong').css({width: 2});
         }
+        $row.find('djDebugLineChart').css({left: getLeft(stat) + '%'});
         $('#djDebugBrowserTimingTableBody').append($row);
     }
 

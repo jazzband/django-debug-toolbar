@@ -17,4 +17,5 @@
             subcalls.hide();
         }
     });
+    djdt.applyStyle('padding-left');
 })(djdt.jQuery);
