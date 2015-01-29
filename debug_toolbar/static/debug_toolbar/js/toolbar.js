@@ -217,6 +217,7 @@
             // set handle position
             var handleTop = djdt.cookie.get('djdttop');
             if (handleTop) {
+                handleTop = Math.min(handleTop, window.innerHeight - 100)
                 $('#djDebugToolbarHandle').css({top: handleTop + 'px'});
             }
             // Unbind keydown
