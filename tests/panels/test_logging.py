@@ -16,6 +16,10 @@ class LoggingPanelTestCase(BaseTestCase):
         self.logger = logging.getLogger(__name__)
         collector.clear_collection()
 
+        # Assume the root logger has been configured with level=DEBUG.
+        # Previously DDT forcefully set this itself to 0 (NOTSET).
+        logging.root.setLevel(logging.DEBUG)
+
     def test_happy_case(self):
         self.logger.info('Nothing to see here, move along!')
 
