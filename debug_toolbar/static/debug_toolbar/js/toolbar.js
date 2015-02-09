@@ -141,13 +141,13 @@
                     // due to djdt.handleDragged being set to true.
                     if (djdt.handleDragged || event.pageY != startPageY) {
                         var top = baseY + event.clientY;
-                        
+
                         if (top < 0) {
                             top = 0;
                         } else if (top + handle.height() > windowHeight) {
                             top = windowHeight - handle.height();
                         }
-                        
+
                         handle.css({top: top});
                         djdt.handleDragged = true;
                     }
@@ -213,12 +213,13 @@
             $('#djDebugToolbar li').removeClass('djdt-active');
             // finally close toolbar
             $('#djDebugToolbar').hide('fast');
-            $('#djDebugToolbarHandle').show();
+            handle = $('#djDebugToolbarHandle')
+            handle.show();
             // set handle position
             var handleTop = djdt.cookie.get('djdttop');
             if (handleTop) {
-                handleTop = Math.min(handleTop, window.innerHeight - 100)
-                $('#djDebugToolbarHandle').css({top: handleTop + 'px'});
+                handleTop = Math.min(handleTop, window.innerHeight - handle.outerHeight() - 10)
+                handle.css({top: handleTop + 'px'});
             }
             // Unbind keydown
             $(document).unbind('keydown.djDebug');
