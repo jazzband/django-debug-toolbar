@@ -9,6 +9,10 @@ env:
   - DJANGO_VERSION=1.5.5
   - DJANGO_VERSION=1.6.10
   - DJANGO_VERSION=1.7.4
+matrix:
+  exclude:
+    - python: "2.6"
+      env: DJANGO_VERSION=1.7.4
 install:
   - pip install -e .
   - pip install Django==$DJANGO_VERSION django-discover-runner sqlparse
