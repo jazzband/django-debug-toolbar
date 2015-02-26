@@ -101,7 +101,7 @@ class DebugToolbar(object):
         self.store_id = uuid.uuid4().hex
         cls = type(self)
         cls._store[self.store_id] = self
-        for _ in range(len(cls._store) - self.config['RESULTS_STORE_SIZE']):
+        for _ in range(len(cls._store) - self.config['RESULTS_CACHE_SIZE']):
             try:
                 # collections.OrderedDict
                 cls._store.popitem(last=False)

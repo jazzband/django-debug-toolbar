@@ -83,7 +83,7 @@ setting.
 By default, data gathered during the last 10 requests is kept in memory. This
 allows you to use the toolbar on a page even if you have browsed to a few
 other pages since you first loaded that page. You can reduce memory
-consumption by setting the ``RESULTS_STORE_SIZE`` configuration option to a
+consumption by setting the ``RESULTS_CACHE_SIZE`` configuration option to a
 lower value. At worst, the toolbar will tell you that the data you're looking
 for isn't available anymore.
 
