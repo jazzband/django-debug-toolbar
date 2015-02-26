@@ -93,7 +93,7 @@ Toolbar options
   right thing depending on whether the WSGI container runs multiple processes.
   This setting allows you to force a different behavior if needed.
 
-* ``RESULTS_STORE_SIZE``
+* ``RESULTS_CACHE_SIZE``
 
   Default: ``10``
 
@@ -191,7 +191,7 @@ Here's what a slightly customized toolbar configuration might look like::
     # This example is unlikely to be appropriate for your project.
     CONFIG_DEFAULTS = {
         # Toolbar options
-        'RESULTS_STORE_SIZE': 3,
+        'RESULTS_CACHE_SIZE': 3,
         'SHOW_COLLAPSED': True,
         # Panel options
         'SQL_WARNING_THRESHOLD': 100,   # milliseconds
