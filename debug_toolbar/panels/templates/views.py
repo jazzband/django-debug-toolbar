@@ -4,12 +4,13 @@ from django.http import HttpResponseBadRequest
 from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import TemplateDoesNotExist
-try:
-    from django.template.loaders.utils import find_template_loader
-except ImportError:  # django < 1.8
-    from django.template.loader import find_template_loader
 from django.utils.safestring import mark_safe
 
+try:
+    from django.template.engine import Engine
+except ImportError:
+    Engine = None
+    from django.template.loader import find_template_loader
 
 def template_source(request):
     """
@@ -20,18 +21,23 @@ def template_source(request):
     if template_name is None:
         return HttpResponseBadRequest('"template" key is required')
 
-    loaders = []
-    for loader_name in settings.TEMPLATE_LOADERS:
-        loader = find_template_loader(loader_name)
+    final_loaders = []
+    if Engine:
+        loaders = Engine.get_default().template_loaders
+    else:
+        loaders = [find_template_loader(loader_name) for loader_name in settings.TEMPLATE_LOADERS]
+
+    for loader in loaders:
         if loader is not None:
             # When the loader has loaders associated with it,
             # append those loaders to the list. This occurs with
             # django.template.loaders.cached.Loader
             if hasattr(loader, 'loaders'):
-                loaders += loader.loaders
+                final_loaders += loader.loaders
             else:
-                loaders.append(loader)
-    for loader in loaders:
+                final_loaders.append(loader)
+
+    for loader in final_loaders:
         try:
             source, display_name = loader.load_template_source(template_name)
             break
