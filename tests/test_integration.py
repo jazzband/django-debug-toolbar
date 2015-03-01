@@ -183,4 +183,3 @@ class DebugToolbarLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: self.selenium.find_element_by_css_selector(
                 '#djDebugWindow code'))
-
