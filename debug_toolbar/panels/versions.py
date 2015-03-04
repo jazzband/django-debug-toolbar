@@ -1,19 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from importlib import import_module
-except ImportError:  # python 2.6
-    from django.utils.importlib import import_module
 import sys
 
 import django
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
 
+from debug_toolbar.compat import import_module, OrderedDict
 from debug_toolbar.panels import Panel
 
 

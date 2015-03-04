@@ -4,13 +4,11 @@ import sys
 
 from django.contrib.auth.models import User
 from django.core import management
-try:
-    from django.db.backends import utils
-except ImportError:
-    from django.db.backends import util as utils
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import six
+
+from debug_toolbar.compat import utils
 
 
 @override_settings(DEBUG=True)
