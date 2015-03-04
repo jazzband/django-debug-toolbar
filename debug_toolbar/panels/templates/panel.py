@@ -5,7 +5,6 @@ from pprint import pformat
 
 import django
 from django import http
-from django.conf import settings
 from django.conf.urls import url
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import Context, RequestContext, Template
@@ -15,7 +14,8 @@ from django.utils.encoding import force_text
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.compat import OrderedDict, Engine, get_standard_processors
+from debug_toolbar.compat import (
+    OrderedDict, get_template_dirs, get_template_context_processors)
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
 from debug_toolbar.panels.templates import views
@@ -47,10 +47,7 @@ def _request_context__init__(
         processors = tuple(processors)
     self.context_processors = OrderedDict()
     updates = dict()
-    if Engine:
-        std_processors = Engine.get_default().template_context_processors
-    else:
-        std_processors = get_standard_processors()
+    std_processors = get_template_context_processors()
     for processor in std_processors + processors:
         name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
@@ -191,10 +188,7 @@ class TemplatesPanel(Panel):
         else:
             context_processors = None
 
-        if Engine:
-            template_dirs = Engine.get_default().dirs
-        else:
-            template_dirs = settings.TEMPLATE_DIRS
+        template_dirs = get_template_dirs()
 
         self.record_stats({
             'templates': template_context,
