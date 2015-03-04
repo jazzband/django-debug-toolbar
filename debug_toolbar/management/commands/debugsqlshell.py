@@ -4,12 +4,10 @@ from time import time
 
 # 'debugsqlshell' is the same as the 'shell'.
 from django.core.management.commands.shell import Command               # noqa
-try:
-    from django.db.backends import utils
-except ImportError:
-    from django.db.backends import util as utils
 
 import sqlparse
+
+from debug_toolbar.compat import utils
 
 
 class PrintQueryWrapper(utils.CursorDebugWrapper):

@@ -1,9 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from importlib import import_module
-except ImportError:  # python 2.6
-    from django.utils.importlib import import_module
 import inspect
 import os.path
 import re
@@ -23,6 +19,7 @@ from django.utils import six
 from django.views.debug import linebreak_iter
 
 from .settings import CONFIG
+from debug_toolbar.compat import import_module
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))

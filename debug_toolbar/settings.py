@@ -1,13 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from importlib import import_module
-except ImportError:  # python 2.6
-    from django.utils.importlib import import_module
 import warnings
 
 from django.conf import settings
 from django.utils import six
+
+from debug_toolbar.compat import import_module
 
 
 # Always import this module as follows:

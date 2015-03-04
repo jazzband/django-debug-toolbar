@@ -1,9 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
 from os.path import normpath
 from pprint import pformat
 
@@ -19,15 +15,11 @@ from django.utils.encoding import force_text
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
+from debug_toolbar.compat import OrderedDict, Engine, get_standard_processors
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
 from debug_toolbar.panels.templates import views
 
-try:
-    from django.template.engine import Engine
-except ImportError:
-    Engine = None
-    from django.template.context import get_standard_processors
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
 # immediately when the panel is disabled to keep the overhead small.

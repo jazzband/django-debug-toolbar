@@ -12,16 +12,11 @@ try:
 except ImportError:
     webdriver = None
 
-try:
-    from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
-        as LiveServerTestCase
-except ImportError:
-    # When we're using < Django 1.7
-    from django.test import LiveServerTestCase
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 from django.utils.unittest import skipIf, skipUnless
 
+from debug_toolbar.compat import LiveServerTestCase
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
 from .base import BaseTestCase

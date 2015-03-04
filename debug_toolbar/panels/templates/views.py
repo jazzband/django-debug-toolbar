@@ -6,11 +6,8 @@ from django.shortcuts import render_to_response
 from django.template import TemplateDoesNotExist
 from django.utils.safestring import mark_safe
 
-try:
-    from django.template.engine import Engine
-except ImportError:
-    Engine = None
-    from django.template.loader import find_template_loader
+from debug_toolbar.compat import Engine, find_template_loader
+
 
 def template_source(request):
     """
