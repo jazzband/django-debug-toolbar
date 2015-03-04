@@ -5,6 +5,13 @@ In order to avoid circular references, nothing should be imported from
 debug_toolbar.
 """
 
+
+try:
+    from django.core.cache import CacheHandler, caches
+except ImportError:  # Django < 1.7
+    CacheHandler = None
+    caches = None
+
 try:
     from django.template.engine import Engine
 except ImportError:  # < Django 1.8
