@@ -7,10 +7,10 @@ from django.core.management.commands.shell import Command               # noqa
 
 import sqlparse
 
-from debug_toolbar.compat import utils
+from debug_toolbar.compat import db_backends_util
 
 
-class PrintQueryWrapper(utils.CursorDebugWrapper):
+class PrintQueryWrapper(db_backends_util.CursorDebugWrapper):
     def execute(self, sql, params=()):
         start_time = time()
         try:
@@ -23,4 +23,4 @@ class PrintQueryWrapper(utils.CursorDebugWrapper):
             print('%s [%.2fms]' % (formatted_sql, duration))
 
 
-utils.CursorDebugWrapper = PrintQueryWrapper
+db_backends_util.CursorDebugWrapper = PrintQueryWrapper
