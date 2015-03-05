@@ -1,25 +1,21 @@
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
 from os.path import normpath
 from pprint import pformat
 
 import django
 from django import http
-from django.conf import settings
 from django.conf.urls import url
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import Context, RequestContext, Template
-from django.template.context import get_standard_processors
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
 from django.utils.encoding import force_text
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
+from debug_toolbar.compat import (
+    OrderedDict, get_template_dirs, get_template_context_processors)
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
 from debug_toolbar.panels.templates import views
@@ -51,7 +47,8 @@ def _request_context__init__(
         processors = tuple(processors)
     self.context_processors = OrderedDict()
     updates = dict()
-    for processor in get_standard_processors() + processors:
+    std_processors = get_template_context_processors()
+    for processor in std_processors + processors:
         name = '%s.%s' % (processor.__module__, processor.__name__)
         context = processor(request)
         self.context_processors[name] = context
@@ -191,8 +188,10 @@ class TemplatesPanel(Panel):
         else:
             context_processors = None
 
+        template_dirs = get_template_dirs()
+
         self.record_stats({
             'templates': template_context,
-            'template_dirs': [normpath(x) for x in settings.TEMPLATE_DIRS],
+            'template_dirs': [normpath(x) for x in template_dirs],
             'context_processors': context_processors,
         })

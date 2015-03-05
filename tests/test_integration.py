@@ -12,16 +12,11 @@ try:
 except ImportError:
     webdriver = None
 
-try:
-    from django.contrib.staticfiles.testing import StaticLiveServerTestCase \
-        as LiveServerTestCase
-except ImportError:
-    # When we're using < Django 1.7
-    from django.test import LiveServerTestCase
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 from django.utils.unittest import skipIf, skipUnless
 
+from debug_toolbar.compat import StaticLiveServerTestCase
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
 from .base import BaseTestCase
@@ -118,7 +113,7 @@ class DebugToolbarIntegrationTestCase(TestCase):
 @skipIf(webdriver is None, "selenium isn't installed")
 @skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")
 @override_settings(DEBUG=True)
-class DebugToolbarLiveTestCase(LiveServerTestCase):
+class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):

@@ -13,12 +13,9 @@ from django.contrib.staticfiles.templatetags import staticfiles
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import LazyObject
 from django.utils.translation import ungettext, ugettext_lazy as _
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
 
 from debug_toolbar import panels
+from debug_toolbar.compat import OrderedDict
 from debug_toolbar.utils import ThreadCollector
 
 

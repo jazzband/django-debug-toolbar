@@ -13,20 +13,13 @@ from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.utils.translation import ugettext_lazy as _, ungettext
 
-try:
-    from django.core.cache import CacheHandler, caches as original_caches
-except ImportError:  # Django < 1.7
-    CacheHandler = None
-    original_caches = None
-try:
-    from collections import OrderedDict
-except ImportError:
-    from django.utils.datastructures import SortedDict as OrderedDict
 
+from debug_toolbar import settings as dt_settings
+from debug_toolbar.compat import (
+    OrderedDict, CacheHandler, caches as original_caches)
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
                                  get_template_info, get_stack)
-from debug_toolbar import settings as dt_settings
 
 
 cache_called = Signal(providing_args=[

@@ -4,20 +4,18 @@ import sys
 
 from django.contrib.auth.models import User
 from django.core import management
-try:
-    from django.db.backends import utils
-except ImportError:
-    from django.db.backends import util as utils
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import six
+
+from debug_toolbar.compat import db_backends_util
 
 
 @override_settings(DEBUG=True)
 class DebugSQLShellTestCase(TestCase):
 
     def setUp(self):
-        self.original_cursor_wrapper = utils.CursorDebugWrapper
+        self.original_cursor_wrapper = db_backends_util.CursorDebugWrapper
         # Since debugsqlshell monkey-patches django.db.backends.utils, we can
         # test it simply by loading it, without executing it. But we have to
         # undo the monkey-patch on exit.
@@ -26,7 +24,7 @@ class DebugSQLShellTestCase(TestCase):
         management.load_command_class(app_name, command_name)
 
     def tearDown(self):
-        utils.CursorDebugWrapper = self.original_cursor_wrapper
+        db_backends_util.CursorDebugWrapper = self.original_cursor_wrapper
 
     def test_command(self):
         original_stdout, sys.stdout = sys.stdout, six.StringIO()
