@@ -1,0 +1,17 @@
+{% load i18n l10n %}{% load static from staticfiles %}{% load url from future %}
+<table>
+	<thead>
+		<tr>
+			<th>Database</th>
+			<th>Query</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for db, sql in sqls %}
+		<tr>
+			<td>{{ db }}</td>
+			<td>{{ sql|safe }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
