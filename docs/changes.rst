@@ -1,6 +1,29 @@
 Change log
 ==========
 
+1.3
+---
+
+This is the first version compatible with Django 1.8.
+
+New features
+~~~~~~~~~~~~
+
+* A new panel is available: Template Profiler.
+* The ``SHOW_TOOLBAR_CALLBACK`` accepts a callable.
+* The toolbar now provides a :ref:`javascript-api`.
+
+Bugfixes
+~~~~~~~~
+
+* The toolbar handle cannot leave the visible area anymore when the toolbar is
+  collapsed.
+* The root level logger is preserved.
+* The ``RESULTS_CACHE_SIZE`` setting is taken into account.
+* CSS classes are prefixed with ``djdt-`` to prevent name conflicts.
+* The private copy of jQuery no longer registers as an AMD module on sites
+  that load RequireJS.
+
 1.2
 ---
 
