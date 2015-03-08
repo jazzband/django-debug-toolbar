@@ -53,7 +53,12 @@ except ImportError:  # Django >= 1.7
 def get_template_dirs():
     """Compatibility method to fetch the template directories."""
     if Engine:
-        template_dirs = Engine.get_default().dirs
+        try:
+            engine = Engine.get_default()
+        except ImproperlyConfigured:
+            template_dirs = []
+        else:
+            template_dirs = engine.dirs
     else:  # Django < 1.8
         template_dirs = settings.TEMPLATE_DIRS
     return template_dirs
@@ -63,9 +68,11 @@ def get_template_loaders():
     """Compatibility method to fetch the template loaders."""
     if Engine:
         try:
-            loaders = Engine.get_default().template_loaders
+            engine = Engine.get_default()
         except ImproperlyConfigured:
             loaders = []
+        else:
+            loaders = engine.template_loaders
     else:  # Django < 1.8
         loaders = [
             find_template_loader(loader_name)
@@ -76,7 +83,12 @@ def get_template_loaders():
 def get_template_context_processors():
     """Compatibility method to fetch the template context processors."""
     if Engine:
-        context_processors = Engine.get_default().template_context_processors
+        try:
+            engine = Engine.get_default()
+        except ImproperlyConfigured:
+            context_processors = []
+        else:
+            context_processors = engine.template_context_processors
     else:  # Django < 1.8
         context_processors = get_standard_processors()
     return context_processors
