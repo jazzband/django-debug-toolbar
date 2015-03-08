@@ -3,14 +3,18 @@
 	<thead>
 		<tr>
 			<th>Database</th>
+			<th>Vendor</th>
 			<th>Query</th>
+			<th>Warning</th>
 		</tr>
 	</thead>
 	<tbody>
-		{% for db, sql in sqls %}
+		{% for alias, vendor, sql, warning in warnings %}
 		<tr>
-			<td>{{ db }}</td>
+			<td>{{ alias }}</td>
+			<td>{{ vendor }}</td>
 			<td>{{ sql|safe }}</td>
+			<td>{{ warning }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
