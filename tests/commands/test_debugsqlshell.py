@@ -30,6 +30,6 @@ class DebugSQLShellTestCase(TestCase):
         original_stdout, sys.stdout = sys.stdout, six.StringIO()
         try:
             User.objects.count()
-            self.assertIn("SELECT COUNT(*)", sys.stdout.getvalue())
+            self.assertIn("SELECT COUNT", sys.stdout.getvalue())
         finally:
             sys.stdout = original_stdout
