@@ -35,8 +35,8 @@ try:
     from django.contrib.staticfiles.testing import (
         StaticLiveServerTestCase)
 except ImportError:  # Django < 1.7
-    from django.test import (
-        LiveServerTestCase as StaticLiveServerTestCase)  # NOQA
+    from django.test import (  # NOQA
+        LiveServerTestCase as StaticLiveServerTestCase)
 
 try:
     from django.db.backends import utils as db_backends_util
