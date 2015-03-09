@@ -29,6 +29,27 @@ def unwrap_cursor(conn):
         conn.cursor = conn._djdt_sqlwarnings_cursor
 
 
+def mysql_warnings(plan):
+    # Ref - https://dev.mysql.com/doc/refman/5.6/en/explain-output.html
+    warnings = []
+
+    for info in plan:
+        select_type = info[1] or ''
+        join_type = info[4] or ''
+        extra = info[9] or ''
+
+        if select_type.upper() == 'UNCACHEABLE SUBQUERY':
+            warnings.append('Using uncacheable subquery')
+
+        if join_type.upper() == 'ALL':
+            warnings.append('Using full table scan in table join')
+
+        if extra.upper() == 'USING FILESORT':
+            warnings.append('Using filesort for sorting the result')
+
+    return frozenset(warnings)
+
+
 class SQLWarningsPanel(Panel):
     """
     Panel that warns certain patterns of the SQL queries run while processing
@@ -56,15 +77,15 @@ class SQLWarningsPanel(Panel):
     def process_response(self, request, response):
         self._cursors = {}
 
-        sqls = ((alias, query['vendor'], query['raw_sql'], query['params'])
+        sqls = ((alias, query['raw_sql'], query['params'])
                 for alias, queries in self._databases.items()
                 for query in queries)
-        plans = (self.explain(alias, vendor, sql, params)
-                 for alias, vendor, sql, params in sqls)
-        evals = (self.evaluate(alias, vendor, sql, plan)
-                 for alias, vendor, sql, plan in plans)
-        warnings = ((alias, vendor, sql, warn)
-                    for alias, vendor, sql, warn in evals if warn)
+        plans = (self.explain(alias, sql, params)
+                 for alias, sql, params in sqls)
+        evals = (self.evaluate(alias, sql, plan)
+                 for alias, sql, plan in plans if plan)
+        warnings = ((alias, sql, warns)
+                    for alias, sql, warns in evals if warns)
 
         self.record_stats({'warnings': list(warnings)})
 
@@ -75,12 +96,16 @@ class SQLWarningsPanel(Panel):
         # 'sql.tracking.ThreadLocalState.Wrapper' would call this function.
         self._databases[alias].append(kwargs)
 
-    def explain(self, alias, vendor, sql, params):
+    def explain(self, alias, sql, params):
+        if not sql.upper().startswith('SELECT '):
+            return alias, sql, None
+
         if alias not in self._cursors:
             conn = connections[alias]
             factory = getattr(conn, '_djdt_sqlwarnings_cursor', conn.cursor)
             self._cursors[alias] = factory()
 
+        vendor = connections[alias].vendor
         cursor = self._cursors[alias]
         params = json.loads(params)
 
@@ -91,11 +116,17 @@ class SQLWarningsPanel(Panel):
         else:
             cursor.execute('EXPLAIN %s' % sql, params)
 
-        # FIXME: Serialize execution plan
         plan = cursor.fetchall()
 
-        return alias, vendor, sql, plan
+        return alias, sql, plan
 
-    def evaluate(self, alias, vendor, sql, plan):
-        warning = plan  # FIXME: generate warning based on SQL execution plan
-        return alias, vendor, sql, warning
+    def evaluate(self, alias, sql, plan):
+        vendor = connections[alias].vendor
+
+        # FIXME: Refactor this to support better extensibility
+        if vendor == 'mysql':
+            warnings = mysql_warnings(plan)
+        else:
+            warnings = None
+
+        return alias, sql, warnings
