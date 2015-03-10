@@ -27,6 +27,7 @@ def unwrap_cursor(conn):
     if hasattr(conn, '_djdt_sqlwarnings_cursor'):
         del conn.cursor
         conn.cursor = conn._djdt_sqlwarnings_cursor
+        del conn._djdt_sqlwarnings_cursor
 
 
 def mysql_warnings(plan):
