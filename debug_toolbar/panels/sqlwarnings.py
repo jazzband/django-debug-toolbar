@@ -48,6 +48,9 @@ def mysql_warnings(plan):
         if extra.upper() == 'USING FILESORT':
             warnings.append('Using filesort for sorting the result')
 
+    if not warnings:
+        return
+
     return frozenset(warnings)
 
 
