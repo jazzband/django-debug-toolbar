@@ -10,10 +10,10 @@
 <script src="{% static 'debug_toolbar/js/jquery_existing.js' %}"></script>
 {% endif %}
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
-<div id="djDebug" hidden dir="ltr"
+<div id="djDebug" hidden="hidden" dir="ltr"
      data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
-	<div hidden id="djDebugToolbar">
+	<div hidden="hidden" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
 			{% if toolbar.panels %}
 			<li><a id="djHideToolBarButton" href="#" title="{% trans "Hide toolbar" %}">{% trans "Hide" %} &#187;</a></li>
@@ -43,7 +43,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-	<div hidden id="djDebugToolbarHandle">
+	<div hidden="hidden" id="djDebugToolbarHandle">
 		<span title="{% trans "Show toolbar" %}" id="djShowToolBarButton">&#171;</span>
 	</div>
 	{% for panel in toolbar.panels %}
