@@ -76,7 +76,7 @@
 									{% for line in query.template_info.context %}
 									<tr>
 										<td>{{ line.num }}</td>
-										<td><code {% if line.highlight %}class="highlighted"{% endif %}>{{ line.content }}</code></td>
+										<td><code {% if line.highlight %}class="djdt-highlighted"{% endif %}>{{ line.content }}</code></td>
 									</tr>
 									{% endfor %}
 								</table>

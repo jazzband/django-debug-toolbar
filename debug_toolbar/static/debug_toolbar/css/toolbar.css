@@ -647,15 +647,12 @@
     }
 }
 
-#djDebug .width-20 {
+#djDebug .djdt-width-20 {
     width: 20%;
 }
-#djDebug .width-60 {
+#djDebug .djdt-width-60 {
     width: 60%;
 }
-#djDebug .width-60 {
-    width: 60%;
-}
-#djDebug .highlighted {
+#djDebug .djdt-highlighted {
     background-color: lightgrey;
 }
