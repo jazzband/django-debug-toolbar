@@ -24,6 +24,14 @@ class SQLPanelTestCase(BaseTestCase):
         self.panel.disable_instrumentation()
         super(SQLPanelTestCase, self).tearDown()
 
+    def test_disabled(self):
+        config = {
+            'DISABLE_PANELS': set(['debug_toolbar.panels.sql.SQLPanel'])
+        }
+        self.assertTrue(self.panel.enabled)
+        with self.settings(DEBUG_TOOLBAR_CONFIG=config):
+            self.assertFalse(self.panel.enabled)
+
     def test_recording(self):
         self.assertEqual(len(self.panel._queries), 0)
 

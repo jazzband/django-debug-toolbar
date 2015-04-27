@@ -58,6 +58,15 @@ class TemplatesPanelTestCase(BaseTestCase):
         self.panel.process_response(self.request, self.response)
         self.assertIn('tests.panels.test_template.context_processor', self.panel.content)
 
+    def test_disabled(self):
+        config = {
+            'DISABLE_PANELS': set([
+                'debug_toolbar.panels.templates.TemplatesPanel'])
+        }
+        self.assertTrue(self.panel.enabled)
+        with self.settings(DEBUG_TOOLBAR_CONFIG=config):
+            self.assertFalse(self.panel.enabled)
+
 
 def context_processor(request):
     return {'content': 'set by processor'}
