@@ -4,7 +4,8 @@ Tips
 The toolbar isn't displayed!
 ----------------------------
 
-The Debug Toolbar will only display itself if the mimetype of the response is
+The Debug Toolbar will only display when ``DEBUG = True`` in your project's
+settings. It will also only display if the mimetype of the response is
 either ``text/html`` or ``application/xhtml+xml`` and contains a closing
 ``</body>`` tag.
 
