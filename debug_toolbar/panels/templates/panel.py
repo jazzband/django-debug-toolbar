@@ -201,12 +201,10 @@ class TemplatesPanel(Panel):
             info = {}
             # Clean up some info about templates
             template = template_data.get('template', None)
-            if not hasattr(template, 'origin'):
-                continue
-            if template.origin and template.origin.name:
+            if hasattr(template, 'origin') and template.origin and template.origin.name:
                 template.origin_name = template.origin.name
             else:
-                template.origin_name = 'No origin'
+                template.origin_name = _('No origin')
             info['template'] = template
             # Clean up context for better readability
             if self.toolbar.config['SHOW_TEMPLATE_CONTEXT']:
