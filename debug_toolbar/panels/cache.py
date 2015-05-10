@@ -82,6 +82,10 @@ class CacheStatTracker(BaseCache):
         return self.cache.delete(*args, **kwargs)
 
     @send_signal
+    def clear(self, *args, **kwargs):
+        return self.cache.clear(*args, **kwargs)
+
+    @send_signal
     def has_key(self, *args, **kwargs):
         # Ignore flake8 rules for has_key since we need to support caches
         # that may be using has_key.
@@ -148,6 +152,7 @@ class CachePanel(Panel):
             ('get', 0),
             ('set', 0),
             ('delete', 0),
+            ('clear', 0),
             ('get_many', 0),
             ('set_many', 0),
             ('delete_many', 0),
