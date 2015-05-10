@@ -27,7 +27,7 @@ class CachePanelTestCase(BaseTestCase):
         cache.cache.delete('foo')
         # Verify that the cache has a valid clear method.
         cache.cache.clear()
-        self.assertEqual(len(self.panel.calls), 5)
+        self.assertEqual(len(self.panel.calls), 4)
 
     @skipIf(django.VERSION < (1, 7), "Caches was added in Django 1.7")
     def test_recording_caches(self):
