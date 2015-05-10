@@ -217,6 +217,15 @@ Path: ``neo4j_panel.Neo4jPanel``
 
 Trace neo4j rest API calls in your django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
 
+Pympler
+~~~~~~~
+
+URL: https://pythonhosted.org/Pympler/django.html
+
+Path: ``pympler.panels.MemoryPanel``
+
+Shows process memory information (virtual size, resident set size) and model instances for the current request.
+
 Request History
 ~~~~~~~~~~~~~~~
 
