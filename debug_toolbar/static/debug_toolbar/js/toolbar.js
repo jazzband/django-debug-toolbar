@@ -285,13 +285,21 @@
 
                 return value;
             }
+        },
+        applyStyle: function(name) {
+            $('#djDebug [data-' + name + ']').each(function() {
+                var css = {};
+                css[name] = $(this).data(name);
+                $(this).css(css);
+            });
         }
     };
     $.extend(publicAPI, {
         show_toolbar: djdt.show_toolbar,
         hide_toolbar: djdt.hide_toolbar,
         close: djdt.close,
-        cookie: djdt.cookie
+        cookie: djdt.cookie,
+        applyStyle: djdt.applyStyle
     });
     $(document).ready(djdt.init);
 })(djdt.jQuery, djdt);

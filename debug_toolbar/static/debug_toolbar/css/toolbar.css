@@ -646,3 +646,13 @@
         display: none;
     }
 }
+
+#djDebug .djdt-width-20 {
+    width: 20%;
+}
+#djDebug .djdt-width-60 {
+    width: 60%;
+}
+#djDebug .djdt-highlighted {
+    background-color: lightgrey;
+}
