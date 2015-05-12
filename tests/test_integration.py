@@ -14,9 +14,8 @@ except ImportError:
 
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
-from django.utils.unittest import skipIf, skipUnless
 
-from debug_toolbar.compat import StaticLiveServerTestCase
+from debug_toolbar.compat import StaticLiveServerTestCase, unittest
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
 from .base import BaseTestCase
@@ -110,8 +109,8 @@ class DebugToolbarIntegrationTestCase(TestCase):
         ET.fromstring(response.content)     # shouldn't raise ParseError
 
 
-@skipIf(webdriver is None, "selenium isn't installed")
-@skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")
+@unittest.skipIf(webdriver is None, "selenium isn't installed")
+@unittest.skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")
 @override_settings(DEBUG=True)
 class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 

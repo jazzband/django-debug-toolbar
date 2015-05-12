@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils import unittest
 
 from ..base import BaseTestCase
 from ..views import regular_view
+from debug_toolbar.compat import unittest
 
 
 @override_settings(DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingPanel'])

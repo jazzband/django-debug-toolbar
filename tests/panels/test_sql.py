@@ -7,10 +7,10 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.db.utils import DatabaseError
 from django.shortcuts import render
-from django.utils import unittest
 from django.test.utils import override_settings
 
 from ..base import BaseTestCase
+from debug_toolbar.compat import unittest
 
 
 class SQLPanelTestCase(BaseTestCase):

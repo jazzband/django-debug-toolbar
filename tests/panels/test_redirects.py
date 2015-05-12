@@ -4,9 +4,9 @@ import django
 from django.conf import settings
 from django.http import HttpResponse
 from django.test.utils import override_settings
-from django.utils import unittest
 
 from ..base import BaseTestCase
+from debug_toolbar.compat import unittest
 
 
 @override_settings(DEBUG_TOOLBAR_CONFIG={'INTERCEPT_REDIRECTS': True})

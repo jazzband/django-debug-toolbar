@@ -103,3 +103,12 @@ if django.VERSION[:2] < (1, 5):
     from django.templatetags.future import url
 else:
     from django.template.defaulttags import url  # NOQA
+
+if django.VERSION[:2] < (1, 8):
+    # If the user is using Django < 1.8, then import the unittest
+    # library from Django so that it supports Python 2.6.
+    # Django >= 1.8 no longer supports Python 2.6, so in those cases
+    # simply load Python's unittest
+    from django.utils import unittest
+else:
+    import unittest  # NOQA

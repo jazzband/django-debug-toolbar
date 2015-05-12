@@ -1,11 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.utils.unittest import TestCase
-
+from debug_toolbar.compat import unittest
 from debug_toolbar.utils import get_name_from_obj
 
 
-class GetNameFromObjTestCase(TestCase):
+class GetNameFromObjTestCase(unittest.TestCase):
 
     def test_func(self):
         def x():
