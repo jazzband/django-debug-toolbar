@@ -32,6 +32,17 @@ class CachePanelTestCase(BaseTestCase):
     @skipIf(django.VERSION < (1, 7), "Caches was added in Django 1.7")
     def test_recording_caches(self):
         self.assertEqual(len(self.panel.calls), 0)
-        cache.cache.set('foo', 'bar')
-        cache.caches[cache.DEFAULT_CACHE_ALIAS].get('foo')
+        default_cache = cache.caches[cache.DEFAULT_CACHE_ALIAS]
+        second_cache = cache.caches['second']
+        default_cache.set('foo', 'bar')
+        second_cache.get('foo')
+        self.assertEqual(len(self.panel.calls), 2)
+
+    @skipIf(django.VERSION > (1, 6), "get_cache was deprecated in Django 1.7")
+    def test_recording_get_cache(self):
+        self.assertEqual(len(self.panel.calls), 0)
+        default_cache = cache.get_cache(cache.DEFAULT_CACHE_ALIAS)
+        second_cache = cache.get_cache('second')
+        default_cache.set('foo', 'bar')
+        second_cache.get('foo')
         self.assertEqual(len(self.panel.calls), 2)
