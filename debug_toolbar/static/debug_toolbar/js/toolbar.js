@@ -8,7 +8,7 @@
         init: function() {
             $('#djDebug').show();
             var current = null;
-            $(document).on('click', '#djDebugPanelList li a', function() {
+            $('#djDebugPanelList').on('click', 'li a', function() {
                 if (!this.className) {
                     return false;
                 }
@@ -44,12 +44,12 @@
                 }
                 return false;
             });
-            $(document).on('click', '#djDebug a.djDebugClose', function() {
+            $('#djDebug').on('click', 'a.djDebugClose', function() {
                 $(document).trigger('close.djDebug');
                 $('#djDebugToolbar li').removeClass('djdt-active');
                 return false;
             });
-            $(document).on('click', '#djDebug .djDebugPanelButton input[type=checkbox]', function() {
+            $('#djDebug').on('click', '.djDebugPanelButton input[type=checkbox]', function() {
                 djdt.cookie.set($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
                     path: '/',
                     expires: 10
@@ -57,7 +57,7 @@
             });
 
             // Used by the SQL and template panels
-            $(document).on('click', '#djDebug .remoteCall', function() {
+            $('#djDebug').on('click', '.remoteCall', function() {
                 var self = $(this);
                 var name = self[0].tagName.toLowerCase();
                 var ajax_data = {};
@@ -83,7 +83,7 @@
                         $('#djDebugWindow').html(message).show();
                 });
 
-                $(document).on('click', '#djDebugWindow a.djDebugBack', function() {
+                $('#djDebugWindow').on('click', 'a.djDebugBack', function() {
                     $(this).parent().parent().hide();
                     return false;
                 });
@@ -92,7 +92,7 @@
             });
 
             // Used by the cache, profiling and SQL panels
-            $(document).on('click', '#djDebug a.djToggleSwitch', function(e) {
+            $('#djDebug').on('click', 'a.djToggleSwitch', function(e) {
                 e.preventDefault();
                 var btn = $(this);
                 var id = btn.attr('data-toggle-id');
