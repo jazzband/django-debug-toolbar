@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-08 21:16+0100\n"
+"POT-Creation-Date: 2015-05-27 19:40-0400\n"
 "PO-Revision-Date: 2012-03-31 20:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,18 +20,18 @@ msgstr ""
 msgid "Debug Toolbar"
 msgstr ""
 
-#: panels/cache.py:192
+#: panels/cache.py:197
 msgid "Cache"
 msgstr ""
 
-#: panels/cache.py:197
+#: panels/cache.py:202
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/cache.py:205
+#: panels/cache.py:210
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
@@ -173,6 +173,10 @@ msgstr ""
 msgid "Templates (%(num_templates)s rendered)"
 msgstr ""
 
+#: panels/templates/panel.py:207
+msgid "No origin"
+msgstr ""
+
 #: panels/timer.py:23
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
@@ -239,23 +243,23 @@ msgstr ""
 msgid "Versions"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:21
+#: templates/debug_toolbar/base.html:19
 msgid "Hide toolbar"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:21
+#: templates/debug_toolbar/base.html:19
 msgid "Hide"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:27
+#: templates/debug_toolbar/base.html:25
 msgid "Disable for next and successive requests"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:27
+#: templates/debug_toolbar/base.html:25
 msgid "Enable for next and successive requests"
 msgstr ""
 
-#: templates/debug_toolbar/base.html:49
+#: templates/debug_toolbar/base.html:47
 msgid "Show toolbar"
 msgstr ""
 
