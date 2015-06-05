@@ -209,14 +209,14 @@ class SQLPanel(Panel):
 
         # Queries are duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
-        query_duplicates = {
-            alias: {
-                query: duplicate_count
+        query_duplicates = dict(
+            (alias, dict(
+                (query, duplicate_count)
                 for query, duplicate_count in queries.items()
                 if duplicate_count >= 2
-            }
+            ))
             for alias, queries in query_duplicates.items()
-        }
+        )
 
         for alias, query in self._queries:
             try:
