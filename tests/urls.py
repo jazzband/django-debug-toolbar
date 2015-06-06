@@ -20,5 +20,6 @@ urlpatterns = patterns('tests.views',                                   # noqa
     url(r'^non_ascii_request/$', 'regular_view', {'title': NonAsciiRepr()}),
     url(r'^new_user/$', 'new_user'),
     url(r'^execute_sql/$', 'execute_sql'),
+    url(r'^cached_view/$', 'cached_view'),
     url(r'^__debug__/', include(debug_toolbar.urls)),
 )

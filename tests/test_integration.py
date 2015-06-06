@@ -86,6 +86,14 @@ class DebugToolbarTestCase(BaseTestCase):
         # check toolbar insertion before "</body>"
         self.assertContains(resp, '</div>\n</body>')
 
+    def test_cache_page(self):
+        self.client.get('/cached_view/')
+        self.assertEqual(
+            len(self.toolbar.get_panel_by_id('CachePanel').calls), 3)
+        self.client.get('/cached_view/')
+        self.assertEqual(
+            len(self.toolbar.get_panel_by_id('CachePanel').calls), 5)
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(TestCase):

@@ -75,7 +75,7 @@ Cache
 
 Path: ``debug_toolbar.panels.cache.CachePanel``
 
-Cache queries.
+Cache queries. Is incompatible with Django's per-site caching.
 
 Signal
 ~~~~~~
