@@ -5,6 +5,7 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 
 
 def execute_sql(request):
@@ -23,4 +24,9 @@ def new_user(request, username='joe'):
 
 def resolving_view(request, arg1, arg2):
     # see test_url_resolving in tests.py
+    return HttpResponse()
+
+
+@cache_page(60)
+def cached_view(request):
     return HttpResponse()

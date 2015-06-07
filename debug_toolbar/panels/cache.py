@@ -11,6 +11,7 @@ from django.core.cache import (
     get_cache as original_get_cache)
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
+from django.middleware import cache as middleware_cache
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 
@@ -124,15 +125,26 @@ def get_cache(*args, **kwargs):
     return CacheStatTracker(original_get_cache(*args, **kwargs))
 
 
-def get_cache_handler():
-    if CacheHandler is None:
-        return None
-
+if CacheHandler is not None:
     class CacheHandlerPatch(CacheHandler):
         def __getitem__(self, alias):
             actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
             return CacheStatTracker(actual_cache)
+
+
+def get_cache_handler():
+    if CacheHandler is None:
+        return None
     return CacheHandlerPatch()
+
+
+# Must monkey patch the middleware's cache module as well in order to
+# cover per-view level caching. This needs to be monkey patched outside
+# of the enable_instrumentation method since the django's
+# decorator_from_middleware_with_args will store the cache from core.caches
+# when it wraps the view.
+middleware_cache.get_cache = get_cache
+middleware_cache.caches = get_cache_handler()
 
 
 class CachePanel(Panel):
@@ -212,19 +224,24 @@ class CachePanel(Panel):
                          count) % dict(count=count)
 
     def enable_instrumentation(self):
-        # This isn't thread-safe because cache connections aren't thread-local
-        # in Django, unlike database connections.
         cache.get_cache = get_cache
         if CacheHandler is None:
             cache.cache = CacheStatTracker(original_cache)
         else:
-            cache.caches = get_cache_handler()
+            if isinstance(middleware_cache.caches, CacheHandlerPatch):
+                cache.caches = middleware_cache.caches
+            else:
+                cache.caches = get_cache_handler()
 
     def disable_instrumentation(self):
         if CacheHandler is None:
             cache.cache = original_cache
         else:
             cache.caches = original_caches
+            # While it can be restored to the original, any views that were
+            # wrapped with the cache_page decorator will continue to use a
+            # monkey patched cache.
+            middleware_cache.caches = original_caches
         cache.get_cache = original_get_cache
 
     def process_response(self, request, response):
