@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='django-debug-toolbar',
-    version='1.3.0',
+    version='1.3.1',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
     long_description=open('README.rst', encoding='utf-8').read(),
