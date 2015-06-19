@@ -643,7 +643,7 @@
 
 @media print {
     #djDebug {
-        display: none;
+        display: none !important;
     }
 }
 
