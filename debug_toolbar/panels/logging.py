@@ -74,7 +74,7 @@ class LoggingPanel(Panel):
     def process_request(self, request):
         collector.clear_collection()
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         records = collector.get_collection()
         self._records[threading.currentThread()] = records
         collector.clear_collection()

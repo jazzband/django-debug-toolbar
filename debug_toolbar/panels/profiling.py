@@ -142,7 +142,7 @@ class ProfilingPanel(Panel):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         if not hasattr(self, 'profiler'):
             return None
         # Could be delayed until the panel content is requested (perf. optim.)

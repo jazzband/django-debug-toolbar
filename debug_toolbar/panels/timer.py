@@ -52,7 +52,7 @@ class TimerPanel(Panel):
         if self.has_content:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         stats = {}
         if hasattr(self, '_start_time'):
             stats['total_time'] = (time.time() - self._start_time) * 1000

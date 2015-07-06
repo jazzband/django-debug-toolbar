@@ -22,7 +22,7 @@ class VersionsPanel(Panel):
 
     template = 'debug_toolbar/panels/versions.html'
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         versions = [
             ('Python', '%d.%d.%d' % sys.version_info[:3]),
             ('Django', self.get_app_version(django)),
