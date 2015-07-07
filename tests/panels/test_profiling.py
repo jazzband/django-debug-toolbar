@@ -7,7 +7,6 @@ from django.test.utils import override_settings
 
 from ..base import BaseTestCase
 from ..views import regular_view
-from debug_toolbar.compat import unittest
 
 
 @override_settings(DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingPanel'])
@@ -17,9 +16,6 @@ class ProfilingPanelTestCase(BaseTestCase):
         super(ProfilingPanelTestCase, self).setUp()
         self.panel = self.toolbar.get_panel_by_id('ProfilingPanel')
 
-    # This test fails randomly for a reason I don't understand.
-
-    @unittest.expectedFailure
     def test_regular_view(self):
         self.panel.process_view(self.request, regular_view, ('profiling',), {})
         self.panel.process_response(self.request, self.response)

@@ -10,6 +10,11 @@ from pstats import Stats
 from colorsys import hsv_to_rgb
 import os
 
+# Occasionally the disable method on the profiler is listed before
+# the actual view functions. This function call should be ignored as
+# it leads to an error within the tests.
+INVALID_PROFILER_FUNC = "<method 'disable' of '_lsprof.Profiler' objects>"
+
 
 class DjangoDebugToolbarStats(Stats):
     __root = None
@@ -17,7 +22,7 @@ class DjangoDebugToolbarStats(Stats):
     def get_root_func(self):
         if self.__root is None:
             for func, (cc, nc, tt, ct, callers) in self.stats.items():
-                if len(callers) == 0:
+                if len(callers) == 0 and INVALID_PROFILER_FUNC not in func:
                     self.__root = func
                     break
         return self.__root
