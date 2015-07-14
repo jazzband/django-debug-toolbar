@@ -13,7 +13,7 @@ import os
 # Occasionally the disable method on the profiler is listed before
 # the actual view functions. This function call should be ignored as
 # it leads to an error within the tests.
-INVALID_PROFILER_FUNC = "<method 'disable' of '_lsprof.Profiler' objects>"
+INVALID_PROFILER_FUNC = '_lsprof.Profiler'
 
 
 class DjangoDebugToolbarStats(Stats):

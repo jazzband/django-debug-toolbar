@@ -1,6 +1,22 @@
 Change log
 ==========
 
+1.4
+---
+
+New features
+~~~~~~~~~~~~
+
+* New panel method :meth:`debug_toolbar.panels.Panel.generate_stats` allows panels
+  to only record stats when the toolbar is going to be inserted into the
+  response.
+
+Bugfixes
+~~~~~~~~
+
+* Response time for requests of projects with numerous media files has
+  been improved.
+
 1.3
 ---
 

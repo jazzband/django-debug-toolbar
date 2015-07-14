@@ -168,10 +168,10 @@ class Panel(object):
     def process_response(self, request, response):
         """
         Like process_response in Django's middleware. This is similar to
-        :meth:`generate_stats`, but will be executed on every request. It
-        should be used when either the logic needs to be executed on every
-        request or it needs to change the response entirely, such as
-        :class:`RedirectsPanel`.
+        :meth:`generate_stats <debug_toolbar.panels.Panel.generate_stats>`,
+        but will be executed on every request. It should be used when either
+        the logic needs to be executed on every request or it needs to change
+        the response entirely, such as :class:`RedirectsPanel`.
 
         Write panel logic related to the response there. Post-process data
         gathered while the view executed. Save data with :meth:`record_stats`.
@@ -181,9 +181,10 @@ class Panel(object):
 
     def generate_stats(self, request, response):
         """
-        Similar to :meth:`process_response`, but may not be executed on every
-        request. This will only be called if the toolbar will be inserted into
-        the request.
+        Similar to :meth:`process_response
+        <debug_toolbar.panels.Panel.process_response>`,
+        but may not be executed on every request. This will only be called if
+        the toolbar will be inserted into the request.
 
         Write panel logic related to the response there. Post-process data
         gathered while the view executed. Save data with :meth:`record_stats`.

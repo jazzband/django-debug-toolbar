@@ -315,6 +315,8 @@ CSS API at this time.
 
     .. automethod:: debug_toolbar.panels.Panel.process_response
 
+    .. automethod:: debug_toolbar.panels.Panel.generate_stats
+
 .. _javascript-api:
 
 JavaScript API
