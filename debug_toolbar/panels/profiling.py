@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, unicode_literals
 
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from debug_toolbar.panels import Panel
@@ -16,13 +17,23 @@ import os
 INVALID_PROFILER_FUNC = '_lsprof.Profiler'
 
 
+def contains_profiler(func_tuple):
+    """Helper function that checks to see if the tuple contains
+    the INVALID_PROFILE_FUNC in any string value of the tuple."""
+    has_profiler = False
+    for value in func_tuple:
+        if isinstance(value, six.string_types):
+            has_profiler |= INVALID_PROFILER_FUNC in value
+    return has_profiler
+
+
 class DjangoDebugToolbarStats(Stats):
     __root = None
 
     def get_root_func(self):
         if self.__root is None:
             for func, (cc, nc, tt, ct, callers) in self.stats.items():
-                if len(callers) == 0 and INVALID_PROFILER_FUNC not in func:
+                if len(callers) == 0 and not contains_profiler(func):
                     self.__root = func
                     break
         return self.__root
