@@ -195,7 +195,7 @@ class TemplatesPanel(Panel):
     def disable_instrumentation(self):
         template_rendered.disconnect(self._store_template_info)
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         template_context = []
         for template_data in self.templates:
             info = {}

@@ -45,6 +45,7 @@ class DebugToolbarTestCase(BaseTestCase):
         panel = self.toolbar.get_panel_by_id('RequestPanel')
         panel.process_request(self.request)
         panel.process_response(self.request, self.response)
+        panel.generate_stats(self.request, self.response)
         return panel.get_stats()
 
     def test_url_resolving_positional(self):

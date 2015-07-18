@@ -25,7 +25,7 @@ class RequestPanel(Panel):
         view_func = self.get_stats().get('view_func', '')
         return view_func.rsplit('.', 1)[-1]
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         self.record_stats({
             'get': [(k, request.GET.getlist(k)) for k in sorted(request.GET)],
             'post': [(k, request.POST.getlist(k)) for k in sorted(request.POST)],

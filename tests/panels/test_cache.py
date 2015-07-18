@@ -46,3 +46,16 @@ class CachePanelTestCase(BaseTestCase):
         default_cache.set('foo', 'bar')
         second_cache.get('foo')
         self.assertEqual(len(self.panel.calls), 2)
+
+    def test_insert_content(self):
+        """
+        Test that the panel only inserts content after generate_stats and
+        not the process_response.
+        """
+        cache.cache.get('café')
+        self.panel.process_response(self.request, self.response)
+        # ensure the panel does not have content yet.
+        self.assertNotIn('café', self.panel.content)
+        self.panel.generate_stats(self.request, self.response)
+        # ensure the panel renders correctly.
+        self.assertIn('café', self.panel.content)

@@ -58,7 +58,7 @@ class SignalsPanel(Panel):
             signals[signal_name] = getattr(signals_mod, signal_name)
         return signals
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         signals = []
         for name, signal in sorted(self.signals.items(), key=lambda x: x[0]):
             if signal is None:

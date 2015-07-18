@@ -64,8 +64,22 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 3)
 
         self.panel.process_response(self.request, self.response)
+        self.panel.generate_stats(self.request, self.response)
 
         # ensure the panel renders correctly
+        self.assertIn('café', self.panel.content)
+
+    def test_insert_content(self):
+        """
+        Test that the panel only inserts content after generate_stats and
+        not the process_response.
+        """
+        list(User.objects.filter(username='café'.encode('utf-8')))
+        self.panel.process_response(self.request, self.response)
+        # ensure the panel does not have content yet.
+        self.assertNotIn('café', self.panel.content)
+        self.panel.generate_stats(self.request, self.response)
+        # ensure the panel renders correctly.
         self.assertIn('café', self.panel.content)
 
     @unittest.skipUnless(connection.vendor == 'postgresql',

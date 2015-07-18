@@ -244,7 +244,7 @@ class CachePanel(Panel):
             middleware_cache.caches = original_caches
         cache.get_cache = original_get_cache
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         self.record_stats({
             'total_calls': len(self.calls),
             'calls': self.calls,

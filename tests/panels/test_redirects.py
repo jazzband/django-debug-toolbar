@@ -58,3 +58,14 @@ class RedirectsPanelTestCase(BaseTestCase):
         redirect['Location'] = 'http://somewhere/else/'
         response = self.panel.process_response(self.request, redirect)
         self.assertContains(response, '369 Look Ma!')
+
+    def test_insert_content(self):
+        """
+        Test that the panel only inserts content after generate_stats and
+        not the process_response.
+        """
+        redirect = HttpResponse(status=304)
+        response = self.panel.process_response(self.request, redirect)
+        self.assertIsNotNone(response)
+        response = self.panel.generate_stats(self.request, redirect)
+        self.assertIsNone(response)

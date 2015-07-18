@@ -126,6 +126,10 @@ class DebugToolbarMiddleware(object):
             # When the body ends with a newline, there's two trailing groups.
             bits.append(''.join(m[0] for m in matches if m[1] == ''))
         if len(bits) > 1:
+            # When the toolbar will be inserted for sure, generate the stats.
+            for panel in reversed(toolbar.enabled_panels):
+                panel.generate_stats(request, response)
+
             bits[-2] += toolbar.render_toolbar()
             response.content = insert_before.join(bits)
             if response.get('Content-Length', None):

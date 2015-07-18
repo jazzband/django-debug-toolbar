@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 19:40-0400\n"
+"POT-Creation-Date: 2015-07-06 16:50-0400\n"
 "PO-Revision-Date: 2012-03-31 20:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,18 +20,18 @@ msgstr ""
 msgid "Debug Toolbar"
 msgstr ""
 
-#: panels/cache.py:197
+#: panels/cache.py:209
 msgid "Cache"
 msgstr ""
 
-#: panels/cache.py:202
+#: panels/cache.py:214
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/cache.py:210
+#: panels/cache.py:222
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
@@ -292,7 +292,7 @@ msgid "Calls"
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:43
-#: templates/debug_toolbar/panels/sql.html:20
+#: templates/debug_toolbar/panels/sql.html:23
 msgid "Time (ms)"
 msgstr ""
 
@@ -466,36 +466,46 @@ msgid_plural "%(num)s queries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/debug_toolbar/panels/sql.html:18
+#: templates/debug_toolbar/panels/sql.html:9
+#, python-format
+msgid "including %(dupes)s duplicates"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:21
 msgid "Query"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:19
+#: templates/debug_toolbar/panels/sql.html:22
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:21
+#: templates/debug_toolbar/panels/sql.html:24
 msgid "Action"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:64
+#: templates/debug_toolbar/panels/sql.html:39
+#, python-format
+msgid "Duplicated %(dupes)s times."
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:71
 msgid "Connection:"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:66
+#: templates/debug_toolbar/panels/sql.html:73
 msgid "Isolation level:"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:69
+#: templates/debug_toolbar/panels/sql.html:76
 msgid "Transaction status:"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:83
+#: templates/debug_toolbar/panels/sql.html:90
 msgid "(unknown)"
 msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:92
+#: templates/debug_toolbar/panels/sql.html:99
 msgid "No SQL queries were recorded during this request."
 msgstr ""
 

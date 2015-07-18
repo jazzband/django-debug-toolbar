@@ -113,7 +113,7 @@ class StaticFilesPanel(panels.Panel):
     def process_request(self, request):
         collector.clear_collection()
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         used_paths = collector.get_collection()
         self._paths[threading.currentThread()] = used_paths
 

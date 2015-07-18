@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, unicode_literals
 
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from debug_toolbar.panels import Panel
@@ -10,6 +11,21 @@ from pstats import Stats
 from colorsys import hsv_to_rgb
 import os
 
+# Occasionally the disable method on the profiler is listed before
+# the actual view functions. This function call should be ignored as
+# it leads to an error within the tests.
+INVALID_PROFILER_FUNC = '_lsprof.Profiler'
+
+
+def contains_profiler(func_tuple):
+    """Helper function that checks to see if the tuple contains
+    the INVALID_PROFILE_FUNC in any string value of the tuple."""
+    has_profiler = False
+    for value in func_tuple:
+        if isinstance(value, six.string_types):
+            has_profiler |= INVALID_PROFILER_FUNC in value
+    return has_profiler
+
 
 class DjangoDebugToolbarStats(Stats):
     __root = None
@@ -17,7 +33,7 @@ class DjangoDebugToolbarStats(Stats):
     def get_root_func(self):
         if self.__root is None:
             for func, (cc, nc, tt, ct, callers) in self.stats.items():
-                if len(callers) == 0:
+                if len(callers) == 0 and not contains_profiler(func):
                     self.__root = func
                     break
         return self.__root
@@ -142,7 +158,7 @@ class ProfilingPanel(Panel):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         if not hasattr(self, 'profiler'):
             return None
         # Could be delayed until the panel content is requested (perf. optim.)

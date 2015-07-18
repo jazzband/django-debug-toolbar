@@ -136,7 +136,7 @@ class SQLPanel(Panel):
         for connection in connections.all():
             unwrap_cursor(connection)
 
-    def process_response(self, request, response):
+    def generate_stats(self, request, response):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
         query_duplicates = defaultdict(lambda: defaultdict(int))
