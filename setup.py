@@ -14,7 +14,7 @@ setup(
     license='BSD',
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),
     install_requires=[
-        'django>=1.4.2',
+        'Django>=1.4.2',
         'sqlparse',
     ],
     include_package_data=True,
