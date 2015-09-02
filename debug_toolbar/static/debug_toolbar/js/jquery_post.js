@@ -1,4 +1,4 @@
 var djdt = {jQuery: jQuery.noConflict(true)};
-if (typeof(window.define) !== 'undefined') {
+if (window.define) {
     window.define.amd = _djdt_define_amd_backup;
 }
