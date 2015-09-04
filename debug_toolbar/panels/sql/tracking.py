@@ -91,7 +91,10 @@ class NormalCursorWrapper(object):
 
     def _decode(self, param):
         try:
-            return force_text(param, strings_only=True)
+            if isinstance(param, list):
+                return map(self._quote_expr, param)
+            else:
+                return force_text(param, strings_only=True)
         except UnicodeDecodeError:
             return '(encoded string)'
 
