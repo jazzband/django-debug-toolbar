@@ -92,7 +92,7 @@ class NormalCursorWrapper(object):
     def _decode(self, param):
         try:
             if isinstance(param, list):
-                return map(self._quote_expr, param)
+                return map(self._decode, param)
             else:
                 return force_text(param, strings_only=True)
         except UnicodeDecodeError:
