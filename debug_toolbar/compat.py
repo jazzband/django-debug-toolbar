@@ -11,7 +11,11 @@ from django.core.exceptions import ImproperlyConfigured
 
 try:
     from django.core.cache import CacheHandler, caches
+
+    def get_cache(name):
+        return caches[name]
 except ImportError:  # Django < 1.7
+    from django.core.cache import get_cache
     CacheHandler = None
     caches = None
 
