@@ -11,9 +11,23 @@ from django.core.exceptions import ImproperlyConfigured
 
 try:
     from django.core.cache import CacheHandler, caches
+
+    def get_cache(name):
+        return caches[name]
 except ImportError:  # Django < 1.7
+    from django.core.cache import get_cache
     CacheHandler = None
     caches = None
+
+try:
+    from django.db.models.signals import post_syncdb
+except ImportError:  # Django > 1.8
+    post_syncdb = None
+
+try:
+    from django.db.models.signals import post_migrate
+except ImportError:  # Django < 1.7
+    post_migrate = None
 
 try:
     from django.template.engine import Engine

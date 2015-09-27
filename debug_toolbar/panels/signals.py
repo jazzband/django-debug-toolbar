@@ -6,12 +6,13 @@ from django.core.signals import (
 from django.db.backends.signals import connection_created
 from django.db.models.signals import (
     class_prepared, pre_init, post_init, pre_save, post_save,
-    pre_delete, post_delete, post_syncdb)
+    pre_delete, post_delete)
 
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.compat import import_module, WEAKREF_TYPES
+from debug_toolbar.compat import (
+    post_syncdb, post_migrate, import_module, WEAKREF_TYPES)
 
 
 class SignalsPanel(Panel):
@@ -28,8 +29,7 @@ class SignalsPanel(Panel):
         'pre_save': pre_save,
         'post_save': post_save,
         'pre_delete': pre_delete,
-        'post_delete': post_delete,
-        'post_syncdb': post_syncdb,
+        'post_delete': post_delete
     }
 
     def nav_subtitle(self):
@@ -52,6 +52,13 @@ class SignalsPanel(Panel):
     @property
     def signals(self):
         signals = self.SIGNALS.copy()
+
+        if post_syncdb is not None:
+            signals['post_syncdb'] = post_syncdb
+
+        if post_migrate is not None:
+            signals['post_migrate'] = post_migrate
+
         for signal in self.toolbar.config['EXTRA_SIGNALS']:
             mod_path, signal_name = signal.rsplit('.', 1)
             signals_mod = import_module(mod_path)
