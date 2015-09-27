@@ -6,7 +6,7 @@ from django.core.signals import (
 from django.db.backends.signals import connection_created
 from django.db.models.signals import (
     class_prepared, pre_init, post_init, pre_save, post_save,
-    pre_delete, post_delete, post_syncdb)
+    pre_delete, post_delete, post_migrate)
 
 from django.utils.translation import ugettext_lazy as _, ungettext
 
@@ -29,7 +29,7 @@ class SignalsPanel(Panel):
         'post_save': post_save,
         'pre_delete': pre_delete,
         'post_delete': post_delete,
-        'post_syncdb': post_syncdb,
+        'post_migrate': post_migrate
     }
 
     def nav_subtitle(self):
