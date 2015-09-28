@@ -1,6 +1,7 @@
 *.pyc
 *.DS_Store
 *~
+*.sw[po]
 build
 .coverage
 dist
