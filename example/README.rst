@@ -22,8 +22,8 @@ the debug toolbar, ie. the directory that contains ``example/``.
 
 Before running the example for the first time, you must create a database::
 
-    $ PYTHONPATH=. django-admin.py syncdb --settings=example.settings
+    $ PYTHONPATH=. django-admin syncdb --settings=example.settings
 
 Then you can use the following command to run the example::
 
-    $ PYTHONPATH=. django-admin.py runserver --settings=example.settings
+    $ PYTHONPATH=. django-admin runserver --settings=example.settings
