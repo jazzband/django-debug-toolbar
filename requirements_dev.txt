@@ -10,7 +10,6 @@ sqlparse
 # Testing
 
 coverage
-django-discover-runner
 flake8
 selenium
 tox
