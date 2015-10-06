@@ -1,11 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 
 import warnings
+from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
-
-from debug_toolbar.compat import import_module
 
 # Always import this module as follows:
 # from debug_toolbar import settings [as dt_settings]

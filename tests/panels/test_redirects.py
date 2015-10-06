@@ -1,11 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
+import unittest
+
 import django
 from django.conf import settings
 from django.http import HttpResponse
 from django.test.utils import override_settings
-
-from debug_toolbar.compat import unittest
 
 from ..base import BaseTestCase
 

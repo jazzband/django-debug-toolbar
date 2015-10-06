@@ -1,4 +1,4 @@
-{% load i18n %}{% load static from staticfiles %}{% load url from debug_toolbar_compat %}
+{% load i18n %}{% load static from staticfiles %}
 <h4>{% blocktrans count template_dirs|length as template_count %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
 {% if template_dirs %}
 	<ol>

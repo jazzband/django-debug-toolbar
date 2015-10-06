@@ -1,5 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
+import weakref
+from importlib import import_module
+
 from django.core.signals import (
     got_request_exception, request_finished, request_started,
 )
@@ -10,7 +13,6 @@ from django.db.models.signals import (
 )
 from django.utils.translation import ugettext_lazy as _, ungettext
 
-from debug_toolbar.compat import WEAKREF_TYPES, import_module
 from debug_toolbar.panels import Panel
 
 
@@ -66,7 +68,7 @@ class SignalsPanel(Panel):
             receivers = []
             for receiver in signal.receivers:
                 receiver = receiver[1]
-                if isinstance(receiver, WEAKREF_TYPES):
+                if isinstance(receiver, weakref.ReferenceType):
                     receiver = receiver()
                 if receiver is None:
                     continue

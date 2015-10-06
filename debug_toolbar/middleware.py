@@ -6,13 +6,13 @@ from __future__ import absolute_import, unicode_literals
 
 import re
 import threading
+from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
 from django.utils.encoding import force_text
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.compat import import_module
 from debug_toolbar.toolbar import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')

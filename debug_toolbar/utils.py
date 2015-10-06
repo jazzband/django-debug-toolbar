@@ -4,6 +4,7 @@ import inspect
 import os.path
 import re
 import sys
+from importlib import import_module
 
 import django
 from django.core.exceptions import ImproperlyConfigured
@@ -14,15 +15,12 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.views.debug import linebreak_iter
 
-from debug_toolbar.compat import import_module
-
 from .settings import CONFIG
 
 try:
     import threading
 except ImportError:
     threading = None
-
 
 
 # Figure out some paths

@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from collections import OrderedDict
 from contextlib import contextmanager
 from os.path import normpath
 from pprint import pformat
@@ -16,7 +17,7 @@ from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.compat import (
-    OrderedDict, get_template_context_processors, get_template_dirs,
+    get_template_context_processors, get_template_dirs,
 )
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, recording

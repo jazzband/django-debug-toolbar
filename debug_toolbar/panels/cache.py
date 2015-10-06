@@ -3,11 +3,12 @@ from __future__ import absolute_import, unicode_literals
 import inspect
 import sys
 import time
+from collections import OrderedDict
 
 from django.conf import settings
 from django.core import cache
 from django.core.cache import (
-    cache as original_cache, get_cache as original_get_cache,
+    CacheHandler, caches as original_caches, get_cache as original_get_cache,
 )
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
@@ -15,9 +16,6 @@ from django.middleware import cache as middleware_cache
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.compat import (
-    CacheHandler, OrderedDict, caches as original_caches,
-)
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import (
     get_stack, get_template_info, render_stacktrace, tidy_stacktrace,
@@ -125,17 +123,10 @@ def get_cache(*args, **kwargs):
     return CacheStatTracker(original_get_cache(*args, **kwargs))
 
 
-if CacheHandler is not None:
-    class CacheHandlerPatch(CacheHandler):
-        def __getitem__(self, alias):
-            actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
-            return CacheStatTracker(actual_cache)
-
-
-def get_cache_handler():
-    if CacheHandler is None:
-        return None
-    return CacheHandlerPatch()
+class CacheHandlerPatch(CacheHandler):
+    def __getitem__(self, alias):
+        actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
+        return CacheStatTracker(actual_cache)
 
 
 # Must monkey patch the middleware's cache module as well in order to
@@ -144,7 +135,7 @@ def get_cache_handler():
 # decorator_from_middleware_with_args will store the cache from core.caches
 # when it wraps the view.
 middleware_cache.get_cache = get_cache
-middleware_cache.caches = get_cache_handler()
+middleware_cache.caches = CacheHandlerPatch()
 
 
 class CachePanel(Panel):
@@ -225,24 +216,18 @@ class CachePanel(Panel):
 
     def enable_instrumentation(self):
         cache.get_cache = get_cache
-        if CacheHandler is None:
-            cache.cache = CacheStatTracker(original_cache)
+        if isinstance(middleware_cache.caches, CacheHandlerPatch):
+            cache.caches = middleware_cache.caches
         else:
-            if isinstance(middleware_cache.caches, CacheHandlerPatch):
-                cache.caches = middleware_cache.caches
-            else:
-                cache.caches = get_cache_handler()
+            cache.caches = CacheHandlerPatch()
 
     def disable_instrumentation(self):
-        if CacheHandler is None:
-            cache.cache = original_cache
-        else:
-            cache.caches = original_caches
-            # While it can be restored to the original, any views that were
-            # wrapped with the cache_page decorator will continue to use a
-            # monkey patched cache.
-            middleware_cache.caches = original_caches
         cache.get_cache = original_get_cache
+        cache.caches = original_caches
+        # While it can be restored to the original, any views that were
+        # wrapped with the cache_page decorator will continue to use a
+        # monkey patched cache.
+        middleware_cache.caches = original_caches
 
     def generate_stats(self, request, response):
         self.record_stats({

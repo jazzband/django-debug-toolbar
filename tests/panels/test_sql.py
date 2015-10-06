@@ -2,14 +2,14 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import unittest
+
 import django
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
-
-from debug_toolbar.compat import unittest
 
 from ..base import BaseTestCase
 

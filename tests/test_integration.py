@@ -3,12 +3,13 @@
 from __future__ import absolute_import, unicode_literals
 
 import os
+import unittest
 from xml.etree import ElementTree as ET
 
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
-from debug_toolbar.compat import StaticLiveServerTestCase, unittest
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
 from .base import BaseTestCase
@@ -20,9 +21,6 @@ try:
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
     webdriver = None
-
-
-
 
 
 rf = RequestFactory()

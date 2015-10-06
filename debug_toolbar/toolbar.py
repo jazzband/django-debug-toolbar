@@ -5,6 +5,8 @@ The main DebugToolbar class that loads and renders the Toolbar.
 from __future__ import absolute_import, unicode_literals
 
 import uuid
+from collections import OrderedDict
+from importlib import import_module
 
 import django
 from django.conf import settings
@@ -14,7 +16,6 @@ from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.compat import OrderedDict, import_module
 
 
 class DebugToolbar(object):

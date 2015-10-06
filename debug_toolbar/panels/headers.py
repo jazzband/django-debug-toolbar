@@ -1,8 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
+from collections import OrderedDict
+
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.compat import OrderedDict
 from debug_toolbar.panels import Panel
 
 

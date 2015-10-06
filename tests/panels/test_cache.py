@@ -2,10 +2,10 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import unittest
+
 import django
 from django.core import cache
-
-from debug_toolbar.compat import unittest
 
 from ..base import BaseTestCase
 

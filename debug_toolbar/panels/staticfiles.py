@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from collections import OrderedDict
 from os.path import join, normpath
 
 from django.conf import settings
@@ -11,16 +12,12 @@ from django.utils.functional import LazyObject
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from debug_toolbar import panels
-from debug_toolbar.compat import OrderedDict
 from debug_toolbar.utils import ThreadCollector
 
 try:
     import threading
 except ImportError:
     threading = None
-
-
-
 
 
 @python_2_unicode_compatible
