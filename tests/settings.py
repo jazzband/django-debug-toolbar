@@ -11,6 +11,8 @@ SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 INTERNAL_IPS = ['127.0.0.1']
 
+LOGGING_CONFIG = None   # avoids spurious output in tests
+
 
 # Application definition
 

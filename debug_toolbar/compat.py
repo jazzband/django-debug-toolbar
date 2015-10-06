@@ -9,6 +9,11 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 try:
+    from django.template.base import linebreak_iter  # NOQA
+except ImportError:  # Django < 1.9
+    from django.views.debug import linebreak_iter  # NOQA
+
+try:
     from django.template.engine import Engine
 except ImportError:  # Django < 1.8
     Engine = None

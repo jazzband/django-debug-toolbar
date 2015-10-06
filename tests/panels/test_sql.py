@@ -121,10 +121,9 @@ class SQLPanelTestCase(BaseTestCase):
 
         render(self.request, "basic.html", {})
 
-        # ensure queries were logged
-        # It's more than one because the SQL run in the loader is run every time
-        # the template is rendered which is more than once.
-        self.assertEqual(len(self.panel._queries), 3)
+        # Two queries are logged because the loader runs SQL every time a
+        # template is loaded and basic.html extends base.html.
+        self.assertEqual(len(self.panel._queries), 2)
         query = self.panel._queries[0]
         self.assertEqual(query[0], 'default')
         self.assertTrue('sql' in query[1])

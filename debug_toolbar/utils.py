@@ -13,7 +13,8 @@ from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.views.debug import linebreak_iter
+
+from debug_toolbar.compat import linebreak_iter
 
 from .settings import CONFIG
 
