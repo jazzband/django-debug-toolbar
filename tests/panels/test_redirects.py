@@ -1,8 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import unittest
-
-import django
 from django.conf import settings
 from django.http import HttpResponse
 from django.test.utils import override_settings
@@ -53,7 +50,6 @@ class RedirectsPanelTestCase(BaseTestCase):
         response = self.panel.process_response(self.request, redirect)
         self.assertContains(response, '369 UNKNOWN STATUS CODE')
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 6), "reason isn't supported")
     def test_unknown_status_code_with_reason(self):
         redirect = HttpResponse(status=369, reason='Look Ma!')
         redirect['Location'] = 'http://somewhere/else/'

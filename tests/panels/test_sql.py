@@ -4,7 +4,6 @@ from __future__ import absolute_import, unicode_literals
 
 import unittest
 
-import django
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.utils import DatabaseError
@@ -111,9 +110,6 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the stacktrace is empty
         self.assertEqual([], query[1]['stacktrace'])
 
-    @unittest.skipIf(django.VERSION < (1, 5),
-                     "Django 1.4 loads the TEMPLATE_LOADERS before "
-                     "override_settings can modify the settings.")
     @override_settings(DEBUG=True, TEMPLATE_DEBUG=True,
                        TEMPLATE_LOADERS=('tests.loaders.LoaderWithSQL',))
     def test_regression_infinite_recursion(self):

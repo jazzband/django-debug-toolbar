@@ -91,20 +91,6 @@ else:
     RequestContext.bind_template = _request_context_bind_template
 
 
-# Monkey-patch versions of Django where Template doesn't store origin.
-# See https://code.djangoproject.com/ticket/16096.
-
-if django.VERSION[:2] < (1, 7):
-
-    old_template_init = Template.__init__
-
-    def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
-        old_template_init(self, template_string, origin, name)
-        self.origin = origin
-
-    Template.__init__ = new_template_init
-
-
 class TemplatesPanel(Panel):
     """
     A panel that lists all templates used during processing of a response.
