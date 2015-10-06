@@ -78,9 +78,7 @@ class DebugToolbar(object):
     def should_render_panels(self):
         render_panels = self.config['RENDER_PANELS']
         if render_panels is None:
-            # Django 1.4 still supports mod_python :( Fall back to the safe
-            # and inefficient default in that case. Revert when we drop 1.4.
-            render_panels = self.request.META.get('wsgi.multiprocess', True)
+            render_panels = self.request.META['wsgi.multiprocess']
         return render_panels
 
     def store(self):
