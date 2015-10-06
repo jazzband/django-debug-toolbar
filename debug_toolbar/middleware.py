@@ -8,12 +8,12 @@ import re
 import threading
 
 from django.conf import settings
-from django.utils.encoding import force_text
 from django.utils import six
+from django.utils.encoding import force_text
 
-from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.compat import import_module
+from debug_toolbar.toolbar import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 # Handles python threading module bug - http://bugs.python.org/issue14308

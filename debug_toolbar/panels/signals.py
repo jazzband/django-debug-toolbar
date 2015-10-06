@@ -1,17 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
-
 from django.core.signals import (
-    request_started, request_finished, got_request_exception)
+    got_request_exception, request_finished, request_started,
+)
 from django.db.backends.signals import connection_created
 from django.db.models.signals import (
-    class_prepared, pre_init, post_init, pre_save, post_save,
-    pre_delete, post_delete, post_syncdb)
-
+    class_prepared, post_delete, post_init, post_save, post_syncdb, pre_delete,
+    pre_init, pre_save,
+)
 from django.utils.translation import ugettext_lazy as _, ungettext
 
+from debug_toolbar.compat import WEAKREF_TYPES, import_module
 from debug_toolbar.panels import Panel
-from debug_toolbar.compat import import_module, WEAKREF_TYPES
 
 
 class SignalsPanel(Panel):

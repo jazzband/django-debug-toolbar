@@ -7,21 +7,21 @@ import time
 from django.conf import settings
 from django.core import cache
 from django.core.cache import (
-    cache as original_cache,
-    get_cache as original_get_cache)
+    cache as original_cache, get_cache as original_get_cache,
+)
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
 from django.utils.translation import ugettext_lazy as _, ungettext
 
-
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.compat import (
-    OrderedDict, CacheHandler, caches as original_caches)
+    CacheHandler, OrderedDict, caches as original_caches,
+)
 from debug_toolbar.panels import Panel
-from debug_toolbar.utils import (tidy_stacktrace, render_stacktrace,
-                                 get_template_info, get_stack)
-
+from debug_toolbar.utils import (
+    get_stack, get_template_info, render_stacktrace, tidy_stacktrace,
+)
 
 cache_called = Signal(providing_args=[
     "time_taken", "name", "return_value", "args", "kwargs", "trace"])

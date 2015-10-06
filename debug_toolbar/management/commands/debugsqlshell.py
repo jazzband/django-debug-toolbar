@@ -2,10 +2,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from time import time
 
-# 'debugsqlshell' is the same as the 'shell'.
-from django.core.management.commands.shell import Command               # noqa
-
 import sqlparse
+# 'debugsqlshell' is the same as the 'shell'.
+from django.core.management.commands.shell import Command  # noqa
 
 from debug_toolbar.compat import db_backends_util
 

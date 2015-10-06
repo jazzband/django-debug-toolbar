@@ -5,8 +5,9 @@ from __future__ import absolute_import, unicode_literals
 import django
 from django.core import cache
 
-from ..base import BaseTestCase
 from debug_toolbar.compat import unittest
+
+from ..base import BaseTestCase
 
 
 class CachePanelTestCase(BaseTestCase):

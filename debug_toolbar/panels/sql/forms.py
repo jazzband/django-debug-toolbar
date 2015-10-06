@@ -1,14 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
-import json
 import hashlib
+import json
 
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import connections
 from django.utils.encoding import force_text
 from django.utils.functional import cached_property
-from django.core.exceptions import ValidationError
 
 from debug_toolbar.panels.sql.utils import reformat_sql
 

@@ -7,7 +7,6 @@ from django.utils import six
 
 from debug_toolbar.compat import import_module
 
-
 # Always import this module as follows:
 # from debug_toolbar import settings [as dt_settings]
 

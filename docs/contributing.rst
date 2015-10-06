@@ -76,6 +76,10 @@ to 100 characters. You can check for style violations with::
 
     $ make flake8
 
+Import style is enforce by isort. You can sort import automatically with::
+
+    $ make isort
+
 Patches
 -------
 

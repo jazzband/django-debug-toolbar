@@ -14,7 +14,7 @@ from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.compat import import_module, OrderedDict
+from debug_toolbar.compat import OrderedDict, import_module
 
 
 class DebugToolbar(object):

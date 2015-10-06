@@ -2,13 +2,16 @@ from __future__ import absolute_import, unicode_literals
 
 import datetime
 import logging
+
+from django.utils.translation import ugettext_lazy as _, ungettext
+
+from debug_toolbar.panels import Panel
+from debug_toolbar.utils import ThreadCollector
+
 try:
     import threading
 except ImportError:
     threading = None
-from django.utils.translation import ungettext, ugettext_lazy as _
-from debug_toolbar.panels import Panel
-from debug_toolbar.utils import ThreadCollector
 
 MESSAGE_IF_STRING_REPRESENTATION_INVALID = '[Could not get log message]'
 

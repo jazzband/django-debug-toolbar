@@ -1,10 +1,10 @@
 # Refresh the debug toolbar's configuration when overriding settings.
 
-from debug_toolbar.toolbar import DebugToolbar
-from debug_toolbar import settings as dt_settings
-
 from django.dispatch import receiver
 from django.test.signals import setting_changed
+
+from debug_toolbar import settings as dt_settings
+from debug_toolbar.toolbar import DebugToolbar
 
 
 @receiver(setting_changed)

@@ -5,13 +5,6 @@ from __future__ import absolute_import, unicode_literals
 import os
 from xml.etree import ElementTree as ET
 
-try:
-    from selenium import webdriver
-    from selenium.common.exceptions import NoSuchElementException
-    from selenium.webdriver.support.wait import WebDriverWait
-except ImportError:
-    webdriver = None
-
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
@@ -20,6 +13,16 @@ from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 
 from .base import BaseTestCase
 from .views import regular_view
+
+try:
+    from selenium import webdriver
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.support.wait import WebDriverWait
+except ImportError:
+    webdriver = None
+
+
+
 
 
 rf = RequestFactory()

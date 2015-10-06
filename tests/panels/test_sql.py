@@ -9,8 +9,9 @@ from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
 
-from ..base import BaseTestCase
 from debug_toolbar.compat import unittest
+
+from ..base import BaseTestCase
 
 
 class SQLPanelTestCase(BaseTestCase):

@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import threading
 
 from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.toolbar import DebugToolbar

@@ -6,7 +6,7 @@ import django
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.compat import import_module, OrderedDict
+from debug_toolbar.compat import OrderedDict, import_module
 from debug_toolbar.panels import Panel
 
 

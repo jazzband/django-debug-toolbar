@@ -4,11 +4,11 @@ import json
 from threading import local
 from time import time
 
-from django.utils.encoding import force_text
 from django.utils import six
+from django.utils.encoding import force_text
 
-from debug_toolbar.utils import tidy_stacktrace, get_template_info, get_stack
 from debug_toolbar import settings as dt_settings
+from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
 
 
 class SQLQueryTriggered(Exception):

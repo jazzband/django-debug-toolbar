@@ -3,6 +3,12 @@
 flake8:
 	flake8 debug_toolbar example tests
 
+isort:
+	isort -rc debug_toolbar example tests
+
+isort_check_only:
+	isort -rc -c debug_toolbar example tests
+
 example:
 	DJANGO_SETTINGS_MODULE=example.settings \
 		django-admin.py runserver
