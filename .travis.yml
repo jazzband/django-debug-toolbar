@@ -1,29 +1,24 @@
 language: python
 sudo: false
 python:
-  - "2.6"
   - "2.7"
   - "3.2"
   - "3.3"
   - "3.4"
+  - "3.5"
 env:
-  - DJANGO="Django>=1.4.0,<1.5.0"
-  - DJANGO="Django>=1.5.0,<1.6.0"
-  - DJANGO="Django>=1.6.0,<1.7.0"
   - DJANGO="Django>=1.7.0,<1.8.0"
   - DJANGO="Django>=1.8.0,<1.9.0"
+  - DJANGO="https://www.djangoproject.com/download/1.9a1/tarball/"
 matrix:
   exclude:
     - python: "3.2"
-      env: DJANGO="Django>=1.4.0,<1.5.0"
+      env: DJANGO="https://www.djangoproject.com/download/1.9a1/tarball/"
     - python: "3.3"
-      env: DJANGO="Django>=1.4.0,<1.5.0"
-    - python: "3.4"
-      env: DJANGO="Django>=1.4.0,<1.5.0"
-      
-    - python: "2.6"
+      env: DJANGO="https://www.djangoproject.com/download/1.9a1/tarball/"
+    - python: "3.5"
       env: DJANGO="Django>=1.7.0,<1.8.0"
-    - python: "2.6"
+    - python: "3.5"
       env: DJANGO="Django>=1.8.0,<1.9.0"
 install:
   - pip install -e .

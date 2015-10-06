@@ -5,7 +5,7 @@ About
 -----
 
 This sample project demonstrates how to use the debug toolbar. It is designed
-to run under the latest stable version of Django, currently 1.5.x.
+to run under the latest stable version of Django.
 
 It also provides a few test pages to ensure the debug toolbar doesn't
 interfere with common JavaScript frameworks.
