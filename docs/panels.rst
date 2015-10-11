@@ -145,6 +145,15 @@ Third-party panels
 
 If you'd like to add a panel to this list, please submit a pull request!
 
+Flamegraph
+~~~~~~~~~~
+
+URL: https://github.com/23andMe/djdt-flamegraph
+
+Path: ``djdt_flamegraph.FlamegraphPanel``
+
+Generates a flame graph from your current request.
+
 Haystack
 ~~~~~~~~
 
