@@ -286,7 +286,7 @@
 	border-collapse:collapse;
 	width:100%;
 	background-color:#fff;
-	display:block;
+	display:table;
 	margin-top:0.8em;
 	overflow: auto;
 }
