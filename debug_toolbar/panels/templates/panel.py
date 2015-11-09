@@ -199,11 +199,13 @@ class TemplatesPanel(Panel):
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
 
+        context_processors = None
         # Fetch context_processors from any template
         if self.templates:
-            context_processors = self.templates[0]['context_processors']
-        else:
-            context_processors = None
+            assigned_processors = [x['context_processors'] for x in self.templates
+                                   if x['context_processors'] is not None]
+            if assigned_processors:
+                context_processors = assigned_processors[0]
 
         template_dirs = get_template_dirs()
 
