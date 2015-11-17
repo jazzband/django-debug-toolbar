@@ -41,7 +41,7 @@
 						{% endif %}
 					</td>
 					<td class="timeline">
-						<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" data-left="{{ query.start_offset|unlocalize }}%"><strong data-width="{{ query.width_ratio_relative|unlocalize }}%" data-background-color"{{ query.trace_color }}">{{ query.width_ratio }}%</strong></div></div>
+						<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" data-left="{{ query.start_offset|unlocalize }}%"><strong data-width="{{ query.width_ratio_relative|unlocalize }}%" data-background-color="{{ query.trace_color }}">{{ query.width_ratio }}%</strong></div></div>
 					</td>
 					<td class="djdt-time">
 						{{ query.duration|floatformat:"2" }}
