@@ -4,6 +4,9 @@ Change log
 1.4
 ---
 
+This version is compatible with the upcoming Django 1.9 release. It requires
+Django 1.7 or later.
+
 New features
 ~~~~~~~~~~~~
 

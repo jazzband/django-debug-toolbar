@@ -5,7 +5,8 @@ from __future__ import absolute_import, unicode_literals
 import logging
 
 from debug_toolbar.panels.logging import (
-    collector, MESSAGE_IF_STRING_REPRESENTATION_INVALID)
+    MESSAGE_IF_STRING_REPRESENTATION_INVALID, collector,
+)
 
 from ..base import BaseTestCase
 

@@ -1,12 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
 import warnings
+from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
-
-from debug_toolbar.compat import import_module
-
+from django.utils.module_loading import import_string
 
 # Always import this module as follows:
 # from debug_toolbar import settings [as dt_settings]
@@ -176,12 +175,9 @@ def check_middleware():
 
 
 def is_middleware_class(middleware_class, middleware_path):
-    # This could be replaced by import_by_path in Django >= 1.6.
     try:
-        mod_path, cls_name = middleware_path.rsplit('.', 1)
-        mod = import_module(mod_path)
-        middleware_cls = getattr(mod, cls_name)
-    except (AttributeError, ImportError, ValueError):
+        middleware_cls = import_string(middleware_path)
+    except ImportError:
         return
     return issubclass(middleware_cls, middleware_class)
 

@@ -1,7 +1,6 @@
 """Django settings for tests."""
 
 import os
-import django
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -11,6 +10,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 INTERNAL_IPS = ['127.0.0.1']
+
+LOGGING_CONFIG = None   # avoids spurious output in tests
 
 
 # Application definition
@@ -73,6 +74,3 @@ DEBUG_TOOLBAR_CONFIG = {
     # Django's test client sets wsgi.multiprocess to True inappropriately
     'RENDER_PANELS': False,
 }
-
-if django.VERSION[:2] < (1, 6):
-    TEST_RUNNER = 'discover_runner.DiscoverRunner'

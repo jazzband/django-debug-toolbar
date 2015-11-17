@@ -1,19 +1,21 @@
 from __future__ import absolute_import, unicode_literals
 
 import uuid
-from copy import copy
 from collections import defaultdict
+from copy import copy
 
 from django.conf.urls import url
 from django.db import connections
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.panels.sql.forms import SQLSelectForm
-from debug_toolbar.utils import render_stacktrace
-from debug_toolbar.panels.sql.utils import reformat_sql, contrasting_color_generator
-from debug_toolbar.panels.sql.tracking import wrap_cursor, unwrap_cursor
 from debug_toolbar.panels.sql import views
+from debug_toolbar.panels.sql.forms import SQLSelectForm
+from debug_toolbar.panels.sql.tracking import unwrap_cursor, wrap_cursor
+from debug_toolbar.panels.sql.utils import (
+    contrasting_color_generator, reformat_sql,
+)
+from debug_toolbar.utils import render_stacktrace
 
 
 def get_isolation_level_display(vendor, level):

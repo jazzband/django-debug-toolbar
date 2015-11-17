@@ -1,9 +1,10 @@
-from setuptools import setup, find_packages
 from io import open
+
+from setuptools import find_packages, setup
 
 setup(
     name='django-debug-toolbar',
-    version='1.3.2',
+    version='1.4',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
     long_description=open('README.rst', encoding='utf-8').read(),
@@ -14,7 +15,7 @@ setup(
     license='BSD',
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),
     install_requires=[
-        'Django>=1.4.2',
+        'Django>=1.7',
         'sqlparse',
     ],
     include_package_data=True,
@@ -28,12 +29,12 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )

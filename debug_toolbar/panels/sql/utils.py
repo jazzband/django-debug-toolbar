@@ -2,9 +2,8 @@ from __future__ import absolute_import, unicode_literals
 
 import re
 
-from django.utils.html import escape
-
 import sqlparse
+from django.utils.html import escape
 from sqlparse import tokens as T
 
 

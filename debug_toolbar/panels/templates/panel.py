@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from collections import OrderedDict
 from contextlib import contextmanager
 from os.path import normpath
 from pprint import pformat
@@ -11,16 +12,16 @@ from django.db.models.query import QuerySet, RawQuerySet
 from django.template import Context, RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
-from django.utils.encoding import force_text
 from django.utils import six
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar.compat import (
-    OrderedDict, get_template_dirs, get_template_context_processors)
+    get_template_context_processors, get_template_dirs,
+)
 from debug_toolbar.panels import Panel
-from debug_toolbar.panels.sql.tracking import recording, SQLQueryTriggered
+from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, recording
 from debug_toolbar.panels.templates import views
-
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
 # immediately when the panel is disabled to keep the overhead small.
@@ -88,20 +89,6 @@ else:
             self.dicts[self._processors_index] = {}
 
     RequestContext.bind_template = _request_context_bind_template
-
-
-# Monkey-patch versions of Django where Template doesn't store origin.
-# See https://code.djangoproject.com/ticket/16096.
-
-if django.VERSION[:2] < (1, 7):
-
-    old_template_init = Template.__init__
-
-    def new_template_init(self, template_string, origin=None, name='<Unknown Template>'):
-        old_template_init(self, template_string, origin, name)
-        self.origin = origin
-
-    Template.__init__ = new_template_init
 
 
 class TemplatesPanel(Panel):

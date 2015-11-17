@@ -8,12 +8,12 @@ import re
 import threading
 
 from django.conf import settings
-from django.utils.encoding import force_text
 from django.utils import six
+from django.utils.encoding import force_text
+from django.utils.module_loading import import_string
 
-from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.compat import import_module
+from debug_toolbar.toolbar import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 # Handles python threading module bug - http://bugs.python.org/issue14308
@@ -45,9 +45,7 @@ class DebugToolbarMiddleware(object):
         # setup, resolve it to the corresponding callable.
         func_or_path = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK']
         if isinstance(func_or_path, six.string_types):
-            # Replace this with import_by_path in Django >= 1.6.
-            mod_path, func_name = func_or_path.rsplit('.', 1)
-            self.show_toolbar = getattr(import_module(mod_path), func_name)
+            self.show_toolbar = import_string(func_or_path)
         else:
             self.show_toolbar = func_or_path
 

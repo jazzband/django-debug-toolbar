@@ -1,10 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.conf import settings
-from django.views.debug import get_safe_settings
-from django.utils.translation import ugettext_lazy as _
+from collections import OrderedDict
 
-from debug_toolbar.compat import OrderedDict
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+from django.views.debug import get_safe_settings
+
 from debug_toolbar.panels import Panel
 
 

@@ -4,22 +4,25 @@ import inspect
 import os.path
 import re
 import sys
+from importlib import import_module
+
+import django
+from django.core.exceptions import ImproperlyConfigured
+from django.template import Node
+from django.utils import six
+from django.utils.encoding import force_text
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+
+from debug_toolbar.compat import linebreak_iter
+
+from .settings import CONFIG
+
 try:
     import threading
 except ImportError:
     threading = None
 
-import django
-from django.core.exceptions import ImproperlyConfigured
-from django.template import Node
-from django.utils.encoding import force_text
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
-from django.utils import six
-from django.views.debug import linebreak_iter
-
-from .settings import CONFIG
-from debug_toolbar.compat import import_module
 
 # Figure out some paths
 django_path = os.path.realpath(os.path.dirname(django.__file__))

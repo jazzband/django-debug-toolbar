@@ -1,13 +1,16 @@
 from __future__ import absolute_import, unicode_literals
 
+import time
+
+from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
+
+from debug_toolbar.panels import Panel
+
 try:
     import resource     # Not available on Win32 systems
 except ImportError:
     resource = None
-import time
-from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
-from debug_toolbar.panels import Panel
 
 
 class TimerPanel(Panel):

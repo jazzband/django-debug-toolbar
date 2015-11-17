@@ -49,9 +49,6 @@ class ProfilingPanelIntegrationTestCase(TestCase):
         self.assertEqual(User.objects.count(), 1)
 
         with self.assertRaises(IntegrityError):
-            if hasattr(transaction, 'atomic'):      # Django >= 1.6
-                with transaction.atomic():
-                    response = self.client.get('/new_user/')
-            else:
+            with transaction.atomic():
                 response = self.client.get('/new_user/')
         self.assertEqual(User.objects.count(), 1)

@@ -24,8 +24,8 @@ the libraries required for working on the Debug Toolbar::
 
 You can run now run the example application::
 
-    $ DJANGO_SETTINGS_MODULE=example.settings django-admin.py migrate
-    $ DJANGO_SETTINGS_MODULE=example.settings django-admin.py runserver
+    $ DJANGO_SETTINGS_MODULE=example.settings django-admin migrate
+    $ DJANGO_SETTINGS_MODULE=example.settings django-admin runserver
 
 For convenience, there's an alias for the second command::
 
@@ -75,6 +75,10 @@ Python code for the Django Debug Toolbar follows PEP8. Line length is limited
 to 100 characters. You can check for style violations with::
 
     $ make flake8
+
+Import style is enforce by isort. You can sort import automatically with::
+
+    $ make isort
 
 Patches
 -------

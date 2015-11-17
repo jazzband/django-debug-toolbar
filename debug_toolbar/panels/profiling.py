@@ -1,15 +1,16 @@
 from __future__ import absolute_import, division, unicode_literals
 
-from django.utils import six
-from django.utils.translation import ugettext_lazy as _
-from django.utils.safestring import mark_safe
-from debug_toolbar.panels import Panel
-from debug_toolbar import settings as dt_settings
-
 import cProfile
-from pstats import Stats
-from colorsys import hsv_to_rgb
 import os
+from colorsys import hsv_to_rgb
+from pstats import Stats
+
+from django.utils import six
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
+
+from debug_toolbar import settings as dt_settings
+from debug_toolbar.panels import Panel
 
 # Occasionally the disable method on the profiler is listed before
 # the actual view functions. This function call should be ignored as

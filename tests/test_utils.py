@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
-from debug_toolbar.compat import unittest
+import unittest
+
 from debug_toolbar.utils import get_name_from_obj
 
 

@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import django
 from django.contrib.auth.models import User
 from django.template import Context, RequestContext, Template
 
@@ -37,8 +36,7 @@ class TemplatesPanelTestCase(BaseTestCase):
         # ensure the query was NOT logged
         self.assertEqual(len(self.sql_panel._queries), 0)
 
-        base_ctx_idx = 1 if django.VERSION[:2] >= (1, 5) else 0
-        ctx = self.panel.templates[0]['context'][base_ctx_idx]
+        ctx = self.panel.templates[0]['context'][1]
         self.assertIn('<<queryset of auth.User>>', ctx)
         self.assertIn('<<triggers database query>>', ctx)
 

@@ -1,10 +1,13 @@
+import django
 from django.template import Library
 
-from ..compat import url as url_compat
+if django.VERSION >= (1, 8):
+    from django.template.defaulttags import cycle
+else:
+    from django.templatetags.future import cycle
+
 
 register = Library()
 
 
-@register.tag
-def url(parser, token):
-    return url_compat(parser, token)
+cycle = register.tag(cycle)
