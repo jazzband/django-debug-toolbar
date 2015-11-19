@@ -15,9 +15,8 @@ setup(
     license='BSD',
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),
     install_requires=[
-        'Django>=1.7',
         'sqlparse',
-    ],
+    ], 
     include_package_data=True,
     zip_safe=False,                 # because we're including static files
     classifiers=[
