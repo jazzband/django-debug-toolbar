@@ -64,16 +64,16 @@
 
                 if (name == 'button') {
                     var form = self.parents('form:eq(0)');
-                    ajax_data['url'] = self.attr('formaction');
+                    ajax_data.url = self.attr('formaction');
 
                     if (form.length) {
-                        ajax_data['data'] = form.serialize();
-                        ajax_data['type'] = form.attr('method') || 'POST';
+                        ajax_data.data = form.serialize();
+                        ajax_data.type = form.attr('method') || 'POST';
                     }
                 }
 
                 if (name == 'a') {
-                    ajax_data['url'] = self.attr('href');
+                    ajax_data.url = self.attr('href');
                 }
 
                 $.ajax(ajax_data).done(function(data){

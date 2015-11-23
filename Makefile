@@ -13,6 +13,12 @@ example:
 	DJANGO_SETTINGS_MODULE=example.settings \
 		django-admin runserver
 
+jshint: node_modules/jshint/bin/jshint
+	./node_modules/jshint/bin/jshint debug_toolbar/static/debug_toolbar/js/*.js
+
+node_modules/jshint/bin/jshint:
+	npm install jshint --prefix .
+
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		django-admin test tests
