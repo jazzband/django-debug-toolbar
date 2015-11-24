@@ -45,13 +45,6 @@ If you're upgrading from a previous version, you should review the
 If the automatic setup doesn't work for your project, if you want to learn
 what it does, or if you prefer defining your settings explicitly, read below.
 
-.. note::
-
-    The automatic setup relies on ``debug_toolbar.models`` being imported when
-    the server starts. Django doesn't provide a better hook to execute code
-    during the start-up sequence. This works with ``manage.py runserver``
-    because it validates models before serving requests.
-
 .. warning::
 
     The automatic setup imports your project's URLconf in order to add the
