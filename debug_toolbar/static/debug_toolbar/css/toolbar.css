@@ -656,3 +656,6 @@
 #djDebug .djdt-highlighted {
     background-color: lightgrey;
 }
+.djdt-hidden {
+    display: none;
+}
