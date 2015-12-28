@@ -29,7 +29,7 @@
 				<tr class="djDebugHoverable {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}{% if query.starts_trans %} djDebugStartTransaction{% endif %}{% if query.ends_trans %} djDebugEndTransaction{% endif %}{% if query.in_trans %} djDebugInTransaction{% endif %}" id="sqlMain_{{ forloop.counter }}">
 					<td class="djdt-color"><span data-background-color="rgb({{ query.rgb_color|join:", " }})">&#160;</span></td>
 					<td class="djdt-toggle">
-						<a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href>+</a>
+						<a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="">+</a>
 					</td>
 					<td class="query">
 						<div class="djDebugSqlWrap">
