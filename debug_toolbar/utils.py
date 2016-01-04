@@ -104,8 +104,9 @@ def get_template_info():
                 break
             elif cur_frame.f_code.co_name == 'render':
                 node = cur_frame.f_locals['self']
+                context = cur_frame.f_locals['context']
                 if isinstance(node, Node):
-                    template_info = get_template_context(node.source)
+                    template_info = get_template_context(node, context)
                     break
             cur_frame = cur_frame.f_back
     except Exception:
@@ -114,7 +115,17 @@ def get_template_info():
     return template_info
 
 
-def get_template_context(source, context_lines=3):
+def get_template_context(node, context):
+    source = getattr(node, 'source', None)
+    # In Django 1.9 template Node does not have source property, Origin does not reload method, so we extract
+    # contextual information from exception info.
+    if source:
+        return get_template_context_from_source(source)
+    else:
+        return get_template_context_from_exception_info(node, context)
+
+
+def get_template_context_from_source(source, context_lines=3):
     line = 0
     upto = 0
     source_lines = []
@@ -146,6 +157,29 @@ def get_template_context(source, context_lines=3):
     return {
         'name': origin.name,
         'context': context,
+    }
+
+
+def get_template_context_from_exception_info(node, context, context_lines=3):
+    exception_info = context.template.get_exception_info(Exception('DDT'), node.token)
+    line = exception_info['line']
+    source_lines = exception_info['source_lines']
+    name = exception_info['name']
+    debug_context = []
+    top = max(1, line - context_lines)
+    bottom = line + 1 + context_lines
+
+    for num, content in source_lines:
+        if num in range(top, bottom):
+            debug_context.append({
+                'num': num,
+                'content': content,
+                'highlight': (num == line),
+            })
+
+    return {
+        'name': name,
+        'context': debug_context,
     }
 
 
