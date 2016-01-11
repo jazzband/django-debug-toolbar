@@ -8,7 +8,7 @@ from collections import OrderedDict
 import django
 from django.conf import settings
 from django.core import cache
-from django.core.cache import CacheHandler, caches as original_caches
+from django.core.cache import CacheHandler
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
@@ -26,9 +26,14 @@ if django.VERSION[:2] < (1, 9):
 cache_called = Signal(providing_args=[
     "time_taken", "name", "return_value", "args", "kwargs", "trace"])
 
+ENABLED = False
+
 
 def send_signal(method):
     def wrapped(self, *args, **kwargs):
+        if not ENABLED:
+            return method(self, *args, **kwargs)
+
         t = time.time()
         value = method(self, *args, **kwargs)
         t = time.time() - t
@@ -141,6 +146,9 @@ if django.VERSION[:2] < (1, 9):
     middleware_cache.get_cache = get_cache
 middleware_cache.caches = CacheHandlerPatch()
 
+if django.VERSION[:2] < (1, 9):
+    cache.get_cache = get_cache
+cache.caches = middleware_cache.caches
 
 class CachePanel(Panel):
     """
@@ -219,21 +227,12 @@ class CachePanel(Panel):
                          count) % dict(count=count)
 
     def enable_instrumentation(self):
-        if django.VERSION[:2] < (1, 9):
-            cache.get_cache = get_cache
-        if isinstance(middleware_cache.caches, CacheHandlerPatch):
-            cache.caches = middleware_cache.caches
-        else:
-            cache.caches = CacheHandlerPatch()
+        global ENABLED
+        ENABLED = True
 
     def disable_instrumentation(self):
-        if django.VERSION[:2] < (1, 9):
-            cache.get_cache = original_get_cache
-        cache.caches = original_caches
-        # While it can be restored to the original, any views that were
-        # wrapped with the cache_page decorator will continue to use a
-        # monkey patched cache.
-        middleware_cache.caches = original_caches
+        global ENABLED
+        ENABLED = False
 
     def generate_stats(self, request, response):
         self.record_stats({
