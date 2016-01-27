@@ -59,6 +59,14 @@ what it does, or if you prefer defining your settings explicitly, read below.
     middleware during development or use the explicit setup to allow the
     toolbar to function properly.
 
+.. warning::
+
+    If you are using Django 1.8+ and have ``django.contrib.postgres`` in your
+    ``INSTALLED_APPS`` (to support PostgreSQL's HStoreField), then
+    ``debug_toolbar`` must come *after* ``django.contrib.postgres`` in the
+    list.  Otherwise, you may see ``can't adapt type: dict`` messages from
+    psycopg2.
+
 Explicit setup
 --------------
 
