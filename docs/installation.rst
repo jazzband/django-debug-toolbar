@@ -11,7 +11,7 @@ The recommended way to install the Debug Toolbar is via pip_::
 If you aren't familiar with pip, you may also obtain a copy of the
 ``debug_toolbar`` directory and add it to your Python path.
 
-.. _pip: http://www.pip-installer.org/
+.. _pip: https://pip.pypa.io/
 
 To test an upcoming release, you can install the in-development version
 instead with the following command::
@@ -25,12 +25,12 @@ Make sure that ``'django.contrib.staticfiles'`` is `set up properly
 <https://docs.djangoproject.com/en/stable/howto/static-files/>`_ and add
 ``'debug_toolbar'`` to your ``INSTALLED_APPS`` setting::
 
-    INSTALLED_APPS = (
+    INSTALLED_APPS = [
         # ...
         'django.contrib.staticfiles',
         # ...
         'debug_toolbar',
-    )
+    ]
 
     STATIC_URL = '/static/'
 
@@ -94,11 +94,11 @@ Middleware
 The Debug Toolbar is mostly implemented in a middleware. Enable it in your
 settings module as follows::
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE_CLASSES = [
         # ...
         'debug_toolbar.middleware.DebugToolbarMiddleware',
         # ...
-    )
+    ]
 
 The order of ``MIDDLEWARE_CLASSES`` is important. You should include the Debug
 Toolbar middleware as early as possible in the list. However, it must come

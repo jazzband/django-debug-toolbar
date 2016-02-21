@@ -285,7 +285,7 @@ Path: ``debug_toolbar_user_panel.panels.UserPanel``
 Easily switch between logged in users, see properties of current user.
 
 VCS Info
-~~~~~~
+~~~~~~~~
 
 URL: https://github.com/giginet/django-debug-toolbar-vcs-info
 
