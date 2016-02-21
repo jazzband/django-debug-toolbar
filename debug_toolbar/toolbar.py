@@ -146,6 +146,3 @@ class DebugToolbar(object):
                 urlpatterns += panel_class.get_urls()
             cls._urlpatterns = urlpatterns
         return cls._urlpatterns
-
-
-urlpatterns = DebugToolbar.get_urls()

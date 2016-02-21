@@ -11,9 +11,16 @@ except Exception:
 
 
 # Code that discovers files or modules in INSTALLED_APPS imports this module.
-# Reference URLpatterns with a string to avoid the risk of circular imports.
 
-urls = 'debug_toolbar.toolbar', 'djdt', 'djdt'
+# Reference URLpatterns with an iterator to avoid circular imports.
+
+def urlpatterns():
+    from debug_toolbar.toolbar import DebugToolbar
+    for pattern in DebugToolbar.get_urls():
+        yield pattern
+
+
+urls = urlpatterns(), 'djdt', 'djdt'
 
 
 default_app_config = 'debug_toolbar.apps.DebugToolbarConfig'
