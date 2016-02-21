@@ -24,7 +24,7 @@ class Panel(object):
     @property
     def enabled(self):
         # Check to see if settings has a default value for it
-        disabled_panels = dt_settings.CONFIG['DISABLE_PANELS']
+        disabled_panels = dt_settings.get_config()['DISABLE_PANELS']
         panel_path = get_name_from_obj(self)
         # Some panels such as the SQLPanel and TemplatesPanel exist in a
         # panel module, but can be disabled without panel in the path.

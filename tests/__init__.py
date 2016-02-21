@@ -10,16 +10,14 @@ from debug_toolbar.toolbar import DebugToolbar
 @receiver(setting_changed)
 def update_toolbar_config(**kwargs):
     if kwargs['setting'] == 'DEBUG_TOOLBAR_CONFIG':
-        dt_settings.CONFIG = {}
-        dt_settings.CONFIG.update(dt_settings.CONFIG_DEFAULTS)
-        dt_settings.CONFIG.update(kwargs['value'] or {})
+        dt_settings.get_config.cache_clear()
         # This doesn't account for deprecated configuration options.
 
 
 @receiver(setting_changed)
 def update_toolbar_panels(**kwargs):
     if kwargs['setting'] == 'DEBUG_TOOLBAR_PANELS':
-        dt_settings.PANELS = kwargs['value'] or dt_settings.PANELS_DEFAULTS
+        dt_settings.get_panels.cache_clear()
         DebugToolbar._panel_classes = None
         # Not implemented: invalidate debug_toolbar.urls.
         # This doesn't account for deprecated panel names.

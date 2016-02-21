@@ -14,9 +14,8 @@ from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
+from debug_toolbar import settings as dt_settings
 from debug_toolbar.compat import linebreak_iter
-
-from .settings import CONFIG
 
 try:
     import threading
@@ -43,7 +42,7 @@ def get_module_path(module_name):
 
 hidden_paths = [
     get_module_path(module_name)
-    for module_name in CONFIG['HIDE_IN_STACKTRACES']
+    for module_name in dt_settings.get_config()['HIDE_IN_STACKTRACES']
 ]
 
 

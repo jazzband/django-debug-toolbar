@@ -21,7 +21,7 @@ class DebugToolbar(object):
 
     def __init__(self, request):
         self.request = request
-        self.config = dt_settings.CONFIG.copy()
+        self.config = dt_settings.get_config().copy()
         self._panels = OrderedDict()
         for panel_class in self.get_panel_classes():
             panel_instance = panel_class(self)
@@ -107,7 +107,7 @@ class DebugToolbar(object):
         if cls._panel_classes is None:
             # Load panels in a temporary variable for thread safety.
             panel_classes = []
-            for panel_path in dt_settings.PANELS:
+            for panel_path in dt_settings.get_panels():
                 # This logic could be replaced with import_by_path in Django 1.6.
                 try:
                     panel_module, panel_classname = panel_path.rsplit('.', 1)

@@ -172,7 +172,7 @@ class ProfilingPanel(Panel):
         func_list = []
         self.add_node(func_list,
                       root,
-                      dt_settings.CONFIG['PROFILER_MAX_DEPTH'],
+                      dt_settings.get_config()['PROFILER_MAX_DEPTH'],
                       root.stats[3] / 8)
 
         self.record_stats({'func_list': func_list})
