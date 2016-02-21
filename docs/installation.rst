@@ -77,9 +77,9 @@ Add the Debug Toolbar's URLs to your project's URLconf as follows::
 
     if settings.DEBUG:
         import debug_toolbar
-        urlpatterns += patterns('',
+        urlpatterns += [
             url(r'^__debug__/', include(debug_toolbar.urls)),
-        )
+        ]
 
 This example uses the ``__debug__`` prefix, but you can use any prefix that
 doesn't clash with your application's URLs. Note the lack of quotes around
