@@ -9,3 +9,4 @@ docs/_build
 example/db.sqlite3
 htmlcov
 .tox
+node_modules

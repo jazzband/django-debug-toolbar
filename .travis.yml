@@ -23,4 +23,6 @@ matrix:
 install:
   - pip install -e .
   - travis_retry pip install $DJANGO django-discover-runner sqlparse
-script: make test
+script:
+  - make jshint
+  - make test
