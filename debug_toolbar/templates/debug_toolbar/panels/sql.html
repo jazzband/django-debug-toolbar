@@ -36,7 +36,9 @@
 							<div class="djDebugSql">{{ query.sql|safe }}</div>
 						</div>
 						{% if query.duplicate_count %}
-							<strong>{% blocktrans with dupes=query.duplicate_count %}Duplicated {{ dupes }} times.{% endblocktrans %}
+							<strong>
+								<span data-background-color="{{ query.duplicate_color }}">&#160;</span>
+								{% blocktrans with dupes=query.duplicate_count %}Duplicated {{ dupes }} times.{% endblocktrans %}
 							</strong>
 						{% endif %}
 					</td>
