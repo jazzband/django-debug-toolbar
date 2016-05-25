@@ -16,9 +16,6 @@ from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.compat import (
-    get_template_context_processors, get_template_dirs,
-)
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, recording
 from debug_toolbar.panels.templates import views
@@ -37,58 +34,32 @@ if Template._render != instrumented_test_render:
 # Monkey-patch to store items added by template context processors. The
 # overhead is sufficiently small to justify enabling it unconditionally.
 
-if django.VERSION[:2] < (1, 8):
+@contextmanager
+def _request_context_bind_template(self, template):
+    if self.template is not None:
+        raise RuntimeError("Context is already bound to a template")
 
-    def _request_context___init__(
-            self, request, dict_=None, processors=None, current_app=None,
-            use_l10n=None, use_tz=None):
-        Context.__init__(
-            self, dict_, current_app=current_app,
-            use_l10n=use_l10n, use_tz=use_tz)
-        if processors is None:
-            processors = ()
-        else:
-            processors = tuple(processors)
-        self.context_processors = OrderedDict()
-        updates = dict()
-        std_processors = get_template_context_processors()
-        for processor in std_processors + processors:
-            name = '%s.%s' % (processor.__module__, processor.__name__)
-            context = processor(request)
-            self.context_processors[name] = context
-            updates.update(context)
-        self.update(updates)
+    self.template = template
+    # Set context processors according to the template engine's settings.
+    processors = (template.engine.template_context_processors +
+                  self._processors)
+    self.context_processors = OrderedDict()
+    updates = {}
+    for processor in processors:
+        name = '%s.%s' % (processor.__module__, processor.__name__)
+        context = processor(self.request)
+        self.context_processors[name] = context
+        updates.update(context)
+    self.dicts[self._processors_index] = updates
 
-    RequestContext.__init__ = _request_context___init__
+    try:
+        yield
+    finally:
+        self.template = None
+        # Unset context processors.
+        self.dicts[self._processors_index] = {}
 
-else:
-
-    @contextmanager
-    def _request_context_bind_template(self, template):
-        if self.template is not None:
-            raise RuntimeError("Context is already bound to a template")
-
-        self.template = template
-        # Set context processors according to the template engine's settings.
-        processors = (template.engine.template_context_processors +
-                      self._processors)
-        self.context_processors = OrderedDict()
-        updates = {}
-        for processor in processors:
-            name = '%s.%s' % (processor.__module__, processor.__name__)
-            context = processor(self.request)
-            self.context_processors[name] = context
-            updates.update(context)
-        self.dicts[self._processors_index] = updates
-
-        try:
-            yield
-        finally:
-            self.template = None
-            # Unset context processors.
-            self.dicts[self._processors_index] = {}
-
-    RequestContext.bind_template = _request_context_bind_template
+RequestContext.bind_template = _request_context_bind_template
 
 
 class TemplatesPanel(Panel):
@@ -199,13 +170,13 @@ class TemplatesPanel(Panel):
                 info['context'] = '\n'.join(context_list)
             template_context.append(info)
 
-        # Fetch context_processors from any template
+        # Fetch context_processors/template_dirs from any template
         if self.templates:
             context_processors = self.templates[0]['context_processors']
+            template_dirs = self.templates[0]['template'].engine.dirs
         else:
             context_processors = None
-
-        template_dirs = get_template_dirs()
+            template_dirs = []
 
         self.record_stats({
             'templates': template_context,

@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import copy
+
 from django.conf import settings
 from django.http import HttpResponse
 from django.test.utils import override_settings
@@ -35,11 +37,10 @@ class RedirectsPanelTestCase(BaseTestCase):
         self.assertContains(response, 'http://somewhere/else/')
 
     def test_redirect_with_broken_context_processor(self):
-        context_processors = list(settings.TEMPLATE_CONTEXT_PROCESSORS) + [
-            'tests.context_processors.broken',
-        ]
+        TEMPLATES = copy.deepcopy(settings.TEMPLATES)
+        TEMPLATES[0]['OPTIONS']['context_processors'] = ['tests.context_processors.broken']
 
-        with self.settings(TEMPLATE_CONTEXT_PROCESSORS=context_processors):
+        with self.settings(TEMPLATES=TEMPLATES):
             redirect = HttpResponse(status=302)
             redirect['Location'] = 'http://somewhere/else/'
             response = self.panel.process_response(self.request, redirect)

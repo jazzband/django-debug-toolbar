@@ -11,8 +11,6 @@ SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 
 # Application definition
 
@@ -38,7 +36,16 @@ ROOT_URLCONF = 'example.urls'
 
 STATIC_URL = '/static/'
 
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'example', 'templates')]
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'example', 'templates')],
+        'OPTIONS': {
+            'debug': True,
+        },
+    },
+]
 
 WSGI_APPLICATION = 'example.wsgi.application'
 
