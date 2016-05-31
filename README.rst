@@ -22,7 +22,7 @@ contributed by the community.
 The current version of the Debug Toolbar is 1.4. It works on Django ≥ 1.7.
 
 Documentation, including installation and configuration instructions, is
-available at http://django-debug-toolbar.readthedocs.org/.
+available at https://django-debug-toolbar.readthedocs.io/.
 
 The Django Debug Toolbar is released under the BSD license, like Django
 itself. If you like it, please consider contributing!
