@@ -1,11 +1,15 @@
 Change log
 ==========
 
+1.5
+---
+
+This version is compatible with Django 1.10 and requires Django 1.8 or later.
+
 1.4
 ---
 
-This version is compatible with Django 1.9 release and requires
-Django 1.7 or later.
+This version is compatible with Django 1.9 and requires Django 1.7 or later.
 
 New features
 ~~~~~~~~~~~~

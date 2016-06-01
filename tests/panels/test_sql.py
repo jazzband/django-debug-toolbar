@@ -110,8 +110,10 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the stacktrace is empty
         self.assertEqual([], query[1]['stacktrace'])
 
-    @override_settings(DEBUG=True, TEMPLATE_DEBUG=True,
-                       TEMPLATE_LOADERS=('tests.loaders.LoaderWithSQL',))
+    @override_settings(DEBUG=True, TEMPLATES=[{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'OPTIONS': {'debug': True, 'loaders': ['tests.loaders.LoaderWithSQL']},
+    }])
     def test_regression_infinite_recursion(self):
         """
         Test case for when the template loader runs a SQL query that causes

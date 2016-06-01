@@ -164,12 +164,15 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
             lambda selenium: version_panel.find_element_by_tag_name('p'))
         self.assertIn("Data for this panel isn't available anymore.", error.text)
 
-    @override_settings(TEMPLATE_LOADERS=[(
-        'django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        ),
-    )])
+    @override_settings(DEBUG=True, TEMPLATES=[{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'OPTIONS': {'loaders': [(
+            'django.template.loaders.cached.Loader', (
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            )
+        )]},
+    }])
     def test_django_cached_template_loader(self):
         self.selenium.get(self.live_server_url + '/regular/basic/')
         version_panel = self.selenium.find_element_by_id('TemplatesPanel')
