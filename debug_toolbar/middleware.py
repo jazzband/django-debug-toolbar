@@ -43,7 +43,7 @@ class DebugToolbarMiddleware(object):
     def __init__(self):
         # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
         # setup, resolve it to the corresponding callable.
-        func_or_path = dt_settings.CONFIG['SHOW_TOOLBAR_CALLBACK']
+        func_or_path = dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK']
         if isinstance(func_or_path, six.string_types):
             self.show_toolbar = import_string(func_or_path)
         else:
@@ -113,7 +113,7 @@ class DebugToolbarMiddleware(object):
 
         # Insert the toolbar in the response.
         content = force_text(response.content, encoding=settings.DEFAULT_CHARSET)
-        insert_before = dt_settings.CONFIG['INSERT_BEFORE']
+        insert_before = dt_settings.get_config()['INSERT_BEFORE']
         try:                    # Python >= 2.7
             pattern = re.escape(insert_before)
             bits = re.split(pattern, content, flags=re.IGNORECASE)

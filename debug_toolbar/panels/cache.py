@@ -33,7 +33,7 @@ def send_signal(method):
         value = method(self, *args, **kwargs)
         t = time.time() - t
 
-        if dt_settings.CONFIG['ENABLE_STACKTRACES']:
+        if dt_settings.get_config()['ENABLE_STACKTRACES']:
             stacktrace = tidy_stacktrace(reversed(get_stack()))
         else:
             stacktrace = []

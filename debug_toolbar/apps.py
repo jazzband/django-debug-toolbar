@@ -11,6 +11,6 @@ class DebugToolbarConfig(AppConfig):
     verbose_name = _("Debug Toolbar")
 
     def ready(self):
-        if dt_settings.PATCH_SETTINGS:
+        if dt_settings.get_patch_settings():
             dt_settings.patch_all()
         dt_settings.check_middleware()
