@@ -6,6 +6,8 @@ Change log
 
 This version is compatible with Django 1.10 and requires Django 1.8 or later.
 
+Support for Python 3.2 is dropped.
+
 1.4
 ---
 
