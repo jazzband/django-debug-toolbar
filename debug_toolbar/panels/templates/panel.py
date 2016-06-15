@@ -5,11 +5,10 @@ from contextlib import contextmanager
 from os.path import normpath
 from pprint import pformat
 
-import django
 from django import http
 from django.conf.urls import url
 from django.db.models.query import QuerySet, RawQuerySet
-from django.template import Context, RequestContext, Template
+from django.template import RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
 from django.utils import six
