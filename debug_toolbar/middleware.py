@@ -16,8 +16,6 @@ from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
-# Handles python threading module bug - http://bugs.python.org/issue14308
-threading._DummyThread._Thread__stop = lambda x: 1
 
 
 def show_toolbar(request):
