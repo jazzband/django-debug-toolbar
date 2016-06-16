@@ -9,4 +9,3 @@ try:
     from django.template.base import linebreak_iter  # NOQA
 except ImportError:  # Django < 1.9
     from django.views.debug import linebreak_iter  # NOQA
-

@@ -3,9 +3,8 @@ from __future__ import absolute_import, unicode_literals
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import TemplateDoesNotExist
-from django.utils.safestring import mark_safe
-
 from django.template.engine import Engine
+from django.utils.safestring import mark_safe
 
 
 def template_source(request):
