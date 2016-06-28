@@ -9,6 +9,7 @@
 {% else %}
 <script src="{% static 'debug_toolbar/js/jquery_existing.js' %}"></script>
 {% endif %}
+<script src="{% static 'debug_toolbar/js/jquery_showhide_plugin.js' %}"></script>
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
