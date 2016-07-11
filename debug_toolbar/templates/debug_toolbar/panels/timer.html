@@ -1,4 +1,4 @@
-{% load i18n %}{% load static from staticfiles %}
+{% load i18n %}{% load static from staticfiles %}{% load debug_toolbar_extras %}
 <h4>{% trans "Resource usage" %}</h4>
 <table>
 	<colgroup>
@@ -41,4 +41,4 @@
 		</tbody>
 	</table>
 </div>
-<script src="{% static 'debug_toolbar/js/toolbar.timer.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.timer.js' %}"{% js_custom_attribute %}></script>
