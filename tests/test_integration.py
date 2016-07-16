@@ -7,6 +7,7 @@ import unittest
 from xml.etree import ElementTree as ET
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core.checks import Error, run_checks
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
@@ -190,3 +191,55 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: self.selenium.find_element_by_css_selector(
                 '#djDebugWindow code'))
+
+
+@override_settings(DEBUG=True)
+class DebugToolbarSystemChecksTestCase(BaseTestCase):
+    @override_settings(
+        MIDDLEWARE=None,
+        MIDDLEWARE_CLASSES=[
+            'django.middleware.gzip.GZipMiddleware',
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+        ]
+    )
+    def test_check_good_configuration(self):
+        messages = run_checks()
+        self.assertEqual(messages, [])
+
+    @override_settings(MIDDLEWARE=None, MIDDLEWARE_CLASSES=[])
+    def test_check_missing_middleware_error(self):
+        messages = run_checks()
+        self.assertEqual(
+            messages,
+            [
+                Error(
+                    "debug_toolbar.middleware.DebugToolbarMiddleware is "
+                    "missing from MIDDLEWARE_CLASSES.",
+                    hint="Add debug_toolbar.middleware.DebugToolbarMiddleware "
+                    "to MIDDLEWARE_CLASSES.",
+                ),
+            ]
+        )
+
+    @override_settings(
+        MIDDLEWARE=None,
+        MIDDLEWARE_CLASSES=[
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+            'django.middleware.gzip.GZipMiddleware',
+        ]
+    )
+    def test_check_gzip_middleware_error(self):
+        messages = run_checks()
+        self.assertEqual(
+            messages,
+            [
+                Error(
+                    "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
+                    "before django.middleware.gzip.GZipMiddleware in "
+                    "MIDDLEWARE_CLASSES.",
+                    hint="Move debug_toolbar.middleware.DebugToolbarMiddleware "
+                    "to after django.middleware.gzip.GZipMiddleware in "
+                    "MIDDLEWARE_CLASSES.",
+                ),
+            ]
+        )

@@ -4,6 +4,14 @@ Change log
 1.6 (upcoming)
 --------------
 
+Removed features
+~~~~~~~~~~~~~~~~
+
+* Support for automatic setup has been removed as it was frequently
+  problematic. Installation now requires explicit setup. The
+  ``DEBUG_TOOLBAR_PATCH_SETTINGS`` setting has also been removed as it is now
+  unused. See the :doc:`installation documentation <installation>` for details.
+
 Bugfixes
 ~~~~~~~~
 
