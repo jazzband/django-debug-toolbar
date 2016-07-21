@@ -8,6 +8,15 @@ This version is compatible with Django 1.10 and requires Django 1.8 or later.
 
 Support for Python 3.2 is dropped.
 
+Bugfixes
+~~~~~~~~
+
+* Restore compatibility with sqlparse ≥ 0.2.0.
+* Add compatibility with Bootstrap 4, Pure CSS, MDL, etc.
+* Improve compatibility with RequireJS / AMD.
+* Improve the UI slightly.
+* Fix invalid (X)HTML.
+
 1.4
 ---
 
