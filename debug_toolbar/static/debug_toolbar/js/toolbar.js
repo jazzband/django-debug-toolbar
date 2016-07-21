@@ -213,12 +213,12 @@
             $('#djDebugToolbar li').removeClass('djdt-active');
             // finally close toolbar
             $('#djDebugToolbar').hide('fast');
-            handle = $('#djDebugToolbarHandle')
+            handle = $('#djDebugToolbarHandle');
             handle.show();
             // set handle position
             var handleTop = djdt.cookie.get('djdttop');
             if (handleTop) {
-                handleTop = Math.min(handleTop, window.innerHeight - handle.outerHeight() - 10)
+                handleTop = Math.min(handleTop, window.innerHeight - handle.outerHeight() - 10);
                 handle.css({top: handleTop + 'px'});
             }
             // Unbind keydown
