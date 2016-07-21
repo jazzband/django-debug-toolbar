@@ -16,7 +16,7 @@ setup(
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),
     install_requires=[
         'Django>=1.8',
-        'sqlparse',
+        'sqlparse>=0.2.0',
     ],
     include_package_data=True,
     zip_safe=False,                 # because we're including static files
