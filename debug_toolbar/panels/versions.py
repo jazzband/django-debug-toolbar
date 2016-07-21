@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import sys
-from collections import OrderedDict
 
 import django
 from django.apps import apps
@@ -24,12 +23,12 @@ class VersionsPanel(Panel):
 
     def generate_stats(self, request, response):
         versions = [
-            ('Python', '%d.%d.%d' % sys.version_info[:3]),
-            ('Django', self.get_app_version(django)),
+            ('Python', '', '%d.%d.%d' % sys.version_info[:3]),
+            ('Django', '', self.get_app_version(django)),
         ]
         versions += list(self.gen_app_versions())
         self.record_stats({
-            'versions': OrderedDict(sorted(versions, key=lambda v: v[0])),
+            'versions': sorted(versions, key=lambda v: v[0]),
             'paths': sys.path,
         })
 
@@ -39,7 +38,7 @@ class VersionsPanel(Panel):
             app = app_config.module
             version = self.get_app_version(app)
             if version:
-                yield name, version
+                yield app.__name__, name, version
 
     def get_app_version(self, app):
         if hasattr(app, 'get_version'):
