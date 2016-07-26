@@ -16,7 +16,7 @@ If you aren't familiar with pip, you may also obtain a copy of the
 To test an upcoming release, you can install the in-development version
 instead with the following command::
 
-     $ pip install -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
+     $ pip install -e git+https://github.com/jazzband/django-debug-toolbar.git#egg=django-debug-toolbar
 
 Prerequisites
 -------------

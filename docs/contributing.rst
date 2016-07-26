@@ -1,11 +1,19 @@
 Contributing
 ============
 
+.. image:: https://jazzband.co/static/img/jazzband.svg
+   :target: https://jazzband.co/
+   :alt: Jazzband
+
+This is a `Jazzband <https://jazzband.co>`_ project. By contributing you agree
+to abide by the `Contributor Code of Conduct <https://jazzband.co/about/conduct>`_
+and follow the `guidelines <https://jazzband.co/about/guidelines>`_.
+
 Bug reports and feature requests
 --------------------------------
 
 You can report bugs and request features in the `bug tracker
-<http://github.com/django-debug-toolbar/django-debug-toolbar/issues>`_.
+<http://github.com/jazzband/django-debug-toolbar/issues>`_.
 
 Please search the existing database for duplicates before filing an issue.
 
@@ -13,7 +21,7 @@ Code
 ----
 
 The code is available `on GitHub
-<http://github.com/django-debug-toolbar/django-debug-toolbar>`_.
+<http://github.com/jazzband/django-debug-toolbar>`_.
 
 Once you've obtained a checkout, you should create a virtualenv_ and install
 the libraries required for working on the Debug Toolbar::
@@ -84,7 +92,7 @@ Patches
 -------
 
 Please submit `pull requests
-<http://github.com/django-debug-toolbar/django-debug-toolbar/pulls>`_!
+<http://github.com/jazzband/django-debug-toolbar/pulls>`_!
 
 The Debug Toolbar includes a limited but growing test suite. If you fix a bug
 or add a feature code, please consider adding proper coverage in the test

@@ -10,7 +10,7 @@ setup(
     long_description=open('README.rst', encoding='utf-8').read(),
     author='Rob Hudson',
     author_email='rob@cogit8.org',
-    url='https://github.com/django-debug-toolbar/django-debug-toolbar',
+    url='https://github.com/jazzband/django-debug-toolbar',
     download_url='https://pypi.python.org/pypi/django-debug-toolbar',
     license='BSD',
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),

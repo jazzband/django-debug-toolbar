@@ -2,9 +2,13 @@
 Django Debug Toolbar
 ====================
 
-.. image:: https://secure.travis-ci.org/django-debug-toolbar/django-debug-toolbar.png
-    :alt: Build Status
-    :target: http://travis-ci.org/django-debug-toolbar/django-debug-toolbar
+.. image:: https://jazzband.co/static/img/badge.svg
+   :target: https://jazzband.co/
+   :alt: Jazzband
+
+.. image:: https://travis-ci.org/jazzband/django-debug-toolbar.svg?branch=master
+   :target: https://travis-ci.org/jazzband/django-debug-toolbar
+   :alt: Build Status
 
 The Django Debug Toolbar is a configurable set of panels that display various
 debug information about the current request/response and when clicked, display
@@ -12,7 +16,7 @@ more details about the panel's content.
 
 Here's a screenshot of the toolbar in action:
 
-.. image:: https://raw.github.com/django-debug-toolbar/django-debug-toolbar/master/example/django-debug-toolbar.png
+.. image:: https://raw.github.com/jazzband/django-debug-toolbar/master/example/django-debug-toolbar.png
    :width: 908
    :height: 557
 
@@ -31,4 +35,4 @@ itself. If you like it, please consider contributing!
 The Django Debug Toolbar was originally created by Rob Hudson <rob@cogit8.org>
 in August 2008 and was further developed by many contributors_.
 
-.. _contributors: https://github.com/django-debug-toolbar/django-debug-toolbar/graphs/contributors
+.. _contributors: https://github.com/jazzband/django-debug-toolbar/graphs/contributors
