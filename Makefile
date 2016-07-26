@@ -28,6 +28,7 @@ test_selenium:
 		django-admin test tests
 
 coverage:
+	python --version
 	coverage erase
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		coverage run `which django-admin` test -v2 tests
