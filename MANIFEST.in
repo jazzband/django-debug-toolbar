@@ -1,5 +1,6 @@
 include LICENSE
 include README.rst
+include CONTRIBUTING.md
 recursive-include debug_toolbar/locale *
 recursive-include debug_toolbar/static *
 recursive-include debug_toolbar/templates *
