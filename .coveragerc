@@ -1,0 +1,6 @@
+[run]
+source = debug_toolbar
+branch = 1
+
+[report]
+omit = *tests*,*migrations*

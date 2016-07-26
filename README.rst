@@ -10,6 +10,10 @@ Django Debug Toolbar
    :target: https://travis-ci.org/jazzband/django-debug-toolbar
    :alt: Build Status
 
+.. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/jazzband/django-debug-toolbar
+   :alt: Test coverage status
+
 The Django Debug Toolbar is a configurable set of panels that display various
 debug information about the current request/response and when clicked, display
 more details about the panel's content.
