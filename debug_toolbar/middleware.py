@@ -10,10 +10,18 @@ import threading
 from django.conf import settings
 from django.utils import six
 from django.utils.encoding import force_text
+from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
+
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:  # Django < 1.10
+    # Works perfectly for everyone using MIDDLEWARE_CLASSES
+    MiddlewareMixin = object
+
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
@@ -31,21 +39,22 @@ def show_toolbar(request):
     return bool(settings.DEBUG)
 
 
-class DebugToolbarMiddleware(object):
+class DebugToolbarMiddleware(MiddlewareMixin):
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
     """
     debug_toolbars = {}
 
-    def __init__(self):
+    @cached_property
+    def show_toolbar(self):
         # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
         # setup, resolve it to the corresponding callable.
         func_or_path = dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK']
         if isinstance(func_or_path, six.string_types):
-            self.show_toolbar = import_string(func_or_path)
+            return import_string(func_or_path)
         else:
-            self.show_toolbar = func_or_path
+            return func_or_path
 
     def process_request(self, request):
         # Decide whether the toolbar is active for this request.

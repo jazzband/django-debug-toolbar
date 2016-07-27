@@ -1,6 +1,23 @@
 Change log
 ==========
 
+1.6 (upcoming)
+--------------
+
+Removed features
+~~~~~~~~~~~~~~~~
+
+* Support for automatic setup has been removed. Installation now requires
+  explicit setup. As a result, the ``DEBUG_TOOLBAR_PATCH_SETTINGS`` setting has
+  also been removed. See the :doc:`installation documentation <installation>`
+  for details.
+
+Bugfixes
+~~~~~~~~
+
+* The ``DebugToolbarMiddleware`` now also supports Django 1.10's ``MIDDLEWARE``
+  setting.
+
 1.5
 ---
 
