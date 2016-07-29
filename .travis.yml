@@ -1,9 +1,7 @@
 language: python
 sudo: false
 python: 3.5
-cache:
-  directories:
-  - "~/.cache/pip"
+cache: pip
 env:
   - TOXENV="py27-dj18"
   - TOXENV="py33-dj18"
