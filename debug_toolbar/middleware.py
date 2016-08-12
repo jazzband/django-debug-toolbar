@@ -129,7 +129,6 @@ class DebugToolbarMiddlewareMixin(object):
 try:
     from django.utils.deprecation import MiddlewareMixin
 
-
     class DebugToolbarMiddleware(MiddlewareMixin, DebugToolbarMiddlewareMixin):
         pass
 except ImportError:
