@@ -31,7 +31,7 @@ def show_toolbar(request):
     return bool(settings.DEBUG)
 
 
-class DebugToolbarMiddleware(object):
+class DebugToolbarMiddlewareMixin(object):
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
@@ -124,3 +124,13 @@ class DebugToolbarMiddleware(object):
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
         return response
+
+
+try:
+    from django.utils.deprecation import MiddlewareMixin
+
+    class DebugToolbarMiddleware(MiddlewareMixin, DebugToolbarMiddlewareMixin):
+        pass
+except ImportError:
+    class DebugToolbarMiddleware(DebugToolbarMiddlewareMixin):
+        pass

@@ -37,7 +37,7 @@ CONFIG_DEFAULTS = {
     ),
     'PROFILER_MAX_DEPTH': 10,
     'SHOW_TEMPLATE_CONTEXT': True,
-    'SQL_WARNING_THRESHOLD': 500,   # milliseconds
+    'SQL_WARNING_THRESHOLD': 500,  # milliseconds
 }
 
 
@@ -167,6 +167,20 @@ def get_patch_settings():
 # The following functions can monkey-patch settings automatically. Several
 # imports are placed inside functions to make it safe to import this module.
 
+_middleware = {
+    'name': '',
+    'middleware': [],
+}
+
+try:
+    if settings.MIDDLEWARE is None:
+        raise AttributeError
+    _middleware['middleware'] = settings.MIDDLEWARE
+    _middleware['name'] = 'MIDDLEWARE'
+except AttributeError:
+    _middleware['middleware'] = settings.MIDDLEWARE_CLASSES
+    _middleware['name'] = 'MIDDLEWARE_CLASSES'
+
 
 def check_middleware():
     from django.middleware.gzip import GZipMiddleware
@@ -175,7 +189,7 @@ def check_middleware():
     debug_toolbar_index = None
 
     # Determine the indexes which gzip and/or the toolbar are installed at
-    for i, middleware in enumerate(settings.MIDDLEWARE_CLASSES):
+    for i, middleware in enumerate(_middleware['middleware']):
         if is_middleware_class(GZipMiddleware, middleware):
             gzip_index = i
         elif is_middleware_class(DebugToolbarMiddleware, middleware):
@@ -186,7 +200,7 @@ def check_middleware():
             "Please use an explicit setup with the "
             "debug_toolbar.middleware.DebugToolbarMiddleware "
             "after django.middleware.gzip.GZipMiddlware "
-            "in MIDDLEWARE_CLASSES.", Warning)
+            "in {}.".format(_middleware['name']), Warning)
 
 
 def is_middleware_class(middleware_class, middleware_path):
@@ -200,7 +214,7 @@ def is_middleware_class(middleware_class, middleware_path):
 def is_toolbar_middleware_installed():
     from debug_toolbar.middleware import DebugToolbarMiddleware
     return any(is_middleware_class(DebugToolbarMiddleware, middleware)
-               for middleware in settings.MIDDLEWARE_CLASSES)
+               for middleware in _middleware['middleware'])
 
 
 def prepend_to_setting(setting_name, value):
@@ -219,7 +233,7 @@ def patch_internal_ips():
 
 def patch_middleware_classes():
     if not is_toolbar_middleware_installed():
-        prepend_to_setting('MIDDLEWARE_CLASSES',
+        prepend_to_setting(_middleware['name'],
                            'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 
