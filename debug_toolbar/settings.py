@@ -37,7 +37,7 @@ CONFIG_DEFAULTS = {
     ),
     'PROFILER_MAX_DEPTH': 10,
     'SHOW_TEMPLATE_CONTEXT': True,
-    'SQL_WARNING_THRESHOLD': 500,   # milliseconds
+    'SQL_WARNING_THRESHOLD': 500,  # milliseconds
 }
 
 
@@ -125,29 +125,29 @@ def get_panels():
         # Backward-compatibility for 1.0, remove in 2.0.
         _RENAMED_PANELS = {
             'debug_toolbar.panels.version.VersionDebugPanel':
-            'debug_toolbar.panels.versions.VersionsPanel',
+                'debug_toolbar.panels.versions.VersionsPanel',
             'debug_toolbar.panels.timer.TimerDebugPanel':
-            'debug_toolbar.panels.timer.TimerPanel',
+                'debug_toolbar.panels.timer.TimerPanel',
             'debug_toolbar.panels.settings_vars.SettingsDebugPanel':
-            'debug_toolbar.panels.settings.SettingsPanel',
+                'debug_toolbar.panels.settings.SettingsPanel',
             'debug_toolbar.panels.headers.HeaderDebugPanel':
-            'debug_toolbar.panels.headers.HeadersPanel',
+                'debug_toolbar.panels.headers.HeadersPanel',
             'debug_toolbar.panels.request_vars.RequestVarsDebugPanel':
-            'debug_toolbar.panels.request.RequestPanel',
+                'debug_toolbar.panels.request.RequestPanel',
             'debug_toolbar.panels.sql.SQLDebugPanel':
-            'debug_toolbar.panels.sql.SQLPanel',
+                'debug_toolbar.panels.sql.SQLPanel',
             'debug_toolbar.panels.template.TemplateDebugPanel':
-            'debug_toolbar.panels.templates.TemplatesPanel',
+                'debug_toolbar.panels.templates.TemplatesPanel',
             'debug_toolbar.panels.cache.CacheDebugPanel':
-            'debug_toolbar.panels.cache.CachePanel',
+                'debug_toolbar.panels.cache.CachePanel',
             'debug_toolbar.panels.signals.SignalDebugPanel':
-            'debug_toolbar.panels.signals.SignalsPanel',
+                'debug_toolbar.panels.signals.SignalsPanel',
             'debug_toolbar.panels.logger.LoggingDebugPanel':
-            'debug_toolbar.panels.logging.LoggingPanel',
+                'debug_toolbar.panels.logging.LoggingPanel',
             'debug_toolbar.panels.redirects.InterceptRedirectsDebugPanel':
-            'debug_toolbar.panels.redirects.RedirectsPanel',
+                'debug_toolbar.panels.redirects.RedirectsPanel',
             'debug_toolbar.panels.profiling.ProfilingDebugPanel':
-            'debug_toolbar.panels.profiling.ProfilingPanel',
+                'debug_toolbar.panels.profiling.ProfilingPanel',
         }
         for index, old_panel in enumerate(PANELS):
             new_panel = _RENAMED_PANELS.get(old_panel)
@@ -167,6 +167,20 @@ def get_patch_settings():
 # The following functions can monkey-patch settings automatically. Several
 # imports are placed inside functions to make it safe to import this module.
 
+_middleware = {
+    'name': '',
+    'middleware': [],
+}
+
+try:
+    if settings.MIDDLEWARE is None:
+        raise AttributeError
+    _middleware['middleware'] = settings.MIDDLEWARE
+    _middleware['name'] = 'MIDDLEWARE'
+except AttributeError:
+    _middleware['middleware'] = settings.MIDDLEWARE_CLASSES
+    _middleware['name'] = 'MIDDLEWARE_CLASSES'
+
 
 def check_middleware():
     from django.middleware.gzip import GZipMiddleware
@@ -175,7 +189,7 @@ def check_middleware():
     debug_toolbar_index = None
 
     # Determine the indexes which gzip and/or the toolbar are installed at
-    for i, middleware in enumerate(settings.MIDDLEWARE_CLASSES):
+    for i, middleware in enumerate(_middleware['middleware']):
         if is_middleware_class(GZipMiddleware, middleware):
             gzip_index = i
         elif is_middleware_class(DebugToolbarMiddleware, middleware):
@@ -186,7 +200,7 @@ def check_middleware():
             "Please use an explicit setup with the "
             "debug_toolbar.middleware.DebugToolbarMiddleware "
             "after django.middleware.gzip.GZipMiddlware "
-            "in MIDDLEWARE_CLASSES.", Warning)
+            "in {}.".format(_middleware['name']), Warning)
 
 
 def is_middleware_class(middleware_class, middleware_path):
@@ -200,7 +214,7 @@ def is_middleware_class(middleware_class, middleware_path):
 def is_toolbar_middleware_installed():
     from debug_toolbar.middleware import DebugToolbarMiddleware
     return any(is_middleware_class(DebugToolbarMiddleware, middleware)
-               for middleware in settings.MIDDLEWARE_CLASSES)
+               for middleware in _middleware['middleware'])
 
 
 def prepend_to_setting(setting_name, value):
@@ -219,7 +233,7 @@ def patch_internal_ips():
 
 def patch_middleware_classes():
     if not is_toolbar_middleware_installed():
-        prepend_to_setting('MIDDLEWARE_CLASSES',
+        prepend_to_setting(_middleware['name'],
                            'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 
@@ -232,8 +246,8 @@ def patch_root_urlconf():
     except NoReverseMatch:
         urlconf_module = import_module(settings.ROOT_URLCONF)
         urlconf_module.urlpatterns = [
-            url(r'^__debug__/', include(debug_toolbar.urls)),
-        ] + urlconf_module.urlpatterns
+                                         url(r'^__debug__/', include(debug_toolbar.urls)),
+                                     ] + urlconf_module.urlpatterns
         clear_url_caches()
 
 
