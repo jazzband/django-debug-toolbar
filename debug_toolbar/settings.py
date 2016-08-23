@@ -1,12 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 
 import warnings
-from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
 from django.utils.lru_cache import lru_cache
-from django.utils.module_loading import import_string
 
 # Always import this module as follows:
 # from debug_toolbar import settings [as dt_settings]
@@ -157,87 +155,3 @@ def get_panels():
                     "setting." % (old_panel, new_panel), DeprecationWarning)
                 PANELS[index] = new_panel
     return PANELS
-
-
-@lru_cache()
-def get_patch_settings():
-    return getattr(settings, 'DEBUG_TOOLBAR_PATCH_SETTINGS', settings.DEBUG)
-
-
-# The following functions can monkey-patch settings automatically. Several
-# imports are placed inside functions to make it safe to import this module.
-
-
-def check_middleware():
-    from django.middleware.gzip import GZipMiddleware
-    from debug_toolbar.middleware import DebugToolbarMiddleware
-    gzip_index = None
-    debug_toolbar_index = None
-
-    # Determine the indexes which gzip and/or the toolbar are installed at
-    for i, middleware in enumerate(settings.MIDDLEWARE_CLASSES):
-        if is_middleware_class(GZipMiddleware, middleware):
-            gzip_index = i
-        elif is_middleware_class(DebugToolbarMiddleware, middleware):
-            debug_toolbar_index = i
-    # If the toolbar appears before the gzip index, raise a warning
-    if gzip_index is not None and debug_toolbar_index < gzip_index:
-        warnings.warn(
-            "Please use an explicit setup with the "
-            "debug_toolbar.middleware.DebugToolbarMiddleware "
-            "after django.middleware.gzip.GZipMiddlware "
-            "in MIDDLEWARE_CLASSES.", Warning)
-
-
-def is_middleware_class(middleware_class, middleware_path):
-    try:
-        middleware_cls = import_string(middleware_path)
-    except ImportError:
-        return
-    return issubclass(middleware_cls, middleware_class)
-
-
-def is_toolbar_middleware_installed():
-    from debug_toolbar.middleware import DebugToolbarMiddleware
-    return any(is_middleware_class(DebugToolbarMiddleware, middleware)
-               for middleware in settings.MIDDLEWARE_CLASSES)
-
-
-def prepend_to_setting(setting_name, value):
-    """Insert value at the beginning of a list or tuple setting."""
-    values = getattr(settings, setting_name)
-    # Make a list [value] or tuple (value,)
-    value = type(values)((value,))
-    setattr(settings, setting_name, value + values)
-
-
-def patch_internal_ips():
-    if not settings.INTERNAL_IPS:
-        prepend_to_setting('INTERNAL_IPS', '127.0.0.1')
-        prepend_to_setting('INTERNAL_IPS', '::1')
-
-
-def patch_middleware_classes():
-    if not is_toolbar_middleware_installed():
-        prepend_to_setting('MIDDLEWARE_CLASSES',
-                           'debug_toolbar.middleware.DebugToolbarMiddleware')
-
-
-def patch_root_urlconf():
-    from django.conf.urls import include, url
-    from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
-    import debug_toolbar
-    try:
-        reverse('djdt:render_panel')
-    except NoReverseMatch:
-        urlconf_module = import_module(settings.ROOT_URLCONF)
-        urlconf_module.urlpatterns = [
-            url(r'^__debug__/', include(debug_toolbar.urls)),
-        ] + urlconf_module.urlpatterns
-        clear_url_caches()
-
-
-def patch_all():
-    patch_internal_ips()
-    patch_middleware_classes()
-    patch_root_urlconf()

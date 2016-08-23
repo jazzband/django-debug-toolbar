@@ -12,13 +12,6 @@ settings module to customize its behavior.
     it'll prevent you from taking advantage of better defaults that may be
     introduced in future releases.
 
-DEBUG_TOOLBAR_PATCH_SETTINGS
-----------------------------
-
-This setting defines whether the toolbar will attempt to automatically adjust
-your project's settings, as described in the :doc:`installation instructions
-<installation>`. By default it has the same value as your ``DEBUG`` setting.
-
 DEBUG_TOOLBAR_PANELS
 --------------------
 
