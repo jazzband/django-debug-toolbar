@@ -172,7 +172,9 @@ class TemplatesPanel(Panel):
         # Fetch context_processors/template_dirs from any template
         if self.templates:
             context_processors = self.templates[0]['context_processors']
-            template_dirs = self.templates[0]['template'].engine.dirs
+            template = self.templates[0]['template']
+            engine_backend = getattr(template, 'engine', None) or getattr(template, 'backend')
+            template_dirs = engine_backend.dirs
         else:
             context_processors = None
             template_dirs = []
