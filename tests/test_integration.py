@@ -6,6 +6,7 @@ import os
 import unittest
 from xml.etree import ElementTree as ET
 
+import django
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.checks import Error, run_checks
 from django.test import RequestFactory, TestCase
@@ -243,3 +244,18 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
                 ),
             ]
         )
+
+    @override_settings(
+        MIDDLEWARE=[
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+            'tests.middleware.simple_middleware',
+        ],
+        MIDDLEWARE_CLASSES=None
+    )
+    def test_middleware_factory_functions_supported(self):
+        messages = run_checks()
+
+        if django.VERSION[:2] < (1, 10):
+            self.assertEqual(messages, [])
+        else:
+            self.assertEqual(messages[0].id, '1_10.W001')
