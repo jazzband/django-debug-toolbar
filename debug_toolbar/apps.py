@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import inspect
+
 from django.apps import AppConfig
 from django.conf import settings
 from django.core.checks import Error, register
@@ -63,4 +65,7 @@ def is_middleware_class(middleware_class, middleware_path):
         middleware_cls = import_string(middleware_path)
     except ImportError:
         return
-    return issubclass(middleware_cls, middleware_class)
+    return (
+        inspect.isclass(middleware_cls) and
+        issubclass(middleware_cls, middleware_class)
+    )
