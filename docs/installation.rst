@@ -43,7 +43,7 @@ URLconf
 Add the Debug Toolbar's URLs to your project's URLconf as follows::
 
     from django.conf import settings
-    from django.conf.urls import include, patterns, url
+    from django.conf.urls import include, url
 
     if settings.DEBUG:
         import debug_toolbar
