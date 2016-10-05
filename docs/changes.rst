@@ -1,8 +1,10 @@
 Change log
 ==========
 
-1.6 (upcoming)
---------------
+1.6
+---
+
+The debug toolbar was adopted by jazzband.
 
 Removed features
 ~~~~~~~~~~~~~~~~
