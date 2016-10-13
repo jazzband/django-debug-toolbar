@@ -9,8 +9,6 @@ from django.middleware.gzip import GZipMiddleware
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 
-from debug_toolbar.middleware import DebugToolbarMiddleware
-
 
 class DebugToolbarConfig(AppConfig):
     name = 'debug_toolbar'
@@ -19,6 +17,8 @@ class DebugToolbarConfig(AppConfig):
 
 @register
 def check_middleware(app_configs, **kwargs):
+    from debug_toolbar.middleware import DebugToolbarMiddleware
+
     errors = []
     gzip_index = None
     debug_toolbar_index = None
