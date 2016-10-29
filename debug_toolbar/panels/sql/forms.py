@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import connections
 from django.utils.crypto import constant_time_compare
-from django.utils.encoding import force_text
+from django.utils.encoding import force_bytes
 from django.utils.functional import cached_property
 
 from debug_toolbar.panels.sql.utils import reformat_sql
@@ -79,12 +79,10 @@ class SQLSelectForm(forms.Form):
         return reformat_sql(self.cleaned_data['sql'])
 
     def make_hash(self, data):
-        items = [data['sql'], data['params']]
-        # Replace lines endings with spaces to preserve the hash value
-        # even when the browser normalizes \r\n to \n in inputs.
-        items = [' '.join(force_text(item).splitlines()) for item in items]
-        return hmac.new(settings.SECRET_KEY.encode('utf-8'),
-                        ''.join(items).encode('utf-8'), hashlib.sha1).hexdigest()
+        m = hmac.new(key=force_bytes(settings.SECRET_KEY), digestmod=hashlib.sha1)
+        for item in [data['sql'], data['params']]:
+            m.update(force_bytes(item))
+        return m.hexdigest()
 
     @property
     def connection(self):
