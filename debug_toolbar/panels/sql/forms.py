@@ -1,12 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
 import hashlib
+import hmac
 import json
 
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import connections
+from django.utils.crypto import constant_time_compare
 from django.utils.encoding import force_text
 from django.utils.functional import cached_property
 
@@ -68,7 +70,7 @@ class SQLSelectForm(forms.Form):
     def clean_hash(self):
         hash = self.cleaned_data['hash']
 
-        if hash != self.make_hash(self.data):
+        if not constant_time_compare(hash, self.make_hash(self.data)):
             raise ValidationError('Tamper alert')
 
         return hash
@@ -77,11 +79,12 @@ class SQLSelectForm(forms.Form):
         return reformat_sql(self.cleaned_data['sql'])
 
     def make_hash(self, data):
-        items = [settings.SECRET_KEY, data['sql'], data['params']]
+        items = [data['sql'], data['params']]
         # Replace lines endings with spaces to preserve the hash value
         # even when the browser normalizes \r\n to \n in inputs.
         items = [' '.join(force_text(item).splitlines()) for item in items]
-        return hashlib.sha1(''.join(items).encode('utf-8')).hexdigest()
+        return hmac.new(settings.SECRET_KEY.encode('utf-8'),
+                        ''.join(items).encode('utf-8'), hashlib.sha1).hexdigest()
 
     @property
     def connection(self):
