@@ -293,6 +293,15 @@ Path: ``vcs_info_panel.panels.GitInfoPanel``
 
 Displays VCS status (revision, branch, latest commit log and more) of your Django application.
 
+uWSGI Stats
+~~~~~~~~~~~
+
+URL: https://github.com/unbit/django-uwsgi
+
+Path: ``django_uwsgi.panels.UwsgiPanel``
+
+Displays uWSGI stats (workers, applications, spooler jobs and more).
+
 API for third-party panels
 --------------------------
 
