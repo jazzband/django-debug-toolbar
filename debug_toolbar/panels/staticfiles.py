@@ -72,6 +72,7 @@ class DebugConfiguredStorage(LazyObject):
 
         self._wrapped = DebugStaticFilesStorage(collector)
 
+
 _original_storage = storage.staticfiles_storage
 
 

@@ -58,6 +58,7 @@ def _request_context_bind_template(self, template):
         # Unset context processors.
         self.dicts[self._processors_index] = {}
 
+
 RequestContext.bind_template = _request_context_bind_template
 
 
