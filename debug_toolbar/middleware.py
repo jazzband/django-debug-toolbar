@@ -119,7 +119,7 @@ class DebugToolbarMiddleware(MiddlewareMixin):
             response.set_cookie('djdt', 'hide', 864000)
 
         # Insert the toolbar in the response.
-        content = force_text(response.content, encoding=settings.DEFAULT_CHARSET)
+        content = force_text(response.content, encoding=response.charset)
         insert_before = dt_settings.get_config()['INSERT_BEFORE']
         pattern = re.escape(insert_before)
         bits = re.split(pattern, content, flags=re.IGNORECASE)
