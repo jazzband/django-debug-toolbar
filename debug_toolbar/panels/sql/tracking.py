@@ -38,8 +38,8 @@ def wrap_cursor(connection, panel):
     if not hasattr(connection, '_djdt_cursor'):
         connection._djdt_cursor = connection.cursor
 
-        def cursor():
-            return state.Wrapper(connection._djdt_cursor(), connection, panel)
+        def cursor(*args, **kwargs):
+            return state.Wrapper(connection._djdt_cursor(*args, **kwargs), connection, panel)
 
         connection.cursor = cursor
         return cursor
