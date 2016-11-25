@@ -4,6 +4,7 @@ Debug Toolbar middleware
 
 from __future__ import absolute_import, unicode_literals
 
+import logging
 import re
 import threading
 
@@ -110,8 +111,12 @@ class DebugToolbarMiddleware(MiddlewareMixin):
         content_encoding = response.get('Content-Encoding', '')
         content_type = response.get('Content-Type', '').split(';')[0]
         if any((getattr(response, 'streaming', False),
-                'gzip' in content_encoding,
                 content_type not in _HTML_TYPES)):
+            return response
+        if 'gzip' in content_encoding:
+            logger = logging.getLogger(__name__)
+            logger.warn('Skipping response processing for gzip encoding. '
+                        'Check the order of your middlewares.')
             return response
 
         # Collapse the toolbar by default if SHOW_COLLAPSED is set.
