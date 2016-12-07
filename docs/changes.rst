@@ -1,6 +1,18 @@
 Change log
 ==========
 
+1.7 (upcoming)
+--------------
+
+Bugfixes
+~~~~~~~~
+
+* Recursive template extension is now understood.
+* Deprecation warnings were fixed.
+* The SQL panel uses HMAC instead of simple hashes to verify that SQL
+  statements have not been changed. Also, the handling of bytes and text
+  for hashing has been hardened.
+
 1.6
 ---
 
