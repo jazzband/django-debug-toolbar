@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 
-SECRET_KEY = bytes(bytearray([i for i in range(256)]))
+SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 INTERNAL_IPS = ['127.0.0.1']
 
