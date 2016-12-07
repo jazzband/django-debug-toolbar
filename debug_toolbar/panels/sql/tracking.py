@@ -39,6 +39,12 @@ def wrap_cursor(connection, panel):
         connection._djdt_cursor = connection.cursor
 
         def cursor(*args, **kwargs):
+            # Per the DB API cursor() does not accept any arguments. There's
+            # some code in the wild which does not follow that convention,
+            # so we pass on the arguments even though it's not clean.
+            # See:
+            # https://github.com/jazzband/django-debug-toolbar/pull/615
+            # https://github.com/jazzband/django-debug-toolbar/pull/896
             return state.Wrapper(connection._djdt_cursor(*args, **kwargs), connection, panel)
 
         connection.cursor = cursor
