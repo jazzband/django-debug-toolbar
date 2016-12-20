@@ -173,6 +173,7 @@ class TemplatesPanel(Panel):
         if self.templates:
             context_processors = self.templates[0]['context_processors']
             template = self.templates[0]['template']
+            # django templates have the 'engine' attribute, while jinja templates use 'backend'
             engine_backend = getattr(template, 'engine', None) or getattr(template, 'backend')
             template_dirs = engine_backend.dirs
         else:
