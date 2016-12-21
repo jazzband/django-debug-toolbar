@@ -38,7 +38,7 @@ class RedirectsPanelTestCase(BaseTestCase):
 
     def test_redirect_with_broken_context_processor(self):
         TEMPLATES = copy.deepcopy(settings.TEMPLATES)
-        TEMPLATES[0]['OPTIONS']['context_processors'] = ['tests.context_processors.broken']
+        TEMPLATES[1]['OPTIONS']['context_processors'] = ['tests.context_processors.broken']
 
         with self.settings(TEMPLATES=TEMPLATES):
             redirect = HttpResponse(status=302)

@@ -30,3 +30,7 @@ def resolving_view(request, arg1, arg2):
 @cache_page(60)
 def cached_view(request):
     return HttpResponse()
+
+
+def regular_jinjia_view(request, title):
+    return render(request, 'jinja2/basic.jinja', {'title': title})

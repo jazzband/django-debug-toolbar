@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$', views.resolving_view),
     url(r'^resolving3/(.+)/$', views.resolving_view, {'arg2': 'default'}),
     url(r'^regular/(?P<title>.*)/$', views.regular_view),
+    url(r'^regular_jinja/(?P<title>.*)/$', views.regular_jinjia_view),
     url(r'^non_ascii_request/$', views.regular_view, {'title': NonAsciiRepr()}),
     url(r'^new_user/$', views.new_user),
     url(r'^execute_sql/$', views.execute_sql),

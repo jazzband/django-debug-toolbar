@@ -153,6 +153,20 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("Name", table.text)
         self.assertIn("Version", table.text)
 
+    @override_settings(DEBUG_TOOLBAR_CONFIG={
+        'DISABLE_PANELS':
+            {'debug_toolbar.panels.redirects.RedirectsPanel'}
+    })
+    def test_basic_jinja(self):
+        self.selenium.get(self.live_server_url + '/regular_jinja/basic')
+        template_panel = self.selenium.find_element_by_id('TemplatesPanel')
+
+        # Click to show the template panel
+        self.selenium.find_element_by_class_name('TemplatesPanel').click()
+
+        self.assertIn('Templates (1 rendered)', template_panel.text)
+        self.assertIn('jinja2/basic.jinja', template_panel.text)
+
     @override_settings(DEBUG_TOOLBAR_CONFIG={'RESULTS_CACHE_SIZE': 0})
     def test_expired_store(self):
         self.selenium.get(self.live_server_url + '/regular/basic/')
