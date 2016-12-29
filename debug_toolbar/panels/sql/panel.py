@@ -148,7 +148,7 @@ class SQLPanel(Panel):
             for n, db in enumerate(self._databases.values()):
                 rgb = [0, 0, 0]
                 color = n % 3
-                rgb[color] = 256 - n / 3 * factor
+                rgb[color] = 256 - n // 3 * factor
                 nn = color
                 # XXX: pretty sure this is horrible after so many aliases
                 while rgb[color] < factor:
