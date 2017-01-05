@@ -24,13 +24,13 @@
         if (endStat) {
             // Render a start through end bar
 	    $row.html('<td>' + stat.replace('Start', '') + '</td>' +
-                      '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
+                      '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
                       '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
             $row.find('strong').css({width: getCSSWidth(stat, endStat)});
         } else {
             // Render a point in time
             $row.html('<td>' + stat + '</td>' +
-                      '<td class="timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
+                      '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
                       '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
             $row.find('strong').css({width: 2});
         }

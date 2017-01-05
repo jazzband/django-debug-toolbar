@@ -18,8 +18,8 @@
 		<thead>
 			<tr>
 				<th class="djdt-color">&#160;</th>
-				<th class="query" colspan="2">{% trans "Query" %}</th>
-				<th class="timeline">{% trans "Timeline" %}</th>
+				<th class="djdt-query" colspan="2">{% trans "Query" %}</th>
+				<th class="djdt-timeline">{% trans "Timeline" %}</th>
 				<th class="djdt-time">{% trans "Time (ms)" %}</th>
 				<th class="djdt-actions">{% trans "Action" %}</th>
 			</tr>
@@ -31,7 +31,7 @@
 					<td class="djdt-toggle">
 						<a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="">+</a>
 					</td>
-					<td class="query">
+					<td class="djdt-query">
 						<div class="djDebugSqlWrap">
 							<div class="djDebugSql">{{ query.sql|safe }}</div>
 						</div>
@@ -42,7 +42,7 @@
 							</strong>
 						{% endif %}
 					</td>
-					<td class="timeline">
+					<td class="djdt-timeline">
 						<div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" data-left="{{ query.start_offset|unlocalize }}%"><strong data-width="{{ query.width_ratio_relative|unlocalize }}%" data-background-color="{{ query.trace_color }}">{{ query.width_ratio }}%</strong></div></div>
 					</td>
 					<td class="djdt-time">

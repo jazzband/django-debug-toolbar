@@ -503,7 +503,7 @@
 #djDebug .highlight .s2 { color:#333 } /* Literal.String.Double */
 #djDebug .highlight .cp { color:#333 } /* Comment.Preproc */
 
-#djDebug .timeline {
+#djDebug .djdt-timeline {
     width: 30%;
 }
 #djDebug .djDebugTimeline {
