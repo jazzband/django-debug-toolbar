@@ -6,13 +6,13 @@ from __future__ import absolute_import, unicode_literals
 
 import uuid
 from collections import OrderedDict
-from importlib import import_module
 
 from django.apps import apps
 from django.conf.urls import url
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
+from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
 
@@ -106,27 +106,10 @@ class DebugToolbar(object):
     def get_panel_classes(cls):
         if cls._panel_classes is None:
             # Load panels in a temporary variable for thread safety.
-            panel_classes = []
-            for panel_path in dt_settings.get_panels():
-                # This logic could be replaced with import_by_path in Django 1.6.
-                try:
-                    panel_module, panel_classname = panel_path.rsplit('.', 1)
-                except ValueError:
-                    raise ImproperlyConfigured(
-                        "%s isn't a debug panel module" % panel_path)
-                try:
-                    mod = import_module(panel_module)
-                except ImportError as e:
-                    raise ImproperlyConfigured(
-                        'Error importing debug panel %s: "%s"' %
-                        (panel_module, e))
-                try:
-                    panel_class = getattr(mod, panel_classname)
-                except AttributeError:
-                    raise ImproperlyConfigured(
-                        'Toolbar Panel module "%s" does not define a "%s" class' %
-                        (panel_module, panel_classname))
-                panel_classes.append(panel_class)
+            panel_classes = [
+                import_string(panel_path)
+                for panel_path in dt_settings.get_panels()
+            ]
             cls._panel_classes = panel_classes
         return cls._panel_classes
 
