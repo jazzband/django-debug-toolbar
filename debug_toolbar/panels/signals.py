@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import weakref
-from importlib import import_module
 
 from django.core.signals import (
     got_request_exception, request_finished, request_started,
@@ -11,6 +10,7 @@ from django.db.models.signals import (
     class_prepared, post_delete, post_init, post_migrate, post_save,
     pre_delete, pre_init, pre_save,
 )
+from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from debug_toolbar.panels import Panel
@@ -55,16 +55,13 @@ class SignalsPanel(Panel):
     def signals(self):
         signals = self.SIGNALS.copy()
         for signal in self.toolbar.config['EXTRA_SIGNALS']:
-            mod_path, signal_name = signal.rsplit('.', 1)
-            signals_mod = import_module(mod_path)
-            signals[signal_name] = getattr(signals_mod, signal_name)
+            signal_name = signal.rsplit('.', 1)[-1]
+            signals[signal_name] = import_string(signal)
         return signals
 
     def generate_stats(self, request, response):
         signals = []
         for name, signal in sorted(self.signals.items(), key=lambda x: x[0]):
-            if signal is None:
-                continue
             receivers = []
             for receiver in signal.receivers:
                 receiver = receiver[1]
