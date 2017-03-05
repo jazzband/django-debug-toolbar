@@ -1,8 +1,11 @@
 Change log
 ==========
 
-1.7 (upcoming)
+1.8 (upcoming)
 --------------
+
+1.7
+---
 
 Bugfixes
 ~~~~~~~~
@@ -11,7 +14,11 @@ Bugfixes
 * Deprecation warnings were fixed.
 * The SQL panel uses HMAC instead of simple hashes to verify that SQL
   statements have not been changed. Also, the handling of bytes and text
-  for hashing has been hardened.
+  for hashing has been hardened. Also, a bug with Python's division
+  handling has been fixed for improved Python 3 support.
+* An error with django-jinja has been fixed.
+* A few CSS classes have been prefixed with ``djdt-`` to avoid
+  conflicting class names.
 
 1.6
 ---
