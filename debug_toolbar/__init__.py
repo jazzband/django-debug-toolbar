@@ -13,14 +13,10 @@ except Exception:
 
 
 # Code that discovers files or modules in INSTALLED_APPS imports this module.
-# URLpatterns were referenced with a string prior to 1.9 to avoid the risk of
-# circular imports
 
 if django.VERSION < (1, 9):
     urls = 'debug_toolbar.toolbar', 'djdt', 'djdt'
 else:
-    from . import toolbar
-    toolbar.app_name = 'djdt'
-    urls = toolbar
+    urls = 'debug_toolbar.toolbar', 'djdt'
 
 default_app_config = 'debug_toolbar.apps.DebugToolbarConfig'
