@@ -131,4 +131,5 @@ class DebugToolbar(object):
         return cls._urlpatterns
 
 
+app_name = 'djdt'
 urlpatterns = DebugToolbar.get_urls()
