@@ -42,6 +42,14 @@ class DebugToolbarTestCase(BaseTestCase):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
 
+    def test_show_toolbar_INTERNAL_IPS_wildcard(self):
+        with self.settings(INTERNAL_IPS=['127.0.0.*']):
+            self.assertTrue(show_toolbar(self.request))
+        with self.settings(INTERNAL_IPS=['*']):
+            self.assertTrue(show_toolbar(self.request))
+        with self.settings(INTERNAL_IPS=['127.0.0.']):
+            self.assertFalse(show_toolbar(self.request))
+
     def _resolve_stats(self, path):
         # takes stats from Request panel
         self.request.path = path
