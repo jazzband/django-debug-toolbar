@@ -10,7 +10,7 @@ import threading
 from django.conf import settings
 from django.utils import six
 from django.utils.encoding import force_text
-from django.utils.functional import cached_property
+from django.utils.lru_cache import lru_cache
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -33,10 +33,18 @@ def show_toolbar(request):
     if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
         return False
 
-    if request.is_ajax():
-        return False
-
     return bool(settings.DEBUG)
+
+
+@lru_cache()
+def get_show_toolbar():
+    # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
+    # setup, resolve it to the corresponding callable.
+    func_or_path = dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK']
+    if isinstance(func_or_path, six.string_types):
+        return import_string(func_or_path)
+    else:
+        return func_or_path
 
 
 class DebugToolbarMiddleware(MiddlewareMixin):
@@ -46,19 +54,14 @@ class DebugToolbarMiddleware(MiddlewareMixin):
     """
     debug_toolbars = {}
 
-    @cached_property
-    def show_toolbar(self):
-        # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
-        # setup, resolve it to the corresponding callable.
-        func_or_path = dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK']
-        if isinstance(func_or_path, six.string_types):
-            return import_string(func_or_path)
-        else:
-            return func_or_path
-
     def process_request(self, request):
         # Decide whether the toolbar is active for this request.
-        if not self.show_toolbar(request):
+        show_toolbar = get_show_toolbar()
+        if not show_toolbar(request):
+            return
+
+        # Don't render the toolbar during AJAX requests.
+        if request.is_ajax():
             return
 
         toolbar = DebugToolbar(request)
