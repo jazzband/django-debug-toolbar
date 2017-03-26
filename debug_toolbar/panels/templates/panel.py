@@ -23,7 +23,7 @@ from debug_toolbar.panels.templates import views
 # immediately when the panel is disabled to keep the overhead small.
 
 # Code taken and adapted from Simon Willison and Django Snippets:
-# http://www.djangosnippets.org/snippets/766/
+# https://www.djangosnippets.org/snippets/766/
 
 if Template._render != instrumented_test_render:
     Template.original_render = Template._render
