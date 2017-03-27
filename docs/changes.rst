@@ -4,6 +4,20 @@ Change log
 1.8 (upcoming)
 --------------
 
+Features
+~~~~~~~~
+
+* New decorator ``debug_toolbar.decorators.require_show_toolbar`` prevents
+  unauthorized access to decorated views by checking ``SHOW_TOOLBAR_CALLBACK``
+  every request. Unauthorized access results in a 404.
+
+Bugfixes
+~~~~~~~~
+
+* All views are now decorated with
+  ``debug_toolbar.decorators.require_show_toolbar`` preventing unauthorized
+  access.
+
 1.7
 ---
 

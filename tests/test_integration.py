@@ -9,10 +9,12 @@ from xml.etree import ElementTree as ET
 import django
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.checks import Error, run_checks
+from django.template.loader import get_template
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
+from debug_toolbar.toolbar import DebugToolbar
 
 from .base import BaseTestCase
 from .views import regular_view
@@ -119,6 +121,103 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_xml_validation(self):
         response = self.client.get('/regular/XML/')
         ET.fromstring(response.content)     # shouldn't raise ParseError
+
+    def test_render_panel_checks_show_toolbar(self):
+        toolbar = DebugToolbar(None)
+        toolbar.store()
+        url = '/__debug__/render_panel/'
+        data = {'store_id': toolbar.store_id, 'panel_id': 'VersionsPanel'}
+
+        response = self.client.get(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.get(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.get(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, 404)
+
+    def test_template_source_checks_show_toolbar(self):
+        template = get_template('basic.html')
+        url = '/__debug__/template_source/'
+        data = {
+            'template': template.template.name,
+            'template_origin': template.template.origin.name
+        }
+
+        response = self.client.get(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.get(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.get(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, 404)
+
+    def test_sql_select_checks_show_toolbar(self):
+        url = '/__debug__/sql_select/'
+        data = {
+            'sql': 'SELECT * FROM auth_user',
+            'raw_sql': 'SELECT * FROM auth_user',
+            'params': '{}',
+            'alias': 'default',
+            'duration': '0',
+            'hash': '6e12daa636b8c9a8be993307135458f90a877606',
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, 404)
+
+    def test_sql_explain_checks_show_toolbar(self):
+        url = '/__debug__/sql_explain/'
+        data = {
+            'sql': 'SELECT * FROM auth_user',
+            'raw_sql': 'SELECT * FROM auth_user',
+            'params': '{}',
+            'alias': 'default',
+            'duration': '0',
+            'hash': '6e12daa636b8c9a8be993307135458f90a877606',
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, 404)
+
+    def test_sql_profile_checks_show_toolbar(self):
+        url = '/__debug__/sql_profile/'
+        data = {
+            'sql': 'SELECT * FROM auth_user',
+            'raw_sql': 'SELECT * FROM auth_user',
+            'params': '{}',
+            'alias': 'default',
+            'duration': '0',
+            'hash': '6e12daa636b8c9a8be993307135458f90a877606',
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, 404)
 
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
