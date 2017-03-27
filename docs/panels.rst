@@ -196,7 +196,7 @@ Path: ``debug_toolbar_line_profiler.panel.ProfilingPanel``
 This package provides a profiling panel that incorporates output from
 line_profiler_.
 
-.. _line_profiler: http://pythonhosted.org/line_profiler/
+.. _line_profiler: https://github.com/rkern/line_profiler
 
 Memcache
 ~~~~~~~~

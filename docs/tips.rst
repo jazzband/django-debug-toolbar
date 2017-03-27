@@ -36,7 +36,7 @@ If you want to use the Debug Toolbar without an Internet connection at all, or
 if you refuse to depend on Google's services, look at the ``JQUERY_URL``
 configuration option.
 
-.. _jQuery: http://jquery.com/
+.. _jQuery: https://jquery.com/
 
 Performance considerations
 --------------------------
