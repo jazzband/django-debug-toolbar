@@ -147,6 +147,21 @@ class Panel(object):
         """
         return self.toolbar.stats.get(self.panel_id, {})
 
+    def record_server_timing(self, key, title, value):
+        """
+        Store data gathered by the panel. ``stats`` is a :class:`dict`.
+
+        Each call to ``record_stats`` updates the statistics dictionary.
+        """
+        data = {key: dict(title=title, value=value)}
+        self.toolbar.server_timing_stats.setdefault(self.panel_id, {}).update(data)
+
+    def get_server_timing_stats(self):
+        """
+        Access data stored by the panel. Returns a :class:`dict`.
+        """
+        return self.toolbar.server_timing_stats.get(self.panel_id, {})
+
     # Standard middleware methods
 
     def process_request(self, request):
@@ -188,6 +203,16 @@ class Panel(object):
 
         Write panel logic related to the response there. Post-process data
         gathered while the view executed. Save data with :meth:`record_stats`.
+
+        Does not return a value.
+        """
+
+    def generate_server_timing(self, request, response):
+        """
+        Similar to :meth:`generate_stats
+        <debug_toolbar.panels.Panel.generate_stats>`,
+
+        Generate stats for Server Timing https://w3c.github.io/server-timing/
 
         Does not return a value.
         """
