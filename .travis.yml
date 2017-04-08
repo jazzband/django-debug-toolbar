@@ -1,20 +1,40 @@
 language: python
 sudo: false
-python: 3.5
 cache: pip
-env:
-  - TOXENV="py27-dj18"
-  - TOXENV="py33-dj18"
-  - TOXENV="py34-dj18"
-  - TOXENV="py27-dj19"
-  - TOXENV="py27-dj110"
-  - TOXENV="py34-dj19"
-  - TOXENV="py34-dj110"
-  - TOXENV="py35-dj19"
-  - TOXENV="py35-dj110"
-  - TOXENV="flake8"
-  - TOXENV="isort"
-  - TOXENV="readme"
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27-dj18
+    - python: 3.3
+      env: TOXENV=py33-dj18
+    - python: 3.4
+      env: TOXENV=py34-dj18
+    - python: 2.7
+      env: TOXENV=py27-dj19
+    - python: 3.4
+      env: TOXENV=py34-dj19
+    - python: 3.5
+      env: TOXENV=py35-dj19
+    - python: 2.7
+      env: TOXENV=py27-dj110
+    - python: 3.4
+      env: TOXENV=py34-dj110
+    - python: 3.5
+      env: TOXENV=py35-dj110
+    - python: 2.7
+      env: TOXENV=py27-dj111
+    - python: 3.4
+      env: TOXENV=py34-dj111
+    - python: 3.5
+      env: TOXENV=py35-dj111
+    - python: 3.6
+      env: TOXENV=py36-dj111
+    - python: 2.7
+      env: TOXENV=flake8
+    - python: 2.7
+      env: TOXENV=isort
+    - python: 2.7
+      env: TOXENV=readme
 install:
   - pip install tox codecov
 script:
