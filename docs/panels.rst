@@ -244,6 +244,15 @@ Path: ``ddt_request_history.panels.request_history.RequestHistoryPanel``
 
 Switch between requests to view their stats. Also adds support for viewing stats for ajax requests.
 
+Pympler
+~~~~~~~
+
+URL: https://pythonhosted.org/Pympler/django.html
+
+Path: ``pympler.panels.MemoryPanel``
+
+Shows process memory information (virtual size, resident set size) and model instances for the current request.
+
 Sites
 ~~~~~
 
