@@ -61,7 +61,10 @@ class DebugToolbar(object):
             self.store()
         try:
             context = {'toolbar': self}
-            return render_to_string('debug_toolbar/base.html', context)
+            kwargs = {}
+            if django.VERSION[:2] >= (1, 8):
+                kwargs['using'] = self.config['TEMPLATE_ENGINE_ALIAS']
+            return render_to_string('debug_toolbar/base.html', context, **kwargs)
         except TemplateSyntaxError:
             if not apps.is_installed('django.contrib.staticfiles'):
                 raise ImproperlyConfigured(

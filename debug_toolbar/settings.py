@@ -36,6 +36,7 @@ CONFIG_DEFAULTS = {
     'PROFILER_MAX_DEPTH': 10,
     'SHOW_TEMPLATE_CONTEXT': True,
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
+    'TEMPLATE_ENGINE_ALIAS': None,
 }
 
 
