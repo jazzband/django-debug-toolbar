@@ -34,7 +34,20 @@ def get_module_path(module_name):
         raise ImproperlyConfigured(
             'Error importing HIDE_IN_STACKTRACES: %s' % (e,))
     else:
-        source_path = inspect.getsourcefile(module)
+        # Note that source_path is a byte string in the default
+        # encoding for the filesystem, which means that
+        # calling .endswith() will attempt to convert it to
+        # ASCII.
+        #
+        # os.path.dirname() is OK dealing with byte strings
+        # in unknown encodings, but .endswith() is not, so
+        # here we cast it down to ASCII for the __init__.py
+        # check, since all we care about is if we need to
+        # call os.path.dirname() on it.
+        smashed_to_ascii = source_path.decode('ascii', 'replace').encode(
+                                              'ascii', 'replace')
+        if smashed_to_ascii.endswith('__init__.py'):
+            source_path = inspect.getsourcefile(module)
         if source_path.endswith('__init__.py'):
             source_path = os.path.dirname(source_path)
         return os.path.realpath(source_path)
