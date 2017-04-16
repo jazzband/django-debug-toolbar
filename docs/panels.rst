@@ -275,6 +275,15 @@ Path: ``template_timings_panel.panels.TemplateTimings.TemplateTimings``
 
 Displays template rendering times for your Django application.
 
+Template Profiler
+~~~~~~~~~~~~~~~~~
+
+URL: https://github.com/node13h/django-debug-toolbar-template-profiler
+
+Path: ``template_profiler_panel.panels.template.TemplateProfilerPanel``
+
+Shows template render call duration and distribution on the timeline. Lightweight. Compatible with WSGI servers which reuse threads for multiple requests (Werkzeug).
+
 User
 ~~~~
 
