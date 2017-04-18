@@ -26,7 +26,7 @@ class SQLPanelTestCase(BaseTestCase):
 
     def test_disabled(self):
         config = {
-            'DISABLE_PANELS': set(['debug_toolbar.panels.sql.SQLPanel'])
+            'DISABLE_PANELS': {'debug_toolbar.panels.sql.SQLPanel'}
         }
         self.assertTrue(self.panel.enabled)
         with self.settings(DEBUG_TOOLBAR_CONFIG=config):
