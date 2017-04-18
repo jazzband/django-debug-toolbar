@@ -74,8 +74,13 @@ class TemplatesPanel(Panel):
         template, context = kwargs['template'], kwargs['context']
 
         # Skip templates that we are generating through the debug toolbar.
-        if (isinstance(template.name, six.string_types) and
-                template.name.startswith('debug_toolbar/')):
+        try:
+            template_name = template.name
+        except AttributeError:
+            template_name = template.template.name
+
+        if (isinstance(template_name, six.string_types) and
+                template_name.startswith('debug_toolbar/')):
             return
 
         context_list = []
@@ -136,7 +141,10 @@ class TemplatesPanel(Panel):
     @property
     def nav_subtitle(self):
         if self.templates:
-            return self.templates[0]['template'].name
+            try:
+                template_name = self.templates[0]['template'].name
+            except AttributeError:
+                template_name = self.templates[0]['template'].template.name
         return ''
 
     template = 'debug_toolbar/panels/templates.html'
