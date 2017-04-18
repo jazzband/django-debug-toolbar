@@ -52,7 +52,7 @@ Toolbar options
 
 * ``DISABLE_PANELS``
 
-  Default: ``set(['debug_toolbar.panels.redirects.RedirectsPanel'])``
+  Default: ``{'debug_toolbar.panels.redirects.RedirectsPanel'}``
 
   This setting is a set of the full Python paths to each panel that you
   want disabled (but still displayed) by default.

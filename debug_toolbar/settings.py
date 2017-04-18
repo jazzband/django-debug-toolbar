@@ -15,7 +15,7 @@ from django.utils.lru_cache import lru_cache
 
 CONFIG_DEFAULTS = {
     # Toolbar options
-    'DISABLE_PANELS': set(['debug_toolbar.panels.redirects.RedirectsPanel']),
+    'DISABLE_PANELS': {'debug_toolbar.panels.redirects.RedirectsPanel'},
     'INSERT_BEFORE': '</body>',
     'JQUERY_URL': '//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js',
     'RENDER_PANELS': None,
