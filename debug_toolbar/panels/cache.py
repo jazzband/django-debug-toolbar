@@ -22,6 +22,9 @@ from debug_toolbar.utils import (
 
 if django.VERSION[:2] < (1, 9):
     from django.core.cache import get_cache as original_get_cache
+    
+if django.VERSION[:2] > (1, 6):
+    from django.core.cache import _create_cache as original_create_cache
 
 cache_called = Signal(providing_args=[
     "time_taken", "name", "return_value", "args", "kwargs", "trace"])
@@ -126,6 +129,11 @@ if django.VERSION[:2] < (1, 9):
         return CacheStatTracker(original_get_cache(*args, **kwargs))
 
 
+if django.VERSION[:2] > (1, 6):
+    def _create_cache(*args, **kwargs):
+        return CacheStatTracker(original_create_cache(*args, **kwargs))
+
+
 class CacheHandlerPatch(CacheHandler):
     def __getitem__(self, alias):
         actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
@@ -219,6 +227,8 @@ class CachePanel(Panel):
                          count) % dict(count=count)
 
     def enable_instrumentation(self):
+        if django.VERSION[:2] > (1, 6):
+            cache._create_cache = _create_cache
         if django.VERSION[:2] < (1, 9):
             cache.get_cache = get_cache
         if isinstance(middleware_cache.caches, CacheHandlerPatch):
@@ -230,6 +240,8 @@ class CachePanel(Panel):
         if django.VERSION[:2] < (1, 9):
             cache.get_cache = original_get_cache
         cache.caches = original_caches
+        if django.VERSION[:2] > (1, 6):
+            cache._create_cache = original_create_cache
         # While it can be restored to the original, any views that were
         # wrapped with the cache_page decorator will continue to use a
         # monkey patched cache.
