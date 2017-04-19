@@ -29,6 +29,8 @@ cache_called = Signal(providing_args=[
 
 def send_signal(method):
     def wrapped(self, *args, **kwargs):
+        if isinstance(self.cache, CacheStatTracker):
+            return method(self, *args, **kwargs)
         t = time.time()
         value = method(self, *args, **kwargs)
         t = time.time() - t
