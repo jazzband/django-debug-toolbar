@@ -11,6 +11,11 @@ from debug_toolbar.toolbar import DebugToolbar
 @require_show_toolbar
 def render_panel(request):
     """Render the contents of a panel"""
+    # Check if store_id key exist in GET request.
+    if not request.GET.has_key('store_id'):
+        content = _('"store_id" key is required')
+        return HttpResponse(content)
+
     toolbar = DebugToolbar.fetch(request.GET['store_id'])
     if toolbar is None:
         content = _("Data for this panel isn't available anymore. "
