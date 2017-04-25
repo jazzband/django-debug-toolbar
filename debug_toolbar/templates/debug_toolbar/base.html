@@ -1,15 +1,15 @@
-{% load i18n %}{% load static from staticfiles %}
+{% load i18n %}{% load static from staticfiles %}{% load debug_toolbar_extras %}
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" type="text/css" media="print" />
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
 {% if toolbar.config.JQUERY_URL %}
 <!-- Prevent our copy of jQuery from registering as an AMD module on sites that use RequireJS. -->
-<script src="{% static 'debug_toolbar/js/jquery_pre.js' %}"></script>
-<script src="{{ toolbar.config.JQUERY_URL }}"></script>
-<script src="{% static 'debug_toolbar/js/jquery_post.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/jquery_pre.js' %}"{% js_custom_attribute %}></script>
+<script src="{{ toolbar.config.JQUERY_URL }}"{% js_custom_attribute %}></script>
+<script src="{% static 'debug_toolbar/js/jquery_post.js' %}"{% js_custom_attribute %}></script>
 {% else %}
-<script src="{% static 'debug_toolbar/js/jquery_existing.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/jquery_existing.js' %}"{% js_custom_attribute %}></script>
 {% endif %}
-<script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.js' %}"{% js_custom_attribute %}></script>
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>

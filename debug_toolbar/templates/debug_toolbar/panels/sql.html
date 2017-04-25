@@ -1,4 +1,4 @@
-{% load i18n l10n %}{% load static from staticfiles %}
+{% load i18n l10n %}{% load static from staticfiles %}{% load debug_toolbar_extras %}
 <div class="djdt-clearfix">
 	<ul class="djdt-stats">
 		{% for alias, info in databases %}
@@ -101,4 +101,4 @@
 	<p>{% trans "No SQL queries were recorded during this request." %}</p>
 {% endif %}
 
-<script src="{% static 'debug_toolbar/js/toolbar.sql.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.sql.js' %}"{% js_custom_attribute %}></script>

@@ -1,4 +1,4 @@
-{% load i18n %}{% load static from staticfiles %}
+{% load i18n %}{% load static from staticfiles %}{% load debug_toolbar_extras %}
 <h4>{% blocktrans count template_dirs|length as template_count %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
 {% if template_dirs %}
 	<ol>
@@ -43,4 +43,4 @@
 	<p>{% trans "None" %}</p>
 {% endif %}
 
-<script src="{% static 'debug_toolbar/js/toolbar.template.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.template.js' %}"{% js_custom_attribute %}></script>

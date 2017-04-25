@@ -1,4 +1,4 @@
-{% load i18n %}{% load static from staticfiles %}
+{% load i18n %}{% load static from staticfiles %}{% load debug_toolbar_extras %}
 <div class="djDebugPanelTitle">
 	<a class="djDebugClose djDebugBack" href=""></a>
 	<h3>{% trans "SQL explained" %}</h3>
@@ -34,4 +34,4 @@
 	</div>
 </div>
 
-<script src="{% static 'debug_toolbar/js/toolbar.sql.js' %}"></script>
+<script src="{% static 'debug_toolbar/js/toolbar.sql.js' %}"{% js_custom_attribute %}></script>
