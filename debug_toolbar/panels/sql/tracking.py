@@ -93,7 +93,7 @@ class NormalCursorWrapper(object):
         if isinstance(params, dict):
             return dict((key, self._quote_expr(value))
                         for key, value in params.items())
-        return list(map(self._quote_expr, params))
+        return [self._quote_expr(p) for p in params]
 
     def _decode(self, param):
         try:
@@ -114,7 +114,7 @@ class NormalCursorWrapper(object):
                 stacktrace = []
             _params = ''
             try:
-                _params = json.dumps(list(map(self._decode, params)))
+                _params = json.dumps([self._decode(p) for p in params])
             except Exception:
                 pass  # object not JSON serializable
 
