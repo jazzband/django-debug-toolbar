@@ -55,7 +55,7 @@ class SQLPanel(Panel):
     """
     def __init__(self, *args, **kwargs):
         super(SQLPanel, self).__init__(*args, **kwargs)
-        self._offset = dict((k, len(connections[k].queries)) for k in connections)
+        self._offset = {k: len(connections[k].queries) for k in connections}
         self._sql_time = 0
         self._num_queries = 0
         self._queries = []
@@ -212,14 +212,14 @@ class SQLPanel(Panel):
         # Queries are duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
         query_colors = contrasting_color_generator()
-        query_duplicates = dict(
-            (alias, dict(
-                (query, (duplicate_count, next(query_colors)))
+        query_duplicates = {
+            alias: {
+                query: (duplicate_count, next(query_colors))
                 for query, duplicate_count in queries.items()
                 if duplicate_count >= 2
-            ))
+            }
             for alias, queries in query_duplicates.items()
-        )
+        }
 
         for alias, query in self._queries:
             try:
