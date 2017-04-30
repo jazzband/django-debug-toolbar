@@ -5,6 +5,7 @@ import os.path
 import re
 import sys
 from importlib import import_module
+from itertools import chain
 
 import django
 from django.core.exceptions import ImproperlyConfigured
@@ -71,7 +72,7 @@ def tidy_stacktrace(stack):
 def render_stacktrace(trace):
     stacktrace = []
     for frame in trace:
-        params = map(escape, frame[0].rsplit(os.path.sep, 1) + list(frame[1:]))
+        params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
         params_dict = {six.text_type(idx): v for idx, v in enumerate(params)}
         try:
             stacktrace.append('<span class="djdt-path">%(0)s/</span>'
