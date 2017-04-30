@@ -79,7 +79,7 @@ class TemplatesPanel(Panel):
             return
 
         context_list = []
-        for context_layer in context.dicts:
+        for context_layer in getattr(context, 'dicts', []):
             temp_layer = {}
             if hasattr(context_layer, 'items'):
                 for key, value in context_layer.items():
