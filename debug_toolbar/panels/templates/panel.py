@@ -84,9 +84,10 @@ class TemplatesPanel(Panel):
         template, context = kwargs['template'], kwargs['context']
 
         # Skip templates that we are generating through the debug toolbar.
-        if (isinstance(template.name, six.string_types) and
-                template.name.startswith(
-                    tuple(self.toolbar.config['SKIP_TEMPLATE_PREFIXES']))):
+        if (isinstance(template.name, six.string_types) and (
+            template.name.startswith('debug_toolbar/') or
+            template.name.startswith(
+                tuple(self.toolbar.config['SKIP_TEMPLATE_PREFIXES'])))):
             return
 
         context_list = []

@@ -172,7 +172,7 @@ Panel options
 
 * ``SKIP_TEMPLATE_PREFIXES``
 
-  Default: ``('debug_toolbar/', 'django/forms/widgets/', 'admin/widgets/')``
+  Default: ``('django/forms/widgets/', 'admin/widgets/')``
 
   Panel: templates.
 
