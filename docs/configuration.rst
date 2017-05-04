@@ -170,6 +170,17 @@ Panel options
   template contexts, or you have template contexts with lazy datastructures
   that you don't want to be evaluated.
 
+* ``SKIP_TEMPLATE_PREFIXES``
+
+  Default: ``('debug_toolbar/', 'django/forms/widgets/', 'admin/widgets/')``
+
+  Panel: templates.
+
+  Templates starting with those strings are skipped when collecting
+  rendered templates and contexts. Template-based form widgets are
+  skipped by default because the panel HTML can easily grow to hundreds
+  of megabytes with many form fields and many options.
+
 * ``SQL_WARNING_THRESHOLD``
 
   Default: ``500``

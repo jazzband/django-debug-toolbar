@@ -35,6 +35,11 @@ CONFIG_DEFAULTS = {
     ),
     'PROFILER_MAX_DEPTH': 10,
     'SHOW_TEMPLATE_CONTEXT': True,
+    'SKIP_TEMPLATE_PREFIXES': (
+        'debug_toolbar/',
+        'django/forms/widgets/',
+        'admin/widgets',
+    ),
     'SQL_WARNING_THRESHOLD': 500,   # milliseconds
 }
 
