@@ -458,6 +458,7 @@
 }
 
 #djDebug .djDebugSql {
+	word-break:break-word;
 	z-index:100000002;
 }
 
