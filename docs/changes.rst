@@ -4,6 +4,9 @@ Change log
 1.8 (upcoming)
 --------------
 
+This version is compatible with Django 1.11 and requires Django 1.8 or
+later.
+
 Features
 ~~~~~~~~
 
@@ -17,6 +20,9 @@ Bugfixes
 * All views are now decorated with
   ``debug_toolbar.decorators.require_show_toolbar`` preventing unauthorized
   access.
+* The templates panel now reuses contexts' pretty printed version which
+  makes the debug toolbar usable again with Django 1.11's template-based
+  forms rendering.
 
 1.7
 ---
