@@ -54,5 +54,7 @@ class VersionsPanel(Panel):
         else:
             return
         if isinstance(version, (list, tuple)):
-            version = '.'.join(str(o) for o in version)
+            # We strip dots from the right because we do not want to show
+            # trailing dots if there are empty elements in the list/tuple
+            version = '.'.join(str(o) for o in version).rstrip('.')
         return version
