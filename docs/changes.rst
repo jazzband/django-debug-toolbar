@@ -1,8 +1,8 @@
 Change log
 ==========
 
-1.8 (upcoming)
---------------
+1.8
+---
 
 This version is compatible with Django 1.11 and requires Django 1.8 or
 later.
