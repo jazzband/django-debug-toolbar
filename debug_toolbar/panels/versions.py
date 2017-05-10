@@ -41,20 +41,25 @@ class VersionsPanel(Panel):
                 yield app.__name__, name, version
 
     def get_app_version(self, app):
-        if hasattr(app, 'get_version'):
-            get_version = app.get_version
-            if callable(get_version):
-                version = get_version()
-            else:
-                version = get_version
-        elif hasattr(app, 'VERSION'):
-            version = app.VERSION
-        elif hasattr(app, '__version__'):
-            version = app.__version__
-        else:
-            return
+        version = self.get_version_from_app(app)
         if isinstance(version, (list, tuple)):
             # We strip dots from the right because we do not want to show
             # trailing dots if there are empty elements in the list/tuple
             version = '.'.join(str(o) for o in version).rstrip('.')
         return version
+
+    def get_version_from_app(self, app):
+        if hasattr(app, 'get_version'):
+            get_version = app.get_version
+            if callable(get_version):
+                try:
+                    return get_version()
+                except TypeError:
+                    pass
+            else:
+                return get_version
+        if hasattr(app, 'VERSION'):
+            return app.VERSION
+        if hasattr(app, '__version__'):
+            return app.__version__
+        return
