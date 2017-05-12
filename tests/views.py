@@ -34,3 +34,8 @@ def cached_view(request):
 
 def regular_jinjia_view(request, title):
     return render(request, 'jinja2/basic.jinja', {'title': title})
+
+
+def listcomp_view(request):
+    lst = [i for i in range(50000) if i % 2 == 0]
+    return render(request, 'basic.html', {'title': 'List comprehension', 'lst': lst})

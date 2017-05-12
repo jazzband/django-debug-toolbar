@@ -1,6 +1,14 @@
 Change log
 ==========
 
+1.9 (upcoming)
+--------------
+
+Bugfixes
+~~~~~~~~
+
+* The profiling panel now escapes reported data resulting in valid HTML.
+
 1.8
 ---
 
