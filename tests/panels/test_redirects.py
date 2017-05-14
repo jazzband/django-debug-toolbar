@@ -4,12 +4,10 @@ import copy
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.test.utils import override_settings
 
 from ..base import BaseTestCase
 
 
-@override_settings(DEBUG_TOOLBAR_CONFIG={'INTERCEPT_REDIRECTS': True})
 class RedirectsPanelTestCase(BaseTestCase):
 
     def setUp(self):
