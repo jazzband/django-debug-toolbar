@@ -1,12 +1,15 @@
 from __future__ import absolute_import, unicode_literals
 
+import unittest
+
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.utils import six
 
 from ..base import BaseTestCase
-from ..views import regular_view
+from ..views import listcomp_view, regular_view
 
 
 @override_settings(DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingPanel'])
@@ -35,6 +38,13 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, self.response)
         # ensure the panel renders correctly.
         self.assertIn('regular_view', self.panel.content)
+
+    @unittest.skipIf(six.PY2, 'list comprehension not listed on Python 2')
+    def test_listcomp_escaped(self):
+        self.panel.process_view(self.request, listcomp_view, (), {})
+        self.panel.generate_stats(self.request, self.response)
+        self.assertNotIn('<span class="djdt-func"><listcomp></span>', self.panel.content)
+        self.assertIn('<span class="djdt-func">&lt;listcomp&gt;</span>', self.panel.content)
 
 
 @override_settings(DEBUG=True,

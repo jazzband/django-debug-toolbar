@@ -6,7 +6,7 @@ from colorsys import hsv_to_rgb
 from pstats import Stats
 
 from django.utils import six
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from debug_toolbar import settings as dt_settings
@@ -78,15 +78,15 @@ class FunctionCall(object):
 
             file_path, file_name = file_name.rsplit(os.sep, 1)
 
-            return mark_safe(
+            return format_html(
                 '<span class="djdt-path">{0}/</span>'
                 '<span class="djdt-file">{1}</span>'
                 ' in <span class="djdt-func">{3}</span>'
-                '(<span class="djdt-lineno">{2}</span>)'.format(
-                    file_path,
-                    file_name,
-                    line_num,
-                    method))
+                '(<span class="djdt-lineno">{2}</span>)',
+                file_path,
+                file_name,
+                line_num,
+                method)
 
     def subfuncs(self):
         i = 0
