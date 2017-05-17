@@ -42,3 +42,4 @@ class StaticFilesPanelTestCase(BaseTestCase):
         # ensure the panel renders correctly.
         self.assertIn('django.contrib.staticfiles.finders.'
                       'AppDirectoriesFinder', self.panel.content)
+        self.assertValidHTML(self.panel.content)

@@ -11,8 +11,9 @@ django_jinja
 # Testing
 
 coverage
-isort
 flake8
+html5lib
+isort
 selenium
 tox
 
