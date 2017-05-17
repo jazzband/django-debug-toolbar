@@ -47,3 +47,4 @@ class CachePanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, self.response)
         # ensure the panel renders correctly.
         self.assertIn('café', self.panel.content)
+        self.assertValidHTML(self.panel.content)

@@ -38,6 +38,7 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, self.response)
         # ensure the panel renders correctly.
         self.assertIn('regular_view', self.panel.content)
+        self.assertValidHTML(self.panel.content)
 
     @unittest.skipIf(six.PY2, 'list comprehension not listed on Python 2')
     def test_listcomp_escaped(self):

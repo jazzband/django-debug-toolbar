@@ -14,7 +14,7 @@
 {% if templates %}
 <dl>
 {% for template in templates %}
-<dt><strong><a class="remoteCall toggleTemplate" href="{% url 'djdt:template_source' %}?template={{ template.template.name }}&template_origin={{ template.template.origin_name }}">{{ template.template.name|addslashes }}</a></strong></dt>
+<dt><strong><a class="remoteCall toggleTemplate" href="{% url 'djdt:template_source' %}?template={{ template.template.name }}&gt;template_origin={{ template.template.origin_name }}">{{ template.template.name|addslashes }}</a></strong></dt>
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	{% if template.context %}
 	<dd>

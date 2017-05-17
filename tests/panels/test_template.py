@@ -64,6 +64,7 @@ class TemplatesPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, self.response)
         # ensure the panel renders correctly.
         self.assertIn('nôt åscíì', self.panel.content)
+        self.assertValidHTML(self.panel.content)
 
     def test_custom_context_processor(self):
         self.panel.process_request(self.request)
