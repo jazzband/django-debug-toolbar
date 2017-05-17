@@ -23,7 +23,7 @@ Prerequisites
 
 Make sure that ``'django.contrib.staticfiles'`` is `set up properly
 <https://docs.djangoproject.com/en/stable/howto/static-files/>`_ and add
-``'debug_toolbar'`` to your ``INSTALLED_APPS`` setting::
+``'debug_toolbar'`` **at the end** of your ``INSTALLED_APPS`` setting::
 
     INSTALLED_APPS = [
         # ...
