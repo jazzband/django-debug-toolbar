@@ -1,0 +1,23 @@
+{% load i18n l10n %}{% load static from staticfiles %}{% load url from future %}
+<table>
+	<thead>
+		<tr>
+			<th>Database</th>
+			<th>Query</th>
+			<th>Warning</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for alias, sql, warns in warnings %}
+		<tr>
+			<td>{{ alias }}</td>
+			<td>{{ sql|safe }}</td>
+			<td>
+				<ul>
+					{% for warn in warns %}<li>{{ warn }}</li>{% endfor %}
+				</ul>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
