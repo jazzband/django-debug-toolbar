@@ -117,6 +117,13 @@ Toolbar options
   request must not be an AJAX request. You can provide your own function
   ``callback(request)`` which returns ``True`` or ``False``.
 
+* ``CHECK_FOR_INTERNAL_IPS``
+
+  Default: ``True``
+
+  Checks that the IP of the client in the request is in ``INTERNAL_IPS`` in the default
+  toolbar callback. (INTERNAL_IPS default to ``("127.0.0.1", "::1")`` )
+  
 Panel options
 ~~~~~~~~~~~~~
 

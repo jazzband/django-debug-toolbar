@@ -30,8 +30,9 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
-        return False
+    if dt_settings.CONFIG['CHECK_FOR_INTERNAL_IPS']:
+        if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
+            return False
 
     return bool(settings.DEBUG)
 

@@ -22,6 +22,7 @@ CONFIG_DEFAULTS = {
     'RESULTS_CACHE_SIZE': 10,
     'ROOT_TAG_EXTRA_ATTRS': '',
     'SHOW_COLLAPSED': False,
+    'CHECK_FOR_INTERNAL_IPS': True,
     'SHOW_TOOLBAR_CALLBACK': 'debug_toolbar.middleware.show_toolbar',
     # Panel options
     'EXTRA_SIGNALS': [],
