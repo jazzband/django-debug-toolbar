@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.decorators import require_show_toolbar
@@ -30,7 +30,7 @@ def sql_select(request):
             'alias': form.cleaned_data['alias'],
         }
         # Using render_to_response avoids running global context processors.
-        return render_to_response('debug_toolbar/panels/sql_select.html', context)
+        return render(request, 'debug_toolbar/panels/sql_select.html', context)
     return HttpResponseBadRequest('Form errors')
 
 
@@ -67,7 +67,7 @@ def sql_explain(request):
             'alias': form.cleaned_data['alias'],
         }
         # Using render_to_response avoids running global context processors.
-        return render_to_response('debug_toolbar/panels/sql_explain.html', context)
+        return render(request, 'debug_toolbar/panels/sql_explain.html', context)
     return HttpResponseBadRequest('Form errors')
 
 
@@ -114,5 +114,5 @@ def sql_profile(request):
             'alias': form.cleaned_data['alias'],
         }
         # Using render_to_response avoids running global context processors.
-        return render_to_response('debug_toolbar/panels/sql_profile.html', context)
+        return render(request, 'debug_toolbar/panels/sql_profile.html', context)
     return HttpResponseBadRequest('Form errors')
