@@ -1,10 +1,10 @@
 # coding: utf-8
 
 from __future__ import absolute_import, unicode_literals
+
 from collections import namedtuple
 
 from ..base import BaseTestCase
-
 
 version_info_t = namedtuple('version_info_t', (
     'major', 'minor', 'micro', 'releaselevel', 'serial',
