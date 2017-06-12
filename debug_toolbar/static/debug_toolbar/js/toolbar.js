@@ -19,16 +19,15 @@
                 } else {
                     $('.djdt-panelContent').hide(); // Hide any that are already open
                     var inner = current.find('.djDebugPanelContent .djdt-scroll'),
-                        store_id = $('#djDebug').data('store-id'),
-                        render_panel_url = $('#djDebug').data('render-panel-url');
-                    if (store_id !== '' && inner.children().length === 0) {
+                        store_id = $('#djDebug').data('store-id');
+                    if (store_id && inner.children().length === 0) {
                         var ajax_data = {
                             data: {
                                 store_id: store_id,
                                 panel_id: this.className
                             },
                             type: 'GET',
-                            url: render_panel_url
+                            url: $('#djDebug').data('render-panel-url')
                         };
                         $.ajax(ajax_data).done(function(data){
                             inner.prev().remove();  // Remove AJAX loader
