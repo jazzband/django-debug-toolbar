@@ -10,7 +10,7 @@ django-jinja==2.3.1
 
 # Testing
 
-coverage
+coverage==4.4.1
 flake8
 html5lib
 isort
