@@ -15,7 +15,7 @@ flake8==3.3.0
 html5lib==0.999999999
 isort==4.2.15
 selenium==3.4.3
-tox
+tox==2.7.0
 
 # Documentation
 
