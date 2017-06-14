@@ -24,4 +24,4 @@ Sphinx==1.6.2
 # Other tools
 
 transifex-client==0.12.4
-wheel
+wheel==0.29.0
