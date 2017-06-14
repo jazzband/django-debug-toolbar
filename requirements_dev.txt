@@ -4,24 +4,24 @@
 
 # Runtime dependencies
 
-Django
-sqlparse
-django_jinja
+Django==1.11.2
+sqlparse==0.2.3
+django-jinja==2.3.1
 
 # Testing
 
-coverage
-flake8
-html5lib
-isort
-selenium
-tox
+coverage==4.4.1
+flake8==3.3.0
+html5lib==0.999999999
+isort==4.2.15
+selenium==3.4.3
+tox==2.7.0
 
 # Documentation
 
-Sphinx
+Sphinx==1.6.2
 
 # Other tools
 
-transifex-client
-wheel
+transifex-client==0.12.4
+wheel==0.29.0
