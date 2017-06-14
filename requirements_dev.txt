@@ -5,7 +5,7 @@
 # Runtime dependencies
 
 Django==1.11.2
-sqlparse
+sqlparse==0.2.3
 django_jinja
 
 # Testing
