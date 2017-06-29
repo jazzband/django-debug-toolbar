@@ -15,6 +15,16 @@ Bugfixes
 This version is compatible with Django 1.11 and requires Django 1.8 or
 later.
 
+**Backwards incompatible changes**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``debug_toolbar.middleware.show_toolbar`` (the default value of setting
+  ``SHOW_TOOLBAR_CALLBACK``) no longer returns ``False`` for AJAX requests.
+  This is to allow reusing the ``SHOW_TOOLBAR_CALLBACK`` function to verify
+  access to panel views requested via AJAX. Projects defining a custom
+  ``SHOW_TOOLBAR_CALLBACK`` should remove checks for AJAX requests in order to
+  continue to allow access to these panels.
+
 Features
 ~~~~~~~~
 
