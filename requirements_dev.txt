@@ -19,7 +19,7 @@ tox
 
 # Documentation
 
-Sphinx
+Sphinx==1.6.3
 
 # Other tools
 
