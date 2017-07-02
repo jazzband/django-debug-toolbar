@@ -15,7 +15,7 @@ flake8
 html5lib
 isort
 selenium
-tox
+tox==2.7.0
 
 # Documentation
 
