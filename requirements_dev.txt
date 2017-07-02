@@ -11,7 +11,7 @@ django_jinja
 # Testing
 
 coverage
-flake8
+flake8==3.3.0
 html5lib
 isort
 selenium
