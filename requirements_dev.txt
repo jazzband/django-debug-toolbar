@@ -14,7 +14,7 @@ coverage
 flake8
 html5lib
 isort
-selenium
+selenium==3.4.3
 tox
 
 # Documentation
