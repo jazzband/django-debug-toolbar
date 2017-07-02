@@ -12,7 +12,7 @@ django_jinja
 
 coverage
 flake8
-html5lib
+html5lib==0.999999999
 isort
 selenium
 tox
