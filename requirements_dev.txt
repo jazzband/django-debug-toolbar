@@ -6,7 +6,7 @@
 
 Django
 sqlparse
-django_jinja
+django-jinja==2.3.1
 
 # Testing
 
