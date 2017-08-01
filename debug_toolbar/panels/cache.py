@@ -234,7 +234,7 @@ class CachePanel(Panel):
                 for mod_name in [x for x in sys.modules
                                  if x != 'debug_toolbar.panels.cache']]
         for m, imp_name in [(m, imp_name)
-                            for m in mods
+                            for m in mods if m is not None
                             for imp_name in m.__dict__
                             if getattr(m, imp_name) is cache.caches]:
             self.monkeypatch(m, imp_name, middleware_cache.caches)
