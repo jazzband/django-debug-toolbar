@@ -121,25 +121,10 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
-if django.VERSION[:2] < (1, 9):
-    def get_cache(*args, **kwargs):
-        return CacheStatTracker(original_get_cache(*args, **kwargs))
-
-
 class CacheHandlerPatch(CacheHandler):
     def __getitem__(self, alias):
         actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
         return CacheStatTracker(actual_cache)
-
-
-# Must monkey patch the middleware's cache module as well in order to
-# cover per-view level caching. This needs to be monkey patched outside
-# of the enable_instrumentation method since the django's
-# decorator_from_middleware_with_args will store the cache from core.caches
-# when it wraps the view.
-if django.VERSION[:2] < (1, 9):
-    middleware_cache.get_cache = get_cache
-middleware_cache.caches = CacheHandlerPatch()
 
 
 class CachePanel(Panel):
@@ -147,6 +132,7 @@ class CachePanel(Panel):
     Panel that displays the cache statistics.
     """
     template = 'debug_toolbar/panels/cache.html'
+    _patched = {}
 
     def __init__(self, *args, **kwargs):
         super(CachePanel, self).__init__(*args, **kwargs)
@@ -218,22 +204,31 @@ class CachePanel(Panel):
                          "Cache calls from %(count)d backends",
                          count) % dict(count=count)
 
+    def monkeypatch(self, mod, target, patch):
+        self._patched[(mod, target)] = getattr(mod, target)
+        setattr(mod, target, patch)
+
     def enable_instrumentation(self):
         if django.VERSION[:2] < (1, 9):
-            cache.get_cache = get_cache
-        if isinstance(middleware_cache.caches, CacheHandlerPatch):
-            cache.caches = middleware_cache.caches
-        else:
-            cache.caches = CacheHandlerPatch()
+            def get_cache(*args, **kwargs):
+                return CacheStatTracker(original_get_cache(*args, **kwargs))
+            self.monkeypatch(cache, 'get_cache', get_cache)
+
+        # Patch all caches instances across all modules, except ours.
+        mods = [sys.modules[mod_name]
+                for mod_name in [x for x in sys.modules
+                                 if x != 'debug_toolbar.panels.cache']]
+        cache_handler_patch = CacheHandlerPatch()
+        for m, imp_name in [(m, imp_name)
+                            for m in mods
+                            for imp_name in m.__dict__
+                            if getattr(m, imp_name) is cache.caches]:
+            self.monkeypatch(m, imp_name, cache_handler_patch)
 
     def disable_instrumentation(self):
-        if django.VERSION[:2] < (1, 9):
-            cache.get_cache = original_get_cache
-        cache.caches = original_caches
-        # While it can be restored to the original, any views that were
-        # wrapped with the cache_page decorator will continue to use a
-        # monkey patched cache.
-        middleware_cache.caches = original_caches
+        for (m, imp), orig in self._patched.items():
+            assert isinstance(getattr(m, imp), CacheHandlerPatch)
+            setattr(m, imp, orig)
 
     def generate_stats(self, request, response):
         self.record_stats({
