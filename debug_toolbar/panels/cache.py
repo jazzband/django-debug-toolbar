@@ -241,7 +241,8 @@ class CachePanel(Panel):
 
     def disable_instrumentation(self):
         for (m, imp), orig in self._patched.items():
-            assert isinstance(getattr(m, imp), CacheHandlerPatch)
+            assert getattr(m, imp) is orig, '{0!r} is not {1!r} ({2!r})'.format(
+                getattr(m, imp), orig, (m, imp))
             setattr(m, imp, orig)
 
     def generate_stats(self, request, response):
