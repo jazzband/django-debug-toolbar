@@ -34,6 +34,7 @@ class CachePanelTestCase(BaseTestCase):
         default_cache.set('foo', 'bar')
         second_cache.get('foo')
         self.assertEqual(len(self.panel.calls), 2)
+        default_cache.delete('foo')
 
     def test_insert_content(self):
         """
