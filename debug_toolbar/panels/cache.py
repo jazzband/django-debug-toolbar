@@ -8,7 +8,7 @@ from collections import OrderedDict
 import django
 from django.conf import settings
 from django.core import cache
-from django.core.cache import CacheHandler, caches as original_caches
+from django.core.cache import CacheHandler
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
@@ -121,10 +121,25 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
+if django.VERSION[:2] < (1, 9):
+    def get_cache(*args, **kwargs):
+        return CacheStatTracker(original_get_cache(*args, **kwargs))
+
+
 class CacheHandlerPatch(CacheHandler):
     def __getitem__(self, alias):
         actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
         return CacheStatTracker(actual_cache)
+
+
+# Must monkey patch the middleware's cache module as well in order to
+# cover per-view level caching. This needs to be monkey patched outside
+# of the enable_instrumentation method since the django's
+# decorator_from_middleware_with_args will store the cache from core.caches
+# when it wraps the view.
+if django.VERSION[:2] < (1, 9):
+    middleware_cache.get_cache = get_cache
+middleware_cache.caches = CacheHandlerPatch()
 
 
 class CachePanel(Panel):
@@ -132,7 +147,6 @@ class CachePanel(Panel):
     Panel that displays the cache statistics.
     """
     template = 'debug_toolbar/panels/cache.html'
-    _patched = {}
 
     def __init__(self, *args, **kwargs):
         super(CachePanel, self).__init__(*args, **kwargs)
@@ -156,6 +170,7 @@ class CachePanel(Panel):
             ('decr_version', 0),
         ))
         cache_called.connect(self._store_call_info)
+        self._patched = {}
 
     def _store_call_info(self, sender, name=None, time_taken=0,
                          return_value=None, args=None, kwargs=None,
@@ -218,12 +233,11 @@ class CachePanel(Panel):
         mods = [sys.modules[mod_name]
                 for mod_name in [x for x in sys.modules
                                  if x != 'debug_toolbar.panels.cache']]
-        cache_handler_patch = CacheHandlerPatch()
         for m, imp_name in [(m, imp_name)
                             for m in mods
                             for imp_name in m.__dict__
                             if getattr(m, imp_name) is cache.caches]:
-            self.monkeypatch(m, imp_name, cache_handler_patch)
+            self.monkeypatch(m, imp_name, middleware_cache.caches)
 
     def disable_instrumentation(self):
         for (m, imp), orig in self._patched.items():

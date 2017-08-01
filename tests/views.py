@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth.models import User
+from django.core.cache import caches
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
@@ -30,6 +31,14 @@ def resolving_view(request, arg1, arg2):
 @cache_page(60)
 def cached_view(request):
     return HttpResponse()
+
+
+def view_using_caches(request):
+    cache = caches['default']
+    if cache.get('foo'):
+        return HttpResponse('cached')
+    cache.set('foo', True)
+    return HttpResponse('not cached')
 
 
 def regular_jinjia_view(request, title):

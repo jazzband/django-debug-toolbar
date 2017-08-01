@@ -100,6 +100,19 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(
             len(self.toolbar.get_panel_by_id('CachePanel').calls), 5)
 
+    def test_caches_in_view(self):
+        response = self.client.get('/view_using_caches/')
+        self.assertEqual(response.content, b'not cached')
+        panel = self.toolbar.get_panel_by_id('CachePanel')
+        self.assertEqual(panel.counts['get'], 1)
+        self.assertEqual(panel.counts['set'], 1)
+
+        response = self.client.get('/view_using_caches/')
+        self.assertEqual(response.content, b'cached')
+        panel = self.toolbar.get_panel_by_id('CachePanel')
+        self.assertEqual(panel.counts['get'], 2)
+        self.assertEqual(panel.counts['set'], 1)
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(TestCase):

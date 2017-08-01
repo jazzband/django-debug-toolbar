@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^new_user/$', views.new_user),
     url(r'^execute_sql/$', views.execute_sql),
     url(r'^cached_view/$', views.cached_view),
+    url(r'^view_using_caches/$', views.view_using_caches),
     url(r'^__debug__/', include(debug_toolbar.urls)),
 ]
