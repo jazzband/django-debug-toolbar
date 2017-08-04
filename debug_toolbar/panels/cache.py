@@ -220,7 +220,7 @@ class CachePanel(Panel):
                          count) % dict(count=count)
 
     def monkeypatch(self, mod, target, patch):
-        self._patched[(mod, target)] = getattr(mod, target)
+        self._patched.setdefault(patch, {})[(mod, target)] = getattr(mod, target)
         setattr(mod, target, patch)
 
     def enable_instrumentation(self):
@@ -240,10 +240,11 @@ class CachePanel(Panel):
             self.monkeypatch(m, imp_name, middleware_cache.caches)
 
     def disable_instrumentation(self):
-        for (m, imp), orig in self._patched.items():
-            assert getattr(m, imp) is orig, '{0!r} is not {1!r} ({2!r})'.format(
-                getattr(m, imp), orig, (m, imp))
-            setattr(m, imp, orig)
+        for patch, patches in self._patched.items():
+            for (m, imp), orig in patches.items():
+                assert getattr(m, imp) is patch, '{0!r} is not {1!r}'.format(
+                    getattr(m, imp), patch)
+                setattr(m, imp, orig)
 
     def generate_stats(self, request, response):
         self.record_stats({
