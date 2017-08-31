@@ -167,12 +167,13 @@ class ProfilingPanel(Panel):
         self.stats = DjangoDebugToolbarStats(self.profiler)
         self.stats.calc_callees()
 
-        root = FunctionCall(self.stats, self.stats.get_root_func(), depth=0)
-
-        func_list = []
-        self.add_node(func_list,
-                      root,
-                      dt_settings.get_config()['PROFILER_MAX_DEPTH'],
-                      root.stats[3] / 8)
-
-        self.record_stats({'func_list': func_list})
+        root_func = self.stats.get_root_func()
+        # Ensure root function exists before continuing with function call analysis
+        if root_func:
+            root = FunctionCall(self.stats, root_func, depth=0)
+            func_list = []
+            self.add_node(func_list,
+                          root,
+                          dt_settings.get_config()['PROFILER_MAX_DEPTH'],
+                          root.stats[3] / 8)
+            self.record_stats({'func_list': func_list})
