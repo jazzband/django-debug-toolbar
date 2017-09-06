@@ -219,6 +219,13 @@ class DebugToolbarIntegrationTestCase(TestCase):
             response = self.client.post(url, data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
             self.assertEqual(response.status_code, 404)
 
+    @override_settings(DEBUG_TOOLBAR_CONFIG={'RENDER_PANELS': True})
+    def test_data_store_id_not_rendered_when_none(self):
+        url = '/regular/basic/'
+        response = self.client.get(url)
+        self.assertIn(b'id="djDebug"', response.content)
+        self.assertNotIn(b'data-store-id', response.content)
+
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
 @unittest.skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")

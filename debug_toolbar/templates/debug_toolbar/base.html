@@ -11,7 +11,10 @@
 {% endif %}
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" class="djdt-hidden" dir="ltr"
-     data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"
+     {% if toolbar.store_id %}
+     data-store-id="{{ toolbar.store_id }}"
+     data-render-panel-url="{% url 'djdt:render_panel' %}"
+     {% endif %}
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
 	<div class="djdt-hidden" id="djDebugToolbar">
 		<ul id="djDebugPanelList">
