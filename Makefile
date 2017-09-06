@@ -21,17 +21,17 @@ node_modules/jshint/bin/jshint:
 
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \
-		django-admin test tests
+		django-admin test $${TEST_ARGS:-tests}
 
 test_selenium:
 	DJANGO_SELENIUM_TESTS=true DJANGO_SETTINGS_MODULE=tests.settings \
-		django-admin test tests
+		django-admin test $${TEST_ARGS:-tests}
 
 coverage:
 	python --version
 	coverage erase
 	DJANGO_SETTINGS_MODULE=tests.settings \
-		coverage run `which django-admin` test -v2 tests
+		coverage run `which django-admin` test -v2 $${TEST_ARGS:-tests}
 	coverage report
 	coverage html
 
