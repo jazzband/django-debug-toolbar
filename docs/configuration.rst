@@ -113,9 +113,15 @@ Toolbar options
 
   This is the dotted path to a function used for determining whether the
   toolbar should show or not. The default checks are that ``DEBUG`` must be
-  set to ``True``, the IP of the request must be in ``INTERNAL_IPS``, and the
-  request must not be an AJAX request. You can provide your own function
-  ``callback(request)`` which returns ``True`` or ``False``.
+  set to ``True`` and the IP of the request must be in ``INTERNAL_IPS``.
+  You can provide your own function ``callback(request)`` which returns
+  ``True`` or ``False``.
+
+  For django-debug-toolbar <= 1.7, the callback should also check whether
+  the request is ajax. Since the 1.8 version, the ajax is checked in the
+  middleware, and the callback should not check the whether the request is
+  ajax anymore, otherwise django-debug-toolbar's own ajax requests will fail
+  with 404s.
 
 Panel options
 ~~~~~~~~~~~~~
