@@ -47,6 +47,24 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.assertNotIn('<span class="djdt-func"><listcomp></span>', self.panel.content)
         self.assertIn('<span class="djdt-func">&lt;listcomp&gt;</span>', self.panel.content)
 
+    def test_generate_stats_no_profiler(self):
+        """
+        Test generating stats with no profiler.
+        """
+        self.assertIsNone(self.panel.generate_stats(self.request, self.response))
+
+    def test_generate_stats_no_root_func(self):
+        """
+        Test generating stats using profiler without root function.
+        """
+        self.panel.process_view(self.request, regular_view, ('profiling',), {})
+        self.panel.process_response(self.request, self.response)
+        self.panel.profiler.clear()
+        self.panel.profiler.enable()
+        self.panel.profiler.disable()
+        self.panel.generate_stats(self.request, self.response)
+        self.assertNotIn('func_list', self.panel.get_stats())
+
 
 @override_settings(DEBUG=True,
                    DEBUG_TOOLBAR_PANELS=['debug_toolbar.panels.profiling.ProfilingPanel'])
