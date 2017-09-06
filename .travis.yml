@@ -29,12 +29,9 @@ matrix:
       env: TOXENV=py35-dj111
     - python: 3.6
       env: TOXENV=py36-dj111
-    - python: 2.7
-      env: TOXENV=flake8
-    - python: 2.7
-      env: TOXENV=isort
-    - python: 2.7
-      env: TOXENV=readme
+    - env: TOXENV=flake8
+    - env: TOXENV=isort
+    - env: TOXENV=readme
 install:
   - pip install tox codecov
 script:
