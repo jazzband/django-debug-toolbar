@@ -145,7 +145,7 @@ class SQLPanel(Panel):
 
         # The key used to determine duplicate queries.
         def duplicate_key(query):
-            return query['raw_sql']
+            return (query['raw_sql'], query['params'])
 
         if self._queries:
             width_ratio_tally = 0
