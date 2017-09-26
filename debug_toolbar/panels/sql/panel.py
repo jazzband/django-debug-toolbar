@@ -142,6 +142,11 @@ class SQLPanel(Panel):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
         query_duplicates = defaultdict(lambda: defaultdict(int))
+
+        # The key used to determine duplicate queries.
+        def duplicate_key(query):
+            return query['raw_sql']
+
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
@@ -164,7 +169,7 @@ class SQLPanel(Panel):
             trans_id = None
             i = 0
             for alias, query in self._queries:
-                query_duplicates[alias][query["raw_sql"]] += 1
+                query_duplicates[alias][duplicate_key(query)] += 1
 
                 trans_id = query.get('trans_id')
                 last_trans_id = trans_ids.get(alias)
@@ -223,7 +228,7 @@ class SQLPanel(Panel):
 
         for alias, query in self._queries:
             try:
-                duplicates_count, color = query_duplicates[alias][query["raw_sql"]]
+                duplicates_count, color = query_duplicates[alias][duplicate_key(query)]
                 query["duplicate_count"] = duplicates_count
                 query["duplicate_color"] = color
             except KeyError:
