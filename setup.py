@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='django-debug-toolbar',
-    version='1.8',
+    version='1.9',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
     long_description=open('README.rst', encoding='utf-8').read(),
@@ -30,6 +30,7 @@ setup(
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
