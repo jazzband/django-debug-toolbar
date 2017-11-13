@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 
 MEDIA_URL = '/media/'   # Avoids https://code.djangoproject.com/ticket/21451
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -40,6 +40,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# Django < 1.10
+MIDDLEWARE_CLASSES = MIDDLEWARE
 
 ROOT_URLCONF = 'tests.urls'
 
