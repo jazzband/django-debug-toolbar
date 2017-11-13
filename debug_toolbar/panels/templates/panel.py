@@ -7,6 +7,7 @@ from pprint import pformat
 
 from django import http
 from django.conf.urls import url
+from django.core import signing
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import RequestContext, Template
 from django.test.signals import template_rendered
@@ -192,8 +193,10 @@ class TemplatesPanel(Panel):
             template = template_data.get('template', None)
             if hasattr(template, 'origin') and template.origin and template.origin.name:
                 template.origin_name = template.origin.name
+                template.origin_hash = signing.dumps(template.origin.name)
             else:
                 template.origin_name = _('No origin')
+                template.origin_hash = ''
             info['template'] = template
             # Clean up context for better readability
             if self.toolbar.config['SHOW_TEMPLATE_CONTEXT']:

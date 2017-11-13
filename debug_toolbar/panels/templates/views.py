@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from django.core import signing
 from django.http import HttpResponseBadRequest
 from django.template import TemplateDoesNotExist
 from django.template.engine import Engine
@@ -23,6 +24,10 @@ def template_source(request):
     template_origin_name = request.GET.get('template_origin', None)
     if template_origin_name is None:
         return HttpResponseBadRequest('"template_origin" key is required')
+    try:
+        template_origin_name = signing.loads(template_origin_name)
+    except Exception:
+        return HttpResponseBadRequest('"template_origin" is invalid')
     template_name = request.GET.get('template', template_origin_name)
 
     final_loaders = []
