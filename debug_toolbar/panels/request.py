@@ -9,7 +9,7 @@ from debug_toolbar.utils import get_name_from_obj
 
 try:
     from django.urls import resolve
-except:  # Django < 1.10 pragma: no cover
+except ImportError:  # Django < 1.10 pragma: no cover
     from django.core.urlresolvers import resolve
 
 
