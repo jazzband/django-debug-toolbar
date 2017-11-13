@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 
 import django
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core import signing
 from django.core.checks import Error, run_checks
 from django.template.loader import get_template
 from django.test import RequestFactory, TestCase
@@ -143,7 +144,7 @@ class DebugToolbarIntegrationTestCase(TestCase):
         url = '/__debug__/template_source/'
         data = {
             'template': template.template.name,
-            'template_origin': template.template.origin.name
+            'template_origin': signing.dumps(template.template.origin.name)
         }
 
         response = self.client.get(url, data)
