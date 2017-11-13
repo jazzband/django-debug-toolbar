@@ -4,10 +4,14 @@ Change log
 1.9 (upcoming)
 --------------
 
+This version is compatible with Django 2.0 and requires Django 1.8 or
+later.
+
 Bugfixes
 ~~~~~~~~
 
 * The profiling panel now escapes reported data resulting in valid HTML.
+* Many minor cleanups and bugfixes.
 
 1.8
 ---
