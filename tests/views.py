@@ -4,8 +4,8 @@ from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template.response import TemplateResponse
 from django.shortcuts import render
+from django.template.response import TemplateResponse
 from django.views.decorators.cache import cache_page
 
 
