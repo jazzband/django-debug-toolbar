@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='django-debug-toolbar',
-    version='1.9',
+    version='1.9.1',
     description='A configurable set of panels that display various debug '
                 'information about the current request/response.',
     long_description=open('README.rst', encoding='utf-8').read(),
