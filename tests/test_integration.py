@@ -227,6 +227,17 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertIn(b'id="djDebug"', response.content)
         self.assertNotIn(b'data-store-id', response.content)
 
+    def test_view_returns_template_response(self):
+        response = self.client.get('/template_response/basic/')
+        self.assertEqual(response.status_code, 200)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={'DISABLE_PANELS': set()})
+    def test_incercept_redirects(self):
+        response = self.client.get('/redirect/')
+        self.assertEqual(response.status_code, 200)
+        # Link to LOCATION header.
+        self.assertIn(b'href="/regular/redirect/"', response.content)
+
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
 @unittest.skipUnless('DJANGO_SELENIUM_TESTS' in os.environ, "selenium tests not requested")

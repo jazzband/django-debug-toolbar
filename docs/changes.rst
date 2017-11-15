@@ -1,6 +1,11 @@
 Change log
 ==========
 
+UNRELEASED
+----------
+
+* Fix erroneous ``ContentNotRenderedError`` raised by the redirects panel.
+
 1.9
 ---
 

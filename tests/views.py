@@ -3,7 +3,8 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 
@@ -15,6 +16,10 @@ def execute_sql(request):
 
 def regular_view(request, title):
     return render(request, 'basic.html', {'title': title})
+
+
+def template_response_view(request, title):
+    return TemplateResponse(request, 'basic.html', {'title': title})
 
 
 def new_user(request, username='joe'):
@@ -39,3 +44,7 @@ def regular_jinjia_view(request, title):
 def listcomp_view(request):
     lst = [i for i in range(50000) if i % 2 == 0]
     return render(request, 'basic.html', {'title': 'List comprehension', 'lst': lst})
+
+
+def redirect_view(request):
+    return HttpResponseRedirect('/regular/redirect/')

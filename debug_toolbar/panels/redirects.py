@@ -25,4 +25,5 @@ class RedirectsPanel(Panel):
                 # Using SimpleTemplateResponse avoids running global context processors.
                 response = SimpleTemplateResponse('debug_toolbar/redirect.html', context)
                 response.cookies = cookies
+                response.render()
         return response
