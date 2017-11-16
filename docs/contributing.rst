@@ -121,7 +121,9 @@ their job, ``.po`` files must be downloaded with ``make update_translations``.
 
 The release itself requires the following steps:
 
-#. Bump version numbers in docs/conf.py, README.rst and setup.py and commit.
+#. Bump version numbers in ``docs/changes.rst``, ``docs/conf.py``,
+   ``README.rst`` and ``setup.py``. Add the release date to
+   ``docs/changes.rst``. Commit.
 
 #. Tag the new version.
 
