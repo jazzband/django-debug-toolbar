@@ -117,7 +117,7 @@ def get_template_info():
 
 def get_template_context(node, context, context_lines=3):
     source = getattr(node, 'source', None)
-    # In Django 1.9 template Node does not have source property, Origin does
+    # From Django 1.9 template Node does not have source property, Origin does
     # not reload method, so we extract contextual information from exception
     # info.
     if source:
@@ -144,6 +144,7 @@ def get_template_context(node, context, context_lines=3):
 
 
 def get_template_source_from_source(source):
+    # For Django 1.8 and earlier versions.
     line = 0
     upto = 0
     source_lines = []
@@ -164,8 +165,19 @@ def get_template_source_from_source(source):
 
 
 def get_template_source_from_exception_info(node, context):
-    exception_info = context.template.get_exception_info(
-        Exception('DDT'), node.token)
+    # For Django 1.9, 1.10 and 1.11 LTS.
+    # Reference: django.template.base.Node.render_annotated
+    # There is a bug in versions 1.9 and 1.10 that points to an incorrect
+    # source location. It is fixed in 1.11 LTS but will not be backported
+    # to previous two versions (Django #27956).
+
+    if django.VERSION[:2] >= (1, 11):
+        exception_info = context.render_context.template.get_exception_info(
+            Exception('DDT'), node.token)
+    else:
+        exception_info = context.template.get_exception_info(
+            Exception('DDT'), node.token)
+
     line = exception_info['line']
     source_lines = exception_info['source_lines']
     name = exception_info['name']
