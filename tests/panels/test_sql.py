@@ -2,10 +2,12 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import datetime
 import unittest
 
 from django.contrib.auth.models import User
 from django.db import connection
+from django.db.models import Count
 from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
@@ -68,6 +70,35 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure the panel renders correctly
         self.assertIn('café', self.panel.content)
+
+    def test_param_conversion(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        list(
+            User.objects
+                .filter(first_name='Foo')
+                .filter(is_staff=True)
+                .filter(is_superuser=False)
+        )
+        list(
+            User.objects
+                .annotate(group_count=Count('groups__id'))
+                .filter(group_count__lt=10)
+                .filter(group_count__gt=1)
+        )
+        list(User.objects.filter(date_joined=datetime.datetime(2017, 12, 22, 16, 7, 1)))
+
+        self.panel.process_response(self.request, self.response)
+        self.panel.generate_stats(self.request, self.response)
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 3)
+
+        self.assertEqual(tuple([q[1]['params'] for q in self.panel._queries]), (
+            '["Foo", true, false]',
+            '[10, 1]',
+            '["2017-12-22 16:07:01"]'
+        ))
 
     def test_insert_content(self):
         """
