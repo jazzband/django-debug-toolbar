@@ -40,8 +40,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-# Django < 1.10
-MIDDLEWARE_CLASSES = MIDDLEWARE
 
 ROOT_URLCONF = 'tests.urls'
 

@@ -5,7 +5,6 @@ import sys
 import time
 from collections import OrderedDict
 
-import django
 from django.conf import settings
 from django.core import cache
 from django.core.cache import CacheHandler, caches as original_caches
@@ -19,9 +18,6 @@ from debug_toolbar.panels import Panel
 from debug_toolbar.utils import (
     get_stack, get_template_info, render_stacktrace, tidy_stacktrace,
 )
-
-if django.VERSION[:2] < (1, 9):
-    from django.core.cache import get_cache as original_get_cache
 
 cache_called = Signal(providing_args=[
     "time_taken", "name", "return_value", "args", "kwargs", "trace"])
@@ -121,24 +117,12 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
-if django.VERSION[:2] < (1, 9):
-    def get_cache(*args, **kwargs):
-        return CacheStatTracker(original_get_cache(*args, **kwargs))
-
-
 class CacheHandlerPatch(CacheHandler):
     def __getitem__(self, alias):
         actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
         return CacheStatTracker(actual_cache)
 
 
-# Must monkey patch the middleware's cache module as well in order to
-# cover per-view level caching. This needs to be monkey patched outside
-# of the enable_instrumentation method since the django's
-# decorator_from_middleware_with_args will store the cache from core.caches
-# when it wraps the view.
-if django.VERSION[:2] < (1, 9):
-    middleware_cache.get_cache = get_cache
 middleware_cache.caches = CacheHandlerPatch()
 
 
@@ -219,16 +203,12 @@ class CachePanel(Panel):
                          count) % dict(count=count)
 
     def enable_instrumentation(self):
-        if django.VERSION[:2] < (1, 9):
-            cache.get_cache = get_cache
         if isinstance(middleware_cache.caches, CacheHandlerPatch):
             cache.caches = middleware_cache.caches
         else:
             cache.caches = CacheHandlerPatch()
 
     def disable_instrumentation(self):
-        if django.VERSION[:2] < (1, 9):
-            cache.get_cache = original_get_cache
         cache.caches = original_caches
         # While it can be restored to the original, any views that were
         # wrapped with the cache_page decorator will continue to use a

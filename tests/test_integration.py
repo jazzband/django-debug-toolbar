@@ -387,7 +387,7 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
     def test_middleware_factory_functions_supported(self):
         messages = run_checks()
 
-        if django.VERSION[:2] < (1, 10) or django.VERSION[:2] >= (2, 0):
+        if django.VERSION[:2] >= (2, 0):
             self.assertEqual(messages, [])
         else:
             self.assertEqual(messages[0].id, '1_10.W001')

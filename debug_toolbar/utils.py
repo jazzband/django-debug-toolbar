@@ -16,7 +16,6 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.compat import linebreak_iter
 
 try:
     import threading
@@ -116,15 +115,8 @@ def get_template_info():
 
 
 def get_template_context(node, context, context_lines=3):
-    source = getattr(node, 'source', None)
-    # In Django 1.9 template Node does not have source property, Origin does
-    # not reload method, so we extract contextual information from exception
-    # info.
-    if source:
-        line, source_lines, name = get_template_source_from_source(source)
-    else:
-        line, source_lines, name = get_template_source_from_exception_info(
-            node, context)
+    line, source_lines, name = get_template_source_from_exception_info(
+        node, context)
     debug_context = []
     start = max(1, line - context_lines)
     end = line + 1 + context_lines
@@ -141,26 +133,6 @@ def get_template_context(node, context, context_lines=3):
         'name': name,
         'context': debug_context,
     }
-
-
-def get_template_source_from_source(source):
-    line = 0
-    upto = 0
-    source_lines = []
-    # before = during = after = ""
-
-    origin, (start, end) = source
-    template_source = origin.reload()
-
-    for num, next in enumerate(linebreak_iter(template_source)):
-        if start >= upto and end <= next:
-            line = num
-            # before = template_source[upto:start]
-            # during = template_source[start:end]
-            # after = template_source[end:next]
-        source_lines.append((num, template_source[upto:next]))
-        upto = next
-    return line, source_lines, origin.name
 
 
 def get_template_source_from_exception_info(node, context):
