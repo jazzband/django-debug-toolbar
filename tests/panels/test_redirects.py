@@ -28,10 +28,7 @@ class RedirectsPanelTestCase(BaseTestCase):
         redirect['Location'] = 'http://somewhere/else/'
         response = self.panel.process_response(self.request, redirect)
         self.assertFalse(response is redirect)
-        try:
-            self.assertContains(response, '302 Found')
-        except AssertionError:  # Django < 1.9
-            self.assertContains(response, '302 FOUND')
+        self.assertContains(response, '302 Found')
         self.assertContains(response, 'http://somewhere/else/')
 
     def test_redirect_with_broken_context_processor(self):
@@ -43,20 +40,14 @@ class RedirectsPanelTestCase(BaseTestCase):
             redirect['Location'] = 'http://somewhere/else/'
             response = self.panel.process_response(self.request, redirect)
             self.assertFalse(response is redirect)
-            try:
-                self.assertContains(response, '302 Found')
-            except AssertionError:  # Django < 1.9
-                self.assertContains(response, '302 FOUND')
+            self.assertContains(response, '302 Found')
             self.assertContains(response, 'http://somewhere/else/')
 
     def test_unknown_status_code(self):
         redirect = HttpResponse(status=369)
         redirect['Location'] = 'http://somewhere/else/'
         response = self.panel.process_response(self.request, redirect)
-        try:
-            self.assertContains(response, '369 Unknown Status Code')
-        except AssertionError:  # Django < 1.9
-            self.assertContains(response, '369 UNKNOWN STATUS CODE')
+        self.assertContains(response, '369 Unknown Status Code')
 
     def test_unknown_status_code_with_reason(self):
         redirect = HttpResponse(status=369, reason='Look Ma!')

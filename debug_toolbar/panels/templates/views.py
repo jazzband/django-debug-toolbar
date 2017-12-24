@@ -2,17 +2,12 @@ from __future__ import absolute_import, unicode_literals
 
 from django.core import signing
 from django.http import HttpResponseBadRequest
-from django.template import TemplateDoesNotExist
+from django.template import Origin, TemplateDoesNotExist
 from django.template.engine import Engine
 from django.template.response import SimpleTemplateResponse
 from django.utils.safestring import mark_safe
 
 from debug_toolbar.decorators import require_show_toolbar
-
-try:
-    from django.template import Origin
-except ImportError:
-    Origin = None
 
 
 @require_show_toolbar
@@ -44,19 +39,12 @@ def template_source(request):
                 final_loaders.append(loader)
 
     for loader in final_loaders:
-        if Origin:  # django>=1.9
-            origin = Origin(template_origin_name)
-            try:
-                source = loader.get_contents(origin)
-                break
-            except TemplateDoesNotExist:
-                pass
-        else:  # django<1.9
-            try:
-                source, _ = loader.load_template_source(template_name)
-                break
-            except TemplateDoesNotExist:
-                pass
+        origin = Origin(template_origin_name)
+        try:
+            source = loader.get_contents(origin)
+            break
+        except TemplateDoesNotExist:
+            pass
     else:
         source = "Template Does Not Exist: %s" % (template_origin_name,)
 

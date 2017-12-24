@@ -1,6 +1,11 @@
 Change log
 ==========
 
+UNRELEASED
+----------
+
+* Removed support for Django < 1.11.
+
 1.9.1 (2017-11-15)
 ------------------
 

@@ -9,19 +9,13 @@ import threading
 
 from django.conf import settings
 from django.utils import six
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_text
 from django.utils.lru_cache import lru_cache
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
-
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:  # Django < 1.10
-    # Works perfectly for everyone using MIDDLEWARE_CLASSES
-    MiddlewareMixin = object
-
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
