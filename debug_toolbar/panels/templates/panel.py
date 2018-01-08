@@ -100,8 +100,12 @@ class TemplatesPanel(Panel):
                 key_values = sorted(context_layer.items())
                 if key_values in self.seen_layers:
                     index = self.seen_layers.index(key_values)
-                    pformatted = self.pformat_layers[index]
-                    context_list.append(pformatted)
+                    try:
+                        pformatted = self.pformat_layers[index]
+                    except IndexError:
+                        continue
+                    else:
+                        context_list.append(pformatted)
                 else:
                     temp_layer = {}
                     for key, value in context_layer.items():
