@@ -16,6 +16,7 @@ setup(
     download_url='https://pypi.python.org/pypi/django-debug-toolbar',
     license='BSD',
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
     install_requires=[
         'Django>=1.11',
         'sqlparse>=0.2.0',
