@@ -100,11 +100,9 @@ class TemplatesPanel(Panel):
                 key_values = sorted(context_layer.items())
                 if key_values in self.seen_layers:
                     index = self.seen_layers.index(key_values)
-                    try:
+                    pformat_layers = self.pformat_layers
+                    if pformat_layers and index in zip(*enumerate(pformat_layers))[0]:
                         pformatted = self.pformat_layers[index]
-                    except IndexError:
-                        continue
-                    else:
                         context_list.append(pformatted)
                 else:
                     temp_layer = {}
