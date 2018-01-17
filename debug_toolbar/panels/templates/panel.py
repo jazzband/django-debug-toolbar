@@ -101,7 +101,7 @@ class TemplatesPanel(Panel):
                 if key_values in self.seen_layers:
                     index = self.seen_layers.index(key_values)
                     pformat_layers = self.pformat_layers
-                    if pformat_layers and index in zip(*enumerate(pformat_layers))[0]:
+                    if pformat_layers and index in list(zip(*enumerate(pformat_layers)))[0]:
                         pformatted = self.pformat_layers[index]
                         context_list.append(pformatted)
                 else:
