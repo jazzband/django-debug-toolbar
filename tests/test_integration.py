@@ -4,9 +4,9 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 import unittest
-from xml.etree import ElementTree as ET
 
 import django
+import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
 from django.core.checks import Error, run_checks
@@ -119,9 +119,19 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertContains(response, 'LÀTÍN')      # template
         self.assertContains(response, 'djDebug')    # toolbar
 
-    def test_xml_validation(self):
-        response = self.client.get('/regular/XML/')
-        ET.fromstring(response.content)     # shouldn't raise ParseError
+    def test_html5_validation(self):
+        response = self.client.get('/regular/HTML5/')
+        parser = html5lib.HTMLParser()
+        content = response.content
+        parser.parse(content)
+        if parser.errors:
+            default_msg = ['Content is invalid HTML:']
+            lines = content.split(b'\n')
+            for position, errorcode, datavars in parser.errors:
+                default_msg.append('  %s' % html5lib.constants.E[errorcode] % datavars)
+                default_msg.append('    %r' % lines[position[0] - 1])
+            msg = self._formatMessage(None, '\n'.join(default_msg))
+            raise self.failureException(msg)
 
     def test_render_panel_checks_show_toolbar(self):
         toolbar = DebugToolbar(None)
