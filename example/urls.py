@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^jquery/$', TemplateView.as_view(template_name='jquery/index.html')),
     url(r'^mootools/$', TemplateView.as_view(template_name='mootools/index.html')),
     url(r'^prototype/$', TemplateView.as_view(template_name='prototype/index.html')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
