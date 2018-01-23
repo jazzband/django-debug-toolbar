@@ -1,6 +1,6 @@
 {% load i18n %}{% load static %}
-<link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" type="text/css" media="print" />
-<link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" type="text/css" media="print">
+<link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css">
 {% if toolbar.config.JQUERY_URL %}
 <!-- Prevent our copy of jQuery from registering as an AMD module on sites that use RequireJS. -->
 <script src="{% static 'debug_toolbar/js/jquery_pre.js' %}"></script>
@@ -25,7 +25,7 @@
 			{% endif %}
 			{% for panel in toolbar.panels %}
 				<li class="djDebugPanelButton">
-					<input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked="checked" title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %} />
+					<input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %}>
 					{% if panel.has_content and panel.enabled %}
 						<a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}">
 					{% else %}
@@ -34,7 +34,7 @@
 					{{ panel.nav_title }}
 					{% if panel.enabled %}
 					{% with panel.nav_subtitle as subtitle %}
-						{% if subtitle %}<br /><small>{{ subtitle }}</small>{% endif %}
+						{% if subtitle %}<br><small>{{ subtitle }}</small>{% endif %}
 					{% endwith %}
 					{% endif %}
 					{% if panel.has_content and panel.enabled %}
@@ -58,7 +58,7 @@
 				</div>
 				<div class="djDebugPanelContent">
 					{% if toolbar.store_id %}
-					<img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="djdt-loader" />
+					<img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="djdt-loader">
 					<div class="djdt-scroll"></div>
 					{% else %}
 					<div class="djdt-scroll">{{ panel.content }}</div>
