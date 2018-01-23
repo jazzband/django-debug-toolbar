@@ -32,8 +32,8 @@ the libraries required for working on the Debug Toolbar::
 
 You can run now run the example application::
 
-    $ DJANGO_SETTINGS_MODULE=example.settings django-admin migrate
-    $ DJANGO_SETTINGS_MODULE=example.settings django-admin runserver
+    $ DJANGO_SETTINGS_MODULE=example.settings python -m django migrate
+    $ DJANGO_SETTINGS_MODULE=example.settings python -m django runserver
 
 For convenience, there's an alias for the second command::
 
