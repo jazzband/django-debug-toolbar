@@ -117,7 +117,7 @@ class NormalCursorWrapper(object):
             _params = ''
             try:
                 _params = json.dumps([self._decode(p) for p in params])
-            except TypeError as e:
+            except TypeError:
                 pass  # object not JSON serializable
 
             template_info = get_template_info()
