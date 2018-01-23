@@ -1,4 +1,4 @@
-{% load i18n %}{% load static from staticfiles%}
+{% load i18n %}
 
 <h4>{% blocktrans count staticfiles_dirs|length as dirs_count %}Static file path{% plural %}Static file paths{% endblocktrans %}</h4>
 {% if staticfiles_dirs %}
