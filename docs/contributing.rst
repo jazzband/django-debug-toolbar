@@ -121,6 +121,14 @@ their job, ``.po`` files must be downloaded with ``make update_translations``.
 
 The release itself requires the following steps:
 
+#. Update supported Python and Django versions:
+
+   - ``setup.py`` ``python_requires`` list
+   - ``setup.py`` trove classifiers
+   - ``README.rst``
+
+   Commit.
+
 #. Bump version numbers in ``docs/changes.rst``, ``docs/conf.py``,
    ``README.rst`` and ``setup.py``. Add the release date to
    ``docs/changes.rst``. Commit.
