@@ -2,6 +2,7 @@ language: python
 sudo: false
 cache: pip
 matrix:
+  fast_finish: true
   include:
     - python: 2.7
       env: TOXENV=py27-dj111
@@ -17,9 +18,19 @@ matrix:
       env: TOXENV=py35-dj20
     - python: 3.6
       env: TOXENV=py36-dj20
+    - python: 3.5
+      env: TOXENV=py35-djmaster
+    - python: 3.6
+      env: TOXENV=py36-djmaster
     - env: TOXENV=flake8
     - env: TOXENV=isort
     - env: TOXENV=readme
+  allow_failures:
+    - python: 3.5
+      env: TOXENV=py35-djmaster
+    - python: 3.6
+      env: TOXENV=py36-djmaster
+
 install:
   - pip install tox codecov
 script:
