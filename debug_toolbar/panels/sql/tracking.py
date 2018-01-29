@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+import datetime
 import json
 from threading import local
 from time import time
@@ -95,8 +96,10 @@ class NormalCursorWrapper(object):
         return [self._quote_expr(p) for p in params]
 
     def _decode(self, param):
+        # make sure datetime, date and time are converted to string by force_text
+        CONVERT_TYPES = (datetime.datetime, datetime.date, datetime.time)
         try:
-            return force_text(param, strings_only=True)
+            return force_text(param, strings_only=not isinstance(param, CONVERT_TYPES))
         except UnicodeDecodeError:
             return '(encoded string)'
 
@@ -114,7 +117,7 @@ class NormalCursorWrapper(object):
             _params = ''
             try:
                 _params = json.dumps([self._decode(p) for p in params])
-            except Exception:
+            except TypeError:
                 pass  # object not JSON serializable
 
             template_info = get_template_info()
