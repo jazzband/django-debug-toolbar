@@ -155,7 +155,7 @@ class NormalCursorWrapper(object):
                 "start_time": start_time,
                 "stop_time": stop_time,
                 "is_slow": duration > dt_settings.get_config()["SQL_WARNING_THRESHOLD"],
-                "is_select": sql.lower().strip().startswith("select"),
+                "is_select": force_text(sql).lower().strip().startswith("select"),
                 "template_info": template_info,
             }
 
