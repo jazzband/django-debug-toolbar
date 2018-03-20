@@ -21,7 +21,13 @@ Code
 ----
 
 The code is available `on GitHub
-<https://github.com/jazzband/django-debug-toolbar>`_.
+<https://github.com/jazzband/django-debug-toolbar>`_. Unfortunately, the
+repository contains old and flawed objects, so if you have set
+`fetch.fsckObjects
+<https://github.com/git/git/blob/0afbf6caa5b16dcfa3074982e5b48e27d452dbbb/Documentation/config.txt#L1381>`_
+you'll have to deactivate it for this repository::
+
+    git clone --config fetch.fsckobjects=false https://github.com/jazzband/django-debug-toolbar.git
 
 Once you've obtained a checkout, you should create a virtualenv_ and install
 the libraries required for working on the Debug Toolbar::
