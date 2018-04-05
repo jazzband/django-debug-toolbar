@@ -21,7 +21,7 @@ def check_middleware(app_configs, **kwargs):
 
     errors = []
     gzip_index = None
-    debug_toolbar_index = None
+    debug_toolbar_indexes = []
 
     setting = getattr(settings, 'MIDDLEWARE', None)
     setting_name = 'MIDDLEWARE'
@@ -34,9 +34,9 @@ def check_middleware(app_configs, **kwargs):
         if is_middleware_class(GZipMiddleware, middleware):
             gzip_index = i
         elif is_middleware_class(DebugToolbarMiddleware, middleware):
-            debug_toolbar_index = i
+            debug_toolbar_indexes.append(i)
 
-    if debug_toolbar_index is None:
+    if not debug_toolbar_indexes:
         # If the toolbar does not appear, report an error.
         errors.append(
             Error(
@@ -46,7 +46,16 @@ def check_middleware(app_configs, **kwargs):
                 "%s." % setting_name,
             )
         )
-    elif gzip_index is not None and debug_toolbar_index < gzip_index:
+    elif len(debug_toolbar_indexes) != 1:
+       errors.append(
+            Error(
+                "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
+                "multiple times in %s." % setting_name,
+                hint="Load debug_toolbar.middleware.DebugToolbarMiddleware only "
+                "once in %s." % setting_name,
+            )
+        ) 
+    elif gzip_index is not None and debug_toolbar_indexes[0] < gzip_index:
         # If the toolbar appears before the gzip index, report an error.
         errors.append(
             Error(
