@@ -47,6 +47,7 @@ def check_middleware(app_configs, **kwargs):
             )
         )
     elif len(debug_toolbar_indexes) != 1:
+        # If the toolbar appears multiple times, report an error.
         errors.append(
             Error(
                 "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
