@@ -76,7 +76,7 @@ class FunctionCall(object):
             if idx > -1:
                 file_name = file_name[(idx + 14):]
 
-            split_path = file_name.rsplit(os.sep, 1)                
+            split_path = file_name.rsplit(os.sep, 1)
             if len(split_path) > 1:
                 file_path, file_name = file_name.rsplit(os.sep, 1)
             else:
