@@ -13,7 +13,7 @@ setup(
     author='Rob Hudson',
     author_email='rob@cogit8.org',
     url='https://github.com/jazzband/django-debug-toolbar',
-    download_url='https://pypi.python.org/pypi/django-debug-toolbar',
+    download_url='https://pypi.org/project/django-debug-toolbar/',
     license='BSD',
     packages=find_packages(exclude=('tests.*', 'tests', 'example')),
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
