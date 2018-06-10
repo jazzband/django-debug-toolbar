@@ -61,15 +61,11 @@ class SQLPanelTestCase(BaseTestCase):
         list(User.objects.filter(username='thé'))
         self.assertEqual(len(self.panel._queries), 2)
 
-        # non-ASCII bytes parameters
-        list(User.objects.filter(username='café'.encode('utf-8')))
-        self.assertEqual(len(self.panel._queries), 3)
-
         self.panel.process_response(self.request, self.response)
         self.panel.generate_stats(self.request, self.response)
 
         # ensure the panel renders correctly
-        self.assertIn('café', self.panel.content)
+        self.assertIn('thé', self.panel.content)
 
     def test_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
@@ -105,7 +101,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel only inserts content after generate_stats and
         not the process_response.
         """
-        list(User.objects.filter(username='café'.encode('utf-8')))
+        list(User.objects.filter(username='café'))
         self.panel.process_response(self.request, self.response)
         # ensure the panel does not have content yet.
         self.assertNotIn('café', self.panel.content)
