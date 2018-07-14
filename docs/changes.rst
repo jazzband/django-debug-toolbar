@@ -5,8 +5,8 @@ UNRELEASED
 ----------
 
 * Removed support for Django < 1.11.
-* Added support and testsing for Django 2.1. No actual code changes were
-  required.
+* Added support and testsing for Django 2.1 and Python 3.7. No actual code
+  changes were required.
 
 1.9.1 (2017-11-15)
 ------------------
