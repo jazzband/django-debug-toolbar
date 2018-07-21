@@ -66,7 +66,7 @@ Toolbar options
 
 * ``JQUERY_URL``
 
-  Default: ``'//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'``
+  Default: ``'//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'``
 
   URL of the copy of jQuery that will be used by the toolbar. Set it to a
   locally-hosted version of jQuery for offline development. Make it empty to
