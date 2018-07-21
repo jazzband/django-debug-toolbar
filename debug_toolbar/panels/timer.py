@@ -82,5 +82,13 @@ class TimerPanel(Panel):
 
         self.record_stats(stats)
 
+    def generate_server_timing(self, request, response):
+        stats = self.get_stats()
+
+        self.record_server_timing('utime', 'User CPU time', stats.get('utime', 0))
+        self.record_server_timing('stime', 'System CPU time', stats.get('stime', 0))
+        self.record_server_timing('total', 'Total CPU time', stats.get('total', 0))
+        self.record_server_timing('total_time', 'Elapsed time', stats.get('total_time', 0))
+
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)

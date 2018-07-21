@@ -27,6 +27,7 @@ class DebugToolbar(object):
             panel_instance = panel_class(self)
             self._panels[panel_instance.panel_id] = panel_instance
         self.stats = {}
+        self.server_timing_stats = {}
         self.store_id = None
 
     # Manage panels

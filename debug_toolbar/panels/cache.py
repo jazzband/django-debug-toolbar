@@ -224,3 +224,9 @@ class CachePanel(Panel):
             'misses': self.misses,
             'counts': self.counts,
         })
+
+    def generate_server_timing(self, request, response):
+        stats = self.get_stats()
+        value = stats.get('total_time', 0)
+        title = 'Cache {} Calls'.format(stats.get('total_calls', 0))
+        self.record_server_timing('total_time', title, value)

@@ -50,6 +50,28 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]['stacktrace']) > 0)
 
+    def test_generate_server_timing(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        list(User.objects.all())
+
+        self.panel.process_response(self.request, self.response)
+        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_server_timing(self.request, self.response)
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 1)
+        query = self.panel._queries[0]
+
+        expected_data = {
+            'sql_time': {
+                'title': 'SQL 1 queries',
+                'value': query[1]['duration']
+            }
+        }
+
+        self.assertEqual(self.panel.get_server_timing_stats(), expected_data)
+
     def test_non_ascii_query(self):
         self.assertEqual(len(self.panel._queries), 0)
 

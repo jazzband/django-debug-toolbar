@@ -124,9 +124,32 @@ class DebugToolbarMiddleware(MiddlewareMixin):
             # When the toolbar will be inserted for sure, generate the stats.
             for panel in reversed(toolbar.enabled_panels):
                 panel.generate_stats(request, response)
+                panel.generate_server_timing(request, response)
+
+            response = self.generate_server_timing_header(response, toolbar.enabled_panels)
 
             bits[-2] += toolbar.render_toolbar()
             response.content = insert_before.join(bits)
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
+        return response
+
+    @staticmethod
+    def generate_server_timing_header(response, panels):
+        data = []
+
+        for panel in panels:
+            stats = panel.get_server_timing_stats()
+            if not stats:
+                continue
+
+            for key, record in stats.items():
+                # example: `SQLPanel_sql_time=0; "SQL 0 queries"`
+                data.append('{}_{}={}; "{}"'.format(panel.panel_id,
+                                                    key,
+                                                    record.get('value'),
+                                                    record.get('title')))
+
+        if data:
+            response['Server-Timing'] = ', '.join(data)
         return response
