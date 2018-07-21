@@ -14,6 +14,14 @@ requests and return responses. Putting the debug toolbar middleware *after*
 the Flatpage middleware, for example, means the toolbar will not show up on
 flatpages.
 
+Also the requesting host IP address needs to be added to the INTERNAL_IPS
+list in the settings or the toolbar will be not enabled. This might be an
+issue if you run django within a docker container. In that case add
+something like this to your settings:
+
+INTERNAL_IPS = [ '127.0.0.1', '172.17.0.1', ]
+
+
 Middleware isn't working correctly
 ----------------------------------
 
