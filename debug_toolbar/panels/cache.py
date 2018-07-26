@@ -32,7 +32,7 @@ def send_signal(method):
         if dt_settings.get_config()['ENABLE_STACKTRACES']:
             stacktrace = tidy_stacktrace(reversed(get_stack()))
         else:
-            stacktrace = []
+            stacktrace = ([], 0)
 
         template_info = get_template_info()
         cache_called.send(sender=self.__class__, time_taken=t,

@@ -162,7 +162,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertTrue('stacktrace' in query[1])
 
         # ensure the stacktrace is empty
-        self.assertEqual([], query[1]['stacktrace'])
+        self.assertEqual(([], 0), query[1]['stacktrace'])
 
     @override_settings(DEBUG=True, TEMPLATES=[{
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
