@@ -626,6 +626,9 @@
 #djDebug .djdt-stack span.djdt-code {
     font-weight: normal;
 }
+#djDebug .djdt-stack span.djdt-hidden_count {
+    font-weight: normal;
+}
 
 #djDebug .djdt-width-20 {
     width: 20%;

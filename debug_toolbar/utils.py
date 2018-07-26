@@ -52,24 +52,24 @@ def omit_path(path):
 
 def tidy_stacktrace(stack):
     """
-    Clean up stacktrace and remove all entries that:
-    1. Are part of Django (except contrib apps)
-    2. Are part of socketserver (used by Django's dev server)
-    3. Are the last entry (which is part of our stacktracing code)
+    Clean up stacktrace and remove entries according to HIDE_IN_STACKTRACES.
 
     ``stack`` should be a list of frame tuples from ``inspect.stack()``
     """
     trace = []
+    hidden_count = 0
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
         if omit_path(os.path.realpath(path)):
+            hidden_count += 1
             continue
         text = (''.join(force_text(t) for t in text)).strip() if text else ''
         trace.append((path, line_no, func_name, text))
-    return trace
+    return trace, hidden_count
 
 
 def render_stacktrace(trace):
     stacktrace = []
+    trace, hidden_count = trace
     for frame in trace:
         params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
         params_dict = {six.text_type(idx): v for idx, v in enumerate(params)}
@@ -83,6 +83,9 @@ def render_stacktrace(trace):
         except KeyError:
             # This frame doesn't have the expected format, so skip it and move on to the next one
             continue
+    if hidden_count:
+        stacktrace.append('<span class="djdt-hidden_count">'
+                          '%d hidden frames.</span>' % hidden_count)
     return mark_safe('\n'.join(stacktrace))
 
 
