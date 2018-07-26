@@ -212,7 +212,7 @@
             $('#djDebugToolbar li').removeClass('djdt-active');
             // finally close toolbar
             $('#djDebugToolbar').hide('fast');
-            handle = $('#djDebugToolbarHandle');
+            var handle = $('#djDebugToolbarHandle');
             handle.show();
             // set handle position
             var handleTop = djdt.cookie.get('djdttop');
