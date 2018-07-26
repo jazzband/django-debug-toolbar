@@ -10,8 +10,7 @@ isort_check_only:
 	isort -rc -c debug_toolbar example tests
 
 example:
-	DJANGO_SETTINGS_MODULE=example.settings \
-		python -m django runserver
+	python example/manage.py runserver
 
 jshint: node_modules/jshint/bin/jshint
 	./node_modules/jshint/bin/jshint debug_toolbar/static/debug_toolbar/js/*.js
