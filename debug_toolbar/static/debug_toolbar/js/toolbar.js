@@ -7,12 +7,11 @@
         isReady: false,
         init: function() {
             $('#djDebug').show();
-            var current = null;
             $('#djDebugPanelList').on('click', 'li a', function() {
                 if (!this.className) {
                     return false;
                 }
-                current = $('#djDebug #' + this.className);
+                var current = $('#djDebug #' + this.className);
                 if (current.is(':visible')) {
                     $(document).trigger('close.djDebug');
                     $(this).parent().removeClass('djdt-active');
