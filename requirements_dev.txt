@@ -10,6 +10,7 @@ coverage
 flake8
 html5lib
 isort
+psycopg2
 selenium
 tox
 

@@ -4,9 +4,10 @@ from __future__ import absolute_import, unicode_literals
 
 import datetime
 import unittest
+from psycopg2 import sql
 
 from django.contrib.auth.models import User
-from django.db import connection
+from django.db import connection, connections
 from django.db.models import Count
 from django.db.utils import DatabaseError
 from django.shortcuts import render
@@ -266,3 +267,10 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]["stacktrace"]) > 0)
+
+    def test_composed_object(self):
+        self.assertEqual(len(self.panel._queries), 0)
+        query = sql.SQL("SELECT * FROM {}").format(sql.Identifier("auth_user"))
+        cursor = connections["postgresql"].cursor()
+        cursor.execute(query)
+        self.assertEqual(len(self.panel._queries), 1)
