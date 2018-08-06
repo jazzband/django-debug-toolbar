@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from collections import OrderedDict
 from contextlib import contextmanager
 from os.path import normpath
-from pprint import pformat
+from pprint import pformat, saferepr
 
 from django import http
 from django.conf.urls import url
@@ -126,7 +126,7 @@ class TemplatesPanel(Panel):
                         else:
                             try:
                                 recording(False)
-                                force_text(value)  # this MAY trigger a db query
+                                saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
                                 temp_layer[key] = '<<triggers database query>>'
                             except UnicodeEncodeError:
