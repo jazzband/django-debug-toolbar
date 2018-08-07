@@ -23,7 +23,7 @@
         var $row = $('<tr class="' + ((rowCount % 2) ? 'djDebugOdd' : 'djDebugEven') + '"></tr>');
         if (endStat) {
             // Render a start through end bar
-	    $row.html('<td>' + stat.replace('Start', '') + '</td>' +
+            $row.html('<td>' + stat.replace('Start', '') + '</td>' +
                       '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
                       '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>');
             $row.find('strong').css({width: getCSSWidth(stat, endStat)});
@@ -34,7 +34,7 @@
                       '<td>' + (perf.timing[stat] - timingOffset) + '</td>');
             $row.find('strong').css({width: 2});
         }
-        $row.find('djDebugLineChart').css({left: getLeft(stat) + '%'});
+        $row.find('.djDebugLineChart').css({left: getLeft(stat) + '%'});
         $('#djDebugBrowserTimingTableBody').append($row);
     }
 
@@ -47,5 +47,5 @@
     addRow('domInteractive');
     addRow('domContentLoadedEventStart', 'domContentLoadedEventEnd');
     addRow('loadEventStart', 'loadEventEnd');
-    $('#djDebugBrowserTiming').css("display", "block");
+    $('#djDebugBrowserTiming').show();
 })(djdt.jQuery);
