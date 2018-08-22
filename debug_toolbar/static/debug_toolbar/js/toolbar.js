@@ -7,9 +7,10 @@
         isReady: false,
         init: function() {
             $('#djDebug').show();
-            $('#djDebugPanelList').on('click', 'li a', function() {
+            $('#djDebugPanelList').on('click', 'li a', function(event) {
+                event.preventDefault();
                 if (!this.className) {
-                    return false;
+                    return;
                 }
                 var current = $('#djDebug #' + this.className);
                 if (current.is(':visible')) {
@@ -40,12 +41,11 @@
                     $('#djDebugToolbar li').removeClass('djdt-active');
                     $(this).parent().addClass('djdt-active');
                 }
-                return false;
             });
-            $('#djDebug').on('click', 'a.djDebugClose', function() {
+            $('#djDebug').on('click', 'a.djDebugClose', function(event) {
+                event.preventDefault();
                 $(document).trigger('close.djDebug');
                 $('#djDebugToolbar li').removeClass('djdt-active');
-                return false;
             });
             $('#djDebug').on('click', '.djDebugPanelButton input[type=checkbox]', function() {
                 djdt.cookie.set($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
@@ -55,7 +55,9 @@
             });
 
             // Used by the SQL and template panels
-            $('#djDebug').on('click', '.remoteCall', function() {
+            $('#djDebug').on('click', '.remoteCall', function(event) {
+                event.preventDefault();
+
                 var self = $(this);
                 var name = self[0].tagName.toLowerCase();
                 var ajax_data = {};
@@ -81,17 +83,15 @@
                         $('#djDebugWindow').html(message).show();
                 });
 
-                $('#djDebugWindow').on('click', 'a.djDebugBack', function() {
+                $('#djDebugWindow').on('click', 'a.djDebugBack', function(event) {
+                    event.preventDefault();
                     $(this).parent().parent().hide();
-                    return false;
                 });
-
-                return false;
             });
 
             // Used by the cache, profiling and SQL panels
-            $('#djDebug').on('click', 'a.djToggleSwitch', function(e) {
-                e.preventDefault();
+            $('#djDebug').on('click', 'a.djToggleSwitch', function(event) {
+                event.preventDefault();
                 var btn = $(this);
                 var id = btn.attr('data-toggle-id');
                 var open_me = btn.text() == btn.attr('data-toggle-open');
@@ -115,21 +115,21 @@
                         $this.find('.djToggleSwitch').text(btn.text());
                     }
                 });
-                return;
             });
 
-            $('#djHideToolBarButton').click(function() {
+            $('#djHideToolBarButton').on('click', function(event) {
+                event.preventDefault();
                 djdt.hide_toolbar(true);
-                return false;
             });
-            $('#djShowToolBarButton').click(function() {
+            $('#djShowToolBarButton').on('click', function(event) {
+                event.preventDefault();
                 if (!djdt.handleDragged) {
                     djdt.show_toolbar();
                 }
-                return false;
             });
             var handle = $('#djDebugToolbarHandle');
             $('#djShowToolBarButton').on('mousedown', function (event) {
+                event.preventDefault();
                 var startPageY = event.pageY;
                 var baseY = handle.offset().top - startPageY;
                 var windowHeight = $(window).height();
@@ -150,11 +150,11 @@
                         djdt.handleDragged = true;
                     }
                 });
-                return false;
             });
-            $(document).on('mouseup', function () {
+            $(document).on('mouseup', function (event) {
                 $(document).off('mousemove.djDebug');
                 if (djdt.handleDragged) {
+                    event.preventDefault();
                     var top = handle.offset().top - window.pageYOffset;
                     djdt.cookie.set('djdttop', top, {
                         path: '/',
@@ -163,10 +163,9 @@
                     setTimeout(function () {
                         djdt.handleDragged = false;
                     }, 10);
-                    return false;
                 }
             });
-            $(document).bind('close.djDebug', function() {
+            $(document).on('close.djDebug', function() {
                 // If a sub-panel is open, close that
                 if ($('#djDebugWindow').is(':visible')) {
                     $('#djDebugWindow').hide();
@@ -189,7 +188,7 @@
             } else {
                 djdt.show_toolbar(false);
             }
-            $('#djDebug .djDebugHoverable').hover(function(){
+            $('#djDebug .djDebugHoverable').on('hover', function(){
                 $(this).addClass('djDebugHover');
             }, function(){
                 $(this).removeClass('djDebugHover');
@@ -220,7 +219,7 @@
                 handle.css({top: handleTop + 'px'});
             }
             // Unbind keydown
-            $(document).unbind('keydown.djDebug');
+            $(document).off('keydown.djDebug');
             if (setCookie) {
                 djdt.cookie.set('djdt', 'hide', {
                     path: '/',
@@ -230,7 +229,7 @@
         },
         show_toolbar: function(animate) {
             // Set up keybindings
-            $(document).bind('keydown.djDebug', function(e) {
+            $(document).on('keydown.djDebug', function(e) {
                 if (e.keyCode == 27) {
                     djdt.close();
                 }
