@@ -5,8 +5,8 @@
 			<li>
 				<strong class="djdt-label"><span data-background-color="rgb({{ info.rgb_color|join:", " }})" class="djdt-color">&#160;</span> {{ alias }}</strong>
 				<span class="djdt-info">{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
-				{% if info.duplicate_count %}
-					{% blocktrans with dupes=info.duplicate_count %}including {{ dupes }} duplicates{% endblocktrans %}
+				{% if info.similar_count %}
+					{% blocktrans with count=info.similar_count %}including {{ count }} similar{% endblocktrans %}
 					{% if info.duplicate_params_count %}
 						{% blocktrans with dupes=info.duplicate_params_count %}and {{ dupes }} duplicates with params{% endblocktrans %}
 					{% endif %}
@@ -38,10 +38,10 @@
 						<div class="djDebugSqlWrap">
 							<div class="djDebugSql">{{ query.sql|safe }}</div>
 						</div>
-						{% if query.duplicate_count %}
+						{% if query.similar_count %}
 							<strong>
-								<span data-background-color="{{ query.duplicate_color }}">&#160;</span>
-								{% blocktrans with dupes=query.duplicate_count %}Duplicated {{ dupes }} times.{% endblocktrans %}
+								<span data-background-color="{{ query.similar_color }}">&#160;</span>
+								{% blocktrans with count=query.similar_count %}{{ count }} similar queries.{% endblocktrans %}
 							</strong>
 						{% endif %}
 						{% if query.duplicate_params_count %}

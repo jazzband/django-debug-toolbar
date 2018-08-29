@@ -141,11 +141,11 @@ class SQLPanel(Panel):
     def generate_stats(self, request, response):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
-        query_duplicates = defaultdict(lambda: defaultdict(int))
+        query_similar = defaultdict(lambda: defaultdict(int))
         query_params_duplicates = defaultdict(lambda: defaultdict(int))
 
-        # The keys used to determine duplicate queries.
-        def duplicate_key(query):
+        # The keys used to determine similar and duplicate queries.
+        def similar_key(query):
             return query['raw_sql']
 
         def duplicate_params_key(query):
@@ -173,7 +173,7 @@ class SQLPanel(Panel):
             trans_id = None
             i = 0
             for alias, query in self._queries:
-                query_duplicates[alias][duplicate_key(query)] += 1
+                query_similar[alias][similar_key(query)] += 1
                 query_params_duplicates[alias][duplicate_params_key(query)] += 1
 
                 trans_id = query.get('trans_id')
@@ -222,13 +222,13 @@ class SQLPanel(Panel):
         # Queries are duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
         query_colors = contrasting_color_generator()
-        query_duplicates_colors = {
+        query_similar_colors = {
             alias: {
-                query: (duplicate_count, next(query_colors))
-                for query, duplicate_count in queries.items()
-                if duplicate_count >= 2
+                query: (similar_count, next(query_colors))
+                for query, similar_count in queries.items()
+                if similar_count >= 2
             }
-            for alias, queries in query_duplicates.items()
+            for alias, queries in query_similar.items()
         }
         query_params_duplicates_colors = {
             alias: {
@@ -241,8 +241,8 @@ class SQLPanel(Panel):
 
         for alias, query in self._queries:
             try:
-                (query["duplicate_count"], query["duplicate_color"]) = (
-                    query_duplicates_colors[alias][duplicate_key(query)]
+                (query["similar_count"], query["similar_color"]) = (
+                    query_similar_colors[alias][similar_key(query)]
                 )
                 (query["duplicate_params_count"], query["duplicate_params_color"]) = (
                     query_params_duplicates_colors[alias][duplicate_params_key(query)]
@@ -252,8 +252,8 @@ class SQLPanel(Panel):
 
         for alias, alias_info in self._databases.items():
             try:
-                alias_info["duplicate_count"] = sum(
-                    e[0] for e in query_duplicates_colors[alias].values()
+                alias_info["similar_count"] = sum(
+                    e[0] for e in query_similar_colors[alias].values()
                 )
                 alias_info["duplicate_params_count"] = sum(
                     e[0] for e in query_params_duplicates_colors[alias].values()
