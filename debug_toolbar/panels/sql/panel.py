@@ -149,7 +149,7 @@ class SQLPanel(Panel):
             return query['raw_sql']
 
         def duplicate_params_key(query):
-            return (query['raw_sql'], query['raw_params'])
+            return (query['raw_sql'], tuple(query['raw_params']))
 
         if self._queries:
             width_ratio_tally = 0
