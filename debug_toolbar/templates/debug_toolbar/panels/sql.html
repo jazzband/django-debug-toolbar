@@ -7,6 +7,9 @@
 				<span class="djdt-info">{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
 				{% if info.duplicate_count %}
 					{% blocktrans with dupes=info.duplicate_count %}including {{ dupes }} duplicates{% endblocktrans %}
+					{% if info.duplicate_params_count %}
+						{% blocktrans with dupes=info.duplicate_params_count %}and {{ dupes }} duplicates with params{% endblocktrans %}
+					{% endif %}
 				{% endif %})</span>
 			</li>
 		{% endfor %}
@@ -39,6 +42,12 @@
 							<strong>
 								<span data-background-color="{{ query.duplicate_color }}">&#160;</span>
 								{% blocktrans with dupes=query.duplicate_count %}Duplicated {{ dupes }} times.{% endblocktrans %}
+							</strong>
+						{% endif %}
+						{% if query.duplicate_params_count %}
+							<strong>
+								<span data-background-color="{{ query.duplicate_params_color }}">&#160;</span>
+								{% blocktrans with dupes=query.duplicate_params_count %}Duplicated {{ dupes }} times with params.{% endblocktrans %}
 							</strong>
 						{% endif %}
 					</td>
