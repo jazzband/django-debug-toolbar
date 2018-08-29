@@ -134,6 +134,7 @@ class NormalCursorWrapper(object):
                 'duration': duration,
                 'raw_sql': sql,
                 'params': _params,
+                'raw_params': params,
                 'stacktrace': stacktrace,
                 'start_time': start_time,
                 'stop_time': stop_time,
