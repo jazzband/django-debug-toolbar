@@ -142,10 +142,14 @@ class SQLPanel(Panel):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
         query_duplicates = defaultdict(lambda: defaultdict(int))
+        query_params_duplicates = defaultdict(lambda: defaultdict(int))
 
-        # The key used to determine duplicate queries.
+        # The keys used to determine duplicate queries.
         def duplicate_key(query):
-            return (query['raw_sql'], query['params'])
+            return query['raw_sql']
+
+        def duplicate_params_key(query):
+            return (query['raw_sql'], query['raw_params'])
 
         if self._queries:
             width_ratio_tally = 0
@@ -170,6 +174,7 @@ class SQLPanel(Panel):
             i = 0
             for alias, query in self._queries:
                 query_duplicates[alias][duplicate_key(query)] += 1
+                query_params_duplicates[alias][duplicate_params_key(query)] += 1
 
                 trans_id = query.get('trans_id')
                 last_trans_id = trans_ids.get(alias)
@@ -225,12 +230,23 @@ class SQLPanel(Panel):
             }
             for alias, queries in query_duplicates.items()
         }
+        query_params_duplicates_colors = {
+            alias: {
+                query: (duplicate_count, next(query_colors))
+                for query, duplicate_count in queries.items()
+                if duplicate_count >= 2
+            }
+            for alias, queries in query_params_duplicates.items()
+        }
 
         for alias, query in self._queries:
             try:
-                duplicates_count, color = query_duplicates_colors[alias][duplicate_key(query)]
-                query["duplicate_count"] = duplicates_count
-                query["duplicate_color"] = color
+                (query["duplicate_count"], query["duplicate_color"]) = (
+                    query_duplicates_colors[alias][duplicate_key(query)]
+                )
+                (query["duplicate_params_count"], query["duplicate_params_color"]) = (
+                    query_params_duplicates_colors[alias][duplicate_params_key(query)]
+                )
             except KeyError:
                 pass
 
@@ -238,6 +254,9 @@ class SQLPanel(Panel):
             try:
                 alias_info["duplicate_count"] = sum(
                     e[0] for e in query_duplicates_colors[alias].values()
+                )
+                alias_info["duplicate_params_count"] = sum(
+                    e[0] for e in query_params_duplicates_colors[alias].values()
                 )
             except KeyError:
                 pass
