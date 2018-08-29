@@ -217,7 +217,7 @@ class SQLPanel(Panel):
         # Queries are duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
         query_colors = contrasting_color_generator()
-        query_duplicates = {
+        query_duplicates_colors = {
             alias: {
                 query: (duplicate_count, next(query_colors))
                 for query, duplicate_count in queries.items()
@@ -228,7 +228,7 @@ class SQLPanel(Panel):
 
         for alias, query in self._queries:
             try:
-                duplicates_count, color = query_duplicates[alias][duplicate_key(query)]
+                duplicates_count, color = query_duplicates_colors[alias][duplicate_key(query)]
                 query["duplicate_count"] = duplicates_count
                 query["duplicate_color"] = color
             except KeyError:
@@ -236,7 +236,9 @@ class SQLPanel(Panel):
 
         for alias, alias_info in self._databases.items():
             try:
-                alias_info["duplicate_count"] = sum(e[0] for e in query_duplicates[alias].values())
+                alias_info["duplicate_count"] = sum(
+                    e[0] for e in query_duplicates_colors[alias].values()
+                )
             except KeyError:
                 pass
 
