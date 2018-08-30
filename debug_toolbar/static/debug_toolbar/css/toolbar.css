@@ -314,7 +314,7 @@
 	padding-right:.5em;
 }
 
-#djDebug .djTemplateHideContextDiv {
+#djDebug .djTemplateContext {
 	background-color:#fff;
 }
 
@@ -422,15 +422,6 @@
 	border-radius:3px;
 }
 
-
-#djDebug a.djTemplateShowContext, #djDebug a.djTemplateShowContext span.toggleArrow {
-	color:#999;
-}
-
-#djDebug a.djTemplateShowContext:hover,  #djDebug a.djTemplateShowContext:hover span.toggleArrow {
-	color:#000;
-	cursor:pointer;
-}
 
 #djDebug .djDebugSqlWrap {
 	position:relative;
