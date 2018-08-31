@@ -532,13 +532,6 @@
 #djDebug .djDebugEndTransaction div.djDebugLineChart strong {
     border-right: 1px solid #94b24d;
 }
-#djDebug .djDebugHover div.djDebugLineChart strong {
-    background-color: #000;
-}
-#djDebug .djDebugInTransaction.djDebugHover div.djDebugLineChart strong {
-    background-color: #94b24d;
-}
-
 
 #djDebug .djdt-panelContent ul.djdt-stats {
     position: relative;
