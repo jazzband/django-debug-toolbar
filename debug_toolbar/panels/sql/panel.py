@@ -141,7 +141,16 @@ class SQLPanel(Panel):
     def generate_stats(self, request, response):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
+        query_similar = defaultdict(lambda: defaultdict(int))
         query_duplicates = defaultdict(lambda: defaultdict(int))
+
+        # The keys used to determine similar and duplicate queries.
+        def similar_key(query):
+            return query['raw_sql']
+
+        def duplicate_key(query):
+            return (query['raw_sql'], tuple(query['raw_params']))
+
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
@@ -164,7 +173,8 @@ class SQLPanel(Panel):
             trans_id = None
             i = 0
             for alias, query in self._queries:
-                query_duplicates[alias][query["raw_sql"]] += 1
+                query_similar[alias][similar_key(query)] += 1
+                query_duplicates[alias][duplicate_key(query)] += 1
 
                 trans_id = query.get('trans_id')
                 last_trans_id = trans_ids.get(alias)
@@ -209,10 +219,18 @@ class SQLPanel(Panel):
             if trans_id:
                 self._queries[(i - 1)][1]['ends_trans'] = True
 
-        # Queries are duplicates only if there's as least 2 of them.
+        # Queries are similar / duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
         query_colors = contrasting_color_generator()
-        query_duplicates = {
+        query_similar_colors = {
+            alias: {
+                query: (similar_count, next(query_colors))
+                for query, similar_count in queries.items()
+                if similar_count >= 2
+            }
+            for alias, queries in query_similar.items()
+        }
+        query_duplicates_colors = {
             alias: {
                 query: (duplicate_count, next(query_colors))
                 for query, duplicate_count in queries.items()
@@ -223,15 +241,23 @@ class SQLPanel(Panel):
 
         for alias, query in self._queries:
             try:
-                duplicates_count, color = query_duplicates[alias][query["raw_sql"]]
-                query["duplicate_count"] = duplicates_count
-                query["duplicate_color"] = color
+                (query["similar_count"], query["similar_color"]) = (
+                    query_similar_colors[alias][similar_key(query)]
+                )
+                (query["duplicate_count"], query["duplicate_color"]) = (
+                    query_duplicates_colors[alias][duplicate_key(query)]
+                )
             except KeyError:
                 pass
 
         for alias, alias_info in self._databases.items():
             try:
-                alias_info["duplicate_count"] = sum(e[0] for e in query_duplicates[alias].values())
+                alias_info["similar_count"] = sum(
+                    e[0] for e in query_similar_colors[alias].values()
+                )
+                alias_info["duplicate_count"] = sum(
+                    e[0] for e in query_duplicates_colors[alias].values()
+                )
             except KeyError:
                 pass
 

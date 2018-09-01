@@ -5,8 +5,15 @@
 			<li>
 				<strong class="djdt-label"><span data-background-color="rgb({{ info.rgb_color|join:", " }})" class="djdt-color">&#160;</span> {{ alias }}</strong>
 				<span class="djdt-info">{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
-				{% if info.duplicate_count %}
-					{% blocktrans with dupes=info.duplicate_count %}including {{ dupes }} duplicates{% endblocktrans %}
+				{% if info.similar_count %}
+					{% blocktrans with count=info.similar_count trimmed %}
+						including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ count }} similar</abbr>
+					{% endblocktrans %}
+					{% if info.duplicate_count %}
+						{% blocktrans with dupes=info.duplicate_count trimmed %}
+							and <abbr title="Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.">{{ dupes }} duplicates</abbr>
+						{% endblocktrans %}
+					{% endif %}
 				{% endif %})</span>
 			</li>
 		{% endfor %}
@@ -35,6 +42,12 @@
 						<div class="djDebugSqlWrap">
 							<div class="djDebugSql">{{ query.sql|safe }}</div>
 						</div>
+						{% if query.similar_count %}
+							<strong>
+								<span data-background-color="{{ query.similar_color }}">&#160;</span>
+								{% blocktrans with count=query.similar_count %}{{ count }} similar queries.{% endblocktrans %}
+							</strong>
+						{% endif %}
 						{% if query.duplicate_count %}
 							<strong>
 								<span data-background-color="{{ query.duplicate_color }}">&#160;</span>
