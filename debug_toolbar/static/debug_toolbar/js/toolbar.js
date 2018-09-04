@@ -82,11 +82,6 @@
                         var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
                         $('#djDebugWindow').html(message).show();
                 });
-
-                $('#djDebugWindow').on('click', 'a.djDebugBack', function(event) {
-                    event.preventDefault();
-                    $(this).parent().parent().hide();
-                });
             });
 
             // Used by the cache, profiling and SQL panels
