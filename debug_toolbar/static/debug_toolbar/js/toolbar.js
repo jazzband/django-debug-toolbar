@@ -121,29 +121,31 @@
                     djdt.show_toolbar();
                 }
             });
+            var startPageY, baseY, windowHeight;
             var handle = $('#djDebugToolbarHandle');
+            var onMouseMove = function(event) {
+                // Chrome can send spurious mousemove events, so don't do anything unless the
+                // cursor really moved.  Otherwise, it will be impossible to expand the toolbar
+                // due to djdt.handleDragged being set to true.
+                if (djdt.handleDragged || event.pageY != startPageY) {
+                    var top = baseY + event.clientY;
+
+                    if (top < 0) {
+                        top = 0;
+                    } else if (top + handle.height() > windowHeight) {
+                        top = windowHeight - handle.height();
+                    }
+
+                    handle.css({top: top});
+                    djdt.handleDragged = true;
+                }
+            };
             $('#djShowToolBarButton').on('mousedown', function (event) {
                 event.preventDefault();
-                var startPageY = event.pageY;
-                var baseY = handle.offset().top - startPageY;
-                var windowHeight = $(window).height();
-                $(document).on('mousemove.djDebug', function (event) {
-                    // Chrome can send spurious mousemove events, so don't do anything unless the
-                    // cursor really moved.  Otherwise, it will be impossible to expand the toolbar
-                    // due to djdt.handleDragged being set to true.
-                    if (djdt.handleDragged || event.pageY != startPageY) {
-                        var top = baseY + event.clientY;
-
-                        if (top < 0) {
-                            top = 0;
-                        } else if (top + handle.height() > windowHeight) {
-                            top = windowHeight - handle.height();
-                        }
-
-                        handle.css({top: top});
-                        djdt.handleDragged = true;
-                    }
-                });
+                startPageY = event.pageY;
+                baseY = handle.offset().top - startPageY;
+                windowHeight = $(window).height();
+                $(document).on('mousemove.djDebug', onMouseMove);
             });
             $(document).on('mouseup', function (event) {
                 $(document).off('mousemove.djDebug');
