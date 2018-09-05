@@ -139,38 +139,36 @@
                     djdt.show_toolbar();
                 }
             });
-            var startPageY, baseY, windowHeight;
-            var handle = $('#djDebugToolbarHandle');
-            var onMouseMove = function(event) {
+            var startPageY, baseY;
+            var handle = document.querySelector('#djDebugToolbarHandle');
+            var onHandleMove = function(event) {
                 // Chrome can send spurious mousemove events, so don't do anything unless the
                 // cursor really moved.  Otherwise, it will be impossible to expand the toolbar
                 // due to djdt.handleDragged being set to true.
                 if (djdt.handleDragged || event.pageY != startPageY) {
-                    var top = baseY + event.clientY;
+                    var top = baseY + event.pageY;
 
                     if (top < 0) {
                         top = 0;
-                    } else if (top + handle.height() > windowHeight) {
-                        top = windowHeight - handle.height();
+                    } else if (top + handle.offsetHeight > window.innerHeight) {
+                        top = window.innerHeight - handle.offsetHeight;
                     }
 
-                    handle.css({top: top});
+                    handle.style.top = top + 'px';
                     djdt.handleDragged = true;
                 }
             };
             djDebug.querySelector('#djShowToolBarButton').addEventListener('mousedown', function(event) {
                 event.preventDefault();
                 startPageY = event.pageY;
-                baseY = handle.offset().top - startPageY;
-                windowHeight = $(window).height();
-                document.addEventListener('mousemove', onMouseMove);
+                baseY = handle.offsetTop - startPageY;
+                document.addEventListener('mousemove', onHandleMove);
             });
-            document.addEventListener('mouseup', function(event) {
-                document.removeEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', function (event) {
+                document.removeEventListener('mousemove', onHandleMove);
                 if (djdt.handleDragged) {
                     event.preventDefault();
-                    var top = handle.offset().top - window.pageYOffset;
-                    djdt.cookie.set('djdttop', top, {
+                    djdt.cookie.set('djdttop', handle.offsetTop, {
                         path: '/',
                         expires: 10
                     });
@@ -198,13 +196,13 @@
             djdt.hide_panels();
             $('#djDebugToolbar').hide('fast');
 
-            var handle = $('#djDebugToolbarHandle');
-            handle.show();
+            var handle = document.querySelector('#djDebugToolbarHandle');
+            $(handle).show();
             // set handle position
             var handleTop = djdt.cookie.get('djdttop');
             if (handleTop) {
-                handleTop = Math.min(handleTop, window.innerHeight - handle.outerHeight() - 10);
-                handle.css({top: handleTop + 'px'});
+                handleTop = Math.min(handleTop, window.innerHeight - handle.offsetHeight);
+                handle.style.top = handleTop + 'px';
             }
 
             // Unbind keydown
