@@ -281,10 +281,9 @@
             }
         },
         applyStyle: function(name) {
-            $('#djDebug [data-' + name + ']').each(function() {
-                var css = {};
-                css[name] = $(this).data(name);
-                $(this).css(css);
+            var selector = '#djDebug [data-' + name + ']';
+            document.querySelectorAll(selector).forEach(function(element) {
+                element.style[name] = element.getAttribute('data-' + name);
             });
         }
     };
