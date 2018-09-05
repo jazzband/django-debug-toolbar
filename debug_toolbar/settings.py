@@ -17,7 +17,6 @@ CONFIG_DEFAULTS = {
     # Toolbar options
     'DISABLE_PANELS': {'debug_toolbar.panels.redirects.RedirectsPanel'},
     'INSERT_BEFORE': '</body>',
-    'JQUERY_URL': '//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js',
     'RENDER_PANELS': None,
     'RESULTS_CACHE_SIZE': 10,
     'ROOT_TAG_EXTRA_ATTRS': '',
