@@ -40,6 +40,20 @@
         }
     };
 
+    var ajax = function(url, init) {
+        init = Object.assign({credentials: 'same-origin'}, init);
+        return fetch(url, init).then(function(response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                var win = document.querySelector('#djDebugWindow');
+                win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+response.status+': '+response.statusText+'</h3></div>';
+                $$.show(win);
+                return Promise.reject();
+            }
+        });
+    };
+
     var djdt = {
         handleDragged: false,
         events: {
@@ -66,22 +80,15 @@
                     var inner = current.querySelector('.djDebugPanelContent .djdt-scroll'),
                         store_id = djDebug.getAttribute('data-store-id');
                     if (store_id && inner.children.length === 0) {
-                        var ajax_data = {
-                            data: {
-                                store_id: store_id,
-                                panel_id: this.className
-                            },
-                            type: 'GET',
-                            url: djDebug.getAttribute('data-render-panel-url')
-                        };
-                        $.ajax(ajax_data).done(function(data){
+                        var url = djDebug.getAttribute('data-render-panel-url');
+                        url += '?' + new URLSearchParams({
+                            store_id: store_id,
+                            panel_id: this.className
+                        })
+                        ajax(url).then(function(body) {
                             inner.previousElementSibling.remove();  // Remove AJAX loader
                             inner.innerHTML = body;
                             $$.executeScripts(inner);
-                        }).fail(function(xhr){
-                            var win = document.querySelector('#djDebugWindow');
-                            win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
-                            $$.show(win);
                         });
                     }
                 }
@@ -109,7 +116,7 @@
                     ajax_data.url = this.getAttribute('formaction');
 
                     if (form) {
-                        ajax_data.data = $(form).serialize();
+                        ajax_data.body = new FormData(form);
                         ajax_data.method = form.getAttribute('method') || 'POST';
                     }
                 }
@@ -118,13 +125,10 @@
                     ajax_data.url = this.getAttribute('href');
                 }
 
-                $.ajax(ajax_data).done(function(data){
+                ajax(ajax_data.url, ajax_data).then(function(body) {
                     var win = djDebug.querySelector('#djDebugWindow');
                     win.innerHTML = body;
                     $$.executeScripts(win);
-                }).fail(function(xhr){
-                    var win = document.querySelector('#djDebugWindow');
-                    win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
                     $$.show(win);
                 });
             });
