@@ -15,7 +15,6 @@
                 var current = $('#djDebug #' + this.className);
                 if (current.is(':visible')) {
                     $(document).trigger('close.djDebug');
-                    $(this).parent().removeClass('djdt-active');
                 } else {
                     $('.djdt-panelContent').hide(); // Hide any that are already open
                     var inner = current.find('.djDebugPanelContent .djdt-scroll'),
@@ -45,7 +44,6 @@
             $('#djDebug').on('click', 'a.djDebugClose', function(event) {
                 event.preventDefault();
                 $(document).trigger('close.djDebug');
-                $('#djDebugToolbar li').removeClass('djdt-active');
             });
             $('#djDebug').on('click', '.djDebugPanelButton input[type=checkbox]', function() {
                 djdt.cookie.set($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
