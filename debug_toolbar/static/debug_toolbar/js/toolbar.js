@@ -1,4 +1,15 @@
 (function ($, publicAPI) {
+    var $$ = {
+        on: function(root, eventName, selector, fn) {
+            root.addEventListener(eventName, function(event) {
+                var target = event.target.closest(selector);
+                if (root.contains(target)) {
+                    fn.call(target, event);
+                }
+            });
+        },
+    };
+
     var onKeyDown = function(event) {
         if (event.keyCode == 27) {
             djdt.hide_one_level();
@@ -12,8 +23,9 @@
         },
         isReady: false,
         init: function() {
-            $('#djDebug').show();
-            $('#djDebugPanelList').on('click', 'li a', function(event) {
+            var djDebug = document.querySelector('#djDebug');
+            djDebug.classList.remove('djdt-hidden');
+            $$.on(djDebug.querySelector('#djDebugPanelList'), 'click', 'li a', function(event) {
                 event.preventDefault();
                 if (!this.className) {
                     return;
@@ -48,11 +60,11 @@
                     }
                 }
             });
-            $('#djDebug').on('click', 'a.djDebugClose', function(event) {
+            $$.on(djDebug, 'click', 'a.djDebugClose', function(event) {
                 event.preventDefault();
                 djdt.hide_one_level();
             });
-            $('#djDebug').on('click', '.djDebugPanelButton input[type=checkbox]', function() {
+            $$.on(djDebug, 'click', '.djDebugPanelButton input[type=checkbox]', function() {
                 djdt.cookie.set($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
                     path: '/',
                     expires: 10
@@ -60,7 +72,7 @@
             });
 
             // Used by the SQL and template panels
-            $('#djDebug').on('click', '.remoteCall', function(event) {
+            $$.on(djDebug, 'click', '.remoteCall', function(event) {
                 event.preventDefault();
 
                 var self = $(this);
@@ -90,7 +102,7 @@
             });
 
             // Used by the cache, profiling and SQL panels
-            $('#djDebug').on('click', 'a.djToggleSwitch', function(event) {
+            $$.on(djDebug, 'click', 'a.djToggleSwitch', function(event) {
                 event.preventDefault();
                 var btn = $(this);
                 var id = btn.attr('data-toggle-id');
@@ -117,11 +129,11 @@
                 });
             });
 
-            $('#djHideToolBarButton').on('click', function(event) {
+            djDebug.querySelector('#djHideToolBarButton').addEventListener('click', function(event) {
                 event.preventDefault();
                 djdt.hide_toolbar(true);
             });
-            $('#djShowToolBarButton').on('click', function(event) {
+            djDebug.querySelector('#djShowToolBarButton').addEventListener('click', function(event) {
                 event.preventDefault();
                 if (!djdt.handleDragged) {
                     djdt.show_toolbar();
@@ -146,15 +158,15 @@
                     djdt.handleDragged = true;
                 }
             };
-            $('#djShowToolBarButton').on('mousedown', function (event) {
+            djDebug.querySelector('#djShowToolBarButton').addEventListener('mousedown', function(event) {
                 event.preventDefault();
                 startPageY = event.pageY;
                 baseY = handle.offset().top - startPageY;
                 windowHeight = $(window).height();
-                $(document).on('mousemove.djDebug', onMouseMove);
+                document.addEventListener('mousemove', onMouseMove);
             });
-            $(document).on('mouseup', function (event) {
-                $(document).off('mousemove.djDebug');
+            document.addEventListener('mouseup', function(event) {
+                document.removeEventListener('mousemove', onMouseMove);
                 if (djdt.handleDragged) {
                     event.preventDefault();
                     var top = handle.offset().top - window.pageYOffset;
@@ -166,9 +178,6 @@
                         djdt.handleDragged = false;
                     }, 10);
                 }
-            });
-            $(document).on('close.djDebug', function() {
-                djdt.hide_one_level();
             });
             if (djdt.cookie.get('djdt') == 'hide') {
                 djdt.hide_toolbar(false);
@@ -199,7 +208,7 @@
             }
 
             // Unbind keydown
-            $(document).off('keydown.djDebug');
+            document.removeEventListener('keydown', onKeyDown);
 
             if (setCookie) {
                 djdt.cookie.set('djdt', 'hide', {
@@ -219,7 +228,7 @@
         },
         show_toolbar: function(animate) {
             // Set up keybindings
-            $(document).on('keydown.djDebug', onKeyDown);
+            document.addEventListener('keydown', onKeyDown);
             $('#djDebugToolbarHandle').hide();
             if (animate) {
                 $('#djDebugToolbar').show('fast');
