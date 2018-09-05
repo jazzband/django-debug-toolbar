@@ -1,4 +1,10 @@
 (function ($, publicAPI) {
+    var onKeyDown = function(event) {
+        if (event.keyCode == 27) {
+            djdt.hide_one_level();
+        }
+    };
+
     var djdt = {
         handleDragged: false,
         events: {
@@ -213,11 +219,7 @@
         },
         show_toolbar: function(animate) {
             // Set up keybindings
-            $(document).on('keydown.djDebug', function(e) {
-                if (e.keyCode == 27) {
-                    djdt.hide_one_level();
-                }
-            });
+            $(document).on('keydown.djDebug', onKeyDown);
             $('#djDebugToolbarHandle').hide();
             if (animate) {
                 $('#djDebugToolbar').show('fast');
