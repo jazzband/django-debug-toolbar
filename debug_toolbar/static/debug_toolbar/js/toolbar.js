@@ -8,6 +8,30 @@
                 }
             });
         },
+        show: function(element) {
+            element.style.display = 'block';
+        },
+        hide: function(element) {
+            element.style.display = 'none';
+        },
+        toggle: function(element, value) {
+            if (value) {
+                $$.show(element);
+            } else {
+                $$.hide(element);
+            }
+        },
+        visible: function(element) {
+            style = getComputedStyle(element);
+            return style.display !== 'none';
+        },
+        executeScripts: function(root) {
+            root.querySelectorAll('script').forEach(function(e) {
+                var clone = document.createElement('script');
+                clone.src = e.src;
+                root.appendChild(clone);
+            });
+        },
     };
 
     var onKeyDown = function(event) {
@@ -24,38 +48,40 @@
         isReady: false,
         init: function() {
             var djDebug = document.querySelector('#djDebug');
-            djDebug.classList.remove('djdt-hidden');
+            $$.show(djDebug);
             $$.on(djDebug.querySelector('#djDebugPanelList'), 'click', 'li a', function(event) {
                 event.preventDefault();
                 if (!this.className) {
                     return;
                 }
-                var current = $('#djDebug #' + this.className);
-                if (current.is(':visible')) {
+                var current = djDebug.querySelector('#' + this.className);
+                if ($$.visible(current)) {
                     djdt.hide_panels();
                 } else {
                     djdt.hide_panels();
 
-                    current.show();
-                    $(this).parent().addClass('djdt-active');
+                    $$.show(current);
+                    this.parentElement.classList.add('djdt-active');
 
-                    var inner = current.find('.djDebugPanelContent .djdt-scroll'),
-                        store_id = $('#djDebug').data('store-id');
-                    if (store_id && inner.children().length === 0) {
+                    var inner = current.querySelector('.djDebugPanelContent .djdt-scroll'),
+                        store_id = djDebug.getAttribute('data-store-id');
+                    if (store_id && inner.children.length === 0) {
                         var ajax_data = {
                             data: {
                                 store_id: store_id,
                                 panel_id: this.className
                             },
                             type: 'GET',
-                            url: $('#djDebug').data('render-panel-url')
+                            url: djDebug.getAttribute('data-render-panel-url')
                         };
                         $.ajax(ajax_data).done(function(data){
-                            inner.prev().remove();  // Remove AJAX loader
-                            inner.html(data);
+                            inner.previousElementSibling.remove();  // Remove AJAX loader
+                            inner.innerHTML = body;
+                            $$.executeScripts(inner);
                         }).fail(function(xhr){
-                            var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
-                            $('#djDebugWindow').html(message).show();
+                            var win = document.querySelector('#djDebugWindow');
+                            win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+                            $$.show(win);
                         });
                     }
                 }
@@ -65,7 +91,7 @@
                 djdt.hide_one_level();
             });
             $$.on(djDebug, 'click', '.djDebugPanelButton input[type=checkbox]', function() {
-                djdt.cookie.set($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
+                djdt.cookie.set(this.getAttribute('data-cookie'), this.checked ? 'on' : 'off', {
                     path: '/',
                     expires: 10
                 });
@@ -75,56 +101,62 @@
             $$.on(djDebug, 'click', '.remoteCall', function(event) {
                 event.preventDefault();
 
-                var self = $(this);
-                var name = self[0].tagName.toLowerCase();
+                var name = this.tagName.toLowerCase();
                 var ajax_data = {};
 
                 if (name == 'button') {
-                    var form = self.parents('form:eq(0)');
-                    ajax_data.url = self.attr('formaction');
+                    var form = this.closest('form');
+                    ajax_data.url = this.getAttribute('formaction');
 
-                    if (form.length) {
-                        ajax_data.data = form.serialize();
-                        ajax_data.type = form.attr('method') || 'POST';
+                    if (form) {
+                        ajax_data.data = $(form).serialize();
+                        ajax_data.method = form.getAttribute('method') || 'POST';
                     }
                 }
 
                 if (name == 'a') {
-                    ajax_data.url = self.attr('href');
+                    ajax_data.url = this.getAttribute('href');
                 }
 
                 $.ajax(ajax_data).done(function(data){
-                    $('#djDebugWindow').html(data).show();
+                    var win = djDebug.querySelector('#djDebugWindow');
+                    win.innerHTML = body;
+                    $$.executeScripts(win);
                 }).fail(function(xhr){
-                        var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
-                        $('#djDebugWindow').html(message).show();
+                    var win = document.querySelector('#djDebugWindow');
+                    win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
+                    $$.show(win);
                 });
             });
 
             // Used by the cache, profiling and SQL panels
             $$.on(djDebug, 'click', 'a.djToggleSwitch', function(event) {
                 event.preventDefault();
-                var btn = $(this);
-                var id = btn.attr('data-toggle-id');
-                var open_me = btn.text() == btn.attr('data-toggle-open');
+                var self = this;
+                var id = this.getAttribute('data-toggle-id');
+                var open_me = this.textContent == this.getAttribute('data-toggle-open');
                 if (id === '' || !id) {
                     return;
                 }
-                var name = btn.attr('data-toggle-name');
-                btn.parents('.djDebugPanelContent').find('#' + name + '_' + id).find('.djDebugCollapsed').toggle(open_me);
-                btn.parents('.djDebugPanelContent').find('#' + name + '_' + id).find('.djDebugUncollapsed').toggle(!open_me);
-                $(this).parents('.djDebugPanelContent').find('.djToggleDetails_' + id).each(function(){
-                    var $this = $(this);
+                var name = this.getAttribute('data-toggle-name');
+                var container = this.closest('.djDebugPanelContent').querySelector('#' + name + '_' + id);
+                container.querySelectorAll('.djDebugCollapsed').forEach(function(e) {
+                    $$.toggle(e, open_me);
+                });
+                container.querySelectorAll('.djDebugUncollapsed').forEach(function(e) {
+                    $$.toggle(e, !open_me);
+                });
+                this.closest('.djDebugPanelContent').querySelectorAll('.djToggleDetails_' + id).forEach(function(e) {
                     if (open_me) {
-                        $this.addClass('djSelected');
-                        $this.removeClass('djUnselected');
-                        btn.text(btn.attr('data-toggle-close'));
-                        $this.find('.djToggleSwitch').text(btn.text());
+                        e.classList.add('djSelected');
+                        e.classList.remove('djUnselected');
+                        self.textContent = self.getAttribute('data-toggle-close');
+                        e.querySelector('.djToggleSwitch').textContent = self.textContent;
                     } else {
-                        $this.removeClass('djSelected');
-                        $this.addClass('djUnselected');
-                        btn.text(btn.attr('data-toggle-open'));
-                        $this.find('.djToggleSwitch').text(btn.text());
+                        e.classList.remove('djSelected');
+                        e.classList.add('djUnselected');
+                        self.textContent = self.getAttribute('data-toggle-open');
+                        e.querySelector('.djToggleSwitch').textContent = self.textContent;
                     }
                 });
             });
@@ -180,24 +212,28 @@
             if (djdt.cookie.get('djdt') == 'hide') {
                 djdt.hide_toolbar(false);
             } else {
-                djdt.show_toolbar(false);
+                djdt.show_toolbar();
             }
             djdt.isReady = true;
-            $.each(djdt.events.ready, function(_, callback){
+            djdt.events.ready.forEach(function(callback) {
                 callback(djdt);
             });
         },
         hide_panels: function() {
-            $('#djDebugWindow').hide();
-            $('.djdt-panelContent').hide();
-            $('#djDebugToolbar li').removeClass('djdt-active');
+            $$.hide(djDebug.querySelector('#djDebugWindow'));
+            djDebug.querySelectorAll('.djdt-panelContent').forEach(function(e) {
+                $$.hide(e);
+            });
+            djDebug.querySelectorAll('#djDebugToolbar li').forEach(function(e) {
+                e.classList.remove('djdt-active');
+            });
         },
         hide_toolbar: function(setCookie) {
             djdt.hide_panels();
-            $('#djDebugToolbar').hide('fast');
+            $$.hide(djDebug.querySelector('#djDebugToolbar'));
 
             var handle = document.querySelector('#djDebugToolbarHandle');
-            $(handle).show();
+            $$.show(handle);
             // set handle position
             var handleTop = djdt.cookie.get('djdttop');
             if (handleTop) {
@@ -205,7 +241,6 @@
                 handle.style.top = handleTop + 'px';
             }
 
-            // Unbind keydown
             document.removeEventListener('keydown', onKeyDown);
 
             if (setCookie) {
@@ -215,24 +250,19 @@
                 });
             }
         },
-        hide_one_level: function() {
-            if ($('#djDebugWindow').is(':visible')) {
-                $('#djDebugWindow').hide();
-            } else if ($('.djdt-panelContent').is(':visible')) {
+        hide_one_level: function(skipDebugWindow) {
+            if ($$.visible(djDebug.querySelector('#djDebugWindow'))) {
+                $$.hide(djDebug.querySelector('#djDebugWindow'));
+            } else if (djDebug.querySelector('#djDebugToolbar li.djdt-active')) {
                 djdt.hide_panels();
             } else {
                 djdt.hide_toolbar(true);
             }
         },
-        show_toolbar: function(animate) {
-            // Set up keybindings
+        show_toolbar: function() {
             document.addEventListener('keydown', onKeyDown);
-            $('#djDebugToolbarHandle').hide();
-            if (animate) {
-                $('#djDebugToolbar').show('fast');
-            } else {
-                $('#djDebugToolbar').show();
-            }
+            $$.hide(djDebug.querySelector('#djDebugToolbarHandle'));
+            $$.show(djDebug.querySelector('#djDebugToolbar'));
             djdt.cookie.set('djdt', 'show', {
                 path: '/',
                 expires: 10
@@ -292,5 +322,5 @@
         cookie: djdt.cookie,
         applyStyle: djdt.applyStyle
     });
-    $(document).ready(djdt.init);
+    document.addEventListener('DOMContentLoaded', djdt.init);
 })(djdt.jQuery, djdt);
