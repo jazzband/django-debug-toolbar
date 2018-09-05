@@ -18,8 +18,10 @@
 	<dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
 	{% if template.context %}
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans "Toggle context" %}</a></div>
-		<div class="djTemplateHideContextDiv djdt-hidden"><code>{{ template.context }}</code></div>
+		<details>
+			<summary>{% trans "Toggle context" %}</summary>
+			<code class="djTemplateContext">{{ template.context }}</code>
+		</details>
 	</dd>
 	{% endif %}
 {% endfor %}
@@ -34,13 +36,13 @@
 {% for key, value in context_processors.items %}
 	<dt><strong>{{ key|escape }}</strong></dt>
 	<dd>
-		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans "Toggle context" %}</a></div>
-		<div class="djTemplateHideContextDiv djdt-hidden"><code>{{ value|escape }}</code></div>
+		<details>
+			<summary>{% trans "Toggle context" %}</summary>
+			<code class="djTemplateContext">{{ value|escape }}</code>
+		</details>
 	</dd>
 {% endfor %}
 </dl>
 {% else %}
 	<p>{% trans "None" %}</p>
 {% endif %}
-
-<script src="{% static 'debug_toolbar/js/toolbar.template.js' %}"></script>

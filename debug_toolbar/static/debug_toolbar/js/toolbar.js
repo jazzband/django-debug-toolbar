@@ -14,10 +14,13 @@
                 }
                 var current = $('#djDebug #' + this.className);
                 if (current.is(':visible')) {
-                    $(document).trigger('close.djDebug');
-                    $(this).parent().removeClass('djdt-active');
+                    djdt.hide_panels();
                 } else {
-                    $('.djdt-panelContent').hide(); // Hide any that are already open
+                    djdt.hide_panels();
+
+                    current.show();
+                    $(this).parent().addClass('djdt-active');
+
                     var inner = current.find('.djDebugPanelContent .djdt-scroll'),
                         store_id = $('#djDebug').data('store-id');
                     if (store_id && inner.children().length === 0) {
@@ -37,15 +40,11 @@
                             $('#djDebugWindow').html(message).show();
                         });
                     }
-                    current.show();
-                    $('#djDebugToolbar li').removeClass('djdt-active');
-                    $(this).parent().addClass('djdt-active');
                 }
             });
             $('#djDebug').on('click', 'a.djDebugClose', function(event) {
                 event.preventDefault();
-                $(document).trigger('close.djDebug');
-                $('#djDebugToolbar li').removeClass('djdt-active');
+                djdt.hide_one_level();
             });
             $('#djDebug').on('click', '.djDebugPanelButton input[type=checkbox]', function() {
                 djdt.cookie.set($(this).attr('data-cookie'), $(this).prop('checked') ? 'on' : 'off', {
@@ -81,11 +80,6 @@
                 }).fail(function(xhr){
                         var message = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+xhr.status+': '+xhr.statusText+'</h3></div>';
                         $('#djDebugWindow').html(message).show();
-                });
-
-                $('#djDebugWindow').on('click', 'a.djDebugBack', function(event) {
-                    event.preventDefault();
-                    $(this).parent().parent().hide();
                 });
             });
 
@@ -166,50 +160,27 @@
                 }
             });
             $(document).on('close.djDebug', function() {
-                // If a sub-panel is open, close that
-                if ($('#djDebugWindow').is(':visible')) {
-                    $('#djDebugWindow').hide();
-                    return;
-                }
-                // If a panel is open, close that
-                if ($('.djdt-panelContent').is(':visible')) {
-                    $('.djdt-panelContent').hide();
-                    $('#djDebugToolbar li').removeClass('djdt-active');
-                    return;
-                }
-                // Otherwise, just minimize the toolbar
-                if ($('#djDebugToolbar').is(':visible')) {
-                    djdt.hide_toolbar(true);
-                    return;
-                }
+                djdt.hide_one_level();
             });
             if (djdt.cookie.get('djdt') == 'hide') {
                 djdt.hide_toolbar(false);
             } else {
                 djdt.show_toolbar(false);
             }
-            $('#djDebug .djDebugHoverable').on('hover', function(){
-                $(this).addClass('djDebugHover');
-            }, function(){
-                $(this).removeClass('djDebugHover');
-            });
             djdt.isReady = true;
             $.each(djdt.events.ready, function(_, callback){
                 callback(djdt);
             });
         },
-        close: function() {
-            $(document).trigger('close.djDebug');
-            return false;
-        },
-        hide_toolbar: function(setCookie) {
-            // close any sub panels
+        hide_panels: function() {
             $('#djDebugWindow').hide();
-            // close all panels
             $('.djdt-panelContent').hide();
             $('#djDebugToolbar li').removeClass('djdt-active');
-            // finally close toolbar
+        },
+        hide_toolbar: function(setCookie) {
+            djdt.hide_panels();
             $('#djDebugToolbar').hide('fast');
+
             var handle = $('#djDebugToolbarHandle');
             handle.show();
             // set handle position
@@ -218,8 +189,10 @@
                 handleTop = Math.min(handleTop, window.innerHeight - handle.outerHeight() - 10);
                 handle.css({top: handleTop + 'px'});
             }
+
             // Unbind keydown
             $(document).off('keydown.djDebug');
+
             if (setCookie) {
                 djdt.cookie.set('djdt', 'hide', {
                     path: '/',
@@ -227,11 +200,20 @@
                 });
             }
         },
+        hide_one_level: function() {
+            if ($('#djDebugWindow').is(':visible')) {
+                $('#djDebugWindow').hide();
+            } else if ($('.djdt-panelContent').is(':visible')) {
+                djdt.hide_panels();
+            } else {
+                djdt.hide_toolbar(true);
+            }
+        },
         show_toolbar: function(animate) {
             // Set up keybindings
             $(document).on('keydown.djDebug', function(e) {
                 if (e.keyCode == 27) {
-                    djdt.close();
+                    djdt.hide_one_level();
                 }
             });
             $('#djDebugToolbarHandle').hide();
@@ -296,7 +278,7 @@
     $.extend(publicAPI, {
         show_toolbar: djdt.show_toolbar,
         hide_toolbar: djdt.hide_toolbar,
-        close: djdt.close,
+        close: djdt.hide_one_level,
         cookie: djdt.cookie,
         applyStyle: djdt.applyStyle
     });
