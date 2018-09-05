@@ -1,4 +1,4 @@
-(function ($, publicAPI) {
+(function () {
     var $$ = {
         on: function(root, eventName, selector, fn) {
             root.addEventListener(eventName, function(event) {
@@ -319,12 +319,12 @@
             });
         }
     };
-    $.extend(publicAPI, {
+    window.djdt = {
         show_toolbar: djdt.show_toolbar,
         hide_toolbar: djdt.hide_toolbar,
         close: djdt.hide_one_level,
         cookie: djdt.cookie,
         applyStyle: djdt.applyStyle
-    });
+    };
     document.addEventListener('DOMContentLoaded', djdt.init);
-})(djdt.jQuery, djdt);
+})();

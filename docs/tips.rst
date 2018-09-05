@@ -25,15 +25,6 @@ panel or moving the ``DebugToolbarMiddleware`` to the end of
 ``MIDDLEWARE_CLASSES``. Read more about it at
 :ref:`ProfilingPanel <profiling-panel>`
 
-Using the toolbar offline
--------------------------
-
-The Debug Toolbar loads the jQuery_ library from the Google Hosted Libraries
-CDN. Your browser will keep it in cache, allowing you to use the toolbar even
-if you disconnect from the Internet temporarily.
-
-.. _jQuery: https://jquery.com/
-
 Performance considerations
 --------------------------
 

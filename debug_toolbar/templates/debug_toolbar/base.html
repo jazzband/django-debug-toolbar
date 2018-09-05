@@ -1,9 +1,6 @@
 {% load i18n %}{% load static %}
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" type="text/css" media="print">
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}" type="text/css">
-<script src="{% static 'debug_toolbar/js/jquery_pre.js' %}"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="{% static 'debug_toolbar/js/jquery_post.js' %}"></script>
 <script src="{% static 'debug_toolbar/js/toolbar.js' %}"></script>
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      {% if toolbar.store_id %}
