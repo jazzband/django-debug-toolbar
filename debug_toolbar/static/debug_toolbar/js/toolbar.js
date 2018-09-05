@@ -188,11 +188,6 @@
             } else {
                 djdt.show_toolbar(false);
             }
-            $('#djDebug .djDebugHoverable').on('hover', function(){
-                $(this).addClass('djDebugHover');
-            }, function(){
-                $(this).removeClass('djDebugHover');
-            });
             djdt.isReady = true;
             $.each(djdt.events.ready, function(_, callback){
                 callback(djdt);
