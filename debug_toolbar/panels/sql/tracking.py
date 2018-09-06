@@ -113,7 +113,7 @@ class NormalCursorWrapper(object):
             if dt_settings.get_config()['ENABLE_STACKTRACES']:
                 stacktrace = tidy_stacktrace(reversed(get_stack()))
             else:
-                stacktrace = ([], 0)
+                stacktrace = []
             _params = ''
             try:
                 _params = json.dumps([self._decode(p) for p in params])
