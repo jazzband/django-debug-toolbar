@@ -17,7 +17,7 @@ UNRELEASED
 * Added a differentiation between similar and duplicate queries. Similar
   queries are what duplicate queries used to be (same SQL, different
   parameters).
-* Stopped hiding frames from Django'c contrib apps in stacktraces by
+* Stopped hiding frames from Django's contrib apps in stacktraces by
   default.
 * Lots of small cleanups and bugfixes.
 
