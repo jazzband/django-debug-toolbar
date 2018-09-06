@@ -351,7 +351,7 @@ JavaScript API
 ~~~~~~~~~~~~~~
 
 Panel templates should include any JavaScript files they need. There are a few
-common methods available, as well as the toolbar's version of jQuery.
+common methods available.
 
 .. js:function:: djdt.close
 
@@ -377,10 +377,6 @@ common methods available, as well as the toolbar's version of jQuery.
 .. js:function:: djdt.hide_toolbar
 
     Closes any panels and hides the toolbar.
-
-.. js:function:: djdt.jQuery
-
-    This is the toolbar's version of jQuery.
 
 .. js:function:: djdt.show_toolbar
 
