@@ -5,8 +5,18 @@ UNRELEASED
 ----------
 
 * Removed support for Django < 1.11.
-* Added support and testsing for Django 2.1 and Python 3.7. No actual code
+* Added support and testing for Django 2.1 and Python 3.7. No actual code
   changes were required.
+* Removed the jQuery dependency. This means that django-debug-toolbar
+  now requires modern browsers with support for ``fetch``, ``classList``
+  etc.
+* Added support for the server timing header.
+* Added a differentiation between similar and duplicate queries. Similar
+  queries are what duplicate queries used to be (same SQL, different
+  parameters).
+* Stopped hiding frames from Django'c contrib apps in stacktraces by
+  default.
+* Lots of small cleanups and bugfixes.
 
 1.9.1 (2017-11-15)
 ------------------
