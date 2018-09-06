@@ -155,13 +155,13 @@
                         e.classList.add('djSelected');
                         e.classList.remove('djUnselected');
                         self.textContent = self.getAttribute('data-toggle-close');
-                        e.querySelector('.djToggleSwitch').textContent = self.textContent;
                     } else {
                         e.classList.remove('djSelected');
                         e.classList.add('djUnselected');
                         self.textContent = self.getAttribute('data-toggle-open');
-                        e.querySelector('.djToggleSwitch').textContent = self.textContent;
                     }
+                    var switch_ = e.querySelector('.djToggleSwitch')
+                    if (switch_) switch_.textContent = self.textContent;
                 });
             });
 
