@@ -355,7 +355,7 @@ common methods available.
 
 .. js:function:: djdt.close
 
-    Triggers the event to close any active panels.
+    Closes the topmost level (window/panel/toolbar)
 
 .. js:function:: djdt.cookie.get
 
