@@ -4,6 +4,9 @@ Change log
 UNRELEASED
 ----------
 
+1.10 (2018-09-06)
+-----------------
+
 * Removed support for Django < 1.11.
 * Added support and testing for Django 2.1 and Python 3.7. No actual code
   changes were required.
