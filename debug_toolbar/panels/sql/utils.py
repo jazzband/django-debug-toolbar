@@ -30,8 +30,8 @@ def reformat_sql(sql):
 def swap_fields(sql):
     expr = r'SELECT</strong> (...........*?) <strong>FROM'
     subs = (r'SELECT</strong> '
-            r'<a class="djDebugUncollapsed djDebugToggle" href="#">&#8226;&#8226;&#8226;</a> '
-            r'<a class="djDebugCollapsed djDebugToggle" href="#">\1</a> '
+            r'<span class="djDebugUncollapsed" href="#">&#8226;&#8226;&#8226;</span> '
+            r'<span class="djDebugCollapsed" href="#">\1</span> '
             r'<strong>FROM')
     return re.sub(expr, subs, sql)
 
