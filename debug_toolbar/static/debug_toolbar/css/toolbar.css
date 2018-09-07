@@ -627,12 +627,6 @@
     font-weight: normal;
 }
 
-@media print {
-    #djDebug {
-        display: none !important;
-    }
-}
-
 #djDebug .djdt-width-20 {
     width: 20%;
 }
