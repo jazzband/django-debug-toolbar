@@ -114,4 +114,5 @@ def sql_profile(request):
             'alias': form.cleaned_data['alias'],
         }
         # Using SimpleTemplateResponse avoids running global context processors.
+        return SimpleTemplateResponse('debug_toolbar/panels/sql_profile.html', context)
     return HttpResponseBadRequest('Form errors <pre>{}</pre>'.format(form.errors.as_data()))

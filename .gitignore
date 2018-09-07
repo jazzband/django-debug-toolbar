@@ -10,3 +10,4 @@ example/db.sqlite3
 htmlcov
 .tox
 node_modules
+tags
