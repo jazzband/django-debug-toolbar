@@ -10,11 +10,12 @@
 	<script type="text/javascript">
 		document.observe('dom:loaded', function() {
 			$('showme').removeClassName('hide');
+			$('v').textContent = Prototype.Version;
 		});
 	</script>
 </head>
 <body>
 	<h1>Prototype Test</h1>
-	<p class="hide" id="showme">If you see this, Prototype is working.</p>
+	<p class="hide" id="showme">If you see this, Prototype <strong id="v"></strong> is working.</p>
 </body>
 </html>
