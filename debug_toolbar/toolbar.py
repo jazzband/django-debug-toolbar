@@ -124,6 +124,7 @@ class DebugToolbar(object):
             # Global URLs
             urlpatterns = [
                 url(r'^render_panel/$', views.render_panel, name='render_panel'),
+                url(r'^render_file/$', views.render_file, name='render_file'),
             ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():

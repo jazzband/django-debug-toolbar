@@ -111,18 +111,14 @@
                 var name = this.tagName.toLowerCase();
                 var ajax_data = {};
 
-                if (name == 'button') {
+                if (name === 'button' || name === 'a') {
                     var form = this.closest('form');
-                    ajax_data.url = this.getAttribute('formaction');
+                    ajax_data.url = name === 'button' ? this.getAttribute('formaction') : this.getAttribute('href');
 
                     if (form) {
                         ajax_data.body = new FormData(form);
                         ajax_data.method = form.getAttribute('method') || 'POST';
                     }
-                }
-
-                if (name == 'a') {
-                    ajax_data.url = this.getAttribute('href');
                 }
 
                 ajax(ajax_data.url, ajax_data).then(function(body) {

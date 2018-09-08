@@ -1,0 +1,14 @@
+{% for frame in trace %}
+	<form method="post">
+		{% spaceless %}{{ frame.form }}{% endspaceless %}
+		<a href="{% url 'djdt:render_file' %}" class="remoteCall">
+			<span class="djdt-path">{{ frame.path }}/</span><span class="djdt-file">{{ frame.file }}</span>
+			in <span class="djdt-func">{{ frame.func }}</span> (<span class="djdt-lineno">{{ frame.line_no }}</span>)
+		</a>
+	</form>
+	<br/>
+	<span class="djdt-code">{{ frame.code }}</span>
+	{% if not forloop.last %}
+		<br/>
+	{% endif %}
+{% endfor %}

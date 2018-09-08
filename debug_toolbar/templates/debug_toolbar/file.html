@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load static %}
+<div class="djDebugPanelTitle">
+	<a class="djDebugClose djDebugBack" href=""></a>
+	<h3>{% trans "File" %}: {{ filename }}</h3>
+</div>
+<div class="djDebugPanelContent">
+	<div class="djdt-scroll">
+		<pre class="djdt-file">
+			{% for line in lines %}
+				{% if forloop.counter == line_no %}
+					<span class="djdt-line djdt-highlight-line" id="{{ hash }}">{{ line }}</span>
+				{% else %}
+					<span class="djdt-line">{{ line }}</span>
+				{% endif %}
+				<br/>
+			{% endfor %}
+		</pre>
+	</div>
+</div>
+
+<script src="{% static 'debug_toolbar/js/toolbar.file.js' %}"></script>

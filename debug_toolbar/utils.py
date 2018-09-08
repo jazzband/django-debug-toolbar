@@ -5,17 +5,17 @@ import os.path
 import re
 import sys
 from importlib import import_module
-from itertools import chain
 
 import django
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
-from django.utils import six
+from django.template.loader import render_to_string
 from django.utils.encoding import force_text
-from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 from debug_toolbar import settings as dt_settings
+
+from .forms import ViewFileForm
 
 try:
     import threading
@@ -71,19 +71,20 @@ def tidy_stacktrace(stack):
 def render_stacktrace(trace):
     stacktrace = []
     for frame in trace:
-        params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
-        params_dict = {six.text_type(idx): v for idx, v in enumerate(params)}
-        try:
-            stacktrace.append('<span class="djdt-path">%(0)s/</span>'
-                              '<span class="djdt-file">%(1)s</span>'
-                              ' in <span class="djdt-func">%(3)s</span>'
-                              '(<span class="djdt-lineno">%(2)s</span>)\n'
-                              '  <span class="djdt-code">%(4)s</span>'
-                              % params_dict)
-        except KeyError:
-            # This frame doesn't have the expected format, so skip it and move on to the next one
-            continue
-    return mark_safe('\n'.join(stacktrace))
+        f = {
+            'full_path': frame[0],
+            'line_no': frame[1],
+            'func': frame[2],
+            'code': frame[3],
+        }
+        f['form'] = ViewFileForm(initial=f)
+        f.update(dict(zip(('path', 'file'), frame[0].rsplit(os.path.sep, 1))))
+        stacktrace.append(f)
+    rendered = render_to_string(
+        'debug_toolbar/stacktrace.html',
+        {'trace': stacktrace}
+    )
+    return mark_safe(rendered.strip())
 
 
 def get_template_info():
