@@ -81,10 +81,10 @@
                         store_id = djDebug.getAttribute('data-store-id');
                     if (store_id && inner.children.length === 0) {
                         var url = djDebug.getAttribute('data-render-panel-url');
-                        url += '?' + new URLSearchParams({
-                            store_id: store_id,
-                            panel_id: this.className
-                        })
+                        var url_params = new URLSearchParams();
+                        url_params.append('store_id', store_id);
+                        url_params.append('panel_id', this.className);
+                        url += '?' + url_params.toString();
                         ajax(url).then(function(body) {
                             inner.previousElementSibling.remove();  // Remove AJAX loader
                             inner.innerHTML = body;
