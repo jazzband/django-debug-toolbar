@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.response import SimpleTemplateResponse
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
+from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.decorators import require_show_toolbar
 from debug_toolbar.toolbar import DebugToolbar
@@ -27,6 +28,7 @@ def render_panel(request):
     return HttpResponse(content)
 
 
+@csrf_exempt
 @require_show_toolbar
 def render_file(request):
     """Render content of given file"""
@@ -45,6 +47,7 @@ def render_file(request):
         'filename': os.path.basename(full_path),
         'lines': lines,
         'line_no': form.cleaned_data['line_no'],
+        'lines_length': len(str(len(lines))),
     }
 
     # Using SimpleTemplateResponse avoids running global context processors.

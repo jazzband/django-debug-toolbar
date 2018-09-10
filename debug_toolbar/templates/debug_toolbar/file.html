@@ -8,12 +8,15 @@
 	<div class="djdt-scroll">
 		<pre class="djdt-file">
 			{% for line in lines %}
-				{% if forloop.counter == line_no %}
-					<span class="djdt-line djdt-highlight-line" id="{{ hash }}">{{ line }}</span>
-				{% else %}
-					<span class="djdt-line">{{ line }}</span>
-				{% endif %}
-				<br/>
+                {% spaceless %}
+                    <span class="djdt-line djdt-line-no">{{ forloop.counter|ljust:lines_length }}</span>
+                    {% if forloop.counter == line_no %}
+                        <span class="djdt-line djdt-highlight-line" id="{{ hash }}">{{ line }}</span>
+                    {% else %}
+                        <span class="djdt-line">{{ line }}</span>
+                    {% endif %}
+                    <br/>
+                {% endspaceless %}
 			{% endfor %}
 		</pre>
 	</div>
