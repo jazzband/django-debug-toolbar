@@ -4,6 +4,9 @@ Change log
 UNRELEASED
 ----------
 
+1.10.1 (2018-09-11)
+-------------------
+
 * Fixed a problem where the duplicate query detection breaks for
   non-hashable query parameters.
 * Added support for structured types when recording SQL.
