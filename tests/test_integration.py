@@ -5,7 +5,6 @@ from __future__ import absolute_import, unicode_literals
 import os
 import unittest
 
-import django
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
@@ -391,19 +390,3 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
                 ),
             ]
         )
-
-    @override_settings(
-        MIDDLEWARE=[
-            'django.contrib.messages.middleware.MessageMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'debug_toolbar.middleware.DebugToolbarMiddleware',
-            'tests.middleware.simple_middleware',
-        ]
-    )
-    def test_middleware_factory_functions_supported(self):
-        messages = run_checks()
-
-        if django.VERSION[:2] >= (2, 0):
-            self.assertEqual(messages, [])
-        else:
-            self.assertEqual(messages[0].id, '1_10.W001')
