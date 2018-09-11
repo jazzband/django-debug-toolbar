@@ -151,6 +151,9 @@ class SQLPanel(Panel):
 
         def duplicate_key(query):
             raw_params = () if query['raw_params'] is None else tuple(query['raw_params'])
+            # pformat() avoids problems because of unhashable types
+            # (e.g. lists) when used as dictionary keys.
+            # https://github.com/jazzband/django-debug-toolbar/issues/1091
             return (query['raw_sql'], pformat(raw_params))
 
         if self._queries:
