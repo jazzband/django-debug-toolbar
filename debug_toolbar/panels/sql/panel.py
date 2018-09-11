@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import uuid
 from collections import defaultdict
 from copy import copy
+from pprint import pformat
 
 from django.conf.urls import url
 from django.db import connections
@@ -150,7 +151,7 @@ class SQLPanel(Panel):
 
         def duplicate_key(query):
             raw_params = () if query['raw_params'] is None else tuple(query['raw_params'])
-            return (query['raw_sql'], raw_params)
+            return (query['raw_sql'], pformat(raw_params))
 
         if self._queries:
             width_ratio_tally = 0
