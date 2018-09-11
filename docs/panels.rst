@@ -198,6 +198,15 @@ line_profiler_.
 
 .. _line_profiler: https://github.com/rkern/line_profiler
 
+Mail
+~~~~~~~~
+
+URL: https://github.com/scuml/django-mail-panel
+
+Path: ``mail_panel.panels.MailToolbarPanel``
+
+This panel captures and displays emails sent from your application.
+
 Memcache
 ~~~~~~~~
 
