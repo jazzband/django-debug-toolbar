@@ -339,8 +339,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 @override_settings(DEBUG=True)
 class DebugToolbarSystemChecksTestCase(BaseTestCase):
     @override_settings(
-        MIDDLEWARE=None,
-        MIDDLEWARE_CLASSES=[
+        MIDDLEWARE=[
+            'django.contrib.messages.middleware.MessageMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.middleware.gzip.GZipMiddleware',
             'debug_toolbar.middleware.DebugToolbarMiddleware',
         ]
@@ -349,7 +350,10 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
         messages = run_checks()
         self.assertEqual(messages, [])
 
-    @override_settings(MIDDLEWARE=None, MIDDLEWARE_CLASSES=[])
+    @override_settings(MIDDLEWARE=[
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+    ])
     def test_check_missing_middleware_error(self):
         messages = run_checks()
         self.assertEqual(
@@ -357,16 +361,17 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
             [
                 Error(
                     "debug_toolbar.middleware.DebugToolbarMiddleware is "
-                    "missing from MIDDLEWARE_CLASSES.",
+                    "missing from MIDDLEWARE.",
                     hint="Add debug_toolbar.middleware.DebugToolbarMiddleware "
-                    "to MIDDLEWARE_CLASSES.",
+                    "to MIDDLEWARE.",
                 ),
             ]
         )
 
     @override_settings(
-        MIDDLEWARE=None,
-        MIDDLEWARE_CLASSES=[
+        MIDDLEWARE=[
+            'django.contrib.messages.middleware.MessageMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
             'debug_toolbar.middleware.DebugToolbarMiddleware',
             'django.middleware.gzip.GZipMiddleware',
         ]
@@ -379,20 +384,21 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
                 Error(
                     "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
                     "before django.middleware.gzip.GZipMiddleware in "
-                    "MIDDLEWARE_CLASSES.",
+                    "MIDDLEWARE.",
                     hint="Move debug_toolbar.middleware.DebugToolbarMiddleware "
                     "to after django.middleware.gzip.GZipMiddleware in "
-                    "MIDDLEWARE_CLASSES.",
+                    "MIDDLEWARE.",
                 ),
             ]
         )
 
     @override_settings(
         MIDDLEWARE=[
+            'django.contrib.messages.middleware.MessageMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
             'debug_toolbar.middleware.DebugToolbarMiddleware',
             'tests.middleware.simple_middleware',
-        ],
-        MIDDLEWARE_CLASSES=None
+        ]
     )
     def test_middleware_factory_functions_supported(self):
         messages = run_checks()
