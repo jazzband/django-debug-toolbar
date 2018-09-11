@@ -4,6 +4,16 @@ Change log
 UNRELEASED
 ----------
 
+* Fixed a problem where the duplicate query detection breaks for
+  non-hashable query parameters.
+* Added support for structured types when recording SQL.
+* Made Travis CI also run one test no PostgreSQL.
+* Added fallbacks for inline images in CSS.
+* Improved cross-browser compatibility around ``URLSearchParams`` usage.
+* Fixed a few typos and redundancies in the documentation, removed
+  mentions of django-debug-toolbar's jQuery which aren't accurate
+  anymore.
+
 1.10 (2018-09-06)
 -----------------
 
