@@ -38,6 +38,10 @@ matrix:
       env: TOXENV=py37-djmaster
       dist: xenial
       sudo: true
+    - python: 3.6
+      env: TOXENV=postgresql
+      addons:
+        postgresql: "9.5"
     - env: TOXENV=flake8
     - env: TOXENV=isort
     - env: TOXENV=readme
