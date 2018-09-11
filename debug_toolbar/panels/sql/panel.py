@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import uuid
 from collections import defaultdict
 from copy import copy
-from pprint import pformat
+from pprint import saferepr
 
 from django.conf.urls import url
 from django.db import connections
@@ -151,10 +151,10 @@ class SQLPanel(Panel):
 
         def duplicate_key(query):
             raw_params = () if query['raw_params'] is None else tuple(query['raw_params'])
-            # pformat() avoids problems because of unhashable types
+            # saferepr() avoids problems because of unhashable types
             # (e.g. lists) when used as dictionary keys.
             # https://github.com/jazzband/django-debug-toolbar/issues/1091
-            return (query['raw_sql'], pformat(raw_params))
+            return (query['raw_sql'], saferepr(raw_params))
 
         if self._queries:
             width_ratio_tally = 0
