@@ -4,7 +4,7 @@ import inspect
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.core.checks import Error, register
+from django.core.checks import Warning, register
 from django.middleware.gzip import GZipMiddleware
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
@@ -39,31 +39,34 @@ def check_middleware(app_configs, **kwargs):
     if not debug_toolbar_indexes:
         # If the toolbar does not appear, report an error.
         errors.append(
-            Error(
+            Warning(
                 "debug_toolbar.middleware.DebugToolbarMiddleware is missing "
                 "from %s." % setting_name,
                 hint="Add debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "%s." % setting_name,
+                id='ddt.W001',
             )
         )
     elif len(debug_toolbar_indexes) != 1:
         # If the toolbar appears multiple times, report an error.
         errors.append(
-            Error(
+            Warning(
                 "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
                 "multiple times in %s." % setting_name,
                 hint="Load debug_toolbar.middleware.DebugToolbarMiddleware only "
                 "once in %s." % setting_name,
+                id='ddt.W002',
             )
         )
     elif gzip_index is not None and debug_toolbar_indexes[0] < gzip_index:
         # If the toolbar appears before the gzip index, report an error.
         errors.append(
-            Error(
+            Warning(
                 "debug_toolbar.middleware.DebugToolbarMiddleware occurs before "
                 "django.middleware.gzip.GZipMiddleware in %s." % setting_name,
                 hint="Move debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "after django.middleware.gzip.GZipMiddleware in %s." % setting_name,
+                id='ddt.W003',
             )
         )
 
