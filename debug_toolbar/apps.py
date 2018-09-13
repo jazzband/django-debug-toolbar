@@ -44,7 +44,7 @@ def check_middleware(app_configs, **kwargs):
                 "from %s." % setting_name,
                 hint="Add debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "%s." % setting_name,
-                id='ddt.W001',
+                id='debug_toolbar.W001',
             )
         )
     elif len(debug_toolbar_indexes) != 1:
@@ -55,7 +55,7 @@ def check_middleware(app_configs, **kwargs):
                 "multiple times in %s." % setting_name,
                 hint="Load debug_toolbar.middleware.DebugToolbarMiddleware only "
                 "once in %s." % setting_name,
-                id='ddt.W002',
+                id='debug_toolbar.W002',
             )
         )
     elif gzip_index is not None and debug_toolbar_indexes[0] < gzip_index:
@@ -66,7 +66,7 @@ def check_middleware(app_configs, **kwargs):
                 "django.middleware.gzip.GZipMiddleware in %s." % setting_name,
                 hint="Move debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "after django.middleware.gzip.GZipMiddleware in %s." % setting_name,
-                id='ddt.W003',
+                id='debug_toolbar.W003',
             )
         )
 

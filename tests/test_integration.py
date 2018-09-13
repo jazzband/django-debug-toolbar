@@ -8,7 +8,7 @@ import unittest
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
-from django.core.checks import Error, run_checks
+from django.core.checks import Warning, run_checks
 from django.template.loader import get_template
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
@@ -358,11 +358,12 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
         self.assertEqual(
             messages,
             [
-                Error(
+                Warning(
                     "debug_toolbar.middleware.DebugToolbarMiddleware is "
                     "missing from MIDDLEWARE.",
                     hint="Add debug_toolbar.middleware.DebugToolbarMiddleware "
                     "to MIDDLEWARE.",
+                    id='debug_toolbar.W001',
                 ),
             ]
         )
@@ -380,13 +381,14 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
         self.assertEqual(
             messages,
             [
-                Error(
+                Warning(
                     "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
                     "before django.middleware.gzip.GZipMiddleware in "
                     "MIDDLEWARE.",
                     hint="Move debug_toolbar.middleware.DebugToolbarMiddleware "
                     "to after django.middleware.gzip.GZipMiddleware in "
                     "MIDDLEWARE.",
+                    id='debug_toolbar.W003',
                 ),
             ]
         )
