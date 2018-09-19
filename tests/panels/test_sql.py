@@ -122,6 +122,55 @@ class SQLPanelTestCase(BaseTestCase):
             '["2017-12-22 16:07:01"]'
         ))
 
+    @unittest.skipUnless(connection.vendor != 'sqlite',
+                         'Test invalid for SQLite')
+    def test_raw_query_param_conversion(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        list(User.objects.raw(
+            " ".join([
+                "SELECT *",
+                "FROM auth_user",
+                "WHERE first_name = %s",
+                "AND is_staff = %s",
+                "AND is_superuser = %s",
+                "AND date_joined = %s",
+            ]),
+            params=['Foo', True, False, datetime.datetime(2017, 12, 22, 16, 7, 1)],
+        ))
+
+        list(User.objects.raw(
+            " ".join([
+                "SELECT *",
+                "FROM auth_user",
+                "WHERE first_name = %(first_name)s",
+                "AND is_staff = %(is_staff)s",
+                "AND is_superuser = %(is_superuser)s",
+                "AND date_joined = %(date_joined)s"
+            ]),
+            params={
+                'first_name': 'Foo',
+                'is_staff': True,
+                'is_superuser': False,
+                'date_joined': datetime.datetime(2017, 12, 22, 16, 7, 1)},
+        ))
+
+        self.panel.process_response(self.request, self.response)
+        self.panel.generate_stats(self.request, self.response)
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 2)
+
+        self.assertEqual(tuple([q[1]['params'] for q in self.panel._queries]), (
+            '["Foo", true, false, "2017-12-22 16:07:01"]',
+            " ".join([
+                '{"first_name": "Foo",',
+                '"is_staff": true,',
+                '"is_superuser": false,',
+                '"date_joined": "2017-12-22 16:07:01"}'
+            ])
+        ))
+
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and

@@ -124,7 +124,7 @@ class NormalCursorWrapper(object):
                 stacktrace = []
             _params = ''
             try:
-                _params = json.dumps([self._decode(p) for p in params])
+                _params = json.dumps(self._decode(params))
             except TypeError:
                 pass  # object not JSON serializable
 
