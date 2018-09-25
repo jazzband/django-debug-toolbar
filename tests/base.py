@@ -26,6 +26,9 @@ class BaseTestCase(TestCase):
         self.toolbar = toolbar
         self.toolbar.stats = {}
 
+    def tearDown(self):
+        DebugToolbarMiddleware.debug_toolbars.pop(threading.current_thread().ident, None)
+
     def assertValidHTML(self, content, msg=None):
         parser = html5lib.HTMLParser()
         parser.parseFragment(self.panel.content)

@@ -58,8 +58,16 @@ class DebugToolbarMiddleware(MiddlewareMixin):
         if request.is_ajax():
             return
 
+        # Check if it is used for the current request already.
+        # This allows for having it multiple times in MIDDLEWARE, where the
+        # SHOW_TOOLBAR_CALLBACK can decide multiple times if it should be
+        # shown.
+        thread_ident = threading.current_thread().ident
+        if self.__class__.debug_toolbars.get(thread_ident) is not None:
+            return
+
         toolbar = DebugToolbar(request)
-        self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
+        self.__class__.debug_toolbars[thread_ident] = toolbar
 
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
