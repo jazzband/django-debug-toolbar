@@ -6,7 +6,7 @@ from threading import local
 from time import time
 
 from django.utils import six
-from django.utils.encoding import force_text
+from django.utils.encoding import force_text, DjangoUnicodeDecodeError
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
@@ -84,7 +84,10 @@ class NormalCursorWrapper(object):
 
     def _quote_expr(self, element):
         if isinstance(element, six.string_types):
-            return "'%s'" % force_text(element).replace("'", "''")
+            try:
+                return "'%s'" % force_text(element).replace("'", "''")
+            except DjangoUnicodeDecodeError:
+                return repr(element)
         else:
             return repr(element)
 
