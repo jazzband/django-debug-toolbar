@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +9,6 @@
 <p class="notice">
 	{% trans "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes. You can click the above link to continue with the redirect as normal." %}
 </p>
-<script type="text/javascript">
-    document.getElementById('redirect_to').focus();
-</script>
+<script src="{% static 'debug_toolbar/js/redirect.js' %}" defer></script>
 </body>
 </html>
