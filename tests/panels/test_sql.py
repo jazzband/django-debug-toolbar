@@ -122,6 +122,18 @@ class SQLPanelTestCase(BaseTestCase):
             '["2017-12-22 16:07:01"]'
         ))
 
+    @unittest.skipUnless(connection.vendor not in ('sqlite', 'postgresql'), '')
+    def test_binary_param_force_text(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM auth_user WHERE username = %s", [b'\xff'])
+
+        self.assertEqual(len(self.panel._queries), 1)
+
+        self.panel.process_response(self.request, self.response)
+        self.panel.generate_stats(self.request, self.response)
+
     @unittest.skipUnless(connection.vendor != 'sqlite',
                          'Test invalid for SQLite')
     def test_raw_query_param_conversion(self):

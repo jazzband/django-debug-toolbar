@@ -6,7 +6,7 @@ from threading import local
 from time import time
 
 from django.utils import six
-from django.utils.encoding import force_text, DjangoUnicodeDecodeError
+from django.utils.encoding import DjangoUnicodeDecodeError, force_text
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
@@ -88,6 +88,8 @@ class NormalCursorWrapper(object):
                 return "'%s'" % force_text(element).replace("'", "''")
             except DjangoUnicodeDecodeError:
                 return repr(element)
+        elif isinstance(element, six.binary_type):
+            return '(binary data)'
         else:
             return repr(element)
 
