@@ -31,8 +31,8 @@ class Panel(object):
         # For that reason, replace .panel. in the path and check for that
         # value in the disabled panels as well.
         disable_panel = (
-            panel_path in disabled_panels or
-            panel_path.replace('.panel.', '.') in disabled_panels)
+            panel_path in disabled_panels
+            or panel_path.replace('.panel.', '.') in disabled_panels)
         if disable_panel:
             default = 'off'
         else:
