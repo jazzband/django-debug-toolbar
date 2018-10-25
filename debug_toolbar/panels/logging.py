@@ -13,15 +13,14 @@ try:
 except ImportError:
     threading = None
 
-MESSAGE_IF_STRING_REPRESENTATION_INVALID = '[Could not get log message]'
+MESSAGE_IF_STRING_REPRESENTATION_INVALID = "[Could not get log message]"
 
 
 class LogCollector(ThreadCollector):
-
     def collect(self, item, thread=None):
         # Avoid logging SQL queries since they are already in the SQL panel
         # TODO: Make this check whether SQL panel is enabled
-        if item.get('channel', '') == 'django.db.backends':
+        if item.get("channel", "") == "django.db.backends":
             return
         super(LogCollector, self).collect(item, thread)
 
@@ -38,12 +37,12 @@ class ThreadTrackingHandler(logging.Handler):
             message = MESSAGE_IF_STRING_REPRESENTATION_INVALID
 
         record = {
-            'message': message,
-            'time': datetime.datetime.fromtimestamp(record.created),
-            'level': record.levelname,
-            'file': record.pathname,
-            'line': record.lineno,
-            'channel': record.name,
+            "message": message,
+            "time": datetime.datetime.fromtimestamp(record.created),
+            "level": record.levelname,
+            "file": record.pathname,
+            "line": record.lineno,
+            "channel": record.name,
         }
         self.collector.collect(record)
 
@@ -57,7 +56,7 @@ logging.root.addHandler(logging_handler)
 
 
 class LoggingPanel(Panel):
-    template = 'debug_toolbar/panels/logging.html'
+    template = "debug_toolbar/panels/logging.html"
 
     def __init__(self, *args, **kwargs):
         super(LoggingPanel, self).__init__(*args, **kwargs)
@@ -69,8 +68,9 @@ class LoggingPanel(Panel):
     def nav_subtitle(self):
         records = self._records[threading.currentThread()]
         record_count = len(records)
-        return ungettext("%(count)s message", "%(count)s messages",
-                         record_count) % {'count': record_count}
+        return ungettext("%(count)s message", "%(count)s messages", record_count) % {
+            "count": record_count
+        }
 
     title = _("Log messages")
 
@@ -81,4 +81,4 @@ class LoggingPanel(Panel):
         records = collector.get_collection()
         self._records[threading.currentThread()] = records
         collector.clear_collection()
-        self.record_stats({'records': records})
+        self.record_stats({"records": records})

@@ -34,6 +34,7 @@ if Template._render != instrumented_test_render:
 # Monkey-patch to store items added by template context processors. The
 # overhead is sufficiently small to justify enabling it unconditionally.
 
+
 @contextmanager
 def _request_context_bind_template(self, template):
     if self.template is not None:
@@ -41,12 +42,11 @@ def _request_context_bind_template(self, template):
 
     self.template = template
     # Set context processors according to the template engine's settings.
-    processors = (template.engine.template_context_processors
-                  + self._processors)
+    processors = template.engine.template_context_processors + self._processors
     self.context_processors = OrderedDict()
     updates = {}
     for processor in processors:
-        name = '%s.%s' % (processor.__module__, processor.__name__)
+        name = "%s.%s" % (processor.__module__, processor.__name__)
         context = processor(self.request)
         self.context_processors[name] = context
         updates.update(context)
@@ -67,6 +67,7 @@ class TemplatesPanel(Panel):
     """
     A panel that lists all templates used during processing of a response.
     """
+
     def __init__(self, *args, **kwargs):
         super(TemplatesPanel, self).__init__(*args, **kwargs)
         self.templates = []
@@ -82,16 +83,13 @@ class TemplatesPanel(Panel):
         self.pformat_layers = []
 
     def _store_template_info(self, sender, **kwargs):
-        template, context = kwargs['template'], kwargs['context']
+        template, context = kwargs["template"], kwargs["context"]
 
         # Skip templates that we are generating through the debug toolbar.
-        is_debug_toolbar_template = (
-            isinstance(template.name, six.string_types)
-            and (
-                template.name.startswith('debug_toolbar/')
-                or template.name.startswith(
-                    tuple(self.toolbar.config['SKIP_TEMPLATE_PREFIXES'])
-                )
+        is_debug_toolbar_template = isinstance(template.name, six.string_types) and (
+            template.name.startswith("debug_toolbar/")
+            or template.name.startswith(
+                tuple(self.toolbar.config["SKIP_TEMPLATE_PREFIXES"])
             )
         )
         if is_debug_toolbar_template:
@@ -99,7 +97,7 @@ class TemplatesPanel(Panel):
 
         context_list = []
         for context_layer in context.dicts:
-            if hasattr(context_layer, 'items') and context_layer:
+            if hasattr(context_layer, "items") and context_layer:
                 # Refs GitHub issue #910
                 # If we can find this layer in our pseudo-cache then find the
                 # matching prettified version in the associated list.
@@ -115,30 +113,36 @@ class TemplatesPanel(Panel):
                         # unicode representation and the request data is
                         # already made available from the Request panel.
                         if isinstance(value, http.HttpRequest):
-                            temp_layer[key] = '<<request>>'
+                            temp_layer[key] = "<<request>>"
                         # Replace the debugging sql_queries element. The SQL
                         # data is already made available from the SQL panel.
-                        elif key == 'sql_queries' and isinstance(value, list):
-                            temp_layer[key] = '<<sql_queries>>'
-                        # Replace LANGUAGES, which is available in i18n context processor
-                        elif key == 'LANGUAGES' and isinstance(value, tuple):
-                            temp_layer[key] = '<<languages>>'
-                        # QuerySet would trigger the database: user can run the query from SQL Panel
+                        elif key == "sql_queries" and isinstance(value, list):
+                            temp_layer[key] = "<<sql_queries>>"
+                        # Replace LANGUAGES, which is available in i18n context
+                        # processor
+                        elif key == "LANGUAGES" and isinstance(value, tuple):
+                            temp_layer[key] = "<<languages>>"
+                        # QuerySet would trigger the database: user can run the
+                        # query from SQL Panel
                         elif isinstance(value, (QuerySet, RawQuerySet)):
                             model_name = "%s.%s" % (
-                                value.model._meta.app_label, value.model.__name__)
-                            temp_layer[key] = '<<%s of %s>>' % (
-                                value.__class__.__name__.lower(), model_name)
+                                value.model._meta.app_label,
+                                value.model.__name__,
+                            )
+                            temp_layer[key] = "<<%s of %s>>" % (
+                                value.__class__.__name__.lower(),
+                                model_name,
+                            )
                         else:
                             try:
                                 recording(False)
                                 saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
-                                temp_layer[key] = '<<triggers database query>>'
+                                temp_layer[key] = "<<triggers database query>>"
                             except UnicodeEncodeError:
-                                temp_layer[key] = '<<unicode encode error>>'
+                                temp_layer[key] = "<<unicode encode error>>"
                             except Exception:
-                                temp_layer[key] = '<<unhandled exception>>'
+                                temp_layer[key] = "<<unhandled exception>>"
                             else:
                                 temp_layer[key] = value
                             finally:
@@ -158,8 +162,8 @@ class TemplatesPanel(Panel):
                         self.pformat_layers.insert(index, pformatted)
                         context_list.append(pformatted)
 
-        kwargs['context'] = context_list
-        kwargs['context_processors'] = getattr(context, 'context_processors', None)
+        kwargs["context"] = context_list
+        kwargs["context_processors"] = getattr(context, "context_processors", None)
         self.templates.append(kwargs)
 
     # Implement the Panel API
@@ -169,20 +173,22 @@ class TemplatesPanel(Panel):
     @property
     def title(self):
         num_templates = len(self.templates)
-        return _("Templates (%(num_templates)s rendered)") % {'num_templates': num_templates}
+        return _("Templates (%(num_templates)s rendered)") % {
+            "num_templates": num_templates
+        }
 
     @property
     def nav_subtitle(self):
         if self.templates:
-            return self.templates[0]['template'].name
-        return ''
+            return self.templates[0]["template"].name
+        return ""
 
-    template = 'debug_toolbar/panels/templates.html'
+    template = "debug_toolbar/panels/templates.html"
 
     @classmethod
     def get_urls(cls):
         return [
-            url(r'^template_source/$', views.template_source, name='template_source'),
+            url(r"^template_source/$", views.template_source, name="template_source")
         ]
 
     def enable_instrumentation(self):
@@ -196,33 +202,38 @@ class TemplatesPanel(Panel):
         for template_data in self.templates:
             info = {}
             # Clean up some info about templates
-            template = template_data.get('template', None)
-            if hasattr(template, 'origin') and template.origin and template.origin.name:
+            template = template_data.get("template", None)
+            if hasattr(template, "origin") and template.origin and template.origin.name:
                 template.origin_name = template.origin.name
                 template.origin_hash = signing.dumps(template.origin.name)
             else:
-                template.origin_name = _('No origin')
-                template.origin_hash = ''
-            info['template'] = template
+                template.origin_name = _("No origin")
+                template.origin_hash = ""
+            info["template"] = template
             # Clean up context for better readability
-            if self.toolbar.config['SHOW_TEMPLATE_CONTEXT']:
-                context_list = template_data.get('context', [])
-                info['context'] = '\n'.join(context_list)
+            if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]:
+                context_list = template_data.get("context", [])
+                info["context"] = "\n".join(context_list)
             template_context.append(info)
 
         # Fetch context_processors/template_dirs from any template
         if self.templates:
-            context_processors = self.templates[0]['context_processors']
-            template = self.templates[0]['template']
-            # django templates have the 'engine' attribute, while jinja templates use 'backend'
-            engine_backend = getattr(template, 'engine', None) or getattr(template, 'backend')
+            context_processors = self.templates[0]["context_processors"]
+            template = self.templates[0]["template"]
+            # django templates have the 'engine' attribute, while jinja
+            # templates use 'backend'
+            engine_backend = getattr(template, "engine", None) or getattr(
+                template, "backend"
+            )
             template_dirs = engine_backend.dirs
         else:
             context_processors = None
             template_dirs = []
 
-        self.record_stats({
-            'templates': template_context,
-            'template_dirs': [normpath(x) for x in template_dirs],
-            'context_processors': context_processors,
-        })
+        self.record_stats(
+            {
+                "templates": template_context,
+                "template_dirs": [normpath(x) for x in template_dirs],
+                "context_processors": context_processors,
+            }
+        )

@@ -43,7 +43,7 @@ matrix:
       addons:
         postgresql: "9.5"
     - env: TOXENV=flake8
-    - env: TOXENV=isort
+    - env: TOXENV=style
     - env: TOXENV=readme
   allow_failures:
     - env: TOXENV=py35-djmaster

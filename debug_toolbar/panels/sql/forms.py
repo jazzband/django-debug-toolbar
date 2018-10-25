@@ -25,18 +25,19 @@ class SQLSelectForm(forms.Form):
         duration: time for SQL to execute passed in from toolbar just for redisplay
         hash: the hash of (secret + sql + params) for tamper checking
     """
+
     sql = forms.CharField()
     raw_sql = forms.CharField()
     params = forms.CharField()
-    alias = forms.CharField(required=False, initial='default')
+    alias = forms.CharField(required=False, initial="default")
     duration = forms.FloatField()
     hash = forms.CharField()
 
     def __init__(self, *args, **kwargs):
-        initial = kwargs.get('initial', None)
+        initial = kwargs.get("initial", None)
 
         if initial is not None:
-            initial['hash'] = self.make_hash(initial)
+            initial["hash"] = self.make_hash(initial)
 
         super(SQLSelectForm, self).__init__(*args, **kwargs)
 
@@ -44,23 +45,23 @@ class SQLSelectForm(forms.Form):
             self.fields[name].widget = forms.HiddenInput()
 
     def clean_raw_sql(self):
-        value = self.cleaned_data['raw_sql']
+        value = self.cleaned_data["raw_sql"]
 
-        if not value.lower().strip().startswith('select'):
+        if not value.lower().strip().startswith("select"):
             raise ValidationError("Only 'select' queries are allowed.")
 
         return value
 
     def clean_params(self):
-        value = self.cleaned_data['params']
+        value = self.cleaned_data["params"]
 
         try:
             return json.loads(value)
         except ValueError:
-            raise ValidationError('Is not valid JSON')
+            raise ValidationError("Is not valid JSON")
 
     def clean_alias(self):
-        value = self.cleaned_data['alias']
+        value = self.cleaned_data["alias"]
 
         if value not in connections:
             raise ValidationError("Database alias '%s' not found" % value)
@@ -68,25 +69,25 @@ class SQLSelectForm(forms.Form):
         return value
 
     def clean_hash(self):
-        hash = self.cleaned_data['hash']
+        hash = self.cleaned_data["hash"]
 
         if not constant_time_compare(hash, self.make_hash(self.data)):
-            raise ValidationError('Tamper alert')
+            raise ValidationError("Tamper alert")
 
         return hash
 
     def reformat_sql(self):
-        return reformat_sql(self.cleaned_data['sql'])
+        return reformat_sql(self.cleaned_data["sql"])
 
     def make_hash(self, data):
         m = hmac.new(key=force_bytes(settings.SECRET_KEY), digestmod=hashlib.sha1)
-        for item in [data['sql'], data['params']]:
+        for item in [data["sql"], data["params"]]:
             m.update(force_bytes(item))
         return m.hexdigest()
 
     @property
     def connection(self):
-        return connections[self.cleaned_data['alias']]
+        return connections[self.cleaned_data["alias"]]
 
     @cached_property
     def cursor(self):

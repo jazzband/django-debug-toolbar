@@ -13,24 +13,24 @@ class VersionsPanel(Panel):
     """
     Shows versions of Python, Django, and installed apps if possible.
     """
+
     @property
     def nav_subtitle(self):
-        return 'Django %s' % django.get_version()
+        return "Django %s" % django.get_version()
 
     title = _("Versions")
 
-    template = 'debug_toolbar/panels/versions.html'
+    template = "debug_toolbar/panels/versions.html"
 
     def generate_stats(self, request, response):
         versions = [
-            ('Python', '', '%d.%d.%d' % sys.version_info[:3]),
-            ('Django', '', self.get_app_version(django)),
+            ("Python", "", "%d.%d.%d" % sys.version_info[:3]),
+            ("Django", "", self.get_app_version(django)),
         ]
         versions += list(self.gen_app_versions())
-        self.record_stats({
-            'versions': sorted(versions, key=lambda v: v[0]),
-            'paths': sys.path,
-        })
+        self.record_stats(
+            {"versions": sorted(versions, key=lambda v: v[0]), "paths": sys.path}
+        )
 
     def gen_app_versions(self):
         for app_config in apps.get_app_configs():
@@ -45,11 +45,11 @@ class VersionsPanel(Panel):
         if isinstance(version, (list, tuple)):
             # We strip dots from the right because we do not want to show
             # trailing dots if there are empty elements in the list/tuple
-            version = '.'.join(str(o) for o in version).rstrip('.')
+            version = ".".join(str(o) for o in version).rstrip(".")
         return version
 
     def get_version_from_app(self, app):
-        if hasattr(app, 'get_version'):
+        if hasattr(app, "get_version"):
             get_version = app.get_version
             if callable(get_version):
                 try:
@@ -58,8 +58,8 @@ class VersionsPanel(Panel):
                     pass
             else:
                 return get_version
-        if hasattr(app, 'VERSION'):
+        if hasattr(app, "VERSION"):
             return app.VERSION
-        if hasattr(app, '__version__'):
+        if hasattr(app, "__version__"):
             return app.__version__
         return

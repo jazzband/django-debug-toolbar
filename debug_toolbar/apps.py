@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class DebugToolbarConfig(AppConfig):
-    name = 'debug_toolbar'
+    name = "debug_toolbar"
     verbose_name = _("Debug Toolbar")
 
 
@@ -23,11 +23,11 @@ def check_middleware(app_configs, **kwargs):
     gzip_index = None
     debug_toolbar_indexes = []
 
-    setting = getattr(settings, 'MIDDLEWARE', None)
-    setting_name = 'MIDDLEWARE'
+    setting = getattr(settings, "MIDDLEWARE", None)
+    setting_name = "MIDDLEWARE"
     if setting is None:
         setting = settings.MIDDLEWARE_CLASSES
-        setting_name = 'MIDDLEWARE_CLASSES'
+        setting_name = "MIDDLEWARE_CLASSES"
 
     # Determine the indexes which gzip and/or the toolbar are installed at
     for i, middleware in enumerate(setting):
@@ -44,7 +44,7 @@ def check_middleware(app_configs, **kwargs):
                 "from %s." % setting_name,
                 hint="Add debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "%s." % setting_name,
-                id='debug_toolbar.W001',
+                id="debug_toolbar.W001",
             )
         )
     elif len(debug_toolbar_indexes) != 1:
@@ -55,7 +55,7 @@ def check_middleware(app_configs, **kwargs):
                 "multiple times in %s." % setting_name,
                 hint="Load debug_toolbar.middleware.DebugToolbarMiddleware only "
                 "once in %s." % setting_name,
-                id='debug_toolbar.W002',
+                id="debug_toolbar.W002",
             )
         )
     elif gzip_index is not None and debug_toolbar_indexes[0] < gzip_index:
@@ -66,7 +66,7 @@ def check_middleware(app_configs, **kwargs):
                 "django.middleware.gzip.GZipMiddleware in %s." % setting_name,
                 hint="Move debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "after django.middleware.gzip.GZipMiddleware in %s." % setting_name,
-                id='debug_toolbar.W003',
+                id="debug_toolbar.W003",
             )
         )
 
@@ -78,7 +78,6 @@ def is_middleware_class(middleware_class, middleware_path):
         middleware_cls = import_string(middleware_path)
     except ImportError:
         return
-    return (
-        inspect.isclass(middleware_cls)
-        and issubclass(middleware_cls, middleware_class)
+    return inspect.isclass(middleware_cls) and issubclass(
+        middleware_cls, middleware_class
     )

@@ -16,14 +16,14 @@ def template_source(request):
     Return the source of a template, syntax-highlighted by Pygments if
     it's available.
     """
-    template_origin_name = request.GET.get('template_origin', None)
+    template_origin_name = request.GET.get("template_origin", None)
     if template_origin_name is None:
         return HttpResponseBadRequest('"template_origin" key is required')
     try:
         template_origin_name = signing.loads(template_origin_name)
     except Exception:
         return HttpResponseBadRequest('"template_origin" is invalid')
-    template_name = request.GET.get('template', template_origin_name)
+    template_name = request.GET.get("template", template_origin_name)
 
     final_loaders = []
     loaders = Engine.get_default().template_loaders
@@ -33,7 +33,7 @@ def template_source(request):
             # When the loader has loaders associated with it,
             # append those loaders to the list. This occurs with
             # django.template.loaders.cached.Loader
-            if hasattr(loader, 'loaders'):
+            if hasattr(loader, "loaders"):
                 final_loaders += loader.loaders
             else:
                 final_loaders.append(loader)
@@ -60,7 +60,7 @@ def template_source(request):
         pass
 
     # Using SimpleTemplateResponse avoids running global context processors.
-    return SimpleTemplateResponse('debug_toolbar/panels/template_source.html', {
-        'source': source,
-        'template_name': template_name
-    })
+    return SimpleTemplateResponse(
+        "debug_toolbar/panels/template_source.html",
+        {"source": source, "template_name": template_name},
+    )

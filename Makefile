@@ -1,13 +1,16 @@
 .PHONY: flake8 example test coverage translatable_strings update_translations
 
-flake8:
+style:
+	isort -rc debug_toolbar example tests
+	black debug_toolbar example tests setup.py
 	flake8 debug_toolbar example tests
 
-isort:
-	isort -rc debug_toolbar example tests
-
-isort_check_only:
+style_check:
 	isort -rc -c debug_toolbar example tests
+	black --check debug_toolbar example tests setup.py
+
+flake8:
+	flake8 debug_toolbar example tests
 
 example:
 	python example/manage.py runserver
