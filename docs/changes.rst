@@ -4,6 +4,8 @@ Change log
 UNRELEASED
 ----------
 
+* Use ``defer`` on all ``<script>`` tags to avoid blocking HTML parsing.
+
 1.10.1 (2018-09-11)
 -------------------
 
