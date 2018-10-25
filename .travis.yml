@@ -30,8 +30,6 @@ matrix:
       env: TOXENV=py37-dj21
       dist: xenial
       sudo: true
-    - python: 3.5
-      env: TOXENV=py35-djmaster
     - python: 3.6
       env: TOXENV=py36-djmaster
     - python: 3.7
@@ -46,7 +44,6 @@ matrix:
     - env: TOXENV=isort
     - env: TOXENV=readme
   allow_failures:
-    - env: TOXENV=py35-djmaster
     - env: TOXENV=py36-djmaster
     - env: TOXENV=py37-djmaster
 
