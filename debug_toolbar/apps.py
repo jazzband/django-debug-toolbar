@@ -79,6 +79,6 @@ def is_middleware_class(middleware_class, middleware_path):
     except ImportError:
         return
     return (
-        inspect.isclass(middleware_cls) and
-        issubclass(middleware_cls, middleware_class)
+        inspect.isclass(middleware_cls)
+        and issubclass(middleware_cls, middleware_class)
     )

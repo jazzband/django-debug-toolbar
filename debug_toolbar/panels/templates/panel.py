@@ -41,8 +41,8 @@ def _request_context_bind_template(self, template):
 
     self.template = template
     # Set context processors according to the template engine's settings.
-    processors = (template.engine.template_context_processors +
-                  self._processors)
+    processors = (template.engine.template_context_processors
+                  + self._processors)
     self.context_processors = OrderedDict()
     updates = {}
     for processor in processors:
@@ -85,10 +85,16 @@ class TemplatesPanel(Panel):
         template, context = kwargs['template'], kwargs['context']
 
         # Skip templates that we are generating through the debug toolbar.
-        if (isinstance(template.name, six.string_types) and (
-            template.name.startswith('debug_toolbar/') or
-            template.name.startswith(
-                tuple(self.toolbar.config['SKIP_TEMPLATE_PREFIXES'])))):
+        is_debug_toolbar_template = (
+            isinstance(template.name, six.string_types)
+            and (
+                template.name.startswith('debug_toolbar/')
+                or template.name.startswith(
+                    tuple(self.toolbar.config['SKIP_TEMPLATE_PREFIXES'])
+                )
+            )
+        )
+        if is_debug_toolbar_template:
             return
 
         context_list = []
