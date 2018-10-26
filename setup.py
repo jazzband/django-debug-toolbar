@@ -4,12 +4,18 @@ from io import open
 
 from setuptools import find_packages, setup
 
+
+def readall(path):
+    with open(path, encoding="utf-8") as fp:
+        return fp.read()
+
+
 setup(
     name="django-debug-toolbar",
     version="1.10.1",
     description="A configurable set of panels that display various debug "
     "information about the current request/response.",
-    long_description=open("README.rst", encoding="utf-8").read(),
+    long_description=readall("README.rst"),
     author="Rob Hudson",
     author_email="rob@cogit8.org",
     url="https://github.com/jazzband/django-debug-toolbar",
