@@ -13,4 +13,5 @@ def require_show_toolbar(view):
             raise Http404
 
         return view(request, *args, **kwargs)
+
     return inner

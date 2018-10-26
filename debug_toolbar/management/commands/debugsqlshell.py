@@ -3,9 +3,10 @@ from __future__ import absolute_import, print_function, unicode_literals
 from time import time
 
 import sqlparse
-# 'debugsqlshell' is the same as the 'shell'.
 from django.core.management.commands.shell import Command  # noqa
 from django.db.backends import utils as db_backends_utils
+
+# 'debugsqlshell' is the same as the 'shell'.
 
 
 class PrintQueryWrapper(db_backends_utils.CursorDebugWrapper):
@@ -18,7 +19,7 @@ class PrintQueryWrapper(db_backends_utils.CursorDebugWrapper):
             end_time = time()
             duration = (end_time - start_time) * 1000
             formatted_sql = sqlparse.format(raw_sql, reindent=True)
-            print('%s [%.2fms]' % (formatted_sql, duration))
+            print("%s [%.2fms]" % (formatted_sql, duration))
 
 
 db_backends_utils.CursorDebugWrapper = PrintQueryWrapper

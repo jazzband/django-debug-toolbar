@@ -9,30 +9,33 @@ from sqlparse import tokens as T
 
 class BoldKeywordFilter:
     """sqlparse filter to bold SQL keywords"""
+
     def process(self, stream):
         """Process the token stream"""
         for token_type, value in stream:
             is_keyword = token_type in T.Keyword
             if is_keyword:
-                yield T.Text, '<strong>'
+                yield T.Text, "<strong>"
             yield token_type, escape(value)
             if is_keyword:
-                yield T.Text, '</strong>'
+                yield T.Text, "</strong>"
 
 
 def reformat_sql(sql):
     stack = sqlparse.engine.FilterStack()
     stack.preprocess.append(BoldKeywordFilter())  # add our custom filter
     stack.postprocess.append(sqlparse.filters.SerializerUnicode())  # tokens -> strings
-    return swap_fields(''.join(stack.run(sql)))
+    return swap_fields("".join(stack.run(sql)))
 
 
 def swap_fields(sql):
-    expr = r'SELECT</strong> (...........*?) <strong>FROM'
-    subs = (r'SELECT</strong> '
-            r'<span class="djDebugUncollapsed" href="#">&#8226;&#8226;&#8226;</span> '
-            r'<span class="djDebugCollapsed" href="#">\1</span> '
-            r'<strong>FROM')
+    expr = r"SELECT</strong> (...........*?) <strong>FROM"
+    subs = (
+        r"SELECT</strong> "
+        r'<span class="djDebugUncollapsed" href="#">&#8226;&#8226;&#8226;</span> '
+        r'<span class="djDebugCollapsed" href="#">\1</span> '
+        r"<strong>FROM"
+    )
     return re.sub(expr, subs, sql)
 
 
@@ -41,11 +44,19 @@ def contrasting_color_generator():
     Generate constrasting colors by varying most significant bit of RGB first,
     and then vary subsequent bits systematically.
     """
-    def rgb_to_hex(rgb):
-        return '#%02x%02x%02x' % tuple(rgb)
 
-    triples = [(1, 0, 0), (0, 1, 0), (0, 0, 1),
-               (1, 1, 0), (0, 1, 1), (1, 0, 1), (1, 1, 1)]
+    def rgb_to_hex(rgb):
+        return "#%02x%02x%02x" % tuple(rgb)
+
+    triples = [
+        (1, 0, 0),
+        (0, 1, 0),
+        (0, 0, 1),
+        (1, 1, 0),
+        (0, 1, 1),
+        (1, 0, 1),
+        (1, 1, 1),
+    ]
     n = 1 << 7
     so_far = [[0, 0, 0]]
     while True:

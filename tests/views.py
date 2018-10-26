@@ -15,16 +15,16 @@ def execute_sql(request):
 
 
 def regular_view(request, title):
-    return render(request, 'basic.html', {'title': title})
+    return render(request, "basic.html", {"title": title})
 
 
 def template_response_view(request, title):
-    return TemplateResponse(request, 'basic.html', {'title': title})
+    return TemplateResponse(request, "basic.html", {"title": title})
 
 
-def new_user(request, username='joe'):
+def new_user(request, username="joe"):
     User.objects.create_user(username=username)
-    return render(request, 'basic.html', {'title': 'new user'})
+    return render(request, "basic.html", {"title": "new user"})
 
 
 def resolving_view(request, arg1, arg2):
@@ -38,13 +38,13 @@ def cached_view(request):
 
 
 def regular_jinjia_view(request, title):
-    return render(request, 'jinja2/basic.jinja', {'title': title})
+    return render(request, "jinja2/basic.jinja", {"title": title})
 
 
 def listcomp_view(request):
     lst = [i for i in range(50000) if i % 2 == 0]
-    return render(request, 'basic.html', {'title': 'List comprehension', 'lst': lst})
+    return render(request, "basic.html", {"title": "List comprehension", "lst": lst})
 
 
 def redirect_view(request):
-    return HttpResponseRedirect('/regular/redirect/')
+    return HttpResponseRedirect("/regular/redirect/")

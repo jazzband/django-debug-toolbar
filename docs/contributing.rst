@@ -85,14 +85,11 @@ SQLite.
 Style
 -----
 
-Python code for the Django Debug Toolbar follows PEP8. Line length is limited
-to 100 characters. You can check for style violations with::
+The Django Debug Toolbar uses `black <https://github.com/ambv/black>`__
+to format code and additionally uses flake8 and isort. You can reformat
+the code using::
 
-    $ make flake8
-
-Import style is enforced by isort. You can sort import automatically with::
-
-    $ make isort
+    $ make style
 
 Patches
 -------
