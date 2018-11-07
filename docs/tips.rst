@@ -14,6 +14,10 @@ requests and return responses. Putting the debug toolbar middleware *after*
 the Flatpage middleware, for example, means the toolbar will not show up on
 flatpages.
 
+Browsers have become more aggressive with caching static assets, such as
+JavaScript and CSS files. Check your browser's development console, and if
+you see errors, try a hard browser refresh or clearing your cache.
+
 Middleware isn't working correctly
 ----------------------------------
 
