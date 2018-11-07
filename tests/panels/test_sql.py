@@ -122,7 +122,8 @@ class SQLPanelTestCase(BaseTestCase):
             '["2017-12-22 16:07:01"]'
         ))
 
-    @unittest.skipUnless(connection.vendor not in ('sqlite', 'postgresql'), '')
+    @unittest.skipIf(connection.vendor in ('sqlite', 'postgresql'),
+                     'Mixing bytestrings and text is not allowed on PostgreSQL and SQLite')
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
 
@@ -130,12 +131,12 @@ class SQLPanelTestCase(BaseTestCase):
             cursor.execute("SELECT * FROM auth_user WHERE username = %s", [b'\xff'])
 
         self.assertEqual(len(self.panel._queries), 1)
+        self.assertEqual(self.panel._queries[0][1]['sql'], "SELECT * FROM auth_user WHERE username = '\ufffd'")
 
         self.panel.process_response(self.request, self.response)
         self.panel.generate_stats(self.request, self.response)
 
-    @unittest.skipUnless(connection.vendor != 'sqlite',
-                         'Test invalid for SQLite')
+    @unittest.skipUnless(connection.vendor != 'sqlite', 'Test invalid for SQLite')
     def test_raw_query_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
 
