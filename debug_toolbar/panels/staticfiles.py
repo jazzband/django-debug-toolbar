@@ -25,6 +25,7 @@ class StaticFile(object):
     """
     Representing the different properties of a static file.
     """
+
     def __init__(self, path):
         self.path = path
 
@@ -39,10 +40,9 @@ class StaticFile(object):
 
 
 class FileCollector(ThreadCollector):
-
     def collect(self, path, thread=None):
         # handle the case of {% static "admin/" %}
-        if path.endswith('/'):
+        if path.endswith("/"):
             return
         super(FileCollector, self).collect(StaticFile(path), thread)
 
@@ -56,12 +56,12 @@ class DebugConfiguredStorage(LazyObject):
     are resolved by using the {% static %} template tag (which uses the
     `url` method).
     """
+
     def _setup(self):
 
         configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
 
         class DebugStaticFilesStorage(configured_storage_cls):
-
             def __init__(self, collector, *args, **kwargs):
                 super(DebugStaticFilesStorage, self).__init__(*args, **kwargs)
                 self.collector = collector
@@ -80,13 +80,16 @@ class StaticFilesPanel(panels.Panel):
     """
     A panel to display the found staticfiles.
     """
-    name = 'Static files'
-    template = 'debug_toolbar/panels/staticfiles.html'
+
+    name = "Static files"
+    template = "debug_toolbar/panels/staticfiles.html"
 
     @property
     def title(self):
-        return (_("Static files (%(num_found)s found, %(num_used)s used)") %
-                {'num_found': self.num_found, 'num_used': self.num_used})
+        return _("Static files (%(num_found)s found, %(num_used)s used)") % {
+            "num_found": self.num_found,
+            "num_used": self.num_used,
+        }
 
     def __init__(self, *args, **kwargs):
         super(StaticFilesPanel, self).__init__(*args, **kwargs)
@@ -94,23 +97,27 @@ class StaticFilesPanel(panels.Panel):
         self._paths = {}
 
     def enable_instrumentation(self):
-        storage.staticfiles_storage = staticfiles.staticfiles_storage = DebugConfiguredStorage()
+        storage.staticfiles_storage = (
+            staticfiles.staticfiles_storage
+        ) = DebugConfiguredStorage()
 
     def disable_instrumentation(self):
-        storage.staticfiles_storage = staticfiles.staticfiles_storage = _original_storage
+        storage.staticfiles_storage = (
+            staticfiles.staticfiles_storage
+        ) = _original_storage
 
     @property
     def num_used(self):
         return len(self._paths[threading.currentThread()])
 
-    nav_title = _('Static files')
+    nav_title = _("Static files")
 
     @property
     def nav_subtitle(self):
         num_used = self.num_used
-        return ungettext("%(num_used)s file used",
-                         "%(num_used)s files used",
-                         num_used) % {'num_used': num_used}
+        return ungettext(
+            "%(num_used)s file used", "%(num_used)s files used", num_used
+        ) % {"num_used": num_used}
 
     def process_request(self, request):
         collector.clear_collection()
@@ -119,14 +126,16 @@ class StaticFilesPanel(panels.Panel):
         used_paths = collector.get_collection()
         self._paths[threading.currentThread()] = used_paths
 
-        self.record_stats({
-            'num_found': self.num_found,
-            'num_used': self.num_used,
-            'staticfiles': used_paths,
-            'staticfiles_apps': self.get_staticfiles_apps(),
-            'staticfiles_dirs': self.get_staticfiles_dirs(),
-            'staticfiles_finders': self.get_staticfiles_finders(),
-        })
+        self.record_stats(
+            {
+                "num_found": self.num_found,
+                "num_used": self.num_used,
+                "staticfiles": used_paths,
+                "staticfiles_apps": self.get_staticfiles_apps(),
+                "staticfiles_dirs": self.get_staticfiles_dirs(),
+                "staticfiles_finders": self.get_staticfiles_finders(),
+            }
+        )
 
     def get_staticfiles_finders(self):
         """
@@ -137,13 +146,12 @@ class StaticFilesPanel(panels.Panel):
         finders_mapping = OrderedDict()
         for finder in finders.get_finders():
             for path, finder_storage in finder.list([]):
-                if getattr(finder_storage, 'prefix', None):
+                if getattr(finder_storage, "prefix", None):
                     prefixed_path = join(finder_storage.prefix, path)
                 else:
                     prefixed_path = path
                 finder_cls = finder.__class__
-                finder_path = '.'.join([finder_cls.__module__,
-                                        finder_cls.__name__])
+                finder_path = ".".join([finder_cls.__module__, finder_cls.__name__])
                 real_path = finder_storage.path(path)
                 payload = (prefixed_path, real_path)
                 finders_mapping.setdefault(finder_path, []).append(payload)

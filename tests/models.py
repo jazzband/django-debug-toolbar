@@ -7,4 +7,4 @@ from django.utils import six
 
 class NonAsciiRepr(object):
     def __repr__(self):
-        return 'nôt åscíì' if six.PY3 else 'nôt åscíì'.encode('utf-8')
+        return "nôt åscíì" if six.PY3 else "nôt åscíì".encode("utf-8")

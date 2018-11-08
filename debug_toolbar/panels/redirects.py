@@ -17,13 +17,15 @@ class RedirectsPanel(Panel):
 
     def process_response(self, request, response):
         if 300 <= int(response.status_code) < 400:
-            redirect_to = response.get('Location', None)
+            redirect_to = response.get("Location", None)
             if redirect_to:
-                status_line = '%s %s' % (response.status_code, response.reason_phrase)
+                status_line = "%s %s" % (response.status_code, response.reason_phrase)
                 cookies = response.cookies
-                context = {'redirect_to': redirect_to, 'status_line': status_line}
+                context = {"redirect_to": redirect_to, "status_line": status_line}
                 # Using SimpleTemplateResponse avoids running global context processors.
-                response = SimpleTemplateResponse('debug_toolbar/redirect.html', context)
+                response = SimpleTemplateResponse(
+                    "debug_toolbar/redirect.html", context
+                )
                 response.cookies = cookies
                 response.render()
         return response

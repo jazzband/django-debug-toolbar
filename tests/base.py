@@ -13,13 +13,14 @@ rf = RequestFactory()
 
 
 class BaseTestCase(TestCase):
-
     def setUp(self):
-        request = rf.get('/')
+        request = rf.get("/")
         response = HttpResponse()
         toolbar = DebugToolbar(request)
 
-        DebugToolbarMiddleware.debug_toolbars[threading.current_thread().ident] = toolbar
+        DebugToolbarMiddleware.debug_toolbars[
+            threading.current_thread().ident
+        ] = toolbar
 
         self.request = request
         self.response = response
@@ -30,11 +31,11 @@ class BaseTestCase(TestCase):
         parser = html5lib.HTMLParser()
         parser.parseFragment(self.panel.content)
         if parser.errors:
-            default_msg = ['Content is invalid HTML:']
-            lines = content.split('\n')
+            default_msg = ["Content is invalid HTML:"]
+            lines = content.split("\n")
             for position, errorcode, datavars in parser.errors:
-                default_msg.append('  %s' % html5lib.constants.E[errorcode] % datavars)
-                default_msg.append('    %s' % lines[position[0] - 1])
+                default_msg.append("  %s" % html5lib.constants.E[errorcode] % datavars)
+                default_msg.append("    %s" % lines[position[0] - 1])
 
-            msg = self._formatMessage(msg, '\n'.join(default_msg))
+            msg = self._formatMessage(msg, "\n".join(default_msg))
             raise self.failureException(msg)

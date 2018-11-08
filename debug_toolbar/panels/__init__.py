@@ -12,6 +12,7 @@ class Panel(object):
     """
     Base class for panels.
     """
+
     def __init__(self, toolbar):
         self.toolbar = toolbar
 
@@ -24,21 +25,22 @@ class Panel(object):
     @property
     def enabled(self):
         # Check to see if settings has a default value for it
-        disabled_panels = dt_settings.get_config()['DISABLE_PANELS']
+        disabled_panels = dt_settings.get_config()["DISABLE_PANELS"]
         panel_path = get_name_from_obj(self)
         # Some panels such as the SQLPanel and TemplatesPanel exist in a
         # panel module, but can be disabled without panel in the path.
         # For that reason, replace .panel. in the path and check for that
         # value in the disabled panels as well.
         disable_panel = (
-            panel_path in disabled_panels or
-            panel_path.replace('.panel.', '.') in disabled_panels)
+            panel_path in disabled_panels
+            or panel_path.replace(".panel.", ".") in disabled_panels
+        )
         if disable_panel:
-            default = 'off'
+            default = "off"
         else:
-            default = 'on'
+            default = "on"
         # The user's cookies should override the default value
-        return self.toolbar.request.COOKIES.get('djdt' + self.panel_id, default) == 'on'
+        return self.toolbar.request.COOKIES.get("djdt" + self.panel_id, default) == "on"
 
     # Titles and content
 
@@ -54,7 +56,7 @@ class Panel(object):
         """
         Subtitle shown in the side bar. Defaults to the empty string.
         """
-        return ''
+        return ""
 
     @property
     def has_content(self):
@@ -220,7 +222,6 @@ class Panel(object):
 
 # Backward-compatibility for 1.0, remove in 2.0.
 class DebugPanel(Panel):
-
     def __init__(self, *args, **kwargs):
         warnings.warn("DebugPanel was renamed to Panel.", DeprecationWarning)
         super(DebugPanel, self).__init__(*args, **kwargs)

@@ -17,14 +17,14 @@ from django.utils.module_loading import import_string
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
 
-_HTML_TYPES = ('text/html', 'application/xhtml+xml')
+_HTML_TYPES = ("text/html", "application/xhtml+xml")
 
 
 def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
+    if request.META.get("REMOTE_ADDR", None) not in settings.INTERNAL_IPS:
         return False
 
     return bool(settings.DEBUG)
@@ -34,7 +34,7 @@ def show_toolbar(request):
 def get_show_toolbar():
     # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
     # setup, resolve it to the corresponding callable.
-    func_or_path = dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK']
+    func_or_path = dt_settings.get_config()["SHOW_TOOLBAR_CALLBACK"]
     if isinstance(func_or_path, six.string_types):
         return import_string(func_or_path)
     else:
@@ -46,6 +46,7 @@ class DebugToolbarMiddleware(MiddlewareMixin):
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
     """
+
     debug_toolbars = {}
 
     def process_request(self, request):
@@ -87,7 +88,9 @@ class DebugToolbarMiddleware(MiddlewareMixin):
         return response
 
     def process_response(self, request, response):
-        toolbar = self.__class__.debug_toolbars.pop(threading.current_thread().ident, None)
+        toolbar = self.__class__.debug_toolbars.pop(
+            threading.current_thread().ident, None
+        )
         if not toolbar:
             return response
 
@@ -104,20 +107,24 @@ class DebugToolbarMiddleware(MiddlewareMixin):
             panel.disable_instrumentation()
 
         # Check for responses where the toolbar can't be inserted.
-        content_encoding = response.get('Content-Encoding', '')
-        content_type = response.get('Content-Type', '').split(';')[0]
-        if any((getattr(response, 'streaming', False),
-                'gzip' in content_encoding,
-                content_type not in _HTML_TYPES)):
+        content_encoding = response.get("Content-Encoding", "")
+        content_type = response.get("Content-Type", "").split(";")[0]
+        if any(
+            (
+                getattr(response, "streaming", False),
+                "gzip" in content_encoding,
+                content_type not in _HTML_TYPES,
+            )
+        ):
             return response
 
         # Collapse the toolbar by default if SHOW_COLLAPSED is set.
-        if toolbar.config['SHOW_COLLAPSED'] and 'djdt' not in request.COOKIES:
-            response.set_cookie('djdt', 'hide', 864000)
+        if toolbar.config["SHOW_COLLAPSED"] and "djdt" not in request.COOKIES:
+            response.set_cookie("djdt", "hide", 864000)
 
         # Insert the toolbar in the response.
         content = force_text(response.content, encoding=response.charset)
-        insert_before = dt_settings.get_config()['INSERT_BEFORE']
+        insert_before = dt_settings.get_config()["INSERT_BEFORE"]
         pattern = re.escape(insert_before)
         bits = re.split(pattern, content, flags=re.IGNORECASE)
         if len(bits) > 1:
@@ -126,12 +133,14 @@ class DebugToolbarMiddleware(MiddlewareMixin):
                 panel.generate_stats(request, response)
                 panel.generate_server_timing(request, response)
 
-            response = self.generate_server_timing_header(response, toolbar.enabled_panels)
+            response = self.generate_server_timing_header(
+                response, toolbar.enabled_panels
+            )
 
             bits[-2] += toolbar.render_toolbar()
             response.content = insert_before.join(bits)
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
+            if response.get("Content-Length", None):
+                response["Content-Length"] = len(response.content)
         return response
 
     @staticmethod
@@ -145,11 +154,12 @@ class DebugToolbarMiddleware(MiddlewareMixin):
 
             for key, record in stats.items():
                 # example: `SQLPanel_sql_time=0; "SQL 0 queries"`
-                data.append('{}_{}={}; "{}"'.format(panel.panel_id,
-                                                    key,
-                                                    record.get('value'),
-                                                    record.get('title')))
+                data.append(
+                    '{}_{}={}; "{}"'.format(
+                        panel.panel_id, key, record.get("value"), record.get("title")
+                    )
+                )
 
         if data:
-            response['Server-Timing'] = ', '.join(data)
+            response["Server-Timing"] = ", ".join(data)
         return response
