@@ -6,6 +6,8 @@ UNRELEASED
 
 * Use ``defer`` on all ``<script>`` tags to avoid blocking HTML parsing.
 * Reformatted the code using `black <https://github.com/ambv/black>`__.
+* Stop inlining images in CSS to avoid Content Security Policy errors
+  altogether.
 
 1.10.1 (2018-09-11)
 -------------------
