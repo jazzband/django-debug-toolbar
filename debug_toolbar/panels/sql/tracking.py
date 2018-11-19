@@ -92,8 +92,6 @@ class NormalCursorWrapper(object):
                 return "'%s'" % force_text(element).replace("'", "''")
             except DjangoUnicodeDecodeError:
                 return repr(element)
-        elif isinstance(element, six.binary_type):
-            return "(binary data)"
         else:
             return repr(element)
 
