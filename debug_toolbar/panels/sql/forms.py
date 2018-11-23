@@ -77,7 +77,7 @@ class SQLSelectForm(forms.Form):
         return hash
 
     def reformat_sql(self):
-        return reformat_sql(self.cleaned_data["sql"])
+        return reformat_sql(self.cleaned_data["sql"], with_toggle=False)
 
     def make_hash(self, data):
         m = hmac.new(key=force_bytes(settings.SECRET_KEY), digestmod=hashlib.sha1)

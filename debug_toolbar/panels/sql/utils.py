@@ -21,22 +21,32 @@ class BoldKeywordFilter:
                 yield T.Text, "</strong>"
 
 
-def reformat_sql(sql):
+def reformat_sql(sql, with_toggle=False):
+    formatted = parse_sql(sql, aligned_indent=True)
+    if not with_toggle:
+        return formatted
+    simple = simplify(parse_sql(sql, aligned_indent=False))
+    uncollapsed = '<span class="djDebugUncollapsed" href="#">{}</span>'.format(simple)
+    collapsed = '<span class="djDebugCollapsed" href="#">{}</span>'.format(formatted)
+    return collapsed + uncollapsed
+
+
+def parse_sql(sql, aligned_indent=False):
     stack = sqlparse.engine.FilterStack()
+    stack.enable_grouping()
+    if aligned_indent:
+        stack.stmtprocess.append(
+            sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
+        )
     stack.preprocess.append(BoldKeywordFilter())  # add our custom filter
     stack.postprocess.append(sqlparse.filters.SerializerUnicode())  # tokens -> strings
-    return swap_fields("".join(stack.run(sql)))
+    return "".join(stack.run(sql))
 
 
-def swap_fields(sql):
+def simplify(sql):
     expr = r"SELECT</strong> (...........*?) <strong>FROM"
-    subs = (
-        r"SELECT</strong> "
-        r'<span class="djDebugUncollapsed" href="#">&#8226;&#8226;&#8226;</span> '
-        r'<span class="djDebugCollapsed" href="#">\1</span> '
-        r"<strong>FROM"
-    )
-    return re.sub(expr, subs, sql)
+    sub = r"SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM"
+    return re.sub(expr, sub, sql)
 
 
 def contrasting_color_generator():

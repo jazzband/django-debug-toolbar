@@ -213,7 +213,7 @@ class SQLPanel(Panel):
                 query["form"] = SQLSelectForm(auto_id=None, initial=copy(query))
 
                 if query["sql"]:
-                    query["sql"] = reformat_sql(query["sql"])
+                    query["sql"] = reformat_sql(query["sql"], with_toggle=True)
                 query["rgb_color"] = self._databases[alias]["rgb_color"]
                 try:
                     query["width_ratio"] = (query["duration"] / self._sql_time) * 100
