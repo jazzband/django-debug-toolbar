@@ -132,7 +132,6 @@ class SQLPanelTestCase(BaseTestCase):
             "SELECT * FROM auth_user WHERE username = '\ufffd'",
         )
 
-
     @unittest.skipUnless(connection.vendor != "sqlite", "Test invalid for SQLite")
     def test_raw_query_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
