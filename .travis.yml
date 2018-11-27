@@ -1,5 +1,6 @@
-language: python
+dist: xenial
 sudo: false
+language: python
 cache: pip
 matrix:
   fast_finish: true
@@ -20,32 +21,27 @@ matrix:
       env: TOXENV=py36-dj20
     - python: 3.7
       env: TOXENV=py37-dj20
-      dist: xenial
-      sudo: true
     - python: 3.5
       env: TOXENV=py35-dj21
     - python: 3.6
       env: TOXENV=py36-dj21
     - python: 3.7
       env: TOXENV=py37-dj21
-      dist: xenial
-      sudo: true
     - python: 3.5
       env: TOXENV=py35-djmaster
     - python: 3.6
       env: TOXENV=py36-djmaster
     - python: 3.7
       env: TOXENV=py37-djmaster
-      dist: xenial
-      sudo: true
-    - python: 3.6
+    - python: 3.7
       env: TOXENV=postgresql
       addons:
         postgresql: "9.5"
     - env: TOXENV=flake8
-    - python: 3.6
+    - python: 3.7
       env: TOXENV=style
-    - env: TOXENV=readme
+    - python: 3.7
+      env: TOXENV=readme
   allow_failures:
     - env: TOXENV=py35-djmaster
     - env: TOXENV=py36-djmaster
