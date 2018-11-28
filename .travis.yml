@@ -37,6 +37,10 @@ matrix:
       env: TOXENV=postgresql
       addons:
         postgresql: "9.5"
+    - python: 3.7
+      env: TOXENV=mariadb
+      addons:
+        mariadb: "10.3"
     - env: TOXENV=flake8
     - python: 3.7
       env: TOXENV=style
