@@ -117,7 +117,10 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 0)
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM tests_binary WHERE field = %s", [b"\xff"])
+            cursor.execute(
+                "SELECT * FROM tests_binary WHERE field = %s",
+                [connection.Database.Binary(b"\xff")],
+            )
 
         self.panel.process_response(self.request, self.response)
         self.panel.generate_stats(self.request, self.response)
