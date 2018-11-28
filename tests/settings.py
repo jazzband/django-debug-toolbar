@@ -85,14 +85,8 @@ if os.environ.get("DJANGO_DATABASE_ENGINE") == "postgresql":
         "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "debug-toolbar"}
     }
 elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
-    # % mysql
-    # CREATE USER 'debug_toolbar'@'localhost' IDENTIFIED BY '';
-    # GRANT ALL PRIVILEGES ON debug_toolbar.* TO 'test_debug_toolbar'@'localhost';
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": "debug_toolbar",
-        }
+        "default": {"ENGINE": "django.db.backends.mysql", "NAME": "debug_toolbar"}
     }
 else:
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3"}}
