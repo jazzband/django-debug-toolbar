@@ -92,7 +92,6 @@ elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": "debug_toolbar",
-            "USER": "debug_toolbar",
         }
     }
 else:
