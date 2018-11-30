@@ -268,6 +268,9 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]["stacktrace"]) > 0)
 
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
     def test_composed_object(self):
         self.assertEqual(len(self.panel._queries), 0)
         query = sql.SQL("SELECT * FROM {}").format(sql.Identifier("auth_user"))
