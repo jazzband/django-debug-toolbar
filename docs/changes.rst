@@ -4,6 +4,9 @@ Change log
 UNRELEASED
 ----------
 
+1.11 (2018-12-03)
+-----------------
+
 * Use ``defer`` on all ``<script>`` tags to avoid blocking HTML parsing,
   removed inline JavaScript.
 * Stop inlining images in CSS to avoid Content Security Policy errors
