@@ -4,10 +4,17 @@ Change log
 UNRELEASED
 ----------
 
-* Use ``defer`` on all ``<script>`` tags to avoid blocking HTML parsing.
-* Reformatted the code using `black <https://github.com/ambv/black>`__.
+* Use ``defer`` on all ``<script>`` tags to avoid blocking HTML parsing,
+  removed inline JavaScript.
 * Stop inlining images in CSS to avoid Content Security Policy errors
   altogether.
+* Reformatted the code using `black <https://github.com/ambv/black>`__.
+* Added the Django mail panel to the list of third-party panels.
+* Convert system check errors to warnings to accomodate exotic
+  configurations.
+* Fixed a crash when explaining raw querysets.
+* Fixed an obscure unicode error with binary data fields.
+* Added MariaDB and Python 3.7 builds to the CI.
 
 1.10.1 (2018-09-11)
 -------------------
