@@ -1,6 +1,9 @@
 Installation
 ============
 
+Each of the following steps needs to be configured for the Debug Toolbar to be
+fully functional.
+
 Getting the code
 ----------------
 
@@ -37,8 +40,8 @@ Make sure that ``'django.contrib.staticfiles'`` is `set up properly
 If you're upgrading from a previous version, you should review the
 :doc:`change log <changes>` and look for specific upgrade instructions.
 
-URLconf
--------
+Setting up URLconf
+------------------
 
 Add the Debug Toolbar's URLs to your project's URLconf as follows::
 
@@ -50,18 +53,18 @@ Add the Debug Toolbar's URLs to your project's URLconf as follows::
         import debug_toolbar
         urlpatterns = [
             path('__debug__/', include(debug_toolbar.urls)),
-                        
+
             # For django versions before 2.0:
             # url(r'^__debug__/', include(debug_toolbar.urls)),
-            
+
         ] + urlpatterns
 
 This example uses the ``__debug__`` prefix, but you can use any prefix that
 doesn't clash with your application's URLs. Note the lack of quotes around
 ``debug_toolbar.urls``.
 
-Middleware
-----------
+Enabling middleware
+-------------------
 
 The Debug Toolbar is mostly implemented in a middleware. Enable it in your
 settings module as follows::
@@ -88,10 +91,21 @@ Old-style middleware::
     response's content, such as
     :class:`~django.middleware.gzip.GZipMiddleware`.
 
-Internal IPs
-------------
+Configuring Internal IPs
+------------------------
 
-The Debug Toolbar is shown only if your IP is listed in the ``INTERNAL_IPS``
-setting. (You can change this logic with the ``SHOW_TOOLBAR_CALLBACK``
-option.) For local development, you should add ``'127.0.0.1'`` to
-``INTERNAL_IPS``.
+The Debug Toolbar is shown only if your IP address is listed in the
+:django:setting:`INTERNAL_IPS` setting.  This means that for local
+development, you *must* add ``'127.0.0.1'`` to :django:setting:`INTERNAL_IPS`;
+you'll need to create this setting if it doesn't already exist in your
+settings module::
+
+   INTERNAL_IPS = [
+       # ...
+       '127.0.0.1',
+       # ...
+   ]
+
+You can change the logic of determining whether or not the Debug Toolbar
+should be shown with the :ref:`SHOW_TOOLBAR_CALLBACK <SHOW_TOOLBAR_CALLBACK>`
+option.  This option allows you to specify a custom function for this purpose.
