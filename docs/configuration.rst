@@ -99,6 +99,8 @@ Toolbar options
 
   If changed to ``True``, the toolbar will be collapsed by default.
 
+.. _SHOW_TOOLBAR_CALLBACK:
+
 * ``SHOW_TOOLBAR_CALLBACK``
 
   Default: ``'debug_toolbar.middleware.show_toolbar'``

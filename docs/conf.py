@@ -275,3 +275,14 @@ intersphinx_mapping = {
 # -- Options for Read the Docs --------------------------------------------
 
 RTD_NEW_THEME = True
+
+
+def setup(app):
+    """ Configure documentation via Sphinx extension
+    """
+    # Add the :setting: role for intersphinx linking to Django's docs
+    app.add_crossref_type(
+        directivename="setting",
+        rolename="setting",
+        indextemplate="pair: %s; setting",
+    )
