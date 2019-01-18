@@ -5,7 +5,6 @@ from os.path import join, normpath
 
 from django.conf import settings
 from django.contrib.staticfiles import finders, storage
-from django.contrib.staticfiles.templatetags import staticfiles
 from django.core.files.storage import get_storage_class
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import LazyObject
@@ -97,14 +96,10 @@ class StaticFilesPanel(panels.Panel):
         self._paths = {}
 
     def enable_instrumentation(self):
-        storage.staticfiles_storage = (
-            staticfiles.staticfiles_storage
-        ) = DebugConfiguredStorage()
+        storage.staticfiles_storage = DebugConfiguredStorage()
 
     def disable_instrumentation(self):
-        storage.staticfiles_storage = (
-            staticfiles.staticfiles_storage
-        ) = _original_storage
+        storage.staticfiles_storage = _original_storage
 
     @property
     def num_used(self):

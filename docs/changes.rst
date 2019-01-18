@@ -4,6 +4,8 @@ Change log
 UNRELEASED
 ----------
 
+* Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
+
 1.11 (2018-12-03)
 -----------------
 
