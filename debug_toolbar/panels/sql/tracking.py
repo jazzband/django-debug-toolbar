@@ -121,6 +121,7 @@ class NormalCursorWrapper(object):
     def _record(self, method, sql, params):
         start_time = time()
         try:
+            params = [param[19:-9] if type(param) == str and len(param) > 20 and param[:15] == "ST_GeomFromEWKB" else param for param in params]
             return method(sql, params)
         finally:
             stop_time = time()
