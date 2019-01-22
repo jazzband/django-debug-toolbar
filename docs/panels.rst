@@ -126,9 +126,6 @@ will not be executed. This is because ``ProfilingPanel.process_view`` will
 return a ``HttpResponse`` which causes the other middlewares'
 ``process_view`` methods to be skipped.
 
-Note that the quick setup creates this situation, as it inserts
-``DebugToolbarMiddleware`` first in ``MIDDLEWARE_CLASSES``.
-
 If you run into this issues, then you should either disable the
 ``ProfilingPanel`` or move ``DebugToolbarMiddleware`` to the end of
 ``MIDDLEWARE_CLASSES``. If you do the latter, then the debug toolbar won't
