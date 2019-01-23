@@ -15,7 +15,10 @@ from django.utils.lru_cache import lru_cache
 
 CONFIG_DEFAULTS = {
     # Toolbar options
-    "DISABLE_PANELS": {"debug_toolbar.panels.redirects.RedirectsPanel"},
+    "DISABLE_PANELS": {
+        "debug_toolbar.panels.profiling.ProfilingPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+    },
     "INSERT_BEFORE": "</body>",
     "RENDER_PANELS": None,
     "RESULTS_CACHE_SIZE": 10,
@@ -126,6 +129,7 @@ PANELS_DEFAULTS = [
     "debug_toolbar.panels.signals.SignalsPanel",
     "debug_toolbar.panels.logging.LoggingPanel",
     "debug_toolbar.panels.redirects.RedirectsPanel",
+    "debug_toolbar.panels.profiling.ProfilingPanel",
 ]
 
 

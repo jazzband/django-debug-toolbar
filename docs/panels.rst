@@ -105,12 +105,6 @@ Since this behavior is annoying when you aren't debugging a redirect, this
 panel is included but inactive by default. You can activate it by default with
 the ``DISABLE_PANELS`` configuration option.
 
-Non-default built-in panels
----------------------------
-
-The following panels are disabled by default. You must add them to the
-``DEBUG_TOOLBAR_PANELS`` setting to enable them.
-
 .. _profiling-panel:
 
 Profiling
@@ -120,13 +114,16 @@ Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
 
 Profiling information for the processing of the request.
 
+This panel is included but inactive by default. You can activate it by default
+with the ``DISABLE_PANELS`` configuration option.
+
 If the ``debug_toolbar.middleware.DebugToolbarMiddleware`` is first in
 ``MIDDLEWARE_CLASSES`` then the other middlewares' ``process_view`` methods
 will not be executed. This is because ``ProfilingPanel.process_view`` will
 return a ``HttpResponse`` which causes the other middlewares'
 ``process_view`` methods to be skipped.
 
-If you run into this issues, then you should either disable the
+If you run into this issues, then you should either deactivate the
 ``ProfilingPanel`` or move ``DebugToolbarMiddleware`` to the end of
 ``MIDDLEWARE_CLASSES``. If you do the latter, then the debug toolbar won't
 track the execution of other middleware.
