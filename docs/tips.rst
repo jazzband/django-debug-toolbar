@@ -21,13 +21,13 @@ you see errors, try a hard browser refresh or clearing your cache.
 Middleware isn't working correctly
 ----------------------------------
 
-Using the Debug Toolbar in its default configuration and with the profiling
-panel will cause middlewares after
+Using the Debug Toolbar in its default configuration with the profiling panel
+active will cause middlewares after
 ``debug_toolbar.middleware.DebugToolbarMiddleware`` to not execute their
 ``process_view`` functions. This can be resolved by disabling the profiling
 panel or moving the ``DebugToolbarMiddleware`` to the end of
-``MIDDLEWARE_CLASSES``. Read more about it at
-:ref:`ProfilingPanel <profiling-panel>`
+``MIDDLEWARE_CLASSES``. Read more about it at :ref:`ProfilingPanel
+<profiling-panel>`
 
 Performance considerations
 --------------------------
