@@ -39,8 +39,8 @@ This panels shows the HTTP request and response headers, as well as a
 selection of values from the WSGI environment.
 
 Note that headers set by middleware placed before the debug toolbar middleware
-in ``MIDDLEWARE_CLASSES`` won't be visible in the panel. The WSGI server
-itself may also add response headers such as ``Date`` and ``Server``.
+in ``MIDDLEWARE`` won't be visible in the panel. The WSGI server itself may
+also add response headers such as ``Date`` and ``Server``.
 
 Request
 ~~~~~~~
@@ -118,15 +118,15 @@ This panel is included but inactive by default. You can activate it by default
 with the ``DISABLE_PANELS`` configuration option.
 
 If the ``debug_toolbar.middleware.DebugToolbarMiddleware`` is first in
-``MIDDLEWARE_CLASSES`` then the other middlewares' ``process_view`` methods
-will not be executed. This is because ``ProfilingPanel.process_view`` will
-return a ``HttpResponse`` which causes the other middlewares'
-``process_view`` methods to be skipped.
+``MIDDLEWARE`` then the other middlewares' ``process_view`` methods will not be
+executed. This is because ``ProfilingPanel.process_view`` will return a
+``HttpResponse`` which causes the other middlewares' ``process_view`` methods
+to be skipped.
 
 If you run into this issues, then you should either deactivate the
 ``ProfilingPanel`` or move ``DebugToolbarMiddleware`` to the end of
-``MIDDLEWARE_CLASSES``. If you do the latter, then the debug toolbar won't
-track the execution of other middleware.
+``MIDDLEWARE``. If you do the latter, then the debug toolbar won't track the
+execution of other middleware.
 
 Third-party panels
 ------------------

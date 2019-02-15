@@ -25,9 +25,8 @@ Using the Debug Toolbar in its default configuration with the profiling panel
 active will cause middlewares after
 ``debug_toolbar.middleware.DebugToolbarMiddleware`` to not execute their
 ``process_view`` functions. This can be resolved by disabling the profiling
-panel or moving the ``DebugToolbarMiddleware`` to the end of
-``MIDDLEWARE_CLASSES``. Read more about it at :ref:`ProfilingPanel
-<profiling-panel>`
+panel or moving the ``DebugToolbarMiddleware`` to the end of ``MIDDLEWARE``.
+Read more about it at :ref:`ProfilingPanel <profiling-panel>`
 
 Performance considerations
 --------------------------
