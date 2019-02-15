@@ -16,8 +16,8 @@ DEBUG_TOOLBAR_PANELS
 --------------------
 
 This setting specifies the full Python path to each panel that you want
-included in the toolbar. It works like Django's ``MIDDLEWARE_CLASSES``
-setting. The default value is::
+included in the toolbar. It works like Django's ``MIDDLEWARE`` setting. The
+default value is::
 
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.versions.VersionsPanel',
