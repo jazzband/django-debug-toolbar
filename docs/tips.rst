@@ -18,16 +18,6 @@ Browsers have become more aggressive with caching static assets, such as
 JavaScript and CSS files. Check your browser's development console, and if
 you see errors, try a hard browser refresh or clearing your cache.
 
-Middleware isn't working correctly
-----------------------------------
-
-Using the Debug Toolbar in its default configuration with the profiling panel
-active will cause middlewares after
-``debug_toolbar.middleware.DebugToolbarMiddleware`` to not execute their
-``process_view`` functions. This can be resolved by disabling the profiling
-panel or moving the ``DebugToolbarMiddleware`` to the end of ``MIDDLEWARE``.
-Read more about it at :ref:`ProfilingPanel <profiling-panel>`
-
 Performance considerations
 --------------------------
 

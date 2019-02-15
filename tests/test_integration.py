@@ -9,6 +9,7 @@ import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
 from django.core.checks import Warning, run_checks
+from django.http import HttpResponse
 from django.template.loader import get_template
 from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.test.utils import override_settings
@@ -47,9 +48,8 @@ class DebugToolbarTestCase(BaseTestCase):
         # takes stats from Request panel
         self.request.path = path
         panel = self.toolbar.get_panel_by_id("RequestPanel")
-        panel.process_request(self.request)
-        panel.process_response(self.request, self.response)
-        panel.generate_stats(self.request, self.response)
+        response = panel.process_request(self.request)
+        panel.generate_stats(self.request, response)
         return panel.get_stats()
 
     def test_url_resolving_positional(self):
@@ -76,22 +76,13 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(stats["view_kwargs"], "None")
         self.assertEqual(stats["view_func"], "<no view>")
 
-    # Django doesn't guarantee that process_request, process_view and
-    # process_response always get called in this order.
-
-    def test_middleware_view_only(self):
-        DebugToolbarMiddleware().process_view(
-            self.request, regular_view, ("title",), {}
-        )
-
-    def test_middleware_response_only(self):
-        DebugToolbarMiddleware().process_response(self.request, self.response)
-
     def test_middleware_response_insertion(self):
-        resp = regular_view(self.request, "İ")
-        DebugToolbarMiddleware().process_response(self.request, resp)
+        def get_response(request):
+            return regular_view(request, "İ")
+
+        response = DebugToolbarMiddleware(get_response)(self.request)
         # check toolbar insertion before "</body>"
-        self.assertContains(resp, "</div>\n</body>")
+        self.assertContains(response, "</div>\n</body>")
 
     def test_cache_page(self):
         self.client.get("/cached_view/")
@@ -131,7 +122,10 @@ class DebugToolbarIntegrationTestCase(TestCase):
             raise self.failureException(msg)
 
     def test_render_panel_checks_show_toolbar(self):
-        toolbar = DebugToolbar(None)
+        def get_response(request):
+            return HttpResponse()
+
+        toolbar = DebugToolbar(rf.get("/"), get_response)
         toolbar.store()
         url = "/__debug__/render_panel/"
         data = {"store_id": toolbar.store_id, "panel_id": "VersionsPanel"}

@@ -7,6 +7,19 @@ UNRELEASED
 * Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
 * The ``ProfilingPanel`` is now enabled but inactive by default.
 * Fixed toggling of table rows in the profiling panel UI.
+* The ``ProfilingPanel`` no longer skips remaining panels or middlewares.
+
+**Backwards incompatible changes**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Removed support for Django's deprecated ``MIDDLEWARE_CLASSES`` setting.
+* Restructured ``Panel`` to execute more like the new-style Django MIDDLEWARE.
+  The ``Panel.__init__()`` method is now passed ``get_response`` as the first
+  positional argument. The ``Panel.process_request()`` method must now always
+  return a response. Usually this is the response returned by
+  ``get_response()`` but the panel may also return a different response as is
+  the case in the ``RedirectsPanel``. Third party panels must adjust to this
+  new architecture. ``Panel.process_response()`` and ``Panel.process_view()``
+  have been removed as a result of this change.
 
 1.11 (2018-12-03)
 -----------------

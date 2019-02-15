@@ -18,13 +18,20 @@ from debug_toolbar import settings as dt_settings
 
 
 class DebugToolbar(object):
-    def __init__(self, request):
+    def __init__(self, request, get_response):
         self.request = request
         self.config = dt_settings.get_config().copy()
+        panels = []
+        for panel_class in reversed(self.get_panel_classes()):
+            panel = panel_class(self, get_response)
+            panels.append(panel)
+            if panel.enabled:
+                get_response = panel.process_request
+        self.process_request = get_response
         self._panels = OrderedDict()
-        for panel_class in self.get_panel_classes():
-            panel_instance = panel_class(self)
-            self._panels[panel_instance.panel_id] = panel_instance
+        while panels:
+            panel = panels.pop()
+            self._panels[panel.panel_id] = panel
         self.stats = {}
         self.server_timing_stats = {}
         self.store_id = None

@@ -117,17 +117,6 @@ Profiling information for the processing of the request.
 This panel is included but inactive by default. You can activate it by default
 with the ``DISABLE_PANELS`` configuration option.
 
-If the ``debug_toolbar.middleware.DebugToolbarMiddleware`` is first in
-``MIDDLEWARE`` then the other middlewares' ``process_view`` methods will not be
-executed. This is because ``ProfilingPanel.process_view`` will return a
-``HttpResponse`` which causes the other middlewares' ``process_view`` methods
-to be skipped.
-
-If you run into this issues, then you should either deactivate the
-``ProfilingPanel`` or move ``DebugToolbarMiddleware`` to the end of
-``MIDDLEWARE``. If you do the latter, then the debug toolbar won't track the
-execution of other middleware.
-
 Third-party panels
 ------------------
 
@@ -341,10 +330,6 @@ unauthorized access. There is no public CSS API at this time.
     .. automethod:: debug_toolbar.panels.Panel.get_stats
 
     .. automethod:: debug_toolbar.panels.Panel.process_request
-
-    .. automethod:: debug_toolbar.panels.Panel.process_view
-
-    .. automethod:: debug_toolbar.panels.Panel.process_response
 
     .. automethod:: debug_toolbar.panels.Panel.generate_stats
 

@@ -1,12 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 
-import threading
-
 import html5lib
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase
 
-from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.toolbar import DebugToolbar
 
 rf = RequestFactory()
@@ -17,17 +14,9 @@ class BaseTestCase(TestCase):
 
     def setUp(self):
         super(BaseTestCase, self).setUp()
-        request = rf.get("/")
-        response = HttpResponse()
-        toolbar = DebugToolbar(request)
-
-        DebugToolbarMiddleware.debug_toolbars[
-            threading.current_thread().ident
-        ] = toolbar
-
-        self.request = request
-        self.response = response
-        self.toolbar = toolbar
+        self._get_response = lambda request: HttpResponse()
+        self.request = rf.get("/")
+        self.toolbar = DebugToolbar(self.request, self.get_response)
         self.toolbar.stats = {}
 
         if self.panel_id:
@@ -40,6 +29,9 @@ class BaseTestCase(TestCase):
         if self.panel:
             self.panel.disable_instrumentation()
         super(BaseTestCase, self).tearDown()
+
+    def get_response(self, request):
+        return self._get_response(request)
 
     def assertValidHTML(self, content, msg=None):
         parser = html5lib.HTMLParser()

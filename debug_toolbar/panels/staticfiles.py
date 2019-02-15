@@ -116,6 +116,7 @@ class StaticFilesPanel(panels.Panel):
 
     def process_request(self, request):
         collector.clear_collection()
+        return super(StaticFilesPanel, self).process_request(request)
 
     def generate_stats(self, request, response):
         used_paths = collector.get_collection()
