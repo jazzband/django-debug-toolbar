@@ -8,14 +8,7 @@ from ..base import BaseTestCase
 
 
 class CachePanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(CachePanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("CachePanel")
-        self.panel.enable_instrumentation()
-
-    def tearDown(self):
-        self.panel.disable_instrumentation()
-        super(CachePanelTestCase, self).tearDown()
+    panel_id = "CachePanel"
 
     def test_recording(self):
         self.assertEqual(len(self.panel.calls), 0)

@@ -13,9 +13,10 @@ from ..base import BaseTestCase
 
 
 class LoggingPanelTestCase(BaseTestCase):
+    panel_id = "LoggingPanel"
+
     def setUp(self):
         super(LoggingPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("LoggingPanel")
         self.logger = logging.getLogger(__name__)
         collector.clear_collection()
 

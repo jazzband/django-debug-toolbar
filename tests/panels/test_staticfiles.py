@@ -8,9 +8,7 @@ from ..base import BaseTestCase
 
 
 class StaticFilesPanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(StaticFilesPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("StaticFilesPanel")
+    panel_id = "StaticFilesPanel"
 
     def test_default_case(self):
         self.panel.process_request(self.request)

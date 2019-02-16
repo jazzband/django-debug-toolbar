@@ -16,14 +16,7 @@ from ..base import BaseTestCase
 
 
 class SQLPanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(SQLPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("SQLPanel")
-        self.panel.enable_instrumentation()
-
-    def tearDown(self):
-        self.panel.disable_instrumentation()
-        super(SQLPanelTestCase, self).tearDown()
+    panel_id = "SQLPanel"
 
     def test_disabled(self):
         config = {"DISABLE_PANELS": {"debug_toolbar.panels.sql.SQLPanel"}}

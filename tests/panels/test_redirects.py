@@ -9,9 +9,7 @@ from ..base import BaseTestCase
 
 
 class RedirectsPanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(RedirectsPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("RedirectsPanel")
+    panel_id = "RedirectsPanel"
 
     def test_regular_response(self):
         response = self.panel.process_response(self.request, self.response)
