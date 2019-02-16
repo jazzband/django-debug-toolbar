@@ -48,7 +48,7 @@ class CachePanelTestCase(BaseTestCase):
         self.assertIn("café", self.panel.content)
         self.assertValidHTML(self.panel.content)
 
-    def test_generate_server_timin(self):
+    def test_generate_server_timing(self):
         self.assertEqual(len(self.panel.calls), 0)
         cache.cache.set("foo", "bar")
         cache.cache.get("foo")
