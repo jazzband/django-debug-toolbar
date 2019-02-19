@@ -16,9 +16,7 @@ from ..views import listcomp_view, regular_view
     DEBUG_TOOLBAR_PANELS=["debug_toolbar.panels.profiling.ProfilingPanel"]
 )
 class ProfilingPanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(ProfilingPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("ProfilingPanel")
+    panel_id = "ProfilingPanel"
 
     def test_regular_view(self):
         self.panel.process_view(self.request, regular_view, ("profiling",), {})

@@ -12,9 +12,7 @@ version_info_t = namedtuple(
 
 
 class VersionsPanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(VersionsPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("VersionsPanel")
+    panel_id = "VersionsPanel"
 
     def test_app_version_from_get_version_fn(self):
         class FakeApp:

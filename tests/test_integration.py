@@ -10,7 +10,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
 from django.core.checks import Warning, run_checks
 from django.template.loader import get_template
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.test.utils import override_settings
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
@@ -360,7 +360,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
 
 @override_settings(DEBUG=True)
-class DebugToolbarSystemChecksTestCase(BaseTestCase):
+class DebugToolbarSystemChecksTestCase(SimpleTestCase):
     @override_settings(
         MIDDLEWARE=[
             "django.contrib.messages.middleware.MessageMiddleware",

@@ -8,9 +8,7 @@ from ..base import BaseTestCase
 
 
 class RequestPanelTestCase(BaseTestCase):
-    def setUp(self):
-        super(RequestPanelTestCase, self).setUp()
-        self.panel = self.toolbar.get_panel_by_id("RequestPanel")
+    panel_id = "RequestPanel"
 
     def test_non_ascii_session(self):
         self.request.session = {"où": "où"}

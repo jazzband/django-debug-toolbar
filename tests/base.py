@@ -13,7 +13,10 @@ rf = RequestFactory()
 
 
 class BaseTestCase(TestCase):
+    panel_id = None
+
     def setUp(self):
+        super(BaseTestCase, self).setUp()
         request = rf.get("/")
         response = HttpResponse()
         toolbar = DebugToolbar(request)
@@ -26,6 +29,17 @@ class BaseTestCase(TestCase):
         self.response = response
         self.toolbar = toolbar
         self.toolbar.stats = {}
+
+        if self.panel_id:
+            self.panel = self.toolbar.get_panel_by_id(self.panel_id)
+            self.panel.enable_instrumentation()
+        else:
+            self.panel = None
+
+    def tearDown(self):
+        if self.panel:
+            self.panel.disable_instrumentation()
+        super(BaseTestCase, self).tearDown()
 
     def assertValidHTML(self, content, msg=None):
         parser = html5lib.HTMLParser()
