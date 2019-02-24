@@ -119,13 +119,10 @@ class SQLPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, self.response)
 
         self.assertEqual(len(self.panel._queries), 1)
-        self.assertTrue(
-            self.panel._queries[0][1]["sql"].startswith(
-                (
-                    "<strong>SELECT</strong> * <strong>FROM</strong>"
-                    " tests_binary <strong>WHERE</strong> field = "
-                )
-            )
+        self.assertIn(
+            "<strong>SELECT</strong> * <strong>FROM</strong>"
+            " tests_binary <strong>WHERE</strong> field =",
+            self.panel._queries[0][1]["sql"],
         )
 
     @unittest.skipUnless(connection.vendor != "sqlite", "Test invalid for SQLite")
