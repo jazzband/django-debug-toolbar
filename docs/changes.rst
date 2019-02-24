@@ -6,6 +6,7 @@ UNRELEASED
 
 * Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
 * The ``ProfilingPanel`` is now enabled but inactive by default.
+* Fixed toggling of table rows in the profiling panel UI.
 
 1.11 (2018-12-03)
 -----------------
