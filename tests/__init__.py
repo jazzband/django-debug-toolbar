@@ -11,7 +11,6 @@ from debug_toolbar.toolbar import DebugToolbar
 def update_toolbar_config(**kwargs):
     if kwargs["setting"] == "DEBUG_TOOLBAR_CONFIG":
         dt_settings.get_config.cache_clear()
-        # This doesn't account for deprecated configuration options.
 
 
 @receiver(setting_changed)
@@ -20,4 +19,3 @@ def update_toolbar_panels(**kwargs):
         dt_settings.get_panels.cache_clear()
         DebugToolbar._panel_classes = None
         # Not implemented: invalidate debug_toolbar.urls.
-        # This doesn't account for deprecated panel names.

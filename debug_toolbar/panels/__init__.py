@@ -1,7 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import warnings
-
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
@@ -218,10 +216,3 @@ class Panel(object):
 
         Does not return a value.
         """
-
-
-# Backward-compatibility for 1.0, remove in 2.0.
-class DebugPanel(Panel):
-    def __init__(self, *args, **kwargs):
-        warnings.warn("DebugPanel was renamed to Panel.", DeprecationWarning)
-        super(DebugPanel, self).__init__(*args, **kwargs)

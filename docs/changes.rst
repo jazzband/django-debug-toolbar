@@ -1,12 +1,27 @@
 Change log
 ==========
 
-UNRELEASED
-----------
+2.0 UNRELEASED
+--------------
 
 * Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
 * The ``ProfilingPanel`` is now enabled but inactive by default.
 * Fixed toggling of table rows in the profiling panel UI.
+
+**Backwards incompatible changes**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The deprecated API, ``debug_toolbar.panels.DebugPanel``, has been removed.
+Third party panels should use ``debug_toolbar.panels.Panel`` instead.
+
+The following deprecated settings have been removed:
+
+* ``HIDDEN_STACKTRACE_MODULES``
+* ``HIDE_DJANGO_SQL``
+* ``INTERCEPT_REDIRECTS``
+* ``RESULTS_STORE_SIZE``
+* ``ROOT_TAG_ATTRS``
+* ``TAG``
 
 1.11 (2018-12-03)
 -----------------
