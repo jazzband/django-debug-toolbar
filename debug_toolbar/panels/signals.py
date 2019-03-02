@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import weakref
 
 from django.core.signals import got_request_exception, request_finished, request_started
@@ -15,7 +13,7 @@ from django.db.models.signals import (
     pre_save,
 )
 from django.utils.module_loading import import_string
-from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.translation import gettext_lazy as _, ngettext as __
 
 from debug_toolbar.panels import Panel
 
@@ -45,12 +43,12 @@ class SignalsPanel(Panel):
         # here we have to handle a double count translation, hence the
         # hard coding of one signal
         if num_signals == 1:
-            return ungettext(
+            return __(
                 "%(num_receivers)d receiver of 1 signal",
                 "%(num_receivers)d receivers of 1 signal",
                 num_receivers,
             ) % {"num_receivers": num_receivers}
-        return ungettext(
+        return __(
             "%(num_receivers)d receiver of %(num_signals)d signals",
             "%(num_receivers)d receivers of %(num_signals)d signals",
             num_receivers,
@@ -83,12 +81,9 @@ class SignalsPanel(Panel):
                     receiver_class_name = getattr(
                         receiver.__self__, "__class__", type
                     ).__name__
-                    text = "%s.%s" % (receiver_class_name, receiver_name)
-                elif getattr(receiver, "im_class", None) is not None:  # Python 2 only
-                    receiver_class_name = receiver.im_class.__name__
-                    text = "%s.%s" % (receiver_class_name, receiver_name)
+                    text = "{}.{}".format(receiver_class_name, receiver_name)
                 else:
-                    text = "%s" % receiver_name
+                    text = receiver_name
                 receivers.append(text)
             signals.append((name, signal, receivers))
 

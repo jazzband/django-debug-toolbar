@@ -2,8 +2,6 @@
 The main DebugToolbar class that loads and renders the Toolbar.
 """
 
-from __future__ import absolute_import, unicode_literals
-
 import uuid
 from collections import OrderedDict
 
@@ -17,7 +15,7 @@ from django.utils.module_loading import import_string
 from debug_toolbar import settings as dt_settings
 
 
-class DebugToolbar(object):
+class DebugToolbar:
     def __init__(self, request, get_response):
         self.request = request
         self.config = dt_settings.get_config().copy()

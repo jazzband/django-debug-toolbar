@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import inspect
 
 from django.apps import AppConfig
@@ -7,7 +5,7 @@ from django.conf import settings
 from django.core.checks import Warning, register
 from django.middleware.gzip import GZipMiddleware
 from django.utils.module_loading import import_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class DebugToolbarConfig(AppConfig):

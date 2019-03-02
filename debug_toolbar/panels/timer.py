@@ -1,9 +1,7 @@
-from __future__ import absolute_import, unicode_literals
-
 import time
 
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
 
@@ -57,7 +55,7 @@ class TimerPanel(Panel):
         self._start_time = time.time()
         if self.has_content:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
-        return super(TimerPanel, self).process_request(request)
+        return super().process_request(request)
 
     def generate_stats(self, request, response):
         stats = {}

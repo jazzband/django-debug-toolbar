@@ -1,7 +1,3 @@
-# coding: utf-8
-
-from __future__ import absolute_import, unicode_literals
-
 import os
 import unittest
 
@@ -258,13 +254,13 @@ class DebugToolbarIntegrationTestCase(TestCase):
 class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
-        super(DebugToolbarLiveTestCase, cls).setUpClass()
+        super().setUpClass()
         cls.selenium = webdriver.Firefox()
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        super(DebugToolbarLiveTestCase, cls).tearDownClass()
+        super().tearDownClass()
 
     def test_basic(self):
         self.selenium.get(self.live_server_url + "/regular/basic/")

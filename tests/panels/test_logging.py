@@ -1,7 +1,3 @@
-# coding: utf-8
-
-from __future__ import absolute_import, unicode_literals
-
 import logging
 
 from debug_toolbar.panels.logging import (
@@ -17,7 +13,7 @@ class LoggingPanelTestCase(BaseTestCase):
     panel_id = "LoggingPanel"
 
     def setUp(self):
-        super(LoggingPanelTestCase, self).setUp()
+        super().setUp()
         self.logger = logging.getLogger(__name__)
         collector.clear_collection()
 
@@ -71,7 +67,7 @@ class LoggingPanelTestCase(BaseTestCase):
         self.assertValidHTML(self.panel.content)
 
     def test_failing_formatting(self):
-        class BadClass(object):
+        class BadClass:
             def __str__(self):
                 raise Exception("Please not stringify me!")
 

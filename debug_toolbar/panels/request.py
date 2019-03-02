@@ -1,9 +1,6 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.http import Http404
 from django.urls import resolve
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import get_name_from_obj
@@ -58,7 +55,7 @@ class RequestPanel(Panel):
                 {
                     "session": [
                         (k, request.session.get(k))
-                        for k in sorted(request.session.keys(), key=force_text)
+                        for k in sorted(request.session.keys())
                     ]
                 }
             )

@@ -1,12 +1,10 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_name_from_obj
 
 
-class Panel(object):
+class Panel:
     """
     Base class for panels.
     """
@@ -153,7 +151,7 @@ class Panel(object):
 
         Each call to ``record_stats`` updates the statistics dictionary.
         """
-        data = {key: dict(title=title, value=value)}
+        data = {key: {"title": title, "value": value}}
         self.toolbar.server_timing_stats.setdefault(self.panel_id, {}).update(data)
 
     def get_server_timing_stats(self):

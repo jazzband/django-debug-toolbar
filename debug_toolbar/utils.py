@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import inspect
 import os.path
 import re
@@ -10,8 +8,6 @@ from itertools import chain
 import django
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
-from django.utils import six
-from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -31,7 +27,7 @@ def get_module_path(module_name):
     try:
         module = import_module(module_name)
     except ImportError as e:
-        raise ImproperlyConfigured("Error importing HIDE_IN_STACKTRACES: %s" % (e,))
+        raise ImproperlyConfigured("Error importing HIDE_IN_STACKTRACES: {}".format(e))
     else:
         source_path = inspect.getsourcefile(module)
         if source_path.endswith("__init__.py"):
@@ -62,7 +58,7 @@ def tidy_stacktrace(stack):
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
         if omit_path(os.path.realpath(path)):
             continue
-        text = ("".join(force_text(t) for t in text)).strip() if text else ""
+        text = "".join(text).strip() if text else ""
         trace.append((path, line_no, func_name, text))
     return trace
 
@@ -71,7 +67,7 @@ def render_stacktrace(trace):
     stacktrace = []
     for frame in trace:
         params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
-        params_dict = {six.text_type(idx): v for idx, v in enumerate(params)}
+        params_dict = {str(idx): v for idx, v in enumerate(params)}
         try:
             stacktrace.append(
                 '<span class="djdt-path">%(0)s/</span>'
@@ -148,7 +144,7 @@ def get_name_from_obj(obj):
 
     if hasattr(obj, "__module__"):
         module = obj.__module__
-        name = "%s.%s" % (module, name)
+        name = "{}.{}".format(module, name)
 
     return name
 
@@ -225,7 +221,7 @@ def get_stack(context=1):
     return framelist
 
 
-class ThreadCollector(object):
+class ThreadCollector:
     def __init__(self):
         if threading is None:
             raise NotImplementedError(

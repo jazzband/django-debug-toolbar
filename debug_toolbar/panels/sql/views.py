@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.http import HttpResponseBadRequest
 from django.template.response import SimpleTemplateResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -50,11 +48,11 @@ def sql_explain(request):
             # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
             # EXPLAIN QUERY PLAN dumps a more human-readable summary
             # See https://www.sqlite.org/lang_explain.html for details
-            cursor.execute("EXPLAIN QUERY PLAN %s" % (sql,), params)
+            cursor.execute("EXPLAIN QUERY PLAN {}".format(sql), params)
         elif vendor == "postgresql":
-            cursor.execute("EXPLAIN ANALYZE %s" % (sql,), params)
+            cursor.execute("EXPLAIN ANALYZE {}".format(sql), params)
         else:
-            cursor.execute("EXPLAIN %s" % (sql,), params)
+            cursor.execute("EXPLAIN {}".format(sql), params)
 
         headers = [d[0] for d in cursor.description]
         result = cursor.fetchall()

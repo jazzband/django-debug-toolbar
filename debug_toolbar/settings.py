@@ -1,8 +1,6 @@
-from __future__ import absolute_import, unicode_literals
+from functools import lru_cache
 
 from django.conf import settings
-from django.utils import six
-from django.utils.lru_cache import lru_cache
 
 # Always import this module as follows:
 # from debug_toolbar import settings [as dt_settings]
@@ -27,7 +25,7 @@ CONFIG_DEFAULTS = {
     "EXTRA_SIGNALS": [],
     "ENABLE_STACKTRACES": True,
     "HIDE_IN_STACKTRACES": (
-        "socketserver" if six.PY3 else "SocketServer",
+        "socketserver",
         "threading",
         "wsgiref",
         "debug_toolbar",

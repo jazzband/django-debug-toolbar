@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import inspect
 import sys
 import time
@@ -11,7 +9,7 @@ from django.core.cache import CacheHandler, caches as original_caches
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
-from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.translation import gettext_lazy as _, ngettext as __
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
@@ -132,7 +130,7 @@ class CacheStatTracker(BaseCache):
 
 class CacheHandlerPatch(CacheHandler):
     def __getitem__(self, alias):
-        actual_cache = super(CacheHandlerPatch, self).__getitem__(alias)
+        actual_cache = super().__getitem__(alias)
         return CacheStatTracker(actual_cache)
 
 
@@ -147,7 +145,7 @@ class CachePanel(Panel):
     template = "debug_toolbar/panels/cache.html"
 
     def __init__(self, *args, **kwargs):
-        super(CachePanel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.total_time = 0
         self.hits = 0
         self.misses = 0
@@ -218,7 +216,7 @@ class CachePanel(Panel):
     @property
     def nav_subtitle(self):
         cache_calls = len(self.calls)
-        return ungettext(
+        return __(
             "%(cache_calls)d call in %(time).2fms",
             "%(cache_calls)d calls in %(time).2fms",
             cache_calls,
@@ -227,11 +225,11 @@ class CachePanel(Panel):
     @property
     def title(self):
         count = len(getattr(settings, "CACHES", ["default"]))
-        return ungettext(
+        return __(
             "Cache calls from %(count)d backend",
             "Cache calls from %(count)d backends",
             count,
-        ) % dict(count=count)
+        ) % {"count": count}
 
     def enable_instrumentation(self):
         if isinstance(middleware_cache.caches, CacheHandlerPatch):

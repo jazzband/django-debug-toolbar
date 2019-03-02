@@ -6,4 +6,4 @@ class LoaderWithSQL(Loader):
     def get_template(self, *args, **kwargs):
         # Force the template loader to run some SQL. Simulates a CMS.
         User.objects.all().count()
-        return super(LoaderWithSQL, self).get_template(*args, **kwargs)
+        return super().get_template(*args, **kwargs)

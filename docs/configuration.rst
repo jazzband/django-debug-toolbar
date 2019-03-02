@@ -141,8 +141,7 @@ Panel options
 * ``HIDE_IN_STACKTRACES``
 
   Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar',
-  'django')``. The first value is ``socketserver`` on Python 3 and
-  ``SocketServer`` on Python 2.
+  'django')``.
 
   Panels: cache, SQL
 

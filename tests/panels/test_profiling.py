@@ -1,13 +1,8 @@
-from __future__ import absolute_import, unicode_literals
-
-import unittest
-
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils import six
 
 from ..base import BaseTestCase
 from ..views import listcomp_view, regular_view
@@ -40,7 +35,6 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.assertIn("regular_view", self.panel.content)
         self.assertValidHTML(self.panel.content)
 
-    @unittest.skipIf(six.PY2, "list comprehension not listed on Python 2")
     def test_listcomp_escaped(self):
         self._get_response = lambda request: listcomp_view(request)
         response = self.panel.process_request(self.request)

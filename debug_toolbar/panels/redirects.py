@@ -1,7 +1,5 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.template.response import SimpleTemplateResponse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
 
@@ -16,11 +14,13 @@ class RedirectsPanel(Panel):
     nav_title = _("Intercept redirects")
 
     def process_request(self, request):
-        response = super(RedirectsPanel, self).process_request(request)
+        response = super().process_request(request)
         if 300 <= int(response.status_code) < 400:
             redirect_to = response.get("Location", None)
             if redirect_to:
-                status_line = "%s %s" % (response.status_code, response.reason_phrase)
+                status_line = "{} {}".format(
+                    response.status_code, response.reason_phrase
+                )
                 cookies = response.cookies
                 context = {"redirect_to": redirect_to, "status_line": status_line}
                 # Using SimpleTemplateResponse avoids running global context processors.
