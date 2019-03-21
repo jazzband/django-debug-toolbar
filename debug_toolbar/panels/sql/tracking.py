@@ -104,7 +104,7 @@ class NormalCursorWrapper(object):
 
     def _decode(self, param):
         # If a sequence type, decode each element separately
-        if isinstance(param, list) or isinstance(param, tuple):
+        if isinstance(param, (tuple, list)):
             return [self._decode(element) for element in param]
 
         # If a dictionary type, decode each value separately
