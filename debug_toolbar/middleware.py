@@ -2,14 +2,10 @@
 Debug Toolbar middleware
 """
 
-from __future__ import absolute_import, unicode_literals
-
 import re
+from functools import lru_cache
 
 from django.conf import settings
-from django.utils import six
-from django.utils.encoding import force_text
-from django.utils.lru_cache import lru_cache
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -33,13 +29,13 @@ def get_show_toolbar():
     # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
     # setup, resolve it to the corresponding callable.
     func_or_path = dt_settings.get_config()["SHOW_TOOLBAR_CALLBACK"]
-    if isinstance(func_or_path, six.string_types):
+    if isinstance(func_or_path, str):
         return import_string(func_or_path)
     else:
         return func_or_path
 
 
-class DebugToolbarMiddleware(object):
+class DebugToolbarMiddleware:
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
@@ -86,7 +82,7 @@ class DebugToolbarMiddleware(object):
             response.set_cookie("djdt", "hide", 864000)
 
         # Insert the toolbar in the response.
-        content = force_text(response.content, encoding=response.charset)
+        content = response.content.decode(response.charset)
         insert_before = dt_settings.get_config()["INSERT_BEFORE"]
         pattern = re.escape(insert_before)
         bits = re.split(pattern, content, flags=re.IGNORECASE)

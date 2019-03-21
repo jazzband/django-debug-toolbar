@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from collections import OrderedDict
 from os.path import join, normpath
 
@@ -8,7 +6,7 @@ from django.contrib.staticfiles import finders, storage
 from django.core.files.storage import get_storage_class
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import LazyObject
-from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.translation import gettext_lazy as _, ngettext as __
 
 from debug_toolbar import panels
 from debug_toolbar.utils import ThreadCollector
@@ -20,7 +18,7 @@ except ImportError:
 
 
 @python_2_unicode_compatible
-class StaticFile(object):
+class StaticFile:
     """
     Representing the different properties of a static file.
     """
@@ -43,7 +41,7 @@ class FileCollector(ThreadCollector):
         # handle the case of {% static "admin/" %}
         if path.endswith("/"):
             return
-        super(FileCollector, self).collect(StaticFile(path), thread)
+        super().collect(StaticFile(path), thread)
 
 
 collector = FileCollector()
@@ -62,12 +60,12 @@ class DebugConfiguredStorage(LazyObject):
 
         class DebugStaticFilesStorage(configured_storage_cls):
             def __init__(self, collector, *args, **kwargs):
-                super(DebugStaticFilesStorage, self).__init__(*args, **kwargs)
+                super().__init__(*args, **kwargs)
                 self.collector = collector
 
             def url(self, path):
                 self.collector.collect(path)
-                return super(DebugStaticFilesStorage, self).url(path)
+                return super().url(path)
 
         self._wrapped = DebugStaticFilesStorage(collector)
 
@@ -91,7 +89,7 @@ class StaticFilesPanel(panels.Panel):
         }
 
     def __init__(self, *args, **kwargs):
-        super(StaticFilesPanel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.num_found = 0
         self._paths = {}
 
@@ -110,13 +108,13 @@ class StaticFilesPanel(panels.Panel):
     @property
     def nav_subtitle(self):
         num_used = self.num_used
-        return ungettext(
-            "%(num_used)s file used", "%(num_used)s files used", num_used
-        ) % {"num_used": num_used}
+        return __("%(num_used)s file used", "%(num_used)s files used", num_used) % {
+            "num_used": num_used
+        }
 
     def process_request(self, request):
         collector.clear_collection()
-        return super(StaticFilesPanel, self).process_request(request)
+        return super().process_request(request)
 
     def generate_stats(self, request, response):
         used_paths = collector.get_collection()

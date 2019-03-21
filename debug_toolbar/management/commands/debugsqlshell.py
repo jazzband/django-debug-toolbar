@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function, unicode_literals
-
 from time import time
 
 import sqlparse
@@ -19,7 +17,7 @@ class PrintQueryWrapper(db_backends_utils.CursorDebugWrapper):
             end_time = time()
             duration = (end_time - start_time) * 1000
             formatted_sql = sqlparse.format(raw_sql, reindent=True)
-            print("%s [%.2fms]" % (formatted_sql, duration))
+            print("{} [{:.2f}ms]".format(formatted_sql, duration))
 
 
 db_backends_utils.CursorDebugWrapper = PrintQueryWrapper

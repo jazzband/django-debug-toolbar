@@ -1,12 +1,9 @@
-from __future__ import absolute_import, unicode_literals
-
 import datetime
 import json
 from threading import local
 from time import time
 
-from django.utils import six
-from django.utils.encoding import DjangoUnicodeDecodeError, force_text
+from django.utils.encoding import force_text
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
@@ -61,7 +58,7 @@ def unwrap_cursor(connection):
         del connection.cursor
 
 
-class ExceptionCursorWrapper(object):
+class ExceptionCursorWrapper:
     """
     Wraps a cursor and raises an exception on any operation.
     Used in Templates panel.
@@ -74,7 +71,7 @@ class ExceptionCursorWrapper(object):
         raise SQLQueryTriggered()
 
 
-class NormalCursorWrapper(object):
+class NormalCursorWrapper:
     """
     Wraps a cursor and logs queries.
     """
@@ -87,11 +84,8 @@ class NormalCursorWrapper(object):
         self.logger = logger
 
     def _quote_expr(self, element):
-        if isinstance(element, six.string_types):
-            try:
-                return "'%s'" % force_text(element).replace("'", "''")
-            except DjangoUnicodeDecodeError:
-                return repr(element)
+        if isinstance(element, str):
+            return "'%s'" % element.replace("'", "''")
         else:
             return repr(element)
 

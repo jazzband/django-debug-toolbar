@@ -1,10 +1,8 @@
-from __future__ import absolute_import, unicode_literals
-
 import sys
 
 import django
 from django.apps import apps
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
 

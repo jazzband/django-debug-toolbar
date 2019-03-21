@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from collections import OrderedDict
 from contextlib import contextmanager
 from os.path import normpath
@@ -12,9 +10,7 @@ from django.db.models.query import QuerySet, RawQuerySet
 from django.template import RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
-from django.utils import six
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, recording
@@ -46,7 +42,7 @@ def _request_context_bind_template(self, template):
     self.context_processors = OrderedDict()
     updates = {}
     for processor in processors:
-        name = "%s.%s" % (processor.__module__, processor.__name__)
+        name = "{}.{}".format(processor.__module__, processor.__name__)
         context = processor(self.request)
         self.context_processors[name] = context
         updates.update(context)
@@ -69,7 +65,7 @@ class TemplatesPanel(Panel):
     """
 
     def __init__(self, *args, **kwargs):
-        super(TemplatesPanel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.templates = []
         # Refs GitHub issue #910
         # Hold a series of seen dictionaries within Contexts. A dictionary is
@@ -86,7 +82,7 @@ class TemplatesPanel(Panel):
         template, context = kwargs["template"], kwargs["context"]
 
         # Skip templates that we are generating through the debug toolbar.
-        is_debug_toolbar_template = isinstance(template.name, six.string_types) and (
+        is_debug_toolbar_template = isinstance(template.name, str) and (
             template.name.startswith("debug_toolbar/")
             or template.name.startswith(
                 tuple(self.toolbar.config["SKIP_TEMPLATE_PREFIXES"])
@@ -125,13 +121,11 @@ class TemplatesPanel(Panel):
                         # QuerySet would trigger the database: user can run the
                         # query from SQL Panel
                         elif isinstance(value, (QuerySet, RawQuerySet)):
-                            model_name = "%s.%s" % (
-                                value.model._meta.app_label,
-                                value.model.__name__,
+                            model_name = "{}.{}".format(
+                                value.model._meta.app_label, value.model.__name__
                             )
-                            temp_layer[key] = "<<%s of %s>>" % (
-                                value.__class__.__name__.lower(),
-                                model_name,
+                            temp_layer[key] = "<<{} of {}>>".format(
+                                value.__class__.__name__.lower(), model_name
                             )
                         else:
                             try:
@@ -153,14 +147,10 @@ class TemplatesPanel(Panel):
                     self.seen_layers.append(key_values)
                     # Note: this *ought* to be len(...) - 1 but let's be safe.
                     index = self.seen_layers.index(key_values)
-                    try:
-                        pformatted = force_text(pformat(temp_layer))
-                    except UnicodeEncodeError:
-                        pass
-                    else:
-                        # Note: this *ought* to be len(...) - 1 but let's be safe.
-                        self.pformat_layers.insert(index, pformatted)
-                        context_list.append(pformatted)
+                    pformatted = pformat(temp_layer)
+                    # Note: this *ought* to be len(...) - 1 but let's be safe.
+                    self.pformat_layers.insert(index, pformatted)
+                    context_list.append(pformatted)
 
         kwargs["context"] = context_list
         kwargs["context_processors"] = getattr(context, "context_processors", None)

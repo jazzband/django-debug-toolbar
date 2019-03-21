@@ -1,8 +1,6 @@
-from __future__ import absolute_import, unicode_literals
-
 from collections import OrderedDict
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
 
@@ -13,26 +11,24 @@ class HeadersPanel(Panel):
     """
 
     # List of environment variables we want to display
-    ENVIRON_FILTER = set(
-        (
-            "CONTENT_LENGTH",
-            "CONTENT_TYPE",
-            "DJANGO_SETTINGS_MODULE",
-            "GATEWAY_INTERFACE",
-            "QUERY_STRING",
-            "PATH_INFO",
-            "PYTHONPATH",
-            "REMOTE_ADDR",
-            "REMOTE_HOST",
-            "REQUEST_METHOD",
-            "SCRIPT_NAME",
-            "SERVER_NAME",
-            "SERVER_PORT",
-            "SERVER_PROTOCOL",
-            "SERVER_SOFTWARE",
-            "TZ",
-        )
-    )
+    ENVIRON_FILTER = {
+        "CONTENT_LENGTH",
+        "CONTENT_TYPE",
+        "DJANGO_SETTINGS_MODULE",
+        "GATEWAY_INTERFACE",
+        "QUERY_STRING",
+        "PATH_INFO",
+        "PYTHONPATH",
+        "REMOTE_ADDR",
+        "REMOTE_HOST",
+        "REQUEST_METHOD",
+        "SCRIPT_NAME",
+        "SERVER_NAME",
+        "SERVER_PORT",
+        "SERVER_PROTOCOL",
+        "SERVER_SOFTWARE",
+        "TZ",
+    }
 
     title = _("Headers")
 
@@ -51,7 +47,7 @@ class HeadersPanel(Panel):
         self.record_stats(
             {"request_headers": self.request_headers, "environ": self.environ}
         )
-        return super(HeadersPanel, self).process_request(request)
+        return super().process_request(request)
 
     def generate_stats(self, request, response):
         self.response_headers = OrderedDict(sorted(response.items()))

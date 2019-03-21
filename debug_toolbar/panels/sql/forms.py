@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import hashlib
 import hmac
 import json
@@ -39,7 +37,7 @@ class SQLSelectForm(forms.Form):
         if initial is not None:
             initial["hash"] = self.make_hash(initial)
 
-        super(SQLSelectForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for name in self.fields:
             self.fields[name].widget = forms.HiddenInput()

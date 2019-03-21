@@ -1,7 +1,3 @@
-# coding: utf-8
-
-from __future__ import absolute_import, unicode_literals
-
 import datetime
 import unittest
 
@@ -71,7 +67,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 2)
 
         # non-ASCII bytes parameters
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         self.assertEqual(len(self.panel._queries), 3)
 
         response = self.panel.process_request(self.request)

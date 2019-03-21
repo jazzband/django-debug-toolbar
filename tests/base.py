@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import html5lib
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase
@@ -13,7 +11,7 @@ class BaseTestCase(TestCase):
     panel_id = None
 
     def setUp(self):
-        super(BaseTestCase, self).setUp()
+        super().setUp()
         self._get_response = lambda request: HttpResponse()
         self.request = rf.get("/")
         self.toolbar = DebugToolbar(self.request, self.get_response)
@@ -28,7 +26,7 @@ class BaseTestCase(TestCase):
     def tearDown(self):
         if self.panel:
             self.panel.disable_instrumentation()
-        super(BaseTestCase, self).tearDown()
+        super().tearDown()
 
     def get_response(self, request):
         return self._get_response(request)

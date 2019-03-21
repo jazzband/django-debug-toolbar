@@ -11,6 +11,7 @@ Change log
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Removed support for Python 2.
 * Removed support for Django's deprecated ``MIDDLEWARE_CLASSES`` setting.
 * Restructured ``Panel`` to execute more like the new-style Django MIDDLEWARE.
   The ``Panel.__init__()`` method is now passed ``get_response`` as the first
@@ -20,9 +21,6 @@ Change log
   the case in the ``RedirectsPanel``. Third party panels must adjust to this
   new architecture. ``Panel.process_response()`` and ``Panel.process_view()``
   have been removed as a result of this change.
-
-**Backwards incompatible changes**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The deprecated API, ``debug_toolbar.panels.DebugPanel``, has been removed.
 Third party panels should use ``debug_toolbar.panels.Panel`` instead.

@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 import uuid
 from collections import defaultdict
 from copy import copy
@@ -7,7 +5,7 @@ from pprint import saferepr
 
 from django.conf.urls import url
 from django.db import connections
-from django.utils.translation import ugettext_lazy as _, ungettext_lazy as __
+from django.utils.translation import gettext_lazy as _, ngettext_lazy as __
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
@@ -56,7 +54,7 @@ class SQLPanel(Panel):
     """
 
     def __init__(self, *args, **kwargs):
-        super(SQLPanel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._offset = {k: len(connections[k].queries) for k in connections}
         self._sql_time = 0
         self._num_queries = 0

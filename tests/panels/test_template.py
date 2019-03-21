@@ -1,7 +1,3 @@
-# coding: utf-8
-
-from __future__ import absolute_import, unicode_literals
-
 from django.contrib.auth.models import User
 from django.template import Context, RequestContext, Template
 from django.test import TestCase, override_settings
@@ -14,13 +10,13 @@ class TemplatesPanelTestCase(BaseTestCase):
     panel_id = "TemplatesPanel"
 
     def setUp(self):
-        super(TemplatesPanelTestCase, self).setUp()
+        super().setUp()
         self.sql_panel = self.toolbar.get_panel_by_id("SQLPanel")
         self.sql_panel.enable_instrumentation()
 
     def tearDown(self):
         self.sql_panel.disable_instrumentation()
-        super(TemplatesPanelTestCase, self).tearDown()
+        super().tearDown()
 
     def test_queryset_hook(self):
         t = Template("No context variables here!")

@@ -1,9 +1,7 @@
-from __future__ import absolute_import, unicode_literals
-
 import datetime
 import logging
 
-from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.translation import gettext_lazy as _, ngettext as __
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import ThreadCollector
@@ -22,7 +20,7 @@ class LogCollector(ThreadCollector):
         # TODO: Make this check whether SQL panel is enabled
         if item.get("channel", "") == "django.db.backends":
             return
-        super(LogCollector, self).collect(item, thread)
+        super().collect(item, thread)
 
 
 class ThreadTrackingHandler(logging.Handler):
@@ -59,7 +57,7 @@ class LoggingPanel(Panel):
     template = "debug_toolbar/panels/logging.html"
 
     def __init__(self, *args, **kwargs):
-        super(LoggingPanel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._records = {}
 
     nav_title = _("Logging")
@@ -68,7 +66,7 @@ class LoggingPanel(Panel):
     def nav_subtitle(self):
         records = self._records[threading.currentThread()]
         record_count = len(records)
-        return ungettext("%(count)s message", "%(count)s messages", record_count) % {
+        return __("%(count)s message", "%(count)s messages", record_count) % {
             "count": record_count
         }
 
@@ -76,7 +74,7 @@ class LoggingPanel(Panel):
 
     def process_request(self, request):
         collector.clear_collection()
-        return super(LoggingPanel, self).process_request(request)
+        return super().process_request(request)
 
     def generate_stats(self, request, response):
         records = collector.get_collection()

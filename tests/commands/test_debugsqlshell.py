@@ -1,5 +1,4 @@
-from __future__ import absolute_import, unicode_literals
-
+import io
 import sys
 
 from django.contrib.auth.models import User
@@ -7,7 +6,6 @@ from django.core import management
 from django.db.backends import utils as db_backends_utils
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils import six
 
 
 @override_settings(DEBUG=True)
@@ -25,7 +23,7 @@ class DebugSQLShellTestCase(TestCase):
         db_backends_utils.CursorDebugWrapper = self.original_cursor_wrapper
 
     def test_command(self):
-        original_stdout, sys.stdout = sys.stdout, six.StringIO()
+        original_stdout, sys.stdout = sys.stdout, io.StringIO()
         try:
             User.objects.count()
             self.assertIn("SELECT COUNT", sys.stdout.getvalue())

@@ -1,13 +1,10 @@
-from __future__ import absolute_import, division, unicode_literals
-
 import cProfile
 import os
 from colorsys import hsv_to_rgb
 from pstats import Stats
 
-from django.utils import six
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
@@ -23,7 +20,7 @@ def contains_profiler(func_tuple):
     the INVALID_PROFILE_FUNC in any string value of the tuple."""
     has_profiler = False
     for value in func_tuple:
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             has_profiler |= INVALID_PROFILER_FUNC in value
     return has_profiler
 
@@ -40,7 +37,7 @@ class DjangoDebugToolbarStats(Stats):
         return self.__root
 
 
-class FunctionCall(object):
+class FunctionCall:
     def __init__(
         self, statobj, func, depth=0, stats=None, id=0, parent_ids=[], hsv=(0, 0.5, 1)
     ):
@@ -60,7 +57,7 @@ class FunctionCall(object):
 
     def background(self):
         r, g, b = hsv_to_rgb(*self.hsv)
-        return "rgb(%f%%,%f%%,%f%%)" % (r * 100, g * 100, b * 100)
+        return "rgb({:f}%,{:f}%,{:f}%)".format(r * 100, g * 100, b * 100)
 
     def func_std_string(self):  # match what old profile produced
         func_name = self.func
@@ -156,9 +153,7 @@ class ProfilingPanel(Panel):
 
     def process_request(self, request):
         self.profiler = cProfile.Profile()
-        return self.profiler.runcall(
-            super(ProfilingPanel, self).process_request, request
-        )
+        return self.profiler.runcall(super().process_request, request)
 
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
         func_list.append(func)

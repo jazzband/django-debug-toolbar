@@ -7,7 +7,7 @@ style:
 
 style_check:
 	isort -rc -c debug_toolbar example tests
-	black --check debug_toolbar example tests setup.py
+	black --target-version=py34 --check debug_toolbar example tests setup.py
 
 flake8:
 	flake8 debug_toolbar example tests
