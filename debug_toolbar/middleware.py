@@ -5,11 +5,9 @@ Debug Toolbar middleware
 from __future__ import absolute_import, unicode_literals
 
 import re
-import threading
 
 from django.conf import settings
 from django.utils import six
-from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_text
 from django.utils.lru_cache import lru_cache
 from django.utils.module_loading import import_string
@@ -41,70 +39,35 @@ def get_show_toolbar():
         return func_or_path
 
 
-class DebugToolbarMiddleware(MiddlewareMixin):
+class DebugToolbarMiddleware(object):
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
     on outgoing response.
     """
 
-    debug_toolbars = {}
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-    def process_request(self, request):
-        # Decide whether the toolbar is active for this request.
+    def __call__(self, request):
+        # Decide whether the toolbar is active for this request. Don't render
+        # the toolbar during AJAX requests.
         show_toolbar = get_show_toolbar()
-        if not show_toolbar(request):
-            return
+        if not show_toolbar(request) or request.is_ajax():
+            return self.get_response(request)
 
-        # Don't render the toolbar during AJAX requests.
-        if request.is_ajax():
-            return
-
-        toolbar = DebugToolbar(request)
-        self.__class__.debug_toolbars[threading.current_thread().ident] = toolbar
+        toolbar = DebugToolbar(request, self.get_response)
 
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
             panel.enable_instrumentation()
-
-        # Run process_request methods of panels like Django middleware.
-        response = None
-        for panel in toolbar.enabled_panels:
-            response = panel.process_request(request)
-            if response:
-                break
-        return response
-
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        toolbar = self.__class__.debug_toolbars.get(threading.current_thread().ident)
-        if not toolbar:
-            return
-
-        # Run process_view methods of panels like Django middleware.
-        response = None
-        for panel in toolbar.enabled_panels:
-            response = panel.process_view(request, view_func, view_args, view_kwargs)
-            if response:
-                break
-        return response
-
-    def process_response(self, request, response):
-        toolbar = self.__class__.debug_toolbars.pop(
-            threading.current_thread().ident, None
-        )
-        if not toolbar:
-            return response
-
-        # Run process_response methods of panels like Django middleware.
-        for panel in reversed(toolbar.enabled_panels):
-            new_response = panel.process_response(request, response)
-            if new_response:
-                response = new_response
-
-        # Deactivate instrumentation ie. monkey-unpatch. This must run
-        # regardless of the response. Keep 'return' clauses below.
-        # (NB: Django's model for middleware doesn't guarantee anything.)
-        for panel in reversed(toolbar.enabled_panels):
-            panel.disable_instrumentation()
+        try:
+            # Run panels like Django middleware.
+            response = toolbar.process_request(request)
+        finally:
+            # Deactivate instrumentation ie. monkey-unpatch. This must run
+            # regardless of the response. Keep 'return' clauses below.
+            for panel in reversed(toolbar.enabled_panels):
+                panel.disable_instrumentation()
 
         # Check for responses where the toolbar can't be inserted.
         content_encoding = response.get("Content-Encoding", "")

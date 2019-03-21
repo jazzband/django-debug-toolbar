@@ -57,6 +57,7 @@ class TimerPanel(Panel):
         self._start_time = time.time()
         if self.has_content:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
+        return super(TimerPanel, self).process_request(request)
 
     def generate_stats(self, request, response):
         stats = {}

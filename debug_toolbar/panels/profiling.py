@@ -154,10 +154,11 @@ class ProfilingPanel(Panel):
 
     template = "debug_toolbar/panels/profiling.html"
 
-    def process_view(self, request, view_func, view_args, view_kwargs):
+    def process_request(self, request):
         self.profiler = cProfile.Profile()
-        args = (request,) + view_args
-        return self.profiler.runcall(view_func, *args, **view_kwargs)
+        return self.profiler.runcall(
+            super(ProfilingPanel, self).process_request, request
+        )
 
     def add_node(self, func_list, func, max_depth, cum_time=0.1):
         func_list.append(func)

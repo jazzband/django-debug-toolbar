@@ -10,6 +10,7 @@ from debug_toolbar.panels.logging import (
 )
 
 from ..base import BaseTestCase
+from ..views import regular_view
 
 
 class LoggingPanelTestCase(BaseTestCase):
@@ -25,20 +26,26 @@ class LoggingPanelTestCase(BaseTestCase):
         logging.root.setLevel(logging.DEBUG)
 
     def test_happy_case(self):
-        self.logger.info("Nothing to see here, move along!")
+        def view(request):
+            self.logger.info("Nothing to see here, move along!")
+            return regular_view(request, "logging")
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        self._get_response = view
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
         records = self.panel.get_stats()["records"]
 
         self.assertEqual(1, len(records))
         self.assertEqual("Nothing to see here, move along!", records[0]["message"])
 
     def test_formatting(self):
-        self.logger.info("There are %d %s", 5, "apples")
+        def view(request):
+            self.logger.info("There are %d %s", 5, "apples")
+            return regular_view(request, "logging")
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        self._get_response = view
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
         records = self.panel.get_stats()["records"]
 
         self.assertEqual(1, len(records))
@@ -47,13 +54,18 @@ class LoggingPanelTestCase(BaseTestCase):
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and
-        not the process_response.
+        not the process_request.
         """
-        self.logger.info("café")
-        self.panel.process_response(self.request, self.response)
+
+        def view(request):
+            self.logger.info("café")
+            return regular_view(request, "logging")
+
+        self._get_response = view
+        response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("café", self.panel.content)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
         self.assertIn("café", self.panel.content)
         self.assertValidHTML(self.panel.content)
@@ -63,11 +75,14 @@ class LoggingPanelTestCase(BaseTestCase):
             def __str__(self):
                 raise Exception("Please not stringify me!")
 
-        # should not raise exception, but fail silently
-        self.logger.debug("This class is misbehaving: %s", BadClass())
+        def view(request):
+            # should not raise exception, but fail silently
+            self.logger.debug("This class is misbehaving: %s", BadClass())
+            return regular_view(request, "logging")
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        self._get_response = view
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
         records = self.panel.get_stats()["records"]
 
         self.assertEqual(1, len(records))

@@ -13,8 +13,9 @@ class Panel(object):
     Base class for panels.
     """
 
-    def __init__(self, toolbar):
+    def __init__(self, toolbar, get_response):
         self.toolbar = toolbar
+        self.get_response = get_response
 
     # Private panel properties
 
@@ -129,8 +130,7 @@ class Panel(object):
         This is the opposite of :meth:`enable_instrumentation`.
 
         Unless the toolbar or this panel is disabled, this method will be
-        called late in :class:`DebugToolbarMiddleware.process_response`. It
-        should be idempotent.
+        called late in the middleware. It should be idempotent.
         """
 
     # Store and retrieve stats (shared between panels for no good reason)
@@ -168,40 +168,21 @@ class Panel(object):
 
     def process_request(self, request):
         """
-        Like process_request in Django's middleware.
+        Like __call__ in Django's middleware.
 
         Write panel logic related to the request there. Save data with
         :meth:`record_stats`.
-        """
 
-    def process_view(self, request, view_func, view_args, view_kwargs):
+        Return the existing response or overwrite it.
         """
-        Like process_view in Django's middleware.
-
-        Write panel logic related to the view there. Save data with
-        :meth:`record_stats`.
-        """
-
-    def process_response(self, request, response):
-        """
-        Like process_response in Django's middleware. This is similar to
-        :meth:`generate_stats <debug_toolbar.panels.Panel.generate_stats>`,
-        but will be executed on every request. It should be used when either
-        the logic needs to be executed on every request or it needs to change
-        the response entirely, such as :class:`RedirectsPanel`.
-
-        Write panel logic related to the response there. Post-process data
-        gathered while the view executed. Save data with :meth:`record_stats`.
-
-        Return a response to overwrite the existing response.
-        """
+        return self.get_response(request)
 
     def generate_stats(self, request, response):
         """
-        Similar to :meth:`process_response
-        <debug_toolbar.panels.Panel.process_response>`,
-        but may not be executed on every request. This will only be called if
-        the toolbar will be inserted into the request.
+        Called after :meth:`process_request
+        <debug_toolbar.panels.Panel.process_request>`, but may not be executed
+        on every request. This will only be called if the toolbar will be
+        inserted into the request.
 
         Write panel logic related to the response there. Post-process data
         gathered while the view executed. Save data with :meth:`record_stats`.

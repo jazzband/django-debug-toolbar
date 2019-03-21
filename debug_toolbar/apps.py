@@ -23,14 +23,8 @@ def check_middleware(app_configs, **kwargs):
     gzip_index = None
     debug_toolbar_indexes = []
 
-    setting = getattr(settings, "MIDDLEWARE", None)
-    setting_name = "MIDDLEWARE"
-    if setting is None:
-        setting = settings.MIDDLEWARE_CLASSES
-        setting_name = "MIDDLEWARE_CLASSES"
-
     # Determine the indexes which gzip and/or the toolbar are installed at
-    for i, middleware in enumerate(setting):
+    for i, middleware in enumerate(settings.MIDDLEWARE):
         if is_middleware_class(GZipMiddleware, middleware):
             gzip_index = i
         elif is_middleware_class(DebugToolbarMiddleware, middleware):
@@ -41,9 +35,9 @@ def check_middleware(app_configs, **kwargs):
         errors.append(
             Warning(
                 "debug_toolbar.middleware.DebugToolbarMiddleware is missing "
-                "from %s." % setting_name,
+                "from MIDDLEWARE.",
                 hint="Add debug_toolbar.middleware.DebugToolbarMiddleware to "
-                "%s." % setting_name,
+                "MIDDLEWARE.",
                 id="debug_toolbar.W001",
             )
         )
@@ -52,9 +46,9 @@ def check_middleware(app_configs, **kwargs):
         errors.append(
             Warning(
                 "debug_toolbar.middleware.DebugToolbarMiddleware occurs "
-                "multiple times in %s." % setting_name,
+                "multiple times in MIDDLEWARE.",
                 hint="Load debug_toolbar.middleware.DebugToolbarMiddleware only "
-                "once in %s." % setting_name,
+                "once in MIDDLEWARE.",
                 id="debug_toolbar.W002",
             )
         )
@@ -63,9 +57,9 @@ def check_middleware(app_configs, **kwargs):
         errors.append(
             Warning(
                 "debug_toolbar.middleware.DebugToolbarMiddleware occurs before "
-                "django.middleware.gzip.GZipMiddleware in %s." % setting_name,
+                "django.middleware.gzip.GZipMiddleware in MIDDLEWARE.",
                 hint="Move debug_toolbar.middleware.DebugToolbarMiddleware to "
-                "after django.middleware.gzip.GZipMiddleware in %s." % setting_name,
+                "after django.middleware.gzip.GZipMiddleware in MIDDLEWARE.",
                 id="debug_toolbar.W003",
             )
         )

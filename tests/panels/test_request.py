@@ -14,9 +14,8 @@ class RequestPanelTestCase(BaseTestCase):
         self.request.session = {"où": "où"}
         if not six.PY3:
             self.request.session["là".encode("utf-8")] = "là".encode("utf-8")
-        self.panel.process_request(self.request)
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
         content = self.panel.content
         if six.PY3:
             self.assertIn("où", content)
@@ -26,21 +25,20 @@ class RequestPanelTestCase(BaseTestCase):
 
     def test_object_with_non_ascii_repr_in_request_params(self):
         self.request.path = "/non_ascii_request/"
-        self.panel.process_request(self.request)
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
         self.assertIn("nôt åscíì", self.panel.content)
 
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and
-        not the process_response.
+        not the process_request.
         """
         self.request.path = "/non_ascii_request/"
-        self.panel.process_response(self.request, self.response)
+        response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("nôt åscíì", self.panel.content)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
         self.assertIn("nôt åscíì", self.panel.content)
         self.assertValidHTML(self.panel.content)

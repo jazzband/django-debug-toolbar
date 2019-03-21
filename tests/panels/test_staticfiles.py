@@ -11,9 +11,8 @@ class StaticFilesPanelTestCase(BaseTestCase):
     panel_id = "StaticFilesPanel"
 
     def test_default_case(self):
-        self.panel.process_request(self.request)
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
         self.assertIn(
             "django.contrib.staticfiles.finders." "AppDirectoriesFinder",
             self.panel.content,
@@ -34,16 +33,15 @@ class StaticFilesPanelTestCase(BaseTestCase):
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and
-        not the process_response.
+        not the process_request.
         """
-        self.panel.process_request(self.request)
-        self.panel.process_response(self.request, self.response)
+        response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn(
             "django.contrib.staticfiles.finders." "AppDirectoriesFinder",
             self.panel.content,
         )
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
         self.assertIn(
             "django.contrib.staticfiles.finders." "AppDirectoriesFinder",

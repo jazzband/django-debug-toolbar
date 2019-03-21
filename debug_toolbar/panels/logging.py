@@ -76,6 +76,7 @@ class LoggingPanel(Panel):
 
     def process_request(self, request):
         collector.clear_collection()
+        return super(LoggingPanel, self).process_request(request)
 
     def generate_stats(self, request, response):
         records = collector.get_collection()

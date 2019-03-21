@@ -30,13 +30,13 @@ class CachePanelTestCase(BaseTestCase):
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and
-        not the process_response.
+        not the process_request.
         """
         cache.cache.get("café")
-        self.panel.process_response(self.request, self.response)
+        response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("café", self.panel.content)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
         self.assertIn("café", self.panel.content)
         self.assertValidHTML(self.panel.content)
@@ -49,8 +49,9 @@ class CachePanelTestCase(BaseTestCase):
 
         self.assertEqual(len(self.panel.calls), 3)
 
-        self.panel.generate_stats(self.request, self.response)
-        self.panel.generate_server_timing(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.panel.generate_server_timing(self.request, response)
 
         stats = self.panel.get_stats()
 

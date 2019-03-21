@@ -51,6 +51,7 @@ class HeadersPanel(Panel):
         self.record_stats(
             {"request_headers": self.request_headers, "environ": self.environ}
         )
+        return super(HeadersPanel, self).process_request(request)
 
     def generate_stats(self, request, response):
         self.response_headers = OrderedDict(sorted(response.items()))

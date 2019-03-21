@@ -45,9 +45,9 @@ class SQLPanelTestCase(BaseTestCase):
 
         list(User.objects.all())
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
-        self.panel.generate_server_timing(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.panel.generate_server_timing(self.request, response)
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
@@ -74,8 +74,8 @@ class SQLPanelTestCase(BaseTestCase):
         list(User.objects.filter(username="café".encode("utf-8")))
         self.assertEqual(len(self.panel._queries), 3)
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
 
         # ensure the panel renders correctly
         self.assertIn("café", self.panel.content)
@@ -95,8 +95,8 @@ class SQLPanelTestCase(BaseTestCase):
         )
         list(User.objects.filter(date_joined=datetime.datetime(2017, 12, 22, 16, 7, 1)))
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 3)
@@ -115,8 +115,8 @@ class SQLPanelTestCase(BaseTestCase):
                 [connection.Database.Binary(b"\xff")],
             )
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
 
         self.assertEqual(len(self.panel._queries), 1)
         self.assertIn(
@@ -166,8 +166,8 @@ class SQLPanelTestCase(BaseTestCase):
             )
         )
 
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 2)
@@ -190,13 +190,13 @@ class SQLPanelTestCase(BaseTestCase):
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and
-        not the process_response.
+        not the process_request.
         """
         list(User.objects.filter(username="café".encode("utf-8")))
-        self.panel.process_response(self.request, self.response)
+        response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("café", self.panel.content)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
         self.assertIn("café", self.panel.content)
         self.assertValidHTML(self.panel.content)

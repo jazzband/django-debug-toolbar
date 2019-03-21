@@ -40,37 +40,35 @@ class TemplatesPanelTestCase(BaseTestCase):
         self.assertIn("<<triggers database query>>", ctx)
 
     def test_object_with_non_ascii_repr_in_context(self):
-        self.panel.process_request(self.request)
+        response = self.panel.process_request(self.request)
         t = Template("{{ object }}")
         c = Context({"object": NonAsciiRepr()})
         t.render(c)
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         self.assertIn("nôt åscíì", self.panel.content)
 
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and
-        not the process_response.
+        not the process_request.
         """
         t = Template("{{ object }}")
         c = Context({"object": NonAsciiRepr()})
         t.render(c)
-        self.panel.process_response(self.request, self.response)
+        response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("nôt åscíì", self.panel.content)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
         self.assertIn("nôt åscíì", self.panel.content)
         self.assertValidHTML(self.panel.content)
 
     def test_custom_context_processor(self):
-        self.panel.process_request(self.request)
+        response = self.panel.process_request(self.request)
         t = Template("{{ content }}")
         c = RequestContext(self.request, processors=[context_processor])
         t.render(c)
-        self.panel.process_response(self.request, self.response)
-        self.panel.generate_stats(self.request, self.response)
+        self.panel.generate_stats(self.request, response)
         self.assertIn(
             "tests.panels.test_template.context_processor", self.panel.content
         )

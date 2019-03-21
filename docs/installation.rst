@@ -75,20 +75,11 @@ settings module as follows::
         # ...
     ]
 
-Old-style middleware::
-
-    MIDDLEWARE_CLASSES = [
-        # ...
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-        # ...
-    ]
-
 .. warning::
 
-    The order of ``MIDDLEWARE`` and ``MIDDLEWARE_CLASSES`` is important. You
-    should include the Debug Toolbar middleware as early as possible in the
-    list. However, it must come after any other middleware that encodes the
-    response's content, such as
+    The order of ``MIDDLEWARE`` is important. You should include the Debug
+    Toolbar middleware as early as possible in the list. However, it must come
+    after any other middleware that encodes the response's content, such as
     :class:`~django.middleware.gzip.GZipMiddleware`.
 
 Configuring Internal IPs
