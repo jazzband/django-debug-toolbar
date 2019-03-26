@@ -108,7 +108,7 @@ class SQLPanelTestCase(BaseTestCase):
         with connection.cursor() as cursor:
             cursor.execute(
                 "SELECT * FROM tests_binary WHERE field = %s",
-                [connection.Database.Binary(b"\xff")],
+                [connection.Database.Binary(b"\udc80\x04\xff")],
             )
 
         response = self.panel.process_request(self.request)
