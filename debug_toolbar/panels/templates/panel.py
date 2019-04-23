@@ -141,13 +141,16 @@ class TemplatesPanel(Panel):
                                 temp_layer[key] = value
                             finally:
                                 recording(True)
+                    # Execute pformat first - if for some reason pformat/repr
+                    # causes more templates to be rendered, seen/pformat layers
+                    # will still be consistent
+                    pformatted = pformat(temp_layer)
                     # Refs GitHub issue #910
                     # If we've not seen the layer before then we will add it
                     # so that if we see it again we can skip formatting it.
                     self.seen_layers.append(key_values)
                     # Note: this *ought* to be len(...) - 1 but let's be safe.
                     index = self.seen_layers.index(key_values)
-                    pformatted = pformat(temp_layer)
                     # Note: this *ought* to be len(...) - 1 but let's be safe.
                     self.pformat_layers.insert(index, pformatted)
                     context_list.append(pformatted)
