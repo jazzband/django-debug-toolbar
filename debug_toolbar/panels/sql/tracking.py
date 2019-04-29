@@ -135,6 +135,10 @@ class NormalCursorWrapper:
             conn = self.db.connection
             vendor = getattr(conn, "vendor", "unknown")
 
+            # Sql might be an object (such as psycopg Composed).
+            # For logging purposes, make sure it's str.
+            sql = str(sql)
+
             params = {
                 "vendor": vendor,
                 "alias": alias,

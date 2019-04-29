@@ -209,6 +209,31 @@ class SQLPanelTestCase(BaseTestCase):
         except DatabaseError as e:
             self.assertTrue("erroneous query" in str(e))
 
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
+    def test_execute_with_psycopg2_composed_sql(self):
+        """
+        Test command executed using a Composed psycopg2 object is logged.
+        Ref: http://initd.org/psycopg/docs/sql.html
+        """
+        from psycopg2 import sql
+
+        self.assertEqual(len(self.panel._queries), 0)
+
+        with connection.cursor() as cursor:
+            command = sql.SQL("select {field} from {table}").format(
+                field=sql.Identifier("username"), table=sql.Identifier("auth_user")
+            )
+            cursor.execute(command)
+
+        self.assertEqual(len(self.panel._queries), 1)
+
+        query = self.panel._queries[0]
+        self.assertEqual(query[0], "default")
+        self.assertTrue("sql" in query[1])
+        self.assertEqual(query[1]["sql"], 'select "username" from "auth_user"')
+
     def test_disable_stacktraces(self):
         self.assertEqual(len(self.panel._queries), 0)
 
