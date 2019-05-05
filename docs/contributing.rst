@@ -85,7 +85,7 @@ SQLite.
 Style
 -----
 
-The Django Debug Toolbar uses `black <https://github.com/ambv/black>`__
+The Django Debug Toolbar uses `black <https://github.com/python/black>`__
 to format code and additionally uses flake8 and isort. You can reformat
 the code using::
 
