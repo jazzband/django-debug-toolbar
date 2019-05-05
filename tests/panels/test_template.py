@@ -3,6 +3,7 @@ from django.template import Context, RequestContext, Template
 from django.test import TestCase, override_settings
 
 from ..base import BaseTestCase
+from ..forms import TemplateReprForm
 from ..models import NonAsciiRepr
 
 
@@ -34,6 +35,18 @@ class TemplatesPanelTestCase(BaseTestCase):
         ctx = self.panel.templates[0]["context"][1]
         self.assertIn("<<queryset of auth.User>>", ctx)
         self.assertIn("<<triggers database query>>", ctx)
+
+    def test_template_repr(self):
+        # Force widget templates to be included
+        self.toolbar.config["SKIP_TEMPLATE_PREFIXES"] = ()
+
+        User.objects.create(username="admin")
+        bad_repr = TemplateReprForm()
+        t = Template("{{ bad_repr }}")
+        c = Context({"bad_repr": bad_repr})
+        html = t.render(c)
+        self.assertIsNotNone(html)
+        self.assertValidHTML(html)
 
     def test_object_with_non_ascii_repr_in_context(self):
         response = self.panel.process_request(self.request)
