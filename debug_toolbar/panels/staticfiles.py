@@ -4,7 +4,6 @@ from os.path import join, normpath
 from django.conf import settings
 from django.contrib.staticfiles import finders, storage
 from django.core.files.storage import get_storage_class
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import LazyObject
 from django.utils.translation import gettext_lazy as _, ngettext as __
 
@@ -17,7 +16,6 @@ except ImportError:
     threading = None
 
 
-@python_2_unicode_compatible
 class StaticFile:
     """
     Representing the different properties of a static file.
