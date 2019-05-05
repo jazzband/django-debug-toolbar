@@ -354,6 +354,7 @@ class DebugToolbarSystemChecksTestCase(SimpleTestCase):
     @override_settings(
         MIDDLEWARE=[
             "django.contrib.messages.middleware.MessageMiddleware",
+            "django.contrib.sessions.middleware.SessionMiddleware",
             "django.contrib.auth.middleware.AuthenticationMiddleware",
             "django.middleware.gzip.GZipMiddleware",
             "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -366,6 +367,7 @@ class DebugToolbarSystemChecksTestCase(SimpleTestCase):
     @override_settings(
         MIDDLEWARE=[
             "django.contrib.messages.middleware.MessageMiddleware",
+            "django.contrib.sessions.middleware.SessionMiddleware",
             "django.contrib.auth.middleware.AuthenticationMiddleware",
         ]
     )
@@ -387,6 +389,7 @@ class DebugToolbarSystemChecksTestCase(SimpleTestCase):
     @override_settings(
         MIDDLEWARE=[
             "django.contrib.messages.middleware.MessageMiddleware",
+            "django.contrib.sessions.middleware.SessionMiddleware",
             "django.contrib.auth.middleware.AuthenticationMiddleware",
             "debug_toolbar.middleware.DebugToolbarMiddleware",
             "django.middleware.gzip.GZipMiddleware",
