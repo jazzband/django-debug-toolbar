@@ -45,6 +45,13 @@ matrix:
       env: TOXENV=mariadb
       addons:
         mariadb: "10.3"
+      script:
+        # working around https://travis-ci.community/t/mariadb-build-error-with-xenial/3160
+        - mysql -u root -e "DROP USER IF EXISTS 'travis'@'%';"
+        - mysql -u root -e "CREATE USER 'travis'@'%';"
+        - mysql -u root -e "CREATE DATABASE debug_toolbar;"
+        - mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%';";
+        - tox -v
     - env: TOXENV=flake8
     - python: 3.7
       env: TOXENV=style
