@@ -96,7 +96,7 @@ class JinjaTemplateTestCase(TestCase):
     def test_django_jinja2(self):
         r = self.client.get("/regular_jinja/foobar/")
         self.assertContains(r, "Test for foobar (Jinja)")
-        self.assertContains(r, "<h3>Templates (1 rendered)</h3>")
+        self.assertContains(r, "<h3>Templates (2 rendered)</h3>")
         self.assertContains(r, "<small>jinja2/basic.jinja</small>")
 
 

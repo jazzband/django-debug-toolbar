@@ -2,7 +2,7 @@
 
 Django
 sqlparse
-django_jinja
+Jinja2
 
 # Testing
 
