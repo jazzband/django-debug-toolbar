@@ -82,6 +82,8 @@ settings module as follows::
     after any other middleware that encodes the response's content, such as
     :class:`~django.middleware.gzip.GZipMiddleware`.
 
+.. _internal-ips:
+
 Configuring Internal IPs
 ------------------------
 
