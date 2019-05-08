@@ -191,7 +191,7 @@ Panel options
 Here's what a slightly customized toolbar configuration might look like::
 
     # This example is unlikely to be appropriate for your project.
-    CONFIG_DEFAULTS = {
+    DEBUG_TOOLBAR_CONFIG = {
         # Toolbar options
         'RESULTS_CACHE_SIZE': 3,
         'SHOW_COLLAPSED': True,
