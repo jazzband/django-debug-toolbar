@@ -36,6 +36,7 @@ recording = state.recording  # export function
 def wrap_cursor(connection, panel):
     if not hasattr(connection, "_djdt_cursor"):
         connection._djdt_cursor = connection.cursor
+        connection._djdt_chunked_cursor = connection.chunked_cursor
 
         def cursor(*args, **kwargs):
             # Per the DB API cursor() does not accept any arguments. There's
@@ -48,7 +49,13 @@ def wrap_cursor(connection, panel):
                 connection._djdt_cursor(*args, **kwargs), connection, panel
             )
 
+        def chunked_cursor(*args, **kwargs):
+            return state.Wrapper(
+                connection._djdt_chunked_cursor(*args, **kwargs), connection, panel
+            )
+
         connection.cursor = cursor
+        connection.chunked_cursor = chunked_cursor
         return cursor
 
 
@@ -56,6 +63,7 @@ def unwrap_cursor(connection):
     if hasattr(connection, "_djdt_cursor"):
         del connection._djdt_cursor
         del connection.cursor
+        del connection.chunked_cursor
 
 
 class ExceptionCursorWrapper:
