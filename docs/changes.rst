@@ -8,6 +8,12 @@ Change log
 * The ``ProfilingPanel`` is now enabled but inactive by default.
 * Fixed toggling of table rows in the profiling panel UI.
 * The ``ProfilingPanel`` no longer skips remaining panels or middlewares.
+* Improved the installation documentation.
+* Fixed a possible crash in the template panel.
+* Added support for psycopg2 ``Composed`` objects.
+* Changed the Jinja2 tests to use Django's own Jinja2 template backend.
+* Added instrumentation to queries using server side cursors.
+* Too many small improvements and cleanups to list them all.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
