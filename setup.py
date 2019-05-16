@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from io import open
 
@@ -12,7 +12,7 @@ def readall(path):
 
 setup(
     name="django-debug-toolbar",
-    version="1.11",
+    version="2.0a1",
     description="A configurable set of panels that display various debug "
     "information about the current request/response.",
     long_description=readall("README.rst"),
