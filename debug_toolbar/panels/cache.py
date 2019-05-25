@@ -180,7 +180,7 @@ class CachePanel(Panel):
         trace=None,
         template_info=None,
         backend=None,
-        **kw
+        **kw,
     ):
         if name == "get":
             if return_value is None:
