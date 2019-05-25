@@ -22,7 +22,7 @@ setup(
     download_url="https://pypi.org/project/django-debug-toolbar/",
     license="BSD",
     packages=find_packages(exclude=("tests.*", "tests", "example")),
-    python_requires=">=3.4",
+    python_requires=">=3.5",
     install_requires=["Django>=1.11", "sqlparse>=0.2.0"],
     include_package_data=True,
     zip_safe=False,  # because we're including static files
@@ -40,7 +40,6 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
