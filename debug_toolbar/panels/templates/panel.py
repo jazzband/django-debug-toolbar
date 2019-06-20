@@ -128,8 +128,8 @@ class TemplatesPanel(Panel):
                                 value.__class__.__name__.lower(), model_name
                             )
                         else:
+                            recording(False)
                             try:
-                                recording(False)
                                 saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
                                 temp_layer[key] = "<<triggers database query>>"
