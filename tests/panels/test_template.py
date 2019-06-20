@@ -88,6 +88,17 @@ class TemplatesPanelTestCase(BaseTestCase):
         with self.settings(DEBUG_TOOLBAR_CONFIG=config):
             self.assertFalse(self.panel.enabled)
 
+    def test_empty_context(self):
+        t = Template("")
+        c = Context({})
+        t.render(c)
+
+        # Includes the builtin context but not the empty one.
+        self.assertEqual(
+            self.panel.templates[0]["context"],
+            ["{'False': False, 'None': None, 'True': True}"],
+        )
+
 
 @override_settings(
     DEBUG=True, DEBUG_TOOLBAR_PANELS=["debug_toolbar.panels.templates.TemplatesPanel"]
