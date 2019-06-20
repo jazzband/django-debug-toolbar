@@ -1,8 +1,8 @@
 Change log
 ==========
 
-2.0a1 (2019-05-16)
-------------------
+2.0 (2019-06-20)
+----------------
 
 * Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
 * The ``ProfilingPanel`` is now enabled but inactive by default.

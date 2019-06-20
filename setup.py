@@ -12,7 +12,7 @@ def readall(path):
 
 setup(
     name="django-debug-toolbar",
-    version="2.0a1",
+    version="2.0",
     description="A configurable set of panels that display various debug "
     "information about the current request/response.",
     long_description=readall("README.rst"),
