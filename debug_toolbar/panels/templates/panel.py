@@ -67,15 +67,8 @@ class TemplatesPanel(Panel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.templates = []
-        # Refs GitHub issue #910
-        # Hold a series of seen dictionaries within Contexts. A dictionary is
-        # considered seen if it is `in` this list, requiring that the __eq__
-        # for the dictionary matches. If *anything* in the dictionary is
-        # different it is counted as a new layer.
-        self.seen_layers = []
-        # Holds all dictionaries which have been prettified for output.
-        # This should align with the seen_layers such that an index here is
-        # the same as the index there.
+        # An associated list of dictionaries and their prettified
+        # representation.
         self.pformat_layers = []
 
     def _store_template_info(self, sender, **kwargs):
@@ -94,15 +87,15 @@ class TemplatesPanel(Panel):
         context_list = []
         for context_layer in context.dicts:
             if context_layer:
-                # Refs GitHub issue #910
-                # If we can find this layer in our pseudo-cache then find the
-                # matching prettified version in the associated list.
+                # Check if the layer is in the cache.
                 key_values = sorted(context_layer.items())
-                if key_values in self.seen_layers:
-                    index = self.seen_layers.index(key_values)
-                    pformatted = self.pformat_layers[index]
-                    context_list.append(pformatted)
-                else:
+                pformatted = None
+                for _key_values, _pformatted in self.pformat_layers:
+                    if _key_values == key_values:
+                        pformatted = _pformatted
+                        break
+
+                if pformatted is None:
                     temp_layer = {}
                     for key, value in context_layer.items():
                         # Replace any request elements - they have a large
@@ -139,19 +132,9 @@ class TemplatesPanel(Panel):
                                 temp_layer[key] = value
                             finally:
                                 recording(True)
-                    # Execute pformat first - if for some reason pformat/repr
-                    # causes more templates to be rendered, seen/pformat layers
-                    # will still be consistent
                     pformatted = pformat(temp_layer)
-                    # Refs GitHub issue #910
-                    # If we've not seen the layer before then we will add it
-                    # so that if we see it again we can skip formatting it.
-                    self.seen_layers.append(key_values)
-                    # Note: this *ought* to be len(...) - 1 but let's be safe.
-                    index = self.seen_layers.index(key_values)
-                    # Note: this *ought* to be len(...) - 1 but let's be safe.
-                    self.pformat_layers.insert(index, pformatted)
-                    context_list.append(pformatted)
+                    self.pformat_layers.append((key_values, pformatted))
+                context_list.append(pformatted)
 
         kwargs["context"] = context_list
         kwargs["context_processors"] = getattr(context, "context_processors", None)
