@@ -121,11 +121,9 @@ class TemplatesPanel(Panel):
                         # QuerySet would trigger the database: user can run the
                         # query from SQL Panel
                         elif isinstance(value, (QuerySet, RawQuerySet)):
-                            model_name = "{}.{}".format(
-                                value.model._meta.app_label, value.model.__name__
-                            )
                             temp_layer[key] = "<<{} of {}>>".format(
-                                value.__class__.__name__.lower(), model_name
+                                value.__class__.__name__.lower(),
+                                value.model._meta.label,
                             )
                         else:
                             try:
