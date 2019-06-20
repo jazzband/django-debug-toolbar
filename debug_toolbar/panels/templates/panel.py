@@ -101,7 +101,6 @@ class TemplatesPanel(Panel):
                 if key_values in self.seen_layers:
                     index = self.seen_layers.index(key_values)
                     pformatted = self.pformat_layers[index]
-                    context_list.append(pformatted)
                 else:
                     temp_layer = {}
                     for key, value in context_layer.items():
@@ -151,7 +150,7 @@ class TemplatesPanel(Panel):
                     index = self.seen_layers.index(key_values)
                     # Note: this *ought* to be len(...) - 1 but let's be safe.
                     self.pformat_layers.insert(index, pformatted)
-                    context_list.append(pformatted)
+                context_list.append(pformatted)
 
         kwargs["context"] = context_list
         kwargs["context_processors"] = getattr(context, "context_processors", None)
