@@ -137,10 +137,8 @@ def get_template_source_from_exception_info(node, context):
 def get_name_from_obj(obj):
     if hasattr(obj, "__name__"):
         name = obj.__name__
-    elif hasattr(obj, "__class__") and hasattr(obj.__class__, "__name__"):
-        name = obj.__class__.__name__
     else:
-        name = "<unknown>"
+        name = obj.__class__.__name__
 
     if hasattr(obj, "__module__"):
         module = obj.__module__
