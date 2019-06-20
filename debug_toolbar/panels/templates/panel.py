@@ -93,7 +93,7 @@ class TemplatesPanel(Panel):
 
         context_list = []
         for context_layer in context.dicts:
-            if hasattr(context_layer, "items") and context_layer:
+            if context_layer:
                 # Refs GitHub issue #910
                 # If we can find this layer in our pseudo-cache then find the
                 # matching prettified version in the associated list.
