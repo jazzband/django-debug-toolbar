@@ -32,9 +32,14 @@ class TemplatesPanelTestCase(BaseTestCase):
         # ensure the query was NOT logged
         self.assertEqual(len(self.sql_panel._queries), 0)
 
-        ctx = self.panel.templates[0]["context"][1]
-        self.assertIn("<<queryset of auth.User>>", ctx)
-        self.assertIn("<<triggers database query>>", ctx)
+        self.assertEqual(
+            self.panel.templates[0]["context"],
+            [
+                "{'False': False, 'None': None, 'True': True}",
+                "{'deep_queryset': '<<triggers database query>>',\n"
+                " 'queryset': '<<queryset of auth.User>>'}",
+            ],
+        )
 
     def test_template_repr(self):
         # Force widget templates to be included
@@ -87,6 +92,17 @@ class TemplatesPanelTestCase(BaseTestCase):
         self.assertTrue(self.panel.enabled)
         with self.settings(DEBUG_TOOLBAR_CONFIG=config):
             self.assertFalse(self.panel.enabled)
+
+    def test_empty_context(self):
+        t = Template("")
+        c = Context({})
+        t.render(c)
+
+        # Includes the builtin context but not the empty one.
+        self.assertEqual(
+            self.panel.templates[0]["context"],
+            ["{'False': False, 'None': None, 'True': True}"],
+        )
 
 
 @override_settings(

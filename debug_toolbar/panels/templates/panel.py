@@ -93,7 +93,7 @@ class TemplatesPanel(Panel):
 
         context_list = []
         for context_layer in context.dicts:
-            if hasattr(context_layer, "items") and context_layer:
+            if context_layer:
                 # Refs GitHub issue #910
                 # If we can find this layer in our pseudo-cache then find the
                 # matching prettified version in the associated list.
@@ -121,15 +121,13 @@ class TemplatesPanel(Panel):
                         # QuerySet would trigger the database: user can run the
                         # query from SQL Panel
                         elif isinstance(value, (QuerySet, RawQuerySet)):
-                            model_name = "{}.{}".format(
-                                value.model._meta.app_label, value.model.__name__
-                            )
                             temp_layer[key] = "<<{} of {}>>".format(
-                                value.__class__.__name__.lower(), model_name
+                                value.__class__.__name__.lower(),
+                                value.model._meta.label,
                             )
                         else:
+                            recording(False)
                             try:
-                                recording(False)
                                 saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
                                 temp_layer[key] = "<<triggers database query>>"
