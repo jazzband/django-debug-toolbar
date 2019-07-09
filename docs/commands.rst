@@ -22,7 +22,7 @@ Here's an example::
     FROM "page_page"
     WHERE "page_page"."id" = 1
 
-    >>> print p.template.name
+    >>> print(p.template.name)
     SELECT "page_template"."id",
            "page_template"."name",
            "page_template"."description"
@@ -43,5 +43,5 @@ Here's an example::
     INNER JOIN "page_template" ON ("page_page"."template_id" = "page_template"."id")
     WHERE "page_page"."id" = 1
 
-    >>> print p.template.name
+    >>> print(p.template.name)
     Home
