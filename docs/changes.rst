@@ -49,7 +49,7 @@ The following deprecated settings have been removed:
   altogether.
 * Reformatted the code using `black <https://github.com/ambv/black>`__.
 * Added the Django mail panel to the list of third-party panels.
-* Convert system check errors to warnings to accomodate exotic
+* Convert system check errors to warnings to accommodate exotic
   configurations.
 * Fixed a crash when explaining raw querysets.
 * Fixed an obscure unicode error with binary data fields.
