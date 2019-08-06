@@ -154,9 +154,6 @@ def get_template_source_from_node(node):
     for num, next in enumerate(linebreak_iter(source)):
         if start >= upto and end <= next:
             line = num
-            before = escape(source[upto:start])
-            during = escape(source[start:end])
-            after = escape(source[end:next])
         source_lines.append((num, escape(source[upto:next])))
         upto = next
     total = len(source_lines)
