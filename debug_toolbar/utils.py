@@ -127,11 +127,57 @@ def get_template_context(node, context, context_lines=3):
 
 
 def get_template_source_from_exception_info(node, context):
-    exception_info = context.template.get_exception_info(Exception("DDT"), node.token)
-    line = exception_info["line"]
-    source_lines = exception_info["source_lines"]
-    name = exception_info["name"]
+    # If the node is in the top level template, use the original source lookup code
+    if context.template.origin == node.origin:
+        source_info = context.template.get_exception_info(Exception("DDT"), node.token)
+    else:  # otherwise, its an included template so load from the node's origin
+        source_info = get_template_source_from_node(node)
+    line = source_info["line"]
+    source_lines = source_info["source_lines"]
+    name = source_info["name"]
     return line, source_lines, name
+
+
+def get_template_source_from_node(node):
+    """Very similar to django.template.base.get_exception_info
+       Instead of using the Templates source, which does not include
+       the source from included files, this method loads the source
+       from the file referenced by node.origin.
+    """
+    source = node.origin.loader.get_contents(node.origin)
+    start, end = node.token.position
+    context_lines = 10
+    line = 0
+    upto = 0
+    source_lines = []
+    before = during = after = ""
+    for num, next in enumerate(linebreak_iter(source)):
+        if start >= upto and end <= next:
+            line = num
+            before = escape(source[upto:start])
+            during = escape(source[start:end])
+            after = escape(source[end:next])
+        source_lines.append((num, escape(source[upto:next])))
+        upto = next
+    total = len(source_lines)
+
+    top = max(1, line - context_lines)
+    bottom = min(total, line + 1 + context_lines)
+
+    return {
+        "source_lines": source_lines[top:bottom],
+        "line": line,
+        "name": node.origin.name,
+    }
+
+
+def linebreak_iter(template_source):
+    yield 0
+    p = template_source.find("\n")
+    while p >= 0:
+        yield p + 1
+        p = template_source.find("\n", p + 1)
+    yield len(template_source) + 1
 
 
 def get_name_from_obj(obj):
