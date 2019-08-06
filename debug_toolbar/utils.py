@@ -150,7 +150,6 @@ def get_template_source_from_node(node):
     line = 0
     upto = 0
     source_lines = []
-    before = during = after = ""
     for num, next in enumerate(linebreak_iter(source)):
         if start >= upto and end <= next:
             line = num
