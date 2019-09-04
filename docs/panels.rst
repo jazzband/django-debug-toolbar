@@ -114,8 +114,8 @@ Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
 
 Profiling information for the processing of the request.
 
-This panel is included but inactive by default. You can activate it by default
-with the ``DISABLE_PANELS`` configuration option.
+This panel is not shown by default. You can activate it by including
+it in ``DEBUG_TOOLBAR_PANELS``.
 
 Third-party panels
 ------------------
