@@ -17,6 +17,12 @@ Django Debug Toolbar
 .. image:: https://requires.io/github/jazzband/django-debug-toolbar/requirements.svg?branch=master
      :target: https://requires.io/github/jazzband/django-debug-toolbar/requirements/?branch=master
      :alt: Requirements Status
+     
+.. image:: https://opencollective.com/jazzband/all/badge.svg?label=financial+contributors
+    :alt: Financial Contributors on Open Collective
+    :target: https://opencollective.com/jazzband
+
+
 
 The Django Debug Toolbar is a configurable set of panels that display various
 debug information about the current request/response and when clicked, display
@@ -44,3 +50,35 @@ The Django Debug Toolbar was originally created by Rob Hudson <rob@cogit8.org>
 in August 2008 and was further developed by many contributors_.
 
 .. _contributors: https://github.com/jazzband/django-debug-toolbar/graphs/contributors
+
+Contributors
++++++++
+
+Code Contributors
+------------------
+
+This project exists thanks to all the people who contribute. 
+
+.. image:: https://opencollective.com/jazzband/contributors.svg?width=890&button=false 
+
+Financial Contributors
+------------------
+
+Become a financial contributor and help us sustain our community. Contribute_
+
+Individuals
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: https://opencollective.com/jazzband/individuals.svg?width=890
+    :target: https://opencollective.com/jazzband
+
+Organizations
+
+~~~~~~~~~~~~~~~~~~~~~~
+
+Support this project with your organization. Your logo will show up here with a link to your website. Contribute_
+
+.. image:: https://opencollective.com/jazzband/organization/0/avatar.svg
+    :target: https://opencollective.com/jazzband/organization/0/website
+
+.. _Contribute: https://opencollective.com/jazzband
