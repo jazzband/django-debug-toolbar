@@ -3,7 +3,7 @@ import json
 from threading import local
 from time import time
 
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
@@ -113,10 +113,10 @@ class NormalCursorWrapper:
         if isinstance(param, dict):
             return {key: self._decode(value) for key, value in param.items()}
 
-        # make sure datetime, date and time are converted to string by force_text
+        # make sure datetime, date and time are converted to string by force_str
         CONVERT_TYPES = (datetime.datetime, datetime.date, datetime.time)
         try:
-            return force_text(param, strings_only=not isinstance(param, CONVERT_TYPES))
+            return force_str(param, strings_only=not isinstance(param, CONVERT_TYPES))
         except UnicodeDecodeError:
             return "(encoded string)"
 
