@@ -139,6 +139,18 @@ Panel options
   calls. Enabling stacktraces can increase the CPU time used when executing
   queries.
 
+* ``ENABLE_STACKTRACES_LOCALS``
+
+  Default: ``False``
+
+  Panels: cache, SQL
+
+  If set to ``True``, this will show locals() for each stacktrace piece of code
+  for SQL queries and cache calls.
+  Enabling stacktraces locals will increase the CPU time used when executing
+  queries and will give too verbose information in most cases, but it is useful
+  when debugging complex obscured cases (django-rest-framework queries duplication)
+
 * ``HIDE_IN_STACKTRACES``
 
   Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar',

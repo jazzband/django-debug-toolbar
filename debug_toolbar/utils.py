@@ -59,23 +59,31 @@ def tidy_stacktrace(stack):
         if omit_path(os.path.realpath(path)):
             continue
         text = "".join(text).strip() if text else ""
-        trace.append((path, line_no, func_name, text))
+        t = (path, line_no, func_name, text,)
+        if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]:
+            t += (frame.f_locals,)
+        trace.append(t)
     return trace
 
 
 def render_stacktrace(trace):
     stacktrace = []
+    template = (
+        '<span class="djdt-path">%(0)s/</span>'
+        '<span class="djdt-file">%(1)s</span>'
+        ' in <span class="djdt-func">%(3)s</span>'
+        '(<span class="djdt-lineno">%(2)s</span>)\n'
+        '  <span class="djdt-code">%(4)s</span>'
+    )
+
+    if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]:
+        template += '  <div class="djdt-code">%(5)s</div>'
+
     for frame in trace:
         params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
         params_dict = {str(idx): v for idx, v in enumerate(params)}
         try:
-            stacktrace.append(
-                '<span class="djdt-path">%(0)s/</span>'
-                '<span class="djdt-file">%(1)s</span>'
-                ' in <span class="djdt-func">%(3)s</span>'
-                '(<span class="djdt-lineno">%(2)s</span>)\n'
-                '  <span class="djdt-code">%(4)s</span>' % params_dict
-            )
+            stacktrace.append(template % params_dict)
         except KeyError:
             # This frame doesn't have the expected format, so skip it and move
             # on to the next one
