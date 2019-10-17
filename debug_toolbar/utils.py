@@ -8,7 +8,7 @@ from itertools import chain
 import django
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
-from django.utils.html import escape
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from debug_toolbar import settings as dt_settings
@@ -59,28 +59,36 @@ def tidy_stacktrace(stack):
         if omit_path(os.path.realpath(path)):
             continue
         text = "".join(text).strip() if text else ""
-        trace.append((path, line_no, func_name, text))
+        frame_locals = (
+            frame.f_locals
+            if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]
+            else None
+        )
+        trace.append((path, line_no, func_name, text, frame_locals))
     return trace
 
 
 def render_stacktrace(trace):
     stacktrace = []
     for frame in trace:
-        params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
+        params = (v for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
         params_dict = {str(idx): v for idx, v in enumerate(params)}
         try:
-            stacktrace.append(
-                '<span class="djdt-path">%(0)s/</span>'
-                '<span class="djdt-file">%(1)s</span>'
-                ' in <span class="djdt-func">%(3)s</span>'
-                '(<span class="djdt-lineno">%(2)s</span>)\n'
-                '  <span class="djdt-code">%(4)s</span>' % params_dict
-            )
+            stacktrace.append(params_dict)
         except KeyError:
             # This frame doesn't have the expected format, so skip it and move
             # on to the next one
             continue
-    return mark_safe("\n".join(stacktrace))
+
+    return mark_safe(
+        render_to_string(
+            "debug_toolbar/panels/sql_stacktrace.html",
+            {
+                "stacktrace": stacktrace,
+                "show_locals": dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
+            },
+        )
+    )
 
 
 def get_template_info():

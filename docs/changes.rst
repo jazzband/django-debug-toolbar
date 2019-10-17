@@ -6,6 +6,7 @@ UNRELEASED
 
 * Removed support for end of life Django 2.0 and 2.1.
 * Added support for Python 3.8.
+* Add locals() option for sql panel.
 
 2.1 (2019-11-12)
 ----------------

@@ -215,6 +215,30 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertIn("café", self.panel.content)
         self.assertValidHTML(self.panel.content)
 
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"ENABLE_STACKTRACES_LOCALS": True})
+    def test_insert_locals(self):
+        """
+        Test that the panel inserts locals() content.
+        """
+        local_var = "<script>alert('test');</script>"  # noqa
+        list(User.objects.filter(username="café".encode("utf-8")))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertIn("local_var", self.panel.content)
+        # Verify the escape logic works
+        self.assertNotIn("<script>alert", self.panel.content)
+        self.assertIn("&lt;script&gt;alert", self.panel.content)
+        self.assertIn("djdt-locals", self.panel.content)
+
+    def test_not_insert_locals(self):
+        """
+        Test that the panel does not insert locals() content.
+        """
+        list(User.objects.filter(username="café".encode("utf-8")))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertNotIn("djdt-locals", self.panel.content)
+
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )

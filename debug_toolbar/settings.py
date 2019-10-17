@@ -24,6 +24,7 @@ CONFIG_DEFAULTS = {
     # Panel options
     "EXTRA_SIGNALS": [],
     "ENABLE_STACKTRACES": True,
+    "ENABLE_STACKTRACES_LOCALS": False,
     "HIDE_IN_STACKTRACES": (
         "socketserver",
         "threading",
