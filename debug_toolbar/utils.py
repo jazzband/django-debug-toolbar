@@ -59,7 +59,7 @@ def tidy_stacktrace(stack):
         if omit_path(os.path.realpath(path)):
             continue
         text = "".join(text).strip() if text else ""
-        t = (path, line_no, func_name, text,)
+        t = (path, line_no, func_name, text)
         if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]:
             t += (frame.f_locals,)
         trace.append(t)
