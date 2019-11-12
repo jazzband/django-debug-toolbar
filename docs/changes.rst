@@ -1,6 +1,17 @@
 Change log
 ==========
 
+2.1 (2019-11-12)
+----------------
+
+* Changed the Travis CI matrix to run style checks first.
+* Exposed the ``djdt.init`` function too.
+* Small improvements to the code to take advantage of newer Django APIs
+  and avoid warnings because of deprecated code.
+* Verified compatibility with the upcoming Django 3.0 (at the time of
+  writing).
+
+
 2.0 (2019-06-20)
 ----------------
 
