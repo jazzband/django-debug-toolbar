@@ -112,9 +112,9 @@ class DebugToolbarMiddleware:
                 continue
 
             for key, record in stats.items():
-                # example: `SQLPanel_sql_time=0; "SQL 0 queries"`
+                # example: `SQLPanel_sql_time;dur=0;desc="SQL 0 queries"`
                 data.append(
-                    '{}_{}={}; "{}"'.format(
+                    '{}_{};dur={};desc="{}"'.format(
                         panel.panel_id, key, record.get("value"), record.get("title")
                     )
                 )

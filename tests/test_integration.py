@@ -1,4 +1,5 @@
 import os
+import re
 import unittest
 
 import html5lib
@@ -92,6 +93,7 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_middleware(self):
         response = self.client.get("/execute_sql/")
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "djDebug")
 
     @override_settings(DEFAULT_CHARSET="iso-8859-1")
     def test_non_utf8_charset(self):
@@ -244,6 +246,20 @@ class DebugToolbarIntegrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         # Link to LOCATION header.
         self.assertIn(b'href="/regular/redirect/"', response.content)
+
+    def test_server_timing_headers(self):
+        response = self.client.get("/execute_sql/")
+        server_timing = response["Server-Timing"]
+        expected_partials = [
+            r'TimerPanel_utime;dur=(\d)*(\.(\d)*)?;desc="User CPU time", ',
+            r'TimerPanel_stime;dur=(\d)*(\.(\d)*)?;desc="System CPU time", ',
+            r'TimerPanel_total;dur=(\d)*(\.(\d)*)?;desc="Total CPU time", ',
+            r'TimerPanel_total_time;dur=(\d)*(\.(\d)*)?;desc="Elapsed time", ',
+            r'SQLPanel_sql_time;dur=(\d)*(\.(\d)*)?;desc="SQL 1 queries", ',
+            r'CachePanel_total_time;dur=0;desc="Cache 0 Calls"',
+        ]
+        for expected in expected_partials:
+            self.assertTrue(re.compile(expected).search(server_timing))
 
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
