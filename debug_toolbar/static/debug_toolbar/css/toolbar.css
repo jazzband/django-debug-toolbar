@@ -619,12 +619,17 @@
     color: #000;
     font-weight: bold;
 }
-#djDebug .djdt-stack span.djdt-path {
+#djDebug .djdt-stack span.djdt-path,
+#djDebug .djdt-stack pre.djdt-locals,
+#djDebug .djdt-stack pre.djdt-locals span {
     color: #777;
     font-weight: normal;
 }
 #djDebug .djdt-stack span.djdt-code {
     font-weight: normal;
+}
+#djDebug .djdt-stack pre.djdt-locals {
+	margin: 0 27px 27px 27px;
 }
 
 #djDebug .djdt-width-20 {

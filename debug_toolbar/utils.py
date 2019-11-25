@@ -8,6 +8,7 @@ from itertools import chain
 import django
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
+from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -68,27 +69,23 @@ def tidy_stacktrace(stack):
 
 def render_stacktrace(trace):
     stacktrace = []
-    template = (
-        '<span class="djdt-path">%(0)s/</span>'
-        '<span class="djdt-file">%(1)s</span>'
-        ' in <span class="djdt-func">%(3)s</span>'
-        '(<span class="djdt-lineno">%(2)s</span>)\n'
-        '  <span class="djdt-code">%(4)s</span>'
-    )
-
-    if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]:
-        template += '  <div class="djdt-code">%(5)s</div>'
-
     for frame in trace:
-        params = (escape(v) for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
+        params = (v for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
         params_dict = {str(idx): v for idx, v in enumerate(params)}
         try:
-            stacktrace.append(template % params_dict)
+            stacktrace.append(params_dict)
         except KeyError:
             # This frame doesn't have the expected format, so skip it and move
             # on to the next one
             continue
-    return mark_safe("\n".join(stacktrace))
+
+    return mark_safe(render_to_string(
+        'debug_toolbar/stacktrace.html',
+        {
+            'stacktrace': stacktrace,
+            'show_locals': dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
+        }
+    ))
 
 
 def get_template_info():
