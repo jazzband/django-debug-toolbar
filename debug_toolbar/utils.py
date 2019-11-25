@@ -9,7 +9,6 @@ import django
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
 from django.template.loader import render_to_string
-from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 from debug_toolbar import settings as dt_settings
@@ -79,13 +78,15 @@ def render_stacktrace(trace):
             # on to the next one
             continue
 
-    return mark_safe(render_to_string(
-        'debug_toolbar/stacktrace.html',
-        {
-            'stacktrace': stacktrace,
-            'show_locals': dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
-        }
-    ))
+    return mark_safe(
+        render_to_string(
+            "debug_toolbar/stacktrace.html",
+            {
+                "stacktrace": stacktrace,
+                "show_locals": dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
+            },
+        )
+    )
 
 
 def get_template_info():
