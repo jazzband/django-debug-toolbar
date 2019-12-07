@@ -1,6 +1,11 @@
 Change log
 ==========
 
+UNRELEASED
+----------
+
+* Removed support for end of life Django 2.0 and 2.1.
+
 2.1 (2019-11-12)
 ----------------
 
