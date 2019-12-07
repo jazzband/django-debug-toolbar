@@ -312,12 +312,6 @@
                 return value;
             }
         },
-        applyStyle: function(name) {
-            var selector = '#djDebug [data-' + name + ']';
-            document.querySelectorAll(selector).forEach(function(element) {
-                element.style[name] = element.getAttribute('data-' + name);
-            });
-        }
     };
     window.djdt = {
         show_toolbar: djdt.show_toolbar,
@@ -325,7 +319,6 @@
         init: djdt.init,
         close: djdt.hide_one_level,
         cookie: djdt.cookie,
-        applyStyle: djdt.applyStyle
     };
     document.addEventListener('DOMContentLoaded', djdt.init);
 })();
