@@ -21,6 +21,17 @@ def check_middleware(app_configs, **kwargs):
     gzip_index = None
     debug_toolbar_indexes = []
 
+    # If old style MIDDLEWARE_CLASSES is being used, report an error.
+    if not settings.MIDDLEWARE:
+        errors.append(
+            Warning(
+                "debug_toolbar is incompatible with MIDDLEWARE_CLASSES setting.",
+                hint="Use MIDDLEWARE instead of MIDDLEWARE_CLASSES",
+                id="debug_toolbar.W000",
+            )
+        )
+        return errors
+
     # Determine the indexes which gzip and/or the toolbar are installed at
     for i, middleware in enumerate(settings.MIDDLEWARE):
         if is_middleware_class(GZipMiddleware, middleware):
