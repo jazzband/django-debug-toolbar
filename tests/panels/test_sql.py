@@ -1,6 +1,7 @@
 import datetime
 import unittest
 
+import django
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.models import Count
@@ -108,10 +109,16 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 3)
 
-        self.assertEqual(
-            tuple([q[1]["params"] for q in self.panel._queries]),
-            ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
-        )
+        if django.VERSION >= (3, 1):
+            self.assertEqual(
+                tuple([q[1]["params"] for q in self.panel._queries]),
+                ('["Foo"]', "[10, 1]", '["2017-12-22 16:07:01"]'),
+            )
+        else:
+            self.assertEqual(
+                tuple([q[1]["params"] for q in self.panel._queries]),
+                ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
+            )
 
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
