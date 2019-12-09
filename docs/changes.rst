@@ -5,6 +5,7 @@ UNRELEASED
 ----------
 
 * Removed support for end of life Django 2.0 and 2.1.
+* Added support for Python 3.8.
 
 2.1 (2019-11-12)
 ----------------
