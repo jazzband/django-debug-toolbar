@@ -22,12 +22,12 @@ def check_middleware(app_configs, **kwargs):
     debug_toolbar_indexes = []
 
     # If old style MIDDLEWARE_CLASSES is being used, report an error.
-    if not settings.MIDDLEWARE:
+    if settings.is_overridden("MIDDLEWARE_CLASSES"):
         errors.append(
             Warning(
                 "debug_toolbar is incompatible with MIDDLEWARE_CLASSES setting.",
                 hint="Use MIDDLEWARE instead of MIDDLEWARE_CLASSES",
-                id="debug_toolbar.W000",
+                id="debug_toolbar.W004",
             )
         )
         return errors
