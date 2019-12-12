@@ -419,18 +419,15 @@ class DebugToolbarSystemChecksTestCase(SimpleTestCase):
             "django.contrib.auth.middleware.AuthenticationMiddleware",
             "django.middleware.gzip.GZipMiddleware",
             "debug_toolbar.middleware.DebugToolbarMiddleware",
-        ],
-        SILENCED_SYSTEM_CHECKS=["1_10.W001"]  # 1.11 warns about MIDDLEWARE_CLASSES
+        ]
     )
     def test_check_middleware_classes_error(self):
         messages = run_checks()
-        self.assertEqual(
+        self.assertIn(
+            Warning(
+                "debug_toolbar is incompatible with MIDDLEWARE_CLASSES setting.",
+                hint="Use MIDDLEWARE instead of MIDDLEWARE_CLASSES",
+                id="debug_toolbar.W004",
+            ),
             messages,
-            [
-                Warning(
-                    "debug_toolbar is incompatible with MIDDLEWARE_CLASSES setting.",
-                    hint="Use MIDDLEWARE instead of MIDDLEWARE_CLASSES",
-                    id="debug_toolbar.W004",
-                )
-            ],
         )
