@@ -59,10 +59,12 @@ def tidy_stacktrace(stack):
         if omit_path(os.path.realpath(path)):
             continue
         text = "".join(text).strip() if text else ""
-        t = (path, line_no, func_name, text)
-        if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]:
-            t += (frame.f_locals,)
-        trace.append(t)
+        frame_locals = (
+            frame.f_locals
+            if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]
+            else None
+        )
+        trace.append((path, line_no, func_name, text, frame_locals))
     return trace
 
 
@@ -80,11 +82,7 @@ def render_stacktrace(trace):
 
     return mark_safe(
         render_to_string(
-            "debug_toolbar/stacktrace.html",
-            {
-                "stacktrace": stacktrace,
-                "show_locals": dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
-            },
+            "debug_toolbar/panels/sql_stacktrace.html", {"stacktrace": stacktrace},
         )
     )
 
