@@ -158,8 +158,21 @@ Panel options
 
 * ``HIDE_IN_STACKTRACES``
 
-  Default: ``('socketserver', 'threading', 'wsgiref', 'debug_toolbar',
-  'django')``.
+  Default::
+
+    (
+        "socketserver",
+        "threading",
+        "wsgiref",
+        "debug_toolbar",
+        "django.db",
+        "django.core.handlers",
+        "django.core.servers",
+        "django.utils.decorators",
+        "django.utils.deprecation",
+        "django.utils.functional",
+    )
+
 
   Panels: cache, SQL
 

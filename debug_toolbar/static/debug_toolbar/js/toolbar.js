@@ -78,9 +78,9 @@
                     this.parentElement.classList.add('djdt-active');
 
                     var inner = current.querySelector('.djDebugPanelContent .djdt-scroll'),
-                        store_id = djDebug.getAttribute('data-store-id');
+                        store_id = djDebug.dataset.storeId;
                     if (store_id && inner.children.length === 0) {
-                        var url = djDebug.getAttribute('data-render-panel-url');
+                        var url = djDebug.dataset.renderPanelUrl;
                         var url_params = new URLSearchParams();
                         url_params.append('store_id', store_id);
                         url_params.append('panel_id', this.className);
@@ -98,7 +98,7 @@
                 djdt.hide_one_level();
             });
             $$.on(djDebug, 'click', '.djDebugPanelButton input[type=checkbox]', function() {
-                djdt.cookie.set(this.getAttribute('data-cookie'), this.checked ? 'on' : 'off', {
+                djdt.cookie.set(this.dataset.cookie, this.checked ? 'on' : 'off', {
                     path: '/',
                     expires: 10
                 });
@@ -137,12 +137,12 @@
             $$.on(djDebug, 'click', 'a.djToggleSwitch', function(event) {
                 event.preventDefault();
                 var self = this;
-                var id = this.getAttribute('data-toggle-id');
-                var open_me = this.textContent == this.getAttribute('data-toggle-open');
+                var id = this.dataset.toggleId;
+                var open_me = this.textContent == this.dataset.toggleOpen;
                 if (id === '' || !id) {
                     return;
                 }
-                var name = this.getAttribute('data-toggle-name');
+                var name = this.dataset.toggleName;
                 var container = this.closest('.djDebugPanelContent').querySelector('#' + name + '_' + id);
                 container.querySelectorAll('.djDebugCollapsed').forEach(function(e) {
                     $$.toggle(e, open_me);
@@ -154,11 +154,11 @@
                     if (open_me) {
                         e.classList.add('djSelected');
                         e.classList.remove('djUnselected');
-                        self.textContent = self.getAttribute('data-toggle-close');
+                        self.textContent = self.dataset.toggleClose;
                     } else {
                         e.classList.remove('djSelected');
                         e.classList.add('djUnselected');
-                        self.textContent = self.getAttribute('data-toggle-open');
+                        self.textContent = self.dataset.toggleOpen;
                     }
                     var switch_ = e.querySelector('.djToggleSwitch')
                     if (switch_) switch_.textContent = self.textContent;
@@ -312,12 +312,6 @@
                 return value;
             }
         },
-        applyStyle: function(name) {
-            var selector = '#djDebug [data-' + name + ']';
-            document.querySelectorAll(selector).forEach(function(element) {
-                element.style[name] = element.getAttribute('data-' + name);
-            });
-        }
     };
     window.djdt = {
         show_toolbar: djdt.show_toolbar,
@@ -325,7 +319,6 @@
         init: djdt.init,
         close: djdt.hide_one_level,
         cookie: djdt.cookie,
-        applyStyle: djdt.applyStyle
     };
     document.addEventListener('DOMContentLoaded', djdt.init);
 })();

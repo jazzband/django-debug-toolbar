@@ -15,7 +15,7 @@ class RedirectsPanel(Panel):
 
     def process_request(self, request):
         response = super().process_request(request)
-        if 300 <= int(response.status_code) < 400:
+        if 300 <= response.status_code < 400:
             redirect_to = response.get("Location", None)
             if redirect_to:
                 status_line = "{} {}".format(

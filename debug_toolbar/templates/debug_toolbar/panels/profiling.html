@@ -1,5 +1,5 @@
 {% load i18n %}{% load static %}
-<table width="100%">
+<table>
 	<thead>
 		<tr>
 			<th>{% trans "Call" %}</th>
@@ -12,9 +12,9 @@
 	</thead>
 	<tbody>
 		{% for call in func_list %}
-			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %} djDebugProfileRow{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" depth="{{ call.depth }}" id="profilingMain_{{ call.id }}">
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" id="profilingMain_{{ call.id }}">
 				<td>
-					<div data-padding-left="{{ call.indent }}px">
+					<div style="padding-left:{{ call.indent }}px">
 						{% if call.has_subfuncs %}
 							<a class="djProfileToggleDetails djToggleSwitch" data-toggle-name="profilingMain" data-toggle-id="{{ call.id }}" data-toggle-open="+" data-toggle-close="-" href>-</a>
 						{% else %}
@@ -32,5 +32,3 @@
 		{% endfor %}
 	</tbody>
 </table>
-
-<script src="{% static 'debug_toolbar/js/toolbar.profiling.js' %}" defer></script>

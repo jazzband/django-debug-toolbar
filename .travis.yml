@@ -1,14 +1,11 @@
-dist: xenial
 language: python
 cache: pip
 matrix:
   fast_finish: true
   include:
     - env: TOXENV=flake8
-    - python: 3.7
-      env: TOXENV=style
-    - python: 3.7
-      env: TOXENV=readme
+    - env: TOXENV=style
+    - env: TOXENV=readme
     - python: 3.5
       env: TOXENV=py35-dj111
     - python: 3.6
@@ -16,33 +13,29 @@ matrix:
     - python: 3.7
       env: TOXENV=py37-dj111
     - python: 3.5
-      env: TOXENV=py35-dj20
-    - python: 3.6
-      env: TOXENV=py36-dj20
-    - python: 3.7
-      env: TOXENV=py37-dj20
-    - python: 3.5
-      env: TOXENV=py35-dj21
-    - python: 3.6
-      env: TOXENV=py36-dj21
-    - python: 3.7
-      env: TOXENV=py37-dj21
-    - python: 3.5
       env: TOXENV=py35-dj22
     - python: 3.6
       env: TOXENV=py36-dj22
     - python: 3.7
       env: TOXENV=py37-dj22
+    - python: 3.8
+      env: TOXENV=py38-dj22
+    - python: 3.6
+      env: TOXENV=py36-dj30
+    - python: 3.7
+      env: TOXENV=py37-dj30
+    - python: 3.8
+      env: TOXENV=py38-dj30
     - python: 3.6
       env: TOXENV=py36-djmaster
     - python: 3.7
       env: TOXENV=py37-djmaster
-    - python: 3.7
-      env: TOXENV=postgresql
+    - python: 3.8
+      env: TOXENV=py38-djmaster
+    - env: TOXENV=postgresql
       addons:
         postgresql: "9.5"
-    - python: 3.7
-      env: TOXENV=mariadb
+    - env: TOXENV=mariadb
       addons:
         mariadb: "10.3"
       script:
@@ -55,6 +48,7 @@ matrix:
   allow_failures:
     - env: TOXENV=py36-djmaster
     - env: TOXENV=py37-djmaster
+    - env: TOXENV=py38-djmaster
 
 install:
   - pip install tox codecov

@@ -86,7 +86,7 @@ class TemplatesPanel(Panel):
 
         context_list = []
         for context_layer in context.dicts:
-            if context_layer:
+            if hasattr(context_layer, "items") and context_layer:
                 # Check if the layer is in the cache.
                 key_values = sorted(context_layer.items())
                 pformatted = None
