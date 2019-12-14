@@ -82,7 +82,11 @@ def render_stacktrace(trace):
 
     return mark_safe(
         render_to_string(
-            "debug_toolbar/panels/sql_stacktrace.html", {"stacktrace": stacktrace},
+            "debug_toolbar/panels/sql_stacktrace.html",
+            {
+                "stacktrace": stacktrace,
+                "show_locals": dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
+            },
         )
     )
 
