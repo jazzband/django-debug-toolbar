@@ -6,6 +6,7 @@ import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
 from django.core.checks import Warning, run_checks
+from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.test import RequestFactory, SimpleTestCase, TestCase
@@ -194,6 +195,35 @@ class DebugToolbarIntegrationTestCase(TestCase):
             "hash": "6e12daa636b8c9a8be993307135458f90a877606",
         }
 
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.post(
+                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+            )
+            self.assertEqual(response.status_code, 404)
+
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
+    def test_sql_explain_postgres_json_field(self):
+        url = "/__debug__/sql_explain/"
+        base_query = (
+            'SELECT * FROM "tests_postgresjson" WHERE "tests_postgresjson"."field" @>'
+        )
+        query = base_query + """ '{"foo": "bar"}'"""
+        data = {
+            "sql": query,
+            "raw_sql": base_query + " %s",
+            "params": '["{\\"foo\\": \\"bar\\"}"]',
+            "alias": "default",
+            "duration": "0",
+            "hash": "2b7172eb2ac8e2a8d6f742f8a28342046e0d00ba",
+        }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
