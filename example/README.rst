@@ -27,3 +27,10 @@ Before running the example for the first time, you must create a database::
 Then you can use the following command to run the example::
 
     $ python -m django runserver --settings=example.settings
+
+You can change the database used by specifying the ``DJANGO_DATABASE_ENGINE``
+environment variable::
+
+    $ DJANGO_DATABASE_ENGINE=postgresql python -m django migrate --settings=example.settings
+    $ DJANGO_DATABASE_ENGINE=postgresql python -m django runserver --settings=example.settings
+

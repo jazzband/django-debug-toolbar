@@ -86,6 +86,7 @@ if os.environ.get("DJANGO_DATABASE_ENGINE", "").lower() == "postgresql":
 if os.environ.get("DJANGO_DATABASE_ENGINE", "").lower() == "mysql":
     # % mysql
     # mysql> CREATE DATABASE debug_toolbar;
+    # mysql> CREATE USER 'debug_toolbar'@'localhost';
     # mysql> GRANT ALL PRIVILEGES ON debug_toolbar.* TO 'debug_toolbar'@'localhost';
     DATABASES = {
         "default": {
