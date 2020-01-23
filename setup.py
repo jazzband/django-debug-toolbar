@@ -21,6 +21,7 @@ setup(
     url="https://github.com/jazzband/django-debug-toolbar",
     download_url="https://pypi.org/project/django-debug-toolbar/",
     license="BSD",
+    license_files=["LICENSE"],
     packages=find_packages(exclude=("tests.*", "tests", "example")),
     python_requires=">=3.5",
     install_requires=["Django>=1.11", "sqlparse>=0.2.0"],
