@@ -8,6 +8,11 @@ from django.utils.encoding import force_str
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
 
+try:
+    from psycopg2._json import Json as PostgresJson
+except ImportError:
+    PostgresJson = None
+
 
 class SQLQueryTriggered(Exception):
     """Thrown when template panel triggers a query"""
@@ -105,6 +110,8 @@ class NormalCursorWrapper:
         return [self._quote_expr(p) for p in params]
 
     def _decode(self, param):
+        if PostgresJson and isinstance(param, PostgresJson):
+            return param.dumps(param.adapted)
         # If a sequence type, decode each element separately
         if isinstance(param, (tuple, list)):
             return [self._decode(element) for element in param]
@@ -136,7 +143,6 @@ class NormalCursorWrapper:
                 _params = json.dumps(self._decode(params))
             except TypeError:
                 pass  # object not JSON serializable
-
             template_info = get_template_info()
 
             alias = getattr(self.db, "alias", "default")

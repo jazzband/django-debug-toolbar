@@ -11,6 +11,16 @@ from django.test.utils import override_settings
 
 from ..base import BaseTestCase
 
+try:
+    from psycopg2._json import Json as PostgresJson
+except ImportError:
+    PostgresJson = None
+
+if connection.vendor == "postgresql":
+    from ..models import PostgresJSON as PostgresJSONModel
+else:
+    PostgresJSONModel = None
+
 
 class SQLPanelTestCase(BaseTestCase):
     panel_id = "SQLPanel"
@@ -119,6 +129,26 @@ class SQLPanelTestCase(BaseTestCase):
                 tuple([q[1]["params"] for q in self.panel._queries]),
                 ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
             )
+
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
+    def test_json_param_conversion(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        list(PostgresJSONModel.objects.filter(field__contains={"foo": "bar"}))
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 1)
+        self.assertEqual(
+            self.panel._queries[0][1]["params"], '["{\\"foo\\": \\"bar\\"}"]',
+        )
+        self.assertIsInstance(
+            self.panel._queries[0][1]["raw_params"][0], PostgresJson,
+        )
 
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
