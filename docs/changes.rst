@@ -4,9 +4,14 @@ Change log
 UNRELEASED
 ----------
 
+
+2.2 (2020-01-31)
+----------------
+
 * Removed support for end of life Django 2.0 and 2.1.
 * Added support for Python 3.8.
 * Add locals() option for sql panel.
+* Added support for Django 3.0
 
 2.1 (2019-11-12)
 ----------------
