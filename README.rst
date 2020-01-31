@@ -31,7 +31,7 @@ Here's a screenshot of the toolbar in action:
 In addition to the built-in panels, a number of third-party panels are
 contributed by the community.
 
-The current stable version of the Debug Toolbar is 2.1. It works on
+The current stable version of the Debug Toolbar is 2.2. It works on
 Django ≥ 1.11.
 
 Documentation, including installation and configuration instructions, is
