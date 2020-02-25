@@ -8,7 +8,7 @@ settings module to customize its behavior.
 
     The debug toolbar ships with a default configuration that is considered
     sane for the vast majority of Django projects. Don't copy-paste blindly
-    the default values shown below into you settings module! It's useless and
+    the default values shown below into your settings module! It's useless and
     it'll prevent you from taking advantage of better defaults that may be
     introduced in future releases.
 
