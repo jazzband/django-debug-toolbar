@@ -211,10 +211,6 @@
 	overflow:auto;
 }
 
-#djDebug .djDebugOdd {
-	background-color:#f5f5f5;
-}
-
 #djDebug .djdt-panelContent {
 	display:none;
 	position:fixed;
@@ -291,6 +287,9 @@
 	margin-top:0.8em;
 	overflow: auto;
 }
+#djDebug .djdt-panelContent tbody > tr:nth-child(odd) {
+	background-color:#f5f5f5;
+}
 #djDebug .djdt-panelContent tbody td,
 #djDebug .djdt-panelContent tbody th {
 	vertical-align:top;
@@ -364,9 +363,6 @@
 	color:#000;
 	vertical-align:top;
 	border:0;
-}
-#djDebug .djdt-panelContent table tr.djDebugOdd td {
-  background-color:#eee;
 }
 */
 
