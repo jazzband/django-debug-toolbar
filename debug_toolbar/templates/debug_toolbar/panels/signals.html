@@ -9,7 +9,7 @@
 	</thead>
 	<tbody>
 		{% for name, signal, receivers in signals %}
-			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+			<tr>
 				<td>{{ name|escape }}</td>
 				<td>{{ signal.providing_args|join:", " }}</td>
 				<td>{{ receivers|join:", " }}</td>

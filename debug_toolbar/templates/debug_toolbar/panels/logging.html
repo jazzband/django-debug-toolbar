@@ -12,7 +12,7 @@
 		</thead>
 		<tbody>
 			{% for record in records %}
-				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<tr>
 					<td>{{ record.level }}</td>
 					<td>{{ record.time|date:"h:i:s m/d/Y" }}</td>
 					<td>{{ record.channel|default:"-" }}</td>

@@ -24,7 +24,7 @@
 				</thead>
 				<tbody>
 					{% for row in result %}
-						<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+						<tr>
 							{% for column in row %}
 								<td>{{ column|escape }}</td>
 							{% endfor %}

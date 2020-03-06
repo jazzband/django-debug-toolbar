@@ -33,7 +33,7 @@
 		</thead>
 		<tbody>
 			{% for query in queries %}
-				<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %}{% if query.starts_trans %} djDebugStartTransaction{% endif %}{% if query.ends_trans %} djDebugEndTransaction{% endif %}{% if query.in_trans %} djDebugInTransaction{% endif %}" id="sqlMain_{{ forloop.counter }}">
+				<tr class="{% if query.is_slow %} djDebugRowWarning{% endif %}{% if query.starts_trans %} djDebugStartTransaction{% endif %}{% if query.ends_trans %} djDebugEndTransaction{% endif %}{% if query.in_trans %} djDebugInTransaction{% endif %}" id="sqlMain_{{ forloop.counter }}">
 					<td class="djdt-color"><span style="background-color:rgb({{ query.rgb_color|join:', '}})">&#160;</span></td>
 					<td class="djdt-toggle">
 						<a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="">+</a>
@@ -79,7 +79,7 @@
 					{% endif %}
 					</td>
 				</tr>
-				<tr class="djUnselected {% cycle 'djDebugOdd' 'djDebugEven' %}{% if query.is_slow %} djDebugRowWarning{% endif %} djToggleDetails_{{ forloop.counter }}" id="sqlDetails_{{ forloop.counter }}">
+				<tr class="djUnselected {% if query.is_slow %} djDebugRowWarning{% endif %} djToggleDetails_{{ forloop.counter }}" id="sqlDetails_{{ forloop.counter }}">
 					<td colspan="2"></td>
 					<td colspan="4">
 						<div class="djSQLDetailsDiv">

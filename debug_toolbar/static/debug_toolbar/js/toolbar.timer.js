@@ -5,8 +5,7 @@
     if (!perf)
         return;
 
-    var rowCount = 0,
-        timingOffset = perf.timing.navigationStart,
+    var timingOffset = perf.timing.navigationStart,
         timingEnd = perf.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;
     function getLeft(stat) {
@@ -19,9 +18,7 @@
         return (width < 1) ? "2px" : width + "%";
     }
     function addRow(stat, endStat) {
-        rowCount++;
         var row = document.createElement('tr');
-        row.className = (rowCount % 2) ? 'djDebugOdd' : 'djDebugEven';
         if (endStat) {
             // Render a start through end bar
             row.innerHTML = '<td>' + stat.replace('Start', '') + '</td>' +
