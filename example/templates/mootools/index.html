@@ -3,19 +3,16 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<title>MooTools Test</title>
-	<style>
-	.hide {display:none;}
-	</style>
 	<script src="//ajax.googleapis.com/ajax/libs/mootools/1.6.0/mootools.min.js"></script>
 	<script>
 		window.addEvent('domready', function() {
-			$$('p.hide').setStyle('display', 'block');
+			$$('p.djdt-hidden').setStyle('display', 'block');
 			$('v').set('text', MooTools.version);
 		});
 	</script>
 </head>
 <body>
 	<h1>MooTools Test</h1>
-	<p class="hide">If you see this, MooTools <strong id="v"></strong> is working.</p>
+	<p class="djdt-hidden">If you see this, MooTools <strong id="v"></strong> is working.</p>
 </body>
 </html>

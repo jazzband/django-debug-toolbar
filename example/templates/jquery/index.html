@@ -3,19 +3,16 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<title>jQuery Test</title>
-	<style>
-	.hide {display:none;}
-	</style>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('p.hide').show();
+			$('p.djdt-hidden').show();
 			$('#v').text($.fn.jquery);
 		});
 	</script>
 </head>
 <body>
 	<h1>jQuery Test</h1>
-	<p class="hide">If you see this, jQuery <strong id="v"></strong> is working.</p>
+	<p class="djdt-hidden">If you see this, jQuery <strong id="v"></strong> is working.</p>
 </body>
 </html>
