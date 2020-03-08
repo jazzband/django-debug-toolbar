@@ -317,55 +317,6 @@
 	background-color:#fff;
 }
 
-/*
-#djDebug .djdt-panelContent p a:hover, #djDebug .djdt-panelContent dd a:hover {
-	color:#111;
-	background-color:#ffc;
-}
-
-#djDebug .djdt-panelContent p {
-	padding:0 5px;
-}
-
-#djDebug .djdt-panelContent p, #djDebug .djdt-panelContent table, #djDebug .djdt-panelContent ol, #djDebug .djdt-panelContent ul, #djDebug .djdt-panelContent dl {
-	margin:5px 0 15px;
-	background-color:#fff;
-}
-#djDebug .djdt-panelContent table {
-	clear:both;
-	border:0;
-	padding:0;
-	margin:0;
-	border-collapse:collapse;
-	border-spacing:0;
-}
-
-#djDebug .djdt-panelContent table a {
-	color:#000;
-	padding:2px 4px;
-}
-#djDebug .djdt-panelContent table a:hover {
-	background-color:#ffc;
-}
-
-#djDebug .djdt-panelContent table th {
-	background-color:#333;
-	font-weight:bold;
-	color:#fff;
-	padding:3px 7px 3px;
-	text-align:left;
-	cursor:pointer;
-}
-#djDebug .djdt-panelContent table td {
-	padding:5px 10px;
-	font-size:14px;
-	background-color:#fff;
-	color:#000;
-	vertical-align:top;
-	border:0;
-}
-*/
-
 #djDebug .djdt-panelContent .djDebugClose {
 	display:block;
 	position:absolute;
