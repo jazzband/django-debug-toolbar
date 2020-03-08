@@ -388,9 +388,7 @@
 #djDebug .djUnselected {
     display: none;
 }
-#djDebug tr.djHiddenByDefault {
-    display: none;
-}
+
 #djDebug tr.djSelected {
     display: table-row;
 }
