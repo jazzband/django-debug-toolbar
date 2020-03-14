@@ -167,40 +167,43 @@
 
 #djDebug #djDebugToolbarHandle {
 	position:fixed;
+	transform:rotate(-90deg);
+	transform-origin:right bottom;
 	background-color:#fff;
 	border:1px solid #111;
-	top:30px;
+	top:0;
 	right:0;
 	z-index:100000000;
 	opacity:0.75;
 }
 
 #djDebug #djShowToolBarButton {
-	display:block;
-	height:75px;
-	width:30px;
-	border-right:none;
-	border-bottom:4px solid #fff;
-	border-top:4px solid #fff;
-	border-left:4px solid #fff;
+	padding:5px;
+	padding-bottom:8px;
+	border:4px solid #fff;
+	border-bottom-width:0;
 	color:#fff;
-	font-size:10px;
+	font-size:22px;
 	font-weight:bold;
-	text-decoration:none;
-	text-align:center;
-	text-indent:-999999px;
-	background: #000 no-repeat left center;
-	background-image: url(../img/djdt_vertical.png);
+	background: #000;
 	opacity:0.5;
 }
 
 #djDebug #djShowToolBarButton:hover {
 	background-color:#111;
-	border-top-color:#FFE761;
-	border-left-color:#FFE761;
-	border-bottom-color:#FFE761;
+	border-color:#ffe761;
 	cursor:move;
 	opacity:1.0;
+}
+
+#djDebug #djShowToolBarD {
+	color:#cf9;
+	font-size:22px;
+}
+
+#djDebug #djShowToolBarJ {
+	color:#cf9;
+	font-size:16px;
 }
 
 #djDebug code {
