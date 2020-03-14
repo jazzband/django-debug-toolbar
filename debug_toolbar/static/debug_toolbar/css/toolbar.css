@@ -6,11 +6,7 @@
     clear: both;
     visibility: hidden;
 }
-#djDebug .djdt-clearfix {display: inline-block;}
-/* Hides from IE-mac \*/
 #djDebug .djdt-clearfix {display: block;}
-* html #djDebug .djdt-clearfix {height: 1%;}
-/* end hide from IE-mac */
 
 /* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
 #djDebug {color:#000;background:#FFF;}
@@ -39,24 +35,14 @@
 	text-align:left;
 	text-shadow: none;
 	white-space: normal;
-	-webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
     transition: none;
 }
 
 #djDebug button, #djDebug a.button {
 	background-color: #eee;
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eee), color-stop(100%, #cccccc));
-	background-image: -webkit-linear-gradient(top, #eee, #cccccc);
-	background-image: -moz-linear-gradient(top, #eee, #cccccc);
-	background-image: -ms-linear-gradient(top, #eee, #cccccc);
-	background-image: -o-linear-gradient(top, #eee, #cccccc);
-	background-image: linear-gradient(top, #eee, #cccccc);
+	background-image: linear-gradient(to bottom, #eee, #cccccc);
 	border: 1px solid #ccc;
 	border-bottom: 1px solid #bbb;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	border-radius: 3px;
 	color: #333;
 	line-height: 1;
@@ -67,12 +53,7 @@
 
 #djDebug button:hover, #djDebug a.button:hover {
     background-color: #ddd;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ddd), color-stop(100%, #bbb));
-    background-image: -webkit-linear-gradient(top, #ddd, #bbb);
-    background-image: -moz-linear-gradient(top, #ddd, #bbb);
-    background-image: -ms-linear-gradient(top, #ddd, #bbb);
-    background-image: -o-linear-gradient(top, #ddd, #bbb);
-    background-image: linear-gradient(top, #ddd, #bbb);
+    background-image: linear-gradient(to bottom, #ddd, #bbb);
     border-color: #bbb;
     border-bottom-color: #999;
     cursor: pointer;
@@ -82,8 +63,6 @@
 #djDebug button:active, #djDebug a.button:active {
     border: 1px solid #aaa;
     border-bottom: 1px solid #888;
-    -webkit-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
-    -moz-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
     box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
 }
 
@@ -355,8 +334,6 @@
 #djDebug a.toggleTemplate {
 	padding:4px;
 	background-color:#bbb;
-	-webkit-border-radius:3px;
-	-moz-border-radius:3px;
 	border-radius:3px;
 }
 
@@ -364,8 +341,6 @@
 	padding:4px;
 	background-color:#444;
 	color:#ffe761;
-	-webkit-border-radius:3px;
-	-moz-border-radius:3px;
 	border-radius:3px;
 }
 
@@ -531,9 +506,7 @@
     text-align: center;
     color: #777;
     display: inline-block;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF', endColorstr='#DCDCDC'); /* for IE */
-    background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DCDCDC)); /* for webkit browsers */
-    background:-moz-linear-gradient(center top , #FFFFFF 0pt, #DCDCDC 100%) repeat scroll 0 0 transparent;
+    background:linear-gradient(to bottom, #fff, #dcdcdc);
 }
 #djDebug .djNoToggleSwitch {
     height: 14px;
@@ -545,11 +518,7 @@
     margin-top:0.8em;
 }
 #djDebug pre {
-	white-space: -moz-pre-wrap;  /* Mozilla, since 1999    */
-	white-space: -pre-wrap;      /* Opera 4-6              */
-	white-space: -o-pre-wrap;    /* Opera 7                */
-	white-space: pre-wrap;       /* CSS-3                  */
-	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	white-space: pre-wrap;
     color: #555;
     border:1px solid #ccc;
     border-collapse:collapse;
