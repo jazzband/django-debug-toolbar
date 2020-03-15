@@ -322,22 +322,22 @@
 	position:absolute;
 	top:4px;
 	right:15px;
-	height:40px;
-	width:40px;
-	background: no-repeat center center;
-	background-image: url(../img/close.png);
+	height:16px;
+	width:16px;
+	line-height:16px;
+	padding:5px;
+	border:6px solid #ddd;
+	border-radius:50%;
+	background:#fff;
+	color:#ddd;
+	text-align:center;
+	font-weight:900;
+	font-size:20px;
+	text-decoration:none;
 }
 
 #djDebug .djdt-panelContent .djDebugClose:hover {
-	background-image: url(../img/close_hover.png);
-}
-
-#djDebug .djdt-panelContent .djDebugClose.djDebugBack {
-	background-image: url(../img/back.png);
-}
-
-#djDebug .djdt-panelContent .djDebugClose.djDebugBack:hover  {
-	background-image: url(../img/back_hover.png);
+	background:#c0695d;
 }
 
 #djDebug .djdt-panelContent dt, #djDebug .djdt-panelContent dd {
