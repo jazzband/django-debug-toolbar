@@ -39,7 +39,9 @@
 		</ul>
 	</div>
 	<div class="djdt-hidden" id="djDebugToolbarHandle">
-		<span title="{% trans "Show toolbar" %}" id="djShowToolBarButton">&#171;</span>
+		<div title="{% trans "Show toolbar" %}" id="djShowToolBarButton">
+			<span id="djShowToolBarD">D</span><span id="djShowToolBarJ">J</span>DT
+		</div>
 	</div>
 	{% for panel in toolbar.panels %}
 		{% if panel.has_content and panel.enabled %}
