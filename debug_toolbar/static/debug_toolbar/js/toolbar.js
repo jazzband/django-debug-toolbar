@@ -47,7 +47,7 @@
                 return response.text();
             } else {
                 var win = document.querySelector('#djDebugWindow');
-                win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose djDebugBack" href=""></a><h3>'+response.status+': '+response.statusText+'</h3></div>';
+                win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose" href="">»</a><h3>'+response.status+': '+response.statusText+'</h3></div>';
                 $$.show(win);
                 return Promise.reject();
             }
