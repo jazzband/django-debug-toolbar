@@ -57,7 +57,9 @@
             {% endif %}
           </td>
           <td class="djdt-timeline">
-            <div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset|unlocalize }}%"><strong style="width:{{ query.width_ratio_relative|unlocalize }}%;background-color:{{ query.trace_color }}">{{ query.width_ratio }}%</strong></div></div>
+            <svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none" aria-label="{{ query.width_ratio }}%">
+              <rect x="{{ query.start_offset|unlocalize }}" y="0" height="5" width="{{ query.width_ratio_relative|unlocalize }}" fill="{{ query.trace_color }}" />
+            </svg>
           </td>
           <td class="djdt-time">
             {{ query.duration|floatformat:"2" }}
