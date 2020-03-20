@@ -99,7 +99,8 @@ class StaticFilesPanel(panels.Panel):
 
     @property
     def num_used(self):
-        return len(self._paths[threading.currentThread()])
+        stats = self.get_stats()
+        return stats and stats["num_used"]
 
     nav_title = _("Static files")
 
@@ -121,7 +122,7 @@ class StaticFilesPanel(panels.Panel):
         self.record_stats(
             {
                 "num_found": self.num_found,
-                "num_used": self.num_used,
+                "num_used": len(used_paths),
                 "staticfiles": used_paths,
                 "staticfiles_apps": self.get_staticfiles_apps(),
                 "staticfiles_dirs": self.get_staticfiles_dirs(),

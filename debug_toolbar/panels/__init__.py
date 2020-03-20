@@ -64,6 +64,15 @@ class Panel:
         return True
 
     @property
+    def is_historical(self):
+        """
+        Panel supports rendering historical values.
+
+        Defaults to :attr:`has_content`.
+        """
+        return self.has_content
+
+    @property
     def title(self):
         """
         Title shown in the panel when it's displayed in full screen.

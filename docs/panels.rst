@@ -9,6 +9,14 @@ Default built-in panels
 
 The following panels are enabled by default.
 
+History
+~~~~~~~
+
+Path: ``debug_toolbar.panels.history.VersionsPanel``
+
+This panel shows the history of requests made and allows switching to a past
+snapshot of the toolbar to view that request's stats.
+
 Version
 ~~~~~~~
 

@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse
-from django.test import TestCase
 from django.test.utils import override_settings
 
-from ..base import BaseTestCase
+from ..base import BaseTestCase, IntegrationTestCase
 from ..views import listcomp_view, regular_view
 
 
@@ -66,7 +65,7 @@ class ProfilingPanelTestCase(BaseTestCase):
 @override_settings(
     DEBUG=True, DEBUG_TOOLBAR_PANELS=["debug_toolbar.panels.profiling.ProfilingPanel"]
 )
-class ProfilingPanelIntegrationTestCase(TestCase):
+class ProfilingPanelIntegrationTestCase(IntegrationTestCase):
     def test_view_executed_once(self):
         self.assertEqual(User.objects.count(), 0)
 

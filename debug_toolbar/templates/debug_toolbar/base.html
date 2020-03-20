@@ -14,25 +14,7 @@
         <li id="djDebugButton">DEBUG</li>
       {% endif %}
       {% for panel in toolbar.panels %}
-        <li class="djDebugPanelButton">
-          <input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %}>
-          {% if panel.has_content and panel.enabled %}
-            <a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}">
-          {% else %}
-            <div class="djdt-contentless{% if not panel.enabled %} djdt-disabled{% endif %}">
-          {% endif %}
-          {{ panel.nav_title }}
-          {% if panel.enabled %}
-            {% with panel.nav_subtitle as subtitle %}
-              {% if subtitle %}<br><small>{{ subtitle }}</small>{% endif %}
-            {% endwith %}
-          {% endif %}
-          {% if panel.has_content and panel.enabled %}
-            </a>
-          {% else %}
-            </div>
-          {% endif %}
-        </li>
+        {% include "debug_toolbar/includes/panel_button.html" %}
       {% endfor %}
     </ul>
   </div>
@@ -41,23 +23,9 @@
       <span id="djShowToolBarD">D</span><span id="djShowToolBarJ">J</span>DT
     </div>
   </div>
+
   {% for panel in toolbar.panels %}
-    {% if panel.has_content and panel.enabled %}
-      <div id="{{ panel.panel_id }}" class="djdt-panelContent">
-        <div class="djDebugPanelTitle">
-          <a href="" class="djDebugClose">×</a>
-          <h3>{{ panel.title|safe }}</h3>
-        </div>
-        <div class="djDebugPanelContent">
-          {% if toolbar.store_id %}
-            <img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="djdt-loader">
-            <div class="djdt-scroll"></div>
-          {% else %}
-            <div class="djdt-scroll">{{ panel.content }}</div>
-          {% endif %}
-        </div>
-      </div>
-    {% endif %}
+    {% include "debug_toolbar/includes/panel_content.html" %}
   {% endfor %}
   <div id="djDebugWindow" class="djdt-panelContent"></div>
 </div>

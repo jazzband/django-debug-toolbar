@@ -55,12 +55,23 @@ const ajax = function(url, init) {
     });
 };
 
+const ajaxJson = function(url, init) {
+    init = Object.assign({credentials: 'same-origin'}, init);
+    return fetch(url, init).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject();
+        }
+    });
+};
+
 const djdt = {
     handleDragged: false,
     init: function() {
         const djDebug = document.querySelector('#djDebug');
         $$.show(djDebug);
-        $$.on(djDebug.querySelector('#djDebugPanelList'), 'click', 'li a', function(event) {
+        $$.on(djDebug.querySelector('#djDebugPanelList li a'), 'click', 'li a', function(event) {
             event.preventDefault();
             if (!this.className) {
                 return;
@@ -125,6 +136,35 @@ const djdt = {
                 const win = djDebug.querySelector('#djDebugWindow');
                 win.innerHTML = data.content;
                 $$.show(win);
+            });
+        });
+
+        // Used by the history panel
+        $$.on(djDebug, 'click', '.switchHistory', function(event) {
+            event.preventDefault();
+            const ajax_data = {};
+            const newStoreId = this.dataset.storeId;
+            const form = this.closest('form');
+            const tbody = this.closest('tbody');
+
+            ajax_data.url = this.getAttribute('formaction');
+
+            if (form) {
+                ajax_data.body = new FormData(form);
+                ajax_data.method = form.getAttribute('method') || 'POST';
+            }
+
+            tbody.querySelector('.djdt-highlighted').classList.remove('djdt-highlighted');
+            this.closest('tr').classList.add('djdt-highlighted');
+
+            ajaxJson(ajax_data.url, ajax_data).then(function(data) {
+                djDebug.setAttribute('data-store-id', newStoreId);
+                Object.keys(data).map(function (panelId) {
+                    if (djDebug.querySelector('#'+panelId)) {
+                        djDebug.querySelector('#'+panelId).outerHTML = data[panelId].content;
+                        djDebug.querySelector('.djdt-'+panelId).outerHTML = data[panelId].button;
+                    }
+                });
             });
         });
 

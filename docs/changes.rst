@@ -33,6 +33,8 @@ Change log
 * Removed support for end of life Django 1.11. The minimum supported Django is
   now 2.2.
 
+* Added HistoryPanel including support for AJAX requests.
+
 
 2.2 (2020-01-31)
 ----------------

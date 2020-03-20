@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.template import Context, RequestContext, Template
-from django.test import TestCase, override_settings
+from django.test import override_settings
 
-from ..base import BaseTestCase
+from ..base import BaseTestCase, IntegrationTestCase
 from ..forms import TemplateReprForm
 from ..models import NonAsciiRepr
 
@@ -109,7 +109,7 @@ class TemplatesPanelTestCase(BaseTestCase):
 @override_settings(
     DEBUG=True, DEBUG_TOOLBAR_PANELS=["debug_toolbar.panels.templates.TemplatesPanel"]
 )
-class JinjaTemplateTestCase(TestCase):
+class JinjaTemplateTestCase(IntegrationTestCase):
     def test_django_jinja2(self):
         r = self.client.get("/regular_jinja/foobar/")
         self.assertContains(r, "Test for foobar (Jinja)")

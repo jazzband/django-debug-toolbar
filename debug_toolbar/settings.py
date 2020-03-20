@@ -37,6 +37,7 @@ CONFIG_DEFAULTS = {
         "django.utils.deprecation",
         "django.utils.functional",
     ),
+    "HISTORY_POST_TRUNCATE_LENGTH": 0,
     "PROFILER_MAX_DEPTH": 10,
     "SHOW_TEMPLATE_CONTEXT": True,
     "SKIP_TEMPLATE_PREFIXES": ("django/forms/widgets/", "admin/widgets/"),
@@ -53,6 +54,7 @@ def get_config():
 
 
 PANELS_DEFAULTS = [
+    "debug_toolbar.panels.history.HistoryPanel",
     "debug_toolbar.panels.versions.VersionsPanel",
     "debug_toolbar.panels.timer.TimerPanel",
     "debug_toolbar.panels.settings.SettingsPanel",
