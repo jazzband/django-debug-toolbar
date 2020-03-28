@@ -5,6 +5,7 @@ Debug Toolbar middleware
 import re
 from functools import lru_cache
 
+import django
 from django.conf import settings
 from django.utils.module_loading import import_string
 
@@ -48,7 +49,11 @@ class DebugToolbarMiddleware:
         # Decide whether the toolbar is active for this request. Don't render
         # the toolbar during AJAX requests.
         show_toolbar = get_show_toolbar()
-        if not show_toolbar(request) or request.is_ajax():
+        if not show_toolbar(request) or (
+            request.is_ajax()
+            if django.VERSION < (3, 1)
+            else not request.accepts("text/html")
+        ):
             return self.get_response(request)
 
         toolbar = DebugToolbar(request, self.get_response)
