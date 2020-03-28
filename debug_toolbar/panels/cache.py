@@ -20,9 +20,7 @@ from debug_toolbar.utils import (
     tidy_stacktrace,
 )
 
-cache_called = Signal(
-    providing_args=["time_taken", "name", "return_value", "args", "kwargs", "trace"]
-)
+cache_called = Signal()
 
 
 def send_signal(method):
