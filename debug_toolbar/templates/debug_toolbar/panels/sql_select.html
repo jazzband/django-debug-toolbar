@@ -1,39 +1,39 @@
 {% load i18n %}{% load static %}
 <div class="djDebugPanelTitle">
-	<a class="djDebugClose" href="">»</a>
-	<h3>{% trans "SQL selected" %}</h3>
+  <a class="djDebugClose" href="">»</a>
+  <h3>{% trans "SQL selected" %}</h3>
 </div>
 <div class="djDebugPanelContent">
-	<div class="djdt-scroll">
-		<dl>
-			<dt>{% trans "Executed SQL" %}</dt>
-			<dd>{{ sql|safe }}</dd>
-			<dt>{% trans "Time" %}</dt>
-			<dd>{{ duration }} ms</dd>
-			<dt>{% trans "Database" %}</dt>
-			<dd>{{ alias }}</dd>
-		</dl>
-		{% if result %}
-		<table class="djSqlSelect">
-			<thead>
-				<tr>
-					{% for h in headers %}
-						<th>{{ h|upper }}</th>
-					{% endfor %}
-				</tr>
-			</thead>
-			<tbody>
-				{% for row in result %}
-					<tr>
-						{% for column in row %}
-							<td>{{ column|escape }}</td>
-						{% endfor %}
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		{% else %}
-			<p>{% trans "Empty set" %}</p>
-		{% endif %}
-	</div>
+  <div class="djdt-scroll">
+    <dl>
+      <dt>{% trans "Executed SQL" %}</dt>
+      <dd>{{ sql|safe }}</dd>
+      <dt>{% trans "Time" %}</dt>
+      <dd>{{ duration }} ms</dd>
+      <dt>{% trans "Database" %}</dt>
+      <dd>{{ alias }}</dd>
+    </dl>
+    {% if result %}
+      <table class="djSqlSelect">
+        <thead>
+          <tr>
+            {% for h in headers %}
+              <th>{{ h|upper }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in result %}
+            <tr>
+              {% for column in row %}
+                <td>{{ column|escape }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>{% trans "Empty set" %}</p>
+    {% endif %}
+  </div>
 </div>
