@@ -38,7 +38,7 @@ class SignalsPanel(Panel):
 
     def nav_subtitle(self):
         signals = self.get_stats()["signals"]
-        num_receivers = sum(len(s[2]) for s in signals)
+        num_receivers = sum(len(receivers) for name, receivers in signals)
         num_signals = len(signals)
         # here we have to handle a double count translation, hence the
         # hard coding of one signal
@@ -85,6 +85,6 @@ class SignalsPanel(Panel):
                 else:
                     text = receiver_name
                 receivers.append(text)
-            signals.append((name, signal, receivers))
+            signals.append((name, receivers))
 
         self.record_stats({"signals": signals})
