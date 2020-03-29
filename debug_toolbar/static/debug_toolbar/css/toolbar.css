@@ -483,7 +483,7 @@
 #djDebug .djDebugRowWarning .djdt-time {
     color: red;
 }
-#djdebug .djdt-panelContent table .djdt-toggle {
+#djDebug .djdt-panelContent table .djdt-toggle {
     width: 14px;
     padding-top: 3px;
 }
@@ -491,10 +491,10 @@
     min-width: 70px;
     white-space: nowrap;
 }
-#djdebug .djdt-panelContent table .djdt-color {
+#djDebug .djdt-panelContent table .djdt-color {
     width: 3px;
 }
-#djdebug .djdt-panelContent table .djdt-color span {
+#djDebug .djdt-panelContent table .djdt-color span {
     width: 3px;
     height: 12px;
     overflow: hidden;
