@@ -427,18 +427,15 @@
     height: 1.5em;
 }
 
-#djDebug div.djDebugLineChartWarning strong {
-    background-color: #900;
+#djDebug svg.djDebugLineChartWarning rect {
+    fill: #900;
 }
 
-#djDebug .djDebugInTransaction div.djDebugLineChart strong {
-    background-color: #d3ff82;
+#djDebug svg.djDebugLineChartInTransaction rect {
+    fill: #d3ff82;
 }
-#djDebug .djDebugStartTransaction div.djDebugLineChart strong {
-    border-left: 1px solid #94b24d;
-}
-#djDebug .djDebugEndTransaction div.djDebugLineChart strong {
-    border-right: 1px solid #94b24d;
+#djDebug svg.djDebugLineChart line {
+    stroke: #94b24d;
 }
 
 #djDebug .djdt-panelContent ul.djdt-stats {
