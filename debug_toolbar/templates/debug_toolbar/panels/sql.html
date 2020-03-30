@@ -58,7 +58,7 @@
           </td>
           <td class="djdt-timeline">
             <svg class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}{% if query.in_trans %} djDebugLineChartInTransaction{% endif %}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none" aria-label="{{ query.width_ratio }}%">
-              <rect x="{{ query.start_offset|unlocalize }}" y="0" height="5" width="{{ query.width_ratio_relative|unlocalize }}" fill="{{ query.trace_color }}" />
+              <rect x="{{ query.start_offset|unlocalize }}" y="0" height="5" width="{{ query.width_ratio|unlocalize }}" fill="{{ query.trace_color }}" />
               {% if query.starts_trans %}
                 <line x1="{{ query.start_offset|unlocalize }}" y1="0" x2="{{ query.start_offset|unlocalize }}" y2="5" />
               {% endif %}
