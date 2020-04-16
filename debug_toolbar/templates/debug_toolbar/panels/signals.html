@@ -1,17 +1,17 @@
 {% load i18n %}
 <table>
-	<thead>
-		<tr>
-			<th>{% trans "Signal" %}</th>
-			<th>{% trans "Receivers" %}</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for name, receivers in signals %}
-			<tr>
-				<td>{{ name|escape }}</td>
-				<td>{{ receivers|join:", " }}</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+  <thead>
+    <tr>
+      <th>{% trans "Signal" %}</th>
+      <th>{% trans "Receivers" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for name, receivers in signals %}
+      <tr>
+        <td>{{ name|escape }}</td>
+        <td>{{ receivers|join:", " }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>

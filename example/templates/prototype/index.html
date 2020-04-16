@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>Prototype Test</title>
-	<script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
-	<script>
-		document.observe('dom:loaded', function() {
-			$('showme').removeClassName('djdt-hidden');
-			$('v').textContent = Prototype.Version;
-		});
-	</script>
-</head>
-<body>
-	<h1>Prototype Test</h1>
-	<p class="djdt-hidden" id="showme">If you see this, Prototype <strong id="v"></strong> is working.</p>
-</body>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Prototype Test</title>
+    <script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
+    <script>
+      document.observe('dom:loaded', function() {
+          $('showme').removeClassName('djdt-hidden');
+          $('v').textContent = Prototype.Version;
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Prototype Test</h1>
+    <p class="djdt-hidden" id="showme">If you see this, Prototype <strong id="v"></strong> is working.</p>
+  </body>
 </html>
