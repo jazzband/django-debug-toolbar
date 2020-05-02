@@ -1,11 +1,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
-# 
+#
+#
 # Translators:
 # Dario Agliottone <dario.agliottone@gmail.com>, 2012
 # Flavio Curella <flavio.curella@gmail.com>, 2013
 # yakky <i.spalletti@nephila.it>, 2013-2014
+# Andrea Rabbaglietti <rabbagliettiandrea@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
@@ -50,7 +51,7 @@ msgstr[1] "Chiamate alla cache da %(count)d backend"
 
 #: panels/headers.py:35
 msgid "Headers"
-msgstr "Intestazioni"
+msgstr "Headers"
 
 #: panels/logging.py:64
 msgid "Logging"
@@ -73,7 +74,7 @@ msgstr "Profilazione"
 
 #: panels/redirects.py:17
 msgid "Intercept redirects"
-msgstr "Intercetta ridirezioni"
+msgstr "Intercetta redirezioni"
 
 #: panels/request.py:18
 msgid "Request"
@@ -242,7 +243,7 @@ msgstr "SQL"
 
 #: panels/templates/panel.py:141
 msgid "Templates"
-msgstr "Template"
+msgstr "Templates"
 
 #: panels/templates/panel.py:146
 #, python-format
@@ -329,7 +330,7 @@ msgstr "Argomenti"
 #: templates/debug_toolbar/panels/cache.html:46
 #: templates/debug_toolbar/panels/request.html:9
 msgid "Keyword arguments"
-msgstr "Parole chiave"
+msgstr "Keyword arguments"
 
 #: templates/debug_toolbar/panels/cache.html:47
 msgid "Backend"
@@ -337,13 +338,13 @@ msgstr "Backend"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
-msgstr "Header della request"
+msgstr "Request headers"
 
 #: templates/debug_toolbar/panels/headers.html:8
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr "Nome"
+msgstr "Chiave"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
