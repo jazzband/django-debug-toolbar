@@ -99,7 +99,8 @@ The following deprecated settings have been removed:
   changes were required.
 * Removed the jQuery dependency. This means that django-debug-toolbar
   now requires modern browsers with support for ``fetch``, ``classList``
-  etc.
+  etc. The ``JQUERY_URL`` setting is also removed because it isn't
+  necessary anymore. If you depend on jQuery, integrate it yourself.
 * Added support for the server timing header.
 * Added a differentiation between similar and duplicate queries. Similar
   queries are what duplicate queries used to be (same SQL, different
