@@ -223,7 +223,7 @@ msgstr "Idle"
 
 #: panels/sql/panel.py:38
 msgid "Active"
-msgstr "Azione"
+msgstr "Attivo"
 
 #: panels/sql/panel.py:39
 msgid "In transaction"
