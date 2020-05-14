@@ -4,6 +4,11 @@ Change log
 UNRELEASED
 ----------
 
+* Added an ``.editorconfig`` file specifying indentation rules etc.
+* Updated the italian translation.
+* Added support for Django 3.1a1.
+* Pruned unused CSS and removed hacks for ancient browsers.
+
 
 2.2 (2020-01-31)
 ----------------
@@ -11,7 +16,8 @@ UNRELEASED
 * Removed support for end of life Django 2.0 and 2.1.
 * Added support for Python 3.8.
 * Add locals() option for sql panel.
-* Added support for Django 3.0
+* Added support for Django 3.0.
+
 
 2.1 (2019-11-12)
 ----------------
