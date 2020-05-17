@@ -1,0 +1,17 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "rules": {
+        "curly": ["error", "all"],
+        "dot-notation": "error",
+        "eqeqeq": "error",
+        "no-eval": "error",
+        "semi": "error"
+    }
+}
