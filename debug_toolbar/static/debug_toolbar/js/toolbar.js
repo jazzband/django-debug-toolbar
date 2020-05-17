@@ -254,7 +254,7 @@
                 });
             }
         },
-        hide_one_level: function(skipDebugWindow) {
+        hide_one_level: function() {
             if ($$.visible(djDebug.querySelector('#djDebugWindow'))) {
                 $$.hide(djDebug.querySelector('#djDebugWindow'));
             } else if (djDebug.querySelector('#djDebugToolbar li.djdt-active')) {
