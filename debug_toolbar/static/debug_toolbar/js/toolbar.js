@@ -199,19 +199,17 @@
                 document.removeEventListener('mousemove', onHandleMove);
                 if (djdt.handleDragged) {
                     event.preventDefault();
-                    djdt.cookie.set('djdttop', handle.offsetTop, {
-                        path: '/',
-                        expires: 10
-                    });
+                    localStorage.setItem('djdt.top', handle.offsetTop);
                     setTimeout(function () {
                         djdt.handleDragged = false;
                     }, 10);
                 }
             });
-            if (djdt.cookie.get('djdt') === 'hide') {
-                djdt.hide_toolbar(false);
-            } else {
+            const show = localStorage.getItem('djdt.show') || djDebug.dataset.defaultShow;
+            if (show === 'true') {
                 djdt.show_toolbar();
+            } else {
+                djdt.hide_toolbar();
             }
         },
         hide_panels: function() {
@@ -224,7 +222,7 @@
                 e.classList.remove('djdt-active');
             });
         },
-        hide_toolbar: function(setCookie) {
+        hide_toolbar: function() {
             djdt.hide_panels();
 
             const djDebug = document.getElementById('djDebug');
@@ -233,7 +231,7 @@
             const handle = document.querySelector('#djDebugToolbarHandle');
             $$.show(handle);
             // set handle position
-            let handleTop = djdt.cookie.get('djdttop');
+            let handleTop = localStorage.getItem('djdt.top');
             if (handleTop) {
                 handleTop = Math.min(handleTop, window.innerHeight - handle.offsetHeight);
                 handle.style.top = handleTop + 'px';
@@ -241,12 +239,7 @@
 
             document.removeEventListener('keydown', onKeyDown);
 
-            if (setCookie) {
-                djdt.cookie.set('djdt', 'hide', {
-                    path: '/',
-                    expires: 10
-                });
-            }
+            localStorage.setItem('djdt.show', 'false');
         },
         hide_one_level: function() {
             const djDebug = document.getElementById('djDebug');
@@ -263,10 +256,7 @@
             const djDebug = document.getElementById('djDebug');
             $$.hide(djDebug.querySelector('#djDebugToolbarHandle'));
             $$.show(djDebug.querySelector('#djDebugToolbar'));
-            djdt.cookie.set('djdt', 'show', {
-                path: '/',
-                expires: 10
-            });
+            localStorage.setItem('djdt.show', 'true');
         },
         cookie: {
             get: function(key){

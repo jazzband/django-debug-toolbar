@@ -82,10 +82,6 @@ class DebugToolbarMiddleware:
         ):
             return response
 
-        # Collapse the toolbar by default if SHOW_COLLAPSED is set.
-        if toolbar.config["SHOW_COLLAPSED"] and "djdt" not in request.COOKIES:
-            response.set_cookie("djdt", "hide", 864000)
-
         # Insert the toolbar in the response.
         content = response.content.decode(response.charset)
         insert_before = dt_settings.get_config()["INSERT_BEFORE"]
