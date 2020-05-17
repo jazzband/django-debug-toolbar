@@ -3,6 +3,7 @@ cache: pip
 matrix:
   fast_finish: true
   include:
+    - env: TOXENV=eslint
     - env: TOXENV=flake8
     - env: TOXENV=style
     - env: TOXENV=readme
