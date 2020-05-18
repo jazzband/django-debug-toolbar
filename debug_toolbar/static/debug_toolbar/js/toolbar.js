@@ -245,7 +245,7 @@
                 });
             }
         },
-        hide_one_level: function(skipDebugWindow) {
+        hide_one_level: function() {
             var djDebug = document.getElementBy('djDebug');
             if ($$.visible(djDebug.querySelector('#djDebugWindow'))) {
                 $$.hide(djDebug.querySelector('#djDebugWindow'));
