@@ -22,7 +22,7 @@
             }
         },
         visible: function(element) {
-            style = getComputedStyle(element);
+            var style = getComputedStyle(element);
             return style.display !== 'none';
         },
         executeScripts: function(root) {
