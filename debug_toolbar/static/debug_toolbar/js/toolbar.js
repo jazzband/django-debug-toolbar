@@ -22,7 +22,7 @@
             }
         },
         visible: function(element) {
-            style = getComputedStyle(element);
+            var style = getComputedStyle(element);
             return style.display !== 'none';
         },
         executeScripts: function(root) {
@@ -56,10 +56,6 @@
 
     var djdt = {
         handleDragged: false,
-        events: {
-            ready: []
-        },
-        isReady: false,
         init: function() {
             var djDebug = document.querySelector('#djDebug');
             $$.show(djDebug);
@@ -138,9 +134,6 @@
                 var self = this;
                 var id = this.dataset.toggleId;
                 var open_me = this.textContent === this.dataset.toggleOpen;
-                if (id === '' || !id) {
-                    return;
-                }
                 var name = this.dataset.toggleName;
                 var container = this.closest('.djDebugPanelContent').querySelector('#' + name + '_' + id);
                 container.querySelectorAll('.djDebugCollapsed').forEach(function(e) {
@@ -217,10 +210,6 @@
             } else {
                 djdt.show_toolbar();
             }
-            djdt.isReady = true;
-            djdt.events.ready.forEach(function(callback) {
-                callback(djdt);
-            });
         },
         hide_panels: function() {
             var djDebug = document.getElementBy('djDebug');
@@ -275,13 +264,6 @@
                 path: '/',
                 expires: 10
             });
-        },
-        ready: function(callback){
-            if (djdt.isReady) {
-                callback(djdt);
-            } else {
-                djdt.events.ready.push(callback);
-            }
         },
         cookie: {
             get: function(key){

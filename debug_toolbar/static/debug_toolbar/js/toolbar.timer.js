@@ -1,18 +1,12 @@
 (function () {
-    // Browser timing remains hidden unless we can successfully access the performance object
-    var perf = window.performance || window.msPerformance ||
-               window.webkitPerformance || window.mozPerformance;
-    if (!perf)
-        return;
-
-    var timingOffset = perf.timing.navigationStart,
-        timingEnd = perf.timing.loadEventEnd,
+    var timingOffset = performance.timing.navigationStart,
+        timingEnd = performance.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;
     function getLeft(stat) {
-        return ((perf.timing[stat] - timingOffset) / (totalTime)) * 100.0;
+        return ((performance.timing[stat] - timingOffset) / (totalTime)) * 100.0;
     }
     function getCSSWidth(stat, endStat) {
-        var width = ((perf.timing[endStat] - perf.timing[stat]) / (totalTime)) * 100.0;
+        var width = ((performance.timing[endStat] - performance.timing[stat]) / (totalTime)) * 100.0;
         // Calculate relative percent (same as sql panel logic)
         width = 100.0 * width / (100.0 - getLeft(stat));
         return (width < 1) ? "2px" : width + "%";
@@ -23,13 +17,13 @@
             // Render a start through end bar
             row.innerHTML = '<td>' + stat.replace('Start', '') + '</td>' +
                             '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
-                            '<td>' + (perf.timing[stat] - timingOffset) + ' (+' + (perf.timing[endStat] - perf.timing[stat]) + ')</td>';
+                            '<td>' + (performance.timing[stat] - timingOffset) + ' (+' + (performance.timing[endStat] - performance.timing[stat]) + ')</td>';
             row.querySelector('strong').style.width = getCSSWidth(stat, endStat);
         } else {
             // Render a point in time
             row.innerHTML = '<td>' + stat + '</td>' +
                             '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
-                            '<td>' + (perf.timing[stat] - timingOffset) + '</td>';
+                            '<td>' + (performance.timing[stat] - timingOffset) + '</td>';
             row.querySelector('strong').style.width = '2px';
         }
         row.querySelector('.djDebugLineChart').style.left = getLeft(stat) + '%';
