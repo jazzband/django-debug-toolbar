@@ -109,16 +109,16 @@
 
                 if (this.tagName === 'BUTTON') {
                     const form = this.closest('form');
-                    ajax_data.url = this.getAttribute('formaction');
+                    ajax_data.url = this.formAction;
 
                     if (form) {
                         ajax_data.body = new FormData(form);
-                        ajax_data.method = form.getAttribute('method') || 'POST';
+                        ajax_data.method = form.method.toUpperCase();
                     }
                 }
 
                 if (this.tagName === 'A') {
-                    ajax_data.url = this.getAttribute('href');
+                    ajax_data.url = this.href;
                 }
 
                 ajax(ajax_data.url, ajax_data).then(function(body) {
