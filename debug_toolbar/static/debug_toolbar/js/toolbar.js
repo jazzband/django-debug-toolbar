@@ -108,10 +108,9 @@
             $$.on(djDebug, 'click', '.remoteCall', function(event) {
                 event.preventDefault();
 
-                var name = this.tagName.toLowerCase();
                 var ajax_data = {};
 
-                if (name == 'button') {
+                if (this.tagName == 'BUTTON') {
                     var form = this.closest('form');
                     ajax_data.url = this.getAttribute('formaction');
 
@@ -121,7 +120,7 @@
                     }
                 }
 
-                if (name == 'a') {
+                if (this.tagName == 'A') {
                     ajax_data.url = this.getAttribute('href');
                 }
 
