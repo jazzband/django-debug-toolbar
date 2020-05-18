@@ -139,9 +139,6 @@
                 var self = this;
                 var id = this.dataset.toggleId;
                 var open_me = this.textContent == this.dataset.toggleOpen;
-                if (id === '' || !id) {
-                    return;
-                }
                 var name = this.dataset.toggleName;
                 var container = this.closest('.djDebugPanelContent').querySelector('#' + name + '_' + id);
                 container.querySelectorAll('.djDebugCollapsed').forEach(function(e) {
