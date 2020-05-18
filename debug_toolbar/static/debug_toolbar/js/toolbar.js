@@ -56,10 +56,6 @@
 
     var djdt = {
         handleDragged: false,
-        events: {
-            ready: []
-        },
-        isReady: false,
         init: function() {
             var djDebug = document.querySelector('#djDebug');
             $$.show(djDebug);
@@ -217,10 +213,6 @@
             } else {
                 djdt.show_toolbar();
             }
-            djdt.isReady = true;
-            djdt.events.ready.forEach(function(callback) {
-                callback(djdt);
-            });
         },
         hide_panels: function() {
             var djDebug = document.getElementBy('djDebug');
@@ -275,13 +267,6 @@
                 path: '/',
                 expires: 10
             });
-        },
-        ready: function(callback){
-            if (djdt.isReady) {
-                callback(djdt);
-            } else {
-                djdt.events.ready.push(callback);
-            }
         },
         cookie: {
             get: function(key){
