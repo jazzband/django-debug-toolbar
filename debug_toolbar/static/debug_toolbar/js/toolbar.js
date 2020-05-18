@@ -35,7 +35,7 @@
     };
 
     var onKeyDown = function(event) {
-        if (event.keyCode == 27) {
+        if (event.keyCode === 27) {
             djdt.hide_one_level();
         }
     };
@@ -111,7 +111,7 @@
                 var name = this.tagName.toLowerCase();
                 var ajax_data = {};
 
-                if (name == 'button') {
+                if (name === 'button') {
                     var form = this.closest('form');
                     ajax_data.url = this.getAttribute('formaction');
 
@@ -121,7 +121,7 @@
                     }
                 }
 
-                if (name == 'a') {
+                if (name === 'a') {
                     ajax_data.url = this.getAttribute('href');
                 }
 
@@ -138,7 +138,7 @@
                 event.preventDefault();
                 var self = this;
                 var id = this.dataset.toggleId;
-                var open_me = this.textContent == this.dataset.toggleOpen;
+                var open_me = this.textContent === this.dataset.toggleOpen;
                 if (id === '' || !id) {
                     return;
                 }
@@ -181,7 +181,7 @@
                 // Chrome can send spurious mousemove events, so don't do anything unless the
                 // cursor really moved.  Otherwise, it will be impossible to expand the toolbar
                 // due to djdt.handleDragged being set to true.
-                if (djdt.handleDragged || event.pageY != startPageY) {
+                if (djdt.handleDragged || event.pageY !== startPageY) {
                     var top = baseY + event.pageY;
 
                     if (top < 0) {
@@ -213,7 +213,7 @@
                     }, 10);
                 }
             });
-            if (djdt.cookie.get('djdt') == 'hide') {
+            if (djdt.cookie.get('djdt') === 'hide') {
                 djdt.hide_toolbar(false);
             } else {
                 djdt.show_toolbar();
