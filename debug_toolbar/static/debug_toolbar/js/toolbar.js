@@ -29,6 +29,7 @@
             root.querySelectorAll('script').forEach(function(e) {
                 const clone = document.createElement('script');
                 clone.src = e.src;
+                clone.async = true;
                 root.appendChild(clone);
             });
         },
@@ -310,5 +311,10 @@
         close: djdt.hide_one_level,
         cookie: djdt.cookie,
     };
-    document.addEventListener('DOMContentLoaded', djdt.init);
+
+    if (document.readyState !== 'loading') {
+        djdt.init();
+    } else {
+        document.addEventListener('DOMContentLoaded', djdt.init);
+    }
 })();

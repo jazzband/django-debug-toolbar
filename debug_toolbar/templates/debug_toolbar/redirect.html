@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <title>Django Debug Toolbar Redirects Panel: {{ status_line }}</title>
+    <script src="{% static 'debug_toolbar/js/redirect.js' %}" async></script>
   </head>
   <body>
     <h1>{{ status_line }}</h1>
@@ -10,6 +11,5 @@
     <p class="notice">
       {% trans "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes. You can click the above link to continue with the redirect as normal." %}
     </p>
-    <script src="{% static 'debug_toolbar/js/redirect.js' %}" defer></script>
   </body>
 </html>
