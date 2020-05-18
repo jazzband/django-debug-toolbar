@@ -12,6 +12,8 @@
         "dot-notation": "error",
         "eqeqeq": "error",
         "no-eval": "error",
+        "no-var": "error",
+        "prefer-const": "error",
         "semi": "error"
     }
 }

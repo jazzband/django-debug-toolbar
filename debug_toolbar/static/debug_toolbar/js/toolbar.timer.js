@@ -1,18 +1,18 @@
 (function () {
-    var timingOffset = performance.timing.navigationStart,
+    const timingOffset = performance.timing.navigationStart,
         timingEnd = performance.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;
     function getLeft(stat) {
         return ((performance.timing[stat] - timingOffset) / (totalTime)) * 100.0;
     }
     function getCSSWidth(stat, endStat) {
-        var width = ((performance.timing[endStat] - performance.timing[stat]) / (totalTime)) * 100.0;
+        let width = ((performance.timing[endStat] - performance.timing[stat]) / (totalTime)) * 100.0;
         // Calculate relative percent (same as sql panel logic)
         width = 100.0 * width / (100.0 - getLeft(stat));
         return (width < 1) ? "2px" : width + "%";
     }
     function addRow(stat, endStat) {
-        var row = document.createElement('tr');
+        const row = document.createElement('tr');
         if (endStat) {
             // Render a start through end bar
             row.innerHTML = '<td>' + stat.replace('Start', '') + '</td>' +
