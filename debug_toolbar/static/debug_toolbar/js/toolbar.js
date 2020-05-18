@@ -224,6 +224,7 @@
             });
         },
         hide_panels: function() {
+            var djDebug = document.getElementBy('djDebug');
             $$.hide(djDebug.querySelector('#djDebugWindow'));
             djDebug.querySelectorAll('.djdt-panelContent').forEach(function(e) {
                 $$.hide(e);
@@ -234,6 +235,8 @@
         },
         hide_toolbar: function(setCookie) {
             djdt.hide_panels();
+
+            var djDebug = document.getElementBy('djDebug');
             $$.hide(djDebug.querySelector('#djDebugToolbar'));
 
             var handle = document.querySelector('#djDebugToolbarHandle');
@@ -255,6 +258,7 @@
             }
         },
         hide_one_level: function(skipDebugWindow) {
+            var djDebug = document.getElementBy('djDebug');
             if ($$.visible(djDebug.querySelector('#djDebugWindow'))) {
                 $$.hide(djDebug.querySelector('#djDebugWindow'));
             } else if (djDebug.querySelector('#djDebugToolbar li.djdt-active')) {
@@ -265,6 +269,7 @@
         },
         show_toolbar: function() {
             document.addEventListener('keydown', onKeyDown);
+            var djDebug = document.getElementBy('djDebug');
             $$.hide(djDebug.querySelector('#djDebugToolbarHandle'));
             $$.show(djDebug.querySelector('#djDebugToolbar'));
             djdt.cookie.set('djdt', 'show', {
