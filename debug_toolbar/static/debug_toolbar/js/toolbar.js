@@ -25,12 +25,12 @@
             const style = getComputedStyle(element);
             return style.display !== 'none';
         },
-        executeScripts: function(root) {
-            root.querySelectorAll('script').forEach(function(e) {
-                const clone = document.createElement('script');
-                clone.src = e.src;
-                clone.async = true;
-                root.appendChild(clone);
+        executeScripts: function(scripts) {
+            scripts.forEach(function(script) {
+                const el = document.createElement('script');
+                el.src = script;
+                el.async = true;
+                document.head.appendChild(el);
             });
         },
     };
@@ -45,7 +45,7 @@
         init = Object.assign({credentials: 'same-origin'}, init);
         return fetch(url, init).then(function(response) {
             if (response.ok) {
-                return response.text();
+                return response.json();
             } else {
                 const win = document.querySelector('#djDebugWindow');
                 win.innerHTML = '<div class="djDebugPanelTitle"><a class="djDebugClose" href="">»</a><h3>'+response.status+': '+response.statusText+'</h3></div>';
@@ -82,10 +82,10 @@
                         url_params.append('store_id', store_id);
                         url_params.append('panel_id', this.className);
                         url += '?' + url_params.toString();
-                        ajax(url).then(function(body) {
+                        ajax(url).then(function(data) {
                             inner.previousElementSibling.remove();  // Remove AJAX loader
-                            inner.innerHTML = body;
-                            $$.executeScripts(inner);
+                            inner.innerHTML = data.content;
+                            $$.executeScripts(data.scripts);
                         });
                     }
                 }
@@ -121,10 +121,9 @@
                     ajax_data.url = this.getAttribute('href');
                 }
 
-                ajax(ajax_data.url, ajax_data).then(function(body) {
+                ajax(ajax_data.url, ajax_data).then(function(data) {
                     const win = djDebug.querySelector('#djDebugWindow');
-                    win.innerHTML = body;
-                    $$.executeScripts(win);
+                    win.innerHTML = data.content;
                     $$.show(win);
                 });
             });

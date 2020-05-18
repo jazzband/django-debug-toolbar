@@ -8,7 +8,18 @@ UNRELEASED
 * Updated the italian translation.
 * Added support for Django 3.1a1.
 * Pruned unused CSS and removed hacks for ancient browsers.
+* Added the new :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>`
+  property. This property should return a list of JavaScript resources to be
+  loaded in the browser when displaying the panel. Right now, this is used by a
+  single panel, the Timer panel. Third party panels can use this property to
+  add scripts rather then embedding them in the content HTML.
 
+**Backwards incompatible changes**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Loading panel content no longer executes the scripts elements embedded in the
+  HTML. Third party panels that require JavaScript resources should now use the
+  :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>` property.
 
 2.2 (2020-01-31)
 ----------------

@@ -1,5 +1,5 @@
-from django.http import HttpResponseBadRequest
-from django.template.response import SimpleTemplateResponse
+from django.http import HttpResponseBadRequest, JsonResponse
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
 from debug_toolbar.decorators import require_show_toolbar
@@ -27,8 +27,8 @@ def sql_select(request):
             "headers": headers,
             "alias": form.cleaned_data["alias"],
         }
-        # Using SimpleTemplateResponse avoids running global context processors.
-        return SimpleTemplateResponse("debug_toolbar/panels/sql_select.html", context)
+        content = render_to_string("debug_toolbar/panels/sql_select.html", context)
+        return JsonResponse({"content": content})
     return HttpResponseBadRequest("Form errors")
 
 
@@ -64,8 +64,8 @@ def sql_explain(request):
             "headers": headers,
             "alias": form.cleaned_data["alias"],
         }
-        # Using SimpleTemplateResponse avoids running global context processors.
-        return SimpleTemplateResponse("debug_toolbar/panels/sql_explain.html", context)
+        content = render_to_string("debug_toolbar/panels/sql_explain.html", context)
+        return JsonResponse({"content": content})
     return HttpResponseBadRequest("Form errors")
 
 
@@ -115,6 +115,6 @@ def sql_profile(request):
             "headers": headers,
             "alias": form.cleaned_data["alias"],
         }
-        # Using SimpleTemplateResponse avoids running global context processors.
-        return SimpleTemplateResponse("debug_toolbar/panels/sql_profile.html", context)
+        content = render_to_string("debug_toolbar/panels/sql_profile.html", context)
+        return JsonResponse({"content": content})
     return HttpResponseBadRequest("Form errors")

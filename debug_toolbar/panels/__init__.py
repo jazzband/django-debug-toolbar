@@ -94,6 +94,13 @@ class Panel:
         if self.has_content:
             return render_to_string(self.template, self.get_stats())
 
+    @property
+    def scripts(self):
+        """
+        Scripts used by the HTML content of the panel when it's displayed.
+        """
+        return []
+
     # URLs for panel-specific views
 
     @classmethod

@@ -1,6 +1,7 @@
 import time
 
 from django.template.loader import render_to_string
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -50,6 +51,12 @@ class TimerPanel(Panel):
             ),
         )
         return render_to_string(self.template, {"rows": rows})
+
+    @property
+    def scripts(self):
+        scripts = super().scripts
+        scripts.append(static("debug_toolbar/js/toolbar.timer.js"))
+        return scripts
 
     def process_request(self, request):
         self._start_time = time.time()
