@@ -15,11 +15,11 @@ flake8:
 example:
 	python example/manage.py runserver
 
-jshint: node_modules/jshint/bin/jshint
-	./node_modules/jshint/bin/jshint debug_toolbar/static/debug_toolbar/js/*.js
+eslint: package-lock.json
+	npx eslint --ignore-path .gitignore .
 
-node_modules/jshint/bin/jshint:
-	npm install jshint --prefix .
+package-lock.json: package.json
+	npm install
 
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \

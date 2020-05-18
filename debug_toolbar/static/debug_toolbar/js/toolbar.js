@@ -152,8 +152,10 @@
                         e.classList.add('djUnselected');
                         self.textContent = self.dataset.toggleOpen;
                     }
-                    var switch_ = e.querySelector('.djToggleSwitch')
-                    if (switch_) switch_.textContent = self.textContent;
+                    var switch_ = e.querySelector('.djToggleSwitch');
+                    if (switch_) {
+                        switch_.textContent = self.textContent;
+                    }
                 });
             });
 
@@ -267,7 +269,9 @@
         },
         cookie: {
             get: function(key){
-                if (document.cookie.indexOf(key) === -1) return null;
+                if (document.cookie.indexOf(key) === -1) {
+                    return null;
+                }
 
                 var cookieArray = document.cookie.split('; '),
                     cookies = {};
