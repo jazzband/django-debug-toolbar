@@ -32,8 +32,7 @@ class SQLSelectForm(forms.Form):
     hash = forms.CharField()
 
     def __init__(self, *args, **kwargs):
-        initial = kwargs.get("initial", None)
-
+        initial = kwargs.get("initial")
         if initial is not None:
             initial["hash"] = self.make_hash(initial)
 
