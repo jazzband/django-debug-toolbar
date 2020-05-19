@@ -1,8 +1,8 @@
 from django.core import signing
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.template import Origin, TemplateDoesNotExist
 from django.template.engine import Engine
-from django.template.response import SimpleTemplateResponse
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from debug_toolbar.decorators import require_show_toolbar
@@ -57,8 +57,8 @@ def template_source(request):
     except ImportError:
         pass
 
-    # Using SimpleTemplateResponse avoids running global context processors.
-    return SimpleTemplateResponse(
+    content = render_to_string(
         "debug_toolbar/panels/template_source.html",
         {"source": source, "template_name": template_name},
     )
+    return JsonResponse({"content": content})

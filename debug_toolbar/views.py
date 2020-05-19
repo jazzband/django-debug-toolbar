@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 
@@ -16,7 +16,9 @@ def render_panel(request):
             "Please reload the page and retry."
         )
         content = "<p>%s</p>" % escape(content)
+        scripts = []
     else:
         panel = toolbar.get_panel_by_id(request.GET["panel_id"])
         content = panel.content
-    return HttpResponse(content)
+        scripts = panel.scripts
+    return JsonResponse({"content": content, "scripts": scripts})
