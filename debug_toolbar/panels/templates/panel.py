@@ -176,7 +176,7 @@ class TemplatesPanel(Panel):
         for template_data in self.templates:
             info = {}
             # Clean up some info about templates
-            template = template_data.get("template", None)
+            template = template_data["template"]
             if hasattr(template, "origin") and template.origin and template.origin.name:
                 template.origin_name = template.origin.name
                 template.origin_hash = signing.dumps(template.origin.name)

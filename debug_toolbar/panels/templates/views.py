@@ -14,7 +14,7 @@ def template_source(request):
     Return the source of a template, syntax-highlighted by Pygments if
     it's available.
     """
-    template_origin_name = request.GET.get("template_origin", None)
+    template_origin_name = request.GET.get("template_origin")
     if template_origin_name is None:
         return HttpResponseBadRequest('"template_origin" key is required')
     try:

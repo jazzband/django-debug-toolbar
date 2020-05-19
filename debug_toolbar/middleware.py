@@ -19,10 +19,7 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    return (
-        settings.DEBUG
-        and request.META.get("REMOTE_ADDR", None) in settings.INTERNAL_IPS
-    )
+    return settings.DEBUG and request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS
 
 
 @lru_cache()
@@ -99,7 +96,7 @@ class DebugToolbarMiddleware:
 
             bits[-2] += toolbar.render_toolbar()
             response.content = insert_before.join(bits)
-            if response.get("Content-Length", None):
+            if "Content-Length" in response:
                 response["Content-Length"] = len(response.content)
         return response
 
