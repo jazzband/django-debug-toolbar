@@ -9,6 +9,11 @@ UNRELEASED
 * Added support for Django 3.1a1.
 * Pruned unused CSS and removed hacks for ancient browsers.
 
+**Backwards incompatible changes**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Removed support for end of life Django 1.11. The minimum supported Django is
+  now 2.2.
 
 2.2 (2020-01-31)
 ----------------
