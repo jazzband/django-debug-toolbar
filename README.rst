@@ -32,7 +32,7 @@ In addition to the built-in panels, a number of third-party panels are
 contributed by the community.
 
 The current stable version of the Debug Toolbar is 2.2. It works on
-Django ≥ 1.11.
+Django ≥ 2.2.
 
 Documentation, including installation and configuration instructions, is
 available at https://django-debug-toolbar.readthedocs.io/.

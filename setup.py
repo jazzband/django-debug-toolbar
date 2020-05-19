@@ -24,14 +24,13 @@ setup(
     license_files=["LICENSE"],
     packages=find_packages(exclude=("tests.*", "tests", "example")),
     python_requires=">=3.5",
-    install_requires=["Django>=1.11", "sqlparse>=0.2.0"],
+    install_requires=["Django>=2.2", "sqlparse>=0.2.0"],
     include_package_data=True,
     zip_safe=False,  # because we're including static files
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
-        "Framework :: Django :: 1.11",
         "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.0",
         "Intended Audience :: Developers",

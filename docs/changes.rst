@@ -20,6 +20,9 @@ UNRELEASED
 * Loading panel content no longer executes the scripts elements embedded in the
   HTML. Third party panels that require JavaScript resources should now use the
   :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>` property.
+* Removed support for end of life Django 1.11. The minimum supported Django is
+  now 2.2.
+
 
 2.2 (2020-01-31)
 ----------------
