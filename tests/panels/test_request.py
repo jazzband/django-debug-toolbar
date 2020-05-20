@@ -8,8 +8,7 @@ class RequestPanelTestCase(BaseTestCase):
         self.request.session = {"où": "où"}
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
-        content = self.panel.content
-        self.assertIn("où", content)
+        self.assertIn("où", self.panel.content)
 
     def test_object_with_non_ascii_repr_in_request_params(self):
         self.request.path = "/non_ascii_request/"
@@ -28,5 +27,6 @@ class RequestPanelTestCase(BaseTestCase):
         self.assertNotIn("nôt åscíì", self.panel.content)
         self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
-        self.assertIn("nôt åscíì", self.panel.content)
-        self.assertValidHTML(self.panel.content)
+        content = self.panel.content
+        self.assertIn("nôt åscíì", content)
+        self.assertValidHTML(content)

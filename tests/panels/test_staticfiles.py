@@ -9,13 +9,12 @@ class StaticFilesPanelTestCase(BaseTestCase):
     def test_default_case(self):
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
+        content = self.panel.content
         self.assertIn(
-            "django.contrib.staticfiles.finders." "AppDirectoriesFinder",
-            self.panel.content,
+            "django.contrib.staticfiles.finders." "AppDirectoriesFinder", content
         )
         self.assertIn(
-            "django.contrib.staticfiles.finders." "FileSystemFinder (2 files)",
-            self.panel.content,
+            "django.contrib.staticfiles.finders." "FileSystemFinder (2 files)", content
         )
         self.assertEqual(self.panel.num_used, 0)
         self.assertNotEqual(self.panel.num_found, 0)
@@ -39,8 +38,8 @@ class StaticFilesPanelTestCase(BaseTestCase):
         )
         self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
+        content = self.panel.content
         self.assertIn(
-            "django.contrib.staticfiles.finders." "AppDirectoriesFinder",
-            self.panel.content,
+            "django.contrib.staticfiles.finders." "AppDirectoriesFinder", content
         )
-        self.assertValidHTML(self.panel.content)
+        self.assertValidHTML(content)
