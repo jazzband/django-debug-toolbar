@@ -32,19 +32,17 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.assertNotIn("regular_view", self.panel.content)
         self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
-        self.assertIn("regular_view", self.panel.content)
-        self.assertValidHTML(self.panel.content)
+        content = self.panel.content
+        self.assertIn("regular_view", content)
+        self.assertValidHTML(content)
 
     def test_listcomp_escaped(self):
         self._get_response = lambda request: listcomp_view(request)
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
-        self.assertNotIn(
-            '<span class="djdt-func"><listcomp></span>', self.panel.content
-        )
-        self.assertIn(
-            '<span class="djdt-func">&lt;listcomp&gt;</span>', self.panel.content
-        )
+        content = self.panel.content
+        self.assertNotIn('<span class="djdt-func"><listcomp></span>', content)
+        self.assertIn('<span class="djdt-func">&lt;listcomp&gt;</span>', content)
 
     def test_generate_stats_no_profiler(self):
         """

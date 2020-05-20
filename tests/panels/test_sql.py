@@ -242,8 +242,9 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertNotIn("café", self.panel.content)
         self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
-        self.assertIn("café", self.panel.content)
-        self.assertValidHTML(self.panel.content)
+        content = self.panel.content
+        self.assertIn("café", content)
+        self.assertValidHTML(content)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"ENABLE_STACKTRACES_LOCALS": True})
     def test_insert_locals(self):
@@ -256,9 +257,10 @@ class SQLPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, response)
         self.assertIn("local_var", self.panel.content)
         # Verify the escape logic works
-        self.assertNotIn("<script>alert", self.panel.content)
-        self.assertIn("&lt;script&gt;alert", self.panel.content)
-        self.assertIn("djdt-locals", self.panel.content)
+        content = self.panel.content
+        self.assertNotIn("<script>alert", content)
+        self.assertIn("&lt;script&gt;alert", content)
+        self.assertIn("djdt-locals", content)
 
     def test_not_insert_locals(self):
         """

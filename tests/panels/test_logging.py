@@ -63,8 +63,9 @@ class LoggingPanelTestCase(BaseTestCase):
         self.assertNotIn("café", self.panel.content)
         self.panel.generate_stats(self.request, response)
         # ensure the panel renders correctly.
-        self.assertIn("café", self.panel.content)
-        self.assertValidHTML(self.panel.content)
+        content = self.panel.content
+        self.assertIn("café", content)
+        self.assertValidHTML(content)
 
     def test_failing_formatting(self):
         class BadClass:
