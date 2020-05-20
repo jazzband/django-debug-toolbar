@@ -296,7 +296,6 @@
     window.djdt = {
         show_toolbar: djdt.show_toolbar,
         hide_toolbar: djdt.hide_toolbar,
-        init: djdt.init,
         close: djdt.hide_one_level,
         cookie: djdt.cookie,
     };
