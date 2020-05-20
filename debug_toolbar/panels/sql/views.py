@@ -15,11 +15,11 @@ def sql_select(request):
     if form.is_valid():
         sql = form.cleaned_data["raw_sql"]
         params = form.cleaned_data["params"]
-        cursor = form.cursor
-        cursor.execute(sql, params)
-        headers = [d[0] for d in cursor.description]
-        result = cursor.fetchall()
-        cursor.close()
+        with form.cursor as cursor:
+            cursor.execute(sql, params)
+            headers = [d[0] for d in cursor.description]
+            result = cursor.fetchall()
+
         context = {
             "result": result,
             "sql": form.reformat_sql(),
@@ -42,21 +42,19 @@ def sql_explain(request):
         sql = form.cleaned_data["raw_sql"]
         params = form.cleaned_data["params"]
         vendor = form.connection.vendor
-        cursor = form.cursor
+        with form.cursor as cursor:
+            if vendor == "sqlite":
+                # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
+                # EXPLAIN QUERY PLAN dumps a more human-readable summary
+                # See https://www.sqlite.org/lang_explain.html for details
+                cursor.execute("EXPLAIN QUERY PLAN {}".format(sql), params)
+            elif vendor == "postgresql":
+                cursor.execute("EXPLAIN ANALYZE {}".format(sql), params)
+            else:
+                cursor.execute("EXPLAIN {}".format(sql), params)
+            headers = [d[0] for d in cursor.description]
+            result = cursor.fetchall()
 
-        if vendor == "sqlite":
-            # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
-            # EXPLAIN QUERY PLAN dumps a more human-readable summary
-            # See https://www.sqlite.org/lang_explain.html for details
-            cursor.execute("EXPLAIN QUERY PLAN {}".format(sql), params)
-        elif vendor == "postgresql":
-            cursor.execute("EXPLAIN ANALYZE {}".format(sql), params)
-        else:
-            cursor.execute("EXPLAIN {}".format(sql), params)
-
-        headers = [d[0] for d in cursor.description]
-        result = cursor.fetchall()
-        cursor.close()
         context = {
             "result": result,
             "sql": form.reformat_sql(),
@@ -78,35 +76,36 @@ def sql_profile(request):
     if form.is_valid():
         sql = form.cleaned_data["raw_sql"]
         params = form.cleaned_data["params"]
-        cursor = form.cursor
         result = None
         headers = None
         result_error = None
-        try:
-            cursor.execute("SET PROFILING=1")  # Enable profiling
-            cursor.execute(sql, params)  # Execute SELECT
-            cursor.execute("SET PROFILING=0")  # Disable profiling
-            # The Query ID should always be 1 here but I'll subselect to get
-            # the last one just in case...
-            cursor.execute(
-                """
-  SELECT  *
-    FROM  information_schema.profiling
-   WHERE  query_id = (
-          SELECT  query_id
-            FROM  information_schema.profiling
-        ORDER BY  query_id DESC
-           LIMIT  1
-        )
-"""
-            )
-            headers = [d[0] for d in cursor.description]
-            result = cursor.fetchall()
-        except Exception:
-            result_error = (
-                "Profiling is either not available or not supported by your database."
-            )
-        cursor.close()
+        with form.cursor as cursor:
+            try:
+                cursor.execute("SET PROFILING=1")  # Enable profiling
+                cursor.execute(sql, params)  # Execute SELECT
+                cursor.execute("SET PROFILING=0")  # Disable profiling
+                # The Query ID should always be 1 here but I'll subselect to get
+                # the last one just in case...
+                cursor.execute(
+                    """
+                    SELECT *
+                    FROM information_schema.profiling
+                    WHERE query_id = (
+                        SELECT query_id
+                        FROM information_schema.profiling
+                        ORDER BY query_id DESC
+                        LIMIT 1
+                    )
+                    """
+                )
+                headers = [d[0] for d in cursor.description]
+                result = cursor.fetchall()
+            except Exception:
+                result_error = (
+                    "Profiling is either not available or not supported by your "
+                    "database."
+                )
+
         context = {
             "result": result,
             "result_error": result_error,
