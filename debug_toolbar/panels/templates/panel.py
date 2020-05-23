@@ -4,12 +4,12 @@ from os.path import normpath
 from pprint import pformat, saferepr
 
 from django import http
-from django.conf.urls import url
 from django.core import signing
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -161,9 +161,7 @@ class TemplatesPanel(Panel):
 
     @classmethod
     def get_urls(cls):
-        return [
-            url(r"^template_source/$", views.template_source, name="template_source")
-        ]
+        return [path("template_source/", views.template_source, name="template_source")]
 
     def enable_instrumentation(self):
         template_rendered.connect(self._store_template_info)

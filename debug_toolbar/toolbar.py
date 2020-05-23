@@ -6,10 +6,10 @@ import uuid
 from collections import OrderedDict
 
 from django.apps import apps
-from django.conf.urls import url
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
+from django.urls import path
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -128,7 +128,7 @@ class DebugToolbar:
             # Load URLs in a temporary variable for thread safety.
             # Global URLs
             urlpatterns = [
-                url(r"^render_panel/$", views.render_panel, name="render_panel")
+                path("render_panel/", views.render_panel, name="render_panel")
             ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():
