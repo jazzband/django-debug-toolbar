@@ -3,8 +3,8 @@ from collections import defaultdict
 from copy import copy
 from pprint import saferepr
 
-from django.conf.urls import url
 from django.db import connections
+from django.urls import path
 from django.utils.translation import gettext_lazy as _, ngettext_lazy as __
 
 from debug_toolbar.panels import Panel
@@ -128,9 +128,9 @@ class SQLPanel(Panel):
     @classmethod
     def get_urls(cls):
         return [
-            url(r"^sql_select/$", views.sql_select, name="sql_select"),
-            url(r"^sql_explain/$", views.sql_explain, name="sql_explain"),
-            url(r"^sql_profile/$", views.sql_profile, name="sql_profile"),
+            path("sql_select/", views.sql_select, name="sql_select"),
+            path("sql_explain/", views.sql_explain, name="sql_explain"),
+            path("sql_profile/", views.sql_profile, name="sql_profile"),
         ]
 
     def enable_instrumentation(self):
