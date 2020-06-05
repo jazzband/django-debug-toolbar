@@ -1,18 +1,25 @@
 Change log
 ==========
 
-UNRELEASED
-----------
+3.0a1 (2020-06-05)
+------------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
 * Updated the italian translation.
-* Added support for Django 3.1a1.
+* Added support for Django 3.1a1. ``fetch()`` and ``jQuery.ajax`` requests are
+  now detected by the absence of a ``Accept: text/html`` header instead of the
+  jQuery-specific ``X-Requested-With`` header on Django 3.1 or better.
 * Pruned unused CSS and removed hacks for ancient browsers.
 * Added the new :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>`
   property. This property should return a list of JavaScript resources to be
   loaded in the browser when displaying the panel. Right now, this is used by a
   single panel, the Timer panel. Third party panels can use this property to
   add scripts rather then embedding them in the content HTML.
+* Switched from JSHint to ESLint. Added an ESLint job to the Travis CI matrix.
+* Debug toolbar state which is only needed in the JavaScript code now uses
+  localStorage.
+* Updated the code to avoid a few deprecation warnings and resource warnings.
+* Started loading JavaScript as ES6 modules.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
