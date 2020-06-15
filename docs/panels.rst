@@ -236,6 +236,15 @@ Path: ``ddt_request_history.panels.request_history.RequestHistoryPanel``
 
 Switch between requests to view their stats. Also adds support for viewing stats for ajax requests.
 
+Requests
+~~~~~~~~
+
+URL: https://github.com/marceltschoppch/django-requests-debug-toolbar
+
+Path: ``requests_panel.panel.RequestsDebugPanel``
+
+Lists HTTP requests made with the popular `requests <https://requests.readthedocs.io/>`_ library.
+
 Sites
 ~~~~~
 
