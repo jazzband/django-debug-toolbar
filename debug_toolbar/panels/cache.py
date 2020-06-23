@@ -84,6 +84,10 @@ class CacheStatTracker(BaseCache):
         return self.cache.set(*args, **kwargs)
 
     @send_signal
+    def touch(self, *args, **kwargs):
+        return self.cache.touch(*args, **kwargs)
+
+    @send_signal
     def delete(self, *args, **kwargs):
         return self.cache.delete(*args, **kwargs)
 
@@ -153,6 +157,7 @@ class CachePanel(Panel):
                 ("add", 0),
                 ("get", 0),
                 ("set", 0),
+                ("touch", 0),
                 ("delete", 0),
                 ("clear", 0),
                 ("get_many", 0),

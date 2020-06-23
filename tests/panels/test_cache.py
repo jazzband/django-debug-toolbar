@@ -11,9 +11,12 @@ class CachePanelTestCase(BaseTestCase):
         cache.cache.set("foo", "bar")
         cache.cache.get("foo")
         cache.cache.delete("foo")
+        self.assertFalse(cache.cache.touch("foo"))
+        cache.cache.set("foo", "bar")
+        self.assertTrue(cache.cache.touch("foo"))
         # Verify that the cache has a valid clear method.
         cache.cache.clear()
-        self.assertEqual(len(self.panel.calls), 4)
+        self.assertEqual(len(self.panel.calls), 7)
 
     def test_recording_caches(self):
         self.assertEqual(len(self.panel.calls), 0)
