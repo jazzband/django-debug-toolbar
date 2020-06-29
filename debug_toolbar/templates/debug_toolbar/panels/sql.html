@@ -34,7 +34,7 @@
     </thead>
     <tbody>
       {% for query in queries %}
-        <tr class="{% if query.is_slow %} djDebugRowWarning{% endif %}{% if query.starts_trans %} djDebugStartTransaction{% endif %}{% if query.ends_trans %} djDebugEndTransaction{% endif %}{% if query.in_trans %} djDebugInTransaction{% endif %}" id="sqlMain_{{ forloop.counter }}">
+        <tr class="{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
           <td class="djdt-color"><span style="background-color:rgb({{ query.rgb_color|join:', '}})">&#160;</span></td>
           <td class="djdt-toggle">
             <a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="">+</a>
@@ -57,7 +57,15 @@
             {% endif %}
           </td>
           <td class="djdt-timeline">
-            <div class="djDebugTimeline"><div class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}" style="left:{{ query.start_offset|unlocalize }}%"><strong style="width:{{ query.width_ratio_relative|unlocalize }}%;background-color:{{ query.trace_color }}">{{ query.width_ratio }}%</strong></div></div>
+            <svg class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}{% if query.in_trans %} djDebugLineChartInTransaction{% endif %}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none" aria-label="{{ query.width_ratio }}%">
+              <rect x="{{ query.start_offset|unlocalize }}" y="0" height="5" width="{{ query.width_ratio|unlocalize }}" fill="{{ query.trace_color }}" />
+              {% if query.starts_trans %}
+                <line x1="{{ query.start_offset|unlocalize }}" y1="0" x2="{{ query.start_offset|unlocalize }}" y2="5" />
+              {% endif %}
+              {% if query.ends_trans %}
+                <line x1="{{ query.end_offset|unlocalize }}" y1="0" x2="{{ query.end_offset|unlocalize }}" y2="5" />
+              {% endif %}
+            </svg>
           </td>
           <td class="djdt-time">
             {{ query.duration|floatformat:"2" }}

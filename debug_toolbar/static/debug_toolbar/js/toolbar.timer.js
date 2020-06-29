@@ -15,17 +15,17 @@ function addRow(stat, endStat) {
     if (endStat) {
         // Render a start through end bar
         row.innerHTML = '<td>' + stat.replace('Start', '') + '</td>' +
-            '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
+            '<td class="djdt-timeline"><svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
             '<td>' + (performance.timing[stat] - timingOffset) + ' (+' + (performance.timing[endStat] - performance.timing[stat]) + ')</td>';
-        row.querySelector('strong').style.width = getCSSWidth(stat, endStat);
+        row.querySelector('rect').setAttribute('width', getCSSWidth(stat, endStat));
     } else {
         // Render a point in time
         row.innerHTML = '<td>' + stat + '</td>' +
-            '<td class="djdt-timeline"><div class="djDebugTimeline"><div class="djDebugLineChart"><strong>&#160;</strong></div></div></td>' +
+            '<td class="djdt-timeline"><svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
             '<td>' + (performance.timing[stat] - timingOffset) + '</td>';
-        row.querySelector('strong').style.width = '2px';
+        row.querySelector('rect').setAttribute('width', 2);
     }
-    row.querySelector('.djDebugLineChart').style.left = getLeft(stat) + '%';
+    row.querySelector('rect').setAttribute('x', getLeft(stat));
     document.querySelector('#djDebugBrowserTimingTableBody').appendChild(row);
 }
 
