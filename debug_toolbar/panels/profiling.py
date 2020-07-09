@@ -9,33 +9,6 @@ from django.utils.translation import gettext_lazy as _
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
 
-# Occasionally the disable method on the profiler is listed before
-# the actual view functions. This function call should be ignored as
-# it leads to an error within the tests.
-INVALID_PROFILER_FUNC = "_lsprof.Profiler"
-
-
-def contains_profiler(func_tuple):
-    """Helper function that checks to see if the tuple contains
-    the INVALID_PROFILE_FUNC in any string value of the tuple."""
-    has_profiler = False
-    for value in func_tuple:
-        if isinstance(value, str):
-            has_profiler |= INVALID_PROFILER_FUNC in value
-    return has_profiler
-
-
-class DjangoDebugToolbarStats(Stats):
-    __root = None
-
-    def get_root_func(self):
-        if self.__root is None:
-            for func, (cc, nc, tt, ct, callers) in self.stats.items():
-                if len(callers) == 0 and not contains_profiler(func):
-                    self.__root = func
-                    break
-        return self.__root
-
 
 class FunctionCall:
     def __init__(
@@ -169,12 +142,12 @@ class ProfilingPanel(Panel):
             return None
         # Could be delayed until the panel content is requested (perf. optim.)
         self.profiler.create_stats()
-        self.stats = DjangoDebugToolbarStats(self.profiler)
+        self.stats = Stats(self.profiler)
         self.stats.calc_callees()
 
-        root_func = self.stats.get_root_func()
-        # Ensure root function exists before continuing with function call analysis
-        if root_func:
+        root_func = cProfile.label(super().process_request.__code__)
+
+        if root_func in self.stats.stats:
             root = FunctionCall(self.stats, root_func, depth=0)
             func_list = []
             self.add_node(
