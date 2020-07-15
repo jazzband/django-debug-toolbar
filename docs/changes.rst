@@ -1,7 +1,7 @@
 Change log
 ==========
 
-3.0a1 (2020-06-05)
+3.0a2 (2020-07-15)
 ------------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
@@ -20,6 +20,9 @@ Change log
   localStorage.
 * Updated the code to avoid a few deprecation warnings and resource warnings.
 * Started loading JavaScript as ES6 modules.
+* Added support for ``cache.touch()`` when using django-debug-toolbar.
+* Eliminated more inline CSS.
+* Updated ``tox.ini`` and ``Makefile`` to use isort>=5.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
