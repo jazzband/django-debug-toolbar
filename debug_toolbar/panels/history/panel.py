@@ -1,8 +1,10 @@
 import json
 import logging
 import re
+import sys
 from collections import OrderedDict
 
+from django.conf import settings
 from django.conf.urls import url
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -63,7 +65,12 @@ class HistoryPanel(Panel):
         # GraphQL tends to not be populated in POST. If the request seems
         # empty, check if it's a JSON request.
         if not data and request.META.get("CONTENT_TYPE") == "application/json":
-            data = json.loads(request.body)
+            # Python <= 3.5's json.loads expects a string.
+            data = json.loads(
+                request.body
+                if sys.version_info[:2] > (3, 5)
+                else request.body.decode(request.encoding or settings.DEFAULT_CHARSET)
+            )
         cleansed = _clean_data(data)
         self.record_stats(
             {
