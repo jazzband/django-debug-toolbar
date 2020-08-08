@@ -26,7 +26,8 @@ class HistoryStoreForm(forms.Form):
 
         super().__init__(*args, **kwargs)
 
-    def make_hash(self, data):
+    @staticmethod
+    def make_hash(data):
         m = hmac.new(key=force_bytes(settings.SECRET_KEY), digestmod=hashlib.sha1)
         m.update(force_bytes(data["store_id"]))
         return m.hexdigest()

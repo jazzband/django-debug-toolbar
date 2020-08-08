@@ -1,47 +1,21 @@
 {% load i18n %}{% load static %}
-<div id="HistoryPanelContent">
-    <div style="position: absolute;top: 0px;left: 10px;right: 10px;bottom: 20px;overflow-x: scroll;">
-        <table style="max-height:100%;">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>{% trans "Time" %}</th>
-                    <th>{% trans "Method" %}</th>
-                    <th>{% trans "Path" %}</th>
-                    <th>{% trans "Post Variables" %}</th>
-                    <th class="djdt-actions">{% trans "Action" %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for id, store_context in stores.items %}
-                    <tr class="{% cycle 'djDebugOdd' 'djDebugEven' %} {% if id == current_store_id %}djdt-highlighted{% endif %}">
-                        <td>{{forloop.counter}}</td>
-                        <td>
-                            {{ store_context.toolbar.stats.HistoryPanel.time|escape }}
-                        </td>
-                        <td>
-                            <p>{{ store_context.toolbar.stats.HistoryPanel.request_method|escape }}</p>
-                        </td>
-                        <td>
-                            <p>{{ store_context.toolbar.stats.HistoryPanel.request_url|escape }}</p>
-                        </td>
-                        <td style="white-space: nowrap;">
-                            <a class="djToggleSwitch djdtTogglePost" href="#">+</a>
-                            {% if truncate_length %}
-                                <span style="white-space: nowrap;">{{ store_context.toolbar.stats.HistoryPanel.post|truncatechars:truncate_length|escape }}</span>
-                            {% else %}
-                                <span style="white-space: nowrap;">{{ store_context.toolbar.stats.HistoryPanel.post|escape }}</span>
-                            {% endif %}
-                        </td>
-                        <td class="djdt-actions">
-                            <form method="post">
-                                {{ store_context.form }}
-                                <button formaction="{% url 'djdt:history_sidebar' %}" data-store-id="{{ id }}" class="switchHistory">Switch</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+<form method="post">
+    {{ refresh_form }}
+    <button formaction="{% url 'djdt:history_refresh' %}" class="refreshHistory">Refresh</button>
+</form>
+<table style="max-height:100%;">
+    <thead>
+        <tr>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Method" %}</th>
+            <th>{% trans "Path" %}</th>
+            <th>{% trans "Request Variables" %}</th>
+            <th class="djdt-actions">{% trans "Action" %}</th>
+        </tr>
+    </thead>
+    <tbody id="djdtHistoryRequests">
+        {% for id, store_context in stores.items %}
+            {% include "debug_toolbar/panels/history_tr.html" %}
+        {% endfor %}
+    </tbody>
+</table>

@@ -31,3 +31,32 @@ def history_sidebar(request):
             }
         return JsonResponse(context)
     return HttpResponseBadRequest("Form errors")
+
+
+@csrf_exempt
+@require_show_toolbar
+def history_refresh(request):
+    """Returns the refreshed list of table rows for the History Panel."""
+    form = HistoryStoreForm(request.POST or None)
+
+    if form.is_valid():
+        requests = []
+        for id, toolbar in reversed(DebugToolbar._store.items()):
+            requests.append(
+                {
+                    "id": id,
+                    "content": render_to_string(
+                        "debug_toolbar/panels/history_tr.html",
+                        {
+                            "id": id,
+                            "store_context": {
+                                "toolbar": toolbar,
+                                "form": HistoryStoreForm(initial={"store_id": id}),
+                            },
+                        },
+                    ),
+                }
+            )
+
+        return JsonResponse({"requests": requests})
+    return HttpResponseBadRequest("Form errors")

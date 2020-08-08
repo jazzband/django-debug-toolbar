@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from collections import OrderedDict
 
 from django.conf.urls import url
@@ -7,14 +8,28 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.history import views
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 
 logger = logging.getLogger(__name__)
 
+SENSITIVE_CREDENTIALS = re.compile("api|token|key|secret|password|signature", re.I)
 CLEANSED_SUBSTITUTE = "********************"
+
+
+def _clean_data(data):
+    """
+    Clean a dictionary of potentially sensitive info before
+    sending to less secure functions.
+    Not comprehensive
+
+    Taken from django.contrib.auth.__init__.credentials
+    """
+    for key in data:
+        if SENSITIVE_CREDENTIALS.search(key):
+            data[key] = CLEANSED_SUBSTITUTE
+    return data
 
 
 class HistoryPanel(Panel):
@@ -33,6 +48,7 @@ class HistoryPanel(Panel):
     def get_urls(cls):
         return [
             url(r"^history_sidebar/$", views.history_sidebar, name="history_sidebar"),
+            url(r"^history_refresh/$", views.history_refresh, name="history_refresh"),
         ]
 
     @property
@@ -40,14 +56,20 @@ class HistoryPanel(Panel):
         return self.get_stats().get("request_url", "")
 
     def generate_stats(self, request, response):
-        cleansed = request.POST.copy()
-        for k in cleansed:
-            cleansed[k] = CLEANSED_SUBSTITUTE
+        if request.method == "GET":
+            data = request.GET.copy()
+        else:
+            data = request.POST.copy()
+        # GraphQL tends to not be populated in POST. If the request seems
+        # empty, check if it's a JSON request.
+        if not data and request.META.get("CONTENT_TYPE") == "application/json":
+            data = json.loads(request.body)
+        cleansed = _clean_data(data)
         self.record_stats(
             {
                 "request_url": request.get_full_path(),
                 "request_method": request.method,
-                "post": json.dumps(cleansed, sort_keys=True, indent=4),
+                "data": cleansed,
                 "time": timezone.now(),
             }
         )
@@ -70,8 +92,8 @@ class HistoryPanel(Panel):
             {
                 "current_store_id": self.toolbar.store_id,
                 "stores": stores,
-                "truncate_length": dt_settings.get_config()[
-                    "HISTORY_POST_TRUNCATE_LENGTH"
-                ],
+                "refresh_form": HistoryStoreForm(
+                    initial={"store_id": self.toolbar.store_id}
+                ),
             },
         )

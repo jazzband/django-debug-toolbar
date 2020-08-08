@@ -55,23 +55,12 @@ const ajax = function(url, init) {
     });
 };
 
-const ajaxJson = function(url, init) {
-    init = Object.assign({credentials: 'same-origin'}, init);
-    return fetch(url, init).then(function(response) {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject();
-        }
-    });
-};
-
 const djdt = {
     handleDragged: false,
     init: function() {
         const djDebug = document.querySelector('#djDebug');
         $$.show(djDebug);
-        $$.on(djDebug.querySelector('#djDebugPanelList li a'), 'click', 'li a', function(event) {
+        $$.on(djDebug.querySelector('#djDebugPanelList'), 'click', 'li a', function(event) {
             event.preventDefault();
             if (!this.className) {
                 return;
@@ -157,7 +146,7 @@ const djdt = {
             tbody.querySelector('.djdt-highlighted').classList.remove('djdt-highlighted');
             this.closest('tr').classList.add('djdt-highlighted');
 
-            ajaxJson(ajax_data.url, ajax_data).then(function(data) {
+            ajax(ajax_data.url, ajax_data).then(function(data) {
                 djDebug.setAttribute('data-store-id', newStoreId);
                 Object.keys(data).map(function (panelId) {
                     if (djDebug.querySelector('#'+panelId)) {
@@ -165,6 +154,31 @@ const djdt = {
                         djDebug.querySelector('.djdt-'+panelId).outerHTML = data[panelId].button;
                     }
                 });
+            });
+        });
+
+        // Used by the history panel
+        $$.on(djDebug, 'click', '.refreshHistory', function(event) {
+            event.preventDefault();
+            const ajax_data = {};
+            const form = this.closest('form');
+            const container = djDebug.querySelector('#djdtHistoryRequests');
+
+            ajax_data.url = this.getAttribute('formaction');
+
+            if (form) {
+                ajax_data.body = new FormData(form);
+                ajax_data.method = form.getAttribute('method') || 'POST';
+            }
+
+            ajax(ajax_data.url, ajax_data).then(function(data) {
+                if (data.requests.constructor === Array) {
+                    data.requests.map(function(request) {
+                        if (!container.querySelector('[data-store-id="'+request.id+'"]')) {
+                            container.innerHTML = request.content + container.innerHTML;
+                        }
+                    });
+                }
             });
         });
 

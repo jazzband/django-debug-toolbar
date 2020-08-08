@@ -44,7 +44,7 @@ class DebugToolbarMiddleware:
     def __call__(self, request):
         # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
-        if not show_toolbar(request):
+        if not show_toolbar(request) or request.path.startswith("/__debug__/"):
             return self.get_response(request)
 
         toolbar = DebugToolbar(request, self.get_response)
@@ -77,8 +77,12 @@ class DebugToolbarMiddleware:
                 getattr(response, "streaming", False),
                 "gzip" in content_encoding,
                 content_type not in _HTML_TYPES,
+                request.is_ajax(),
             )
         ):
+            # If a AJAX or JSON request, render the toolbar for the history.
+            if request.is_ajax() or content_type == "application/json":
+                toolbar.render_toolbar()
             return response
 
         # Insert the toolbar in the response.

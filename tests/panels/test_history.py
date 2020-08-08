@@ -3,7 +3,8 @@ from unittest.mock import patch
 from django.test import RequestFactory, override_settings
 from django.urls import resolve, reverse
 
-from debug_toolbar.panels.history.panel import CLEANSED_SUBSTITUTE
+from debug_toolbar.panels.history.forms import HistoryStoreForm
+from debug_toolbar.toolbar import DebugToolbar
 
 from ..base import BaseTestCase, IntegrationTestCase
 
@@ -20,10 +21,22 @@ class HistoryPanelTestCase(BaseTestCase):
             self.assertFalse(self.panel.enabled)
 
     def test_post_cleansing(self):
-        self.request = rf.post("/", data={"foo": "bar"})
+        self.request = rf.post("/", data={"foo": "bar", "token1": "value"})
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
-        self.assertIn(CLEANSED_SUBSTITUTE, self.panel.get_stats()["post"])
+        data = self.panel.get_stats()["data"]
+        self.assertEqual(data["foo"], "bar")
+        self.assertEqual(data["token1"], "********************")
+
+    def test_post_json_cleansing(self):
+        self.request = rf.post(
+            "/", data={"foo": "bar", "token1": "value"}, content_type="application/json"
+        )
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        data = self.panel.get_stats()["data"]
+        self.assertEqual(data["foo"], "bar")
+        self.assertEqual(data["token1"], "********************")
 
     def test_urls(self):
         self.assertEqual(
@@ -32,18 +45,30 @@ class HistoryPanelTestCase(BaseTestCase):
         self.assertEqual(
             resolve("/__debug__/history_sidebar/").url_name, "history_sidebar",
         )
-
-    @override_settings(DEBUG_TOOLBAR_CONFIG={"HISTORY_POST_TRUNCATE_LENGTH": 11})
-    def test_truncate_length_setting(self):
-        self.toolbar.store()
-        self.request = rf.post("/", data={"foo": "bar"})
-        response = self.panel.process_request(self.request)
-        self.panel.generate_stats(self.request, response)
-        self.assertIn("foo…", self.panel.content)
-        self.assertNotIn(CLEANSED_SUBSTITUTE, self.panel.content)
+        self.assertEqual(
+            reverse("djdt:history_refresh"), "/__debug__/history_refresh/",
+        )
+        self.assertEqual(
+            resolve("/__debug__/history_refresh/").url_name, "history_refresh",
+        )
 
 
 class HistoryViewsTestCase(IntegrationTestCase):
+    @override_settings(DEBUG=True)
+    def test_history_panel_integration_content(self):
+        """Verify the history panel's content renders properly.."""
+        self.assertEqual(len(DebugToolbar._store), 0)
+
+        data = {"key": "value", "foo": "bar"}
+        self.client.get("/json_view/", data, content_type="application/json")
+
+        # Check the history panel's stats to verify the toolbar rendered properly.
+        self.assertEqual(len(DebugToolbar._store), 1)
+        toolbar = list(DebugToolbar._store.values())[0]
+        content = toolbar.get_panel_by_id("HistoryPanel").content
+        self.assertIn("bar", content)
+        self.assertIn("********************", content)
+
     @override_settings(DEBUG=True)
     def test_history_sidebar_invalid(self):
         response = self.client.post(reverse("djdt:history_sidebar"))
@@ -68,3 +93,60 @@ class HistoryViewsTestCase(IntegrationTestCase):
         response = self.client.post(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {})
+
+    @override_settings(DEBUG=True)
+    def test_history_sidebar(self):
+        """Validate the history sidebar view."""
+        self.client.get("/json_view/")
+        store_id = list(DebugToolbar._store.keys())[0]
+        data = {
+            "store_id": store_id,
+            "hash": HistoryStoreForm.make_hash({"store_id": store_id}),
+        }
+        response = self.client.post(reverse("djdt:history_sidebar"), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            set(response.json().keys()),
+            {
+                "VersionsPanel",
+                "TimerPanel",
+                "SettingsPanel",
+                "HeadersPanel",
+                "RequestPanel",
+                "SQLPanel",
+                "StaticFilesPanel",
+                "TemplatesPanel",
+                "CachePanel",
+                "SignalsPanel",
+                "LoggingPanel",
+                "ProfilingPanel",
+            },
+        )
+
+    @override_settings(DEBUG=True)
+    def test_history_refresh_invalid(self):
+        response = self.client.post(reverse("djdt:history_refresh"))
+        self.assertEqual(response.status_code, 400)
+
+        data = {
+            "store_id": "foo",
+            "hash": "invalid",
+        }
+        response = self.client.post(reverse("djdt:history_refresh"), data=data)
+        self.assertEqual(response.status_code, 400)
+
+    @override_settings(DEBUG=True)
+    def test_history_refresh(self):
+        """Verify refresh history response has request variables."""
+        data = {"key": "value", "foo": "bar"}
+        self.client.get("/json_view/", data, content_type="application/json")
+        data = {
+            "store_id": "foo",
+            "hash": "3280d66a3cca10098a44907c5a1fd255265eed31",
+        }
+        response = self.client.post(reverse("djdt:history_refresh"), data=data)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data["requests"]), 1)
+        for val in ["key", "********************", "foo", "bar"]:
+            self.assertIn(val, data["requests"][0]["content"])

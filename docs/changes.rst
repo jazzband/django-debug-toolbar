@@ -23,6 +23,7 @@ Change log
 * Added support for ``cache.touch()`` when using django-debug-toolbar.
 * Eliminated more inline CSS.
 * Updated ``tox.ini`` and ``Makefile`` to use isort>=5.
+* Increased RESULTS_CACHE_SIZE to 25 to better support AJAX requests.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -81,7 +81,7 @@ Toolbar options
 
 * ``RESULTS_CACHE_SIZE``
 
-  Default: ``10``
+  Default: ``25``
 
   The toolbar keeps up to this many results in memory.
 
@@ -179,14 +179,6 @@ Panel options
   Useful for eliminating server-related entries which can result
   in enormous DOM structures and toolbar rendering delays.
 
-* ``HISTORY_POST_TRUNCATE_LENGTH``
-
-  Default: ``0``
-
-  Panel: history
-
-  This setting allows the request's POST content to be truncated
-  when showing the toolbar history.
 
 * ``PROFILER_MAX_DEPTH``
 
