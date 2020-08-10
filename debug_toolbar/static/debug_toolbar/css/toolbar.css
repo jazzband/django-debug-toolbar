@@ -316,6 +316,7 @@
     font-weight: 900;
     font-size: 20px;
     text-decoration: none;
+    box-sizing: content-box;
 }
 
 #djDebug .djdt-panelContent .djDebugClose:hover {
