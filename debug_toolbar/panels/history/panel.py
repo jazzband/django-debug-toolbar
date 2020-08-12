@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 import sys
 from collections import OrderedDict
 
@@ -15,23 +14,6 @@ from debug_toolbar.panels.history import views
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 
 logger = logging.getLogger(__name__)
-
-SENSITIVE_CREDENTIALS = re.compile("api|token|key|secret|password|signature", re.I)
-CLEANSED_SUBSTITUTE = "********************"
-
-
-def _clean_data(data):
-    """
-    Clean a dictionary of potentially sensitive info before
-    sending to less secure functions.
-    Not comprehensive
-
-    Taken from django.contrib.auth.__init__.credentials
-    """
-    for key in data:
-        if SENSITIVE_CREDENTIALS.search(key):
-            data[key] = CLEANSED_SUBSTITUTE
-    return data
 
 
 class HistoryPanel(Panel):
@@ -71,12 +53,11 @@ class HistoryPanel(Panel):
                 if sys.version_info[:2] > (3, 5)
                 else request.body.decode(request.encoding or settings.DEFAULT_CHARSET)
             )
-        cleansed = _clean_data(data)
         self.record_stats(
             {
                 "request_url": request.get_full_path(),
                 "request_method": request.method,
-                "data": cleansed,
+                "data": data,
                 "time": timezone.now(),
             }
         )

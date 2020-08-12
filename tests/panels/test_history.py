@@ -20,23 +20,21 @@ class HistoryPanelTestCase(BaseTestCase):
         with self.settings(DEBUG_TOOLBAR_CONFIG=config):
             self.assertFalse(self.panel.enabled)
 
-    def test_post_cleansing(self):
-        self.request = rf.post("/", data={"foo": "bar", "token1": "value"})
+    def test_post(self):
+        self.request = rf.post("/", data={"foo": "bar"})
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         data = self.panel.get_stats()["data"]
         self.assertEqual(data["foo"], "bar")
-        self.assertEqual(data["token1"], "********************")
 
-    def test_post_json_cleansing(self):
+    def test_post_json(self):
         self.request = rf.post(
-            "/", data={"foo": "bar", "token1": "value"}, content_type="application/json"
+            "/", data={"foo": "bar"}, content_type="application/json"
         )
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         data = self.panel.get_stats()["data"]
         self.assertEqual(data["foo"], "bar")
-        self.assertEqual(data["token1"], "********************")
 
     def test_urls(self):
         self.assertEqual(
@@ -59,7 +57,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         """Verify the history panel's content renders properly.."""
         self.assertEqual(len(DebugToolbar._store), 0)
 
-        data = {"key": "value", "foo": "bar"}
+        data = {"foo": "bar"}
         self.client.get("/json_view/", data, content_type="application/json")
 
         # Check the history panel's stats to verify the toolbar rendered properly.
@@ -67,7 +65,6 @@ class HistoryViewsTestCase(IntegrationTestCase):
         toolbar = list(DebugToolbar._store.values())[0]
         content = toolbar.get_panel_by_id("HistoryPanel").content
         self.assertIn("bar", content)
-        self.assertIn("********************", content)
 
     @override_settings(DEBUG=True)
     def test_history_sidebar_invalid(self):
@@ -138,7 +135,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     @override_settings(DEBUG=True)
     def test_history_refresh(self):
         """Verify refresh history response has request variables."""
-        data = {"key": "value", "foo": "bar"}
+        data = {"foo": "bar"}
         self.client.get("/json_view/", data, content_type="application/json")
         data = {
             "store_id": "foo",
@@ -148,5 +145,5 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(len(data["requests"]), 1)
-        for val in ["key", "********************", "foo", "bar"]:
+        for val in ["foo", "bar"]:
             self.assertIn(val, data["requests"][0]["content"])

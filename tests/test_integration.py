@@ -145,7 +145,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         """Verify the toolbar is rendered and data is stored for a json request."""
         self.assertEqual(len(DebugToolbar._store), 0)
 
-        data = {"key": "value", "foo": "bar"}
+        data = {"foo": "bar"}
         response = self.client.get("/json_view/", data, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode("utf-8"), '{"foo": "bar"}')
@@ -154,7 +154,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         toolbar = list(DebugToolbar._store.values())[0]
         self.assertEqual(
             toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
-            {"key": ["********************"], "foo": ["bar"]},
+            {"foo": ["bar"]},
         )
 
     def test_template_source_checks_show_toolbar(self):
