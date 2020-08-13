@@ -157,8 +157,7 @@
 }
 
 #djDebug #djShowToolBarButton {
-    padding: 5px;
-    padding-bottom: 8px;
+    padding: 0 5px;
     border: 4px solid #fff;
     border-bottom-width: 0;
     color: #fff;
