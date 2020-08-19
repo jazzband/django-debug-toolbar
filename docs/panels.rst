@@ -172,7 +172,7 @@ to.
 Line Profiler
 ~~~~~~~~~~~~~
 
-URL: https://github.com/dmclain/django-debug-toolbar-line-profiler
+URL: https://github.com/mikekeda/django-debug-toolbar-line-profiler
 
 Path: ``debug_toolbar_line_profiler.panel.ProfilingPanel``
 
