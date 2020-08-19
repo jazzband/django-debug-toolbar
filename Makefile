@@ -1,12 +1,12 @@
 .PHONY: flake8 example test coverage translatable_strings update_translations
 
 style:
-	isort debug_toolbar example tests
+	isort .
 	black --target-version=py35 debug_toolbar example tests setup.py
 	flake8 debug_toolbar example tests
 
 style_check:
-	isort -c debug_toolbar example tests
+	isort -c .
 	black --target-version=py34 --check debug_toolbar example tests setup.py
 
 flake8:
