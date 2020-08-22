@@ -22,6 +22,12 @@ matrix:
     - python: 3.8
       env: TOXENV=py38-dj30-sqlite
     - python: 3.6
+      env: TOXENV=py36-dj31-sqlite
+    - python: 3.7
+      env: TOXENV=py37-dj31-sqlite
+    - python: 3.8
+      env: TOXENV=py38-dj31-sqlite
+    - python: 3.6
       env: TOXENV=py36-djmaster-sqlite
     - python: 3.7
       env: TOXENV=py37-djmaster-sqlite
@@ -33,6 +39,10 @@ matrix:
         postgresql: "9.5"
     - python: 3.8
       env: TOXENV=py38-dj30-postgresql
+      addons:
+        postgresql: "9.5"
+    - python: 3.8
+      env: TOXENV=py38-dj31-postgresql
       addons:
         postgresql: "9.5"
     - python: 3.8
@@ -48,6 +58,17 @@ matrix:
         - tox -v
     - python: 3.8
       env: TOXENV=py38-dj30-mariadb
+      addons:
+        mariadb: "10.3"
+      script:
+        # working around https://travis-ci.community/t/mariadb-build-error-with-xenial/3160
+        - mysql -u root -e "DROP USER IF EXISTS 'travis'@'%';"
+        - mysql -u root -e "CREATE USER 'travis'@'%';"
+        - mysql -u root -e "CREATE DATABASE debug_toolbar;"
+        - mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'%';";
+        - tox -v
+    - python: 3.8
+      env: TOXENV=py38-dj31-mariadb
       addons:
         mariadb: "10.3"
       script:
