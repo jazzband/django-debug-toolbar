@@ -20,5 +20,6 @@ except ImportError:  # Django<3.1
 
 
 if JSONField:
+
     class PostgresJSON(models.Model):
         field = JSONField()
