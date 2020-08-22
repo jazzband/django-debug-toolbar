@@ -128,6 +128,60 @@ const djdt = {
             });
         });
 
+        // Used by the history panel
+        $$.on(djDebug, 'click', '.switchHistory', function(event) {
+            event.preventDefault();
+            const ajax_data = {};
+            const newStoreId = this.dataset.storeId;
+            const form = this.closest('form');
+            const tbody = this.closest('tbody');
+
+            ajax_data.url = this.getAttribute('formaction');
+
+            if (form) {
+                ajax_data.body = new FormData(form);
+                ajax_data.method = form.getAttribute('method') || 'POST';
+            }
+
+            tbody.querySelector('.djdt-highlighted').classList.remove('djdt-highlighted');
+            this.closest('tr').classList.add('djdt-highlighted');
+
+            ajax(ajax_data.url, ajax_data).then(function(data) {
+                djDebug.setAttribute('data-store-id', newStoreId);
+                Object.keys(data).map(function (panelId) {
+                    if (djDebug.querySelector('#'+panelId)) {
+                        djDebug.querySelector('#'+panelId).outerHTML = data[panelId].content;
+                        djDebug.querySelector('.djdt-'+panelId).outerHTML = data[panelId].button;
+                    }
+                });
+            });
+        });
+
+        // Used by the history panel
+        $$.on(djDebug, 'click', '.refreshHistory', function(event) {
+            event.preventDefault();
+            const ajax_data = {};
+            const form = this.closest('form');
+            const container = djDebug.querySelector('#djdtHistoryRequests');
+
+            ajax_data.url = this.getAttribute('formaction');
+
+            if (form) {
+                ajax_data.body = new FormData(form);
+                ajax_data.method = form.getAttribute('method') || 'POST';
+            }
+
+            ajax(ajax_data.url, ajax_data).then(function(data) {
+                if (data.requests.constructor === Array) {
+                    data.requests.map(function(request) {
+                        if (!container.querySelector('[data-store-id="'+request.id+'"]')) {
+                            container.innerHTML = request.content + container.innerHTML;
+                        }
+                    });
+                }
+            });
+        });
+
         // Used by the cache, profiling and SQL panels
         $$.on(djDebug, 'click', 'a.djToggleSwitch', function(event) {
             event.preventDefault();

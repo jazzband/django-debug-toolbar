@@ -64,8 +64,8 @@ class LoggingPanel(Panel):
 
     @property
     def nav_subtitle(self):
-        records = self._records[threading.currentThread()]
-        record_count = len(records)
+        stats = self.get_stats()
+        record_count = len(stats["records"]) if stats else None
         return __("%(count)s message", "%(count)s messages", record_count) % {
             "count": record_count
         }

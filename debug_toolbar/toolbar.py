@@ -88,6 +88,9 @@ class DebugToolbar:
         return render_panels
 
     def store(self):
+        # Store already exists.
+        if self.store_id:
+            return
         self.store_id = uuid.uuid4().hex
         cls = type(self)
         cls._store[self.store_id] = self

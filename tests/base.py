@@ -43,3 +43,15 @@ class BaseTestCase(TestCase):
 
             msg = self._formatMessage(msg, "\n".join(default_msg))
             raise self.failureException(msg)
+
+
+class IntegrationTestCase(TestCase):
+    """Base TestCase for tests involving clients making requests."""
+
+    def setUp(self):
+        # The HistoryPanel keeps track of previous stores in memory.
+        # This bleeds into other tests and violates their idempotency.
+        # Clear the store before each test.
+        for key in list(DebugToolbar._store.keys()):
+            del DebugToolbar._store[key]
+        super().setUp()

@@ -9,13 +9,13 @@ from django.core.checks import Warning, run_checks
 from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase
 from django.test.utils import override_settings
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.toolbar import DebugToolbar
 
-from .base import BaseTestCase
+from .base import BaseTestCase, IntegrationTestCase
 from .views import regular_view
 
 try:
@@ -90,7 +90,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
 
 @override_settings(DEBUG=True)
-class DebugToolbarIntegrationTestCase(TestCase):
+class DebugToolbarIntegrationTestCase(IntegrationTestCase):
     def test_middleware(self):
         response = self.client.get("/execute_sql/")
         self.assertEqual(response.status_code, 200)
@@ -140,6 +140,22 @@ class DebugToolbarIntegrationTestCase(TestCase):
                 url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
             )
             self.assertEqual(response.status_code, 404)
+
+    def test_middleware_render_toolbar_json(self):
+        """Verify the toolbar is rendered and data is stored for a json request."""
+        self.assertEqual(len(DebugToolbar._store), 0)
+
+        data = {"foo": "bar"}
+        response = self.client.get("/json_view/", data, content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode("utf-8"), '{"foo": "bar"}')
+        # Check the history panel's stats to verify the toolbar rendered properly.
+        self.assertEqual(len(DebugToolbar._store), 1)
+        toolbar = list(DebugToolbar._store.values())[0]
+        self.assertEqual(
+            toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
+            {"foo": ["bar"]},
+        )
 
     def test_template_source_checks_show_toolbar(self):
         template = get_template("basic.html")
@@ -340,6 +356,32 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         self.assertIn("Templates (1 rendered)", template_panel.text)
         self.assertIn("jinja2/basic.jinja", template_panel.text)
+
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={
+            "DISABLE_PANELS": {"debug_toolbar.panels.redirects.RedirectsPanel"}
+        }
+    )
+    def test_rerender_on_history_switch(self):
+        self.selenium.get(self.live_server_url + "/regular_jinja/basic")
+        # Make a new request so the history panel has more than one option.
+        self.selenium.get(self.live_server_url + "/execute_sql/")
+        template_panel = self.selenium.find_element_by_id("HistoryPanel")
+        # Record the current side panel of buttons for later comparison.
+        previous_button_panel = self.selenium.find_element_by_id(
+            "djDebugPanelList"
+        ).text
+
+        # Click to show the history panel
+        self.selenium.find_element_by_class_name("HistoryPanel").click()
+        # Click to switch back to the jinja page view snapshot
+        list(template_panel.find_elements_by_css_selector("button"))[-1].click()
+
+        current_button_panel = self.selenium.find_element_by_id("djDebugPanelList").text
+        # Verify the button side panels have updated.
+        self.assertNotEqual(previous_button_panel, current_button_panel)
+        self.assertNotIn("1 query", current_button_panel)
+        self.assertIn("1 query", previous_button_panel)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 0})
     def test_expired_store(self):

@@ -5,7 +5,6 @@ Debug Toolbar middleware
 import re
 from functools import lru_cache
 
-import django
 from django.conf import settings
 from django.utils.module_loading import import_string
 
@@ -43,14 +42,9 @@ class DebugToolbarMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # Decide whether the toolbar is active for this request. Don't render
-        # the toolbar during AJAX requests.
+        # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
-        if not show_toolbar(request) or (
-            request.is_ajax()
-            if django.VERSION < (3, 1)
-            else not request.accepts("text/html")
-        ):
+        if not show_toolbar(request) or request.path.startswith("/__debug__/"):
             return self.get_response(request)
 
         toolbar = DebugToolbar(request, self.get_response)
@@ -67,6 +61,14 @@ class DebugToolbarMiddleware:
             for panel in reversed(toolbar.enabled_panels):
                 panel.disable_instrumentation()
 
+        # Generate the stats for all requests when the toolbar is being shown,
+        # but not necessarily inserted.
+        for panel in reversed(toolbar.enabled_panels):
+            panel.generate_stats(request, response)
+            panel.generate_server_timing(request, response)
+
+        response = self.generate_server_timing_header(response, toolbar.enabled_panels)
+
         # Check for responses where the toolbar can't be inserted.
         content_encoding = response.get("Content-Encoding", "")
         content_type = response.get("Content-Type", "").split(";")[0]
@@ -75,8 +77,12 @@ class DebugToolbarMiddleware:
                 getattr(response, "streaming", False),
                 "gzip" in content_encoding,
                 content_type not in _HTML_TYPES,
+                request.is_ajax(),
             )
         ):
+            # If a AJAX or JSON request, render the toolbar for the history.
+            if request.is_ajax() or content_type == "application/json":
+                toolbar.render_toolbar()
             return response
 
         # Insert the toolbar in the response.
@@ -85,15 +91,6 @@ class DebugToolbarMiddleware:
         pattern = re.escape(insert_before)
         bits = re.split(pattern, content, flags=re.IGNORECASE)
         if len(bits) > 1:
-            # When the toolbar will be inserted for sure, generate the stats.
-            for panel in reversed(toolbar.enabled_panels):
-                panel.generate_stats(request, response)
-                panel.generate_server_timing(request, response)
-
-            response = self.generate_server_timing_header(
-                response, toolbar.enabled_panels
-            )
-
             bits[-2] += toolbar.render_toolbar()
             response.content = insert_before.join(bits)
             if "Content-Length" in response:

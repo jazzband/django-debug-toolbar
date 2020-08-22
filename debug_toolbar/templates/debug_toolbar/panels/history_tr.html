@@ -1,0 +1,47 @@
+{% load i18n %}
+<tr class="{% if id == current_store_id %}djdt-highlighted{% endif %}" id="historyMain_{{ id }}" data-store-id="{{ id }}">
+    <td>
+        {{ store_context.toolbar.stats.HistoryPanel.time|escape }}
+    </td>
+    <td>
+        <p>{{ store_context.toolbar.stats.HistoryPanel.request_method|escape }}</p>
+    </td>
+    <td>
+        <p>{{ store_context.toolbar.stats.HistoryPanel.request_url|truncatechars:100|escape }}</p>
+    </td>
+    <td>
+        <a class="djToggleSwitch" data-toggle-name="historyMain" data-toggle-id="{{ id }}" data-toggle-open="+" data-toggle-close="-" href>+</a>
+        <div class="djUnselected djToggleDetails_{{ id }}">
+          <table>
+            <colgroup>
+              <col class="djdt-width-20">
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>{% trans "Variable" %}</th>
+                <th>{% trans "Value" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key, value in store_context.toolbar.stats.HistoryPanel.data.items %}
+                <tr>
+                  <td><code>{{ key|pprint }}</code></td>
+                  <td><code>{{ value|pprint }}</code></td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="2">No data</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </td>
+    <td class="djdt-actions">
+        <form method="post">
+            {{ store_context.form }}
+            <button formaction="{% url 'djdt:history_sidebar' %}" data-store-id="{{ id }}" class="switchHistory">Switch</button>
+        </form>
+    </td>
+</tr>

@@ -1,0 +1,21 @@
+{% load i18n %}{% load static %}
+<form method="post">
+    {{ refresh_form }}
+    <button formaction="{% url 'djdt:history_refresh' %}" class="refreshHistory">Refresh</button>
+</form>
+<table style="max-height:100%;">
+    <thead>
+        <tr>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Method" %}</th>
+            <th>{% trans "Path" %}</th>
+            <th>{% trans "Request Variables" %}</th>
+            <th class="djdt-actions">{% trans "Action" %}</th>
+        </tr>
+    </thead>
+    <tbody id="djdtHistoryRequests">
+        {% for id, store_context in stores.items %}
+            {% include "debug_toolbar/panels/history_tr.html" %}
+        {% endfor %}
+    </tbody>
+</table>
