@@ -11,11 +11,10 @@ class Binary(models.Model):
 
 
 try:
+    from django.db.models import JSONField
+except ImportError:  # Django<3.1
     from django.contrib.postgres.fields import JSONField
 
-    class PostgresJSON(models.Model):
-        field = JSONField()
 
-
-except ImportError:
-    pass
+class PostgresJSON(models.Model):
+    field = JSONField()
