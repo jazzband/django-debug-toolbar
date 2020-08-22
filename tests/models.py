@@ -13,8 +13,12 @@ class Binary(models.Model):
 try:
     from django.db.models import JSONField
 except ImportError:  # Django<3.1
-    from django.contrib.postgres.fields import JSONField
+    try:
+        from django.contrib.postgres.fields import JSONField
+    except ImportError:  # psycopg2 not installed
+        JSONField = None
 
 
-class PostgresJSON(models.Model):
-    field = JSONField()
+if JSONField:
+    class PostgresJSON(models.Model):
+        field = JSONField()
