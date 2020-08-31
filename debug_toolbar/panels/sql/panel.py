@@ -117,11 +117,14 @@ class SQLPanel(Panel):
     @property
     def title(self):
         count = len(self._databases)
-        return __(
-            "SQL queries from %(count)d connection",
-            "SQL queries from %(count)d connections",
-            count,
-        ) % {"count": count}
+        return (
+            __(
+                "SQL queries from %(count)d connection",
+                "SQL queries from %(count)d connections",
+                count,
+            )
+            % {"count": count}
+        )
 
     template = "debug_toolbar/panels/sql.html"
 

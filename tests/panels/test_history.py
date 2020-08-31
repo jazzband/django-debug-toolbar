@@ -38,16 +38,20 @@ class HistoryPanelTestCase(BaseTestCase):
 
     def test_urls(self):
         self.assertEqual(
-            reverse("djdt:history_sidebar"), "/__debug__/history_sidebar/",
+            reverse("djdt:history_sidebar"),
+            "/__debug__/history_sidebar/",
         )
         self.assertEqual(
-            resolve("/__debug__/history_sidebar/").url_name, "history_sidebar",
+            resolve("/__debug__/history_sidebar/").url_name,
+            "history_sidebar",
         )
         self.assertEqual(
-            reverse("djdt:history_refresh"), "/__debug__/history_refresh/",
+            reverse("djdt:history_refresh"),
+            "/__debug__/history_refresh/",
         )
         self.assertEqual(
-            resolve("/__debug__/history_refresh/").url_name, "history_refresh",
+            resolve("/__debug__/history_refresh/").url_name,
+            "history_refresh",
         )
 
 
