@@ -2,15 +2,15 @@
 
 style:
 	isort .
-	black --target-version=py35 debug_toolbar example tests setup.py
-	flake8 debug_toolbar example tests
+	black --target-version=py35 .
+	flake8
 
 style_check:
 	isort -c .
-	black --target-version=py34 --check debug_toolbar example tests setup.py
+	black --target-version=py35 --check .
 
 flake8:
-	flake8 debug_toolbar example tests
+	flake8
 
 example:
 	python example/manage.py runserver

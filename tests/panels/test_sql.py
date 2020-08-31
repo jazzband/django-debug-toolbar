@@ -144,11 +144,13 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
         self.assertEqual(
-            self.panel._queries[0][1]["params"], '["{\\"foo\\": \\"bar\\"}"]',
+            self.panel._queries[0][1]["params"],
+            '["{\\"foo\\": \\"bar\\"}"]',
         )
         if django.VERSION < (3, 1):
             self.assertIsInstance(
-                self.panel._queries[0][1]["raw_params"][0], PostgresJson,
+                self.panel._queries[0][1]["raw_params"][0],
+                PostgresJson,
             )
 
     def test_binary_param_force_text(self):
