@@ -307,9 +307,6 @@
     width: 16px;
     line-height: 16px;
     padding: 5px;
-    border: 6px solid #ddd;
-    border-radius: 50%;
-    background: #fff;
     color: #ddd;
     text-align: center;
     font-weight: 900;
@@ -319,7 +316,7 @@
 }
 
 #djDebug .djdt-panelContent .djDebugClose:hover {
-    background: #c0695d;
+    color: #c0695d;
 }
 
 #djDebug .djdt-panelContent dt, #djDebug .djdt-panelContent dd {
