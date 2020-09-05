@@ -1,7 +1,7 @@
 Change log
 ==========
 
-3.0a2 (2020-07-15)
+3.0a3 (2020-09-05)
 ------------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
@@ -24,6 +24,11 @@ Change log
 * Eliminated more inline CSS.
 * Updated ``tox.ini`` and ``Makefile`` to use isort>=5.
 * Increased RESULTS_CACHE_SIZE to 25 to better support AJAX requests.
+* Fixed the close button CSS by explicitly specifying the
+  ``box-sizing`` property.
+* Simplified the ``isort`` configuration by taking advantage of isort's
+  ``black`` profile.
+* Added HistoryPanel including support for AJAX requests.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,8 +38,6 @@ Change log
   :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>` property.
 * Removed support for end of life Django 1.11. The minimum supported Django is
   now 2.2.
-
-* Added HistoryPanel including support for AJAX requests.
 
 
 2.2 (2020-01-31)
