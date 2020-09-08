@@ -1,7 +1,7 @@
 Change log
 ==========
 
-3.0a3 (2020-09-05)
+3.0a4 (2020-09-08)
 ------------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
