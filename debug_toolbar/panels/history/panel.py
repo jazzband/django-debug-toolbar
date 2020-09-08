@@ -4,6 +4,7 @@ import sys
 from collections import OrderedDict
 
 from django.conf import settings
+from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
 from django.urls import path
 from django.utils import timezone
@@ -40,19 +41,26 @@ class HistoryPanel(Panel):
         return self.get_stats().get("request_url", "")
 
     def generate_stats(self, request, response):
-        if request.method == "GET":
-            data = request.GET.copy()
-        else:
-            data = request.POST.copy()
-        # GraphQL tends to not be populated in POST. If the request seems
-        # empty, check if it's a JSON request.
-        if not data and request.META.get("CONTENT_TYPE") == "application/json":
-            # Python <= 3.5's json.loads expects a string.
-            data = json.loads(
-                request.body
-                if sys.version_info[:2] > (3, 5)
-                else request.body.decode(request.encoding or settings.DEFAULT_CHARSET)
-            )
+        try:
+            if request.method == "GET":
+                data = request.GET.copy()
+            else:
+                data = request.POST.copy()
+            # GraphQL tends to not be populated in POST. If the request seems
+            # empty, check if it's a JSON request.
+            if not data and request.META.get("CONTENT_TYPE") == "application/json":
+                # Python <= 3.5's json.loads expects a string.
+                data = json.loads(
+                    request.body
+                    if sys.version_info[:2] > (3, 5)
+                    else request.body.decode(
+                        request.encoding or settings.DEFAULT_CHARSET
+                    )
+                )
+        except RawPostDataException:
+            # It is not guaranteed that we may read the request data (again).
+            data = None
+
         self.record_stats(
             {
                 "request_url": request.get_full_path(),
