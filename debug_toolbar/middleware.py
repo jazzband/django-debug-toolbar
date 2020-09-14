@@ -77,11 +77,11 @@ class DebugToolbarMiddleware:
                 getattr(response, "streaming", False),
                 "gzip" in content_encoding,
                 content_type not in _HTML_TYPES,
-                request.is_ajax(),
+                not request.accepts("text/html"),
             )
         ):
             # If a AJAX or JSON request, render the toolbar for the history.
-            if request.is_ajax() or content_type == "application/json":
+            if not request.accepts("text/html") or content_type == "application/json":
                 toolbar.render_toolbar()
             return response
 
