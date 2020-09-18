@@ -12,6 +12,10 @@ Change log
 * Started running Selenium tests on Travis CI.
 * Added a system check which prevents using django-debug-toolbar without
   any enabled panels.
+* Added  :func:`Panel.run_checks <debug_toolbar.panels.Panel.run_checks>`
+  for panels to verify the configuration before the application starts.
+* Validate the static file paths specified in ``STATICFILES_DIRS``
+  exist via :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
 
 
 3.1 (2020-09-21)

@@ -1,5 +1,4 @@
 import json
-import logging
 import sys
 from collections import OrderedDict
 
@@ -13,8 +12,6 @@ from django.utils.translation import gettext_lazy as _
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.history import views
 from debug_toolbar.panels.history.forms import HistoryStoreForm
-
-logger = logging.getLogger(__name__)
 
 
 class HistoryPanel(Panel):

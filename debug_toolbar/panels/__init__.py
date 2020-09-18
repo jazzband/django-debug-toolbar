@@ -211,3 +211,15 @@ class Panel:
 
         Does not return a value.
         """
+
+    @classmethod
+    def run_checks(cls):
+        """
+        Check that the integration is configured correctly for the panel.
+
+        This will be called as a part of the Django checks system when the
+        application is being setup.
+
+        Return a list of :class: `django.core.checks.CheckMessage` instances.
+        """
+        return []

@@ -352,6 +352,8 @@ unauthorized access. There is no public CSS API at this time.
 
     .. automethod:: debug_toolbar.panels.Panel.generate_stats
 
+    .. automethod:: debug_toolbar.panels.Panel.run_checks
+
 .. _javascript-api:
 
 JavaScript API
