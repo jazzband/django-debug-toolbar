@@ -12,6 +12,7 @@ html5lib
 isort
 selenium
 tox
+black
 
 # Documentation
 
