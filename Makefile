@@ -13,6 +13,9 @@ flake8:
 	flake8
 
 example:
+	python example/manage.py migrate --noinput
+	-DJANGO_SUPERUSER_PASSWORD=p python example/manage.py createsuperuser \
+		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
 	python example/manage.py runserver
 
 eslint: package-lock.json
