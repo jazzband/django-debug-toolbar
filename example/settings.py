@@ -78,7 +78,7 @@ if os.environ.get("DJANGO_DATABASE_ENGINE", "").lower() == "postgresql":
     # % createdb debug_toolbar -O debug_toolbar
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "ENGINE": "django.db.backends.postgresql",
             "NAME": "debug_toolbar",
             "USER": "debug_toolbar",
         }
