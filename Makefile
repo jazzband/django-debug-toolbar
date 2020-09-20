@@ -47,3 +47,8 @@ translatable_strings:
 update_translations:
 	tx pull -a --minimum-perc=10
 	cd debug_toolbar && python -m django compilemessages
+
+.PHONY: example/django-debug-toolbar.png
+example/django-debug-toolbar.png: example/screenshot.py
+	python $< --browser firefox --headless -o $@
+	optipng $@

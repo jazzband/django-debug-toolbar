@@ -132,6 +132,14 @@ The release itself requires the following steps:
 
    Commit.
 
+#. Update the screenshot in ``README.rst``.
+
+   .. code-block:: console
+
+       $ make example/django-debug-toolbar.png
+
+   Commit.
+
 #. Bump version numbers in ``docs/changes.rst``, ``docs/conf.py``,
    ``README.rst`` and ``setup.py``. Add the release date to
    ``docs/changes.rst``. Commit.

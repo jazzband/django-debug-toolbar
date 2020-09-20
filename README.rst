@@ -25,8 +25,7 @@ more details about the panel's content.
 Here's a screenshot of the toolbar in action:
 
 .. image:: https://raw.github.com/jazzband/django-debug-toolbar/master/example/django-debug-toolbar.png
-   :width: 908
-   :height: 557
+   :alt: Django Debug Toolbar screenshot
 
 In addition to the built-in panels, a number of third-party panels are
 contributed by the community.
