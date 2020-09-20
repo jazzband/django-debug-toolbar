@@ -149,6 +149,7 @@
     transform-origin: right bottom;
     background-color: #fff;
     border: 1px solid #111;
+    border-bottom: 0;
     top: 0;
     right: 0;
     z-index: 100000000;
