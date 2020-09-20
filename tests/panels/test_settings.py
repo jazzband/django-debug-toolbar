@@ -12,7 +12,7 @@ class SettingsIntegrationTestCase(IntegrationTestCase):
         self.assertContains(
             response,
             """
-            <li class="djDebugPanelButton djdt-SettingsPanel">
+            <li id="djdt-SettingsPanel" class="djDebugPanelButton">
             <input type="checkbox" checked title="Disable for next and successive requests" data-cookie="djdtSettingsPanel">
             <a class="SettingsPanel" href="#" title="Settings from None">Settings</a>
             </li>
