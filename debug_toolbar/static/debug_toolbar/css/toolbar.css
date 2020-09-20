@@ -68,7 +68,7 @@
 
 #djDebug #djDebugToolbar {
     background-color: #111;
-    width: 200px;
+    width: 220px;
     z-index: 100000000;
     position: fixed;
     top: 0;
@@ -196,7 +196,7 @@
     position: fixed;
     margin: 0;
     top: 0;
-    right: 200px;
+    right: 220px;
     bottom: 0;
     left: 0px;
     background-color: #eee;
