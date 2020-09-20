@@ -9,7 +9,7 @@ Getting the code
 
 The recommended way to install the Debug Toolbar is via pip_::
 
-    $ pip install django-debug-toolbar
+    $ python -m pip install django-debug-toolbar
 
 If you aren't familiar with pip, you may also obtain a copy of the
 ``debug_toolbar`` directory and add it to your Python path.
@@ -19,7 +19,7 @@ If you aren't familiar with pip, you may also obtain a copy of the
 To test an upcoming release, you can install the in-development version
 instead with the following command::
 
-     $ pip install -e git+https://github.com/jazzband/django-debug-toolbar.git#egg=django-debug-toolbar
+     $ python -m pip install -e git+https://github.com/jazzband/django-debug-toolbar.git#egg=django-debug-toolbar
 
 Prerequisites
 -------------

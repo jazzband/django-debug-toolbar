@@ -15,7 +15,7 @@ How to
 
 The test project requires a working installation of Django::
 
-    $ pip install Django
+    $ python -m pip install Django
 
 The following commands must be run from the root directory of a checkout of
 the debug toolbar, ie. the directory that contains ``example/``.

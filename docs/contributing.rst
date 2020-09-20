@@ -32,7 +32,7 @@ you'll have to deactivate it for this repository::
 Once you've obtained a checkout, you should create a virtualenv_ and install
 the libraries required for working on the Debug Toolbar::
 
-    $ pip install -r requirements_dev.txt
+    $ python -m pip install -r requirements_dev.txt
 
 .. _virtualenv: https://virtualenv.pypa.io/
 
