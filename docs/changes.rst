@@ -1,8 +1,8 @@
 Change log
 ==========
 
-3.0a4 (2020-09-08)
-------------------
+3.0 (2020-09-20)
+----------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
 * Updated the italian translation.
