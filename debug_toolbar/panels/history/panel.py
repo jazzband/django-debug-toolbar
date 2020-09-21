@@ -48,7 +48,11 @@ class HistoryPanel(Panel):
                 data = request.POST.copy()
             # GraphQL tends to not be populated in POST. If the request seems
             # empty, check if it's a JSON request.
-            if not data and request.META.get("CONTENT_TYPE") == "application/json":
+            if (
+                not data
+                and request.body
+                and request.META.get("CONTENT_TYPE") == "application/json"
+            ):
                 # Python <= 3.5's json.loads expects a string.
                 data = json.loads(
                     request.body
