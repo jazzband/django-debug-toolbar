@@ -28,13 +28,21 @@ class HistoryPanelTestCase(BaseTestCase):
         self.assertEqual(data["foo"], "bar")
 
     def test_post_json(self):
-        self.request = rf.post(
-            "/", data={"foo": "bar"}, content_type="application/json"
-        )
-        response = self.panel.process_request(self.request)
-        self.panel.generate_stats(self.request, response)
-        data = self.panel.get_stats()["data"]
-        self.assertEqual(data["foo"], "bar")
+        for data, expected_stats_data in (
+            ({"foo": "bar"}, {"foo": "bar"}),
+            ("", {}),
+        ):
+            with self.subTest(data=data):
+                self.request = rf.post(
+                    "/",
+                    data=data,
+                    content_type="application/json",
+                    CONTENT_TYPE="application/json",  # Force django test client to add the content-type even if no data
+                )
+                response = self.panel.process_request(self.request)
+                self.panel.generate_stats(self.request, response)
+                data = self.panel.get_stats()["data"]
+                self.assertDictEqual(data, expected_stats_data)
 
     def test_urls(self):
         self.assertEqual(
