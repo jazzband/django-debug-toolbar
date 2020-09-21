@@ -15,7 +15,7 @@ How to
 
 The example project requires a working installation of Django::
 
-    $ pip install Django
+    $ python -m pip install Django
 
 The following command must run from the root directory of Django Debug Toolbar,
 i.e. the directory that contains ``example/``::
