@@ -450,14 +450,8 @@
     min-width: 70px;
     white-space: nowrap;
 }
-#djDebug .djdt-panelContent table .djdt-color {
-    width: 3px;
-}
-#djDebug .djdt-panelContent table .djdt-color span {
-    width: 3px;
-    height: 12px;
-    overflow: hidden;
-    padding: 0;
+#djDebug .djdt-color:after {
+    content: "\00a0";
 }
 #djDebug .djToggleSwitch {
     text-decoration: none;

@@ -3,7 +3,7 @@
   <ul>
     {% for alias, info in databases %}
       <li>
-        <strong><span style="background-color:rgb({{ info.rgb_color|join:', ' }})" class="djdt-color">&#160;</span> {{ alias }}</strong>
+        <strong><span class="djdt-color" style="background-color:rgb({{ info.rgb_color|join:', ' }})"></span> {{ alias }}</strong>
         {{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
         {% if info.similar_count %}
           {% blocktrans with count=info.similar_count trimmed %}
@@ -24,7 +24,7 @@
   <table>
     <thead>
       <tr>
-        <th class="djdt-color">&#160;</th>
+        <th></th>
         <th class="djdt-query" colspan="2">{% trans "Query" %}</th>
         <th class="djdt-timeline">{% trans "Timeline" %}</th>
         <th class="djdt-time">{% trans "Time (ms)" %}</th>
@@ -34,7 +34,7 @@
     <tbody>
       {% for query in queries %}
         <tr class="{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
-          <td class="djdt-color"><span style="background-color:rgb({{ query.rgb_color|join:', '}})">&#160;</span></td>
+          <td><span class="djdt-color" style="background-color:rgb({{ query.rgb_color|join:', '}})"></span></td>
           <td class="djdt-toggle">
             <a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="">+</a>
           </td>
@@ -44,13 +44,13 @@
             </div>
             {% if query.similar_count %}
               <strong>
-                <span style="background-color:{{ query.similar_color }}">&#160;</span>
+                <span class="djdt-color" style="background-color:{{ query.similar_color }}"></span>
                 {% blocktrans with count=query.similar_count %}{{ count }} similar queries.{% endblocktrans %}
               </strong>
             {% endif %}
             {% if query.duplicate_count %}
               <strong>
-                <span style="background-color:{{ query.duplicate_color }}">&#160;</span>
+                <span class="djdt-color" style="background-color:{{ query.duplicate_color }}"></span>
                 {% blocktrans with dupes=query.duplicate_count %}Duplicated {{ dupes }} times.{% endblocktrans %}
               </strong>
             {% endif %}
