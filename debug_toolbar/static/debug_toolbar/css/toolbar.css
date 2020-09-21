@@ -354,13 +354,11 @@
 
 #djDebug .djDebugCollapsed {
     display: none;
-    text-decoration: none;
     color: #333;
 }
 
 #djDebug .djDebugUncollapsed {
     color: #333;
-    text-decoration: none;
 }
 
 #djDebug .djUnselected {
