@@ -19,7 +19,7 @@ class CustomPanelTestCase(IntegrationTestCase):
         self.assertContains(
             response,
             """
-            <li class="djDebugPanelButton djdt-CustomPanel">
+            <li id="djdt-CustomPanel" class="djDebugPanelButton">
             <input type="checkbox" checked title="Disable for next and successive requests" data-cookie="djdtCustomPanel">
             <a class="CustomPanel" href="#" title="Title with special chars &amp;&quot;&#39;&lt;&gt;">
             Title with special chars &amp;&quot;&#39;&lt;&gt;

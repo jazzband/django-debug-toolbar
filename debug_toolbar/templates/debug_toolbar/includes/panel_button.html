@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<li class="djDebugPanelButton djdt-{{ panel.panel_id }}">
+<li id="djdt-{{ panel.panel_id }}" class="djDebugPanelButton">
   <input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %}>
   {% if panel.has_content and panel.enabled %}
     <a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}">

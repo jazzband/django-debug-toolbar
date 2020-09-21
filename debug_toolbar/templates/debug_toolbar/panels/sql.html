@@ -1,21 +1,20 @@
 {% load i18n l10n %}
 <div class="djdt-clearfix">
-  <ul class="djdt-stats">
+  <ul>
     {% for alias, info in databases %}
       <li>
-        <strong class="djdt-label"><span style="background-color:rgb({{ info.rgb_color|join:', ' }})" class="djdt-color">&#160;</span> {{ alias }}</strong>
-        <span class="djdt-info">{{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
-          {% if info.similar_count %}
-            {% blocktrans with count=info.similar_count trimmed %}
-              including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ count }} similar</abbr>
+        <strong><span style="background-color:rgb({{ info.rgb_color|join:', ' }})" class="djdt-color">&#160;</span> {{ alias }}</strong>
+        {{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
+        {% if info.similar_count %}
+          {% blocktrans with count=info.similar_count trimmed %}
+            including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ count }} similar</abbr>
+          {% endblocktrans %}
+          {% if info.duplicate_count %}
+            {% blocktrans with dupes=info.duplicate_count trimmed %}
+              and <abbr title="Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.">{{ dupes }} duplicates</abbr>
             {% endblocktrans %}
-            {% if info.duplicate_count %}
-              {% blocktrans with dupes=info.duplicate_count trimmed %}
-                and <abbr title="Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.">{{ dupes }} duplicates</abbr>
-              {% endblocktrans %}
-            {% endif %}
-          {% endif %})
-        </span>
+          {% endif %}
+        {% endif %})
       </li>
     {% endfor %}
   </ul>

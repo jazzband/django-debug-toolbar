@@ -13,6 +13,9 @@ flake8:
 	flake8
 
 example:
+	python example/manage.py migrate --noinput
+	-DJANGO_SUPERUSER_PASSWORD=p python example/manage.py createsuperuser \
+		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
 	python example/manage.py runserver
 
 eslint: package-lock.json
@@ -44,3 +47,8 @@ translatable_strings:
 update_translations:
 	tx pull -a --minimum-perc=10
 	cd debug_toolbar && python -m django compilemessages
+
+.PHONY: example/django-debug-toolbar.png
+example/django-debug-toolbar.png: example/screenshot.py
+	python $< --browser firefox --headless -o $@
+	optipng $@

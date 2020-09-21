@@ -13,24 +13,36 @@ interfere with common JavaScript frameworks.
 How to
 ------
 
-The test project requires a working installation of Django::
+The example project requires a working installation of Django::
 
     $ pip install Django
 
-The following commands must be run from the root directory of a checkout of
-the debug toolbar, ie. the directory that contains ``example/``.
+The following command must run from the root directory of Django Debug Toolbar,
+i.e. the directory that contains ``example/``::
 
-Before running the example for the first time, you must create a database::
+    $ make example
 
-    $ python -m django migrate --settings=example.settings
+This will create a database, superuser, and run the Django development server.
+The superuser's username will be the same as the current OS user and the
+password is "p".
 
-Then you can use the following command to run the example::
+If you'd like to run these steps individually, use the following commands.
+Again, run from the root directory of Django Debug Toolbar.
 
-    $ python -m django runserver --settings=example.settings
+Create a database::
+
+    $ python example/manage.py migrate
+
+Create a superuser::
+
+    $ python example/manage.py createsuperuser
+
+Run the Django development server::
+
+    $ python example/manage.py runserver
 
 You can change the database used by specifying the ``DJANGO_DATABASE_ENGINE``
 environment variable::
 
-    $ DJANGO_DATABASE_ENGINE=postgresql python -m django migrate --settings=example.settings
-    $ DJANGO_DATABASE_ENGINE=postgresql python -m django runserver --settings=example.settings
-
+    $ DJANGO_DATABASE_ENGINE=postgresql python example/manage.py migrate
+    $ DJANGO_DATABASE_ENGINE=postgresql python example/manage.py runserver

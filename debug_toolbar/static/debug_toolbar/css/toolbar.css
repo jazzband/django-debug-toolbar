@@ -436,27 +436,6 @@
     stroke: #94b24d;
 }
 
-#djDebug .djdt-panelContent ul.djdt-stats {
-    position: relative;
-    list-style-type: none;
-}
-#djDebug .djdt-panelContent ul.djdt-stats li {
-    width: 30%;
-    float: left;
-}
-#djDebug .djdt-panelContent ul.djdt-stats li strong.djdt-label {
-    display: block;
-}
-#djDebug .djdt-panelContent ul.djdt-stats li span.djdt-color {
-    height: 12px;
-    width: 3px;
-    display: inline-block;
-}
-#djDebug .djdt-panelContent ul.djdt-stats li span.djdt-info {
-    display: block;
-    padding-left: 5px;
-}
-
 #djDebug .djdt-panelContent thead th {
     white-space: nowrap;
 }
