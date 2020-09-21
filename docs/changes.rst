@@ -1,6 +1,21 @@
 Change log
 ==========
 
+3.1 (2020-09-21)
+----------------
+
+* Fixed a crash in the history panel when sending an empty JSON POST
+  request.
+* Made ``make example`` also set up the database and a superuser
+  account.
+* Added a Makefile target for regenerating the django-debug-toolbar
+  screenshot.
+* Added automatic escaping of panel titles resp. disallowed HTML tags.
+* Removed some CSS
+* Restructured the SQL stats template.
+* Changed command line examples to prefer ``python -m pip`` to ``pip``.
+
+
 3.0 (2020-09-20)
 ----------------
 
