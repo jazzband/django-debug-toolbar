@@ -126,9 +126,17 @@
 }
 
 #djDebug #djDebugToolbar li.djdt-active {
-    background: #333 no-repeat left center;
-    background-image: url(../img/indicator.png);
-    padding-left: 10px;
+    background: #333;
+}
+
+#djDebug #djDebugToolbar li.djdt-active:before {
+    content: "▶";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #eee;
+    font-size: 150%;
 }
 
 #djDebug #djDebugToolbar li.djdt-active a:hover {
