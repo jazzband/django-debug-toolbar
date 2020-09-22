@@ -22,7 +22,7 @@ class SettingsIntegrationTestCase(IntegrationTestCase):
         self.assertContains(
             response,
             """
-            <div id="SettingsPanel" class="djdt-panelContent">
+            <div id="SettingsPanel" class="djdt-panelContent djdt-hidden">
             <div class="djDebugPanelTitle">
             <a href="" class="djDebugClose">×</a>
             <h3>Settings from None</h3>

@@ -1,7 +1,7 @@
 {% load static %}
 
 {% if panel.has_content and panel.enabled %}
-  <div id="{{ panel.panel_id }}" class="djdt-panelContent">
+  <div id="{{ panel.panel_id }}" class="djdt-panelContent djdt-hidden">
     <div class="djDebugPanelTitle">
       <a href="" class="djDebugClose">×</a>
       <h3>{{ panel.title }}</h3>

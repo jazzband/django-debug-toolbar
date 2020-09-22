@@ -191,7 +191,6 @@
 }
 
 #djDebug .djdt-panelContent {
-    display: none;
     position: fixed;
     margin: 0;
     top: 0;
@@ -351,7 +350,6 @@
 }
 
 #djDebug .djDebugCollapsed {
-    display: none;
     color: #333;
 }
 
