@@ -1,13 +1,3 @@
-/* http://www.positioniseverything.net/easyclearing.html */
-#djDebug .djdt-clearfix:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-#djDebug .djdt-clearfix {display: block;}
-
 /* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
 #djDebug {color: #000;background: #FFF;}
 #djDebug, #djDebug div, #djDebug span, #djDebug applet, #djDebug object, #djDebug iframe,
