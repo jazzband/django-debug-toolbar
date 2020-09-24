@@ -151,7 +151,7 @@ const djdt = {
                 Object.keys(data).map(function (panelId) {
                     if (djDebug.querySelector('#'+panelId)) {
                         djDebug.querySelector('#'+panelId).outerHTML = data[panelId].content;
-                        djDebug.querySelector('.djdt-'+panelId).outerHTML = data[panelId].button;
+                        djDebug.querySelector('#djdt-'+panelId).outerHTML = data[panelId].button;
                     }
                 });
             });
