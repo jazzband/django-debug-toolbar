@@ -1,6 +1,13 @@
 Change log
 ==========
 
+3.2 (unreleased)
+----------------
+
+* Fixed a regression where the JavaScript code crashed with an invalid
+  CSS selector when searching for an element to replace.
+
+
 3.1 (2020-09-21)
 ----------------
 
