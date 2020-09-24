@@ -21,6 +21,7 @@ from .views import regular_view
 try:
     from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.firefox.options import Options
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
     webdriver = None
@@ -317,7 +318,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = webdriver.Firefox()
+        options = Options()
+        options.headless = bool(os.environ.get("TRAVIS"))
+        cls.selenium = webdriver.Firefox(options=options)
 
     @classmethod
     def tearDownClass(cls):
