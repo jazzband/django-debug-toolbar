@@ -354,7 +354,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         # Click to show the template panel
         self.selenium.find_element_by_class_name("TemplatesPanel").click()
 
-        self.assertIn("Templates (1 rendered)", template_panel.text)
+        self.assertIn("Templates (2 rendered)", template_panel.text)
         self.assertIn("jinja2/basic.jinja", template_panel.text)
 
     @override_settings(
