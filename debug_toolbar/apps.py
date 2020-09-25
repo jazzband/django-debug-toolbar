@@ -7,6 +7,8 @@ from django.middleware.gzip import GZipMiddleware
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
+from debug_toolbar import settings as dt_settings
+
 
 class DebugToolbarConfig(AppConfig):
     name = "debug_toolbar"
@@ -84,3 +86,19 @@ def is_middleware_class(middleware_class, middleware_path):
     return inspect.isclass(middleware_cls) and issubclass(
         middleware_cls, middleware_class
     )
+
+
+@register
+def check_panels(app_configs, **kwargs):
+    errors = []
+    panels = dt_settings.get_panels()
+    if not panels:
+        errors.append(
+            Warning(
+                "Setting DEBUG_TOOLBAR_PANELS is empty.",
+                hint="Set DEBUG_TOOLBAR_PANELS to a non-empty list in your "
+                "settings.py.",
+                id="debug_toolbar.W005",
+            )
+        )
+    return errors

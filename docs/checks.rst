@@ -13,3 +13,4 @@ Debug Toolbar setup and configuration:
   occurs before ``django.middleware.gzip.GZipMiddleware`` in ``MIDDLEWARE``.
 * **debug_toolbar.W004**: ``debug_toolbar`` is incompatible with
   ``MIDDLEWARE_CLASSES`` setting.
+* **debug_toolbar.W005**: Setting ``DEBUG_TOOLBAR_PANELS`` is empty.
