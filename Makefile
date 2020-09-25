@@ -1,13 +1,17 @@
 .PHONY: flake8 example test coverage translatable_strings update_translations
 
-style:
+PRETTIER_TARGETS = '**/*.(css|js)'
+
+style: package-lock.json
 	isort .
 	black --target-version=py35 .
 	flake8
+	npx prettier --ignore-path .gitignore --write $(PRETTIER_TARGETS)
 
-style_check:
+style_check: package-lock.json
 	isort -c .
 	black --target-version=py35 --check .
+	npx prettier --loglevel debug --ignore-path .gitignore --check $(PRETTIER_TARGETS)
 
 flake8:
 	flake8

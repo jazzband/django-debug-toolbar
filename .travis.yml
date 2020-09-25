@@ -1,3 +1,4 @@
+dist: bionic
 language: python
 cache: pip
 matrix:
