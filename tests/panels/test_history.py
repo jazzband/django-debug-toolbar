@@ -80,14 +80,14 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     @override_settings(DEBUG=True)
     def test_history_sidebar_invalid(self):
-        response = self.client.post(reverse("djdt:history_sidebar"))
+        response = self.client.get(reverse("djdt:history_sidebar"))
         self.assertEqual(response.status_code, 400)
 
         data = {
             "store_id": "foo",
             "hash": "invalid",
         }
-        response = self.client.post(reverse("djdt:history_sidebar"), data=data)
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 400)
 
     @override_settings(DEBUG=True)
@@ -99,7 +99,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
             "store_id": "foo",
             "hash": "3280d66a3cca10098a44907c5a1fd255265eed31",
         }
-        response = self.client.post(reverse("djdt:history_sidebar"), data=data)
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {})
 
@@ -112,7 +112,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
             "store_id": store_id,
             "hash": HistoryStoreForm.make_hash({"store_id": store_id}),
         }
-        response = self.client.post(reverse("djdt:history_sidebar"), data=data)
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             set(response.json().keys()),
@@ -134,14 +134,14 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     @override_settings(DEBUG=True)
     def test_history_refresh_invalid(self):
-        response = self.client.post(reverse("djdt:history_refresh"))
+        response = self.client.get(reverse("djdt:history_refresh"))
         self.assertEqual(response.status_code, 400)
 
         data = {
             "store_id": "foo",
             "hash": "invalid",
         }
-        response = self.client.post(reverse("djdt:history_refresh"), data=data)
+        response = self.client.get(reverse("djdt:history_refresh"), data=data)
         self.assertEqual(response.status_code, 400)
 
     @override_settings(DEBUG=True)
@@ -153,7 +153,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
             "store_id": "foo",
             "hash": "3280d66a3cca10098a44907c5a1fd255265eed31",
         }
-        response = self.client.post(reverse("djdt:history_refresh"), data=data)
+        response = self.client.get(reverse("djdt:history_refresh"), data=data)
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(len(data["requests"]), 1)
