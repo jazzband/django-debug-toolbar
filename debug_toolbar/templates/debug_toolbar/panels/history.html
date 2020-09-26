@@ -1,7 +1,7 @@
 {% load i18n %}{% load static %}
-<form method="post">
+<form method="post" action="{% url 'djdt:history_refresh' %}">
     {{ refresh_form }}
-    <button formaction="{% url 'djdt:history_refresh' %}" class="refreshHistory">Refresh</button>
+    <button class="refreshHistory">Refresh</button>
 </form>
 <table style="max-height:100%;">
     <thead>

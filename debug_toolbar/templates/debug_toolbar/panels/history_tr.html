@@ -39,9 +39,9 @@
         </div>
     </td>
     <td class="djdt-actions">
-        <form method="post">
+        <form method="post" action="{% url 'djdt:history_sidebar' %}">
             {{ store_context.form }}
-            <button formaction="{% url 'djdt:history_sidebar' %}" data-store-id="{{ id }}" class="switchHistory">Switch</button>
+            <button data-store-id="{{ id }}" class="switchHistory">Switch</button>
         </form>
     </td>
 </tr>

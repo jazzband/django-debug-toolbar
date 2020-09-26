@@ -105,23 +105,19 @@ const djdt = {
         $$.on(djDebug, 'click', '.remoteCall', function(event) {
             event.preventDefault();
 
+            let url;
             const ajax_data = {};
 
             if (this.tagName === 'BUTTON') {
                 const form = this.closest('form');
-                ajax_data.url = this.formAction;
-
-                if (form) {
-                    ajax_data.body = new FormData(form);
-                    ajax_data.method = form.method.toUpperCase();
-                }
+                url = this.formAction;
+                ajax_data.method = form.method.toUpperCase();
+                ajax_data.body = new FormData(form);
+            } else if (this.tagName === 'A') {
+                url = this.href;
             }
 
-            if (this.tagName === 'A') {
-                ajax_data.url = this.href;
-            }
-
-            ajax(ajax_data.url, ajax_data).then(function(data) {
+            ajax(url, ajax_data).then(function(data) {
                 const win = djDebug.querySelector('#djDebugWindow');
                 win.innerHTML = data.content;
                 $$.show(win);
@@ -131,22 +127,19 @@ const djdt = {
         // Used by the history panel
         $$.on(djDebug, 'click', '.switchHistory', function(event) {
             event.preventDefault();
-            const ajax_data = {};
             const newStoreId = this.dataset.storeId;
             const form = this.closest('form');
             const tbody = this.closest('tbody');
 
-            ajax_data.url = this.getAttribute('formaction');
-
-            if (form) {
-                ajax_data.body = new FormData(form);
-                ajax_data.method = form.getAttribute('method') || 'POST';
-            }
+            const ajax_data = {
+                method: form.method.toUpperCase(),
+                body: new FormData(form),
+            };
 
             tbody.querySelector('.djdt-highlighted').classList.remove('djdt-highlighted');
             this.closest('tr').classList.add('djdt-highlighted');
 
-            ajax(ajax_data.url, ajax_data).then(function(data) {
+            ajax(form.action, ajax_data).then(function(data) {
                 djDebug.setAttribute('data-store-id', newStoreId);
                 Object.keys(data).map(function (panelId) {
                     if (djDebug.querySelector('#'+panelId)) {
@@ -160,18 +153,15 @@ const djdt = {
         // Used by the history panel
         $$.on(djDebug, 'click', '.refreshHistory', function(event) {
             event.preventDefault();
-            const ajax_data = {};
             const form = this.closest('form');
             const container = djDebug.querySelector('#djdtHistoryRequests');
 
-            ajax_data.url = this.getAttribute('formaction');
+            const ajax_data = {
+                method: form.method.toUpperCase(),
+                body: new FormData(form),
+            };
 
-            if (form) {
-                ajax_data.body = new FormData(form);
-                ajax_data.method = form.getAttribute('method') || 'POST';
-            }
-
-            ajax(ajax_data.url, ajax_data).then(function(data) {
+            ajax(form.action, ajax_data).then(function(data) {
                 if (data.requests.constructor === Array) {
                     data.requests.map(function(request) {
                         if (!container.querySelector('[data-store-id="'+request.id+'"]')) {
