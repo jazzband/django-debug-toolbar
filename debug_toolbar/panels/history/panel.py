@@ -5,6 +5,7 @@ from collections import OrderedDict
 from django.conf import settings
 from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
+from django.templatetags.static import static
 from django.urls import path
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -94,3 +95,9 @@ class HistoryPanel(Panel):
                 ),
             },
         )
+
+    @property
+    def scripts(self):
+        scripts = super().scripts
+        scripts.append(static("debug_toolbar/js/history.js"))
+        return scripts
