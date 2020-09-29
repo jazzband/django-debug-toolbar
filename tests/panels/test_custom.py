@@ -37,7 +37,7 @@ class CustomPanelTestCase(IntegrationTestCase):
             <h3>Title with special chars &amp;&quot;&#39;&lt;&gt;</h3>
             </div>
             <div class="djDebugPanelContent">
-            <img class="djdt-loader" src="/static/debug_toolbar/img/ajax-loader.gif" alt="loading">
+            <div class="djdt-loader"></div>
             <div class="djdt-scroll"></div>
             </div>
             </div>
