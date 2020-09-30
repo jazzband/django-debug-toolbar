@@ -77,15 +77,15 @@ class DebugToolbar:
             else:
                 raise
 
-    # Handle storing toolbars in memory and fetching them later on
-
-    _store = OrderedDict()
-
     def should_render_panels(self):
         render_panels = self.config["RENDER_PANELS"]
         if render_panels is None:
             render_panels = self.request.META["wsgi.multiprocess"]
         return render_panels
+
+    # Handle storing toolbars in memory and fetching them later on
+
+    _store = OrderedDict()
 
     def store(self):
         # Store already exists.
