@@ -8,7 +8,7 @@
     </div>
     <div class="djDebugPanelContent">
       {% if toolbar.store_id %}
-        <img src="{% static 'debug_toolbar/img/ajax-loader.gif' %}" alt="loading" class="djdt-loader">
+        <div class="djdt-loader"></div>
         <div class="djdt-scroll"></div>
       {% else %}
         <div class="djdt-scroll">{{ panel.content }}</div>

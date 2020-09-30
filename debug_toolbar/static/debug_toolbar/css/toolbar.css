@@ -233,8 +233,18 @@
 }
 
 #djDebug .djDebugPanelContent .djdt-loader {
-    display: block;
     margin: 80px auto;
+    border: 6px solid white;
+    border-radius: 50%;
+    border-top: 6px solid #ffe761;
+    width: 38px;
+    height: 38px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 #djDebug .djDebugPanelContent .djdt-scroll {
