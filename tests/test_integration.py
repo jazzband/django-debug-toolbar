@@ -21,6 +21,7 @@ from .views import regular_view
 try:
     from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.firefox.options import Options
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
     webdriver = None
@@ -317,7 +318,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = webdriver.Firefox()
+        options = Options()
+        options.headless = bool(os.environ.get("TRAVIS"))
+        cls.selenium = webdriver.Firefox(options=options)
 
     @classmethod
     def tearDownClass(cls):
@@ -354,7 +357,8 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         # Click to show the template panel
         self.selenium.find_element_by_class_name("TemplatesPanel").click()
 
-        self.assertIn("Templates (1 rendered)", template_panel.text)
+        self.assertIn("Templates (2 rendered)", template_panel.text)
+        self.assertIn("base.html", template_panel.text)
         self.assertIn("jinja2/basic.jinja", template_panel.text)
 
     @override_settings(

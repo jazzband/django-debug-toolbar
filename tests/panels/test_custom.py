@@ -31,7 +31,7 @@ class CustomPanelTestCase(IntegrationTestCase):
         self.assertContains(
             response,
             """
-            <div id="CustomPanel" class="djdt-panelContent">
+            <div id="CustomPanel" class="djdt-panelContent djdt-hidden">
             <div class="djDebugPanelTitle">
             <a href="" class="djDebugClose">×</a>
             <h3>Title with special chars &amp;&quot;&#39;&lt;&gt;</h3>
