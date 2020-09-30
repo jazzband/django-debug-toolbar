@@ -8,11 +8,7 @@
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
   <div class="djdt-hidden" id="djDebugToolbar">
     <ul id="djDebugPanelList">
-      {% if toolbar.panels %}
-        <li><a id="djHideToolBarButton" href="#" title="{% trans "Hide toolbar" %}">{% trans "Hide" %} »</a></li>
-      {% else %}
-        <li id="djDebugButton">DEBUG</li>
-      {% endif %}
+      <li><a id="djHideToolBarButton" href="#" title="{% trans "Hide toolbar" %}">{% trans "Hide" %} »</a></li>
       {% for panel in toolbar.panels %}
         {% include "debug_toolbar/includes/panel_button.html" %}
       {% endfor %}
@@ -27,5 +23,5 @@
   {% for panel in toolbar.panels %}
     {% include "debug_toolbar/includes/panel_content.html" %}
   {% endfor %}
-  <div id="djDebugWindow" class="djdt-panelContent"></div>
+  <div id="djDebugWindow" class="djdt-panelContent djdt-hidden"></div>
 </div>

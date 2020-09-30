@@ -6,6 +6,7 @@ Django Debug Toolbar
 
    installation
    configuration
+   checks
    tips
    panels
    commands

@@ -8,10 +8,10 @@ const $$ = {
         });
     },
     show: function(element) {
-        element.style.display = 'block';
+        element.classList.remove('djdt-hidden');
     },
     hide: function(element) {
-        element.style.display = 'none';
+        element.classList.add('djdt-hidden');
     },
     toggle: function(element, value) {
         if (value) {
@@ -21,8 +21,7 @@ const $$ = {
         }
     },
     visible: function(element) {
-        const style = getComputedStyle(element);
-        return style.display !== 'none';
+        element.classList.contains('djdt-hidden');
     },
     executeScripts: function(scripts) {
         scripts.forEach(function(script) {
