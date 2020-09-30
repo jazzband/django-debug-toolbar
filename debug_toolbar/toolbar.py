@@ -92,15 +92,9 @@ class DebugToolbar:
         if self.store_id:
             return
         self.store_id = uuid.uuid4().hex
-        cls = type(self)
-        cls._store[self.store_id] = self
-        for _ in range(len(cls._store) - self.config["RESULTS_CACHE_SIZE"]):
-            try:
-                # collections.OrderedDict
-                cls._store.popitem(last=False)
-            except TypeError:
-                # django.utils.datastructures.SortedDict
-                del cls._store[cls._store.keyOrder[0]]
+        self._store[self.store_id] = self
+        for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
+            self._store.popitem(last=False)
 
     @classmethod
     def fetch(cls, store_id):
