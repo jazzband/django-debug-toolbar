@@ -6,6 +6,12 @@ Change log
 
 * Fixed a regression where the JavaScript code crashed with an invalid
   CSS selector when searching for an element to replace.
+* Replaced remaining images with CSS.
+* Continued refactoring the frontend code for simplicity, continued
+  removing unused CSS.
+* Started running Selenium tests on Travis CI.
+* Added a system check which prevents using django-debug-toolbar without
+  any enabled panels.
 
 
 3.1 (2020-09-21)
