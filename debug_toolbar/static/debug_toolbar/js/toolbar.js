@@ -147,7 +147,7 @@ const djdt = {
 
             ajax(ajax_data.url, ajax_data).then(function(data) {
                 djDebug.setAttribute('data-store-id', newStoreId);
-                Object.keys(data).map(function (panelId) {
+                Object.keys(data).forEach(function (panelId) {
                     if (djDebug.querySelector('#'+panelId)) {
                         djDebug.querySelector('#'+panelId).outerHTML = data[panelId].content;
                         djDebug.querySelector('#djdt-'+panelId).outerHTML = data[panelId].button;
@@ -172,7 +172,7 @@ const djdt = {
 
             ajax(ajax_data.url, ajax_data).then(function(data) {
                 if (data.requests.constructor === Array) {
-                    data.requests.map(function(request) {
+                    data.requests.forEach(function(request) {
                         if (!container.querySelector('[data-store-id="'+request.id+'"]')) {
                             container.innerHTML = request.content + container.innerHTML;
                         }
