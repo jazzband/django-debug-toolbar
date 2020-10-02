@@ -59,6 +59,19 @@ const ajax = function (url, init) {
     });
 };
 
+function ajaxForm(element) {
+    const form = element.closest("form");
+    const url = new URL(form.action);
+    const formData = new FormData(form);
+    for (const [name, value] of formData.entries()) {
+        url.searchParams.append(name, value);
+    }
+    const ajaxData = {
+        method: form.method.toUpperCase(),
+    };
+    return ajax(url, ajaxData);
+}
+
 const djdt = {
     handleDragged: false,
     init: function () {
@@ -148,20 +161,14 @@ const djdt = {
         $$.on(djDebug, "click", ".switchHistory", function (event) {
             event.preventDefault();
             const newStoreId = this.dataset.storeId;
-            const form = this.closest("form");
             const tbody = this.closest("tbody");
-
-            const ajax_data = {
-                method: form.method.toUpperCase(),
-                body: new FormData(form),
-            };
 
             tbody
                 .querySelector(".djdt-highlighted")
                 .classList.remove("djdt-highlighted");
             this.closest("tr").classList.add("djdt-highlighted");
 
-            ajax(form.action, ajax_data).then(function (data) {
+            ajaxForm(this).then(function (data) {
                 djDebug.setAttribute("data-store-id", newStoreId);
                 Object.keys(data).forEach(function (panelId) {
                     if (djDebug.querySelector("#" + panelId)) {
@@ -177,15 +184,8 @@ const djdt = {
         // Used by the history panel
         $$.on(djDebug, "click", ".refreshHistory", function (event) {
             event.preventDefault();
-            const form = this.closest("form");
             const container = djDebug.querySelector("#djdtHistoryRequests");
-
-            const ajax_data = {
-                method: form.method.toUpperCase(),
-                body: new FormData(form),
-            };
-
-            ajax(form.action, ajax_data).then(function (data) {
+            ajaxForm(this).then(function (data) {
                 if (data.requests.constructor === Array) {
                     data.requests.forEach(function (request) {
                         if (

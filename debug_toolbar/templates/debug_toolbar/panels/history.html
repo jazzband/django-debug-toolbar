@@ -1,5 +1,5 @@
 {% load i18n %}{% load static %}
-<form method="post" action="{% url 'djdt:history_refresh' %}">
+<form method="get" action="{% url 'djdt:history_refresh' %}">
     {{ refresh_form }}
     <button class="refreshHistory">Refresh</button>
 </form>
