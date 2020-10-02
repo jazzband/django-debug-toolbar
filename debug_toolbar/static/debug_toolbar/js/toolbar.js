@@ -87,11 +87,9 @@ const djdt = {
                         ),
                         store_id = djDebug.dataset.storeId;
                     if (store_id && inner.children.length === 0) {
-                        let url = djDebug.dataset.renderPanelUrl;
-                        const url_params = new URLSearchParams();
-                        url_params.append("store_id", store_id);
-                        url_params.append("panel_id", this.className);
-                        url += "?" + url_params.toString();
+                        let url = new URL(djDebug.dataset.renderPanelUrl, window.location);
+                        url.searchParams.append("store_id", store_id);
+                        url.searchParams.append("panel_id", this.className);
                         ajax(url).then(function (data) {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
                             inner.innerHTML = data.content;
