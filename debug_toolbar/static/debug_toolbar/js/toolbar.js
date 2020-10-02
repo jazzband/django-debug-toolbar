@@ -100,7 +100,10 @@ const djdt = {
                         ),
                         store_id = djDebug.dataset.storeId;
                     if (store_id && inner.children.length === 0) {
-                        let url = new URL(djDebug.dataset.renderPanelUrl, window.location);
+                        const url = new URL(
+                            djDebug.dataset.renderPanelUrl,
+                            window.location
+                        );
                         url.searchParams.append("store_id", store_id);
                         url.searchParams.append("panel_id", this.className);
                         ajax(url).then(function (data) {
