@@ -74,7 +74,18 @@ def check_middleware(app_configs, **kwargs):
                 id="debug_toolbar.W003",
             )
         )
+    return errors
 
+
+@register
+def check_panel_configs(app_configs, **kwargs):
+    """Allow each panel to check the toolbar's integration for their its own purposes."""
+    from debug_toolbar.toolbar import DebugToolbar
+
+    errors = []
+    for panel_class in DebugToolbar.get_panel_classes():
+        for check_message in panel_class.run_checks():
+            errors.append(check_message)
     return errors
 
 
