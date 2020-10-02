@@ -11,7 +11,7 @@ style: package-lock.json
 style_check: package-lock.json
 	isort -c .
 	black --target-version=py35 --check .
-	npx prettier --loglevel debug --ignore-path .gitignore --check $(PRETTIER_TARGETS)
+	npx prettier --ignore-path .gitignore --check $(PRETTIER_TARGETS)
 
 flake8:
 	flake8
