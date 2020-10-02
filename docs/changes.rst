@@ -16,6 +16,8 @@ Change log
   for panels to verify the configuration before the application starts.
 * Validate the static file paths specified in ``STATICFILES_DIRS``
   exist via :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
+* Introduced `prettier <https://prettier.io/>`__ to format the frontend
+  code.
 
 
 3.1 (2020-09-21)
