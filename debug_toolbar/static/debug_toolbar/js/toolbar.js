@@ -177,9 +177,9 @@ const djdt = {
             if (djdt.handleDragged) {
                 event.preventDefault();
                 localStorage.setItem("djdt.top", handle.offsetTop);
-                setTimeout(function () {
+                requestAnimationFrame(function () {
                     djdt.handleDragged = false;
-                }, 10);
+                });
             }
         });
         const show =
