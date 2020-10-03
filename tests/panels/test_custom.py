@@ -33,7 +33,7 @@ class CustomPanelTestCase(IntegrationTestCase):
             """
             <div id="CustomPanel" class="djdt-panelContent djdt-hidden">
             <div class="djDebugPanelTitle">
-            <a href="" class="djDebugClose">×</a>
+            <button type="button" class="djDebugClose">×</button>
             <h3>Title with special chars &amp;&quot;&#39;&lt;&gt;</h3>
             </div>
             <div class="djDebugPanelContent">

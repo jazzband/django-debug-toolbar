@@ -49,8 +49,7 @@ const djdt = {
                 }
             }
         );
-        $$.on(djDebug, "click", "a.djDebugClose", function (event) {
-            event.preventDefault();
+        $$.on(djDebug, "click", ".djDebugClose", function (event) {
             djdt.hide_one_level();
         });
         $$.on(

@@ -366,7 +366,6 @@
 }
 
 #djDebug .djdt-panelContent .djDebugClose {
-    display: block;
     position: absolute;
     top: 4px;
     right: 15px;
@@ -381,7 +380,6 @@
     text-align: center;
     font-weight: 900;
     font-size: 20px;
-    text-decoration: none;
     box-sizing: content-box;
 }
 

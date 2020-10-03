@@ -42,7 +42,7 @@ function ajax(url, init) {
         } else {
             const win = document.querySelector("#djDebugWindow");
             win.innerHTML =
-                '<div class="djDebugPanelTitle"><a class="djDebugClose" href="">»</a><h3>' +
+                '<div class="djDebugPanelTitle"><button type="button" class="djDebugClose">»</button><h3>' +
                 response.status +
                 ": " +
                 response.statusText +
