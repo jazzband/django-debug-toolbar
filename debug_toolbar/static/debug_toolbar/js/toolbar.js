@@ -142,7 +142,6 @@ const djdt = {
         djDebug
             .querySelector("#djShowToolBarButton")
             .addEventListener("click", function (event) {
-                event.preventDefault();
                 if (!djdt.handleDragged) {
                     djdt.show_toolbar();
                 }
