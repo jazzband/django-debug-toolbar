@@ -36,21 +36,24 @@ const $$ = {
 
 function ajax(url, init) {
     init = Object.assign({ credentials: "same-origin" }, init);
-    return fetch(url, init).then(function (response) {
-        if (response.ok) {
-            return response.json();
-        } else {
+    return fetch(url, init)
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            }
+            return Promise.reject(
+                new Error(response.status + ": " + response.statusText)
+            );
+        })
+        .catch(function (error) {
             const win = document.querySelector("#djDebugWindow");
             win.innerHTML =
                 '<div class="djDebugPanelTitle"><a class="djDebugClose" href="">»</a><h3>' +
-                response.status +
-                ": " +
-                response.statusText +
+                error.message +
                 "</h3></div>";
             $$.show(win);
-            return Promise.reject();
-        }
-    });
+            throw error;
+        });
 }
 
 function ajaxForm(element) {
