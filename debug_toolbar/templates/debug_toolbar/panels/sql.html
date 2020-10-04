@@ -20,13 +20,21 @@
 
 {% if queries %}
   <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col class="djdt-width-30">
+      <col>
+      <col>
+    </colgroup>
     <thead>
       <tr>
         <th></th>
-        <th class="djdt-query" colspan="2">{% trans "Query" %}</th>
-        <th class="djdt-timeline">{% trans "Timeline" %}</th>
-        <th class="djdt-time">{% trans "Time (ms)" %}</th>
-        <th class="djdt-actions">{% trans "Action" %}</th>
+        <th colspan="2">{% trans "Query" %}</th>
+        <th>{% trans "Timeline" %}</th>
+        <th>{% trans "Time (ms)" %}</th>
+        <th>{% trans "Action" %}</th>
       </tr>
     </thead>
     <tbody>
@@ -36,7 +44,7 @@
           <td class="djdt-toggle">
             <button type="button" class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}">+</button>
           </td>
-          <td class="djdt-query">
+          <td>
             <div class="djDebugSql">{{ query.sql|safe }}</div>
             {% if query.similar_count %}
               <strong>
@@ -51,7 +59,7 @@
               </strong>
             {% endif %}
           </td>
-          <td class="djdt-timeline">
+          <td>
             <svg class="djDebugLineChart{% if query.is_slow %} djDebugLineChartWarning{% endif %}{% if query.in_trans %} djDebugLineChartInTransaction{% endif %}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none" aria-label="{{ query.width_ratio }}%">
               <rect x="{{ query.start_offset|unlocalize }}" y="0" height="5" width="{{ query.width_ratio|unlocalize }}" fill="{{ query.trace_color }}" />
               {% if query.starts_trans %}

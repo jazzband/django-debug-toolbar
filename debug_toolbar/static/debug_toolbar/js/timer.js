@@ -20,7 +20,7 @@ function addRow(stat, endStat) {
             "<td>" +
             stat.replace("Start", "") +
             "</td>" +
-            '<td class="djdt-timeline"><svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
+            '<td><svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
             "<td>" +
             (performance.timing[stat] - timingOffset) +
             " (+" +
@@ -36,7 +36,7 @@ function addRow(stat, endStat) {
             "<td>" +
             stat +
             "</td>" +
-            '<td class="djdt-timeline"><svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
+            '<td><svg class="djDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
             "<td>" +
             (performance.timing[stat] - timingOffset) +
             "</td>";
