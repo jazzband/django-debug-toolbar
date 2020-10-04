@@ -403,7 +403,6 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("Data for this panel isn't available anymore.", error.text)
 
     @override_settings(
-        DEBUG=True,
         TEMPLATES=[
             {
                 "BACKEND": "django.template.backends.django.DjangoTemplates",
