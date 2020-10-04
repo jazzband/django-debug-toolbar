@@ -27,6 +27,7 @@ eslint: package-lock.json
 
 package-lock.json: package.json
 	npm install
+	touch $@
 
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \
