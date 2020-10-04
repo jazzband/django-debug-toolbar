@@ -12,6 +12,7 @@ from django.test import RequestFactory
 from django.test.utils import override_settings
 
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
+from debug_toolbar.panels import Panel
 from debug_toolbar.toolbar import DebugToolbar
 
 from .base import BaseTestCase, IntegrationTestCase
@@ -29,6 +30,15 @@ except ImportError:
 
 
 rf = RequestFactory()
+
+
+class BuggyPanel(Panel):
+    def title(self):
+        return "BuggyPanel"
+
+    @property
+    def content(self):
+        raise Exception
 
 
 @override_settings(DEBUG=True)
@@ -466,3 +476,11 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         # SQL panel is still visible
         self.assertTrue(sql_panel.is_displayed())
+
+    @override_settings(DEBUG_TOOLBAR_PANELS=["tests.test_integration.BuggyPanel"])
+    def test_displays_server_error(self):
+        self.selenium.get(self.live_server_url + "/regular/basic/")
+        debug_window = self.selenium.find_element_by_id("djDebugWindow")
+        self.selenium.find_element_by_class_name("BuggyPanel").click()
+        WebDriverWait(self.selenium, timeout=3).until(EC.visibility_of(debug_window))
+        self.assertEqual(debug_window.text, "»\n500: Internal Server Error")
