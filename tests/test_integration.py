@@ -22,7 +22,9 @@ from .views import regular_view
 try:
     from selenium import webdriver
     from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.common.by import By
     from selenium.webdriver.firefox.options import Options
+    from selenium.webdriver.support import expected_conditions as EC
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
     webdriver = None
@@ -441,6 +443,33 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
                 "#djDebugWindow code"
             )
         )
+
+    def test_sql_action_and_go_back(self):
+        self.selenium.get(self.live_server_url + "/execute_sql/")
+        sql_panel = self.selenium.find_element_by_id("SQLPanel")
+        debug_window = self.selenium.find_element_by_id("djDebugWindow")
+
+        # Click to show the SQL panel
+        self.selenium.find_element_by_class_name("SQLPanel").click()
+
+        # SQL panel loads
+        button = WebDriverWait(self.selenium, timeout=3).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
+        )
+        button.click()
+
+        # SQL selected window loads
+        WebDriverWait(self.selenium, timeout=3).until(EC.visibility_of(debug_window))
+        self.assertIn("SQL selected", debug_window.text)
+
+        # Close the SQL selected window
+        debug_window.find_element_by_class_name("djDebugClose").click()
+        WebDriverWait(self.selenium, timeout=3).until(
+            EC.invisibility_of_element(debug_window)
+        )
+
+        # SQL panel is still visible
+        self.assertTrue(sql_panel.is_displayed())
 
 
 @override_settings(DEBUG=True)
