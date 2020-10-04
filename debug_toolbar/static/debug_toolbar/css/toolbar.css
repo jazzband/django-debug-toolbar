@@ -83,8 +83,7 @@
     transition: none;
 }
 
-#djDebug button,
-#djDebug a.button {
+#djDebug button {
     background-color: #eee;
     background-image: linear-gradient(to bottom, #eee, #cccccc);
     border: 1px solid #ccc;
@@ -97,8 +96,7 @@
     text-shadow: 0 1px 0 #eee;
 }
 
-#djDebug button:hover,
-#djDebug a.button:hover {
+#djDebug button:hover {
     background-color: #ddd;
     background-image: linear-gradient(to bottom, #ddd, #bbb);
     border-color: #bbb;
@@ -107,8 +105,7 @@
     text-shadow: 0 1px 0 #ddd;
 }
 
-#djDebug button:active,
-#djDebug a.button:active {
+#djDebug button:active {
     border: 1px solid #aaa;
     border-bottom: 1px solid #888;
     box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
