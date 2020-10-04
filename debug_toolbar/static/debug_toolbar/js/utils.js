@@ -48,7 +48,7 @@ function ajax(url, init) {
         .catch(function (error) {
             const win = document.querySelector("#djDebugWindow");
             win.innerHTML =
-                '<div class="djDebugPanelTitle"><a class="djDebugClose" href="">»</a><h3>' +
+                '<div class="djDebugPanelTitle"><button type="button" class="djDebugClose">»</button><h3>' +
                 error.message +
                 "</h3></div>";
             $$.show(win);
