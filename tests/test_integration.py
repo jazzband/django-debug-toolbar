@@ -426,10 +426,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.selenium.get(self.live_server_url + "/regular/basic/")
         version_panel = self.selenium.find_element_by_id("TemplatesPanel")
 
-        # Click to show the versions panel
+        # Click to show the templates panel
         self.selenium.find_element_by_class_name("TemplatesPanel").click()
 
-        # Version panel loads
+        # Templates panel loads
         trigger = WebDriverWait(self.selenium, timeout=10).until(
             lambda selenium: version_panel.find_element_by_css_selector(".remoteCall")
         )
