@@ -7,8 +7,12 @@ Change log
 * Fixed a regression where the JavaScript code crashed with an invalid
   CSS selector when searching for an element to replace.
 * Replaced remaining images with CSS.
-* Continued refactoring the frontend code for simplicity, continued
-  removing unused CSS.
+* Continued refactoring the HTML and CSS code for simplicity, continued
+  improving the use of semantic HTML.
+* Stopped caring about prehistoric browsers for good. Started splitting
+  up the JavaScript code to take advantage of
+  JavaScript modules.
+* Continued removing unused CSS.
 * Started running Selenium tests on Travis CI.
 * Added a system check which prevents using django-debug-toolbar without
   any enabled panels.
@@ -18,6 +22,10 @@ Change log
   exist via :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
 * Introduced `prettier <https://prettier.io/>`__ to format the frontend
   code.
+* Started accessing history views using GET requests since they do not
+  change state on the server.
+* Fixed a bug where unsuccessful requests (e.g. network errors) were
+  silently ignored.
 
 
 3.1 (2020-09-21)
