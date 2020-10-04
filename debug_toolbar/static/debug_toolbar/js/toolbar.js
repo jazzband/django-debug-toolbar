@@ -49,7 +49,7 @@ const djdt = {
                 }
             }
         );
-        $$.on(djDebug, "click", ".djDebugClose", function (event) {
+        $$.on(djDebug, "click", ".djDebugClose", function () {
             djdt.hide_one_level();
         });
         $$.on(
@@ -92,8 +92,7 @@ const djdt = {
         });
 
         // Used by the cache, profiling and SQL panels
-        $$.on(djDebug, "click", ".djToggleSwitch", function (event) {
-            const self = this;
+        $$.on(djDebug, "click", ".djToggleSwitch", function () {
             const id = this.dataset.toggleId;
             const toggleOpen = "+";
             const toggleClose = "-";
@@ -112,6 +111,7 @@ const djdt = {
                 .forEach(function (e) {
                     $$.toggle(e, !open_me);
                 });
+            const self = this;
             this.closest(".djDebugPanelContent")
                 .querySelectorAll(".djToggleDetails_" + id)
                 .forEach(function (e) {
@@ -139,7 +139,7 @@ const djdt = {
             });
         djDebug
             .querySelector("#djShowToolBarButton")
-            .addEventListener("click", function (event) {
+            .addEventListener("click", function () {
                 if (!djdt.handleDragged) {
                     djdt.show_toolbar();
                 }
