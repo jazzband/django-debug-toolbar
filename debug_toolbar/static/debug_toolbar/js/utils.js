@@ -21,7 +21,7 @@ const $$ = {
         }
     },
     visible: function (element) {
-        element.classList.contains("djdt-hidden");
+        return !element.classList.contains("djdt-hidden");
     },
     executeScripts: function (scripts) {
         scripts.forEach(function (script) {
