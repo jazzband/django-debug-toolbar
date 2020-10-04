@@ -34,7 +34,7 @@
         <tr class="{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
           <td><span class="djdt-color" style="background-color:rgb({{ query.rgb_color|join:', '}})"></span></td>
           <td class="djdt-toggle">
-            <a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href="">+</a>
+            <a class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}" href="">+</a>
           </td>
           <td class="djdt-query">
             <div class="djDebugSqlWrap">
