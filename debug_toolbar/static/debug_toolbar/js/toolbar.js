@@ -97,7 +97,9 @@ const djdt = {
             event.preventDefault();
             const self = this;
             const id = this.dataset.toggleId;
-            const open_me = this.textContent === this.dataset.toggleOpen;
+            const toggleOpen = "+";
+            const toggleClose = "-";
+            const open_me = this.textContent === toggleOpen;
             const name = this.dataset.toggleName;
             const container = this.closest(
                 ".djDebugPanelContent"
@@ -118,11 +120,11 @@ const djdt = {
                     if (open_me) {
                         e.classList.add("djSelected");
                         e.classList.remove("djUnselected");
-                        self.textContent = self.dataset.toggleClose;
+                        self.textContent = toggleClose;
                     } else {
                         e.classList.remove("djSelected");
                         e.classList.add("djUnselected");
-                        self.textContent = self.dataset.toggleOpen;
+                        self.textContent = toggleOpen;
                     }
                     const switch_ = e.querySelector(".djToggleSwitch");
                     if (switch_) {
