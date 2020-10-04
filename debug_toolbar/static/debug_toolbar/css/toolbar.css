@@ -561,14 +561,12 @@
     content: "\00a0";
 }
 #djDebug .djToggleSwitch {
-    text-decoration: none;
+    box-sizing: content-box;
+    padding: 0;
     border: 1px solid #999;
-    height: 12px;
+    border-radius: 0;
     width: 12px;
-    line-height: 12px;
-    text-align: center;
     color: #777;
-    display: inline-block;
     background: linear-gradient(to bottom, #fff, #dcdcdc);
 }
 #djDebug .djNoToggleSwitch {

@@ -16,7 +16,7 @@
         <td>
           <div style="padding-left:{{ call.indent }}px">
             {% if call.has_subfuncs %}
-              <a class="djProfileToggleDetails djToggleSwitch" data-toggle-name="profilingMain" data-toggle-id="{{ call.id }}" href>-</a>
+              <button type="button" class="djProfileToggleDetails djToggleSwitch" data-toggle-name="profilingMain" data-toggle-id="{{ call.id }}">-</button>
             {% else %}
               <span class="djNoToggleSwitch"></span>
             {% endif %}

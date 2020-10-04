@@ -10,7 +10,7 @@
         <p>{{ store_context.toolbar.stats.HistoryPanel.request_url|truncatechars:100|escape }}</p>
     </td>
     <td>
-        <a class="djToggleSwitch" data-toggle-name="historyMain" data-toggle-id="{{ id }}" href>+</a>
+        <button type="button" class="djToggleSwitch" data-toggle-name="historyMain" data-toggle-id="{{ id }}">+</button>
         <div class="djUnselected djToggleDetails_{{ id }}">
           <table>
             <colgroup>

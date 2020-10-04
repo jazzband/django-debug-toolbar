@@ -92,8 +92,7 @@ const djdt = {
         });
 
         // Used by the cache, profiling and SQL panels
-        $$.on(djDebug, "click", "a.djToggleSwitch", function (event) {
-            event.preventDefault();
+        $$.on(djDebug, "click", ".djToggleSwitch", function (event) {
             const self = this;
             const id = this.dataset.toggleId;
             const toggleOpen = "+";
