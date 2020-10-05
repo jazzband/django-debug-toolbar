@@ -1,0 +1,22 @@
+{% load i18n %}
+
+<table>
+  <colgroup>
+    <col class="djdt-width-20">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>{% trans "Variable" %}</th>
+      <th>{% trans "Value" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in variables %}
+      <tr>
+        <td><code>{{ key|pprint }}</code></td>
+        <td><code>{{ value|pprint }}</code></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
