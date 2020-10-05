@@ -6,24 +6,21 @@ style: package-lock.json
 	isort .
 	black --target-version=py35 .
 	flake8
+	npx eslint --ignore-path .gitignore --fix .
 	npx prettier --ignore-path .gitignore --write $(PRETTIER_TARGETS)
 
 style_check: package-lock.json
 	isort -c .
 	black --target-version=py35 --check .
-	npx prettier --ignore-path .gitignore --check $(PRETTIER_TARGETS)
-
-flake8:
 	flake8
+	npx eslint --ignore-path .gitignore .
+	npx prettier --ignore-path .gitignore --check $(PRETTIER_TARGETS)
 
 example:
 	python example/manage.py migrate --noinput
 	-DJANGO_SUPERUSER_PASSWORD=p python example/manage.py createsuperuser \
 		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
 	python example/manage.py runserver
-
-eslint: package-lock.json
-	npx eslint --ignore-path .gitignore .
 
 package-lock.json: package.json
 	npm install
