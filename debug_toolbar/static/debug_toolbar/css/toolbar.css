@@ -413,10 +413,6 @@
     border-radius: 3px;
 }
 
-#djDebug .djDebugSqlWrap {
-    position: relative;
-}
-
 #djDebug .djDebugCollapsed {
     color: #333;
 }
@@ -434,8 +430,7 @@
 }
 
 #djDebug .djDebugSql {
-    word-break: break-word;
-    z-index: 100000002;
+    overflow-wrap: anywhere;
 }
 
 #djDebug .djSQLDetailsDiv tbody th {

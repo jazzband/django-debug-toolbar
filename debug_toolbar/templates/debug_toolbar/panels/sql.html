@@ -37,9 +37,7 @@
             <button type="button" class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}">+</button>
           </td>
           <td class="djdt-query">
-            <div class="djDebugSqlWrap">
-              <div class="djDebugSql">{{ query.sql|safe }}</div>
-            </div>
+            <div class="djDebugSql">{{ query.sql|safe }}</div>
             {% if query.similar_count %}
               <strong>
                 <span class="djdt-color" style="background-color:{{ query.similar_color }}"></span>
