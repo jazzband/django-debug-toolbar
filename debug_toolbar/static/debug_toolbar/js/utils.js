@@ -46,7 +46,7 @@ function ajax(url, init) {
             );
         })
         .catch(function (error) {
-            const win = document.querySelector("#djDebugWindow");
+            const win = document.getElementById("djDebugWindow");
             win.innerHTML =
                 '<div class="djDebugPanelTitle"><button type="button" class="djDebugClose">»</button><h3>' +
                 error.message +

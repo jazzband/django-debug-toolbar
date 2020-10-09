@@ -15,10 +15,10 @@ $$.on(djDebug, "click", ".switchHistory", function (event) {
     ajaxForm(this).then(function (data) {
         djDebug.setAttribute("data-store-id", newStoreId);
         Object.keys(data).forEach(function (panelId) {
-            if (djDebug.querySelector("#" + panelId)) {
-                djDebug.querySelector("#" + panelId).outerHTML =
-                    data[panelId].content;
-                djDebug.querySelector("#djdt-" + panelId).outerHTML =
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.outerHTML = data[panelId].content;
+                document.getElementById("djdt-" + panelId).outerHTML =
                     data[panelId].button;
             }
         });
@@ -27,7 +27,7 @@ $$.on(djDebug, "click", ".switchHistory", function (event) {
 
 $$.on(djDebug, "click", ".refreshHistory", function (event) {
     event.preventDefault();
-    const container = djDebug.querySelector("#djdtHistoryRequests");
+    const container = document.getElementById("djdtHistoryRequests");
     ajaxForm(this).then(function (data) {
         data.requests.forEach(function (request) {
             if (
