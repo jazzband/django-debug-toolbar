@@ -240,7 +240,7 @@ const djdt = {
     },
     cookie: {
         get: function (key) {
-            if (document.cookie.indexOf(key) === -1) {
+            if (!document.cookie.includes(key)) {
                 return null;
             }
 
