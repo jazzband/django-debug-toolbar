@@ -1,5 +1,5 @@
 const $$ = {
-    on: function (root, eventName, selector, fn) {
+    on(root, eventName, selector, fn) {
         root.addEventListener(eventName, function (event) {
             const target = event.target.closest(selector);
             if (root.contains(target)) {
@@ -7,23 +7,23 @@ const $$ = {
             }
         });
     },
-    show: function (element) {
+    show(element) {
         element.classList.remove("djdt-hidden");
     },
-    hide: function (element) {
+    hide(element) {
         element.classList.add("djdt-hidden");
     },
-    toggle: function (element, value) {
+    toggle(element, value) {
         if (value) {
             $$.show(element);
         } else {
             $$.hide(element);
         }
     },
-    visible: function (element) {
+    visible(element) {
         return !element.classList.contains("djdt-hidden");
     },
-    executeScripts: function (scripts) {
+    executeScripts(scripts) {
         scripts.forEach(function (script) {
             const el = document.createElement("script");
             el.type = "module";
