@@ -29,16 +29,12 @@ $$.on(djDebug, "click", ".refreshHistory", function (event) {
     event.preventDefault();
     const container = djDebug.querySelector("#djdtHistoryRequests");
     ajaxForm(this).then(function (data) {
-        if (data.requests.constructor === Array) {
-            data.requests.forEach(function (request) {
-                if (
-                    !container.querySelector(
-                        '[data-store-id="' + request.id + '"]'
-                    )
-                ) {
-                    container.innerHTML = request.content + container.innerHTML;
-                }
-            });
-        }
+        data.requests.forEach(function (request) {
+            if (
+                !container.querySelector('[data-store-id="' + request.id + '"]')
+            ) {
+                container.innerHTML = request.content + container.innerHTML;
+            }
+        });
     });
 });
