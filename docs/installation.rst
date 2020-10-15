@@ -97,3 +97,16 @@ settings module::
 You can change the logic of determining whether or not the Debug Toolbar
 should be shown with the :ref:`SHOW_TOOLBAR_CALLBACK <SHOW_TOOLBAR_CALLBACK>`
 option.  This option allows you to specify a custom function for this purpose.
+
+Troubleshooting
+---------------
+
+On some platforms, the Django ``runserver`` command may use incorrect content
+types for static assets. To guess content types, Django relies on the
+:mod:`mimetypes` module from the Python standard library, which itself relies
+on the underlying platform's map files. If you find improper content types for
+certain files, it is most likely that the platform's map files are incorrect or
+need to be updated. This can be achieved, for example, by installing or
+updating the ``mailcap`` package on a Red Hat distribution, ``mime-support`` on
+a Debian distribution, or by editing the keys under ``HKEY_CLASSES_ROOT`` in
+the Windows registry.
