@@ -69,20 +69,18 @@ class DebugToolbarMiddleware:
 
         response = self.generate_server_timing_header(response, toolbar.enabled_panels)
 
+        # Always render the toolbar for the history panel, even if it is not
+        # included in the response.
+        rendered = toolbar.render_toolbar()
+
         # Check for responses where the toolbar can't be inserted.
         content_encoding = response.get("Content-Encoding", "")
         content_type = response.get("Content-Type", "").split(";")[0]
-        if any(
-            (
-                getattr(response, "streaming", False),
-                "gzip" in content_encoding,
-                content_type not in _HTML_TYPES,
-                request.is_ajax(),
-            )
+        if (
+            getattr(response, "streaming", False)
+            or "gzip" in content_encoding
+            or content_type not in _HTML_TYPES
         ):
-            # If a AJAX or JSON request, render the toolbar for the history.
-            if request.is_ajax() or content_type == "application/json":
-                toolbar.render_toolbar()
             return response
 
         # Insert the toolbar in the response.
@@ -91,7 +89,7 @@ class DebugToolbarMiddleware:
         pattern = re.escape(insert_before)
         bits = re.split(pattern, content, flags=re.IGNORECASE)
         if len(bits) > 1:
-            bits[-2] += toolbar.render_toolbar()
+            bits[-2] += rendered
             response.content = insert_before.join(bits)
             if "Content-Length" in response:
                 response["Content-Length"] = len(response.content)
