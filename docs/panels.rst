@@ -90,7 +90,7 @@ Signal
 
 Path: ``debug_toolbar.panels.signals.SignalsPanel``
 
-List of signals, their args and receivers.
+List of signals and receivers.
 
 Logging
 ~~~~~~~
