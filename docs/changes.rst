@@ -153,7 +153,7 @@ The following deprecated settings have been removed:
 * Convert system check errors to warnings to accommodate exotic
   configurations.
 * Fixed a crash when explaining raw querysets.
-* Fixed an obscure unicode error with binary data fields.
+* Fixed an obscure Unicode error with binary data fields.
 * Added MariaDB and Python 3.7 builds to the CI.
 
 1.10.1 (2018-09-11)

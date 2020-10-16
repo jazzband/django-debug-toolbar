@@ -99,7 +99,7 @@ class TemplatesPanel(Panel):
                     temp_layer = {}
                     for key, value in context_layer.items():
                         # Replace any request elements - they have a large
-                        # unicode representation and the request data is
+                        # Unicode representation and the request data is
                         # already made available from the Request panel.
                         if isinstance(value, http.HttpRequest):
                             temp_layer[key] = "<<request>>"
@@ -125,7 +125,7 @@ class TemplatesPanel(Panel):
                             except SQLQueryTriggered:
                                 temp_layer[key] = "<<triggers database query>>"
                             except UnicodeEncodeError:
-                                temp_layer[key] = "<<unicode encode error>>"
+                                temp_layer[key] = "<<Unicode encode error>>"
                             except Exception:
                                 temp_layer[key] = "<<unhandled exception>>"
                             else:
