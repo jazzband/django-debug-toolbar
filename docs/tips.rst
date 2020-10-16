@@ -7,14 +7,14 @@ The toolbar isn't displayed!
 The Debug Toolbar will only display when ``DEBUG = True`` in your project's
 settings (see :ref:`Show Toolbar Callback <SHOW_TOOLBAR_CALLBACK>`) and your
 IP address must also match an entry in your project's ``INTERNAL_IPS`` setting
-(see :ref:`internal-ips`).  It will also only display if the mimetype of the
+(see :ref:`internal-ips`).  It will also only display if the MIME type of the
 response is either ``text/html`` or ``application/xhtml+xml`` and contains a
 closing ``</body>`` tag.
 
 Be aware of middleware ordering and other middleware that may intercept
-requests and return responses. Putting the debug toolbar middleware *after*
-the Flatpage middleware, for example, means the toolbar will not show up on
-flatpages.
+requests and return responses. Putting the debug toolbar middleware *after* the
+``FlatpageFallbackMiddleware`` middleware, for example, means the toolbar will
+not show up on flatpages.
 
 Browsers have become more aggressive with caching static assets, such as
 JavaScript and CSS files. Check your browser's development console, and if

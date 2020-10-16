@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LoginView
 from django.urls import include, path, re_path
 
 import debug_toolbar
@@ -20,5 +21,6 @@ urlpatterns = [
     path("cached_view/", views.cached_view),
     path("json_view/", views.json_view),
     path("redirect/", views.redirect_view),
+    path("login_without_redirect/", LoginView.as_view(redirect_field_name=None)),
     path("__debug__/", include(debug_toolbar.urls)),
 ]

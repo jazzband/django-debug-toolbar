@@ -76,7 +76,7 @@ Static files
 
 Path: ``debug_toolbar.panels.staticfiles.StaticFilesPanel``
 
-Used static files and their locations (via the staticfiles finders).
+Used static files and their locations (via the ``staticfiles`` finders).
 
 Cache
 ~~~~~
@@ -90,7 +90,7 @@ Signal
 
 Path: ``debug_toolbar.panels.signals.SignalsPanel``
 
-List of signals, their args and receivers.
+List of signals and receivers.
 
 Logging
 ~~~~~~~
@@ -224,7 +224,7 @@ URL: https://github.com/robinedwards/django-debug-toolbar-neo4j-panel
 
 Path: ``neo4j_panel.Neo4jPanel``
 
-Trace neo4j rest API calls in your django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
+Trace neo4j rest API calls in your Django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
 
 Pympler
 ~~~~~~~
@@ -242,7 +242,7 @@ URL: https://github.com/djsutho/django-debug-toolbar-request-history
 
 Path: ``ddt_request_history.panels.request_history.RequestHistoryPanel``
 
-Switch between requests to view their stats. Also adds support for viewing stats for ajax requests.
+Switch between requests to view their stats. Also adds support for viewing stats for AJAX requests.
 
 Requests
 ~~~~~~~~

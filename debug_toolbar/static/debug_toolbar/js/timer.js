@@ -12,7 +12,7 @@ function getCSSWidth(stat, endStat) {
     width = (100.0 * width) / (100.0 - getLeft(stat));
     return width < 1 ? "2px" : width + "%";
 }
-function addRow(stat, endStat) {
+function addRow(tbody, stat, endStat) {
     const row = document.createElement("tr");
     if (endStat) {
         // Render a start through end bar
@@ -43,16 +43,17 @@ function addRow(stat, endStat) {
         row.querySelector("rect").setAttribute("width", 2);
     }
     row.querySelector("rect").setAttribute("x", getLeft(stat));
-    document.querySelector("#djDebugBrowserTimingTableBody").appendChild(row);
+    tbody.appendChild(row);
 }
 
+const tbody = document.getElementById("djDebugBrowserTimingTableBody");
 // This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
-addRow("domainLookupStart", "domainLookupEnd");
-addRow("connectStart", "connectEnd");
-addRow("requestStart", "responseEnd"); // There is no requestEnd
-addRow("responseStart", "responseEnd");
-addRow("domLoading", "domComplete"); // Spans the events below
-addRow("domInteractive");
-addRow("domContentLoadedEventStart", "domContentLoadedEventEnd");
-addRow("loadEventStart", "loadEventEnd");
-document.querySelector("#djDebugBrowserTiming").classList.remove("djdt-hidden");
+addRow(tbody, "domainLookupStart", "domainLookupEnd");
+addRow(tbody, "connectStart", "connectEnd");
+addRow(tbody, "requestStart", "responseEnd"); // There is no requestEnd
+addRow(tbody, "responseStart", "responseEnd");
+addRow(tbody, "domLoading", "domComplete"); // Spans the events below
+addRow(tbody, "domInteractive");
+addRow(tbody, "domContentLoadedEventStart", "domContentLoadedEventEnd");
+addRow(tbody, "loadEventStart", "loadEventEnd");
+document.getElementById("djDebugBrowserTiming").classList.remove("djdt-hidden");

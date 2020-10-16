@@ -88,10 +88,9 @@ class TemplatesPanel(Panel):
         for context_layer in context.dicts:
             if hasattr(context_layer, "items") and context_layer:
                 # Check if the layer is in the cache.
-                key_values = sorted(context_layer.items())
                 pformatted = None
-                for _key_values, _pformatted in self.pformat_layers:
-                    if _key_values == key_values:
+                for key_values, _pformatted in self.pformat_layers:
+                    if key_values == context_layer:
                         pformatted = _pformatted
                         break
 
@@ -99,7 +98,7 @@ class TemplatesPanel(Panel):
                     temp_layer = {}
                     for key, value in context_layer.items():
                         # Replace any request elements - they have a large
-                        # unicode representation and the request data is
+                        # Unicode representation and the request data is
                         # already made available from the Request panel.
                         if isinstance(value, http.HttpRequest):
                             temp_layer[key] = "<<request>>"
@@ -125,7 +124,7 @@ class TemplatesPanel(Panel):
                             except SQLQueryTriggered:
                                 temp_layer[key] = "<<triggers database query>>"
                             except UnicodeEncodeError:
-                                temp_layer[key] = "<<unicode encode error>>"
+                                temp_layer[key] = "<<Unicode encode error>>"
                             except Exception:
                                 temp_layer[key] = "<<unhandled exception>>"
                             else:
@@ -133,7 +132,7 @@ class TemplatesPanel(Panel):
                             finally:
                                 recording(True)
                     pformatted = pformat(temp_layer)
-                    self.pformat_layers.append((key_values, pformatted))
+                    self.pformat_layers.append((context_layer, pformatted))
                 context_list.append(pformatted)
 
         kwargs["context"] = context_list
