@@ -197,7 +197,7 @@ Panel options
 
   If set to ``True`` then a template's context will be included with it in the
   template debug panel. Turning this off is useful when you have large
-  template contexts, or you have template contexts with lazy datastructures
+  template contexts, or you have template contexts with lazy data structures
   that you don't want to be evaluated.
 
 * ``SKIP_TEMPLATE_PREFIXES``

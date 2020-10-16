@@ -17,6 +17,7 @@ black
 # Documentation
 
 Sphinx
+sphinxcontrib-spelling
 
 # Other tools
 

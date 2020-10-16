@@ -4,6 +4,9 @@ cache: pip
 matrix:
   fast_finish: true
   include:
+    - env: TOXENV=docs
+      before_install:
+        - sudo apt-get -y install libenchant1c2a
     - env: TOXENV=style
     - env: TOXENV=readme
     - python: 3.5

@@ -47,7 +47,7 @@ Change log
 ----------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
-* Updated the italian translation.
+* Updated the Italian translation.
 * Added support for Django 3.1a1. ``fetch()`` and ``jQuery.ajax`` requests are
   now detected by the absence of a ``Accept: text/html`` header instead of the
   jQuery-specific ``X-Requested-With`` header on Django 3.1 or better.
@@ -59,7 +59,7 @@ Change log
   add scripts rather then embedding them in the content HTML.
 * Switched from JSHint to ESLint. Added an ESLint job to the Travis CI matrix.
 * Debug toolbar state which is only needed in the JavaScript code now uses
-  localStorage.
+  ``localStorage``.
 * Updated the code to avoid a few deprecation warnings and resource warnings.
 * Started loading JavaScript as ES6 modules.
 * Added support for ``cache.touch()`` when using django-debug-toolbar.
@@ -87,7 +87,7 @@ Change log
 
 * Removed support for end of life Django 2.0 and 2.1.
 * Added support for Python 3.8.
-* Add locals() option for sql panel.
+* Add locals() option for SQL panel.
 * Added support for Django 3.0.
 
 
@@ -153,14 +153,14 @@ The following deprecated settings have been removed:
 * Convert system check errors to warnings to accommodate exotic
   configurations.
 * Fixed a crash when explaining raw querysets.
-* Fixed an obscure unicode error with binary data fields.
+* Fixed an obscure Unicode error with binary data fields.
 * Added MariaDB and Python 3.7 builds to the CI.
 
 1.10.1 (2018-09-11)
 -------------------
 
 * Fixed a problem where the duplicate query detection breaks for
-  non-hashable query parameters.
+  unhashable query parameters.
 * Added support for structured types when recording SQL.
 * Made Travis CI also run one test no PostgreSQL.
 * Added fallbacks for inline images in CSS.
@@ -185,7 +185,7 @@ The following deprecated settings have been removed:
   parameters).
 * Stopped hiding frames from Django's contrib apps in stacktraces by
   default.
-* Lots of small cleanups and bugfixes.
+* Lots of small cleanups and bug fixes.
 
 1.9.1 (2017-11-15)
 ------------------
@@ -198,11 +198,11 @@ The following deprecated settings have been removed:
 This version is compatible with Django 2.0 and requires Django 1.8 or
 later.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The profiling panel now escapes reported data resulting in valid HTML.
-* Many minor cleanups and bugfixes.
+* Many minor cleanups and bug fixes.
 
 1.8 (2017-05-05)
 ----------------
@@ -231,8 +231,8 @@ Features
   skipped by default to avoid panel sizes going into hundreds of
   megabytes of HTML.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * All views are now decorated with
   ``debug_toolbar.decorators.require_show_toolbar`` preventing unauthorized
@@ -245,8 +245,8 @@ Bugfixes
 1.7 (2017-03-05)
 ----------------
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Recursive template extension is now understood.
 * Deprecation warnings were fixed.
@@ -261,7 +261,7 @@ Bugfixes
 1.6 (2016-10-05)
 ----------------
 
-The debug toolbar was adopted by jazzband.
+The debug toolbar was adopted by Jazzband.
 
 Removed features
 ~~~~~~~~~~~~~~~~
@@ -271,8 +271,8 @@ Removed features
   ``DEBUG_TOOLBAR_PATCH_SETTINGS`` setting has also been removed as it is now
   unused. See the :doc:`installation documentation <installation>` for details.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The ``DebugToolbarMiddleware`` now also supports Django 1.10's ``MIDDLEWARE``
   setting.
@@ -284,8 +284,8 @@ This version is compatible with Django 1.10 and requires Django 1.8 or later.
 
 Support for Python 3.2 is dropped.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Restore compatibility with sqlparse ≥ 0.2.0.
 * Add compatibility with Bootstrap 4, Pure CSS, MDL, etc.
@@ -305,8 +305,8 @@ New features
   to only record stats when the toolbar is going to be inserted into the
   response.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Response time for requests of projects with numerous media files has
   been improved.
@@ -323,8 +323,8 @@ New features
 * The ``SHOW_TOOLBAR_CALLBACK`` accepts a callable.
 * The toolbar now provides a :ref:`javascript-api`.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The toolbar handle cannot leave the visible area anymore when the toolbar is
   collapsed.
@@ -342,11 +342,11 @@ New features
 
 * The ``JQUERY_URL`` setting defines where the toolbar loads jQuery from.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The toolbar now always loads a private copy of jQuery in order to avoid
-  using an incompatible version. It no longer attemps to integrate with AMD.
+  using an incompatible version. It no longer attempts to integrate with AMD.
 
   This private copy is available in ``djdt.jQuery``. Third-party panels are
   encouraged to use it because it should be as stable as the toolbar itself.
@@ -362,8 +362,8 @@ New features
 * The SQL panel colors queries depending on the stack level.
 * The Profiler panel allows configuring the maximum depth.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Support languages where lowercase and uppercase strings may have different
   lengths.
