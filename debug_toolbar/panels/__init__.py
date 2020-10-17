@@ -131,8 +131,7 @@ class Panel:
         time.
 
         Unless the toolbar or this panel is disabled, this method will be
-        called early in :class:`DebugToolbarMiddleware.process_request`. It
-        should be idempotent.
+        called early in ``DebugToolbarMiddleware``. It should be idempotent.
         """
 
     def disable_instrumentation(self):
