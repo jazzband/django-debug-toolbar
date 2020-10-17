@@ -12,7 +12,7 @@ The following panels are enabled by default.
 History
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.history.HistoryPanel``
+.. class:: debug_toolbar.panels.history.HistoryPanel
 
 This panel shows the history of requests made and allows switching to a past
 snapshot of the toolbar to view that request's stats.
@@ -20,28 +20,28 @@ snapshot of the toolbar to view that request's stats.
 Version
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.versions.VersionsPanel``
+.. class:: debug_toolbar.panels.versions.VersionsPanel
 
 Shows versions of Python, Django, and installed apps if possible.
 
 Timer
 ~~~~~
 
-Path: ``debug_toolbar.panels.timer.TimerPanel``
+.. class:: debug_toolbar.panels.timer.TimerPanel
 
 Request timer.
 
 Settings
 ~~~~~~~~
 
-Path: ``debug_toolbar.panels.settings.SettingsPanel``
+.. class:: debug_toolbar.panels.settings.SettingsPanel
 
 A list of settings in settings.py.
 
 Headers
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.headers.HeadersPanel``
+.. class:: debug_toolbar.panels.headers.HeadersPanel
 
 This panels shows the HTTP request and response headers, as well as a
 selection of values from the WSGI environment.
@@ -53,56 +53,56 @@ also add response headers such as ``Date`` and ``Server``.
 Request
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.request.RequestPanel``
+.. class:: debug_toolbar.panels.request.RequestPanel
 
 GET/POST/cookie/session variable display.
 
 SQL
 ~~~
 
-Path: ``debug_toolbar.panels.sql.SQLPanel``
+.. class:: debug_toolbar.panels.sql.SQLPanel
 
 SQL queries including time to execute and links to EXPLAIN each query.
 
 Template
 ~~~~~~~~
 
-Path: ``debug_toolbar.panels.templates.TemplatesPanel``
+.. class:: debug_toolbar.panels.templates.TemplatesPanel
 
 Templates and context used, and their template paths.
 
 Static files
 ~~~~~~~~~~~~
 
-Path: ``debug_toolbar.panels.staticfiles.StaticFilesPanel``
+.. class:: debug_toolbar.panels.staticfiles.StaticFilesPanel
 
 Used static files and their locations (via the ``staticfiles`` finders).
 
 Cache
 ~~~~~
 
-Path: ``debug_toolbar.panels.cache.CachePanel``
+.. class:: debug_toolbar.panels.cache.CachePanel
 
 Cache queries. Is incompatible with Django's per-site caching.
 
 Signal
 ~~~~~~
 
-Path: ``debug_toolbar.panels.signals.SignalsPanel``
+.. class:: debug_toolbar.panels.signals.SignalsPanel
 
 List of signals and receivers.
 
 Logging
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.logging.LoggingPanel``
+.. class:: debug_toolbar.panels.logging.LoggingPanel
 
 Logging output via Python's built-in :mod:`logging` module.
 
 Redirects
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.redirects.RedirectsPanel``
+.. class:: debug_toolbar.panels.redirects.RedirectsPanel
 
 When this panel is enabled, the debug toolbar will show an intermediate page
 upon redirect so you can view any debug information prior to redirecting. This
@@ -118,7 +118,7 @@ the ``DISABLE_PANELS`` configuration option.
 Profiling
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
+.. class:: debug_toolbar.panels.profiling.ProfilingPanel
 
 Profiling information for the processing of the request.
 
@@ -370,18 +370,18 @@ common methods available.
 
     This is a helper function to fetch values stored in the cookies.
 
-    :param string key: The key for the value to be fetched.
+    :param key: The key for the value to be fetched.
 
 .. js:function:: djdt.cookie.set
 
     This is a helper function to set a value stored in the cookies.
 
-    :param string key: The key to be used.
+    :param key: The key to be used.
 
-    :param string value: The value to be set.
+    :param value: The value to be set.
 
-    :param Object options: The options for the value to be set. It should contain
-        the properties ``expires`` and ``path``.
+    :param options: The options for the value to be set. It should contain the
+        properties ``expires`` and ``path``.
 
 .. js:function:: djdt.hide_toolbar
 
