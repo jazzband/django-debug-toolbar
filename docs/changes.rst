@@ -16,10 +16,10 @@ Change log
 * Started running Selenium tests on Travis CI.
 * Added a system check which prevents using django-debug-toolbar without
   any enabled panels.
-* Added  :func:`Panel.run_checks <debug_toolbar.panels.Panel.run_checks>`
-  for panels to verify the configuration before the application starts.
+* Added :meth:`Panel.run_checks() <debug_toolbar.panels.Panel.run_checks>` for
+  panels to verify the configuration before the application starts.
 * Validate the static file paths specified in ``STATICFILES_DIRS``
-  exist via :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
+  exist via :class:`~debug_toolbar.panels.staticfiles.StaticFilesPanel`
 * Introduced `prettier <https://prettier.io/>`__ to format the frontend
   code.
 * Started accessing history views using GET requests since they do not
@@ -62,7 +62,8 @@ Change log
   ``localStorage``.
 * Updated the code to avoid a few deprecation warnings and resource warnings.
 * Started loading JavaScript as ES6 modules.
-* Added support for ``cache.touch()`` when using django-debug-toolbar.
+* Added support for :meth:`cache.touch() <django.core.caches.cache.touch>` when
+  using django-debug-toolbar.
 * Eliminated more inline CSS.
 * Updated ``tox.ini`` and ``Makefile`` to use isort>=5.
 * Increased RESULTS_CACHE_SIZE to 25 to better support AJAX requests.
@@ -70,7 +71,8 @@ Change log
   ``box-sizing`` property.
 * Simplified the ``isort`` configuration by taking advantage of isort's
   ``black`` profile.
-* Added HistoryPanel including support for AJAX requests.
+* Added :class:`~debug_toolbar.panels.history.HistoryPanel` including support
+  for AJAX requests.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,10 +107,13 @@ Change log
 2.0 (2019-06-20)
 ----------------
 
-* Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
-* The ``ProfilingPanel`` is now enabled but inactive by default.
+* Updated :class:`~debug_toolbar.panels.staticfiles.StaticFilesPanel` to be
+  compatible with Django 3.0.
+* The :class:`~debug_toolbar.panels.profiling.ProfilingPanel` is now enabled
+  but inactive by default.
 * Fixed toggling of table rows in the profiling panel UI.
-* The ``ProfilingPanel`` no longer skips remaining panels or middlewares.
+* The :class:`~debug_toolbar.panels.profiling.ProfilingPanel` no longer skips
+  remaining panels or middlewares.
 * Improved the installation documentation.
 * Fixed a possible crash in the template panel.
 * Added support for psycopg2 ``Composed`` objects.
@@ -120,17 +125,19 @@ Change log
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * Removed support for Python 2.
 * Removed support for Django's deprecated ``MIDDLEWARE_CLASSES`` setting.
-* Restructured ``Panel`` to execute more like the new-style Django MIDDLEWARE.
-  The ``Panel.__init__()`` method is now passed ``get_response`` as the first
-  positional argument. The ``Panel.process_request()`` method must now always
+* Restructured :class:`debug_toolbar.panels.Panel` to execute more like the
+  new-style Django MIDDLEWARE. The ``Panel.__init__()`` method is now passed
+  ``get_response`` as the first positional argument. The
+  :meth:`debug_toolbar.panels.Panel.process_request` method must now always
   return a response. Usually this is the response returned by
   ``get_response()`` but the panel may also return a different response as is
-  the case in the ``RedirectsPanel``. Third party panels must adjust to this
-  new architecture. ``Panel.process_response()`` and ``Panel.process_view()``
-  have been removed as a result of this change.
+  the case in the :class:`~debug_toolbar.panels.redirects.RedirectsPanel`.
+  Third party panels must adjust to this new architecture.
+  ``Panel.process_response()`` and ``Panel.process_view()`` have been removed
+  as a result of this change.
 
 The deprecated API, ``debug_toolbar.panels.DebugPanel``, has been removed.
-Third party panels should use ``debug_toolbar.panels.Panel`` instead.
+Third party panels should use :class:`debug_toolbar.panels.Panel` instead.
 
 The following deprecated settings have been removed:
 

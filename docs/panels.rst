@@ -322,7 +322,7 @@ Panels can ship their own templates, static files and views. All views should
 be decorated with ``debug_toolbar.decorators.require_show_toolbar`` to prevent
 unauthorized access. There is no public CSS API at this time.
 
-.. autoclass:: debug_toolbar.panels.Panel(*args, **kwargs)
+.. autoclass:: debug_toolbar.panels.Panel
 
     .. autoattribute:: debug_toolbar.panels.Panel.nav_title
 
@@ -366,13 +366,13 @@ common methods available.
 
     Closes the topmost level (window/panel/toolbar)
 
-.. js:function:: djdt.cookie.get
+.. js:function:: djdt.cookie.get(key)
 
     This is a helper function to fetch values stored in the cookies.
 
     :param key: The key for the value to be fetched.
 
-.. js:function:: djdt.cookie.set
+.. js:function:: djdt.cookie.set(key, value, options)
 
     This is a helper function to set a value stored in the cookies.
 
