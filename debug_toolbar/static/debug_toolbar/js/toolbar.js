@@ -133,7 +133,7 @@ const djdt = {
             .getElementById("djHideToolBarButton")
             .addEventListener("click", function (event) {
                 event.preventDefault();
-                djdt.hide_toolbar(true);
+                djdt.hide_toolbar();
             });
         document
             .getElementById("djShowToolBarButton")
@@ -227,7 +227,7 @@ const djdt = {
             if (toolbar.querySelector("li.djdt-active")) {
                 djdt.hide_panels();
             } else {
-                djdt.hide_toolbar(true);
+                djdt.hide_toolbar();
             }
         }
     },
