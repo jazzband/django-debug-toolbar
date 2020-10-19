@@ -18,7 +18,12 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    return settings.DEBUG and request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS
+    INTERNAL_IPS = settings.INTERNAL_IPS
+    if (settings.DEBUG) and ("*" == INTERNAL_IPS[0] or request.META.get("REMOTE_ADDR") in INTERNAL_IPS):
+        response = True
+    else:
+        response = False
+    return response
 
 
 @lru_cache()
