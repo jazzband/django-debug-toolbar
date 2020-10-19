@@ -26,6 +26,9 @@ Change log
   change state on the server.
 * Fixed a bug where unsuccessful requests (e.g. network errors) were
   silently ignored.
+* Started spellchecking the documentation.
+* Removed calls to the deprecated ``request.is_ajax()`` method. These calls
+  were unnecessary now that most endpoints return JSON anyway.
 
 
 3.1 (2020-09-21)
