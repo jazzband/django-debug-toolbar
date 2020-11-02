@@ -1,15 +1,22 @@
 import weakref
 
-from django.core.signals import got_request_exception, request_finished, request_started
+from django.core.signals import (
+    got_request_exception,
+    request_finished,
+    request_started,
+    setting_changed,
+)
 from django.db.backends.signals import connection_created
 from django.db.models.signals import (
     class_prepared,
+    m2m_changed,
     post_delete,
     post_init,
     post_migrate,
     post_save,
     pre_delete,
     pre_init,
+    pre_migrate,
     pre_save,
 )
 from django.utils.module_loading import import_string
@@ -33,7 +40,10 @@ class SignalsPanel(Panel):
         "post_save": post_save,
         "pre_delete": pre_delete,
         "post_delete": post_delete,
+        "m2m_changed": m2m_changed,
+        "pre_migrate": pre_migrate,
         "post_migrate": post_migrate,
+        "setting_changed": setting_changed,
     }
 
     def nav_subtitle(self):
