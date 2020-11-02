@@ -20,6 +20,7 @@ included in the toolbar. It works like Django's ``MIDDLEWARE`` setting. The
 default value is::
 
     DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.history.HistoryPanel',
         'debug_toolbar.panels.versions.VersionsPanel',
         'debug_toolbar.panels.timer.TimerPanel',
         'debug_toolbar.panels.settings.SettingsPanel',
