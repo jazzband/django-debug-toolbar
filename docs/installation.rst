@@ -110,3 +110,40 @@ need to be updated. This can be achieved, for example, by installing or
 updating the ``mailcap`` package on a Red Hat distribution, ``mime-support`` on
 a Debian distribution, or by editing the keys under ``HKEY_CLASSES_ROOT`` in
 the Windows registry.
+
+Cross-Origin Request Blocked
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Debug Toolbar loads a `JavaScript module`_. Typical local development using
+Django ``runserver`` is not impacted. However, if your application server and
+static files server are at different origins, you may see `CORS errors`_ in
+your browser's development console:
+
+.. code-block:: text
+
+    Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://localhost/static/debug_toolbar/js/toolbar.js. (Reason: CORS header ‘Access-Control-Allow-Origin’ missing).
+
+Or
+
+.. code-block:: text
+
+    Access to script at 'http://localhost/static/debug_toolbar/js/toolbar.js' from origin 'http://localhost:8000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+To resolve, configure your static files server to add the
+`Access-Control-Allow-Origin header`_ with the origin of the application
+server. For example, if your application server is at ``http://example.com``,
+and your static files are served by NGINX, add:
+
+.. code-block:: nginx
+
+    add_header Access-Control-Allow-Origin http://example.com;
+
+And for Apache:
+
+.. code-block:: apache
+
+    Header add Access-Control-Allow-Origin http://example.com
+
+.. _JavaScript module: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
+.. _CORS errors: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin
+.. _Access-Control-Allow-Origin header: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
