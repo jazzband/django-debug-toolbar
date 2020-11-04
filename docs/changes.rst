@@ -85,7 +85,14 @@ Change log
   :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>` property.
 * Removed support for end of life Django 1.11. The minimum supported Django is
   now 2.2.
+* The Debug Toolbar now loads a `JavaScript module`_. Typical local development
+  using Django ``runserver`` is not impacted. However, if your application
+  server and static files server are at different origins, you may see CORS
+  errors in your browser's development console. See the "Cross-Origin Request
+  Blocked" section of the :doc:`installation docs <installation>` for details
+  on how to resolve this issue.
 
+.. _JavaScript module: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
 
 2.2 (2020-01-31)
 ----------------
