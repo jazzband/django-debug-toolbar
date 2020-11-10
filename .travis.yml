@@ -1,4 +1,7 @@
 dist: bionic
+arch:
+    - amd64
+    - ppc64le
 language: python
 cache: pip
 matrix:
