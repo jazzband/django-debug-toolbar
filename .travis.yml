@@ -147,6 +147,18 @@ matrix:
     - env: TOXENV=py38-djmaster-sqlite
     - env: TOXENV=py38-djmaster-postgresql
     - env: TOXENV=py38-djmaster-mariadb
+    - env: TOXENV=py38-dj31-postgresql DJANGO_SELENIUM_TESTS=True
+    - env: TOXENV=style
+      arch: ppc64le
+    - python: 3.8
+      env: TOXENV=py38-dj30-sqlite
+      arch: ppc64le
+    - python: 3.8
+      env: TOXENV=py38-dj31-sqlite
+      arch: ppc64le 
+    
+
+
 
 install:
   - pip install tox codecov
