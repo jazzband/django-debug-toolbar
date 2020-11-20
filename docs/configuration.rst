@@ -221,6 +221,15 @@ Panel options
   The SQL panel highlights queries that took more that this amount of time,
   in milliseconds, to execute.
 
+* ``SQL_TOKEN_GROUPING``
+
+  Default: ``True``
+
+  Panel: SQL
+
+  Disable SQL token grouping, that might cause render slowdowns,
+  when a view make long SQL textual queries.
+
 Here's what a slightly customized toolbar configuration might look like::
 
     # This example is unlikely to be appropriate for your project.
