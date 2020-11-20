@@ -227,7 +227,8 @@ Panel options
 
   Panel: SQL
 
-  Disable SQL token grouping, that might cause render slowdowns,
+  Controls SQL token grouping.
+  When set to ``True``, it might cause render slowdowns
   when a view make long SQL textual queries.
 
 Here's what a slightly customized toolbar configuration might look like::
