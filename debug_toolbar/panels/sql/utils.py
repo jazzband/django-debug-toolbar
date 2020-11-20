@@ -4,6 +4,8 @@ import sqlparse
 from django.utils.html import escape
 from sqlparse import tokens as T
 
+from debug_toolbar import settings as dt_settings
+
 
 class BoldKeywordFilter:
     """sqlparse filter to bold SQL keywords"""
@@ -31,7 +33,8 @@ def reformat_sql(sql, with_toggle=False):
 
 def parse_sql(sql, aligned_indent=False):
     stack = sqlparse.engine.FilterStack()
-    stack.enable_grouping()
+    if dt_settings.get_config()["SQL_STACK_GROUPING"]:
+        stack.enable_grouping()
     if aligned_indent:
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
