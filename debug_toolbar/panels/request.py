@@ -26,8 +26,8 @@ class RequestPanel(Panel):
     def generate_stats(self, request, response):
         self.record_stats(
             {
-                "get": [(k, request.GET.get(k)) for k in sorted(request.GET)],
-                "post": [(k, request.POST.get(k)) for k in sorted(request.POST)],
+                "get": [(k, request.GET.getlist(k)) for k in sorted(request.GET)],
+                "post": [(k, request.POST.getlist(k)) for k in sorted(request.POST)],
                 "cookies": [
                     (k, request.COOKIES.get(k)) for k in sorted(request.COOKIES)
                 ],
