@@ -81,11 +81,23 @@ CACHES = {
 
 if os.environ.get("DJANGO_DATABASE_ENGINE") == "postgresql":
     DATABASES = {
-        "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "debug-toolbar"}
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "debug_toolbar",
+            "USER": "root",
+            "PASSWORD": "debug_toolbar",
+            "PORT": os.environ.get("POSTGRES_PORT", ""),
+        }
     }
 elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
     DATABASES = {
-        "default": {"ENGINE": "django.db.backends.mysql", "NAME": "debug_toolbar"}
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "debug_toolbar",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "PORT": os.environ.get("MYSQL_PORT", ""),
+        }
     }
 else:
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3"}}

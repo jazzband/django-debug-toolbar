@@ -1,0 +1,94 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: ['3.5', '3.6', '3.7', '3.8']
+        database: ['postgresql', 'mariadb', 'sqlite']
+        include:
+        - python-version: '3.8'
+          tox-env: py38-docs
+        - python-version: '3.8'
+          tox-env: py38-style
+        - python-version: '3.8'
+          tox-env: py38-readme
+
+    services:
+      mariadb:
+        image: mariadb:10.3
+        env:
+          MYSQL_ROOT_PASSWORD: debug_toolbar
+          MYSQL_DATABASE: debug_toolbar
+        ports:
+        - 3306/tcp
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      postgres:
+        image: 'postgres:9.5'
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: debug_toolbar
+        ports:
+        - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key:
+          ${{ matrix.python-version }}-v1-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/tox.ini') }}
+        restore-keys: |
+          ${{ matrix.python-version }}-v1-
+
+    - name: Install enchant (only for docs)
+      if: "endsWith(matrix.tox-env, '-docs')"
+      run: |
+        sudo apt-get -qq update
+        sudo apt-get -y install libenchant
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox tox-gh-actions
+
+    - name: Tox tests
+      run: tox -v
+      env:
+        TOXENV: ${{ matrix.tox-env }}
+        DATABASE: ${{ matrix.database }}
+        MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
+        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        name: Python ${{ matrix.python-version }}
+        fail_ci_if_error: true
