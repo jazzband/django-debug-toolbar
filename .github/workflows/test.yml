@@ -62,7 +62,7 @@ jobs:
           ${{ matrix.python-version }}-v1-
 
     - name: Install enchant (only for docs)
-      if: "endsWith(matrix.tox-env, '-docs')"
+      if: "matrix.target == 'docs'"
       run: |
         sudo apt-get -qq update
         sudo apt-get -y install libenchant
@@ -83,4 +83,3 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         name: Python ${{ matrix.python-version }}
-        fail_ci_if_error: true
