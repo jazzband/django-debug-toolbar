@@ -86,7 +86,7 @@ if os.environ.get("DJANGO_DATABASE_ENGINE") == "postgresql":
             "NAME": "debug_toolbar",
             "USER": "root",
             "PASSWORD": "debug_toolbar",
-            "HOST": "127.0.0.1",
+            "HOST": "localhost",
             "PORT": os.environ.get("POSTGRES_PORT", ""),
         }
     }
@@ -97,7 +97,7 @@ elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
             "NAME": "debug_toolbar",
             "USER": "postgres",
             "PASSWORD": "postgres",
-            "HOST": "127.0.0.1",
+            "HOST": "localhost",
             "PORT": os.environ.get("MYSQL_PORT", ""),
         }
     }
