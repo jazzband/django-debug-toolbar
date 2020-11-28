@@ -10,7 +10,6 @@ jobs:
       max-parallel: 5
       matrix:
         python-version: ['3.5', '3.6', '3.7', '3.8']
-        target: ['postgresql', 'mariadb', 'sqlite']
 
     services:
       mariadb:
@@ -62,7 +61,6 @@ jobs:
           ${{ matrix.python-version }}-v1-
 
     - name: Install enchant (only for docs)
-      if: "matrix.target == 'docs'"
       run: |
         sudo apt-get -qq update
         sudo apt-get -y install enchant
@@ -75,7 +73,6 @@ jobs:
     - name: Tox tests
       run: tox -v
       env:
-        TARGET: ${{ matrix.target }}
         MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
 
