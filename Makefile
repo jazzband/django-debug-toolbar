@@ -4,14 +4,14 @@ PRETTIER_TARGETS = '**/*.(css|js)'
 
 style: package-lock.json
 	isort .
-	black --target-version=py35 .
+	black --target-version=py36 .
 	flake8
 	npx eslint --ignore-path .gitignore --fix .
 	npx prettier --ignore-path .gitignore --write $(PRETTIER_TARGETS)
 
 style_check: package-lock.json
 	isort -c .
-	black --target-version=py35 --check .
+	black --target-version=py36 --check .
 	flake8
 	npx eslint --ignore-path .gitignore .
 	npx prettier --ignore-path .gitignore --check $(PRETTIER_TARGETS)

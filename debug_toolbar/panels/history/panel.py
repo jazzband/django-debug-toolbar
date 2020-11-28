@@ -51,14 +51,7 @@ class HistoryPanel(Panel):
                 and request.body
                 and request.META.get("CONTENT_TYPE") == "application/json"
             ):
-                # Python <= 3.5's json.loads expects a string.
-                data = json.loads(
-                    request.body
-                    if sys.version_info[:2] > (3, 5)
-                    else request.body.decode(
-                        request.encoding or settings.DEFAULT_CHARSET
-                    )
-                )
+                data = json.loads(request.body)
         except RawPostDataException:
             # It is not guaranteed that we may read the request data (again).
             data = None
