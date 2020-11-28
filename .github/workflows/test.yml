@@ -3,7 +3,7 @@ name: Test
 on: [push, pull_request]
 
 jobs:
-  build:
+  mysql:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -15,23 +15,78 @@ jobs:
       mariadb:
         image: mariadb:10.3
         env:
-          MYSQL_ROOT_PASSWORD: debug_toolbar
-          MYSQL_DATABASE: debug_toolbar
-        ports:
-        - 3306/tcp
+          MYSQL_ROOT_PASSWORD: mysql
+          MYSQL_DATABASE: mysql
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+        - 3306:3306
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key:
+          ${{ matrix.python-version }}-v1-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/tox.ini') }}
+        restore-keys: |
+          ${{ matrix.python-version }}-v1-
+
+    - name: Install enchant (only for docs)
+      run: |
+        sudo apt-get -qq update
+        sudo apt-get -y install enchant
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox tox-gh-actions
+
+    - name: Test with tox
+      run: tox
+      env:
+        DB_BACKEND: mysql
+        DB_NAME: mysql
+        DB_USER: root
+        DB_PASSWORD: mysql
+        DB_HOST: "127.0.0.1"
+        DB_PORT: "3306"
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        name: Python ${{ matrix.python-version }}
+
+  postgres:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: ['3.6', '3.7', '3.8']
+
+    services:
       postgres:
         image: 'postgres:9.5'
         env:
-          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
         ports:
-        - 5432/tcp
+        - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -70,13 +125,98 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install --upgrade tox tox-gh-actions
 
-    - name: Tox tests
-      run: tox -v
+    - name: Test with tox
+      run: tox
       env:
-        MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
-        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+        DB_BACKEND: postgresql
+        DB_NAME: postgres
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        DB_HOST: localhost
+        DB_PORT: 5432
 
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
         name: Python ${{ matrix.python-version }}
+
+  sqlite:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: ['3.6', '3.7', '3.8']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key:
+          ${{ matrix.python-version }}-v1-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/tox.ini') }}
+        restore-keys: |
+          ${{ matrix.python-version }}-v1-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox tox-gh-actions
+
+    - name: Test with tox
+      run: tox
+      env:
+        DB_BACKEND: sqlite3
+        DB_NAME: ":memory:"
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        name: Python ${{ matrix.python-version }}
+
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key:
+          ${{ matrix.python-version }}-v1-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/tox.ini') }}
+        restore-keys: |
+          ${{ matrix.python-version }}-v1-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox
+
+    - name: Test with tox
+      run: tox -e docs,style,readme
