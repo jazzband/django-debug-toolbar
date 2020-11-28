@@ -71,8 +71,8 @@ DATABASES = {
     }
 }
 
-# To use another database, set the DJANGO_DATABASE_ENGINE environment variable.
-if os.environ.get("DJANGO_DATABASE_ENGINE", "").lower() == "postgresql":
+# To use another database, set the DB_BACKEND environment variable.
+if os.environ.get("DB_BACKEND", "").lower() == "postgresql":
     # % su postgres
     # % createuser debug_toolbar
     # % createdb debug_toolbar -O debug_toolbar
@@ -83,7 +83,7 @@ if os.environ.get("DJANGO_DATABASE_ENGINE", "").lower() == "postgresql":
             "USER": "debug_toolbar",
         }
     }
-if os.environ.get("DJANGO_DATABASE_ENGINE", "").lower() == "mysql":
+if os.environ.get("DB_BACKEND", "").lower() == "mysql":
     # % mysql
     # mysql> CREATE DATABASE debug_toolbar;
     # mysql> CREATE USER 'debug_toolbar'@'localhost';

@@ -36,11 +36,11 @@ test_selenium:
 
 coverage:
 	python --version
-	coverage erase
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		python -b -W always -m coverage run -m django test -v2 $${TEST_ARGS:-tests}
 	coverage report
 	coverage html
+	coverage xml
 
 translatable_strings:
 	cd debug_toolbar && python -m django makemessages -l en --no-obsolete

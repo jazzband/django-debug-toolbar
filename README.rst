@@ -6,8 +6,8 @@ Django Debug Toolbar
    :target: https://jazzband.co/
    :alt: Jazzband
 
-.. image:: https://travis-ci.org/jazzband/django-debug-toolbar.svg?branch=master
-   :target: https://travis-ci.org/jazzband/django-debug-toolbar
+.. image:: https://github.com/jazzband/django-debug-toolbar/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
 
 .. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/master/graph/badge.svg
