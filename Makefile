@@ -40,7 +40,6 @@ coverage:
 		python -b -W always -m coverage run -m django test -v2 $${TEST_ARGS:-tests}
 	coverage report
 	coverage html
-	coverage combine
 	coverage xml
 
 translatable_strings:
