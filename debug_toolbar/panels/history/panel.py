@@ -1,8 +1,6 @@
 import json
-import sys
 from collections import OrderedDict
 
-from django.conf import settings
 from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
 from django.templatetags.static import static
