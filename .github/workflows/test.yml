@@ -65,7 +65,7 @@ jobs:
       if: "matrix.target == 'docs'"
       run: |
         sudo apt-get -qq update
-        sudo apt-get -y install libenchant
+        sudo apt-get -y install enchant
 
     - name: Install dependencies
       run: |
