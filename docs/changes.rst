@@ -1,6 +1,11 @@
 Change log
 ==========
 
+unreleased
+----------
+
+* Moved CI to GitHub Actions: https://github.com/jazzband/django-debug-toolbar/actions
+
 3.2a1 (2020-10-19)
 ------------------
 
