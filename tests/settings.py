@@ -97,7 +97,7 @@ elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
             "NAME": "debug_toolbar",
             "USER": "root",
             "PASSWORD": "debug_toolbar",
-            "HOST": "localhost",
+            "HOST": "127.0.0.1",
             "PORT": os.environ.get("MYSQL_PORT", ""),
         }
     }
