@@ -10,14 +10,7 @@ jobs:
       max-parallel: 5
       matrix:
         python-version: ['3.5', '3.6', '3.7', '3.8']
-        database: ['postgresql', 'mariadb', 'sqlite']
-        include:
-        - python-version: '3.8'
-          tox-env: py38-docs
-        - python-version: '3.8'
-          tox-env: py38-style
-        - python-version: '3.8'
-          tox-env: py38-readme
+        target: ['postgresql', 'mariadb', 'sqlite', 'extra']
 
     services:
       mariadb:
@@ -82,8 +75,7 @@ jobs:
     - name: Tox tests
       run: tox -v
       env:
-        TOXENV: ${{ matrix.tox-env }}
-        DATABASE: ${{ matrix.database }}
+        TARGET: ${{ matrix.target }}
         MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
 
