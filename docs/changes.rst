@@ -29,6 +29,7 @@ Change log
 * Started spellchecking the documentation.
 * Removed calls to the deprecated ``request.is_ajax()`` method. These calls
   were unnecessary now that most endpoints return JSON anyway.
+* Removed support for Python 3.5.
 
 
 3.1 (2020-09-21)
