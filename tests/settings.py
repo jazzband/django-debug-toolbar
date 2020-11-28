@@ -84,8 +84,8 @@ if os.environ.get("DJANGO_DATABASE_ENGINE") == "postgresql":
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": "debug_toolbar",
-            "USER": "root",
-            "PASSWORD": "debug_toolbar",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
             "HOST": "localhost",
             "PORT": os.environ.get("POSTGRES_PORT", ""),
         }
@@ -95,8 +95,8 @@ elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": "debug_toolbar",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
+            "USER": "root",
+            "PASSWORD": "debug_toolbar",
             "HOST": "localhost",
             "PORT": os.environ.get("MYSQL_PORT", ""),
         }
