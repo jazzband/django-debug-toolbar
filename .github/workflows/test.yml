@@ -10,7 +10,7 @@ jobs:
       max-parallel: 5
       matrix:
         python-version: ['3.5', '3.6', '3.7', '3.8']
-        target: ['postgresql', 'mariadb', 'sqlite', 'docs', 'style', 'readme']
+        target: ['postgresql', 'mariadb', 'sqlite']
 
     services:
       mariadb:
