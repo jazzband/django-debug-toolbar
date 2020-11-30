@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.utils import get_name_from_obj
+from debug_toolbar.utils import get_name_from_obj, get_sorted_request_variable
 
 
 class RequestPanel(Panel):
@@ -26,13 +26,12 @@ class RequestPanel(Panel):
     def generate_stats(self, request, response):
         self.record_stats(
             {
-                "get": [(k, request.GET.get(k)) for k in sorted(request.GET)],
-                "post": [(k, request.POST.get(k)) for k in sorted(request.POST)],
-                "cookies": [
-                    (k, request.COOKIES.get(k)) for k in sorted(request.COOKIES)
-                ],
+                "get": get_sorted_request_variable(request.GET),
+                "post": get_sorted_request_variable(request.POST),
+                "cookies": get_sorted_request_variable(request.COOKIES),
             }
         )
+
         view_info = {
             "view_func": _("<no view>"),
             "view_args": "None",
