@@ -210,6 +210,16 @@ def getframeinfo(frame, context=1):
         return (filename, lineno, frame.f_code.co_name, lines, index)
 
 
+def get_sorted_request_variable(variable):
+    """
+    Get a sorted list of variables from the request data.
+    """
+    if isinstance(variable, dict):
+        return [(k, variable.get(k)) for k in sorted(variable)]
+    else:
+        return [(k, variable.getlist(k)) for k in sorted(variable)]
+
+
 def get_stack(context=1):
     """
     Get a list of records for a frame and all higher (calling) frames.

@@ -1,3 +1,5 @@
+from django.http import QueryDict
+
 from ..base import BaseTestCase
 
 
@@ -30,3 +32,55 @@ class RequestPanelTestCase(BaseTestCase):
         content = self.panel.content
         self.assertIn("nôt åscíì", content)
         self.assertValidHTML(content)
+
+    def test_query_dict_for_request_in_method_get(self):
+        """
+        Test verifies the correctness of the statistics generation method
+        in the case when the GET request is class QueryDict
+        """
+        self.request.GET = QueryDict("foo=bar")
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        # ensure the panel GET request data is processed correctly.
+        content = self.panel.content
+        self.assertIn("foo", content)
+        self.assertIn("bar", content)
+
+    def test_dict_for_request_in_method_get(self):
+        """
+        Test verifies the correctness of the statistics generation method
+        in the case when the GET request is class Dict
+        """
+        self.request.GET = {"foo": "bar"}
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        # ensure the panel GET request data is processed correctly.
+        content = self.panel.content
+        self.assertIn("foo", content)
+        self.assertIn("bar", content)
+
+    def test_query_dict_for_request_in_method_post(self):
+        """
+        Test verifies the correctness of the statistics generation method
+        in the case when the POST request is class QueryDict
+        """
+        self.request.GET = QueryDict("foo=bar")
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        # ensure the panel POST request data is processed correctly.
+        content = self.panel.content
+        self.assertIn("foo", content)
+        self.assertIn("bar", content)
+
+    def test_dict_for_request_in_method_post(self):
+        """
+        Test verifies the correctness of the statistics generation method
+        in the case when the POST request is class Dict
+        """
+        self.request.GET = {"foo": "bar"}
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        # ensure the panel POST request data is processed correctly.
+        content = self.panel.content
+        self.assertIn("foo", content)
+        self.assertIn("bar", content)
