@@ -41,8 +41,8 @@ Run the Django development server::
 
     $ python example/manage.py runserver
 
-You can change the database used by specifying the ``DJANGO_DATABASE_ENGINE``
+You can change the database used by specifying the ``DB_BACKEND``
 environment variable::
 
-    $ DJANGO_DATABASE_ENGINE=postgresql python example/manage.py migrate
-    $ DJANGO_DATABASE_ENGINE=postgresql python example/manage.py runserver
+    $ DB_BACKEND=postgresql python example/manage.py migrate
+    $ DB_BACKEND=postgresql python example/manage.py runserver

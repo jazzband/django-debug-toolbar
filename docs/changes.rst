@@ -1,6 +1,11 @@
 Change log
 ==========
 
+unreleased
+----------
+
+* Moved CI to GitHub Actions: https://github.com/jazzband/django-debug-toolbar/actions
+
 3.2a1 (2020-10-19)
 ------------------
 
@@ -29,6 +34,7 @@ Change log
 * Started spellchecking the documentation.
 * Removed calls to the deprecated ``request.is_ajax()`` method. These calls
   were unnecessary now that most endpoints return JSON anyway.
+* Removed support for Python 3.5.
 
 
 3.1 (2020-09-21)
