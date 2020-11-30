@@ -1,5 +1,6 @@
-from ..base import BaseTestCase
 from django.http import QueryDict
+
+from ..base import BaseTestCase
 
 
 class RequestPanelTestCase(BaseTestCase):
@@ -37,7 +38,7 @@ class RequestPanelTestCase(BaseTestCase):
         Test verifies the correctness of the statistics generation method
         in the case when the GET request is class QueryDict
         """
-        self.request.GET = QueryDict('foo=bar')
+        self.request.GET = QueryDict("foo=bar")
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         # ensure the panel GET request data is processed correctly.
@@ -63,7 +64,7 @@ class RequestPanelTestCase(BaseTestCase):
         Test verifies the correctness of the statistics generation method
         in the case when the POST request is class QueryDict
         """
-        self.request.GET = QueryDict('foo=bar')
+        self.request.GET = QueryDict("foo=bar")
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         # ensure the panel POST request data is processed correctly.
