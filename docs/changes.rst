@@ -5,6 +5,12 @@ unreleased
 ----------
 
 * Moved CI to GitHub Actions: https://github.com/jazzband/django-debug-toolbar/actions
+* Stopped crashing when ``request.GET`` and ``request.POST`` are
+  dictionaries instead of ``QueryDict`` instances. This isn't a valid
+  use of Django but django-debug-toolbar shouldn't crash anyway.
+* Fixed a crash in the history panel when sending a  JSON POST request
+  with invalid JSON.
+
 
 3.2a1 (2020-10-19)
 ------------------
