@@ -64,7 +64,7 @@ class RequestPanelTestCase(BaseTestCase):
         Test verifies the correctness of the statistics generation method
         in the case when the POST request is class QueryDict
         """
-        self.request.GET = QueryDict("foo=bar")
+        self.request.POST = QueryDict("foo=bar")
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         # ensure the panel POST request data is processed correctly.
@@ -77,7 +77,7 @@ class RequestPanelTestCase(BaseTestCase):
         Test verifies the correctness of the statistics generation method
         in the case when the POST request is class Dict
         """
-        self.request.GET = {"foo": "bar"}
+        self.request.POST = {"foo": "bar"}
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         # ensure the panel POST request data is processed correctly.
