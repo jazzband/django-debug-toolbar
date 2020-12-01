@@ -30,7 +30,8 @@ class HistoryPanelTestCase(BaseTestCase):
     def test_post_json(self):
         for data, expected_stats_data in (
             ({"foo": "bar"}, {"foo": "bar"}),
-            ("", {}),
+            ("", {}),  # Empty JSON
+            ("'", {}),  # Invalid JSON
         ):
             with self.subTest(data=data):
                 self.request = rf.post(

@@ -49,7 +49,10 @@ class HistoryPanel(Panel):
                 and request.body
                 and request.META.get("CONTENT_TYPE") == "application/json"
             ):
-                data = json.loads(request.body)
+                try:
+                    data = json.loads(request.body)
+                except ValueError:
+                    pass
         except RawPostDataException:
             # It is not guaranteed that we may read the request data (again).
             data = None
