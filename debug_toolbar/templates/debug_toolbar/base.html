@@ -12,14 +12,14 @@
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
   <div class="djdt-hidden" id="djDebugToolbar">
     <ul id="djDebugPanelList">
-      <li><a id="djHideToolBarButton" href="#" title="{% trans "Hide toolbar" %}">{% trans "Hide" %} »</a></li>
+      <li><a id="djHideToolBarButton" href="#" title="{% trans 'Hide toolbar' %}">{% trans "Hide" %} »</a></li>
       {% for panel in toolbar.panels %}
         {% include "debug_toolbar/includes/panel_button.html" %}
       {% endfor %}
     </ul>
   </div>
   <div class="djdt-hidden" id="djDebugToolbarHandle">
-    <div title="{% trans "Show toolbar" %}" id="djShowToolBarButton">
+    <div title="{% trans 'Show toolbar' %}" id="djShowToolBarButton">
       <span id="djShowToolBarD">D</span><span id="djShowToolBarJ">J</span>DT
     </div>
   </div>
