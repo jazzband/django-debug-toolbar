@@ -1,7 +1,11 @@
-{% load i18n %}{% load static %}
+{% load i18n static %}
+{% block css %}
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" media="print">
 <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}">
+{% endblock %}
+{% block js %}
 <script type="module" src="{% static 'debug_toolbar/js/toolbar.js' %}" async></script>
+{% endblock %}
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      {% if toolbar.store_id %}data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"{% endif %}
      data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
