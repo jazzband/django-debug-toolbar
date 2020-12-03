@@ -1,8 +1,8 @@
 Change log
 ==========
 
-unreleased
-----------
+3.2 (2020-12-03)
+----------------
 
 * Moved CI to GitHub Actions: https://github.com/jazzband/django-debug-toolbar/actions
 * Stopped crashing when ``request.GET`` and ``request.POST`` are
@@ -10,6 +10,12 @@ unreleased
   use of Django but django-debug-toolbar shouldn't crash anyway.
 * Fixed a crash in the history panel when sending a  JSON POST request
   with invalid JSON.
+* Added missing signals to the signals panel by default.
+* Documented how to avoid CORS errors now that we're using JavaScript
+  modules.
+* Verified support for Python 3.9.
+* Added a ``css`` and a ``js`` template block to
+  ``debug_toolbar/base.html`` to allow overriding CSS and JS.
 
 
 3.2a1 (2020-10-19)
@@ -21,8 +27,7 @@ unreleased
 * Continued refactoring the HTML and CSS code for simplicity, continued
   improving the use of semantic HTML.
 * Stopped caring about prehistoric browsers for good. Started splitting
-  up the JavaScript code to take advantage of
-  JavaScript modules.
+  up the JavaScript code to take advantage of JavaScript modules.
 * Continued removing unused CSS.
 * Started running Selenium tests on Travis CI.
 * Added a system check which prevents using django-debug-toolbar without
