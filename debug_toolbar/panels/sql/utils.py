@@ -33,7 +33,7 @@ def reformat_sql(sql, with_toggle=False):
 
 def parse_sql(sql, aligned_indent=False):
     stack = sqlparse.engine.FilterStack()
-    if dt_settings.get_config()["SQL_TOKEN_GROUPING"]:
+    if dt_settings.get_config()["ENABLE_SQL_TOKEN_GROUPING"]:
         stack.enable_grouping()
     if aligned_indent:
         stack.stmtprocess.append(
