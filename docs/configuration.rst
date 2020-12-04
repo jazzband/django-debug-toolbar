@@ -235,14 +235,14 @@ Panel options
   When set to ``True``, it might cause render slowdowns
   when a view make long SQL textual queries.
 
-  Without grouping::
+  **Without grouping**::
 
     SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined"
     FROM "auth_user"
     WHERE "auth_user"."username" = '''dzqqq'''
     LIMIT 21
 
-  With grouping::
+  **With grouping**::
 
     SELECT "auth_user"."id",
        "auth_user"."password",
