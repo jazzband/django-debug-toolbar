@@ -6,13 +6,21 @@ Django Debug Toolbar
    :target: https://jazzband.co/
    :alt: Jazzband
 
-.. image:: https://travis-ci.org/jazzband/django-debug-toolbar.svg?branch=master
-   :target: https://travis-ci.org/jazzband/django-debug-toolbar
+.. image:: https://github.com/jazzband/django-debug-toolbar/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
 
 .. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/jazzband/django-debug-toolbar
    :alt: Test coverage status
+
+.. image:: https://img.shields.io/pypi/pyversions/django-debug-toolbar
+   :target: https://pypi.python.org/pypi/django-debug-toolbar
+   :alt: Supported Python versions
+
+.. image:: https://img.shields.io/pypi/djversions/django-debug-toolbar
+   :target: https://pypi.org/project/django-debug-toolbar
+   :alt: Supported Django versions
 
 The Django Debug Toolbar is a configurable set of panels that display various
 debug information about the current request/response and when clicked, display
@@ -26,7 +34,7 @@ Here's a screenshot of the toolbar in action:
 In addition to the built-in panels, a number of third-party panels are
 contributed by the community.
 
-The current stable version of the Debug Toolbar is 3.1. It works on
+The current stable version of the Debug Toolbar is 3.2. It works on
 Django ≥ 2.2.
 
 Documentation, including installation and configuration instructions, is

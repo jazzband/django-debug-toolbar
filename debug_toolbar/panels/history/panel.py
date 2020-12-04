@@ -1,8 +1,6 @@
 import json
-import sys
 from collections import OrderedDict
 
-from django.conf import settings
 from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -51,14 +49,10 @@ class HistoryPanel(Panel):
                 and request.body
                 and request.META.get("CONTENT_TYPE") == "application/json"
             ):
-                # Python <= 3.5's json.loads expects a string.
-                data = json.loads(
-                    request.body
-                    if sys.version_info[:2] > (3, 5)
-                    else request.body.decode(
-                        request.encoding or settings.DEFAULT_CHARSET
-                    )
-                )
+                try:
+                    data = json.loads(request.body)
+                except ValueError:
+                    pass
         except RawPostDataException:
             # It is not guaranteed that we may read the request data (again).
             data = None
