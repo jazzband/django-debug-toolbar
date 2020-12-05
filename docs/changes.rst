@@ -1,6 +1,13 @@
 Change log
 ==========
 
+Next version
+------------
+
+* Changed ``djdt.cookie.set()`` to set ``sameSite=Lax`` by default if
+  callers do not provide a value.
+
+
 3.2 (2020-12-03)
 ----------------
 
