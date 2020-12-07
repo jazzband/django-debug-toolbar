@@ -156,6 +156,16 @@ matrix:
     - python: 3.8
       env: TOXENV=py38-dj31-sqlite
       arch: ppc64le 
+    -  python: 3.8
+      env: TOXENV=py38-dj22-postgresql
+      arch: ppc64le 
+      addons:
+        postgresql: "9.5"
+    - python: 3.8
+      env: TOXENV=py38-dj30-postgresql
+      arch: ppc64le 
+      addons:
+        postgresql: "9.5"
     
 
 
