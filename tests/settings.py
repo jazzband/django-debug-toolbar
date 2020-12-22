@@ -93,6 +93,8 @@ DATABASES = {
     },
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # Debug Toolbar configuration
 
 DEBUG_TOOLBAR_CONFIG = {
