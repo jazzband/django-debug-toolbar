@@ -130,13 +130,20 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
-class CacheHandlerPatch(CacheHandler):
-    def __getitem__(self, alias):
-        actual_cache = super().__getitem__(alias)
-        return CacheStatTracker(actual_cache)
+# class CacheHandlerPatch(CacheHandler):
+#     def ____getitem__(self, alias):
+#         actual_cache = super().__getitem__(alias)
+#         return CacheStatTracker(actual_cache)
+#
+#     def create_connection(self, alias):
+#         return CacheStatTracker(super().create_connection(alias))
+#
+#
+# middleware_cache.caches = CacheHandlerPatch()
 
 
-middleware_cache.caches = CacheHandlerPatch()
+original_caches._original_create_connection = original_caches.create_connection
+original_caches.create_connection = lambda alias: CacheStatTracker(original_caches._original_create_connection(alias))
 
 
 class CachePanel(Panel):
@@ -241,12 +248,14 @@ class CachePanel(Panel):
         )
 
     def enable_instrumentation(self):
+        return
         if isinstance(middleware_cache.caches, CacheHandlerPatch):
             cache.caches = middleware_cache.caches
         else:
             cache.caches = CacheHandlerPatch()
 
     def disable_instrumentation(self):
+        return
         cache.caches = original_caches
         # While it can be restored to the original, any views that were
         # wrapped with the cache_page decorator will continue to use a
