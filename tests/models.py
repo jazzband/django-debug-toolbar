@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -23,3 +24,10 @@ if JSONField:
 
     class PostgresJSON(models.Model):
         field = JSONField()
+
+
+if settings.USE_GIS:
+    from django.contrib.gis.db import models as gismodels
+
+    class Location(gismodels.Model):
+        point = gismodels.PointField()

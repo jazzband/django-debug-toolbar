@@ -27,6 +27,11 @@ INSTALLED_APPS = [
     "tests",
 ]
 
+USE_GIS = os.getenv("DB_BACKEND") in ("postgis",)
+
+if USE_GIS:
+    INSTALLED_APPS = ["django.contrib.gis"] + INSTALLED_APPS
+
 MEDIA_URL = "/media/"  # Avoids https://code.djangoproject.com/ticket/21451
 
 MIDDLEWARE = [
@@ -82,7 +87,9 @@ CACHES = {
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.%s" % os.getenv("DB_BACKEND", "sqlite3"),
+        "ENGINE": "django.{}db.backends.{}".format(
+            "contrib.gis." if USE_GIS else "", os.getenv("DB_BACKEND", "sqlite3")
+        ),
         "NAME": os.getenv("DB_NAME", ":memory:"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
