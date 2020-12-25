@@ -50,7 +50,7 @@ Add the Debug Toolbar's URLs to your project's URLconf::
     from django.urls import include, path
 
     urlpatterns = [
-        ...
+        # ...
         path('__debug__/', include(debug_toolbar.urls)),
     ]
 
