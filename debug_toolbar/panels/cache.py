@@ -136,6 +136,14 @@ class CacheStatTracker(BaseCache):
 
 
 class CacheHandlerPatch(CacheHandler):
+    def __getitem__(self, alias):
+        actual_cache = super().__getitem__(alias)
+        return (
+            actual_cache
+            if isinstance(actual_cache, CacheStatTracker)
+            else CacheStatTracker(actual_cache)
+        )
+
     def create_connection(self, alias):
         return CacheStatTracker(super().create_connection(alias))
 
