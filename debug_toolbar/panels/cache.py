@@ -5,7 +5,12 @@ from collections import OrderedDict
 
 from django.conf import settings
 from django.core import cache
-from django.core.cache import CacheHandler, caches as original_caches
+from django.core.cache import (
+    DEFAULT_CACHE_ALIAS,
+    CacheHandler,
+    cache as original_cache,
+    caches as original_caches,
+)
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
@@ -130,20 +135,12 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
-# class CacheHandlerPatch(CacheHandler):
-#     def ____getitem__(self, alias):
-#         actual_cache = super().__getitem__(alias)
-#         return CacheStatTracker(actual_cache)
-#
-#     def create_connection(self, alias):
-#         return CacheStatTracker(super().create_connection(alias))
-#
-#
-# middleware_cache.caches = CacheHandlerPatch()
+class CacheHandlerPatch(CacheHandler):
+    def create_connection(self, alias):
+        return CacheStatTracker(super().create_connection(alias))
 
 
-original_caches._original_create_connection = original_caches.create_connection
-original_caches.create_connection = lambda alias: CacheStatTracker(original_caches._original_create_connection(alias))
+middleware_cache.caches = CacheHandlerPatch()
 
 
 class CachePanel(Panel):
@@ -248,19 +245,18 @@ class CachePanel(Panel):
         )
 
     def enable_instrumentation(self):
-        return
-        if isinstance(middleware_cache.caches, CacheHandlerPatch):
-            cache.caches = middleware_cache.caches
-        else:
-            cache.caches = CacheHandlerPatch()
+        if not isinstance(middleware_cache.caches, CacheHandlerPatch):
+            middleware_cache.caches = CacheHandlerPatch()
+        cache.caches = middleware_cache.caches
+        cache.cache = cache.caches[DEFAULT_CACHE_ALIAS]
 
     def disable_instrumentation(self):
-        return
-        cache.caches = original_caches
         # While it can be restored to the original, any views that were
         # wrapped with the cache_page decorator will continue to use a
         # monkey patched cache.
         middleware_cache.caches = original_caches
+        cache.caches = original_caches
+        cache.cache = original_cache
 
     def generate_stats(self, request, response):
         self.record_stats(
