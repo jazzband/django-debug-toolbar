@@ -27,11 +27,13 @@ package-lock.json: package.json
 	touch $@
 
 test:
-	DJANGO_SETTINGS_MODULE=tests.settings \
+	DB_BACKEND=sqlite3 DB_NAME=":memory:" \
+        DJANGO_SETTINGS_MODULE=tests.settings \
 		python -m django test $${TEST_ARGS:-tests}
 
 test_selenium:
-	DJANGO_SELENIUM_TESTS=true DJANGO_SETTINGS_MODULE=tests.settings \
+	DB_BACKEND=sqlite3 DB_NAME=":memory:" \
+        DJANGO_SELENIUM_TESTS=true DJANGO_SETTINGS_MODULE=tests.settings \
 		python -m django test $${TEST_ARGS:-tests}
 
 coverage:
