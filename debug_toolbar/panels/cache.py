@@ -236,7 +236,7 @@ class CachePanel(Panel):
                 "kwargs": kwargs,
                 "trace": render_stacktrace(trace),
                 "template_info": template_info,
-                "backend": backend,
+                "backend": str(backend),
             }
         )
 

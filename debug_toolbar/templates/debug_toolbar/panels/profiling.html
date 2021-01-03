@@ -20,7 +20,8 @@
             {% else %}
               <span class="djNoToggleSwitch"></span>
             {% endif %}
-            <span class="djdt-stack">{{ call.func_std_string }}</span>
+            {# The func_std_string property is escaped when serialized into the store #}
+            <span class="djdt-stack">{{ call.func_std_string|safe }}</span>
           </div>
         </td>
         <td>{{ call.cumtime|floatformat:3 }}</td>

@@ -1,8 +1,30 @@
-from collections import OrderedDict
+import json
+from collections import OrderedDict, defaultdict
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
+
+
+class DebugToolbarJSONEncoder(DjangoJSONEncoder):
+    def default(self, o):
+        try:
+            return super().default(o)
+        except TypeError:
+            return str(o)
+
+
+def serialize(data):
+    return json.dumps(data, cls=DebugToolbarJSONEncoder)
+
+
+def deserialize(data):
+    return json.loads(data)
+
+
+# Record stats in serialized fashion.
+# Remove use of fetching the toolbar as a whole from the store.
 
 
 class BaseStore:
@@ -24,9 +46,14 @@ class BaseStore:
     def delete(cls, store_id):
         raise NotImplementedError
 
+    @classmethod
+    def record_stats(cls, store_id, panel_id, stats):
+        raise NotImplementedError
+
 
 class MemoryStore(BaseStore):
     _store = OrderedDict()
+    _stats = defaultdict(dict)
 
     @classmethod
     def get(cls, store_id):
@@ -45,6 +72,18 @@ class MemoryStore(BaseStore):
     @classmethod
     def delete(cls, store_id):
         del cls._store[store_id]
+
+    @classmethod
+    def save_panel(cls, store_id, panel_id, stats=None):
+        cls._stats[store_id][panel_id] = serialize(stats)
+
+    @classmethod
+    def panel(cls, store_id, panel_id):
+        try:
+            data = cls._stats[store_id][panel_id]
+        except KeyError:
+            data = None
+        return {} if data is None else deserialize(data)
 
 
 store = import_string(dt_settings.get_config()["TOOLBAR_STORE_CLASS"])

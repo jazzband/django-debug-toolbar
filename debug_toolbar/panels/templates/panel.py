@@ -171,20 +171,24 @@ class TemplatesPanel(Panel):
     def generate_stats(self, request, response):
         template_context = []
         for template_data in self.templates:
-            info = {}
             # Clean up some info about templates
             template = template_data["template"]
             if hasattr(template, "origin") and template.origin and template.origin.name:
-                template.origin_name = template.origin.name
-                template.origin_hash = signing.dumps(template.origin.name)
+                origin_name = template.origin.name
+                origin_hash = signing.dumps(template.origin.name)
             else:
-                template.origin_name = _("No origin")
-                template.origin_hash = ""
-            info["template"] = template
-            # Clean up context for better readability
-            if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]:
-                context_list = template_data.get("context", [])
-                info["context"] = "\n".join(context_list)
+                origin_name = _("No origin")
+                origin_hash = ""
+            info = {
+                "template": {
+                    "origin_name": origin_name,
+                    "origin_hash": origin_hash,
+                    "name": template.name,
+                },
+                "context": "\n".join(template_data.get("context", []))
+                if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]
+                else "",
+            }
             template_context.append(info)
 
         # Fetch context_processors/template_dirs from any template

@@ -25,7 +25,7 @@ class HistoryPanelTestCase(BaseTestCase):
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         data = self.panel.get_stats()["data"]
-        self.assertEqual(data["foo"], "bar")
+        self.assertEqual(data["foo"], ["bar"])
 
     def test_post_json(self):
         for data, expected_stats_data in (

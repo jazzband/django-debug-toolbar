@@ -77,7 +77,8 @@
             {% if query.params %}
               {% if query.is_select %}
                 <form method="post">
-                  {{ query.form }}
+                  {# The form is rendered when serialized into storage #}
+                  {{ query.form|safe }}
                   <button formaction="{% url 'djdt:sql_select' %}" class="remoteCall">Sel</button>
                   <button formaction="{% url 'djdt:sql_explain' %}" class="remoteCall">Expl</button>
                   {% if query.vendor == 'mysql' %}
@@ -100,7 +101,8 @@
                 <p><strong>{% trans "Transaction status:" %}</strong> {{ query.trans_status }}</p>
               {% endif %}
               {% if query.stacktrace %}
-                <pre class="djdt-stack">{{ query.stacktrace }}</pre>
+                {# The stacktrace property is a rendered template. It is escaped when serialized into the store #}
+                <pre class="djdt-stack">{{ query.stacktrace|safe }}</pre>
               {% endif %}
               {% if query.template_info %}
                 <table>

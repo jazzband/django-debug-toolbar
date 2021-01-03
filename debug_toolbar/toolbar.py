@@ -34,7 +34,7 @@ class DebugToolbar:
             self._panels[panel.panel_id] = panel
         self.stats = {}
         self.server_timing_stats = {}
-        self.store_id = None
+        self.store_id = uuid.uuid4().hex
 
     # Manage panels
 
@@ -90,10 +90,6 @@ class DebugToolbar:
         return render_panels
 
     def store(self):
-        # Store already exists.
-        if self.store_id:
-            return
-        self.store_id = uuid.uuid4().hex
         store.set(self.store_id, self)
 
     # Manually implement class-level caching of panel classes and url patterns

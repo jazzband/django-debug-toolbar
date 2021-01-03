@@ -1,6 +1,7 @@
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
+from debug_toolbar.store import store
 from debug_toolbar.utils import get_name_from_obj
 
 
@@ -150,6 +151,22 @@ class Panel:
 
     # Store and retrieve stats (shared between panels for no good reason)
 
+    def deserialize_stats(self, data):
+        """
+        Deserialize stats coming from the store.
+
+        Provided to support future store mechanisms overriding a panel's content.
+        """
+        return data
+
+    def serialize_stats(self, stats):
+        """
+        Serialize stats for the store.
+
+        Provided to support future store mechanisms overriding a panel's content.
+        """
+        return stats
+
     def record_stats(self, stats):
         """
         Store data gathered by the panel. ``stats`` is a :class:`dict`.
@@ -157,12 +174,15 @@ class Panel:
         Each call to ``record_stats`` updates the statistics dictionary.
         """
         self.toolbar.stats.setdefault(self.panel_id, {}).update(stats)
+        store.save_panel(
+            self.toolbar.store_id, self.panel_id, self.serialize_stats(stats)
+        )
 
     def get_stats(self):
         """
         Access data stored by the panel. Returns a :class:`dict`.
         """
-        return self.toolbar.stats.get(self.panel_id, {})
+        return self.deserialize_stats(store.panel(self.toolbar.store_id, self.panel_id))
 
     def record_server_timing(self, key, title, value):
         """

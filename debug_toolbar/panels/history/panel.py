@@ -47,9 +47,9 @@ class HistoryPanel(Panel):
     def generate_stats(self, request, response):
         try:
             if request.method == "GET":
-                data = request.GET.copy()
+                data = dict(request.GET.copy())
             else:
-                data = request.POST.copy()
+                data = dict(request.POST.copy())
             # GraphQL tends to not be populated in POST. If the request seems
             # empty, check if it's a JSON request.
             if (
