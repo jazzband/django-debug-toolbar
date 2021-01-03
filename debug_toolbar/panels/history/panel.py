@@ -12,6 +12,7 @@ from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.history import views
 from debug_toolbar.panels.history.forms import HistoryStoreForm
+from debug_toolbar.store import store
 
 
 class HistoryPanel(Panel):
@@ -81,7 +82,7 @@ class HistoryPanel(Panel):
         Fetch every store for the toolbar and include it in the template.
         """
         stores = OrderedDict()
-        for id, toolbar in reversed(self.toolbar._store.items()):
+        for id, toolbar in reversed(store.all()):
             stores[id] = {
                 "toolbar": toolbar,
                 "form": SignedDataForm(

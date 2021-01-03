@@ -14,6 +14,7 @@ from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
+from debug_toolbar.store import store
 
 
 class DebugToolbar:
@@ -88,22 +89,12 @@ class DebugToolbar:
             render_panels = self.request.META["wsgi.multiprocess"]
         return render_panels
 
-    # Handle storing toolbars in memory and fetching them later on
-
-    _store = OrderedDict()
-
     def store(self):
         # Store already exists.
         if self.store_id:
             return
         self.store_id = uuid.uuid4().hex
-        self._store[self.store_id] = self
-        for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
-            self._store.popitem(last=False)
-
-    @classmethod
-    def fetch(cls, store_id):
-        return cls._store.get(store_id)
+        store.set(self.store_id, self)
 
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.

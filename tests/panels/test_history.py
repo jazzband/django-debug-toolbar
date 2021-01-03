@@ -4,7 +4,7 @@ from django.test import RequestFactory, override_settings
 from django.urls import resolve, reverse
 
 from debug_toolbar.forms import SignedDataForm
-from debug_toolbar.toolbar import DebugToolbar
+from debug_toolbar.store import store
 
 from ..base import BaseTestCase, IntegrationTestCase
 
@@ -83,14 +83,14 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_panel_integration_content(self):
         """Verify the history panel's content renders properly.."""
-        self.assertEqual(len(DebugToolbar._store), 0)
+        self.assertEqual(len(store.all()), 0)
 
         data = {"foo": "bar"}
         self.client.get("/json_view/", data, content_type="application/json")
 
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(DebugToolbar._store), 1)
-        toolbar = list(DebugToolbar._store.values())[0]
+        self.assertEqual(len(store.all()), 1)
+        toolbar = list(store.all())[0][1]
         content = toolbar.get_panel_by_id("HistoryPanel").content
         self.assertIn("bar", content)
 
@@ -98,14 +98,16 @@ class HistoryViewsTestCase(IntegrationTestCase):
         response = self.client.get(reverse("djdt:history_sidebar"))
         self.assertEqual(response.status_code, 400)
 
-        data = {"signed": SignedDataForm.sign({"store_id": "foo"}) + "invalid"}
+        self.client.get("/json_view/")
+        store_id = list(store.all())[0][0]
+        data = {"signed": SignedDataForm.sign({"store_id": store_id}) + "invalid"}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 400)
 
-    def test_history_sidebar(self):
-        """Validate the history sidebar view."""
+    def test_history_sidebar_hash(self):
+        """Validate the hashing mechanism."""
         self.client.get("/json_view/")
-        store_id = list(DebugToolbar._store)[0]
+        store_id = list(store.all())[0][0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -120,7 +122,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     def test_history_sidebar_expired_store_id(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
-        store_id = list(DebugToolbar._store)[0]
+        store_id = list(store.all())[0][0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -130,14 +132,18 @@ class HistoryViewsTestCase(IntegrationTestCase):
         )
         self.client.get("/json_view/")
 
-        # Querying old store_id should return in empty response
+        # Querying previous store_id should still work
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {})
+        self.assertEqual(
+            set(response.json()),
+            self.PANEL_KEYS,
+        )
 
         # Querying with latest store_id
-        latest_store_id = list(DebugToolbar._store)[0]
+        latest_store_id = list(store.all())[-1][0]
+        self.assertNotEqual(latest_store_id, store_id)
         data = {"signed": SignedDataForm.sign({"store_id": latest_store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -157,15 +163,14 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_refresh(self):
         """Verify refresh history response has request variables."""
-        data = {"foo": "bar"}
-        self.client.get("/json_view/", data, content_type="application/json")
+        self.client.get("/json_view/", {"foo": "bar"}, content_type="application/json")
         data = {"signed": SignedDataForm.sign({"store_id": "foo"})}
         response = self.client.get(reverse("djdt:history_refresh"), data=data)
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(len(data["requests"]), 1)
 
-        store_id = list(DebugToolbar._store)[0]
+        store_id = list(store.all())[0][0]
         signature = SignedDataForm.sign({"store_id": store_id})
         self.assertIn(html.escape(signature), data["requests"][0]["content"])
 

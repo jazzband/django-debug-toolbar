@@ -16,6 +16,7 @@ from django.test.utils import override_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels import Panel
+from debug_toolbar.store import store
 from debug_toolbar.toolbar import DebugToolbar
 
 from .base import BaseTestCase, IntegrationTestCase
@@ -207,15 +208,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_middleware_render_toolbar_json(self):
         """Verify the toolbar is rendered and data is stored for a json request."""
-        self.assertEqual(len(DebugToolbar._store), 0)
+        self.assertEqual(len(store.all()), 0)
 
         data = {"foo": "bar"}
         response = self.client.get("/json_view/", data, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode("utf-8"), '{"foo": "bar"}')
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(DebugToolbar._store), 1)
-        toolbar = list(DebugToolbar._store.values())[0]
+        self.assertEqual(len(store.all()), 1)
+        toolbar = list(store.all())[0][1]
         self.assertEqual(
             toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
             {"foo": ["bar"]},
@@ -523,6 +524,8 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 0})
     def test_expired_store(self):
+        original_value = store.config["RESULTS_CACHE_SIZE"]
+        store.config["RESULTS_CACHE_SIZE"] = 0
         self.get("/regular/basic/")
         version_panel = self.selenium.find_element_by_id("VersionsPanel")
 
@@ -534,6 +537,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
             lambda selenium: version_panel.find_element_by_tag_name("p")
         )
         self.assertIn("Data for this panel isn't available anymore.", error.text)
+        store.config["RESULTS_CACHE_SIZE"] = original_value
 
     @override_settings(
         TEMPLATES=[
