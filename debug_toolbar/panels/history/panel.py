@@ -81,10 +81,10 @@ class HistoryPanel(Panel):
 
         Fetch every store for the toolbar and include it in the template.
         """
-        stores = OrderedDict()
-        for id, toolbar in reversed(store.all()):
-            stores[id] = {
-                "toolbar": toolbar,
+        histories = OrderedDict()
+        for id in reversed(store.ids()):
+            histories[id] = {
+                "stats": self.deserialize_stats(store.panel(id, self.panel_id)),
                 "form": SignedDataForm(
                     initial=HistoryStoreForm(initial={"store_id": id}).initial
                 ),
@@ -94,10 +94,10 @@ class HistoryPanel(Panel):
             self.template,
             {
                 "current_store_id": self.toolbar.store_id,
-                "stores": stores,
+                "histories": histories,
                 "refresh_form": SignedDataForm(
                     initial=HistoryStoreForm(
-                        initial={"store_id": self.toolbar.store_id}
+                        initial={"store_id": str(self.toolbar.store_id)}
                     ).initial
                 ),
             },

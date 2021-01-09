@@ -38,7 +38,13 @@ class Panel:
         else:
             default = "on"
         # The user's cookies should override the default value
-        return self.toolbar.request.COOKIES.get("djdt" + self.panel_id, default) == "on"
+        if self.toolbar.request is not None:
+            return (
+                self.toolbar.request.COOKIES.get("djdt" + self.panel_id, default)
+                == "on"
+            )
+        else:
+            return bool(store.panel(self.toolbar.store_id, self.panel_id))
 
     # Titles and content
 
@@ -151,7 +157,8 @@ class Panel:
 
     # Store and retrieve stats (shared between panels for no good reason)
 
-    def deserialize_stats(self, data):
+    @classmethod
+    def deserialize_stats(cls, data):
         """
         Deserialize stats coming from the store.
 
@@ -159,7 +166,8 @@ class Panel:
         """
         return data
 
-    def serialize_stats(self, stats):
+    @classmethod
+    def serialize_stats(cls, stats):
         """
         Serialize stats for the store.
 

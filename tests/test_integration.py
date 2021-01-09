@@ -17,7 +17,7 @@ from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels import Panel
 from debug_toolbar.store import store
-from debug_toolbar.toolbar import DebugToolbar
+from debug_toolbar.toolbar import DebugToolbar, stats_only_toolbar
 
 from .base import BaseTestCase, IntegrationTestCase
 from .views import regular_view
@@ -190,7 +190,6 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             return HttpResponse()
 
         toolbar = DebugToolbar(rf.get("/"), get_response)
-        toolbar.store()
         url = "/__debug__/render_panel/"
         data = {"store_id": toolbar.store_id, "panel_id": "VersionsPanel"}
 
@@ -208,15 +207,16 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_middleware_render_toolbar_json(self):
         """Verify the toolbar is rendered and data is stored for a json request."""
-        self.assertEqual(len(store.all()), 0)
+        self.assertEqual(len(store.ids()), 0)
 
         data = {"foo": "bar", "spam[]": ["eggs", "ham"]}
         response = self.client.get("/json_view/", data, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode("utf-8"), '{"foo": "bar"}')
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(store.all()), 1)
-        toolbar = list(store.all())[0][1]
+        self.assertEqual(len(store.ids()), 1)
+        toolbar = stats_only_toolbar(store.ids()[0])
+
         self.assertEqual(
             toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
             {"foo": ["bar"], "spam[]": ["eggs", "ham"]},
@@ -522,10 +522,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertNotIn("1 query", current_button_panel)
         self.assertIn("1 query", previous_button_panel)
 
-    @override_settings(DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 0})
     def test_expired_store(self):
         original_value = store.config["RESULTS_CACHE_SIZE"]
-        store.config["RESULTS_CACHE_SIZE"] = 0
+        store.config["RESULTS_CACHE_SIZE"] = 1
         self.get("/regular/basic/")
         version_panel = self.selenium.find_element_by_id("VersionsPanel")
 

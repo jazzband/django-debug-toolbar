@@ -5,6 +5,7 @@ from django.urls import resolve, reverse
 
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.store import store
+from debug_toolbar.toolbar import stats_only_toolbar
 
 from ..base import BaseTestCase, IntegrationTestCase
 
@@ -83,14 +84,14 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_panel_integration_content(self):
         """Verify the history panel's content renders properly.."""
-        self.assertEqual(len(store.all()), 0)
+        self.assertEqual(len(store.ids()), 0)
 
         data = {"foo": "bar"}
         self.client.get("/json_view/", data, content_type="application/json")
 
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(store.all()), 1)
-        toolbar = list(store.all())[0][1]
+        self.assertEqual(len(store.ids()), 1)
+        toolbar = stats_only_toolbar(store.ids()[0])
         content = toolbar.get_panel_by_id("HistoryPanel").content
         self.assertIn("bar", content)
 
@@ -99,7 +100,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 400)
 
         self.client.get("/json_view/")
-        store_id = list(store.all())[0][0]
+        store_id = store.ids()[0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id}) + "invalid"}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 400)
@@ -107,13 +108,26 @@ class HistoryViewsTestCase(IntegrationTestCase):
     def test_history_sidebar_hash(self):
         """Validate the hashing mechanism."""
         self.client.get("/json_view/")
-        store_id = list(store.all())[0][0]
+        store_id = store.ids()[0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            set(response.json()),
-            self.PANEL_KEYS,
+            list(response.json().keys()),
+            [
+                "VersionsPanel",
+                "TimerPanel",
+                "SettingsPanel",
+                "HeadersPanel",
+                "RequestPanel",
+                "SQLPanel",
+                "StaticFilesPanel",
+                "TemplatesPanel",
+                "CachePanel",
+                "SignalsPanel",
+                "LoggingPanel",
+                "ProfilingPanel",
+            ],
         )
 
     @override_settings(
@@ -122,7 +136,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     def test_history_sidebar_expired_store_id(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
-        store_id = list(store.all())[0][0]
+        store_id = list(store.ids())[0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -142,7 +156,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         )
 
         # Querying with latest store_id
-        latest_store_id = list(store.all())[-1][0]
+        latest_store_id = store.ids()[-1]
         self.assertNotEqual(latest_store_id, store_id)
         data = {"signed": SignedDataForm.sign({"store_id": latest_store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
@@ -170,7 +184,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         data = response.json()
         self.assertEqual(len(data["requests"]), 1)
 
-        store_id = list(store.all())[0][0]
+        store_id = store.ids()[0]
         signature = SignedDataForm.sign({"store_id": store_id})
         self.assertIn(html.escape(signature), data["requests"][0]["content"])
 

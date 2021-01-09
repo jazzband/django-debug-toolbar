@@ -18,7 +18,8 @@ from debug_toolbar.store import store
 
 
 class DebugToolbar:
-    def __init__(self, request, get_response):
+    def __init__(self, request, get_response, store_id=None):
+        self.store_id = store_id or uuid.uuid4().hex
         self.request = request
         self.config = dt_settings.get_config().copy()
         panels = []
@@ -34,7 +35,6 @@ class DebugToolbar:
             self._panels[panel.panel_id] = panel
         self.stats = {}
         self.server_timing_stats = {}
-        self.store_id = uuid.uuid4().hex
 
     # Manage panels
 
@@ -64,8 +64,7 @@ class DebugToolbar:
         """
         Renders the overall Toolbar with panels inside.
         """
-        if not self.should_render_panels():
-            self.store()
+        self.store()
         try:
             context = {"toolbar": self}
             return render_to_string("debug_toolbar/base.html", context)
@@ -90,7 +89,7 @@ class DebugToolbar:
         return render_panels
 
     def store(self):
-        store.set(self.store_id, self)
+        store.set(self.store_id)
 
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.
@@ -139,6 +138,10 @@ class DebugToolbar:
         except Resolver404:
             return False
         return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
+
+
+def stats_only_toolbar(store_id):
+    return DebugToolbar(request=None, get_response=lambda r: r, store_id=store_id)
 
 
 app_name = "djdt"

@@ -5,6 +5,7 @@ from debug_toolbar.decorators import require_show_toolbar, signed_data_view
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 from debug_toolbar.store import store
+from debug_toolbar.toolbar import stats_only_toolbar
 
 
 @require_show_toolbar
@@ -15,7 +16,8 @@ def history_sidebar(request, verified_data):
 
     if form.is_valid():
         store_id = form.cleaned_data["store_id"]
-        toolbar = store.get(store_id)
+        toolbar = stats_only_toolbar(store_id)
+
         context = {}
         if toolbar is None:
             # When the store_id has been popped already due to
@@ -25,6 +27,7 @@ def history_sidebar(request, verified_data):
             if not panel.is_historical:
                 continue
             panel_context = {"panel": panel}
+
             context[panel.panel_id] = {
                 "button": render_to_string(
                     "debug_toolbar/includes/panel_button.html", panel_context
@@ -45,7 +48,8 @@ def history_refresh(request, verified_data):
 
     if form.is_valid():
         requests = []
-        for id, toolbar in list(reversed(store.all())):
+        for id in reversed(store.ids()):
+            toolbar = stats_only_toolbar(id)
             requests.append(
                 {
                     "id": id,
@@ -53,8 +57,10 @@ def history_refresh(request, verified_data):
                         "debug_toolbar/panels/history_tr.html",
                         {
                             "id": id,
-                            "store_context": {
-                                "toolbar": toolbar,
+                            "history": {
+                                "stats": toolbar.get_panel_by_id(
+                                    "HistoryPanel"
+                                ).get_stats(),
                                 "form": SignedDataForm(
                                     initial=HistoryStoreForm(
                                         initial={"store_id": id}

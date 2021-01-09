@@ -1,5 +1,5 @@
 import json
-from collections import OrderedDict, defaultdict
+from collections import defaultdict
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.module_loading import import_string
@@ -31,47 +31,47 @@ class BaseStore:
     config = dt_settings.get_config().copy()
 
     @classmethod
-    def get(cls, store_id):
+    def ids(cls):
         raise NotImplementedError
 
     @classmethod
-    def all(cls):
+    def exists(cls, store_id):
         raise NotImplementedError
 
     @classmethod
-    def set(cls, store_id, toolbar):
+    def set(cls, store_id):
         raise NotImplementedError
 
     @classmethod
     def delete(cls, store_id):
-        raise NotImplementedError
-
-    @classmethod
-    def record_stats(cls, store_id, panel_id, stats):
         raise NotImplementedError
 
 
 class MemoryStore(BaseStore):
-    _store = OrderedDict()
+    _ids = list()
     _stats = defaultdict(dict)
 
     @classmethod
-    def get(cls, store_id):
-        return cls._store.get(store_id)
+    def ids(cls):
+        return cls._ids
 
     @classmethod
-    def all(cls):
-        return cls._store.items()
+    def exists(cls, store_id):
+        return store_id in cls._ids
 
     @classmethod
-    def set(cls, store_id, toolbar):
-        cls._store[store_id] = toolbar
-        for _ in range(cls.config["RESULTS_CACHE_SIZE"], len(cls._store)):
-            cls._store.popitem(last=False)
+    def set(cls, store_id):
+        if store_id not in cls._ids:
+            cls._ids.append(store_id)
+        if len(cls._ids) > cls.config["RESULTS_CACHE_SIZE"]:
+            cls.delete(cls._ids[0])
 
     @classmethod
     def delete(cls, store_id):
-        del cls._store[store_id]
+        if store_id in cls._stats:
+            del cls._stats[store_id]
+        if store_id in cls._ids:
+            cls._ids.remove(store_id)
 
     @classmethod
     def save_panel(cls, store_id, panel_id, stats=None):

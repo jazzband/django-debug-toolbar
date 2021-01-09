@@ -4,13 +4,14 @@ from django.utils.translation import gettext as _
 
 from debug_toolbar.decorators import require_show_toolbar
 from debug_toolbar.store import store
+from debug_toolbar.toolbar import stats_only_toolbar
 
 
 @require_show_toolbar
 def render_panel(request):
     """Render the contents of a panel"""
-    toolbar = store.get(request.GET["store_id"])
-    if toolbar is None:
+    store_id = request.GET["store_id"]
+    if not store.exists(store_id):
         content = _(
             "Data for this panel isn't available anymore. "
             "Please reload the page and retry."
@@ -18,6 +19,7 @@ def render_panel(request):
         content = "<p>%s</p>" % escape(content)
         scripts = []
     else:
+        toolbar = stats_only_toolbar(store_id)
         panel = toolbar.get_panel_by_id(request.GET["panel_id"])
         content = panel.content
         scripts = panel.scripts
