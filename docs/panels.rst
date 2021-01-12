@@ -185,7 +185,7 @@ URL: https://github.com/danyi1212/django-windowsauth
 Path: ``windows_auth.panels.LDAPPanel``
 
 LDAP Operations performed during the request, including timing, request and response messages, 
-the entries received, write changes list, stacktracing and error debugging.
+the entries received, write changes list, stack-tracing and error debugging.
 This panel also shows connection usage metrics when it is collected. 
 `Check out the docs <https://django-windowsauth.readthedocs.io/en/latest/howto/debug_toolbar.html>`_.
 
