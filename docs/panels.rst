@@ -177,6 +177,18 @@ Retrieves and displays information you specify using the ``debug`` statement.
 Inspector panel also logs to the console by default, but may be instructed not
 to.
 
+LDAP Tracing
+~~~~~~~~~~~~
+
+URL: https://github.com/danyi1212/django-windowsauth
+
+Path: ``windows_auth.panels.LDAPPanel``
+
+LDAP Operations performed during the request, including timing, request and response messages, 
+the entries received, write changes list, stacktracing and error debugging.
+This panel also shows connection usage metrics when it is collected. 
+`Check out the docs <https://django-windowsauth.readthedocs.io/en/latest/howto/debug_toolbar.html>`_.
+
 Line Profiler
 ~~~~~~~~~~~~~
 
@@ -188,17 +200,6 @@ This package provides a profiling panel that incorporates output from
 line_profiler_.
 
 .. _line_profiler: https://github.com/rkern/line_profiler
-
-LDAP Tracing
-~~~~~~~~~~~~
-
-URL: https://github.com/danyi1212/django-windowsauth
-
-Path: ``windows_auth.panels.LDAPPanel``
-
-LDAP Operations performed during the request, including timing, request and response messages, the entries recieved, write changes list, stacktracing and error debugging.
-This panel also shows connection usage metrics when it is collected. 
-`Check out the docs <https://django-windowsauth.readthedocs.io/en/latest/howto/debug_toolbar.html>`_.
 
 Mail
 ~~~~~~~~
