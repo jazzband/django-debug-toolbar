@@ -4,7 +4,7 @@ from django.test import RequestFactory, override_settings
 from django.urls import resolve, reverse
 
 from debug_toolbar.forms import SignedDataForm
-from debug_toolbar.store import store
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import stats_only_toolbar
 
 from ..base import BaseTestCase, IntegrationTestCase
@@ -84,6 +84,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_panel_integration_content(self):
         """Verify the history panel's content renders properly.."""
+        store = get_store()
         self.assertEqual(len(store.ids()), 0)
 
         data = {"foo": "bar"}
@@ -96,6 +97,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.assertIn("bar", content)
 
     def test_history_sidebar_invalid(self):
+        store = get_store()
         response = self.client.get(reverse("djdt:history_sidebar"))
         self.assertEqual(response.status_code, 400)
 
@@ -107,6 +109,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_sidebar_hash(self):
         """Validate the hashing mechanism."""
+        store = get_store()
         self.client.get("/json_view/")
         store_id = store.ids()[0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
@@ -135,6 +138,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     )
     def test_history_sidebar_expired_store_id(self):
         """Validate the history sidebar view."""
+        store = get_store()
         self.client.get("/json_view/")
         store_id = list(store.ids())[0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
@@ -177,6 +181,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_refresh(self):
         """Verify refresh history response has request variables."""
+        store = get_store()
         self.client.get("/json_view/", {"foo": "bar"}, content_type="application/json")
         data = {"signed": SignedDataForm.sign({"store_id": "foo"})}
         response = self.client.get(reverse("djdt:history_refresh"), data=data)

@@ -2,13 +2,14 @@ import html5lib
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase
 
-from debug_toolbar.store import store
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
 rf = RequestFactory()
 
 
 class BaseTestCase(TestCase):
+    databases = {"default", "debug_toolbar"}
     panel_id = None
 
     def setUp(self):
@@ -49,10 +50,12 @@ class BaseTestCase(TestCase):
 class IntegrationTestCase(TestCase):
     """Base TestCase for tests involving clients making requests."""
 
+    databases = {"default", "debug_toolbar"}
+
     def setUp(self):
         # The HistoryPanel keeps track of previous stores in memory.
         # This bleeds into other tests and violates their idempotency.
         # Clear the store before each test.
-        for key in list(store.ids()):
-            store.delete(key)
+        for key in list(get_store().ids()):
+            get_store().delete(key)
         super().setUp()

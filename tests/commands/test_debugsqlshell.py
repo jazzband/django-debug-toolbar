@@ -16,6 +16,8 @@ else:
 
 @override_settings(DEBUG=True)
 class DebugSQLShellTestCase(TestCase):
+    databases = {"default", "debug_toolbar"}
+
     def setUp(self):
         self.original_wrapper = base_module.CursorDebugWrapper
         # Since debugsqlshell monkey-patches django.db.backends.utils, we can

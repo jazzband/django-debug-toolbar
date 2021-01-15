@@ -1,7 +1,7 @@
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.store import store
+from debug_toolbar.store import get_store
 from debug_toolbar.utils import get_name_from_obj
 
 
@@ -44,7 +44,7 @@ class Panel:
                 == "on"
             )
         else:
-            return bool(store.panel(self.toolbar.store_id, self.panel_id))
+            return bool(get_store().panel(self.toolbar.store_id, self.panel_id))
 
     # Titles and content
 
@@ -182,7 +182,7 @@ class Panel:
         Each call to ``record_stats`` updates the statistics dictionary.
         """
         self.toolbar.stats.setdefault(self.panel_id, {}).update(stats)
-        store.save_panel(
+        get_store().save_panel(
             self.toolbar.store_id, self.panel_id, self.serialize_stats(stats)
         )
 
@@ -190,7 +190,9 @@ class Panel:
         """
         Access data stored by the panel. Returns a :class:`dict`.
         """
-        return self.deserialize_stats(store.panel(self.toolbar.store_id, self.panel_id))
+        return self.deserialize_stats(
+            get_store().panel(self.toolbar.store_id, self.panel_id)
+        )
 
     def record_server_timing(self, key, title, value):
         """

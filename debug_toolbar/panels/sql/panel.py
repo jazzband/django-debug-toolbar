@@ -110,18 +110,20 @@ class SQLPanel(Panel):
 
     @property
     def nav_subtitle(self):
+        stats = self.get_stats()
+        num_queries = len(stats["queries"])
         return ngettext(
             "%(query_count)d query in %(sql_time).2fms",
             "%(query_count)d queries in %(sql_time).2fms",
-            self._num_queries,
+            num_queries,
         ) % {
-            "query_count": self._num_queries,
-            "sql_time": self._sql_time,
+            "query_count": num_queries,
+            "sql_time": stats["sql_time"],
         }
 
     @property
     def title(self):
-        count = len(self._databases)
+        count = len(self.get_stats()["databases"])
         return (
             ngettext(
                 "SQL queries from %(count)d connection",
@@ -144,10 +146,14 @@ class SQLPanel(Panel):
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.
         for connection in connections.all():
+            if connection.alias == "debug_toolbar":
+                continue
             wrap_cursor(connection, self)
 
     def disable_instrumentation(self):
         for connection in connections.all():
+            if connection.alias == "debug_toolbar":
+                continue
             unwrap_cursor(connection)
 
     def generate_stats(self, request, response):

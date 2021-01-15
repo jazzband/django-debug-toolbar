@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from debug_toolbar.decorators import require_show_toolbar, signed_data_view
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels.history.forms import HistoryStoreForm
-from debug_toolbar.store import store
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import stats_only_toolbar
 
 
@@ -48,7 +48,7 @@ def history_refresh(request, verified_data):
 
     if form.is_valid():
         requests = []
-        for id in reversed(store.ids()):
+        for id in reversed(get_store().ids()):
             toolbar = stats_only_toolbar(id)
             requests.append(
                 {

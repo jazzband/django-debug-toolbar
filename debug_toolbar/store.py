@@ -63,7 +63,7 @@ class MemoryStore(BaseStore):
     def set(cls, store_id):
         if store_id not in cls._ids:
             cls._ids.append(store_id)
-        if len(cls._ids) > cls.config["RESULTS_CACHE_SIZE"]:
+        for _ in range(len(cls._ids) - cls.config["RESULTS_CACHE_SIZE"]):
             cls.delete(cls._ids[0])
 
     @classmethod
@@ -86,4 +86,5 @@ class MemoryStore(BaseStore):
         return {} if data is None else deserialize(data)
 
 
-store = import_string(dt_settings.get_config()["TOOLBAR_STORE_CLASS"])
+def get_store():
+    return import_string(dt_settings.get_config()["TOOLBAR_STORE_CLASS"])

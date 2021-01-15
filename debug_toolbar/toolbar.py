@@ -14,7 +14,7 @@ from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.store import store
+from debug_toolbar.store import get_store
 
 
 class DebugToolbar:
@@ -89,7 +89,7 @@ class DebugToolbar:
         return render_panels
 
     def store(self):
-        store.set(self.store_id)
+        get_store().set(self.store_id)
 
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.

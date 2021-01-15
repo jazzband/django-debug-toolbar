@@ -92,6 +92,17 @@ DATABASES = {
             "USER": "default_test",
         },
     },
+    "debug_toolbar": {
+        "ENGINE": "django.db.backends.%s" % os.getenv("DB_BACKEND"),
+        "NAME": "debug_toolbar_store",
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", ""),
+        "PORT": os.getenv("DB_PORT", ""),
+        "TEST": {
+            "USER": "default_test",
+        },
+    },
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

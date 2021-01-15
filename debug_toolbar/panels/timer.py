@@ -19,11 +19,9 @@ class TimerPanel(Panel):
 
     def nav_subtitle(self):
         stats = self.get_stats()
-        if hasattr(self, "_start_rusage"):
-            utime = self._end_rusage.ru_utime - self._start_rusage.ru_utime
-            stime = self._end_rusage.ru_stime - self._start_rusage.ru_stime
+        if stats.get("utime"):
             return _("CPU: %(cum)0.2fms (%(total)0.2fms)") % {
-                "cum": (utime + stime) * 1000.0,
+                "cum": stats["utime"],
                 "total": stats["total_time"],
             }
         elif "total_time" in stats:

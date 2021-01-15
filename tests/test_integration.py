@@ -1,6 +1,7 @@
 import os
 import re
 import unittest
+import uuid
 
 import django
 import html5lib
@@ -16,7 +17,7 @@ from django.test.utils import override_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels import Panel
-from debug_toolbar.store import store
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar, stats_only_toolbar
 
 from .base import BaseTestCase, IntegrationTestCase
@@ -207,6 +208,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_middleware_render_toolbar_json(self):
         """Verify the toolbar is rendered and data is stored for a json request."""
+        store = get_store()
         self.assertEqual(len(store.ids()), 0)
 
         data = {"foo": "bar", "spam[]": ["eggs", "ham"]}
@@ -443,6 +445,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 )
 @override_settings(DEBUG=True)
 class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
+    databases = {"default", "debug_toolbar"}
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -503,9 +507,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     )
     def test_rerender_on_history_switch(self):
         self.get("/regular_jinja/basic")
+        self.selenium.find_element_by_id("HistoryPanel")
         # Make a new request so the history panel has more than one option.
         self.get("/execute_sql/")
-        template_panel = self.selenium.find_element_by_id("HistoryPanel")
+        history_panel = self.selenium.find_element_by_id("HistoryPanel")
         # Record the current side panel of buttons for later comparison.
         previous_button_panel = self.selenium.find_element_by_id(
             "djDebugPanelList"
@@ -514,7 +519,12 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         # Click to show the history panel
         self.selenium.find_element_by_class_name("HistoryPanel").click()
         # Click to switch back to the jinja page view snapshot
-        list(template_panel.find_elements_by_css_selector("button"))[-1].click()
+        list(history_panel.find_elements_by_css_selector("button"))[-1].click()
+
+        self.wait.until(
+            lambda selenium: self.selenium.find_element_by_id("djDebugPanelList").text
+            != previous_button_panel
+        )
 
         current_button_panel = self.selenium.find_element_by_id("djDebugPanelList").text
         # Verify the button side panels have updated.
@@ -523,10 +533,12 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("1 query", previous_button_panel)
 
     def test_expired_store(self):
-        original_value = store.config["RESULTS_CACHE_SIZE"]
-        store.config["RESULTS_CACHE_SIZE"] = 1
+        store = get_store()
         self.get("/regular/basic/")
         version_panel = self.selenium.find_element_by_id("VersionsPanel")
+
+        for i in range(store.config["RESULTS_CACHE_SIZE"]):
+            store.set(uuid.uuid4().hex)
 
         # Click to show the version panel
         self.selenium.find_element_by_class_name("VersionsPanel").click()
@@ -536,7 +548,6 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
             lambda selenium: version_panel.find_element_by_tag_name("p")
         )
         self.assertIn("Data for this panel isn't available anymore.", error.text)
-        store.config["RESULTS_CACHE_SIZE"] = original_value
 
     @override_settings(
         TEMPLATES=[

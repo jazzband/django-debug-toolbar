@@ -246,14 +246,15 @@ class CachePanel(Panel):
 
     @property
     def nav_subtitle(self):
-        cache_calls = len(self.calls)
+        stats = self.get_stats()
+        cache_calls = len(stats["calls"])
         return (
             ngettext(
                 "%(cache_calls)d call in %(time).2fms",
                 "%(cache_calls)d calls in %(time).2fms",
                 cache_calls,
             )
-            % {"cache_calls": cache_calls, "time": self.total_time}
+            % {"cache_calls": cache_calls, "time": stats["total_time"]}
         )
 
     @property
