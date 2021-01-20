@@ -1,4 +1,5 @@
 import datetime
+import os
 import unittest
 
 import django
@@ -396,3 +397,47 @@ class SQLPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, response)
         self.assertEqual(len(self.panel._queries), 1)
         self.assertEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+
+    @override_settings(
+        DEBUG=True,
+    )
+    def test_flat_template_information(self):
+        """
+        Test case for when the query is used in a flat template hierarchy
+        (without included templates).
+        """
+        self.assertEqual(len(self.panel._queries), 0)
+
+        users = User.objects.all()
+        render(self.request, "sql/flat.html", {"users": users})
+
+        self.assertEqual(len(self.panel._queries), 1)
+
+        query = self.panel._queries[0]
+        template_info = query[1]["template_info"]
+        template_name = os.path.basename(template_info["name"])
+        self.assertEqual(template_name, "flat.html")
+        self.assertEqual(template_info["context"][2]["content"].strip(), "{{ users }}")
+        self.assertEqual(template_info["context"][2]["highlight"], True)
+
+    @override_settings(
+        DEBUG=True,
+    )
+    def test_nested_template_information(self):
+        """
+        Test case for when the query is used in a nested template
+        hierarchy (with included templates).
+        """
+        self.assertEqual(len(self.panel._queries), 0)
+
+        users = User.objects.all()
+        render(self.request, "sql/nested.html", {"users": users})
+
+        self.assertEqual(len(self.panel._queries), 1)
+
+        query = self.panel._queries[0]
+        template_info = query[1]["template_info"]
+        template_name = os.path.basename(template_info["name"])
+        self.assertEqual(template_name, "included.html")
+        self.assertEqual(template_info["context"][0]["content"].strip(), "{{ users }}")
+        self.assertEqual(template_info["context"][0]["highlight"], True)

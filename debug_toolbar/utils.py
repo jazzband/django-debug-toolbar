@@ -135,7 +135,14 @@ def get_template_context(node, context, context_lines=3):
 
 
 def get_template_source_from_exception_info(node, context):
-    exception_info = context.template.get_exception_info(Exception("DDT"), node.token)
+    if context.template.origin == node.origin:
+        exception_info = context.template.get_exception_info(
+            Exception("DDT"), node.token
+        )
+    else:
+        exception_info = context.render_context.template.get_exception_info(
+            Exception("DDT"), node.token
+        )
     line = exception_info["line"]
     source_lines = exception_info["source_lines"]
     name = exception_info["name"]
