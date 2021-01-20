@@ -3,9 +3,20 @@ import sys
 import time
 from collections import OrderedDict
 
+try:
+    from django.utils.connection import ConnectionProxy
+except ImportError:
+    # Django 3.1 and below doesn't have a ConnectionProxy
+    pass
+
 from django.conf import settings
 from django.core import cache
-from django.core.cache import CacheHandler, caches as original_caches
+from django.core.cache import (
+    DEFAULT_CACHE_ALIAS,
+    CacheHandler,
+    cache as original_cache,
+    caches as original_caches,
+)
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
@@ -246,8 +257,14 @@ class CachePanel(Panel):
         else:
             cache.caches = CacheHandlerPatch()
 
+        try:
+            cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
+        except NameError:
+            pass
+
     def disable_instrumentation(self):
         cache.caches = original_caches
+        cache.cache = original_cache
         # While it can be restored to the original, any views that were
         # wrapped with the cache_page decorator will continue to use a
         # monkey patched cache.
