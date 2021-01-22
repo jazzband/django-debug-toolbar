@@ -38,12 +38,26 @@ const djdt = {
                             djDebug.dataset.renderPanelUrl,
                             window.location
                         );
+                        const onLoadEvent = current.dataset.onLoadEvent;
                         url.searchParams.append("store_id", store_id);
                         url.searchParams.append("panel_id", this.className);
                         ajax(url).then(function (data) {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
                             inner.innerHTML = data.content;
-                            $$.executeScripts(data.scripts);
+                            if (data.scripts.length > 0) {
+                                let raisedEvent = false;
+                                $$.executeScripts(data.scripts, function () {
+                                    // Attempt to raise the event only once.
+                                    if (!raisedEvent) {
+                                        raisedEvent = true;
+                                        djDebug.dispatchEvent(
+                                            new Event(onLoadEvent)
+                                        );
+                                    }
+                                });
+                            } else {
+                                djDebug.dispatchEvent(new Event(onLoadEvent));
+                            }
                         });
                     }
                 }

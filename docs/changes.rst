@@ -9,6 +9,11 @@ Next version
 * Added ``PRETTIFY_SQL`` configuration option to support controlling
   SQL token grouping. By default it's set to True. When set to False,
   a performance improvement can be seen by the SQL panel.
+* Support JavaScript event when a panel loads of the format
+  ``djdt.panel.[PanelId]`` where PanelId is the panel's python class'
+  ``panel_id`` property. Listening for this event corrects the bug
+  in the Timer Panel in which it doesn't insert the browser timings
+  after being switching requests in the History Panel.
 
 
 3.2 (2020-12-03)

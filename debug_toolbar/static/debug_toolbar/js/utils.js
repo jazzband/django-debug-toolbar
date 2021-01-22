@@ -23,12 +23,13 @@ const $$ = {
     visible(element) {
         return !element.classList.contains("djdt-hidden");
     },
-    executeScripts(scripts) {
+    executeScripts(scripts, onLoad) {
         scripts.forEach(function (script) {
             const el = document.createElement("script");
             el.type = "module";
             el.src = script;
             el.async = true;
+            el.onload = onLoad;
             document.head.appendChild(el);
         });
     },

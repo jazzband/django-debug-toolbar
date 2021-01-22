@@ -402,3 +402,27 @@ common methods available.
 .. js:function:: djdt.show_toolbar
 
     Shows the toolbar.
+
+Events
+^^^^^^
+
+.. js:attribute:: djdt.panel.[panel_id]
+
+    ``[panel_id]`` is the ``panel_id`` property of the panel's Python class.
+
+    This is an event raised when a panel is loaded for the first time. This
+    will not be raised on every render of the panel as the panel's content
+    is cached after the first load. This event can be useful when creating
+    custom scripts to process the HTML further.
+
+    An example of this for the ``CustomPanel`` would be:
+
+.. code-block:: javascript
+
+    function addCustomMetrics() {
+        // Logic to process/add custom metrics here.
+    }
+    // The panel events are dispatched on the #djDebug element.
+    const djDebug = document.getElementById("djDebug");
+    // When the event djdt.panel.CustomPanel is raised, call AddCustomMetrics
+    djDebug.addEventListener("djdt.panel.CustomPanel", addCustomMetrics, false);
