@@ -6,6 +6,9 @@ Next version
 
 * Changed ``djdt.cookie.set()`` to set ``sameSite=Lax`` by default if
   callers do not provide a value.
+* Added ``PRETTIFY_SQL`` configuration option to support controlling
+  SQL token grouping. By default it's set to True. When set to False,
+  a performance improvement can be seen by the SQL panel.
 
 
 3.2 (2020-12-03)
