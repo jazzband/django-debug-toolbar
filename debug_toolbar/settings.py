@@ -37,6 +37,7 @@ CONFIG_DEFAULTS = {
         "django.utils.deprecation",
         "django.utils.functional",
     ),
+    "PRETTIFY_SQL": True,
     "PROFILER_MAX_DEPTH": 10,
     "SHOW_TEMPLATE_CONTEXT": True,
     "SKIP_TEMPLATE_PREFIXES": ("django/forms/widgets/", "admin/widgets/"),
