@@ -9,6 +9,8 @@ from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
 
+from debug_toolbar import settings as dt_settings
+
 from ..base import BaseTestCase
 
 try:
@@ -357,3 +359,40 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]["stacktrace"]) > 0)
+
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={"PRETTIFY_SQL": True},
+    )
+    def test_prettify_sql(self):
+        """
+        Test case to validate that the PRETTIFY_SQL setting changes the output
+        of the sql when it's toggled. It does not validate what it does
+        though.
+        """
+        list(User.objects.filter(username__istartswith="spam"))
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        pretty_sql = self.panel._queries[-1][1]["sql"]
+        self.assertEqual(len(self.panel._queries), 1)
+
+        # Reset the queries
+        self.panel._queries = []
+        # Run it again, but with prettyify off. Verify that it's different.
+        dt_settings.get_config()["PRETTIFY_SQL"] = False
+        list(User.objects.filter(username__istartswith="spam"))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertEqual(len(self.panel._queries), 1)
+        self.assertNotEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+
+        self.panel._queries = []
+        # Run it again, but with prettyify back on.
+        # This is so we don't have to check what PRETTIFY_SQL does exactly,
+        # but we know it's doing something.
+        dt_settings.get_config()["PRETTIFY_SQL"] = True
+        list(User.objects.filter(username__istartswith="spam"))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertEqual(len(self.panel._queries), 1)
+        self.assertEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
