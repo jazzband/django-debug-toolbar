@@ -17,6 +17,11 @@ History
 This panel shows the history of requests made and allows switching to a past
 snapshot of the toolbar to view that request's stats.
 
+.. caution::
+   If :ref:`RENDER_PANELS <RENDER_PANELS>` configuration option is set to
+   ``True`` or if the server runs with multiple processes, the History Panel
+   will be disabled.
+
 Version
 ~~~~~~~
 
@@ -184,9 +189,9 @@ URL: https://github.com/danyi1212/django-windowsauth
 
 Path: ``windows_auth.panels.LDAPPanel``
 
-LDAP Operations performed during the request, including timing, request and response messages, 
+LDAP Operations performed during the request, including timing, request and response messages,
 the entries received, write changes list, stack-tracing and error debugging.
-This panel also shows connection usage metrics when it is collected. 
+This panel also shows connection usage metrics when it is collected.
 `Check out the docs <https://django-windowsauth.readthedocs.io/en/latest/howto/debug_toolbar.html>`_.
 
 Line Profiler

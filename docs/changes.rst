@@ -9,6 +9,10 @@ Next version
 * Added ``PRETTIFY_SQL`` configuration option to support controlling
   SQL token grouping. By default it's set to True. When set to False,
   a performance improvement can be seen by the SQL panel.
+* ``HistoryPanel`` will be disabled when ``RENDER_PANELS`` is ``True``
+  or if it's not set, but the server is running with multiple processes.
+* Fixes ``RENDER_PANELS`` functionality so that when ``True`` panels are
+  rendered during the request and not loaded asynchronously.
 
 
 3.2 (2020-12-03)

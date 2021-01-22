@@ -66,6 +66,8 @@ Toolbar options
   The toolbar searches for this string in the HTML and inserts itself just
   before.
 
+.. _RENDER_PANELS:
+
 * ``RENDER_PANELS``
 
   Default: ``None``

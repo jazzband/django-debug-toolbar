@@ -7,7 +7,10 @@
 <script type="module" src="{% static 'debug_toolbar/js/toolbar.js' %}" async></script>
 {% endblock %}
 <div id="djDebug" class="djdt-hidden" dir="ltr"
-     {% if toolbar.store_id %}data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{% url 'djdt:render_panel' %}"{% endif %}
+     {% if not toolbar.should_render_panels %}
+     data-store-id="{{ toolbar.store_id }}"
+     data-render-panel-url="{% url 'djdt:render_panel' %}"
+     {% endif %}
      data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
   <div class="djdt-hidden" id="djDebugToolbar">
