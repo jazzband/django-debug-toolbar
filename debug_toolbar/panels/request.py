@@ -44,7 +44,16 @@ class RequestPanel(Panel):
             view_info["view_func"] = get_name_from_obj(func)
             view_info["view_args"] = args
             view_info["view_kwargs"] = kwargs
-            view_info["view_urlname"] = getattr(match, "url_name", _("<unavailable>"))
+
+            if getattr(match, "url_name", False):
+                url_name = match.url_name
+                if match.namespaces:
+                    url_name = ":".join([*match.namespaces, url_name])
+            else:
+                url_name = _("<unavailable>")
+
+            view_info["view_urlname"] = url_name
+
         except Http404:
             pass
         self.record_stats(view_info)

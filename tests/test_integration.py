@@ -63,6 +63,10 @@ class DebugToolbarTestCase(BaseTestCase):
         panel.generate_stats(self.request, response)
         return panel.get_stats()
 
+    def test_namespaced_url(self):
+        stats = self._resolve_stats("/admin/login/")
+        self.assertEqual(stats["view_urlname"], "admin:login")
+
     def test_url_resolving_positional(self):
         stats = self._resolve_stats("/resolving1/a/b/")
         self.assertEqual(stats["view_urlname"], "positional-resolving")
