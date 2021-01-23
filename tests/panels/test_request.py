@@ -84,3 +84,10 @@ class RequestPanelTestCase(BaseTestCase):
         content = self.panel.content
         self.assertIn("foo", content)
         self.assertIn("bar", content)
+
+    def test_namespaced_url(self):
+        self.request.path = "/admin/login/"
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        panel_stats = self.panel.get_stats()
+        self.assertEqual(panel_stats["view_urlname"], "admin:login")
