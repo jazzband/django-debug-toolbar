@@ -6,8 +6,7 @@ from collections import OrderedDict
 try:
     from django.utils.connection import ConnectionProxy
 except ImportError:
-    # Django 3.1 and below doesn't have a ConnectionProxy
-    pass
+    ConnectionProxy = None
 
 from django.conf import settings
 from django.core import cache
@@ -257,10 +256,9 @@ class CachePanel(Panel):
         else:
             cache.caches = CacheHandlerPatch()
 
-        try:
+        # Wrap the patched cache inside Django's ConnectionProxy
+        if ConnectionProxy:
             cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
-        except NameError:
-            pass
 
     def disable_instrumentation(self):
         cache.caches = original_caches
