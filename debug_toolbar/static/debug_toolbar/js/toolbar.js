@@ -20,7 +20,8 @@ const djdt = {
                 if (!this.className) {
                     return;
                 }
-                const current = document.getElementById(this.className);
+                const panelId = this.className;
+                const current = document.getElementById(panelId);
                 if ($$.visible(current)) {
                     djdt.hide_panels();
                 } else {
@@ -38,27 +39,24 @@ const djdt = {
                             djDebug.dataset.renderPanelUrl,
                             window.location
                         );
-                        const onLoadEvent = current.dataset.onLoadEvent;
                         url.searchParams.append("store_id", store_id);
-                        url.searchParams.append("panel_id", this.className);
+                        url.searchParams.append("panel_id", panelId);
                         ajax(url).then(function (data) {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
                             inner.innerHTML = data.content;
-                            if (data.scripts.length > 0) {
-                                let raisedEvent = false;
-                                $$.executeScripts(data.scripts, function () {
-                                    // Attempt to raise the event only once.
-                                    if (!raisedEvent) {
-                                        raisedEvent = true;
-                                        djDebug.dispatchEvent(
-                                            new Event(onLoadEvent)
-                                        );
-                                    }
-                                });
-                            } else {
-                                djDebug.dispatchEvent(new Event(onLoadEvent));
-                            }
+                            $$.executeScripts(data.scripts);
+                            djDebug.dispatchEvent(
+                                new CustomEvent("djdt.panel.render", {
+                                    detail: { panelId: panelId },
+                                })
+                            );
                         });
+                    } else {
+                        djDebug.dispatchEvent(
+                            new CustomEvent("djdt.panel.render", {
+                                detail: { panelId: panelId },
+                            })
+                        );
                     }
                 }
             }

@@ -1,4 +1,7 @@
+import { $$ } from "./utils.js";
+
 function insertBrowserTiming() {
+    console.log(["inserted"]);
     const timingOffset = performance.timing.navigationStart,
         timingEnd = performance.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;
@@ -48,20 +51,25 @@ function insertBrowserTiming() {
         tbody.appendChild(row);
     }
 
-    const tbody = document.getElementById("djDebugBrowserTimingTableBody");
-    // This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
-    addRow(tbody, "domainLookupStart", "domainLookupEnd");
-    addRow(tbody, "connectStart", "connectEnd");
-    addRow(tbody, "requestStart", "responseEnd"); // There is no requestEnd
-    addRow(tbody, "responseStart", "responseEnd");
-    addRow(tbody, "domLoading", "domComplete"); // Spans the events below
-    addRow(tbody, "domInteractive");
-    addRow(tbody, "domContentLoadedEventStart", "domContentLoadedEventEnd");
-    addRow(tbody, "loadEventStart", "loadEventEnd");
-    document
-        .getElementById("djDebugBrowserTiming")
-        .classList.remove("djdt-hidden");
+    const browserTiming = document.getElementById("djDebugBrowserTiming");
+    // Determine if the browser timing section has already been rendered.
+    if (browserTiming.classList.contains("djdt-hidden")) {
+        const tbody = document.getElementById("djDebugBrowserTimingTableBody");
+        // This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
+        addRow(tbody, "domainLookupStart", "domainLookupEnd");
+        addRow(tbody, "connectStart", "connectEnd");
+        addRow(tbody, "requestStart", "responseEnd"); // There is no requestEnd
+        addRow(tbody, "responseStart", "responseEnd");
+        addRow(tbody, "domLoading", "domComplete"); // Spans the events below
+        addRow(tbody, "domInteractive");
+        addRow(tbody, "domContentLoadedEventStart", "domContentLoadedEventEnd");
+        addRow(tbody, "loadEventStart", "loadEventEnd");
+        browserTiming.classList.remove("djdt-hidden");
+    }
 }
 
 const djDebug = document.getElementById("djDebug");
-djDebug.addEventListener("djdt.panel.TimerPanel", insertBrowserTiming, false);
+// Insert the browser timing now since it's possible for this
+// script to miss the initial panel load event.
+insertBrowserTiming();
+$$.onPanelRender(djDebug, "TimerPanel", insertBrowserTiming);

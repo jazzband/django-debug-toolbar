@@ -184,9 +184,9 @@ URL: https://github.com/danyi1212/django-windowsauth
 
 Path: ``windows_auth.panels.LDAPPanel``
 
-LDAP Operations performed during the request, including timing, request and response messages, 
+LDAP Operations performed during the request, including timing, request and response messages,
 the entries received, write changes list, stack-tracing and error debugging.
-This panel also shows connection usage metrics when it is collected. 
+This panel also shows connection usage metrics when it is collected.
 `Check out the docs <https://django-windowsauth.readthedocs.io/en/latest/howto/debug_toolbar.html>`_.
 
 Line Profiler
@@ -406,23 +406,28 @@ common methods available.
 Events
 ^^^^^^
 
-.. js:attribute:: djdt.panel.[panel_id]
+.. js:attribute:: djdt.panel.render
 
-    ``[panel_id]`` is the ``panel_id`` property of the panel's Python class.
-
-    This is an event raised when a panel is loaded for the first time. This
-    will not be raised on every render of the panel as the panel's content
-    is cached after the first load. This event can be useful when creating
-    custom scripts to process the HTML further.
+    This is an event raised when a panel is rendered. It has the property
+    ``detail.panelId`` which identifies which panel has been loaded. This
+    event can be useful when creating custom scripts to process the HTML
+    further.
 
     An example of this for the ``CustomPanel`` would be:
 
 .. code-block:: javascript
 
+    import { $$ } from "./utils.js";
     function addCustomMetrics() {
         // Logic to process/add custom metrics here.
+
+        // Be sure to cover the case of this function being called twice
+        // due to file being loaded asynchronously.
     }
-    // The panel events are dispatched on the #djDebug element.
     const djDebug = document.getElementById("djDebug");
-    // When the event djdt.panel.CustomPanel is raised, call AddCustomMetrics
-    djDebug.addEventListener("djdt.panel.CustomPanel", addCustomMetrics, false);
+    $$.onPanelRender(djDebug, "CustomPanel", addCustomMetrics);
+    // Since a panel's scripts are loaded asynchronously, it's possible that
+    // the above statement would occur after the djdt.panel.render event has
+    // been raised. To account for that, the rendering function should be
+    // called here as well.
+    addCustomMetrics();

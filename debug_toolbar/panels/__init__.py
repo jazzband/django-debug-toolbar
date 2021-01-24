@@ -108,9 +108,9 @@ class Panel:
         """
         Scripts used by the HTML content of the panel when it's displayed.
 
-        When a panel is loaded on the frontend, a JavaScript event will be
-        dispatched of the format ``djdt.panel.[panel_id]``. The scripts used can
-        listen for this event to execute functionality on panel load.
+        When a panel is rendered on the frontend, the ``djdt.panel.render``
+        JavaScript event will be dispatched. The scripts can listen for
+        this event to support dynamic functionality.
         """
         return []
 
