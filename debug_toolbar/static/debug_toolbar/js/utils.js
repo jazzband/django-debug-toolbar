@@ -32,6 +32,12 @@ const $$ = {
             document.head.appendChild(el);
         });
     },
+    applyStyle(name) {
+        const selector = "#djDebug [data-" + name + "]";
+        document.querySelectorAll(selector).forEach(function (element) {
+            element.style[name] = element.getAttribute("data-" + name);
+        });
+    },
 };
 
 function ajax(url, init) {
