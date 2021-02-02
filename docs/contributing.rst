@@ -141,8 +141,8 @@ The release itself requires the following steps:
    Commit.
 
 #. Bump version numbers in ``docs/changes.rst``, ``docs/conf.py``,
-   ``README.rst`` and ``setup.py``. Add the release date to
-   ``docs/changes.rst``. Commit.
+   ``README.rst``, ``debug_toolbar/__init__.py`` and ``setup.py``.
+   Add the release date to ``docs/changes.rst``. Commit.
 
 #. Tag the new version.
 
