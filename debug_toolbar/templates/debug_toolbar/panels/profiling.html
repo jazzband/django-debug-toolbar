@@ -14,7 +14,7 @@
     {% for call in func_list %}
       <tr class="{% for parent_id in call.parent_ids %} djToggleDetails_{{ parent_id }}{% endfor %}" id="profilingMain_{{ call.id }}">
         <td>
-          <div data-padding-left="{{ call.indent }}px">
+          <div data-djdt-styles="paddingLeft:{{ call.indent }}px">
             {% if call.has_subfuncs %}
               <button type="button" class="djProfileToggleDetails djToggleSwitch" data-toggle-name="profilingMain" data-toggle-id="{{ call.id }}">-</button>
             {% else %}

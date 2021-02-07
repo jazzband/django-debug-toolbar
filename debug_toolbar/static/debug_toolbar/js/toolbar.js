@@ -44,8 +44,7 @@ const djdt = {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
                             inner.innerHTML = data.content;
                             $$.executeScripts(data.scripts);
-                            $$.applyStyle("padding-left");
-                            $$.applyStyle("background-color");
+                            $$.applyStyles(inner);
                         });
                     }
                 }

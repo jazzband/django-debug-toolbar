@@ -32,11 +32,25 @@ const $$ = {
             document.head.appendChild(el);
         });
     },
-    applyStyle(name) {
-        const selector = "#djDebug [data-" + name + "]";
-        document.querySelectorAll(selector).forEach(function (element) {
-            element.style[name] = element.getAttribute("data-" + name);
-        });
+    applyStyles(container) {
+        /*
+         * Given a container element, apply styles set via data-djdt-styles attribute.
+         * The format is data-djdt-styles="styleName1:value;styleName2:value2"
+         * The style names should use the CSSStyleDeclaration camel cased names.
+         */
+        container
+            .querySelectorAll("[data-djdt-styles]")
+            .forEach(function (element) {
+                const styles = element.dataset.djdtStyles || "";
+                styles.split(";").forEach(function (styleText) {
+                    const styleKeyPair = styleText.split(":");
+                    if (styleKeyPair.length === 2) {
+                        const name = styleKeyPair[0].trim();
+                        const value = styleKeyPair[1].trim();
+                        element.style[name] = value;
+                    }
+                });
+            });
     },
 };
 
