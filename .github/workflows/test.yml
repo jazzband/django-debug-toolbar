@@ -15,8 +15,7 @@ jobs:
       mariadb:
         image: mariadb:10.3
         env:
-          MYSQL_ROOT_PASSWORD: mysql
-          MYSQL_DATABASE: mysql
+          MYSQL_ROOT_PASSWORD: debug_toolbar
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
@@ -61,11 +60,10 @@ jobs:
       run: tox
       env:
         DB_BACKEND: mysql
-        DB_NAME: mysql
         DB_USER: root
-        DB_PASSWORD: mysql
-        DB_HOST: "127.0.0.1"
-        DB_PORT: "3306"
+        DB_PASSWORD: debug_toolbar
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
 
     - name: Upload coverage
       uses: codecov/codecov-action@v1
@@ -84,7 +82,9 @@ jobs:
       postgres:
         image: 'postgres:9.5'
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: debug_toolbar
+          POSTGRES_USER: debug_toolbar
+          POSTGRES_PASSWORD: debug_toolbar
         ports:
         - 5432:5432
         options: >-
@@ -129,9 +129,6 @@ jobs:
       run: tox
       env:
         DB_BACKEND: postgresql
-        DB_NAME: postgres
-        DB_USER: postgres
-        DB_PASSWORD: postgres
         DB_HOST: localhost
         DB_PORT: 5432
 
