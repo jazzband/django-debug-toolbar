@@ -37,6 +37,9 @@ Make sure that ``'django.contrib.staticfiles'`` is `set up properly
 
     STATIC_URL = '/static/'
 
+Run ``./manage.py collectstatic`` to update the Debug Toolbar's frontend
+assets.
+
 If you're upgrading from a previous version, you should review the
 :doc:`change log <changes>` and look for specific upgrade instructions.
 
