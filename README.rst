@@ -10,7 +10,7 @@ Django Debug Toolbar
    :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
 
-.. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/jazzband/django-debug-toolbar
    :alt: Test coverage status
 
@@ -28,7 +28,7 @@ more details about the panel's content.
 
 Here's a screenshot of the toolbar in action:
 
-.. image:: https://raw.github.com/jazzband/django-debug-toolbar/master/example/django-debug-toolbar.png
+.. image:: https://raw.github.com/jazzband/django-debug-toolbar/main/example/django-debug-toolbar.png
    :alt: Django Debug Toolbar screenshot
 
 In addition to the built-in panels, a number of third-party panels are
