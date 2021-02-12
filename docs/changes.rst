@@ -9,7 +9,7 @@ Next version
 * Added ``PRETTIFY_SQL`` configuration option to support controlling
   SQL token grouping. By default it's set to True. When set to False,
   a performance improvement can be seen by the SQL panel.
-* Fixed issue with toolbar expecting urls to start with `/__debug__/`
+* Fixed issue with toolbar expecting URL paths to start with `/__debug__/`
   while the documentation indicates it's not required.
 
 3.2 (2020-12-03)
