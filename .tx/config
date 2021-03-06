@@ -2,7 +2,7 @@
 host = https://www.transifex.com
 lang_map = sr@latin:sr_Latn
 
-[django-debug-toolbar.master]
+[django-debug-toolbar.main]
 file_filter = debug_toolbar/locale/<lang>/LC_MESSAGES/django.po
 source_file = debug_toolbar/locale/en/LC_MESSAGES/django.po
 source_lang = en

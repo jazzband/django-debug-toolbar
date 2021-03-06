@@ -81,8 +81,8 @@ CACHES = {
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.%s" % os.getenv("DB_BACKEND"),
-        "NAME": os.getenv("DB_NAME"),
+        "ENGINE": "django.db.backends.%s" % os.getenv("DB_BACKEND", "sqlite3"),
+        "NAME": os.getenv("DB_NAME", ":memory:"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST", ""),

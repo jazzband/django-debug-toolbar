@@ -1,13 +1,9 @@
 __all__ = ["VERSION"]
 
 
-try:
-    import pkg_resources
-
-    VERSION = pkg_resources.get_distribution("django-debug-toolbar").version
-except Exception:
-    VERSION = "unknown"
-
+# Do not use pkg_resources to find the version but set it here directly!
+# see issue #1446
+VERSION = "3.2"
 
 # Code that discovers files or modules in INSTALLED_APPS imports this module.
 

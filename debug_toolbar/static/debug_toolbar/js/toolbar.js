@@ -45,6 +45,7 @@ const djdt = {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
                             inner.innerHTML = data.content;
                             $$.executeScripts(data.scripts);
+                            $$.applyStyles(inner);
                             djDebug.dispatchEvent(
                                 new CustomEvent("djdt.panel.render", {
                                     detail: { panelId: panelId },

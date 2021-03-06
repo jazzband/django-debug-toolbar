@@ -53,7 +53,7 @@ Tests
 
 Once you've set up a development environment as explained above, you can run
 the test suite for the versions of Django and Python installed in that
-environment::
+environment using the SQLite database::
 
     $ make test
 
@@ -79,8 +79,23 @@ or by setting the ``DJANGO_SELENIUM_TESTS`` environment variable::
     $ DJANGO_SELENIUM_TESTS=true make coverage
     $ DJANGO_SELENIUM_TESTS=true tox
 
-At this time, there isn't an easy way to test against databases other than
-SQLite.
+To test via `tox` against other databases, you'll need to create the user,
+database and assign the proper permissions. For PostgreSQL in a `psql`
+shell (note this allows the debug_toolbar user the permission to create
+databases)::
+
+    psql> CREATE USER debug_toolbar WITH PASSWORD 'debug_toolbar';
+    psql> ALTER USER debug_toolbar CREATEDB;
+    psql> CREATE DATABASE debug_toolbar;
+    psql> GRANT ALL PRIVILEGES ON DATABASE debug_toolbar to debug_toolbar;
+
+For MySQL/MariaDB in a `mysql` shell::
+
+    mysql> CREATE DATABASE debug_toolbar;
+    mysql> CREATE USER 'debug_toolbar'@'localhost' IDENTIFIED BY 'debug_toolbar';
+    mysql> GRANT ALL PRIVILEGES ON debug_toolbar.* TO 'debug_toolbar'@'localhost';
+    mysql> GRANT ALL PRIVILEGES ON test_debug_toolbar.* TO 'debug_toolbar'@'localhost';
+
 
 Style
 -----
@@ -141,8 +156,8 @@ The release itself requires the following steps:
    Commit.
 
 #. Bump version numbers in ``docs/changes.rst``, ``docs/conf.py``,
-   ``README.rst`` and ``setup.py``. Add the release date to
-   ``docs/changes.rst``. Commit.
+   ``README.rst``, ``debug_toolbar/__init__.py`` and ``setup.py``.
+   Add the release date to ``docs/changes.rst``. Commit.
 
 #. Tag the new version.
 
