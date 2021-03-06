@@ -9,7 +9,8 @@ from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
-from django.urls import path
+from django.urls import path, resolve
+from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -132,6 +133,19 @@ class DebugToolbar:
                 urlpatterns += panel_class.get_urls()
             cls._urlpatterns = urlpatterns
         return cls._urlpatterns
+
+    @classmethod
+    def is_toolbar_request(cls, request):
+        """
+        Determine if the request is for a DebugToolbar view.
+        """
+        # The primary caller of this function is in the middleware which may
+        # not have resolver_match set.
+        try:
+            resolver_match = request.resolver_match or resolve(request.path)
+        except Resolver404:
+            return False
+        return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
 
 
 app_name = "djdt"

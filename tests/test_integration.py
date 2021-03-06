@@ -101,6 +101,25 @@ class DebugToolbarTestCase(BaseTestCase):
         self.client.get("/cached_view/")
         self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 5)
 
+    def test_is_toolbar_request(self):
+        self.request.path = "/__debug__/render_panel/"
+        self.assertTrue(self.toolbar.is_toolbar_request(self.request))
+
+        self.request.path = "/invalid/__debug__/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
+        self.request.path = "/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
+    @override_settings(ROOT_URLCONF="tests.urls_invalid")
+    def test_is_toolbar_request_without_djdt_urls(self):
+        """Test cases when the toolbar urls aren't configured."""
+        self.request.path = "/__debug__/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
+        self.request.path = "/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(IntegrationTestCase):
