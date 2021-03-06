@@ -1,12 +1,10 @@
 import os
+import unittest
 
+import django
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.core.checks import Warning
-from django.test import SimpleTestCase
 from django.test.utils import override_settings
-
-from debug_toolbar.panels.staticfiles import StaticFilesPanel
 
 from ..base import BaseTestCase
 
@@ -54,6 +52,7 @@ class StaticFilesPanelTestCase(BaseTestCase):
         )
         self.assertValidHTML(content)
 
+    @unittest.skipIf(django.VERSION >= (4,), "Django>=4 handles missing dirs itself.")
     @override_settings(
         STATICFILES_DIRS=[PATH_DOES_NOT_EXIST] + settings.STATICFILES_DIRS,
         STATIC_ROOT=PATH_DOES_NOT_EXIST,
@@ -80,21 +79,4 @@ class StaticFilesPanelTestCase(BaseTestCase):
         )
         self.assertEqual(
             self.panel.get_staticfiles_dirs(), finders.FileSystemFinder().locations
-        )
-
-
-@override_settings(DEBUG=True)
-class StaticFilesPanelChecksTestCase(SimpleTestCase):
-    @override_settings(STATICFILES_DIRS=[PATH_DOES_NOT_EXIST])
-    def test_run_checks(self):
-        messages = StaticFilesPanel.run_checks()
-        self.assertEqual(
-            messages,
-            [
-                Warning(
-                    "debug_toolbar requires the STATICFILES_DIRS directories to exist.",
-                    hint="Running manage.py collectstatic may help uncover the issue.",
-                    id="debug_toolbar.staticfiles.W001",
-                )
-            ],
         )
