@@ -8,6 +8,7 @@ style: package-lock.json
 	flake8
 	npx eslint --ignore-path .gitignore --fix .
 	npx prettier --ignore-path .gitignore --write $(PRETTIER_TARGETS)
+	! grep -r '\(style=\|onclick=\|<script>\|<style\)' debug_toolbar/templates/
 
 style_check: package-lock.json
 	isort -c .
@@ -15,6 +16,7 @@ style_check: package-lock.json
 	flake8
 	npx eslint --ignore-path .gitignore .
 	npx prettier --ignore-path .gitignore --check $(PRETTIER_TARGETS)
+	! grep -r '\(style=\|onclick=\|<script>\|<style\)' debug_toolbar/templates/
 
 example:
 	python example/manage.py migrate --noinput
