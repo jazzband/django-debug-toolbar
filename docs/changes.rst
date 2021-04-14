@@ -4,6 +4,13 @@ Change log
 Next version
 ------------
 
+
+3.2.1 (2021-04-14)
+------------------
+
+* Fixed SQL Injection vulnerability, CVE-2021-30459. The toolbar now
+  calculates a signature on all fields for the SQL select, explain,
+  and analyze forms.
 * Changed ``djdt.cookie.set()`` to set ``sameSite=Lax`` by default if
   callers do not provide a value.
 * Added ``PRETTIFY_SQL`` configuration option to support controlling
