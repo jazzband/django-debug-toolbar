@@ -13,3 +13,15 @@ class NonAsciiRepr(object):
 
 class Binary(models.Model):
     field = models.BinaryField()
+
+
+try:
+    from django.contrib.postgres.fields import JSONField
+except ImportError:  # psycopg2 not installed
+    JSONField = None
+
+
+if JSONField:
+
+    class PostgresJSON(models.Model):
+        field = JSONField()

@@ -3,8 +3,10 @@
 from __future__ import absolute_import, unicode_literals
 
 import datetime
+import sys
 import unittest
 
+import django
 from django.contrib.auth.models import User
 from django.db import connection
 from django.db.models import Count
@@ -113,6 +115,10 @@ class SQLPanelTestCase(BaseTestCase):
             ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
         )
 
+    @unittest.skipIf(
+        django.VERSION < (2, 1) and connection.vendor == "mysql",
+        "There's a bug with MySQL and Django 2.0.X that fails this test.",
+    )
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
 
@@ -136,6 +142,7 @@ class SQLPanelTestCase(BaseTestCase):
         )
 
     @unittest.skipUnless(connection.vendor != "sqlite", "Test invalid for SQLite")
+    @unittest.skipIf(sys.version_info[0:2] < (3, 6), "Dicts are unordered before 3.6")
     def test_raw_query_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
 

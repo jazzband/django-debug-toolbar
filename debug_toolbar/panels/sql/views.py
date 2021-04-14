@@ -4,15 +4,16 @@ from django.http import HttpResponseBadRequest
 from django.template.response import SimpleTemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from debug_toolbar.decorators import require_show_toolbar
+from debug_toolbar.decorators import require_show_toolbar, signed_data_view
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 
 
 @csrf_exempt
 @require_show_toolbar
-def sql_select(request):
+@signed_data_view
+def sql_select(request, verified_data):
     """Returns the output of the SQL SELECT statement"""
-    form = SQLSelectForm(request.POST or None)
+    form = SQLSelectForm(verified_data)
 
     if form.is_valid():
         sql = form.cleaned_data["raw_sql"]
@@ -36,9 +37,10 @@ def sql_select(request):
 
 @csrf_exempt
 @require_show_toolbar
-def sql_explain(request):
+@signed_data_view
+def sql_explain(request, verified_data):
     """Returns the output of the SQL EXPLAIN on the given query"""
-    form = SQLSelectForm(request.POST or None)
+    form = SQLSelectForm(verified_data)
 
     if form.is_valid():
         sql = form.cleaned_data["raw_sql"]
@@ -73,9 +75,10 @@ def sql_explain(request):
 
 @csrf_exempt
 @require_show_toolbar
-def sql_profile(request):
+@signed_data_view
+def sql_profile(request, verified_data):
     """Returns the output of running the SQL and getting the profiling statistics"""
-    form = SQLSelectForm(request.POST or None)
+    form = SQLSelectForm(verified_data)
 
     if form.is_valid():
         sql = form.cleaned_data["raw_sql"]

@@ -1,8 +1,8 @@
 # Runtime dependencies
 
-Django
+Django<3
 sqlparse
-django_jinja
+django_jinja==2.4.1
 
 # Testing
 

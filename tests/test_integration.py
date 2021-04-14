@@ -5,14 +5,17 @@ from __future__ import absolute_import, unicode_literals
 import os
 import unittest
 
+import django
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
 from django.core.checks import Warning, run_checks
+from django.db import connection
 from django.template.loader import get_template
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.toolbar import DebugToolbar
 
@@ -171,12 +174,15 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_sql_select_checks_show_toolbar(self):
         url = "/__debug__/sql_select/"
         data = {
-            "sql": "SELECT * FROM auth_user",
-            "raw_sql": "SELECT * FROM auth_user",
-            "params": "{}",
-            "alias": "default",
-            "duration": "0",
-            "hash": "6e12daa636b8c9a8be993307135458f90a877606",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
 
         response = self.client.post(url, data)
@@ -194,14 +200,49 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_sql_explain_checks_show_toolbar(self):
         url = "/__debug__/sql_explain/"
         data = {
-            "sql": "SELECT * FROM auth_user",
-            "raw_sql": "SELECT * FROM auth_user",
-            "params": "{}",
-            "alias": "default",
-            "duration": "0",
-            "hash": "6e12daa636b8c9a8be993307135458f90a877606",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
 
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertEqual(response.status_code, 200)
+        with self.settings(INTERNAL_IPS=[]):
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 404)
+            response = self.client.post(
+                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+            )
+            self.assertEqual(response.status_code, 404)
+
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
+    def test_sql_explain_postgres_json_field(self):
+        url = "/__debug__/sql_explain/"
+        base_query = (
+            'SELECT * FROM "tests_postgresjson" WHERE "tests_postgresjson"."field" @>'
+        )
+        query = base_query + """ '{"foo": "bar"}'"""
+        data = {
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": query,
+                    "raw_sql": base_query + " %s",
+                    "params": '["{\\"foo\\": \\"bar\\"}"]',
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
+        }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
@@ -217,12 +258,15 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_sql_profile_checks_show_toolbar(self):
         url = "/__debug__/sql_profile/"
         data = {
-            "sql": "SELECT * FROM auth_user",
-            "raw_sql": "SELECT * FROM auth_user",
-            "params": "{}",
-            "alias": "default",
-            "duration": "0",
-            "hash": "6e12daa636b8c9a8be993307135458f90a877606",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
 
         response = self.client.post(url, data)
@@ -363,6 +407,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 class DebugToolbarSystemChecksTestCase(BaseTestCase):
     @override_settings(
         MIDDLEWARE=[
+            "django.contrib.sessions.middleware.SessionMiddleware",
             "django.contrib.messages.middleware.MessageMiddleware",
             "django.contrib.auth.middleware.AuthenticationMiddleware",
             "django.middleware.gzip.GZipMiddleware",
@@ -373,6 +418,7 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
         messages = run_checks()
         self.assertEqual(messages, [])
 
+    @unittest.skipIf(django.VERSION >= (2, 2), "Django handles missing dirs itself.")
     @override_settings(
         MIDDLEWARE=[
             "django.contrib.messages.middleware.MessageMiddleware",
@@ -396,6 +442,7 @@ class DebugToolbarSystemChecksTestCase(BaseTestCase):
 
     @override_settings(
         MIDDLEWARE=[
+            "django.contrib.sessions.middleware.SessionMiddleware",
             "django.contrib.messages.middleware.MessageMiddleware",
             "django.contrib.auth.middleware.AuthenticationMiddleware",
             "debug_toolbar.middleware.DebugToolbarMiddleware",

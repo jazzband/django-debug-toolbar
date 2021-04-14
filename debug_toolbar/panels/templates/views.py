@@ -50,8 +50,8 @@ def template_source(request):
 
     try:
         from pygments import highlight
-        from pygments.lexers import HtmlDjangoLexer
         from pygments.formatters import HtmlFormatter
+        from pygments.lexers import HtmlDjangoLexer
 
         source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
         source = mark_safe(source)
