@@ -12,6 +12,7 @@ from django.template.loader import get_template
 from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.test.utils import override_settings
 
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.toolbar import DebugToolbar
 
@@ -164,12 +165,15 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_sql_select_checks_show_toolbar(self):
         url = "/__debug__/sql_select/"
         data = {
-            "sql": "SELECT * FROM auth_user",
-            "raw_sql": "SELECT * FROM auth_user",
-            "params": "{}",
-            "alias": "default",
-            "duration": "0",
-            "hash": "6e12daa636b8c9a8be993307135458f90a877606",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
 
         response = self.client.post(url, data)
@@ -187,12 +191,15 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_sql_explain_checks_show_toolbar(self):
         url = "/__debug__/sql_explain/"
         data = {
-            "sql": "SELECT * FROM auth_user",
-            "raw_sql": "SELECT * FROM auth_user",
-            "params": "{}",
-            "alias": "default",
-            "duration": "0",
-            "hash": "6e12daa636b8c9a8be993307135458f90a877606",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
 
         response = self.client.post(url, data)
@@ -217,12 +224,15 @@ class DebugToolbarIntegrationTestCase(TestCase):
         )
         query = base_query + """ '{"foo": "bar"}'"""
         data = {
-            "sql": query,
-            "raw_sql": base_query + " %s",
-            "params": '["{\\"foo\\": \\"bar\\"}"]',
-            "alias": "default",
-            "duration": "0",
-            "hash": "2b7172eb2ac8e2a8d6f742f8a28342046e0d00ba",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": query,
+                    "raw_sql": base_query + " %s",
+                    "params": '["{\\"foo\\": \\"bar\\"}"]',
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
@@ -239,12 +249,15 @@ class DebugToolbarIntegrationTestCase(TestCase):
     def test_sql_profile_checks_show_toolbar(self):
         url = "/__debug__/sql_profile/"
         data = {
-            "sql": "SELECT * FROM auth_user",
-            "raw_sql": "SELECT * FROM auth_user",
-            "params": "{}",
-            "alias": "default",
-            "duration": "0",
-            "hash": "6e12daa636b8c9a8be993307135458f90a877606",
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
         }
 
         response = self.client.post(url, data)

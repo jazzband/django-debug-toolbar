@@ -79,16 +79,17 @@ CACHES = {
     "second": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
 }
 
-if os.environ.get("DJANGO_DATABASE_ENGINE") == "postgresql":
-    DATABASES = {
-        "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "debug-toolbar"}
-    }
-elif os.environ.get("DJANGO_DATABASE_ENGINE") == "mysql":
-    DATABASES = {
-        "default": {"ENGINE": "django.db.backends.mysql", "NAME": "debug_toolbar"}
-    }
-else:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3"}}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.%s" % os.getenv("DB_BACKEND", "sqlite3"),
+        "NAME": os.getenv("DB_NAME", ":memory:"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", ""),
+        "PORT": os.getenv("DB_PORT", ""),
+        "TEST": {"USER": "default_test"},
+    },
+}
 
 
 # Debug Toolbar configuration

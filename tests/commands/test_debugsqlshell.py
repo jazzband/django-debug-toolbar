@@ -1,5 +1,6 @@
 import io
 import sys
+import unittest
 
 import django
 from django.contrib.auth.models import User
@@ -15,6 +16,10 @@ else:
 
 
 @override_settings(DEBUG=True)
+@unittest.skipIf(
+    django.VERSION < (2, 1) and connection.vendor == "mysql",
+    "There's a bug with MySQL and Django 2.0.X that fails this test.",
+)
 class DebugSQLShellTestCase(TestCase):
     def setUp(self):
         self.original_wrapper = base_module.CursorDebugWrapper

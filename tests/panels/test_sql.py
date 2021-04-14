@@ -1,4 +1,5 @@
 import datetime
+import sys
 import unittest
 
 import django
@@ -144,12 +145,18 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
         self.assertEqual(
-            self.panel._queries[0][1]["params"], '["{\\"foo\\": \\"bar\\"}"]',
+            self.panel._queries[0][1]["params"],
+            '["{\\"foo\\": \\"bar\\"}"]',
         )
         self.assertIsInstance(
-            self.panel._queries[0][1]["raw_params"][0], PostgresJson,
+            self.panel._queries[0][1]["raw_params"][0],
+            PostgresJson,
         )
 
+    @unittest.skipIf(
+        django.VERSION < (2, 1) and connection.vendor == "mysql",
+        "There's a bug with MySQL and Django 2.0.X that fails this test.",
+    )
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
 
@@ -170,6 +177,7 @@ class SQLPanelTestCase(BaseTestCase):
         )
 
     @unittest.skipUnless(connection.vendor != "sqlite", "Test invalid for SQLite")
+    @unittest.skipIf(sys.version_info[0:2] < (3, 6), "Dicts are unordered before 3.6")
     def test_raw_query_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
 

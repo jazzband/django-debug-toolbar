@@ -7,6 +7,7 @@ from django.conf.urls import url
 from django.db import connections
 from django.utils.translation import gettext_lazy as _, ngettext_lazy as __
 
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
 from debug_toolbar.panels.sql.forms import SQLSelectForm
@@ -117,11 +118,14 @@ class SQLPanel(Panel):
     @property
     def title(self):
         count = len(self._databases)
-        return __(
-            "SQL queries from %(count)d connection",
-            "SQL queries from %(count)d connections",
-            count,
-        ) % {"count": count}
+        return (
+            __(
+                "SQL queries from %(count)d connection",
+                "SQL queries from %(count)d connections",
+                count,
+            )
+            % {"count": count}
+        )
 
     template = "debug_toolbar/panels/sql.html"
 
@@ -208,7 +212,9 @@ class SQLPanel(Panel):
                         query["vendor"], query["trans_status"]
                     )
 
-                query["form"] = SQLSelectForm(auto_id=None, initial=copy(query))
+                query["form"] = SignedDataForm(
+                    auto_id=None, initial=SQLSelectForm(initial=copy(query)).initial
+                )
 
                 if query["sql"]:
                     query["sql"] = reformat_sql(query["sql"], with_toggle=True)

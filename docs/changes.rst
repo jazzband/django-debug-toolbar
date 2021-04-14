@@ -4,6 +4,12 @@ Change log
 UNRELEASED
 ----------
 
+2.2.1 (2021-04-14)
+------------------
+
+* Fixed SQL Injection vulnerability, CVE-2021-30459. The toolbar now
+  calculates a signature on all fields for the SQL select, explain,
+  and analyze forms.
 
 2.2 (2020-01-31)
 ----------------
