@@ -252,14 +252,14 @@ class ThreadCollector:
         is provided, returns a list for the current thread.
         """
         if thread is None:
-            thread = threading.currentThread()
+            thread = threading.current_thread()
         if thread not in self.collections:
             self.collections[thread] = []
         return self.collections[thread]
 
     def clear_collection(self, thread=None):
         if thread is None:
-            thread = threading.currentThread()
+            thread = threading.current_thread()
         if thread in self.collections:
             del self.collections[thread]
 

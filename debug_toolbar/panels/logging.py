@@ -78,6 +78,6 @@ class LoggingPanel(Panel):
 
     def generate_stats(self, request, response):
         records = collector.get_collection()
-        self._records[threading.currentThread()] = records
+        self._records[threading.current_thread()] = records
         collector.clear_collection()
         self.record_stats({"records": records})

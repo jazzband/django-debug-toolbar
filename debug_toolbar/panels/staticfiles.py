@@ -118,7 +118,7 @@ class StaticFilesPanel(panels.Panel):
 
     def generate_stats(self, request, response):
         used_paths = collector.get_collection()
-        self._paths[threading.currentThread()] = used_paths
+        self._paths[threading.current_thread()] = used_paths
 
         self.record_stats(
             {
