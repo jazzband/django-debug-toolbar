@@ -16,8 +16,13 @@ Next version
 * Added ``PRETTIFY_SQL`` configuration option to support controlling
   SQL token grouping. By default it's set to True. When set to False,
   a performance improvement can be seen by the SQL panel.
-* Fixed issue with toolbar expecting URL paths to start with `/__debug__/`
-  while the documentation indicates it's not required.
+* Added a JavaScript event when a panel loads of the format
+  ``djdt.panel.[PanelId]`` where PanelId is the ``panel_id`` property
+  of the panel's Python class. Listening for this event corrects the bug
+  in the Timer Panel in which it didn't insert the browser timings
+  after switching requests in the History Panel.
+* Fixed issue with the toolbar expecting URL paths to start with
+  ``/__debug__/`` while the documentation indicates it's not required.
 
 3.2 (2020-12-03)
 ----------------

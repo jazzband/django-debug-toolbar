@@ -7,6 +7,21 @@ const $$ = {
             }
         });
     },
+    onPanelRender(root, panelId, fn) {
+        /*
+        This is a helper function to attach a handler for a `djdt.panel.render`
+        event of a specific panel.
+
+        root: The container element that the listener should be attached to.
+        panelId: The Id of the panel.
+        fn: A function to execute when the event is triggered.
+         */
+        root.addEventListener("djdt.panel.render", function (event) {
+            if (event.detail.panelId === panelId) {
+                fn.call(event);
+            }
+        });
+    },
     show(element) {
         element.classList.remove("djdt-hidden");
     },

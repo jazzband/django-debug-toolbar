@@ -20,7 +20,8 @@ const djdt = {
                 if (!this.className) {
                     return;
                 }
-                const current = document.getElementById(this.className);
+                const panelId = this.className;
+                const current = document.getElementById(panelId);
                 if ($$.visible(current)) {
                     djdt.hide_panels();
                 } else {
@@ -39,13 +40,24 @@ const djdt = {
                             window.location
                         );
                         url.searchParams.append("store_id", store_id);
-                        url.searchParams.append("panel_id", this.className);
+                        url.searchParams.append("panel_id", panelId);
                         ajax(url).then(function (data) {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
                             inner.innerHTML = data.content;
                             $$.executeScripts(data.scripts);
                             $$.applyStyles(inner);
+                            djDebug.dispatchEvent(
+                                new CustomEvent("djdt.panel.render", {
+                                    detail: { panelId: panelId },
+                                })
+                            );
                         });
+                    } else {
+                        djDebug.dispatchEvent(
+                            new CustomEvent("djdt.panel.render", {
+                                detail: { panelId: panelId },
+                            })
+                        );
                     }
                 }
             }
