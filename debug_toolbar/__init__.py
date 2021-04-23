@@ -1,3 +1,5 @@
+import django
+
 __all__ = ["VERSION"]
 
 
@@ -9,4 +11,5 @@ VERSION = "3.2.1"
 
 urls = "debug_toolbar.toolbar", "djdt"
 
-default_app_config = "debug_toolbar.apps.DebugToolbarConfig"
+if django.VERSION < (3, 2):
+    default_app_config = "debug_toolbar.apps.DebugToolbarConfig"
