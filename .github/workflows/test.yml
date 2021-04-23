@@ -216,4 +216,4 @@ jobs:
         python -m pip install --upgrade tox
 
     - name: Test with tox
-      run: tox -e docs,style,readme
+      run: tox -e docs,style,packaging
