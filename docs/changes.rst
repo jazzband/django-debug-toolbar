@@ -4,6 +4,8 @@ Change log
 Next version
 ------------
 
+* Ensured that the handle stays within bounds when resizing the window.
+
 
 3.2.1 (2021-04-14)
 ------------------
