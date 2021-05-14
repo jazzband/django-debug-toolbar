@@ -198,7 +198,7 @@
 
 #djDebug #djDebugToolbarHandle {
     position: fixed;
-    transform: rotate(-90deg);
+    transform: translateY(-100%) rotate(-90deg);
     transform-origin: right bottom;
     background-color: #fff;
     border: 1px solid #111;

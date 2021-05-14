@@ -222,7 +222,7 @@ const djdt = {
         if (handleTop) {
             handleTop = Math.min(
                 handleTop,
-                window.innerHeight - handle.offsetHeight
+                window.innerHeight - handle.offsetWidth
             );
             handle.style.top = handleTop + "px";
         }
