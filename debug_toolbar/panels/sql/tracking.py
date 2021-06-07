@@ -57,11 +57,10 @@ def wrap_cursor(connection, panel):
         def chunked_cursor(*args, **kwargs):
             # prevent double wrapping
             # solves https://github.com/jazzband/django-debug-toolbar/issues/1239
-            if hasattr(connection._djdt_cursor, "__wrapped__"):
-                return connection._djdt_cursor(*args, **kwargs)
-            return state.Wrapper(
-                connection._djdt_chunked_cursor(*args, **kwargs), connection, panel
-            )
+            cursor = connection._djdt_chunked_cursor(*args, **kwargs)
+            if not isinstance(cursor, NormalCursorWrapper):
+                return state.Wrapper(cursor, connection, panel)
+            return cursor
 
         connection.cursor = cursor
         connection.chunked_cursor = chunked_cursor
