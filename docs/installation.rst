@@ -109,7 +109,8 @@ certain files, it is most likely that the platform's map files are incorrect or
 need to be updated. This can be achieved, for example, by installing or
 updating the ``mailcap`` package on a Red Hat distribution, ``mime-support`` on
 a Debian distribution, or by editing the keys under ``HKEY_CLASSES_ROOT`` in
-the Windows registry.
+the Windows registry(I can fix it on this machine by setting HKEY_CLASSES_ROOT\.js
+Content Type to text/javascript).
 
 Cross-Origin Request Blocked
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
