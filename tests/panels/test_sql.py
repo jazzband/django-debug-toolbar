@@ -11,8 +11,8 @@ from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
 
-from debug_toolbar import settings as dt_settings
 import debug_toolbar.panels.sql.tracking as sql_tracking
+from debug_toolbar import settings as dt_settings
 
 from ..base import BaseTestCase
 
