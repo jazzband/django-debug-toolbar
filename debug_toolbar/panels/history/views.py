@@ -2,6 +2,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 
 from debug_toolbar.decorators import require_show_toolbar, signed_data_view
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 from debug_toolbar.toolbar import DebugToolbar
 
@@ -16,6 +17,10 @@ def history_sidebar(request, verified_data):
         store_id = form.cleaned_data["store_id"]
         toolbar = DebugToolbar.fetch(store_id)
         context = {}
+        if toolbar is None:
+            # When the store_id has been popped already due to
+            # RESULTS_CACHE_SIZE
+            return JsonResponse(context)
         for panel in toolbar.panels:
             if not panel.is_historical:
                 continue
@@ -40,7 +45,8 @@ def history_refresh(request, verified_data):
 
     if form.is_valid():
         requests = []
-        for id, toolbar in reversed(DebugToolbar._store.items()):
+        # Convert to list to handle mutations happenening in parallel
+        for id, toolbar in list(DebugToolbar._store.items())[::-1]:
             requests.append(
                 {
                     "id": id,
@@ -50,7 +56,7 @@ def history_refresh(request, verified_data):
                             "id": id,
                             "store_context": {
                                 "toolbar": toolbar,
-                                "form": HistoryStoreForm(initial={"store_id": id}),
+                                "form": SignedDataForm(initial={"store_id": id}),
                             },
                         },
                     ),
