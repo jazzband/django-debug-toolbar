@@ -15,7 +15,6 @@ $$.on(djDebug, "click", ".switchHistory", function (event) {
 
     ajaxForm(this).then(function (data) {
         djDebug.setAttribute("data-store-id", newStoreId);
-        console.log("New id is" + newStoreId);
         // Check if response is empty, it could be due to an expired store_id.
         if (Object.keys(data).length === 0) {
             const container = document.getElementById("djdtHistoryRequests");
