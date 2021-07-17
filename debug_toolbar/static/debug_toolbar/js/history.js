@@ -10,8 +10,8 @@ $$.on(djDebug, "click", ".switchHistory", function (event) {
     const highlighted = tbody.querySelector(".djdt-highlighted");
     if (highlighted) {
         highlighted.classList.remove("djdt-highlighted");
-        this.closest("tr").classList.add("djdt-highlighted");
     }
+    this.closest("tr").classList.add("djdt-highlighted");
 
     ajaxForm(this).then(function (data) {
         djDebug.setAttribute("data-store-id", newStoreId);
