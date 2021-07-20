@@ -1,6 +1,7 @@
 import datetime
 import os
 import unittest
+from unittest.mock import patch
 
 import django
 from django.contrib.auth.models import User
@@ -10,6 +11,7 @@ from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
 
+import debug_toolbar.panels.sql.tracking as sql_tracking
 from debug_toolbar import settings as dt_settings
 
 from ..base import BaseTestCase
@@ -60,6 +62,20 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
+
+    @patch("debug_toolbar.panels.sql.tracking.state", wraps=sql_tracking.state)
+    def test_cursor_wrapper_singleton(self, mock_state):
+        list(User.objects.all())
+
+        # ensure that cursor wrapping is applied only once
+        self.assertEqual(mock_state.Wrapper.call_count, 1)
+
+    @patch("debug_toolbar.panels.sql.tracking.state", wraps=sql_tracking.state)
+    def test_chunked_cursor_wrapper_singleton(self, mock_state):
+        list(User.objects.all().iterator())
+
+        # ensure that cursor wrapping is applied only once
+        self.assertEqual(mock_state.Wrapper.call_count, 1)
 
     def test_generate_server_timing(self):
         self.assertEqual(len(self.panel._queries), 0)
