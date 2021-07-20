@@ -1,3 +1,5 @@
+import html
+
 from django.test import RequestFactory, override_settings
 from django.urls import resolve, reverse
 
@@ -64,6 +66,21 @@ class HistoryPanelTestCase(BaseTestCase):
 
 @override_settings(DEBUG=True)
 class HistoryViewsTestCase(IntegrationTestCase):
+    PANEL_KEYS = {
+        "VersionsPanel",
+        "TimerPanel",
+        "SettingsPanel",
+        "HeadersPanel",
+        "RequestPanel",
+        "SQLPanel",
+        "StaticFilesPanel",
+        "TemplatesPanel",
+        "CachePanel",
+        "SignalsPanel",
+        "LoggingPanel",
+        "ProfilingPanel",
+    }
+
     def test_history_panel_integration_content(self):
         """Verify the history panel's content renders properly.."""
         self.assertEqual(len(DebugToolbar._store), 0)
@@ -88,26 +105,45 @@ class HistoryViewsTestCase(IntegrationTestCase):
     def test_history_sidebar(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
-        store_id = list(DebugToolbar._store.keys())[0]
+        store_id = list(DebugToolbar._store)[0]
         data = {"signed": SignedDataForm.sign({"store_id": store_id})}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            set(response.json().keys()),
-            {
-                "VersionsPanel",
-                "TimerPanel",
-                "SettingsPanel",
-                "HeadersPanel",
-                "RequestPanel",
-                "SQLPanel",
-                "StaticFilesPanel",
-                "TemplatesPanel",
-                "CachePanel",
-                "SignalsPanel",
-                "LoggingPanel",
-                "ProfilingPanel",
-            },
+            set(response.json()),
+            self.PANEL_KEYS,
+        )
+
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 1, "RENDER_PANELS": False}
+    )
+    def test_history_sidebar_expired_store_id(self):
+        """Validate the history sidebar view."""
+        self.client.get("/json_view/")
+        store_id = list(DebugToolbar._store)[0]
+        data = {"signed": SignedDataForm.sign({"store_id": store_id})}
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            set(response.json()),
+            self.PANEL_KEYS,
+        )
+        self.client.get("/json_view/")
+
+        # Querying old store_id should return in empty response
+        data = {"signed": SignedDataForm.sign({"store_id": store_id})}
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {})
+
+        # Querying with latest store_id
+        latest_store_id = list(DebugToolbar._store)[0]
+        data = {"signed": SignedDataForm.sign({"store_id": latest_store_id})}
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            set(response.json()),
+            self.PANEL_KEYS,
         )
 
     def test_history_refresh_invalid_signature(self):
@@ -128,5 +164,10 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(len(data["requests"]), 1)
+
+        store_id = list(DebugToolbar._store)[0]
+        signature = SignedDataForm.sign({"store_id": store_id})
+        self.assertIn(html.escape(signature), data["requests"][0]["content"])
+
         for val in ["foo", "bar"]:
             self.assertIn(val, data["requests"][0]["content"])
