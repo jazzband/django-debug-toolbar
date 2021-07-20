@@ -2,7 +2,7 @@
 <ul>
   {% for alias, info in databases %}
     <li>
-      <strong><span class="djdt-color" style="background-color:rgb({{ info.rgb_color|join:', ' }})"></span> {{ alias }}</strong>
+      <strong><span class="djdt-color" data-djdt-styles="backgroundColor:rgb({{ info.rgb_color|join:', ' }})"></span> {{ alias }}</strong>
       {{ info.time_spent|floatformat:"2" }} ms ({% blocktrans count info.num_queries as num %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
       {% if info.similar_count %}
         {% blocktrans with count=info.similar_count trimmed %}
@@ -40,7 +40,7 @@
     <tbody>
       {% for query in queries %}
         <tr class="{% if query.is_slow %} djDebugRowWarning{% endif %}" id="sqlMain_{{ forloop.counter }}">
-          <td><span class="djdt-color" style="background-color:rgb({{ query.rgb_color|join:', '}})"></span></td>
+          <td><span class="djdt-color" data-djdt-styles="backgroundColor:rgb({{ query.rgb_color|join:', '}})"></span></td>
           <td class="djdt-toggle">
             <button type="button" class="djToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ forloop.counter }}">+</button>
           </td>
@@ -48,13 +48,13 @@
             <div class="djDebugSql">{{ query.sql|safe }}</div>
             {% if query.similar_count %}
               <strong>
-                <span class="djdt-color" style="background-color:{{ query.similar_color }}"></span>
+                <span class="djdt-color" data-djdt-styles="backgroundColor:{{ query.similar_color }}"></span>
                 {% blocktrans with count=query.similar_count %}{{ count }} similar queries.{% endblocktrans %}
               </strong>
             {% endif %}
             {% if query.duplicate_count %}
               <strong>
-                <span class="djdt-color" style="background-color:{{ query.duplicate_color }}"></span>
+                <span class="djdt-color" data-djdt-styles="backgroundColor:{{ query.duplicate_color }}"></span>
                 {% blocktrans with dupes=query.duplicate_count %}Duplicated {{ dupes }} times.{% endblocktrans %}
               </strong>
             {% endif %}

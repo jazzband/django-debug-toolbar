@@ -83,8 +83,8 @@ Configuring Internal IPs
 ------------------------
 
 The Debug Toolbar is shown only if your IP address is listed in the
-:django:setting:`INTERNAL_IPS` setting.  This means that for local
-development, you *must* add ``'127.0.0.1'`` to :django:setting:`INTERNAL_IPS`;
+:setting:`INTERNAL_IPS` setting.  This means that for local
+development, you *must* add ``'127.0.0.1'`` to :setting:`INTERNAL_IPS`;
 you'll need to create this setting if it doesn't already exist in your
 settings module::
 

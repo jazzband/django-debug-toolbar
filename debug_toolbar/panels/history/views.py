@@ -1,20 +1,26 @@
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 
-from debug_toolbar.decorators import require_show_toolbar
+from debug_toolbar.decorators import require_show_toolbar, signed_data_view
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 from debug_toolbar.toolbar import DebugToolbar
 
 
 @require_show_toolbar
-def history_sidebar(request):
+@signed_data_view
+def history_sidebar(request, verified_data):
     """Returns the selected debug toolbar history snapshot."""
-    form = HistoryStoreForm(request.GET)
+    form = HistoryStoreForm(verified_data)
 
     if form.is_valid():
         store_id = form.cleaned_data["store_id"]
         toolbar = DebugToolbar.fetch(store_id)
         context = {}
+        if toolbar is None:
+            # When the store_id has been popped already due to
+            # RESULTS_CACHE_SIZE
+            return JsonResponse(context)
         for panel in toolbar.panels:
             if not panel.is_historical:
                 continue
@@ -32,13 +38,15 @@ def history_sidebar(request):
 
 
 @require_show_toolbar
-def history_refresh(request):
+@signed_data_view
+def history_refresh(request, verified_data):
     """Returns the refreshed list of table rows for the History Panel."""
-    form = HistoryStoreForm(request.GET)
+    form = HistoryStoreForm(verified_data)
 
     if form.is_valid():
         requests = []
-        for id, toolbar in reversed(DebugToolbar._store.items()):
+        # Convert to list to handle mutations happenening in parallel
+        for id, toolbar in list(DebugToolbar._store.items())[::-1]:
             requests.append(
                 {
                     "id": id,
@@ -48,7 +56,11 @@ def history_refresh(request):
                             "id": id,
                             "store_context": {
                                 "toolbar": toolbar,
-                                "form": HistoryStoreForm(initial={"store_id": id}),
+                                "form": SignedDataForm(
+                                    initial=HistoryStoreForm(
+                                        initial={"store_id": id}
+                                    ).initial
+                                ),
                             },
                         },
                     ),

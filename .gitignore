@@ -1,6 +1,7 @@
 *.pyc
 *.DS_Store
 *~
+.idea
 build
 .coverage
 dist

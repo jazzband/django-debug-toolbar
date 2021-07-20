@@ -1,0 +1,53 @@
+import json
+
+from django import forms
+from django.core import signing
+from django.core.exceptions import ValidationError
+from django.utils.encoding import force_str
+
+
+class SignedDataForm(forms.Form):
+    """Helper form that wraps a form to validate its contents on post.
+
+    class PanelForm(forms.Form):
+        # fields
+
+    On render:
+        form = SignedDataForm(initial=PanelForm(initial=data).initial)
+
+    On POST:
+        signed_form = SignedDataForm(request.POST)
+        if signed_form.is_valid():
+            panel_form = PanelForm(signed_form.verified_data)
+            if panel_form.is_valid():
+                # Success
+    Or wrap the FBV with ``debug_toolbar.decorators.signed_data_view``
+    """
+
+    salt = "django_debug_toolbar"
+    signed = forms.CharField(required=True, widget=forms.HiddenInput)
+
+    def __init__(self, *args, **kwargs):
+        initial = kwargs.pop("initial", None)
+        if initial:
+            initial = {"signed": self.sign(initial)}
+        super().__init__(*args, initial=initial, **kwargs)
+
+    def clean_signed(self):
+        try:
+            verified = json.loads(
+                signing.Signer(salt=self.salt).unsign(self.cleaned_data["signed"])
+            )
+            return verified
+        except signing.BadSignature:
+            raise ValidationError("Bad signature")
+
+    def verified_data(self):
+        return self.is_valid() and self.cleaned_data["signed"]
+
+    @classmethod
+    def sign(cls, data):
+        items = sorted(data.items(), key=lambda item: item[0])
+        return signing.Signer(salt=cls.salt).sign(
+            json.dumps({key: force_str(value) for key, value in items})
+        )

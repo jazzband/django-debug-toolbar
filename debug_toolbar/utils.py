@@ -135,7 +135,14 @@ def get_template_context(node, context, context_lines=3):
 
 
 def get_template_source_from_exception_info(node, context):
-    exception_info = context.template.get_exception_info(Exception("DDT"), node.token)
+    if context.template.origin == node.origin:
+        exception_info = context.template.get_exception_info(
+            Exception("DDT"), node.token
+        )
+    else:
+        exception_info = context.render_context.template.get_exception_info(
+            Exception("DDT"), node.token
+        )
     line = exception_info["line"]
     source_lines = exception_info["source_lines"]
     name = exception_info["name"]
@@ -252,14 +259,14 @@ class ThreadCollector:
         is provided, returns a list for the current thread.
         """
         if thread is None:
-            thread = threading.currentThread()
+            thread = threading.current_thread()
         if thread not in self.collections:
             self.collections[thread] = []
         return self.collections[thread]
 
     def clear_collection(self, thread=None):
         if thread is None:
-            thread = threading.currentThread()
+            thread = threading.current_thread()
         if thread in self.collections:
             del self.collections[thread]
 

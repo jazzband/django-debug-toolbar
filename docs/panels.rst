@@ -407,3 +407,32 @@ common methods available.
 .. js:function:: djdt.show_toolbar
 
     Shows the toolbar.
+
+Events
+^^^^^^
+
+.. js:attribute:: djdt.panel.render
+
+    This is an event raised when a panel is rendered. It has the property
+    ``detail.panelId`` which identifies which panel has been loaded. This
+    event can be useful when creating custom scripts to process the HTML
+    further.
+
+    An example of this for the ``CustomPanel`` would be:
+
+.. code-block:: javascript
+
+    import { $$ } from "./utils.js";
+    function addCustomMetrics() {
+        // Logic to process/add custom metrics here.
+
+        // Be sure to cover the case of this function being called twice
+        // due to file being loaded asynchronously.
+    }
+    const djDebug = document.getElementById("djDebug");
+    $$.onPanelRender(djDebug, "CustomPanel", addCustomMetrics);
+    // Since a panel's scripts are loaded asynchronously, it's possible that
+    // the above statement would occur after the djdt.panel.render event has
+    // been raised. To account for that, the rendering function should be
+    // called here as well.
+    addCustomMetrics();

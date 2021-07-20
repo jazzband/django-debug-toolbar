@@ -107,6 +107,10 @@ class Panel:
     def scripts(self):
         """
         Scripts used by the HTML content of the panel when it's displayed.
+
+        When a panel is rendered on the frontend, the ``djdt.panel.render``
+        JavaScript event will be dispatched. The scripts can listen for
+        this event to support dynamic functionality.
         """
         return []
 

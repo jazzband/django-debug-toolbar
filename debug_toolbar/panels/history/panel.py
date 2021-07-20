@@ -8,13 +8,14 @@ from django.urls import path
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.history import views
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 
 
 class HistoryPanel(Panel):
-    """ A panel to display History """
+    """A panel to display History"""
 
     title = _("History")
     nav_title = _("History")
@@ -82,7 +83,9 @@ class HistoryPanel(Panel):
         for id, toolbar in reversed(self.toolbar._store.items()):
             stores[id] = {
                 "toolbar": toolbar,
-                "form": HistoryStoreForm(initial={"store_id": id}),
+                "form": SignedDataForm(
+                    initial=HistoryStoreForm(initial={"store_id": id}).initial
+                ),
             }
 
         return render_to_string(
@@ -90,8 +93,10 @@ class HistoryPanel(Panel):
             {
                 "current_store_id": self.toolbar.store_id,
                 "stores": stores,
-                "refresh_form": HistoryStoreForm(
-                    initial={"store_id": self.toolbar.store_id}
+                "refresh_form": SignedDataForm(
+                    initial=HistoryStoreForm(
+                        initial={"store_id": self.toolbar.store_id}
+                    ).initial
                 ),
             },
         )

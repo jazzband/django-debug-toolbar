@@ -44,7 +44,7 @@ class DebugToolbarMiddleware:
     def __call__(self, request):
         # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
-        if not show_toolbar(request) or request.path.startswith("/__debug__/"):
+        if not show_toolbar(request) or DebugToolbar.is_toolbar_request(request):
             return self.get_response(request)
 
         toolbar = DebugToolbar(request, self.get_response)

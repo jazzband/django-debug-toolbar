@@ -1,5 +1,7 @@
 import os
+import unittest
 
+import django
 from django.conf import settings
 from django.core.checks import Warning, run_checks
 from django.test import SimpleTestCase, override_settings
@@ -89,6 +91,7 @@ class ChecksTestCase(SimpleTestCase):
             messages,
         )
 
+    @unittest.skipIf(django.VERSION >= (4,), "Django>=4 handles missing dirs itself.")
     @override_settings(
         STATICFILES_DIRS=[PATH_DOES_NOT_EXIST],
     )
