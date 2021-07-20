@@ -17,6 +17,11 @@ History
 This panel shows the history of requests made and allows switching to a past
 snapshot of the toolbar to view that request's stats.
 
+.. caution::
+   If :ref:`RENDER_PANELS <RENDER_PANELS>` configuration option is set to
+   ``True`` or if the server runs with multiple processes, the History Panel
+   will be disabled.
+
 Version
 ~~~~~~~
 

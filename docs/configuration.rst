@@ -66,19 +66,24 @@ Toolbar options
   The toolbar searches for this string in the HTML and inserts itself just
   before.
 
+.. _RENDER_PANELS:
+
 * ``RENDER_PANELS``
 
   Default: ``None``
 
   If set to ``False``, the debug toolbar will keep the contents of panels in
-  memory on the server and load them on demand. If set to ``True``, it will
-  render panels inside every page. This may slow down page rendering but it's
+  memory on the server and load them on demand.
+
+  If set to ``True``, it will disable ``HistoryPanel`` and render panels
+  inside every page. This may slow down page rendering but it's
   required on multi-process servers, for example if you deploy the toolbar in
   production (which isn't recommended).
 
   The default value of ``None`` tells the toolbar to automatically do the
   right thing depending on whether the WSGI container runs multiple processes.
-  This setting allows you to force a different behavior if needed.
+  This setting allows you to force a different behavior if needed. If the
+  WSGI container runs multiple processes, it will disable ``HistoryPanel``.
 
 * ``RESULTS_CACHE_SIZE``
 

@@ -321,11 +321,44 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             self.assertEqual(response.status_code, 404)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": True})
-    def test_data_store_id_not_rendered_when_none(self):
+    def test_render_panels_in_request(self):
+        """
+        Test that panels are are rendered during the request with
+        RENDER_PANELS=TRUE
+        """
         url = "/regular/basic/"
         response = self.client.get(url)
         self.assertIn(b'id="djDebug"', response.content)
+        # Verify the store id is not included.
         self.assertNotIn(b"data-store-id", response.content)
+        # Verify the history panel was disabled
+        self.assertIn(
+            b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
+            b'title="Enable for next and successive requests">',
+            response.content,
+        )
+        # Verify the a panel was rendered
+        self.assertIn(b"Response headers", response.content)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": False})
+    def test_load_panels(self):
+        """
+        Test that panels are not rendered during the request with
+        RENDER_PANELS=False
+        """
+        url = "/execute_sql/"
+        response = self.client.get(url)
+        self.assertIn(b'id="djDebug"', response.content)
+        # Verify the store id is included.
+        self.assertIn(b"data-store-id", response.content)
+        # Verify the history panel was not disabled
+        self.assertNotIn(
+            b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
+            b'title="Enable for next and successive requests">',
+            response.content,
+        )
+        # Verify the a panel was not rendered
+        self.assertNotIn(b"Response headers", response.content)
 
     def test_view_returns_template_response(self):
         response = self.client.get("/template_response/basic/")

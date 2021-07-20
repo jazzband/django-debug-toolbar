@@ -79,6 +79,10 @@ class DebugToolbar:
                 raise
 
     def should_render_panels(self):
+        """Determine whether the panels should be rendered during the request
+
+        If False, the panels will be loaded via Ajax.
+        """
         render_panels = self.config["RENDER_PANELS"]
         if render_panels is None:
             render_panels = self.request.META["wsgi.multiprocess"]

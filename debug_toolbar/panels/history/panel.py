@@ -22,6 +22,12 @@ class HistoryPanel(Panel):
     template = "debug_toolbar/panels/history.html"
 
     @property
+    def enabled(self):
+        # Do not show the history panel if the panels are rendered on request
+        # rather than loaded via ajax.
+        return super().enabled and not self.toolbar.should_render_panels()
+
+    @property
     def is_historical(self):
         """The HistoryPanel should not be included in the historical panels."""
         return False

@@ -147,3 +147,11 @@ And for Apache:
 .. _JavaScript module: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
 .. _CORS errors: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin
 .. _Access-Control-Allow-Origin header: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+
+Django Channels & Async
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The Debug Toolbar currently doesn't support Django Channels or async projects.
+If you are using Django channels are having issues getting panels to load,
+please review the documentation for the configuration option
+:ref:`RENDER_PANELS <RENDER_PANELS>`.
