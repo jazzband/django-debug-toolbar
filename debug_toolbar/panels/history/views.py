@@ -56,7 +56,11 @@ def history_refresh(request, verified_data):
                             "id": id,
                             "store_context": {
                                 "toolbar": toolbar,
-                                "form": SignedDataForm(initial={"store_id": id}),
+                                "form": SignedDataForm(
+                                    initial=HistoryStoreForm(
+                                        initial={"store_id": id}
+                                    ).initial
+                                ),
                             },
                         },
                     ),
