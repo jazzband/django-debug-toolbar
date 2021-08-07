@@ -10,6 +10,7 @@ Next version
   running with multiple processes.
 * Fixed ``RENDER_PANELS`` functionality so that when ``True`` panels are
   rendered during the request and not loaded asynchronously.
+* HistoryPanel now shows status codes of reponses.
 
 
 3.2.1 (2021-04-14)
