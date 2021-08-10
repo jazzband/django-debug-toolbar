@@ -121,6 +121,17 @@ class DebugToolbarTestCase(BaseTestCase):
         self.request.path = "/render_panel/"
         self.assertFalse(self.toolbar.is_toolbar_request(self.request))
 
+    @override_settings(ROOT_URLCONF="tests.urls_invalid")
+    def test_is_toolbar_request_override_request_urlconf(self):
+        """Test cases when the toolbar URL is configured on the request."""
+        self.request.path = "/__debug__/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
+        # Verify overriding the urlconf on the request is valid.
+        self.request.urlconf = "tests.urls"
+        self.request.path = "/__debug__/render_panel/"
+        self.assertTrue(self.toolbar.is_toolbar_request(self.request))
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(IntegrationTestCase):

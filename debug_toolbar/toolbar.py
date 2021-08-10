@@ -146,7 +146,9 @@ class DebugToolbar:
         # The primary caller of this function is in the middleware which may
         # not have resolver_match set.
         try:
-            resolver_match = request.resolver_match or resolve(request.path, getattr(request, 'urlconf', None))
+            resolver_match = request.resolver_match or resolve(
+                request.path, getattr(request, "urlconf", None)
+            )
         except Resolver404:
             return False
         return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
