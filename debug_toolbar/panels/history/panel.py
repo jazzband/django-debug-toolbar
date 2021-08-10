@@ -68,6 +68,7 @@ class HistoryPanel(Panel):
             {
                 "request_url": request.get_full_path(),
                 "request_method": request.method,
+                "status_code": response.status_code,
                 "data": data,
                 "time": timezone.now(),
             }
