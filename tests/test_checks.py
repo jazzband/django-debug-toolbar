@@ -91,6 +91,25 @@ class ChecksTestCase(SimpleTestCase):
             messages,
         )
 
+    @override_settings(
+        INSTALLED_APPS=[
+            "django.contrib.auth",
+            "django.contrib.contenttypes",
+            "debug_toolbar",
+            "django.contrib.postgres",
+        ]
+    )
+    def test_check_installed_apps_error(self):
+        messages = run_checks()
+        self.assertIn(
+            Warning(
+                "django.contrib.postgres occurs after django_toolbar in INSTALLED_APPS. This can lead to `can't adapt type 'dict'` messages.",
+                hint="Move django.contrib.postgres to before django_toolbar in INSTALLED_APPS.",
+                id="debug_toolbar.W006",
+            ),
+            messages,
+        )
+
     @unittest.skipIf(django.VERSION >= (4,), "Django>=4 handles missing dirs itself.")
     @override_settings(
         STATICFILES_DIRS=[PATH_DOES_NOT_EXIST],

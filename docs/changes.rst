@@ -12,7 +12,9 @@ Next version
   rendered during the request and not loaded asynchronously.
 * HistoryPanel now shows status codes of responses.
 * Support ``request.urlconf`` override when checking for toolbar requests.
-
+* Add warning W006 to indicate that ``django.contrib.postgres`` is
+  specified after ``debug_toolbar`` in ``INSTALLED_APPS`` which leads to
+  ``can't adapt type 'dict'`` messages.
 
 3.2.1 (2021-04-14)
 ------------------

@@ -14,3 +14,5 @@ Debug Toolbar setup and configuration:
 * **debug_toolbar.W004**: ``debug_toolbar`` is incompatible with
   ``MIDDLEWARE_CLASSES`` setting.
 * **debug_toolbar.W005**: Setting ``DEBUG_TOOLBAR_PANELS`` is empty.
+* **debug_toolbar.W006**: ``django.contrib.postgres`` occurs after
+  ``debug_toolbar`` in ``INSTALLED_APPS``.

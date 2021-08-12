@@ -22,6 +22,8 @@ def check_middleware(app_configs, **kwargs):
     errors = []
     gzip_index = None
     debug_toolbar_indexes = []
+    postgres_app_index = None
+    debug_toolbar_app_index = None
 
     # If old style MIDDLEWARE_CLASSES is being used, report an error.
     if settings.is_overridden("MIDDLEWARE_CLASSES"):
@@ -40,6 +42,20 @@ def check_middleware(app_configs, **kwargs):
             gzip_index = i
         elif is_middleware_class(DebugToolbarMiddleware, middleware):
             debug_toolbar_indexes.append(i)
+
+    postgres_apps = [
+        "django.contrib.postgres",
+        "django.contrib.postgres.apps.PostgresConfig",
+    ]
+    debug_toolbar_apps = [
+        "debug_toolbar",
+        "debug_toolbar.apps.DebugToolbarConfig",
+    ]
+    for i, installed_app in enumerate(settings.INSTALLED_APPS):
+        if installed_app in postgres_apps:
+            postgres_app_index = i
+        elif installed_app in debug_toolbar_apps:
+            debug_toolbar_app_index = i
 
     if not debug_toolbar_indexes:
         # If the toolbar does not appear, report an error.
@@ -72,6 +88,19 @@ def check_middleware(app_configs, **kwargs):
                 hint="Move debug_toolbar.middleware.DebugToolbarMiddleware to "
                 "after django.middleware.gzip.GZipMiddleware in MIDDLEWARE.",
                 id="debug_toolbar.W003",
+            )
+        )
+
+    if (
+        debug_toolbar_app_index is not None
+        and postgres_app_index is not None
+        and postgres_app_index > debug_toolbar_app_index
+    ):
+        errors.append(
+            Warning(
+                "django.contrib.postgres occurs after django_toolbar in INSTALLED_APPS. This can lead to `can't adapt type 'dict'` messages.",
+                hint="Move django.contrib.postgres to before django_toolbar in INSTALLED_APPS.",
+                id="debug_toolbar.W006",
             )
         )
     return errors
