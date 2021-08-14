@@ -4,6 +4,10 @@ Change log
 Next version
 ------------
 
+
+3.2.2 (2021-08-14)
+------------------
+
 * Ensured that the handle stays within bounds when resizing the window.
 * Disabled ``HistoryPanel`` when ``RENDER_PANELS`` is ``True``
   or if ``RENDER_PANELS`` is ``None`` and the WSGI container is
