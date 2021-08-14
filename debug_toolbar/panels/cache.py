@@ -19,7 +19,7 @@ from django.core.cache import (
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
-from django.utils.translation import gettext_lazy as _, ngettext as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
@@ -230,7 +230,7 @@ class CachePanel(Panel):
     def nav_subtitle(self):
         cache_calls = len(self.calls)
         return (
-            __(
+            ngettext(
                 "%(cache_calls)d call in %(time).2fms",
                 "%(cache_calls)d calls in %(time).2fms",
                 cache_calls,
@@ -242,7 +242,7 @@ class CachePanel(Panel):
     def title(self):
         count = len(getattr(settings, "CACHES", ["default"]))
         return (
-            __(
+            ngettext(
                 "Cache calls from %(count)d backend",
                 "Cache calls from %(count)d backends",
                 count,

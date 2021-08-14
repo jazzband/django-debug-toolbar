@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from django.utils.translation import gettext_lazy as _, ngettext as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import ThreadCollector
@@ -66,7 +66,7 @@ class LoggingPanel(Panel):
     def nav_subtitle(self):
         stats = self.get_stats()
         record_count = len(stats["records"]) if stats else None
-        return __("%(count)s message", "%(count)s messages", record_count) % {
+        return ngettext("%(count)s message", "%(count)s messages", record_count) % {
             "count": record_count
         }
 
