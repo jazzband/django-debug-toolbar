@@ -3,6 +3,7 @@ import importlib
 import os
 import signal
 import subprocess
+from time import sleep
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,7 +34,10 @@ def create_webdriver(browser, headless):
 
 
 def example_server():
-    return subprocess.Popen(["make", "example"])
+    proc = subprocess.Popen(["make", "example"])
+    # `make example` runs a few things before runserver.
+    sleep(2)
+    return proc
 
 
 def set_viewport_size(selenium, width, height):
@@ -67,12 +71,15 @@ def main():
                 submit_form(selenium, {"username": os.environ["USER"], "password": "p"})
 
                 selenium.get("http://localhost:8000/admin/auth/user/")
-                # Close the admin sidebar.
-                el = selenium.find_element_by_id("toggle-nav-sidebar")
-                el.click()
+                # Check if SQL Panel is already visible:
+                sql_panel = selenium.find_element_by_id("djdt-SQLPanel")
+                if not sql_panel:
+                    # Open the admin sidebar.
+                    el = selenium.find_element_by_id("djDebugToolbarHandle")
+                    el.click()
+                    sql_panel = selenium.find_element_by_id("djdt-SQLPanel")
                 # Open the SQL panel.
-                el = selenium.find_element_by_id("djdt-SQLPanel")
-                el.click()
+                sql_panel.click()
 
                 selenium.save_screenshot(args.outfile)
         finally:
