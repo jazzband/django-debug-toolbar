@@ -6,7 +6,7 @@ from django.contrib.staticfiles import finders, storage
 from django.core.checks import Warning
 from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
-from django.utils.translation import gettext_lazy as _, ngettext as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar import panels
 from debug_toolbar.utils import ThreadCollector
@@ -108,9 +108,9 @@ class StaticFilesPanel(panels.Panel):
     @property
     def nav_subtitle(self):
         num_used = self.num_used
-        return __("%(num_used)s file used", "%(num_used)s files used", num_used) % {
-            "num_used": num_used
-        }
+        return ngettext(
+            "%(num_used)s file used", "%(num_used)s files used", num_used
+        ) % {"num_used": num_used}
 
     def process_request(self, request):
         collector.clear_collection()

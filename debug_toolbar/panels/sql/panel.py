@@ -5,7 +5,7 @@ from pprint import saferepr
 
 from django.db import connections
 from django.urls import path
-from django.utils.translation import gettext_lazy as _, ngettext_lazy as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
@@ -110,16 +110,20 @@ class SQLPanel(Panel):
 
     @property
     def nav_subtitle(self):
-        return __("%d query in %.2fms", "%d queries in %.2fms", self._num_queries) % (
+        return ngettext(
+            "%(query_count)d query in %(sql_time).2fms",
+            "%(query_count)d queries in %(sql_time).2fms",
             self._num_queries,
-            self._sql_time,
-        )
+        ) % {
+            "query_count": self._num_queries,
+            "sql_time": self._sql_time,
+        }
 
     @property
     def title(self):
         count = len(self._databases)
         return (
-            __(
+            ngettext(
                 "SQL queries from %(count)d connection",
                 "SQL queries from %(count)d connections",
                 count,
