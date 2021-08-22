@@ -100,7 +100,7 @@ option.  This option allows you to specify a custom function for this purpose.
 
 .. warning::
 
-    If using Docker the following will set your internal ips correctly only if you are in Debug mode.::
+    If using Docker the following will set your `INTERNAL_IPS` correctly only if you are in Debug mode.::
     
         if DEBUG:
             import os  # only if you haven't already imported this
