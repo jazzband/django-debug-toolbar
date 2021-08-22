@@ -1,6 +1,7 @@
 *.pyc
 *.DS_Store
 *~
+.idea
 build
 .coverage
 dist
@@ -11,3 +12,5 @@ htmlcov
 .tox
 node_modules
 package-lock.json
+geckodriver.log
+coverage.xml

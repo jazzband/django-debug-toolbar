@@ -55,9 +55,12 @@ def wrap_cursor(connection, panel):
             )
 
         def chunked_cursor(*args, **kwargs):
-            return state.Wrapper(
-                connection._djdt_chunked_cursor(*args, **kwargs), connection, panel
-            )
+            # prevent double wrapping
+            # solves https://github.com/jazzband/django-debug-toolbar/issues/1239
+            cursor = connection._djdt_chunked_cursor(*args, **kwargs)
+            if not isinstance(cursor, BaseCursorWrapper):
+                return state.Wrapper(cursor, connection, panel)
+            return cursor
 
         connection.cursor = cursor
         connection.chunked_cursor = chunked_cursor
@@ -71,7 +74,11 @@ def unwrap_cursor(connection):
         del connection.chunked_cursor
 
 
-class ExceptionCursorWrapper:
+class BaseCursorWrapper:
+    pass
+
+
+class ExceptionCursorWrapper(BaseCursorWrapper):
     """
     Wraps a cursor and raises an exception on any operation.
     Used in Templates panel.
@@ -84,7 +91,7 @@ class ExceptionCursorWrapper:
         raise SQLQueryTriggered()
 
 
-class NormalCursorWrapper:
+class NormalCursorWrapper(BaseCursorWrapper):
     """
     Wraps a cursor and logs queries.
     """

@@ -51,7 +51,7 @@
       {% for call in calls %}
         <tr id="cacheMain_{{ forloop.counter }}">
           <td class="djdt-toggle">
-            <a class="djToggleSwitch" data-toggle-name="cacheMain" data-toggle-id="{{ forloop.counter }}" data-toggle-open="+" data-toggle-close="-" href>+</a>
+            <button class="djToggleSwitch" data-toggle-name="cacheMain" data-toggle-id="{{ forloop.counter }}">+</button>
           </td>
           <td>{{ call.time|floatformat:"4" }}</td>
           <td>{{ call.name|escape }}</td>

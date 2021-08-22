@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="djDebugPanelTitle">
-  <a class="djDebugClose" href="">»</a>
+  <button type="button" class="djDebugClose">»</button>
   <h3>{% trans "SQL explained" %}</h3>
 </div>
 <div class="djDebugPanelContent">
@@ -13,7 +13,7 @@
       <dt>{% trans "Database" %}</dt>
       <dd>{{ alias }}</dd>
     </dl>
-    <table class="djSqlExplain">
+    <table>
       <thead>
         <tr>
           {% for h in headers %}
@@ -25,7 +25,7 @@
         {% for row in result %}
           <tr>
             {% for column in row %}
-              <td>{{ column|escape }}</td>
+              <td>{% if forloop.last %}<code>{% endif %}{{ column|escape }}{% if forloop.last %}</code>{% endif %}</td>
             {% endfor %}
           </tr>
         {% endfor %}

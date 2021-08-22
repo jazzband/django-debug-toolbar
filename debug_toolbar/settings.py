@@ -17,7 +17,7 @@ CONFIG_DEFAULTS = {
     },
     "INSERT_BEFORE": "</body>",
     "RENDER_PANELS": None,
-    "RESULTS_CACHE_SIZE": 10,
+    "RESULTS_CACHE_SIZE": 25,
     "ROOT_TAG_EXTRA_ATTRS": "",
     "SHOW_COLLAPSED": False,
     "SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar",
@@ -37,6 +37,7 @@ CONFIG_DEFAULTS = {
         "django.utils.deprecation",
         "django.utils.functional",
     ),
+    "PRETTIFY_SQL": True,
     "PROFILER_MAX_DEPTH": 10,
     "SHOW_TEMPLATE_CONTEXT": True,
     "SKIP_TEMPLATE_PREFIXES": ("django/forms/widgets/", "admin/widgets/"),
@@ -53,6 +54,7 @@ def get_config():
 
 
 PANELS_DEFAULTS = [
+    "debug_toolbar.panels.history.HistoryPanel",
     "debug_toolbar.panels.versions.VersionsPanel",
     "debug_toolbar.panels.timer.TimerPanel",
     "debug_toolbar.panels.settings.SettingsPanel",

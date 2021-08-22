@@ -3,9 +3,10 @@ from os.path import join, normpath
 
 from django.conf import settings
 from django.contrib.staticfiles import finders, storage
+from django.core.checks import Warning
 from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
-from django.utils.translation import gettext_lazy as _, ngettext as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar import panels
 from debug_toolbar.utils import ThreadCollector
@@ -99,16 +100,17 @@ class StaticFilesPanel(panels.Panel):
 
     @property
     def num_used(self):
-        return len(self._paths[threading.currentThread()])
+        stats = self.get_stats()
+        return stats and stats["num_used"]
 
     nav_title = _("Static files")
 
     @property
     def nav_subtitle(self):
         num_used = self.num_used
-        return __("%(num_used)s file used", "%(num_used)s files used", num_used) % {
-            "num_used": num_used
-        }
+        return ngettext(
+            "%(num_used)s file used", "%(num_used)s files used", num_used
+        ) % {"num_used": num_used}
 
     def process_request(self, request):
         collector.clear_collection()
@@ -116,12 +118,12 @@ class StaticFilesPanel(panels.Panel):
 
     def generate_stats(self, request, response):
         used_paths = collector.get_collection()
-        self._paths[threading.currentThread()] = used_paths
+        self._paths[threading.current_thread()] = used_paths
 
         self.record_stats(
             {
                 "num_found": self.num_found,
-                "num_used": self.num_used,
+                "num_used": len(used_paths),
                 "staticfiles": used_paths,
                 "staticfiles_apps": self.get_staticfiles_apps(),
                 "staticfiles_dirs": self.get_staticfiles_dirs(),
@@ -137,17 +139,21 @@ class StaticFilesPanel(panels.Panel):
         """
         finders_mapping = OrderedDict()
         for finder in finders.get_finders():
-            for path, finder_storage in finder.list([]):
-                if getattr(finder_storage, "prefix", None):
-                    prefixed_path = join(finder_storage.prefix, path)
-                else:
-                    prefixed_path = path
-                finder_cls = finder.__class__
-                finder_path = ".".join([finder_cls.__module__, finder_cls.__name__])
-                real_path = finder_storage.path(path)
-                payload = (prefixed_path, real_path)
-                finders_mapping.setdefault(finder_path, []).append(payload)
-                self.num_found += 1
+            try:
+                for path, finder_storage in finder.list([]):
+                    if getattr(finder_storage, "prefix", None):
+                        prefixed_path = join(finder_storage.prefix, path)
+                    else:
+                        prefixed_path = path
+                    finder_cls = finder.__class__
+                    finder_path = ".".join([finder_cls.__module__, finder_cls.__name__])
+                    real_path = finder_storage.path(path)
+                    payload = (prefixed_path, real_path)
+                    finders_mapping.setdefault(finder_path, []).append(payload)
+                    self.num_found += 1
+            except OSError:
+                # This error should be captured and presented as a part of run_checks.
+                pass
         return finders_mapping
 
     def get_staticfiles_dirs(self):
@@ -171,3 +177,27 @@ class StaticFilesPanel(panels.Panel):
                     if app not in apps:
                         apps.append(app)
         return apps
+
+    @classmethod
+    def run_checks(cls):
+        """
+        Check that the integration is configured correctly for the panel.
+
+        Specifically look for static files that haven't been collected yet.
+
+        Return a list of :class: `django.core.checks.CheckMessage` instances.
+        """
+        errors = []
+        for finder in finders.get_finders():
+            try:
+                for path, finder_storage in finder.list([]):
+                    finder_storage.path(path)
+            except OSError:
+                errors.append(
+                    Warning(
+                        "debug_toolbar requires the STATICFILES_DIRS directories to exist.",
+                        hint="Running manage.py collectstatic may help uncover the issue.",
+                        id="debug_toolbar.staticfiles.W001",
+                    )
+                )
+        return errors

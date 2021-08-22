@@ -3,13 +3,23 @@ import sys
 import time
 from collections import OrderedDict
 
+try:
+    from django.utils.connection import ConnectionProxy
+except ImportError:
+    ConnectionProxy = None
+
 from django.conf import settings
 from django.core import cache
-from django.core.cache import CacheHandler, caches as original_caches
+from django.core.cache import (
+    DEFAULT_CACHE_ALIAS,
+    CacheHandler,
+    cache as original_cache,
+    caches as original_caches,
+)
 from django.core.cache.backends.base import BaseCache
 from django.dispatch import Signal
 from django.middleware import cache as middleware_cache
-from django.utils.translation import gettext_lazy as _, ngettext as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
@@ -84,6 +94,10 @@ class CacheStatTracker(BaseCache):
         return self.cache.set(*args, **kwargs)
 
     @send_signal
+    def touch(self, *args, **kwargs):
+        return self.cache.touch(*args, **kwargs)
+
+    @send_signal
     def delete(self, *args, **kwargs):
         return self.cache.delete(*args, **kwargs)
 
@@ -153,6 +167,7 @@ class CachePanel(Panel):
                 ("add", 0),
                 ("get", 0),
                 ("set", 0),
+                ("touch", 0),
                 ("delete", 0),
                 ("clear", 0),
                 ("get_many", 0),
@@ -178,7 +193,7 @@ class CachePanel(Panel):
         trace=None,
         template_info=None,
         backend=None,
-        **kw
+        **kw,
     ):
         if name == "get":
             if return_value is None:
@@ -214,20 +229,26 @@ class CachePanel(Panel):
     @property
     def nav_subtitle(self):
         cache_calls = len(self.calls)
-        return __(
-            "%(cache_calls)d call in %(time).2fms",
-            "%(cache_calls)d calls in %(time).2fms",
-            cache_calls,
-        ) % {"cache_calls": cache_calls, "time": self.total_time}
+        return (
+            ngettext(
+                "%(cache_calls)d call in %(time).2fms",
+                "%(cache_calls)d calls in %(time).2fms",
+                cache_calls,
+            )
+            % {"cache_calls": cache_calls, "time": self.total_time}
+        )
 
     @property
     def title(self):
         count = len(getattr(settings, "CACHES", ["default"]))
-        return __(
-            "Cache calls from %(count)d backend",
-            "Cache calls from %(count)d backends",
-            count,
-        ) % {"count": count}
+        return (
+            ngettext(
+                "Cache calls from %(count)d backend",
+                "Cache calls from %(count)d backends",
+                count,
+            )
+            % {"count": count}
+        )
 
     def enable_instrumentation(self):
         if isinstance(middleware_cache.caches, CacheHandlerPatch):
@@ -235,8 +256,13 @@ class CachePanel(Panel):
         else:
             cache.caches = CacheHandlerPatch()
 
+        # Wrap the patched cache inside Django's ConnectionProxy
+        if ConnectionProxy:
+            cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
+
     def disable_instrumentation(self):
         cache.caches = original_caches
+        cache.cache = original_cache
         # While it can be restored to the original, any views that were
         # wrapped with the cache_page decorator will continue to use a
         # monkey patched cache.

@@ -6,10 +6,11 @@ import uuid
 from collections import OrderedDict
 
 from django.apps import apps
-from django.conf.urls import url
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
+from django.urls import path, resolve
+from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -77,27 +78,28 @@ class DebugToolbar:
             else:
                 raise
 
-    # Handle storing toolbars in memory and fetching them later on
-
-    _store = OrderedDict()
-
     def should_render_panels(self):
+        """Determine whether the panels should be rendered during the request
+
+        If False, the panels will be loaded via Ajax.
+        """
         render_panels = self.config["RENDER_PANELS"]
         if render_panels is None:
             render_panels = self.request.META["wsgi.multiprocess"]
         return render_panels
 
+    # Handle storing toolbars in memory and fetching them later on
+
+    _store = OrderedDict()
+
     def store(self):
+        # Store already exists.
+        if self.store_id:
+            return
         self.store_id = uuid.uuid4().hex
-        cls = type(self)
-        cls._store[self.store_id] = self
-        for _ in range(len(cls._store) - self.config["RESULTS_CACHE_SIZE"]):
-            try:
-                # collections.OrderedDict
-                cls._store.popitem(last=False)
-            except TypeError:
-                # django.utils.datastructures.SortedDict
-                del cls._store[cls._store.keyOrder[0]]
+        self._store[self.store_id] = self
+        for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
+            self._store.popitem(last=False)
 
     @classmethod
     def fetch(cls, store_id):
@@ -128,13 +130,28 @@ class DebugToolbar:
             # Load URLs in a temporary variable for thread safety.
             # Global URLs
             urlpatterns = [
-                url(r"^render_panel/$", views.render_panel, name="render_panel")
+                path("render_panel/", views.render_panel, name="render_panel")
             ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():
                 urlpatterns += panel_class.get_urls()
             cls._urlpatterns = urlpatterns
         return cls._urlpatterns
+
+    @classmethod
+    def is_toolbar_request(cls, request):
+        """
+        Determine if the request is for a DebugToolbar view.
+        """
+        # The primary caller of this function is in the middleware which may
+        # not have resolver_match set.
+        try:
+            resolver_match = request.resolver_match or resolve(
+                request.path, getattr(request, "urlconf", None)
+            )
+        except Resolver404:
+            return False
+        return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
 
 
 app_name = "djdt"

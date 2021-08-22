@@ -1,5 +1,7 @@
 import datetime
+import os
 import unittest
+from unittest.mock import patch
 
 import django
 from django.contrib.auth.models import User
@@ -8,6 +10,9 @@ from django.db.models import Count
 from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.test.utils import override_settings
+
+import debug_toolbar.panels.sql.tracking as sql_tracking
+from debug_toolbar import settings as dt_settings
 
 from ..base import BaseTestCase
 
@@ -57,6 +62,20 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
+
+    @patch("debug_toolbar.panels.sql.tracking.state", wraps=sql_tracking.state)
+    def test_cursor_wrapper_singleton(self, mock_state):
+        list(User.objects.all())
+
+        # ensure that cursor wrapping is applied only once
+        self.assertEqual(mock_state.Wrapper.call_count, 1)
+
+    @patch("debug_toolbar.panels.sql.tracking.state", wraps=sql_tracking.state)
+    def test_chunked_cursor_wrapper_singleton(self, mock_state):
+        list(User.objects.all().iterator())
+
+        # ensure that cursor wrapping is applied only once
+        self.assertEqual(mock_state.Wrapper.call_count, 1)
 
     def test_generate_server_timing(self):
         self.assertEqual(len(self.panel._queries), 0)
@@ -144,11 +163,14 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
         self.assertEqual(
-            self.panel._queries[0][1]["params"], '["{\\"foo\\": \\"bar\\"}"]',
+            self.panel._queries[0][1]["params"],
+            '["{\\"foo\\": \\"bar\\"}"]',
         )
-        self.assertIsInstance(
-            self.panel._queries[0][1]["raw_params"][0], PostgresJson,
-        )
+        if django.VERSION < (3, 1):
+            self.assertIsInstance(
+                self.panel._queries[0][1]["raw_params"][0],
+                PostgresJson,
+            )
 
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
@@ -354,3 +376,84 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure the stacktrace is populated
         self.assertTrue(len(query[1]["stacktrace"]) > 0)
+
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={"PRETTIFY_SQL": True},
+    )
+    def test_prettify_sql(self):
+        """
+        Test case to validate that the PRETTIFY_SQL setting changes the output
+        of the sql when it's toggled. It does not validate what it does
+        though.
+        """
+        list(User.objects.filter(username__istartswith="spam"))
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        pretty_sql = self.panel._queries[-1][1]["sql"]
+        self.assertEqual(len(self.panel._queries), 1)
+
+        # Reset the queries
+        self.panel._queries = []
+        # Run it again, but with prettyify off. Verify that it's different.
+        dt_settings.get_config()["PRETTIFY_SQL"] = False
+        list(User.objects.filter(username__istartswith="spam"))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertEqual(len(self.panel._queries), 1)
+        self.assertNotEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+
+        self.panel._queries = []
+        # Run it again, but with prettyify back on.
+        # This is so we don't have to check what PRETTIFY_SQL does exactly,
+        # but we know it's doing something.
+        dt_settings.get_config()["PRETTIFY_SQL"] = True
+        list(User.objects.filter(username__istartswith="spam"))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertEqual(len(self.panel._queries), 1)
+        self.assertEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+
+    @override_settings(
+        DEBUG=True,
+    )
+    def test_flat_template_information(self):
+        """
+        Test case for when the query is used in a flat template hierarchy
+        (without included templates).
+        """
+        self.assertEqual(len(self.panel._queries), 0)
+
+        users = User.objects.all()
+        render(self.request, "sql/flat.html", {"users": users})
+
+        self.assertEqual(len(self.panel._queries), 1)
+
+        query = self.panel._queries[0]
+        template_info = query[1]["template_info"]
+        template_name = os.path.basename(template_info["name"])
+        self.assertEqual(template_name, "flat.html")
+        self.assertEqual(template_info["context"][2]["content"].strip(), "{{ users }}")
+        self.assertEqual(template_info["context"][2]["highlight"], True)
+
+    @override_settings(
+        DEBUG=True,
+    )
+    def test_nested_template_information(self):
+        """
+        Test case for when the query is used in a nested template
+        hierarchy (with included templates).
+        """
+        self.assertEqual(len(self.panel._queries), 0)
+
+        users = User.objects.all()
+        render(self.request, "sql/nested.html", {"users": users})
+
+        self.assertEqual(len(self.panel._queries), 1)
+
+        query = self.panel._queries[0]
+        template_info = query[1]["template_info"]
+        template_name = os.path.basename(template_info["name"])
+        self.assertEqual(template_name, "included.html")
+        self.assertEqual(template_info["context"][0]["content"].strip(), "{{ users }}")
+        self.assertEqual(template_info["context"][0]["highlight"], True)

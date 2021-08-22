@@ -1,19 +1,26 @@
 import weakref
 
-from django.core.signals import got_request_exception, request_finished, request_started
+from django.core.signals import (
+    got_request_exception,
+    request_finished,
+    request_started,
+    setting_changed,
+)
 from django.db.backends.signals import connection_created
 from django.db.models.signals import (
     class_prepared,
+    m2m_changed,
     post_delete,
     post_init,
     post_migrate,
     post_save,
     pre_delete,
     pre_init,
+    pre_migrate,
     pre_save,
 )
 from django.utils.module_loading import import_string
-from django.utils.translation import gettext_lazy as _, ngettext as __
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar.panels import Panel
 
@@ -33,7 +40,10 @@ class SignalsPanel(Panel):
         "post_save": post_save,
         "pre_delete": pre_delete,
         "post_delete": post_delete,
+        "m2m_changed": m2m_changed,
+        "pre_migrate": pre_migrate,
         "post_migrate": post_migrate,
+        "setting_changed": setting_changed,
     }
 
     def nav_subtitle(self):
@@ -43,16 +53,22 @@ class SignalsPanel(Panel):
         # here we have to handle a double count translation, hence the
         # hard coding of one signal
         if num_signals == 1:
-            return __(
-                "%(num_receivers)d receiver of 1 signal",
-                "%(num_receivers)d receivers of 1 signal",
+            return (
+                ngettext(
+                    "%(num_receivers)d receiver of 1 signal",
+                    "%(num_receivers)d receivers of 1 signal",
+                    num_receivers,
+                )
+                % {"num_receivers": num_receivers}
+            )
+        return (
+            ngettext(
+                "%(num_receivers)d receiver of %(num_signals)d signals",
+                "%(num_receivers)d receivers of %(num_signals)d signals",
                 num_receivers,
-            ) % {"num_receivers": num_receivers}
-        return __(
-            "%(num_receivers)d receiver of %(num_signals)d signals",
-            "%(num_receivers)d receivers of %(num_signals)d signals",
-            num_receivers,
-        ) % {"num_receivers": num_receivers, "num_signals": num_signals}
+            )
+            % {"num_receivers": num_receivers, "num_signals": num_signals}
+        )
 
     title = _("Signals")
 

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.views.decorators.cache import cache_page
@@ -31,6 +31,10 @@ def resolving_view(request, arg1, arg2):
 @cache_page(60)
 def cached_view(request):
     return render(request, "base.html")
+
+
+def json_view(request):
+    return JsonResponse({"foo": "bar"})
 
 
 def regular_jinjia_view(request, title):

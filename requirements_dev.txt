@@ -12,10 +12,12 @@ html5lib
 isort
 selenium
 tox
+black
 
 # Documentation
 
 Sphinx
+sphinxcontrib-spelling
 
 # Other tools
 

@@ -9,31 +9,44 @@ Default built-in panels
 
 The following panels are enabled by default.
 
+History
+~~~~~~~
+
+.. class:: debug_toolbar.panels.history.HistoryPanel
+
+This panel shows the history of requests made and allows switching to a past
+snapshot of the toolbar to view that request's stats.
+
+.. caution::
+   If :ref:`RENDER_PANELS <RENDER_PANELS>` configuration option is set to
+   ``True`` or if the server runs with multiple processes, the History Panel
+   will be disabled.
+
 Version
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.versions.VersionsPanel``
+.. class:: debug_toolbar.panels.versions.VersionsPanel
 
 Shows versions of Python, Django, and installed apps if possible.
 
 Timer
 ~~~~~
 
-Path: ``debug_toolbar.panels.timer.TimerPanel``
+.. class:: debug_toolbar.panels.timer.TimerPanel
 
 Request timer.
 
 Settings
 ~~~~~~~~
 
-Path: ``debug_toolbar.panels.settings.SettingsPanel``
+.. class:: debug_toolbar.panels.settings.SettingsPanel
 
 A list of settings in settings.py.
 
 Headers
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.headers.HeadersPanel``
+.. class:: debug_toolbar.panels.headers.HeadersPanel
 
 This panels shows the HTTP request and response headers, as well as a
 selection of values from the WSGI environment.
@@ -45,56 +58,56 @@ also add response headers such as ``Date`` and ``Server``.
 Request
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.request.RequestPanel``
+.. class:: debug_toolbar.panels.request.RequestPanel
 
 GET/POST/cookie/session variable display.
 
 SQL
 ~~~
 
-Path: ``debug_toolbar.panels.sql.SQLPanel``
+.. class:: debug_toolbar.panels.sql.SQLPanel
 
 SQL queries including time to execute and links to EXPLAIN each query.
 
 Template
 ~~~~~~~~
 
-Path: ``debug_toolbar.panels.templates.TemplatesPanel``
+.. class:: debug_toolbar.panels.templates.TemplatesPanel
 
 Templates and context used, and their template paths.
 
 Static files
 ~~~~~~~~~~~~
 
-Path: ``debug_toolbar.panels.staticfiles.StaticFilesPanel``
+.. class:: debug_toolbar.panels.staticfiles.StaticFilesPanel
 
-Used static files and their locations (via the staticfiles finders).
+Used static files and their locations (via the ``staticfiles`` finders).
 
 Cache
 ~~~~~
 
-Path: ``debug_toolbar.panels.cache.CachePanel``
+.. class:: debug_toolbar.panels.cache.CachePanel
 
 Cache queries. Is incompatible with Django's per-site caching.
 
 Signal
 ~~~~~~
 
-Path: ``debug_toolbar.panels.signals.SignalsPanel``
+.. class:: debug_toolbar.panels.signals.SignalsPanel
 
-List of signals, their args and receivers.
+List of signals and receivers.
 
 Logging
 ~~~~~~~
 
-Path: ``debug_toolbar.panels.logging.LoggingPanel``
+.. class:: debug_toolbar.panels.logging.LoggingPanel
 
 Logging output via Python's built-in :mod:`logging` module.
 
 Redirects
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.redirects.RedirectsPanel``
+.. class:: debug_toolbar.panels.redirects.RedirectsPanel
 
 When this panel is enabled, the debug toolbar will show an intermediate page
 upon redirect so you can view any debug information prior to redirecting. This
@@ -110,7 +123,7 @@ the ``DISABLE_PANELS`` configuration option.
 Profiling
 ~~~~~~~~~
 
-Path: ``debug_toolbar.panels.profiling.ProfilingPanel``
+.. class:: debug_toolbar.panels.profiling.ProfilingPanel
 
 Profiling information for the processing of the request.
 
@@ -169,10 +182,22 @@ Retrieves and displays information you specify using the ``debug`` statement.
 Inspector panel also logs to the console by default, but may be instructed not
 to.
 
+LDAP Tracing
+~~~~~~~~~~~~
+
+URL: https://github.com/danyi1212/django-windowsauth
+
+Path: ``windows_auth.panels.LDAPPanel``
+
+LDAP Operations performed during the request, including timing, request and response messages,
+the entries received, write changes list, stack-tracing and error debugging.
+This panel also shows connection usage metrics when it is collected.
+`Check out the docs <https://django-windowsauth.readthedocs.io/en/latest/howto/debug_toolbar.html>`_.
+
 Line Profiler
 ~~~~~~~~~~~~~
 
-URL: https://github.com/dmclain/django-debug-toolbar-line-profiler
+URL: https://github.com/mikekeda/django-debug-toolbar-line-profiler
 
 Path: ``debug_toolbar_line_profiler.panel.ProfilingPanel``
 
@@ -216,7 +241,7 @@ URL: https://github.com/robinedwards/django-debug-toolbar-neo4j-panel
 
 Path: ``neo4j_panel.Neo4jPanel``
 
-Trace neo4j rest API calls in your django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
+Trace neo4j rest API calls in your Django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
 
 Pympler
 ~~~~~~~
@@ -234,7 +259,16 @@ URL: https://github.com/djsutho/django-debug-toolbar-request-history
 
 Path: ``ddt_request_history.panels.request_history.RequestHistoryPanel``
 
-Switch between requests to view their stats. Also adds support for viewing stats for ajax requests.
+Switch between requests to view their stats. Also adds support for viewing stats for AJAX requests.
+
+Requests
+~~~~~~~~
+
+URL: https://github.com/marceltschoppch/django-requests-debug-toolbar
+
+Path: ``requests_panel.panel.RequestsDebugPanel``
+
+Lists HTTP requests made with the popular `requests <https://requests.readthedocs.io/>`_ library.
 
 Sites
 ~~~~~
@@ -305,7 +339,7 @@ Panels can ship their own templates, static files and views. All views should
 be decorated with ``debug_toolbar.decorators.require_show_toolbar`` to prevent
 unauthorized access. There is no public CSS API at this time.
 
-.. autoclass:: debug_toolbar.panels.Panel(*args, **kwargs)
+.. autoclass:: debug_toolbar.panels.Panel
 
     .. autoattribute:: debug_toolbar.panels.Panel.nav_title
 
@@ -335,6 +369,8 @@ unauthorized access. There is no public CSS API at this time.
 
     .. automethod:: debug_toolbar.panels.Panel.generate_stats
 
+    .. automethod:: debug_toolbar.panels.Panel.run_checks
+
 .. _javascript-api:
 
 JavaScript API
@@ -347,22 +383,22 @@ common methods available.
 
     Closes the topmost level (window/panel/toolbar)
 
-.. js:function:: djdt.cookie.get
+.. js:function:: djdt.cookie.get(key)
 
     This is a helper function to fetch values stored in the cookies.
 
-    :param string key: The key for the value to be fetched.
+    :param key: The key for the value to be fetched.
 
-.. js:function:: djdt.cookie.set
+.. js:function:: djdt.cookie.set(key, value, options)
 
     This is a helper function to set a value stored in the cookies.
 
-    :param string key: The key to be used.
+    :param key: The key to be used.
 
-    :param string value: The value to be set.
+    :param value: The value to be set.
 
-    :param Object options: The options for the value to be set. It should contain
-        the properties ``expires`` and ``path``.
+    :param options: The options for the value to be set. It should contain the
+        properties ``expires`` and ``path``.
 
 .. js:function:: djdt.hide_toolbar
 
@@ -371,3 +407,32 @@ common methods available.
 .. js:function:: djdt.show_toolbar
 
     Shows the toolbar.
+
+Events
+^^^^^^
+
+.. js:attribute:: djdt.panel.render
+
+    This is an event raised when a panel is rendered. It has the property
+    ``detail.panelId`` which identifies which panel has been loaded. This
+    event can be useful when creating custom scripts to process the HTML
+    further.
+
+    An example of this for the ``CustomPanel`` would be:
+
+.. code-block:: javascript
+
+    import { $$ } from "./utils.js";
+    function addCustomMetrics() {
+        // Logic to process/add custom metrics here.
+
+        // Be sure to cover the case of this function being called twice
+        // due to file being loaded asynchronously.
+    }
+    const djDebug = document.getElementById("djDebug");
+    $$.onPanelRender(djDebug, "CustomPanel", addCustomMetrics);
+    // Since a panel's scripts are loaded asynchronously, it's possible that
+    // the above statement would occur after the djdt.panel.render event has
+    // been raised. To account for that, the rendering function should be
+    // called here as well.
+    addCustomMetrics();

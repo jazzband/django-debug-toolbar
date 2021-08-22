@@ -3,10 +3,11 @@ from collections import defaultdict
 from copy import copy
 from pprint import saferepr
 
-from django.conf.urls import url
 from django.db import connections
-from django.utils.translation import gettext_lazy as _, ngettext_lazy as __
+from django.urls import path
+from django.utils.translation import gettext_lazy as _, ngettext
 
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
 from debug_toolbar.panels.sql.forms import SQLSelectForm
@@ -109,28 +110,35 @@ class SQLPanel(Panel):
 
     @property
     def nav_subtitle(self):
-        return __("%d query in %.2fms", "%d queries in %.2fms", self._num_queries) % (
+        return ngettext(
+            "%(query_count)d query in %(sql_time).2fms",
+            "%(query_count)d queries in %(sql_time).2fms",
             self._num_queries,
-            self._sql_time,
-        )
+        ) % {
+            "query_count": self._num_queries,
+            "sql_time": self._sql_time,
+        }
 
     @property
     def title(self):
         count = len(self._databases)
-        return __(
-            "SQL queries from %(count)d connection",
-            "SQL queries from %(count)d connections",
-            count,
-        ) % {"count": count}
+        return (
+            ngettext(
+                "SQL queries from %(count)d connection",
+                "SQL queries from %(count)d connections",
+                count,
+            )
+            % {"count": count}
+        )
 
     template = "debug_toolbar/panels/sql.html"
 
     @classmethod
     def get_urls(cls):
         return [
-            url(r"^sql_select/$", views.sql_select, name="sql_select"),
-            url(r"^sql_explain/$", views.sql_explain, name="sql_explain"),
-            url(r"^sql_profile/$", views.sql_profile, name="sql_profile"),
+            path("sql_select/", views.sql_select, name="sql_select"),
+            path("sql_explain/", views.sql_explain, name="sql_explain"),
+            path("sql_profile/", views.sql_profile, name="sql_profile"),
         ]
 
     def enable_instrumentation(self):
@@ -208,19 +216,17 @@ class SQLPanel(Panel):
                         query["vendor"], query["trans_status"]
                     )
 
-                query["form"] = SQLSelectForm(auto_id=None, initial=copy(query))
+                query["form"] = SignedDataForm(
+                    auto_id=None, initial=SQLSelectForm(initial=copy(query)).initial
+                )
 
                 if query["sql"]:
                     query["sql"] = reformat_sql(query["sql"], with_toggle=True)
                 query["rgb_color"] = self._databases[alias]["rgb_color"]
                 try:
                     query["width_ratio"] = (query["duration"] / self._sql_time) * 100
-                    query["width_ratio_relative"] = (
-                        100.0 * query["width_ratio"] / (100.0 - width_ratio_tally)
-                    )
                 except ZeroDivisionError:
                     query["width_ratio"] = 0
-                    query["width_ratio_relative"] = 0
                 query["start_offset"] = width_ratio_tally
                 query["end_offset"] = query["width_ratio"] + query["start_offset"]
                 width_ratio_tally += query["width_ratio"]

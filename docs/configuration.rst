@@ -20,6 +20,7 @@ included in the toolbar. It works like Django's ``MIDDLEWARE`` setting. The
 default value is::
 
     DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.history.HistoryPanel',
         'debug_toolbar.panels.versions.VersionsPanel',
         'debug_toolbar.panels.timer.TimerPanel',
         'debug_toolbar.panels.settings.SettingsPanel',
@@ -65,23 +66,28 @@ Toolbar options
   The toolbar searches for this string in the HTML and inserts itself just
   before.
 
+.. _RENDER_PANELS:
+
 * ``RENDER_PANELS``
 
   Default: ``None``
 
   If set to ``False``, the debug toolbar will keep the contents of panels in
-  memory on the server and load them on demand. If set to ``True``, it will
-  render panels inside every page. This may slow down page rendering but it's
+  memory on the server and load them on demand.
+
+  If set to ``True``, it will disable ``HistoryPanel`` and render panels
+  inside every page. This may slow down page rendering but it's
   required on multi-process servers, for example if you deploy the toolbar in
   production (which isn't recommended).
 
   The default value of ``None`` tells the toolbar to automatically do the
   right thing depending on whether the WSGI container runs multiple processes.
-  This setting allows you to force a different behavior if needed.
+  This setting allows you to force a different behavior if needed. If the
+  WSGI container runs multiple processes, it will disable ``HistoryPanel``.
 
 * ``RESULTS_CACHE_SIZE``
 
-  Default: ``10``
+  Default: ``25``
 
   The toolbar keeps up to this many results in memory.
 
@@ -179,6 +185,40 @@ Panel options
   Useful for eliminating server-related entries which can result
   in enormous DOM structures and toolbar rendering delays.
 
+* ``PRETTIFY_SQL``
+
+  Default: ``True``
+
+  Panel: SQL
+
+  Controls SQL token grouping.
+
+  Token grouping allows pretty print of similar tokens,
+  like aligned indentation for every selected field.
+
+  When set to ``True``, it might cause render slowdowns
+  when a view make long SQL textual queries.
+
+  **Without grouping**::
+
+    SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name"
+    FROM "auth_user"
+    WHERE "auth_user"."username" = '''test_username'''
+    LIMIT 21
+
+  **With grouping**::
+
+    SELECT "auth_user"."id",
+       "auth_user"."password",
+       "auth_user"."last_login",
+       "auth_user"."is_superuser",
+       "auth_user"."username",
+       "auth_user"."first_name",
+       "auth_user"."last_name",
+      FROM "auth_user"
+    WHERE "auth_user"."username" = '''test_username'''
+    LIMIT 21
+
 * ``PROFILER_MAX_DEPTH``
 
   Default: ``10``
@@ -196,7 +236,7 @@ Panel options
 
   If set to ``True`` then a template's context will be included with it in the
   template debug panel. Turning this off is useful when you have large
-  template contexts, or you have template contexts with lazy datastructures
+  template contexts, or you have template contexts with lazy data structures
   that you don't want to be evaluated.
 
 * ``SKIP_TEMPLATE_PREFIXES``

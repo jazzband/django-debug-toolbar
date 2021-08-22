@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.utils import get_name_from_obj
+from debug_toolbar.utils import get_name_from_obj, get_sorted_request_variable
 
 
 class RequestPanel(Panel):
@@ -26,13 +26,12 @@ class RequestPanel(Panel):
     def generate_stats(self, request, response):
         self.record_stats(
             {
-                "get": [(k, request.GET.getlist(k)) for k in sorted(request.GET)],
-                "post": [(k, request.POST.getlist(k)) for k in sorted(request.POST)],
-                "cookies": [
-                    (k, request.COOKIES.get(k)) for k in sorted(request.COOKIES)
-                ],
+                "get": get_sorted_request_variable(request.GET),
+                "post": get_sorted_request_variable(request.POST),
+                "cookies": get_sorted_request_variable(request.COOKIES),
             }
         )
+
         view_info = {
             "view_func": _("<no view>"),
             "view_args": "None",
@@ -45,7 +44,16 @@ class RequestPanel(Panel):
             view_info["view_func"] = get_name_from_obj(func)
             view_info["view_args"] = args
             view_info["view_kwargs"] = kwargs
-            view_info["view_urlname"] = getattr(match, "url_name", _("<unavailable>"))
+
+            if getattr(match, "url_name", False):
+                url_name = match.url_name
+                if match.namespaces:
+                    url_name = ":".join([*match.namespaces, url_name])
+            else:
+                url_name = _("<unavailable>")
+
+            view_info["view_urlname"] = url_name
+
         except Http404:
             pass
         self.record_stats(view_info)

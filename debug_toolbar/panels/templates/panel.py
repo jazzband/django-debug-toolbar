@@ -4,12 +4,12 @@ from os.path import normpath
 from pprint import pformat, saferepr
 
 from django import http
-from django.conf.urls import url
 from django.core import signing
 from django.db.models.query import QuerySet, RawQuerySet
 from django.template import RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
+from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -88,10 +88,9 @@ class TemplatesPanel(Panel):
         for context_layer in context.dicts:
             if hasattr(context_layer, "items") and context_layer:
                 # Check if the layer is in the cache.
-                key_values = sorted(context_layer.items())
                 pformatted = None
-                for _key_values, _pformatted in self.pformat_layers:
-                    if _key_values == key_values:
+                for key_values, _pformatted in self.pformat_layers:
+                    if key_values == context_layer:
                         pformatted = _pformatted
                         break
 
@@ -99,7 +98,7 @@ class TemplatesPanel(Panel):
                     temp_layer = {}
                     for key, value in context_layer.items():
                         # Replace any request elements - they have a large
-                        # unicode representation and the request data is
+                        # Unicode representation and the request data is
                         # already made available from the Request panel.
                         if isinstance(value, http.HttpRequest):
                             temp_layer[key] = "<<request>>"
@@ -125,7 +124,7 @@ class TemplatesPanel(Panel):
                             except SQLQueryTriggered:
                                 temp_layer[key] = "<<triggers database query>>"
                             except UnicodeEncodeError:
-                                temp_layer[key] = "<<unicode encode error>>"
+                                temp_layer[key] = "<<Unicode encode error>>"
                             except Exception:
                                 temp_layer[key] = "<<unhandled exception>>"
                             else:
@@ -133,7 +132,7 @@ class TemplatesPanel(Panel):
                             finally:
                                 recording(True)
                     pformatted = pformat(temp_layer)
-                    self.pformat_layers.append((key_values, pformatted))
+                    self.pformat_layers.append((context_layer, pformatted))
                 context_list.append(pformatted)
 
         kwargs["context"] = context_list
@@ -161,9 +160,7 @@ class TemplatesPanel(Panel):
 
     @classmethod
     def get_urls(cls):
-        return [
-            url(r"^template_source/$", views.template_source, name="template_source")
-        ]
+        return [path("template_source/", views.template_source, name="template_source")]
 
     def enable_instrumentation(self):
         template_rendered.connect(self._store_template_info)

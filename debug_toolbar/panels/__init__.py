@@ -64,6 +64,15 @@ class Panel:
         return True
 
     @property
+    def is_historical(self):
+        """
+        Panel supports rendering historical values.
+
+        Defaults to :attr:`has_content`.
+        """
+        return self.has_content
+
+    @property
     def title(self):
         """
         Title shown in the panel when it's displayed in full screen.
@@ -98,6 +107,10 @@ class Panel:
     def scripts(self):
         """
         Scripts used by the HTML content of the panel when it's displayed.
+
+        When a panel is rendered on the frontend, the ``djdt.panel.render``
+        JavaScript event will be dispatched. The scripts can listen for
+        this event to support dynamic functionality.
         """
         return []
 
@@ -122,8 +135,7 @@ class Panel:
         time.
 
         Unless the toolbar or this panel is disabled, this method will be
-        called early in :class:`DebugToolbarMiddleware.process_request`. It
-        should be idempotent.
+        called early in ``DebugToolbarMiddleware``. It should be idempotent.
         """
 
     def disable_instrumentation(self):
@@ -202,3 +214,15 @@ class Panel:
 
         Does not return a value.
         """
+
+    @classmethod
+    def run_checks(cls):
+        """
+        Check that the integration is configured correctly for the panel.
+
+        This will be called as a part of the Django checks system when the
+        application is being setup.
+
+        Return a list of :class: `django.core.checks.CheckMessage` instances.
+        """
+        return []

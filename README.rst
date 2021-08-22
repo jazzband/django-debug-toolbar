@@ -6,17 +6,21 @@ Django Debug Toolbar
    :target: https://jazzband.co/
    :alt: Jazzband
 
-.. image:: https://travis-ci.org/jazzband/django-debug-toolbar.svg?branch=master
-   :target: https://travis-ci.org/jazzband/django-debug-toolbar
+.. image:: https://github.com/jazzband/django-debug-toolbar/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
 
-.. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/jazzband/django-debug-toolbar
    :alt: Test coverage status
 
-.. image:: https://requires.io/github/jazzband/django-debug-toolbar/requirements.svg?branch=master
-     :target: https://requires.io/github/jazzband/django-debug-toolbar/requirements/?branch=master
-     :alt: Requirements Status
+.. image:: https://img.shields.io/pypi/pyversions/django-debug-toolbar
+   :target: https://pypi.python.org/pypi/django-debug-toolbar
+   :alt: Supported Python versions
+
+.. image:: https://img.shields.io/pypi/djversions/django-debug-toolbar
+   :target: https://pypi.org/project/django-debug-toolbar
+   :alt: Supported Django versions
 
 The Django Debug Toolbar is a configurable set of panels that display various
 debug information about the current request/response and when clicked, display
@@ -24,14 +28,13 @@ more details about the panel's content.
 
 Here's a screenshot of the toolbar in action:
 
-.. image:: https://raw.github.com/jazzband/django-debug-toolbar/master/example/django-debug-toolbar.png
-   :width: 908
-   :height: 557
+.. image:: https://raw.github.com/jazzband/django-debug-toolbar/main/example/django-debug-toolbar.png
+   :alt: Django Debug Toolbar screenshot
 
 In addition to the built-in panels, a number of third-party panels are
 contributed by the community.
 
-The current stable version of the Debug Toolbar is 2.2. It works on
+The current stable version of the Debug Toolbar is 3.2.2. It works on
 Django ≥ 2.2.
 
 Documentation, including installation and configuration instructions, is

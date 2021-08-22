@@ -55,7 +55,7 @@ class TimerPanel(Panel):
     @property
     def scripts(self):
         scripts = super().scripts
-        scripts.append(static("debug_toolbar/js/toolbar.timer.js"))
+        scripts.append(static("debug_toolbar/js/timer.js"))
         return scripts
 
     def process_request(self, request):

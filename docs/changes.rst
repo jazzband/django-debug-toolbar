@@ -1,18 +1,134 @@
 Change log
 ==========
 
-UNRELEASED
-----------
+Next version
+------------
+
+
+3.2.2 (2021-08-14)
+------------------
+
+* Ensured that the handle stays within bounds when resizing the window.
+* Disabled ``HistoryPanel`` when ``RENDER_PANELS`` is ``True``
+  or if ``RENDER_PANELS`` is ``None`` and the WSGI container is
+  running with multiple processes.
+* Fixed ``RENDER_PANELS`` functionality so that when ``True`` panels are
+  rendered during the request and not loaded asynchronously.
+* HistoryPanel now shows status codes of responses.
+* Support ``request.urlconf`` override when checking for toolbar requests.
+
+
+3.2.1 (2021-04-14)
+------------------
+
+* Fixed SQL Injection vulnerability, CVE-2021-30459. The toolbar now
+  calculates a signature on all fields for the SQL select, explain,
+  and analyze forms.
+* Changed ``djdt.cookie.set()`` to set ``sameSite=Lax`` by default if
+  callers do not provide a value.
+* Added ``PRETTIFY_SQL`` configuration option to support controlling
+  SQL token grouping. By default it's set to True. When set to False,
+  a performance improvement can be seen by the SQL panel.
+* Added a JavaScript event when a panel loads of the format
+  ``djdt.panel.[PanelId]`` where PanelId is the ``panel_id`` property
+  of the panel's Python class. Listening for this event corrects the bug
+  in the Timer Panel in which it didn't insert the browser timings
+  after switching requests in the History Panel.
+* Fixed issue with the toolbar expecting URL paths to start with
+  ``/__debug__/`` while the documentation indicates it's not required.
+
+3.2 (2020-12-03)
+----------------
+
+* Moved CI to GitHub Actions: https://github.com/jazzband/django-debug-toolbar/actions
+* Stopped crashing when ``request.GET`` and ``request.POST`` are
+  dictionaries instead of ``QueryDict`` instances. This isn't a valid
+  use of Django but django-debug-toolbar shouldn't crash anyway.
+* Fixed a crash in the history panel when sending a  JSON POST request
+  with invalid JSON.
+* Added missing signals to the signals panel by default.
+* Documented how to avoid CORS errors now that we're using JavaScript
+  modules.
+* Verified support for Python 3.9.
+* Added a ``css`` and a ``js`` template block to
+  ``debug_toolbar/base.html`` to allow overriding CSS and JS.
+
+
+3.2a1 (2020-10-19)
+------------------
+
+* Fixed a regression where the JavaScript code crashed with an invalid
+  CSS selector when searching for an element to replace.
+* Replaced remaining images with CSS.
+* Continued refactoring the HTML and CSS code for simplicity, continued
+  improving the use of semantic HTML.
+* Stopped caring about prehistoric browsers for good. Started splitting
+  up the JavaScript code to take advantage of JavaScript modules.
+* Continued removing unused CSS.
+* Started running Selenium tests on Travis CI.
+* Added a system check which prevents using django-debug-toolbar without
+  any enabled panels.
+* Added :meth:`Panel.run_checks() <debug_toolbar.panels.Panel.run_checks>` for
+  panels to verify the configuration before the application starts.
+* Validate the static file paths specified in ``STATICFILES_DIRS``
+  exist via :class:`~debug_toolbar.panels.staticfiles.StaticFilesPanel`
+* Introduced `prettier <https://prettier.io/>`__ to format the frontend
+  code.
+* Started accessing history views using GET requests since they do not
+  change state on the server.
+* Fixed a bug where unsuccessful requests (e.g. network errors) were
+  silently ignored.
+* Started spellchecking the documentation.
+* Removed calls to the deprecated ``request.is_ajax()`` method. These calls
+  were unnecessary now that most endpoints return JSON anyway.
+* Removed support for Python 3.5.
+
+
+3.1 (2020-09-21)
+----------------
+
+* Fixed a crash in the history panel when sending an empty JSON POST
+  request.
+* Made ``make example`` also set up the database and a superuser
+  account.
+* Added a Makefile target for regenerating the django-debug-toolbar
+  screenshot.
+* Added automatic escaping of panel titles resp. disallowed HTML tags.
+* Removed some CSS
+* Restructured the SQL stats template.
+* Changed command line examples to prefer ``python -m pip`` to ``pip``.
+
+
+3.0 (2020-09-20)
+----------------
 
 * Added an ``.editorconfig`` file specifying indentation rules etc.
-* Updated the italian translation.
-* Added support for Django 3.1a1.
+* Updated the Italian translation.
+* Added support for Django 3.1a1. ``fetch()`` and ``jQuery.ajax`` requests are
+  now detected by the absence of a ``Accept: text/html`` header instead of the
+  jQuery-specific ``X-Requested-With`` header on Django 3.1 or better.
 * Pruned unused CSS and removed hacks for ancient browsers.
 * Added the new :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>`
   property. This property should return a list of JavaScript resources to be
   loaded in the browser when displaying the panel. Right now, this is used by a
   single panel, the Timer panel. Third party panels can use this property to
   add scripts rather then embedding them in the content HTML.
+* Switched from JSHint to ESLint. Added an ESLint job to the Travis CI matrix.
+* Debug toolbar state which is only needed in the JavaScript code now uses
+  ``localStorage``.
+* Updated the code to avoid a few deprecation warnings and resource warnings.
+* Started loading JavaScript as ES6 modules.
+* Added support for :meth:`cache.touch() <django.core.caches.cache.touch>` when
+  using django-debug-toolbar.
+* Eliminated more inline CSS.
+* Updated ``tox.ini`` and ``Makefile`` to use isort>=5.
+* Increased RESULTS_CACHE_SIZE to 25 to better support AJAX requests.
+* Fixed the close button CSS by explicitly specifying the
+  ``box-sizing`` property.
+* Simplified the ``isort`` configuration by taking advantage of isort's
+  ``black`` profile.
+* Added :class:`~debug_toolbar.panels.history.HistoryPanel` including support
+  for AJAX requests.
 
 **Backwards incompatible changes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,14 +138,21 @@ UNRELEASED
   :attr:`Panel.scripts <debug_toolbar.panels.Panel.scripts>` property.
 * Removed support for end of life Django 1.11. The minimum supported Django is
   now 2.2.
+* The Debug Toolbar now loads a `JavaScript module`_. Typical local development
+  using Django ``runserver`` is not impacted. However, if your application
+  server and static files server are at different origins, you may see CORS
+  errors in your browser's development console. See the "Cross-Origin Request
+  Blocked" section of the :doc:`installation docs <installation>` for details
+  on how to resolve this issue.
 
+.. _JavaScript module: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
 
 2.2 (2020-01-31)
 ----------------
 
 * Removed support for end of life Django 2.0 and 2.1.
 * Added support for Python 3.8.
-* Add locals() option for sql panel.
+* Add locals() option for SQL panel.
 * Added support for Django 3.0.
 
 
@@ -47,10 +170,13 @@ UNRELEASED
 2.0 (2019-06-20)
 ----------------
 
-* Updated ``StaticFilesPanel`` to be compatible with Django 3.0.
-* The ``ProfilingPanel`` is now enabled but inactive by default.
+* Updated :class:`~debug_toolbar.panels.staticfiles.StaticFilesPanel` to be
+  compatible with Django 3.0.
+* The :class:`~debug_toolbar.panels.profiling.ProfilingPanel` is now enabled
+  but inactive by default.
 * Fixed toggling of table rows in the profiling panel UI.
-* The ``ProfilingPanel`` no longer skips remaining panels or middlewares.
+* The :class:`~debug_toolbar.panels.profiling.ProfilingPanel` no longer skips
+  remaining panels or middlewares.
 * Improved the installation documentation.
 * Fixed a possible crash in the template panel.
 * Added support for psycopg2 ``Composed`` objects.
@@ -62,17 +188,19 @@ UNRELEASED
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * Removed support for Python 2.
 * Removed support for Django's deprecated ``MIDDLEWARE_CLASSES`` setting.
-* Restructured ``Panel`` to execute more like the new-style Django MIDDLEWARE.
-  The ``Panel.__init__()`` method is now passed ``get_response`` as the first
-  positional argument. The ``Panel.process_request()`` method must now always
+* Restructured :class:`debug_toolbar.panels.Panel` to execute more like the
+  new-style Django MIDDLEWARE. The ``Panel.__init__()`` method is now passed
+  ``get_response`` as the first positional argument. The
+  :meth:`debug_toolbar.panels.Panel.process_request` method must now always
   return a response. Usually this is the response returned by
   ``get_response()`` but the panel may also return a different response as is
-  the case in the ``RedirectsPanel``. Third party panels must adjust to this
-  new architecture. ``Panel.process_response()`` and ``Panel.process_view()``
-  have been removed as a result of this change.
+  the case in the :class:`~debug_toolbar.panels.redirects.RedirectsPanel`.
+  Third party panels must adjust to this new architecture.
+  ``Panel.process_response()`` and ``Panel.process_view()`` have been removed
+  as a result of this change.
 
 The deprecated API, ``debug_toolbar.panels.DebugPanel``, has been removed.
-Third party panels should use ``debug_toolbar.panels.Panel`` instead.
+Third party panels should use :class:`debug_toolbar.panels.Panel` instead.
 
 The following deprecated settings have been removed:
 
@@ -95,14 +223,14 @@ The following deprecated settings have been removed:
 * Convert system check errors to warnings to accommodate exotic
   configurations.
 * Fixed a crash when explaining raw querysets.
-* Fixed an obscure unicode error with binary data fields.
+* Fixed an obscure Unicode error with binary data fields.
 * Added MariaDB and Python 3.7 builds to the CI.
 
 1.10.1 (2018-09-11)
 -------------------
 
 * Fixed a problem where the duplicate query detection breaks for
-  non-hashable query parameters.
+  unhashable query parameters.
 * Added support for structured types when recording SQL.
 * Made Travis CI also run one test no PostgreSQL.
 * Added fallbacks for inline images in CSS.
@@ -127,7 +255,7 @@ The following deprecated settings have been removed:
   parameters).
 * Stopped hiding frames from Django's contrib apps in stacktraces by
   default.
-* Lots of small cleanups and bugfixes.
+* Lots of small cleanups and bug fixes.
 
 1.9.1 (2017-11-15)
 ------------------
@@ -140,11 +268,11 @@ The following deprecated settings have been removed:
 This version is compatible with Django 2.0 and requires Django 1.8 or
 later.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The profiling panel now escapes reported data resulting in valid HTML.
-* Many minor cleanups and bugfixes.
+* Many minor cleanups and bug fixes.
 
 1.8 (2017-05-05)
 ----------------
@@ -173,8 +301,8 @@ Features
   skipped by default to avoid panel sizes going into hundreds of
   megabytes of HTML.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * All views are now decorated with
   ``debug_toolbar.decorators.require_show_toolbar`` preventing unauthorized
@@ -187,8 +315,8 @@ Bugfixes
 1.7 (2017-03-05)
 ----------------
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Recursive template extension is now understood.
 * Deprecation warnings were fixed.
@@ -203,7 +331,7 @@ Bugfixes
 1.6 (2016-10-05)
 ----------------
 
-The debug toolbar was adopted by jazzband.
+The debug toolbar was adopted by Jazzband.
 
 Removed features
 ~~~~~~~~~~~~~~~~
@@ -213,8 +341,8 @@ Removed features
   ``DEBUG_TOOLBAR_PATCH_SETTINGS`` setting has also been removed as it is now
   unused. See the :doc:`installation documentation <installation>` for details.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The ``DebugToolbarMiddleware`` now also supports Django 1.10's ``MIDDLEWARE``
   setting.
@@ -226,8 +354,8 @@ This version is compatible with Django 1.10 and requires Django 1.8 or later.
 
 Support for Python 3.2 is dropped.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Restore compatibility with sqlparse ≥ 0.2.0.
 * Add compatibility with Bootstrap 4, Pure CSS, MDL, etc.
@@ -247,8 +375,8 @@ New features
   to only record stats when the toolbar is going to be inserted into the
   response.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Response time for requests of projects with numerous media files has
   been improved.
@@ -265,8 +393,8 @@ New features
 * The ``SHOW_TOOLBAR_CALLBACK`` accepts a callable.
 * The toolbar now provides a :ref:`javascript-api`.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The toolbar handle cannot leave the visible area anymore when the toolbar is
   collapsed.
@@ -284,11 +412,11 @@ New features
 
 * The ``JQUERY_URL`` setting defines where the toolbar loads jQuery from.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * The toolbar now always loads a private copy of jQuery in order to avoid
-  using an incompatible version. It no longer attemps to integrate with AMD.
+  using an incompatible version. It no longer attempts to integrate with AMD.
 
   This private copy is available in ``djdt.jQuery``. Third-party panels are
   encouraged to use it because it should be as stable as the toolbar itself.
@@ -304,8 +432,8 @@ New features
 * The SQL panel colors queries depending on the stack level.
 * The Profiler panel allows configuring the maximum depth.
 
-Bugfixes
-~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 * Support languages where lowercase and uppercase strings may have different
   lengths.
