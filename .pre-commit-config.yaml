@@ -1,0 +1,46 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: mixed-line-ending
+-   repo: https://github.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+    -   id: flake8
+-   repo: https://github.com/pycqa/doc8
+    rev: 0.9.0
+    hooks:
+    -   id: doc8
+-   repo: https://github.com/pycqa/isort
+    rev: 5.9.3
+    hooks:
+    -   id: isort
+-   repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.9.0
+    hooks:
+    -   id: python-check-blanket-noqa
+    -   id: python-check-mock-methods
+    -   id: python-no-eval
+    -   id: python-no-log-warn
+    -   id: rst-backticks
+    -   id: rst-directive-colons
+-   repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.3.2
+    hooks:
+    -   id: prettier
+        types: [javascript, css]
+-   repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.0.0-beta.0
+    hooks:
+    -   id: eslint
+        files: \.js?$
+        types: [file]
+-   repo: https://github.com/psf/black
+    rev: 21.7b0
+    hooks:
+    -   id: black
+        language_version: python3
+        entry: black --target-version=py36

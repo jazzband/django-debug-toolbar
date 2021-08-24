@@ -79,8 +79,8 @@ or by setting the ``DJANGO_SELENIUM_TESTS`` environment variable::
     $ DJANGO_SELENIUM_TESTS=true make coverage
     $ DJANGO_SELENIUM_TESTS=true tox
 
-To test via `tox` against other databases, you'll need to create the user,
-database and assign the proper permissions. For PostgreSQL in a `psql`
+To test via ``tox`` against other databases, you'll need to create the user,
+database and assign the proper permissions. For PostgreSQL in a ``psql``
 shell (note this allows the debug_toolbar user the permission to create
 databases)::
 
@@ -89,7 +89,7 @@ databases)::
     psql> CREATE DATABASE debug_toolbar;
     psql> GRANT ALL PRIVILEGES ON DATABASE debug_toolbar to debug_toolbar;
 
-For MySQL/MariaDB in a `mysql` shell::
+For MySQL/MariaDB in a ``mysql`` shell::
 
     mysql> CREATE DATABASE debug_toolbar;
     mysql> CREATE USER 'debug_toolbar'@'localhost' IDENTIFIED BY 'debug_toolbar';
@@ -101,8 +101,14 @@ Style
 -----
 
 The Django Debug Toolbar uses `black <https://github.com/psf/black>`__ to
-format code and additionally uses flake8 and isort. You can reformat the code
-using::
+format code and additionally uses flake8 and isort. The toolbar uses
+`pre-commit <https://pre-commit>`__ to automatically apply our style guidelines
+when a commit is made. If necessary this  can be bypassed using::
+
+    $ git commit --no-verify
+
+
+To reformat the code manually use::
 
     $ make style
 
