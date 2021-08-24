@@ -371,9 +371,9 @@ This version is compatible with Django 1.9 and requires Django 1.7 or later.
 New features
 ~~~~~~~~~~~~
 
-* New panel method :meth:`debug_toolbar.panels.Panel.generate_stats` allows panels
-  to only record stats when the toolbar is going to be inserted into the
-  response.
+* New panel method :meth:`debug_toolbar.panels.Panel.generate_stats` allows
+  panels to only record stats when the toolbar is going to be inserted into
+  the response.
 
 Bug fixes
 ~~~~~~~~~
