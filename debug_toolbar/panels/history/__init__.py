@@ -1,1 +1,1 @@
-from debug_toolbar.panels.history.panel import HistoryPanel  # noqa
+from debug_toolbar.panels.history.panel import HistoryPanel  # noqa: F401

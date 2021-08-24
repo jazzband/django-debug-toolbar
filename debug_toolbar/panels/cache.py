@@ -109,7 +109,7 @@ class CacheStatTracker(BaseCache):
     def has_key(self, *args, **kwargs):
         # Ignore flake8 rules for has_key since we need to support caches
         # that may be using has_key.
-        return self.cache.has_key(*args, **kwargs)  # noqa
+        return self.cache.has_key(*args, **kwargs)  # noqa: W601
 
     @send_signal
     def incr(self, *args, **kwargs):

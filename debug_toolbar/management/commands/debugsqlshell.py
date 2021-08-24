@@ -2,7 +2,7 @@ from time import time
 
 import django
 import sqlparse
-from django.core.management.commands.shell import Command  # noqa
+from django.core.management.commands.shell import Command  # noqa: F401
 from django.db import connection
 
 if connection.vendor == "postgresql" and django.VERSION >= (3, 0, 0):
