@@ -8,6 +8,7 @@ try:
 except ImportError:
     ConnectionProxy = None
 
+import django
 from django.conf import settings
 from django.core import cache
 from django.core.cache import (
@@ -140,10 +141,27 @@ class CacheStatTracker(BaseCache):
         return self.cache.decr_version(*args, **kwargs)
 
 
-class CacheHandlerPatch(CacheHandler):
-    def __getitem__(self, alias):
-        actual_cache = super().__getitem__(alias)
-        return CacheStatTracker(actual_cache)
+if django.VERSION < (3, 2):
+
+    class CacheHandlerPatch(CacheHandler):
+        def __getitem__(self, alias):
+            actual_cache = super().__getitem__(alias)
+            return CacheStatTracker(actual_cache)
+
+
+else:
+
+    class CacheHandlerPatch(CacheHandler):
+        def __init__(self, settings=None):
+            self._djdt_wrap = True
+            super().__init__(settings=settings)
+
+        def create_connection(self, alias):
+            actual_cache = super().create_connection(alias)
+            if self._djdt_wrap:
+                return CacheStatTracker(actual_cache)
+            else:
+                return actual_cache
 
 
 middleware_cache.caches = CacheHandlerPatch()
@@ -251,22 +269,40 @@ class CachePanel(Panel):
         )
 
     def enable_instrumentation(self):
-        if isinstance(middleware_cache.caches, CacheHandlerPatch):
-            cache.caches = middleware_cache.caches
+        if django.VERSION < (3, 2):
+            if isinstance(middleware_cache.caches, CacheHandlerPatch):
+                cache.caches = middleware_cache.caches
+            else:
+                cache.caches = CacheHandlerPatch()
         else:
-            cache.caches = CacheHandlerPatch()
+            for alias in cache.caches:
+                if not isinstance(cache.caches[alias], CacheStatTracker):
+                    cache.caches[alias] = CacheStatTracker(cache.caches[alias])
+
+            if not isinstance(middleware_cache.caches, CacheHandlerPatch):
+                middleware_cache.caches = cache.caches
 
         # Wrap the patched cache inside Django's ConnectionProxy
         if ConnectionProxy:
             cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
 
     def disable_instrumentation(self):
-        cache.caches = original_caches
-        cache.cache = original_cache
-        # While it can be restored to the original, any views that were
-        # wrapped with the cache_page decorator will continue to use a
-        # monkey patched cache.
-        middleware_cache.caches = original_caches
+        if django.VERSION < (3, 2):
+            cache.caches = original_caches
+            cache.cache = original_cache
+            # While it can be restored to the original, any views that were
+            # wrapped with the cache_page decorator will continue to use a
+            # monkey patched cache.
+            middleware_cache.caches = original_caches
+        else:
+            for alias in cache.caches:
+                if isinstance(cache.caches[alias], CacheStatTracker):
+                    cache.caches[alias] = cache.caches[alias].cache
+            if ConnectionProxy:
+                cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
+            # While it can be restored to the original, any views that were
+            # wrapped with the cache_page decorator will continue to use a
+            # monkey patched cache.
 
     def generate_stats(self, request, response):
         self.record_stats(
