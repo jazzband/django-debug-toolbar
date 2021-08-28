@@ -122,3 +122,37 @@ class ChecksTestCase(SimpleTestCase):
                 )
             ],
         )
+
+    @override_settings(
+        TEMPLATES=[
+            {
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "APP_DIRS": False,
+                "OPTIONS": {
+                    "context_processors": [
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.request",
+                        "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
+                    ]
+                },
+            },
+        ]
+    )
+    def test_templates_is_using_app_dirs_false(self):
+        errors = run_checks()
+        self.assertEqual(
+            errors,
+            [
+                Warning(
+                    "At least one DjangoTemplates TEMPLATES configuration "
+                    "needs to have APP_DIRS set to True.",
+                    hint=(
+                        "Use APP_DIRS=True for at least one "
+                        "django.template.backends.django.DjangoTemplates "
+                        "backend configuration."
+                    ),
+                    id="debug_toolbar.W006",
+                )
+            ],
+        )

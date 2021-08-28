@@ -9,6 +9,8 @@ Next version
   ``django.core.caches`` as a whole. The ``middleware.cache`` is still
   being patched as a whole in order to attempt to catch any cache
   usages before ``enable_instrumentation`` is called.
+* Add check ``W006`` to warn that the toolbar is incompatible with
+  ``TEMPLATES`` settings configurations with ``APP_DIRS`` set to ``False``.
 
 
 3.2.2 (2021-08-14)
