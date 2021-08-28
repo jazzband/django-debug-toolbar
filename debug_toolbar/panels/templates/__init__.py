@@ -1,1 +1,3 @@
-from debug_toolbar.panels.templates.panel import TemplatesPanel  # noqa: F401
+from debug_toolbar.panels.templates.panel import TemplatesPanel
+
+__all__ = ["TemplatesPanel"]

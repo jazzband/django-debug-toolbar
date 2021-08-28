@@ -1,1 +1,3 @@
-from debug_toolbar.panels.sql.panel import SQLPanel  # noqa: F401
+from debug_toolbar.panels.sql.panel import SQLPanel
+
+__all__ = ["SQLPanel"]
