@@ -220,7 +220,8 @@ Memcache
 
 URL: https://github.com/ross/memcache-debug-panel
 
-Path: ``memcache_toolbar.panels.memcache.MemcachePanel`` or ``memcache_toolbar.panels.pylibmc.PylibmcPanel``
+Path: ``memcache_toolbar.panels.memcache.MemcachePanel`` or
+``memcache_toolbar.panels.pylibmc.PylibmcPanel``
 
 This panel tracks memcached usage. It currently supports both the pylibmc and
 memcache libraries.
@@ -241,7 +242,8 @@ URL: https://github.com/robinedwards/django-debug-toolbar-neo4j-panel
 
 Path: ``neo4j_panel.Neo4jPanel``
 
-Trace neo4j rest API calls in your Django application, this also works for neo4django and neo4jrestclient, support for py2neo is on its way.
+Trace neo4j rest API calls in your Django application, this also works for
+neo4django and neo4jrestclient, support for py2neo is on its way.
 
 Pympler
 ~~~~~~~
@@ -250,7 +252,8 @@ URL: https://pythonhosted.org/Pympler/django.html
 
 Path: ``pympler.panels.MemoryPanel``
 
-Shows process memory information (virtual size, resident set size) and model instances for the current request.
+Shows process memory information (virtual size, resident set size) and model
+instances for the current request.
 
 Request History
 ~~~~~~~~~~~~~~~
@@ -259,7 +262,8 @@ URL: https://github.com/djsutho/django-debug-toolbar-request-history
 
 Path: ``ddt_request_history.panels.request_history.RequestHistoryPanel``
 
-Switch between requests to view their stats. Also adds support for viewing stats for AJAX requests.
+Switch between requests to view their stats. Also adds support for viewing
+stats for AJAX requests.
 
 Requests
 ~~~~~~~~
@@ -289,8 +293,9 @@ URL: https://github.com/node13h/django-debug-toolbar-template-profiler
 
 Path: ``template_profiler_panel.panels.template.TemplateProfilerPanel``
 
-Shows template render call duration and distribution on the timeline. Lightweight.
-Compatible with WSGI servers which reuse threads for multiple requests (Werkzeug).
+Shows template render call duration and distribution on the timeline.
+Lightweight. Compatible with WSGI servers which reuse threads for multiple
+requests (Werkzeug).
 
 Template Timings
 ~~~~~~~~~~~~~~~~
@@ -317,7 +322,8 @@ URL: https://github.com/giginet/django-debug-toolbar-vcs-info
 
 Path: ``vcs_info_panel.panels.GitInfoPanel``
 
-Displays VCS status (revision, branch, latest commit log and more) of your Django application.
+Displays VCS status (revision, branch, latest commit log and more) of your
+Django application.
 
 uWSGI Stats
 ~~~~~~~~~~~

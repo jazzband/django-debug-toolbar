@@ -273,7 +273,7 @@ class SQLPanelTestCase(BaseTestCase):
         """
         Test that the panel inserts locals() content.
         """
-        local_var = "<script>alert('test');</script>"  # noqa
+        local_var = "<script>alert('test');</script>"  # noqa: F841
         list(User.objects.filter(username="café".encode("utf-8")))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)

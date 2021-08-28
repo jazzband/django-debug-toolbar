@@ -2,7 +2,7 @@ from time import time
 
 import django
 import sqlparse
-from django.core.management.commands.shell import Command  # noqa
+from django.core.management.commands.shell import Command
 from django.db import connection
 
 if connection.vendor == "postgresql" and django.VERSION >= (3, 0, 0):
@@ -11,6 +11,11 @@ else:
     from django.db.backends import utils as base_module
 
 # 'debugsqlshell' is the same as the 'shell'.
+
+
+# Command is required to exist to be loaded via
+# django.core.managementload_command_class
+__all__ = ["Command", "PrintQueryWrapper"]
 
 
 class PrintQueryWrapper(base_module.CursorDebugWrapper):

@@ -201,7 +201,10 @@ Panel options
 
   **Without grouping**::
 
-    SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name"
+    SELECT
+        "auth_user"."id", "auth_user"."password", "auth_user"."last_login",
+        "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name",
+        "auth_user"."last_name"
     FROM "auth_user"
     WHERE "auth_user"."username" = '''test_username'''
     LIMIT 21

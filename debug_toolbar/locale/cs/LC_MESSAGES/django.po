@@ -1,7 +1,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
-# 
+#
+#
 # Translators:
 # Vlada Macek <macek@sandbox.cz>, 2013
 msgid ""
