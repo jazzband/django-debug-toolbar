@@ -4,11 +4,11 @@ Change log
 Next version
 ------------
 
-* Changed caching monkey-patching for Django3.2+ to iterate over existing
+* Changed cache monkey-patching for Django 3.2+ to iterate over existing
   caches and patch them individually rather than attempting to patch
   ``django.core.caches`` as a whole. The ``middleware.cache`` is still
   being patched as a whole in order to attempt to catch any cache
-  usages before ``enable_instrumentation`` is called. Fixes #1496
+  usages before ``enable_instrumentation`` is called.
 
 
 3.2.2 (2021-08-14)
