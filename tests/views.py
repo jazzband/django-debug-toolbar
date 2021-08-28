@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.response import TemplateResponse
@@ -30,6 +31,15 @@ def resolving_view(request, arg1, arg2):
 
 @cache_page(60)
 def cached_view(request):
+    return render(request, "base.html")
+
+
+def cached_low_level_view(request):
+    key = "spam"
+    value = cache.get(key)
+    if not value:
+        value = "eggs"
+        cache.set(key, value, 60)
     return render(request, "base.html")
 
 

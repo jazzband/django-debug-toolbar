@@ -6,6 +6,7 @@ import django
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
+from django.core.cache import cache
 from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -101,6 +102,25 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
         self.client.get("/cached_view/")
         self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 5)
+
+    def test_low_level_cache_view(self):
+        """Test cases when low level caching API is used within a request."""
+        self.client.get("/cached_low_level_view/")
+        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 2)
+        self.client.get("/cached_low_level_view/")
+        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
+
+    def test_cache_disable_instrumentation(self):
+        """
+        Verify that middleware cache usages before and after
+        DebugToolbarMiddleware are not counted.
+        """
+        self.assertIsNone(cache.set("UseCacheAfterToolbar.before", None))
+        self.assertIsNone(cache.set("UseCacheAfterToolbar.after", None))
+        self.client.get("/execute_sql/")
+        self.assertEqual(cache.get("UseCacheAfterToolbar.before"), 1)
+        self.assertEqual(cache.get("UseCacheAfterToolbar.after"), 1)
+        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 0)
 
     def test_is_toolbar_request(self):
         self.request.path = "/__debug__/render_panel/"
@@ -376,7 +396,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"DISABLE_PANELS": set()})
-    def test_incercept_redirects(self):
+    def test_intcercept_redirects(self):
         response = self.client.get("/redirect/")
         self.assertEqual(response.status_code, 200)
         # Link to LOCATION header.

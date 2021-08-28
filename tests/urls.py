@@ -20,6 +20,7 @@ urlpatterns = [
     path("new_user/", views.new_user),
     path("execute_sql/", views.execute_sql),
     path("cached_view/", views.cached_view),
+    path("cached_low_level_view/", views.cached_low_level_view),
     path("json_view/", views.json_view),
     path("redirect/", views.redirect_view),
     path("login_without_redirect/", LoginView.as_view(redirect_field_name=None)),
