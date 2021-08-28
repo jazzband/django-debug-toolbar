@@ -23,6 +23,20 @@ def check_middleware(app_configs, **kwargs):
     gzip_index = None
     debug_toolbar_indexes = []
 
+    if all(not config.get("APP_DIRS", False) for config in settings.TEMPLATES):
+        errors.append(
+            Warning(
+                "At least one DjangoTemplates TEMPLATES configuration needs "
+                "to have APP_DIRS set to True.",
+                hint=(
+                    "Use APP_DIRS=True for at least one "
+                    "django.template.backends.django.DjangoTemplates "
+                    "backend configuration."
+                ),
+                id="debug_toolbar.W006",
+            )
+        )
+
     # If old style MIDDLEWARE_CLASSES is being used, report an error.
     if settings.is_overridden("MIDDLEWARE_CLASSES"):
         errors.append(
