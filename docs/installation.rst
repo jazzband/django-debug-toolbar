@@ -38,8 +38,8 @@ Make sure that ``'django.contrib.staticfiles'`` is `set up properly
     STATIC_URL = '/static/'
 
 Make sure your ``TEMPLATES`` setting contains a ``DjangoTemplates`` backend
-whose ``APP_DIRS`` options is set to ``True``. It’s in there by default, so
-you’ll only need to change this if you’ve changed that setting.
+whose ``APP_DIRS`` options is set to ``True``. It's in there by default, so
+you'll only need to change this if you've changed that setting.
 
 
 If you're upgrading from a previous version, you should review the
