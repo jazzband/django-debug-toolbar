@@ -110,6 +110,18 @@ class DebugToolbarTestCase(BaseTestCase):
         self.client.get("/cached_low_level_view/")
         self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
 
+    def test_cache_disable_instrumentation(self):
+        """
+        Verify that middleware cache usages before and after
+        DebugToolbarMiddleware are not counted.
+        """
+        self.assertIsNone(cache.set("UseCacheAfterToolbar.before", None))
+        self.assertIsNone(cache.set("UseCacheAfterToolbar.after", None))
+        self.client.get("/execute_sql/")
+        self.assertEqual(cache.get("UseCacheAfterToolbar.before"), 1)
+        self.assertEqual(cache.get("UseCacheAfterToolbar.after"), 1)
+        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 0)
+
     def test_is_toolbar_request(self):
         self.request.path = "/__debug__/render_panel/"
         self.assertTrue(self.toolbar.is_toolbar_request(self.request))
@@ -384,7 +396,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"DISABLE_PANELS": set()})
-    def test_incercept_redirects(self):
+    def test_intcercept_redirects(self):
         response = self.client.get("/redirect/")
         self.assertEqual(response.status_code, 200)
         # Link to LOCATION header.
@@ -560,18 +572,6 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
                 "#djDebugWindow code"
             )
         )
-
-    def test_cache_disable_instrumentation(self):
-        """
-        Verify that middleware cache usages before and after
-        DebugToolbarMiddleware are not counted.
-        """
-        self.assertIsNone(cache.set("UseCacheAfterToolbar.before", None))
-        self.assertIsNone(cache.set("UseCacheAfterToolbar.after", None))
-        self.get("/execute_sql/")
-        self.assertEqual(cache.get("UseCacheAfterToolbar.before"), 1)
-        self.assertEqual(cache.get("UseCacheAfterToolbar.after"), 1)
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 0)
 
     def test_sql_action_and_go_back(self):
         self.get("/execute_sql/")
