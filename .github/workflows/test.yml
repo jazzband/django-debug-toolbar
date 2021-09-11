@@ -9,11 +9,11 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10.0-rc.1']
 
     services:
       mariadb:
-        image: mariadb:10.3
+        image: mariadb
         env:
           MYSQL_ROOT_PASSWORD: debug_toolbar
         options: >-
@@ -76,11 +76,11 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10.0-rc.1']
 
     services:
       postgres:
-        image: 'postgres:9.5'
+        image: postgres
         env:
           POSTGRES_DB: debug_toolbar
           POSTGRES_USER: debug_toolbar
@@ -143,7 +143,7 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10.0-rc.1']
 
     steps:
     - uses: actions/checkout@v2
