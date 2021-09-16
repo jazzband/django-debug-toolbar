@@ -45,7 +45,8 @@ def _request_context_bind_template(self, template):
         name = "{}.{}".format(processor.__module__, processor.__name__)
         context = processor(self.request)
         self.context_processors[name] = context
-        updates.update(context)
+        if context:
+            updates.update(context)
     self.dicts[self._processors_index] = updates
 
     try:
