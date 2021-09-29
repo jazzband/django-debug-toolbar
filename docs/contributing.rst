@@ -126,7 +126,7 @@ Translations
 ------------
 
 Translation efforts are coordinated on `Transifex
-<https://www.transifex.net/projects/p/django-debug-toolbar/>`_.
+<https://www.transifex.com/projects/p/django-debug-toolbar/>`_.
 
 Help translate the Debug Toolbar in your language!
 
