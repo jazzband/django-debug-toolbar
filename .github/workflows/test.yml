@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10.0-rc.1']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
 
     services:
       mariadb:
@@ -76,7 +76,7 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10.0-rc.1']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
 
     services:
       postgres:
@@ -143,7 +143,7 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10.0-rc.1']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
 
     steps:
     - uses: actions/checkout@v2
