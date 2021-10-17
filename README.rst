@@ -1,5 +1,5 @@
 ====================
-Django Debug Toolbar
+Django debug toolbar
 ====================
 
 .. image:: https://jazzband.co/static/img/badge.svg
