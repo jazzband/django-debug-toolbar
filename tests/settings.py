@@ -101,6 +101,14 @@ DATABASES = {
     },
 }
 
+if os.getenv("DB_BACKEND") == "pymysql":
+    import pymysql
+
+    pymysql.install_as_MySQLdb()
+    DATABASES["default"]["ENGINE"] = "django.{}db.backends.mysql".format(
+        "contrib.gis." if USE_GIS else ""
+    )
+
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Debug Toolbar configuration

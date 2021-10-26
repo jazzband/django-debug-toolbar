@@ -65,6 +65,15 @@ jobs:
         DB_HOST: 127.0.0.1
         DB_PORT: 3306
 
+    - name: Test pymysql with tox
+      run: tox
+      env:
+        DB_BACKEND: pymysql
+        DB_USER: root
+        DB_PASSWORD: debug_toolbar
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
