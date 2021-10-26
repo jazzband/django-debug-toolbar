@@ -299,6 +299,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
     @unittest.skipUnless(settings.USE_GIS, "Test only valid with gis support")
     def test_sql_explain_gis(self):
         from django.contrib.gis.geos import GEOSGeometry
+
         from .models import Location
 
         db_table = Location._meta.db_table
