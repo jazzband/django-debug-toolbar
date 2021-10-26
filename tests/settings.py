@@ -108,6 +108,7 @@ if os.getenv("DB_BACKEND") == "pymysql":
     DATABASES["default"]["ENGINE"] = "django.{}db.backends.mysql".format(
         "contrib.gis." if USE_GIS else ""
     )
+    DATABASES["default"]["NAME"] = DATABASES["default"]["ENGINE"] + "_pymysql"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
