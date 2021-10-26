@@ -106,14 +106,14 @@ option.  This option allows you to specify a custom function for this purpose.
 .. warning::
 
     If using Docker the following will set your `INTERNAL_IPS` correctly only if you are in Debug mode.::
-    
+
         if DEBUG:
             import os  # only if you haven't already imported this
             import socket  # only if you haven't already imported this
             hostname, _, ips = socker.gethostbyname_ex(socket.gethostname())
             INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
-            
-           
+
+
 Troubleshooting
 ---------------
 
