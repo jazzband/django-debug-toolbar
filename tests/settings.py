@@ -102,9 +102,40 @@ DATABASES = {
 }
 
 if os.getenv("DB_BACKEND") == "pymysql":
+    import django
     import pymysql
 
     pymysql.install_as_MySQLdb()
+    pymysql.version_info = (1, 3, 13, "final", 0)
+    if django.VERSION[:2] == (2, 2):
+        # https://github.com/PyMySQL/PyMySQL/issues/790
+        from functools import partialmethod
+
+        from django.db.backends.mysql.operations import DatabaseOperations
+        from django.db.backends.mysql.schema import DatabaseSchemaEditor
+        from django.utils.encoding import force_str
+
+        def last_executed_query(self, cursor, sql, params):
+            return force_str(getattr(cursor, "_executed", None), errors="replace")
+
+        setattr(
+            DatabaseOperations,
+            "last_executed_query",
+            partialmethod(last_executed_query),
+        )
+
+        def quote_value(self, value):
+            self.connection.ensure_connection()
+            # MySQLdb escapes to string, PyMySQL to bytes.
+            quoted = self.connection.connection.escape(
+                value, self.connection.connection.encoders
+            )
+            if isinstance(value, str) and isinstance(quoted, bytes):
+                quoted = quoted.decode()
+            return quoted
+
+        DatabaseSchemaEditor.quote_value = quote_value
+
     DATABASES["default"]["ENGINE"] = "django.{}db.backends.mysql".format(
         "contrib.gis." if USE_GIS else ""
     )
