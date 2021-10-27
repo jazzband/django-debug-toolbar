@@ -110,7 +110,7 @@ option.  This option allows you to specify a custom function for this purpose.
         if DEBUG:
             import os  # only if you haven't already imported this
             import socket  # only if you haven't already imported this
-            hostname, _, ips = socker.gethostbyname_ex(socket.gethostname())
+            hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
             INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
 
 
