@@ -1,6 +1,11 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    # Run weekly on Saturday
+    - cron: '37 3 * * SAT'
 
 jobs:
   mysql:
