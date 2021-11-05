@@ -138,7 +138,12 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 3)
 
-        if django.VERSION >= (3, 1):
+        if (
+            django.VERSION >= (3, 1)
+            # Django 4.1 started passing true/false back for boolean
+            # comparisons in MySQL.
+            and not (django.VERSION >= (4, 1) and connection.vendor == "mysql")
+        ):
             self.assertEqual(
                 tuple([q[1]["params"] for q in self.panel._queries]),
                 ('["Foo"]', "[10, 1]", '["2017-12-22 16:07:01"]'),
