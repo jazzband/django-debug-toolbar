@@ -11,11 +11,11 @@ repos:
     hooks:
     -   id: flake8
 -   repo: https://github.com/pycqa/doc8
-    rev: 0.9.1
+    rev: 0.10.1
     hooks:
     -   id: doc8
 -   repo: https://github.com/pycqa/isort
-    rev: 5.10.0
+    rev: 5.10.1
     hooks:
     -   id: isort
 -   repo: https://github.com/pre-commit/pygrep-hooks
