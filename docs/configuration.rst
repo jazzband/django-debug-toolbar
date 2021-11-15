@@ -123,6 +123,12 @@ Toolbar options
   the callback. This allows reusing the callback to verify access to panel
   views requested via AJAX.
 
+  .. warning::
+
+     Please note that the debug toolbar isn't hardened for use in production
+     environments or on public servers. You should be aware of the implications
+     to the security of your servers when using your own callback.
+
 Panel options
 ~~~~~~~~~~~~~
 
