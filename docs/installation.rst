@@ -1,11 +1,14 @@
 Installation
 ============
 
+Process
+-------
+
 Each of the following steps needs to be configured for the Debug Toolbar to be
 fully functional.
 
-Getting the code
-----------------
+1. Install the Package
+^^^^^^^^^^^^^^^^^^^^^^
 
 The recommended way to install the Debug Toolbar is via pip_::
 
@@ -21,34 +24,60 @@ instead with the following command::
 
      $ python -m pip install -e git+https://github.com/jazzband/django-debug-toolbar.git#egg=django-debug-toolbar
 
-Prerequisites
--------------
-
-Make sure that ``'django.contrib.staticfiles'`` is `set up properly
-<https://docs.djangoproject.com/en/stable/howto/static-files/>`_ and add
-``'debug_toolbar'`` to your ``INSTALLED_APPS`` setting::
-
-    INSTALLED_APPS = [
-        # ...
-        'django.contrib.staticfiles',
-        # ...
-        'debug_toolbar',
-    ]
-
-    STATIC_URL = '/static/'
-
-Make sure your ``TEMPLATES`` setting contains a ``DjangoTemplates`` backend
-whose ``APP_DIRS`` options is set to ``True``. It's in there by default, so
-you'll only need to change this if you've changed that setting.
-
-
 If you're upgrading from a previous version, you should review the
 :doc:`change log <changes>` and look for specific upgrade instructions.
 
-Setting up URLconf
-------------------
+2. Check for Prerequisites
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the Debug Toolbar's URLs to your project's URLconf::
+The Debug Toolbar requires two things from core Django. These are already
+configured in Django’s default ``startproject`` template, so in most cases you
+will already have these set up.
+
+First, ensure that ``'django.contrib.staticfiles'`` is in your
+``INSTALLED_APPS`` setting, and `configured properly
+<https://docs.djangoproject.com/en/stable/howto/static-files/>`_:
+
+.. code-block:: python
+
+    INSTALLED_APPS = [
+        # ...
+        "django.contrib.staticfiles",
+        # ...
+    ]
+
+    STATIC_URL = "static/"
+
+Second, ensure that your ``TEMPLATES`` setting contains a
+``DjangoTemplates`` backend whose ``APP_DIRS`` options is set to ``True``:
+
+.. code-block:: python
+
+    TEMPLATES = [
+        {
+            "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "APP_DIRS": True,
+            # ...
+        }
+    ]
+
+3. Install the App
+^^^^^^^^^^^^^^^^^^
+
+Add ``"debug_toolbar"`` to your ``INSTALLED_APPS`` setting::
+
+    INSTALLED_APPS = [
+        # ...
+        "debug_toolbar",
+        # ...
+    ]
+
+4. Add the URLs
+^^^^^^^^^^^^^^^
+
+Add django-debug-toolbar's URLs to your project's URLconf:
+
+.. code-block:: python
 
     import debug_toolbar
     from django.urls import include, path
@@ -62,15 +91,17 @@ This example uses the ``__debug__`` prefix, but you can use any prefix that
 doesn't clash with your application's URLs. Note the lack of quotes around
 ``debug_toolbar.urls``.
 
-Enabling middleware
--------------------
+5. Add the Middleware
+^^^^^^^^^^^^^^^^^^^^^
 
-The Debug Toolbar is mostly implemented in a middleware. Enable it in your
-settings module as follows::
+The Debug Toolbar is mostly implemented in a middleware. Add it to your
+``MIDDLEWARE`` setting:
+
+.. code-block:: python
 
     MIDDLEWARE = [
         # ...
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
         # ...
     ]
 
@@ -83,35 +114,36 @@ settings module as follows::
 
 .. _internal-ips:
 
-Configuring Internal IPs
-------------------------
+6. Configure Internal IPs
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Debug Toolbar is shown only if your IP address is listed in the
+The Debug Toolbar is shown only if your IP address is listed in Django’s
 :setting:`INTERNAL_IPS` setting.  This means that for local
-development, you *must* add ``'127.0.0.1'`` to :setting:`INTERNAL_IPS`;
-you'll need to create this setting if it doesn't already exist in your
-settings module::
+development, you *must* add ``"127.0.0.1"`` to :setting:`INTERNAL_IPS`.
+You'll need to create this setting if it doesn't already exist in your
+settings module:
+
+.. code-block:: python
 
    INTERNAL_IPS = [
        # ...
-       '127.0.0.1',
+       "127.0.0.1",
        # ...
    ]
 
 You can change the logic of determining whether or not the Debug Toolbar
 should be shown with the :ref:`SHOW_TOOLBAR_CALLBACK <SHOW_TOOLBAR_CALLBACK>`
-option.  This option allows you to specify a custom function for this purpose.
+option.
 
 .. warning::
 
-    If using Docker the following will set your `INTERNAL_IPS` correctly only if you are in Debug mode.::
+    If using Docker the following will set your ``INTERNAL_IPS`` correctly in Debug mode::
 
         if DEBUG:
             import os  # only if you haven't already imported this
             import socket  # only if you haven't already imported this
             hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
             INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
-
 
 Troubleshooting
 ---------------
