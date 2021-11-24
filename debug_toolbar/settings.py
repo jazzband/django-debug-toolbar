@@ -2,13 +2,6 @@ from functools import lru_cache
 
 from django.conf import settings
 
-# Always import this module as follows:
-# from debug_toolbar import settings [as dt_settings]
-
-# Don't import directly CONFIG or PANELs, or you will miss changes performed
-# with override_settings in tests.
-
-
 CONFIG_DEFAULTS = {
     # Toolbar options
     "DISABLE_PANELS": {
