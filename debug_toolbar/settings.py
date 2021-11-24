@@ -2,7 +2,6 @@ from functools import lru_cache
 
 from django.conf import settings
 
-
 CONFIG_DEFAULTS = {
     # Toolbar options
     "DISABLE_PANELS": {
