@@ -221,4 +221,4 @@ jobs:
         python -m pip install --upgrade tox
 
     - name: Test with tox
-      run: tox -e docs,style,packaging
+      run: tox -e docs,packaging

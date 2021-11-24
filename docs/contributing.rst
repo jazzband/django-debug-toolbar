@@ -103,14 +103,19 @@ Style
 The Django Debug Toolbar uses `black <https://github.com/psf/black>`__ to
 format code and additionally uses flake8 and isort. The toolbar uses
 `pre-commit <https://pre-commit>`__ to automatically apply our style guidelines
-when a commit is made. If necessary this  can be bypassed using::
+when a commit is made. Set up pre-commit before committing with:
+
+    $ pre-commit install
+
+If necessary you can bypass pre-commit locally with::
 
     $ git commit --no-verify
 
+Note that it runs on CI.
 
 To reformat the code manually use::
 
-    $ make style
+    $ pre-commit run --all-files
 
 Patches
 -------
