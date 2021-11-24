@@ -10,7 +10,5 @@ docs/_build
 example/db.sqlite3
 htmlcov
 .tox
-node_modules
-package-lock.json
 geckodriver.log
 coverage.xml
