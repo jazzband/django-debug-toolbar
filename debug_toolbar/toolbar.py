@@ -143,6 +143,8 @@ class DebugToolbar:
         """
         Determine if the request is for a DebugToolbar view.
         """
+        from debug_toolbar.urls import app_name
+
         # The primary caller of this function is in the middleware which may
         # not have resolver_match set.
         try:
@@ -152,7 +154,3 @@ class DebugToolbar:
         except Resolver404:
             return False
         return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
-
-
-app_name = "djdt"
-urlpatterns = DebugToolbar.get_urls()
