@@ -14,6 +14,13 @@ class DebugToolbarConfig(AppConfig):
     name = "debug_toolbar"
     verbose_name = _("Debug Toolbar")
 
+    def ready(self):
+        from debug_toolbar.toolbar import DebugToolbar
+
+        # Import the panels when the app is ready. This allows panels
+        # like CachePanel to enable the instrumentation immediately.
+        DebugToolbar.get_panel_classes()
+
 
 @register
 def check_middleware(app_configs, **kwargs):
