@@ -344,7 +344,7 @@ msgstr "Anfrage-Header"
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr "Name"
+msgstr "Schlüssel"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
