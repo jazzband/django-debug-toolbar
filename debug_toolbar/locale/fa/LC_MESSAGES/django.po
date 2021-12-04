@@ -3,28 +3,24 @@
 #
 #
 # Translators:
-# jcatalan <catalanojuan@gmail.com>, 2014
-# Daniel Iglesias <igledaniel@gmail.com>, 2021
-# Leonardo J. Caballero G. <leonardocaballero@gmail.com>, 2013-2014,2020
-# marcelor <marcelor@gmail.com>, 2013
-# Sergio Infante <rsinfante@gmail.com>, 2015
+# Ali Soltani <alisoltanics@gmail.com>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-14 10:25-0500\n"
-"PO-Revision-Date: 2021-10-01 11:10+0000\n"
-"Last-Translator: Daniel Iglesias <igledaniel@gmail.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/django-debug-toolbar/django-debug-toolbar/language/es/)\n"
+"PO-Revision-Date: 2021-09-30 18:42+0000\n"
+"Last-Translator: Ali Soltani <alisoltanics@gmail.com>\n"
+"Language-Team: Persian (http://www.transifex.com/django-debug-toolbar/django-debug-toolbar/language/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: fa\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: apps.py:15
 msgid "Debug Toolbar"
-msgstr "Barra de herramientas de Depuración"
+msgstr "نوار ابزار دیباگ"
 
 #: panels/cache.py:227
 msgid "Cache"
@@ -34,129 +30,129 @@ msgstr "Cache"
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] "%(cache_calls)d llamada en %(time).2fms"
-msgstr[1] "%(cache_calls)d llamadas en %(time).2fms"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/cache.py:246
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
-msgstr[0] "%(count)d llamadas al Cache desde el backend"
-msgstr[1] "%(count)d llamadas al Caché desde backends"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/headers.py:33
 msgid "Headers"
-msgstr "Encabezados"
+msgstr "هدر ها"
 
 #: panels/history/panel.py:20 panels/history/panel.py:21
 msgid "History"
-msgstr "Historial"
+msgstr "تاریخچه"
 
 #: panels/logging.py:63
 msgid "Logging"
-msgstr "Registros"
+msgstr "لاگ"
 
 #: panels/logging.py:69
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] "%(count)s mensaje"
-msgstr[1] "%(count)s mensajes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/logging.py:73
 msgid "Log messages"
-msgstr "Mensajes del registro"
+msgstr "پیام های لاگ"
 
 #: panels/profiling.py:150
 msgid "Profiling"
-msgstr "Análisis de rendimiento"
+msgstr "نمایه سازی"
 
 #: panels/redirects.py:14
 msgid "Intercept redirects"
-msgstr "Interceptar re-direcionamiento"
+msgstr ""
 
 #: panels/request.py:16
 msgid "Request"
-msgstr "Petición"
+msgstr "ریکوئست"
 
 #: panels/request.py:36
 msgid "<no view>"
-msgstr "<sin vista>"
+msgstr ""
 
 #: panels/request.py:53
 msgid "<unavailable>"
-msgstr "<no disponible>"
+msgstr ""
 
 #: panels/settings.py:24
 msgid "Settings"
-msgstr "Configuraciones"
+msgstr "تنظیمات"
 
 #: panels/settings.py:27
 #, python-format
 msgid "Settings from %s"
-msgstr "Valores procedentes de %s"
+msgstr "تنظیمات از %s"
 
 #: panels/signals.py:58
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] "%(num_receivers)d receptor de 1 señal"
-msgstr[1] "%(num_receivers)d receptores de 1 señal"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/signals.py:66
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] "%(num_receivers)d receptor de %(num_signals)d señales"
-msgstr[1] "%(num_receivers)d receptores de %(num_signals)d señales"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/signals.py:73
 msgid "Signals"
-msgstr "Señales"
+msgstr "signal ها"
 
 #: panels/sql/panel.py:24
 msgid "Autocommit"
-msgstr "Autocommit"
+msgstr "کامیت خودکار"
 
 #: panels/sql/panel.py:25
 msgid "Read uncommitted"
-msgstr "Leer cambios tentativos"
+msgstr ""
 
 #: panels/sql/panel.py:26
 msgid "Read committed"
-msgstr "Leer cambios permanentes"
+msgstr ""
 
 #: panels/sql/panel.py:27
 msgid "Repeatable read"
-msgstr "Lectura repetible"
+msgstr ""
 
 #: panels/sql/panel.py:28
 msgid "Serializable"
-msgstr "Serializable"
+msgstr "قابل سریالایز شدن"
 
 #: panels/sql/panel.py:40
 msgid "Idle"
-msgstr "Inactivo"
+msgstr "IDLE"
 
 #: panels/sql/panel.py:41
 msgid "Active"
-msgstr "Activo"
+msgstr "فعال"
 
 #: panels/sql/panel.py:42
 msgid "In transaction"
-msgstr "En transacción"
+msgstr "در تراکنش"
 
 #: panels/sql/panel.py:43
 msgid "In error"
-msgstr "En error"
+msgstr "در خطا"
 
 #: panels/sql/panel.py:44
 msgid "Unknown"
-msgstr "Desconocido"
+msgstr "ناشناخته"
 
 #: panels/sql/panel.py:109
 msgid "SQL"
-msgstr "SQL"
+msgstr "اس کیو ال"
 
 #: panels/sql/panel.py:114
 #, python-format
@@ -175,41 +171,41 @@ msgstr[1] ""
 #: panels/staticfiles.py:85
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr "Archivos estáticos (%(num_found)s encontrados, %(num_used)s en uso)"
+msgstr ""
 
 #: panels/staticfiles.py:106
 msgid "Static files"
-msgstr "Archivos estáticos"
+msgstr "فایل های استاتیک"
 
 #: panels/staticfiles.py:112
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] "%(num_used)s archivo usado"
-msgstr[1] "%(num_used)s archivos usados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: panels/templates/panel.py:144
 msgid "Templates"
-msgstr "Plantillas"
+msgstr "تمپلیت ها"
 
 #: panels/templates/panel.py:149
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
-msgstr "Plantillas (%(num_templates)s renderizadas)"
+msgstr "تمپلیت ها (%(num_templates)s rendered)"
 
 #: panels/templates/panel.py:181
 msgid "No origin"
-msgstr "Sin origen"
+msgstr "بدون origin"
 
 #: panels/timer.py:25
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
-msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
+msgstr ""
 
 #: panels/timer.py:30
 #, python-format
 msgid "Total: %0.2fms"
-msgstr "Total: %0.2fms"
+msgstr ""
 
 #: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
 #: templates/debug_toolbar/panels/logging.html:7
@@ -217,137 +213,137 @@ msgstr "Total: %0.2fms"
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
-msgstr "Tiempo"
+msgstr "زمان"
 
 #: panels/timer.py:44
 msgid "User CPU time"
-msgstr "Tiempo en CPU de usuario"
+msgstr "زمان سی پی یو کاربر"
 
 #: panels/timer.py:44
 #, python-format
 msgid "%(utime)0.3f msec"
-msgstr "%(utime)0.3f mseg"
+msgstr ""
 
 #: panels/timer.py:45
 msgid "System CPU time"
-msgstr "Tiempo en CPU del sistema"
+msgstr "زمان CPU سیستم"
 
 #: panels/timer.py:45
 #, python-format
 msgid "%(stime)0.3f msec"
-msgstr "%(stime)0.3f mseg"
+msgstr ""
 
 #: panels/timer.py:46
 msgid "Total CPU time"
-msgstr "Tiempo total de CPU"
+msgstr "زمان کل سی پی یو"
 
 #: panels/timer.py:46
 #, python-format
 msgid "%(total)0.3f msec"
-msgstr "%(total)0.3f mseg"
+msgstr "%(total)0.3f میلی ثانیه"
 
 #: panels/timer.py:47
 msgid "Elapsed time"
-msgstr "Tiempo transcurrido"
+msgstr "زمان سپری شده"
 
 #: panels/timer.py:47
 #, python-format
 msgid "%(total_time)0.3f msec"
-msgstr "%(total_time)0.3f mseg"
+msgstr ""
 
 #: panels/timer.py:49
 msgid "Context switches"
-msgstr "Cambios de contexto"
+msgstr ""
 
 #: panels/timer.py:50
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
-msgstr "%(vcsw)d voluntario, %(ivcsw)d involuntario"
+msgstr ""
 
 #: panels/versions.py:19
 msgid "Versions"
-msgstr "Versiones"
+msgstr "ورژن ها"
 
 #: templates/debug_toolbar/base.html:18
 msgid "Hide toolbar"
-msgstr "Ocutar barra de herramientas"
+msgstr "پنهان کردن toolbar"
 
 #: templates/debug_toolbar/base.html:18
 msgid "Hide"
-msgstr "Ocultar"
+msgstr "پنهان کردن"
 
 #: templates/debug_toolbar/base.html:25
 msgid "Show toolbar"
-msgstr "Mostrar barra de herramientas"
+msgstr "نمایش toolbar"
 
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Disable for next and successive requests"
-msgstr "Deshabilitar para el próximo y sucesivos peticiones"
+msgstr "غیر فعال کردن برای ریکوئست های پی در پی"
 
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Enable for next and successive requests"
-msgstr "Habilitar para el próximo y sucesivos peticiones"
+msgstr "فعال کردن برای ریکوئست های بعدی و پی در پی"
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
-msgstr "Resúmen"
+msgstr "خلاصه"
 
 #: templates/debug_toolbar/panels/cache.html:6
 msgid "Total calls"
-msgstr "Llamadas totales"
+msgstr "تعداد نهایی کال کردن ها"
 
 #: templates/debug_toolbar/panels/cache.html:7
 msgid "Total time"
-msgstr "Tiempo total"
+msgstr "زمان نهایی"
 
 #: templates/debug_toolbar/panels/cache.html:8
 msgid "Cache hits"
-msgstr "Aciertos de caché"
+msgstr "Cache hits"
 
 #: templates/debug_toolbar/panels/cache.html:9
 msgid "Cache misses"
-msgstr "Errores de caché"
+msgstr "Cache misses\n "
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
-msgstr "Comandos"
+msgstr "دستورات"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
-msgstr "Llamadas"
+msgstr "call ها"
 
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:36
 msgid "Time (ms)"
-msgstr "Tiempo (ms)"
+msgstr "زمان (میلی ثانیه)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
-msgstr "Tipo"
+msgstr "نوع"
 
 #: templates/debug_toolbar/panels/cache.html:45
 #: templates/debug_toolbar/panels/request.html:8
 msgid "Arguments"
-msgstr "Argumentos"
+msgstr "آرگومان ها"
 
 #: templates/debug_toolbar/panels/cache.html:46
 #: templates/debug_toolbar/panels/request.html:9
 msgid "Keyword arguments"
-msgstr "Argumentos por palabra clave"
+msgstr "آرگومان های کیورد"
 
 #: templates/debug_toolbar/panels/cache.html:47
 msgid "Backend"
-msgstr "Backend"
+msgstr "بک اند"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
-msgstr "Encabezados de peticiones"
+msgstr "هدر های ریکوئست"
 
 #: templates/debug_toolbar/panels/headers.html:8
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr "Clave"
+msgstr "کلید"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -357,153 +353,153 @@ msgstr "Clave"
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr "Valor"
+msgstr "مقدار"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
-msgstr "Encabezados de respuesta"
+msgstr "هدر های ریسپانس"
 
 #: templates/debug_toolbar/panels/headers.html:41
 msgid "WSGI environ"
-msgstr "Entorno WSGI"
+msgstr "محیط WSGI"
 
 #: templates/debug_toolbar/panels/headers.html:43
 msgid ""
 "Since the WSGI environ inherits the environment of the server, only a "
 "significant subset is shown below."
-msgstr "Ya que el entorno WSGI hereda el entorno del servidor, solo un subconjunto significativo es mostrado más abajo."
+msgstr "از آنجا که محیط WSGI محیط سرور را به ارث می برد ، فقط یک زیر مجموعه مهم در زیر نشان داده شده است."
 
 #: templates/debug_toolbar/panels/history.html:10
 msgid "Method"
-msgstr "Método"
+msgstr "متد"
 
 #: templates/debug_toolbar/panels/history.html:11
 #: templates/debug_toolbar/panels/staticfiles.html:43
 msgid "Path"
-msgstr "Ruta"
+msgstr "Path"
 
 #: templates/debug_toolbar/panels/history.html:12
 msgid "Request Variables"
-msgstr "Variables de la petición"
+msgstr "متغیر های ریکوئست"
 
 #: templates/debug_toolbar/panels/history.html:13
 msgid "Status"
-msgstr "Estado"
+msgstr "وضعیت"
 
 #: templates/debug_toolbar/panels/history.html:14
 #: templates/debug_toolbar/panels/sql.html:37
 msgid "Action"
-msgstr "Acción"
+msgstr "اکشن"
 
 #: templates/debug_toolbar/panels/history_tr.html:22
 #: templates/debug_toolbar/panels/request_variables.html:10
 msgid "Variable"
-msgstr "Variable"
+msgstr "متغیر"
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr "Nivel"
+msgstr "سطح"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
-msgstr "Canal"
+msgstr "کانال"
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr "Mensaje"
+msgstr "پیام"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Location"
-msgstr "Ubicación"
+msgstr "مکان"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
-msgstr "No hay mensajes registrados"
+msgstr "پیامی لاگ نشده"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
-msgstr "Llamar"
+msgstr "Call"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "CumTime"
-msgstr "TiempoAcum"
+msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:7
 #: templates/debug_toolbar/panels/profiling.html:9
 msgid "Per"
-msgstr "Por"
+msgstr "بر"
 
 #: templates/debug_toolbar/panels/profiling.html:8
 msgid "TotTime"
-msgstr "TiempoTot"
+msgstr "زمان نهایی"
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr "Contar"
+msgstr "تعداد"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr "Información de Vista"
+msgstr "اطلاعات View"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
-msgstr "Función vista"
+msgstr "تابع Viw"
 
 #: templates/debug_toolbar/panels/request.html:10
 msgid "URL name"
-msgstr "Nombre de dirección URL"
+msgstr "نام URL"
 
 #: templates/debug_toolbar/panels/request.html:24
 msgid "Cookies"
-msgstr "Cookies"
+msgstr "کوکی ها"
 
 #: templates/debug_toolbar/panels/request.html:27
 msgid "No cookies"
-msgstr "Sin cookies"
+msgstr "کوکی ای وجود ندارد"
 
 #: templates/debug_toolbar/panels/request.html:31
 msgid "Session data"
-msgstr "Datos de sesión"
+msgstr "دیتای سشن"
 
 #: templates/debug_toolbar/panels/request.html:34
 msgid "No session data"
-msgstr "Sin datos de sesión"
+msgstr "دیتای سشن وجود ندارد"
 
 #: templates/debug_toolbar/panels/request.html:38
 msgid "GET data"
-msgstr "Datos del GET"
+msgstr "دیتای GET"
 
 #: templates/debug_toolbar/panels/request.html:41
 msgid "No GET data"
-msgstr "Sin datos GET"
+msgstr "دیتای GET وجود ندارد"
 
 #: templates/debug_toolbar/panels/request.html:45
 msgid "POST data"
-msgstr "Datos del POST"
+msgstr "دیتای POST"
 
 #: templates/debug_toolbar/panels/request.html:48
 msgid "No POST data"
-msgstr "Sin datos POST"
+msgstr "دیتای POST وجود ندارد"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr "Configuración"
+msgstr "تنظیمات"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr "Señal"
+msgstr "Signal"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Receivers"
-msgstr "Receptores"
+msgstr "Receiver ها"
 
 #: templates/debug_toolbar/panels/sql.html:6
 #, python-format
 msgid "%(num)s query"
 msgid_plural "%(num)s queries"
-msgstr[0] "%(num)s consulta"
-msgstr[1] "%(num)s consultas"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/sql.html:8
 #, python-format
@@ -517,89 +513,89 @@ msgstr ""
 msgid ""
 "and <abbr title=\"Duplicate queries are identical to each other: they "
 "execute exactly the same SQL and parameters.\">%(dupes)s duplicates</abbr>"
-msgstr "y <abbr title=\"Las consultas repetidas son idénticas: ejecutan el mismo SQL con los mismos parámetros. \">%(dupes)s repetidos</abbr>"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:34
 msgid "Query"
-msgstr "Query"
+msgstr "کوئری"
 
 #: templates/debug_toolbar/panels/sql.html:35
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
-msgstr "Línea de tiempo"
+msgstr "تایملاین"
 
 #: templates/debug_toolbar/panels/sql.html:52
 #, python-format
 msgid "%(count)s similar queries."
-msgstr "%(count)s consultas similares. "
+msgstr "%(count)s کوئری مشابه"
 
 #: templates/debug_toolbar/panels/sql.html:58
 #, python-format
 msgid "Duplicated %(dupes)s times."
-msgstr "Repetidas %(dupes)s veces."
+msgstr "%(dupes)s بار تکرار شده"
 
 #: templates/debug_toolbar/panels/sql.html:95
 msgid "Connection:"
-msgstr "Conexión:"
+msgstr "کانکشن:"
 
 #: templates/debug_toolbar/panels/sql.html:97
 msgid "Isolation level:"
-msgstr "Nivel de aislamiento:"
+msgstr "سطح isolation:"
 
 #: templates/debug_toolbar/panels/sql.html:100
 msgid "Transaction status:"
-msgstr "Estado de la transacción:"
+msgstr "وضعیت تراکنش"
 
 #: templates/debug_toolbar/panels/sql.html:114
 msgid "(unknown)"
-msgstr "(desconocido)"
+msgstr "(ناشناخته)"
 
 #: templates/debug_toolbar/panels/sql.html:123
 msgid "No SQL queries were recorded during this request."
-msgstr "No se registraron consultas SQL durante ésta petición."
+msgstr "کوئری SQL ای در این ریکوئست ثبت نشده است"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
-msgstr "SQL explicado"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr "SQL Ejecutado"
+msgstr "کوئری اجرا شده"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr "Base de datos"
+msgstr "دیتابیس"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
-msgstr "SQL analizado"
+msgstr "SQL profiled"
 
 #: templates/debug_toolbar/panels/sql_profile.html:37
 msgid "Error"
-msgstr "Error"
+msgstr "خطا"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
-msgstr "SQL seleccionado"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
-msgstr "Establecer Vacío"
+msgstr "set خالی"
 
 #: templates/debug_toolbar/panels/staticfiles.html:3
 msgid "Static file path"
 msgid_plural "Static file paths"
-msgstr[0] "Ruta a archivos estático"
-msgstr[1] "Rutas a archivos estáticos"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:7
 #, python-format
 msgid "(prefix %(prefix)s)"
-msgstr "(prefijo %(prefix)s)"
+msgstr "(prefix %(prefix)s)"
 
 #: templates/debug_toolbar/panels/staticfiles.html:11
 #: templates/debug_toolbar/panels/staticfiles.html:22
@@ -608,99 +604,99 @@ msgstr "(prefijo %(prefix)s)"
 #: templates/debug_toolbar/panels/templates.html:30
 #: templates/debug_toolbar/panels/templates.html:47
 msgid "None"
-msgstr "Ninguno"
+msgstr "خالی"
 
 #: templates/debug_toolbar/panels/staticfiles.html:14
 msgid "Static file app"
 msgid_plural "Static file apps"
-msgstr[0] "Aplicación a archivos estáticos"
-msgstr[1] "Aplicaciones de archivos estáticos"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:25
 msgid "Static file"
 msgid_plural "Static files"
-msgstr[0] "Archivo estático"
-msgstr[1] "Archivos estáticos"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:39
 #, python-format
 msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
-msgstr[0] "%(payload_count)s archivo"
-msgstr[1] "%(payload_count)s archivos"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
-msgstr "Fuente de plantilla:"
+msgstr "منبع تمپلیت:"
 
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
 msgid_plural "Template paths"
-msgstr[0] "Ruta de plantilla"
-msgstr[1] "Rutas de plantillas"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] "Plantilla"
-msgstr[1] "Plantillas"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/templates.html:22
 #: templates/debug_toolbar/panels/templates.html:40
 msgid "Toggle context"
-msgstr "Mostrar/Ocultar contexto"
+msgstr ""
 
 #: templates/debug_toolbar/panels/templates.html:33
 msgid "Context processor"
 msgid_plural "Context processors"
-msgstr[0] "Procesador de contexto"
-msgstr[1] "Procesadores de contexto"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
-msgstr "Uso de recursos"
+msgstr "استفاده منابع"
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr "Recurso"
+msgstr "منابع"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
-msgstr "Distribución de tiempos de navegador"
+msgstr "زمان بندی مرورگر"
 
 #: templates/debug_toolbar/panels/timer.html:35
 msgid "Timing attribute"
-msgstr "Atributo de tiempo"
+msgstr "ویژگی زمان بندی"
 
 #: templates/debug_toolbar/panels/timer.html:37
 msgid "Milliseconds since navigation start (+length)"
-msgstr "Milisegundos desde inicio de la navegación (+longitud)"
+msgstr ""
 
 #: templates/debug_toolbar/panels/versions.html:10
 msgid "Package"
-msgstr "Paquete"
+msgstr "پکیج"
 
 #: templates/debug_toolbar/panels/versions.html:11
 msgid "Name"
-msgstr "Nombre"
+msgstr "نام"
 
 #: templates/debug_toolbar/panels/versions.html:12
 msgid "Version"
-msgstr "Versión"
+msgstr "ورژن"
 
 #: templates/debug_toolbar/redirect.html:10
 msgid "Location:"
-msgstr "Ubicación:"
+msgstr "مکان:"
 
 #: templates/debug_toolbar/redirect.html:12
 msgid ""
 "The Django Debug Toolbar has intercepted a redirect to the above URL for "
 "debug viewing purposes. You can click the above link to continue with the "
 "redirect as normal."
-msgstr "El Django Debug Toolbar ha interceptado un re-direccionamiento a la dirección de Internet mostrada arriba, con el propósito de inspeccionarla. Usted puede hacer clic en el vínculo de arriba para continuar con el re-direccionamiento normalmente."
+msgstr ""
 
 #: views.py:15
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
-msgstr "La información de este panel ya no se encuentra disponible. Por favor recargue la página y pruebe nuevamente."
+msgstr "دیتا برای نمایش در دسترس نیست. لطفا صفحه را ریفرش کنید."

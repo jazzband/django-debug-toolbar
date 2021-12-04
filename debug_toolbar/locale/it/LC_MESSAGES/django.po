@@ -6,58 +6,55 @@
 # Dario Agliottone <dario.agliottone@gmail.com>, 2012
 # Flavio Curella <flavio.curella@gmail.com>, 2013
 # yakky <i.spalletti@nephila.it>, 2013-2014
-# Andrea Rabbaglietti <rabbagliettiandrea@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-25 21:52+0200\n"
-"PO-Revision-Date: 2014-04-25 19:53+0000\n"
-"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/django-debug-toolbar/language/it/)\n"
+"POT-Creation-Date: 2021-08-14 10:25-0500\n"
+"PO-Revision-Date: 2021-08-14 15:25+0000\n"
+"Last-Translator: Tim Schilling\n"
+"Language-Team: Italian (http://www.transifex.com/django-debug-toolbar/django-debug-toolbar/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps.py:11
+#: apps.py:15
 msgid "Debug Toolbar"
 msgstr ""
 
-#: views.py:14
-msgid ""
-"Data for this panel isn't available anymore. Please reload the page and "
-"retry."
-msgstr "Non sono più disponibili dati per questo pannello. Ricarica la pagina e riprova."
-
-#: panels/cache.py:191
+#: panels/cache.py:227
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:196
+#: panels/cache.py:234
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] "%(cache_calls)d chiamata in %(time).2fms"
 msgstr[1] "%(cache_calls)d chiamate in %(time).2fms"
 
-#: panels/cache.py:204
+#: panels/cache.py:246
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
 msgstr[0] "Chiamate alla cache da %(count)d backend"
 msgstr[1] "Chiamate alla cache da %(count)d backend"
 
-#: panels/headers.py:35
+#: panels/headers.py:33
 msgid "Headers"
-msgstr "Headers"
+msgstr "Intestazioni"
 
-#: panels/logging.py:64
+#: panels/history/panel.py:20 panels/history/panel.py:21
+msgid "History"
+msgstr ""
+
+#: panels/logging.py:63
 msgid "Logging"
 msgstr "Logging"
 
-#: panels/logging.py:70
+#: panels/logging.py:69
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
@@ -68,59 +65,117 @@ msgstr[1] "%(count)s messaggi"
 msgid "Log messages"
 msgstr "Messaggi di log"
 
-#: panels/profiling.py:127
+#: panels/profiling.py:150
 msgid "Profiling"
 msgstr "Profilazione"
 
-#: panels/redirects.py:17
+#: panels/redirects.py:14
 msgid "Intercept redirects"
-msgstr "Intercetta redirezioni"
+msgstr "Intercetta ridirezioni"
 
-#: panels/request.py:18
+#: panels/request.py:16
 msgid "Request"
 msgstr "Request"
 
-#: panels/request.py:35
+#: panels/request.py:36
 msgid "<no view>"
 msgstr "<nessuna view>"
 
-#: panels/request.py:47
+#: panels/request.py:53
 msgid "<unavailable>"
 msgstr "<non disponibile>"
 
-#: panels/settings.py:20
+#: panels/settings.py:24
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: panels/settings.py:23
+#: panels/settings.py:27
 #, python-format
-msgid "Settings from <code>%s</code>"
-msgstr "Impostazioni da <code>%s</code>"
+msgid "Settings from %s"
+msgstr ""
 
-#: panels/signals.py:45
+#: panels/signals.py:58
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
 msgstr[0] "%(num_receivers)d ricevitore di 1 segnale"
 msgstr[1] "%(num_receivers)d ricevitori di 1 segnale"
 
-#: panels/signals.py:48
+#: panels/signals.py:66
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
 msgstr[0] "%(num_receivers)d ricevitore di %(num_signals)d segnali"
 msgstr[1] "%(num_receivers)d ricevitori di %(num_signals)d segnali"
 
-#: panels/signals.py:53
+#: panels/signals.py:73
 msgid "Signals"
 msgstr "Segnali"
 
-#: panels/staticfiles.py:89
+#: panels/sql/panel.py:24
+msgid "Autocommit"
+msgstr "Autocommit"
+
+#: panels/sql/panel.py:25
+msgid "Read uncommitted"
+msgstr "Read uncommitted"
+
+#: panels/sql/panel.py:26
+msgid "Read committed"
+msgstr "Read committed"
+
+#: panels/sql/panel.py:27
+msgid "Repeatable read"
+msgstr "Repeatable read"
+
+#: panels/sql/panel.py:28
+msgid "Serializable"
+msgstr "Serializable"
+
+#: panels/sql/panel.py:40
+msgid "Idle"
+msgstr "Idle"
+
+#: panels/sql/panel.py:41
+msgid "Active"
+msgstr "Azione"
+
+#: panels/sql/panel.py:42
+msgid "In transaction"
+msgstr "Stato transazione:"
+
+#: panels/sql/panel.py:43
+msgid "In error"
+msgstr "Errore"
+
+#: panels/sql/panel.py:44
+msgid "Unknown"
+msgstr "(sconosciuto)"
+
+#: panels/sql/panel.py:109
+msgid "SQL"
+msgstr "SQL"
+
+#: panels/sql/panel.py:114
+#, python-format
+msgid "%(query_count)d query in %(sql_time).2fms"
+msgid_plural "%(query_count)d queries in %(sql_time).2fms"
+msgstr[0] ""
+msgstr[1] ""
+
+#: panels/sql/panel.py:127
+#, python-format
+msgid "SQL queries from %(count)d connection"
+msgid_plural "SQL queries from %(count)d connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#: panels/staticfiles.py:85
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
 msgstr "File statici (%(num_found)s trovati, %(num_used)s usati)"
 
-#: panels/staticfiles.py:107
+#: panels/staticfiles.py:106
 msgid "Static files"
 msgstr "Files statici"
 
@@ -131,159 +186,105 @@ msgid_plural "%(num_used)s files used"
 msgstr[0] "%(num_used)s file usato"
 msgstr[1] "%(num_used)s file usati"
 
-#: panels/timer.py:23
+#: panels/templates/panel.py:144
+msgid "Templates"
+msgstr "Template"
+
+#: panels/templates/panel.py:149
+#, python-format
+msgid "Templates (%(num_templates)s rendered)"
+msgstr "Templates (%(num_templates)s rendered)"
+
+#: panels/templates/panel.py:181
+msgid "No origin"
+msgstr ""
+
+#: panels/timer.py:25
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
 msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
 
-#: panels/timer.py:28
+#: panels/timer.py:30
 #, python-format
 msgid "Total: %0.2fms"
 msgstr "Totale: %0.2fms"
 
-#: panels/timer.py:34 templates/debug_toolbar/panels/logging.html:7
+#: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
+#: templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
 msgstr "Tempo"
 
-#: panels/timer.py:42
+#: panels/timer.py:44
 msgid "User CPU time"
 msgstr "Tempo CPU utente"
 
-#: panels/timer.py:42
+#: panels/timer.py:44
 #, python-format
 msgid "%(utime)0.3f msec"
 msgstr "%(utime)0.3f msec"
 
-#: panels/timer.py:43
+#: panels/timer.py:45
 msgid "System CPU time"
 msgstr "Tempo CPU sistema"
 
-#: panels/timer.py:43
+#: panels/timer.py:45
 #, python-format
 msgid "%(stime)0.3f msec"
 msgstr "%(stime)0.3f msec"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 msgid "Total CPU time"
 msgstr "Tempo Totale CPU"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 #, python-format
 msgid "%(total)0.3f msec"
 msgstr "%(total)0.3f msec"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 msgid "Elapsed time"
 msgstr "Tempo Trascorso"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 #, python-format
 msgid "%(total_time)0.3f msec"
 msgstr "%(total_time)0.3f msec"
 
-#: panels/timer.py:46
+#: panels/timer.py:49
 msgid "Context switches"
 msgstr "Cambi di contesto"
 
-#: panels/timer.py:46
+#: panels/timer.py:50
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 msgstr "%(vcsw)d volontario, %(ivcsw)d involontario"
 
-#: panels/versions.py:25
+#: panels/versions.py:19
 msgid "Versions"
 msgstr "Versioni"
 
-#: panels/sql/panel.py:22
-msgid "Autocommit"
-msgstr "Autocommit"
-
-#: panels/sql/panel.py:23
-msgid "Read uncommitted"
-msgstr "Read uncommitted"
-
-#: panels/sql/panel.py:24
-msgid "Read committed"
-msgstr "Read committed"
-
-#: panels/sql/panel.py:25
-msgid "Repeatable read"
-msgstr "Repeatable read"
-
-#: panels/sql/panel.py:26
-msgid "Serializable"
-msgstr "Serializable"
-
-#: panels/sql/panel.py:37
-msgid "Idle"
-msgstr "Idle"
-
-#: panels/sql/panel.py:38
-msgid "Active"
-msgstr "Attivo"
-
-#: panels/sql/panel.py:39
-msgid "In transaction"
-msgstr "Stato transazione:"
-
-#: panels/sql/panel.py:40
-msgid "In error"
-msgstr "Errore"
-
-#: panels/sql/panel.py:41
-msgid "Unknown"
-msgstr "(sconosciuto)"
-
-#: panels/sql/panel.py:105
-msgid "SQL"
-msgstr "SQL"
-
-#: panels/templates/panel.py:141
-msgid "Templates"
-msgstr "Templates"
-
-#: panels/templates/panel.py:146
-#, python-format
-msgid "Templates (%(num_templates)s rendered)"
-msgstr "Templates (%(num_templates)s rendered)"
-
-#: templates/debug_toolbar/base.html:19
+#: templates/debug_toolbar/base.html:18
 msgid "Hide toolbar"
 msgstr "Nascondi Toolbar"
 
-#: templates/debug_toolbar/base.html:19
+#: templates/debug_toolbar/base.html:18
 msgid "Hide"
 msgstr "Nascondi"
 
 #: templates/debug_toolbar/base.html:25
-msgid "Disable for next and successive requests"
-msgstr "Disattiva per la prossima requests e le successive"
-
-#: templates/debug_toolbar/base.html:25
-msgid "Enable for next and successive requests"
-msgstr "Abilita per la prossima requests e le successive"
-
-#: templates/debug_toolbar/base.html:47
 msgid "Show toolbar"
 msgstr "Mostra Toolbar"
 
-#: templates/debug_toolbar/base.html:53
-msgid "Close"
-msgstr "Chiudi"
+#: templates/debug_toolbar/includes/panel_button.html:4
+msgid "Disable for next and successive requests"
+msgstr "Disattiva per la prossima requests e le successive"
 
-#: templates/debug_toolbar/redirect.html:8
-msgid "Location:"
-msgstr "Location:"
-
-#: templates/debug_toolbar/redirect.html:10
-msgid ""
-"The Django Debug Toolbar has intercepted a redirect to the above URL for "
-"debug viewing purposes. You can click the above link to continue with the "
-"redirect as normal."
-msgstr "Django Debug Toolbar ha intercettato un redirect verso la URL indicata per visualizzare il debug, Puoi cliccare sul link sopra per continuare normalmente con la redirezione."
+#: templates/debug_toolbar/includes/panel_button.html:4
+msgid "Enable for next and successive requests"
+msgstr "Abilita per la prossima requests e le successive"
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
@@ -314,7 +315,7 @@ msgid "Calls"
 msgstr "Chiamate"
 
 #: templates/debug_toolbar/panels/cache.html:43
-#: templates/debug_toolbar/panels/sql.html:20
+#: templates/debug_toolbar/panels/sql.html:36
 msgid "Time (ms)"
 msgstr "Durata (ms)"
 
@@ -330,7 +331,7 @@ msgstr "Argomenti"
 #: templates/debug_toolbar/panels/cache.html:46
 #: templates/debug_toolbar/panels/request.html:9
 msgid "Keyword arguments"
-msgstr "Keyword arguments"
+msgstr "Parole chiave"
 
 #: templates/debug_toolbar/panels/cache.html:47
 msgid "Backend"
@@ -338,21 +339,19 @@ msgstr "Backend"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
-msgstr "Request headers"
+msgstr "Header della request"
 
 #: templates/debug_toolbar/panels/headers.html:8
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr "Chiave"
+msgstr "Nome"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
 #: templates/debug_toolbar/panels/headers.html:49
-#: templates/debug_toolbar/panels/request.html:33
-#: templates/debug_toolbar/panels/request.html:59
-#: templates/debug_toolbar/panels/request.html:85
-#: templates/debug_toolbar/panels/request.html:110
+#: templates/debug_toolbar/panels/history_tr.html:23
+#: templates/debug_toolbar/panels/request_variables.html:11
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
@@ -372,6 +371,33 @@ msgid ""
 "significant subset is shown below."
 msgstr "Visto che l'ambiente WSGI è ereditato dal server, sotto è mostrata solo la parte significativa."
 
+#: templates/debug_toolbar/panels/history.html:10
+msgid "Method"
+msgstr ""
+
+#: templates/debug_toolbar/panels/history.html:11
+#: templates/debug_toolbar/panels/staticfiles.html:43
+msgid "Path"
+msgstr "Percorso"
+
+#: templates/debug_toolbar/panels/history.html:12
+msgid "Request Variables"
+msgstr ""
+
+#: templates/debug_toolbar/panels/history.html:13
+msgid "Status"
+msgstr ""
+
+#: templates/debug_toolbar/panels/history.html:14
+#: templates/debug_toolbar/panels/sql.html:37
+msgid "Action"
+msgstr "Azione"
+
+#: templates/debug_toolbar/panels/history_tr.html:22
+#: templates/debug_toolbar/panels/request_variables.html:10
+msgid "Variable"
+msgstr "Variabile"
+
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
 msgstr "Livello"
@@ -385,7 +411,7 @@ msgid "Message"
 msgstr "Messaggio"
 
 #: templates/debug_toolbar/panels/logging.html:10
-#: templates/debug_toolbar/panels/staticfiles.html:45
+#: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Location"
 msgstr "Location"
 
@@ -430,38 +456,31 @@ msgstr "Nome URL"
 msgid "Cookies"
 msgstr "Cookies"
 
-#: templates/debug_toolbar/panels/request.html:32
-#: templates/debug_toolbar/panels/request.html:58
-#: templates/debug_toolbar/panels/request.html:84
-#: templates/debug_toolbar/panels/request.html:109
-msgid "Variable"
-msgstr "Variabile"
-
-#: templates/debug_toolbar/panels/request.html:46
+#: templates/debug_toolbar/panels/request.html:27
 msgid "No cookies"
 msgstr "Nessun cookie"
 
-#: templates/debug_toolbar/panels/request.html:50
+#: templates/debug_toolbar/panels/request.html:31
 msgid "Session data"
 msgstr "Dati di sessione"
 
-#: templates/debug_toolbar/panels/request.html:72
+#: templates/debug_toolbar/panels/request.html:34
 msgid "No session data"
 msgstr "Nessun dato in sessione"
 
-#: templates/debug_toolbar/panels/request.html:76
+#: templates/debug_toolbar/panels/request.html:38
 msgid "GET data"
 msgstr "Dati GET"
 
-#: templates/debug_toolbar/panels/request.html:98
+#: templates/debug_toolbar/panels/request.html:41
 msgid "No GET data"
 msgstr "Nessun dato in GET"
 
-#: templates/debug_toolbar/panels/request.html:102
+#: templates/debug_toolbar/panels/request.html:45
 msgid "POST data"
 msgstr "Dati POST"
 
-#: templates/debug_toolbar/panels/request.html:123
+#: templates/debug_toolbar/panels/request.html:48
 msgid "No POST data"
 msgstr "Nessuno dato in POST"
 
@@ -474,63 +493,72 @@ msgid "Signal"
 msgstr "Segnale"
 
 #: templates/debug_toolbar/panels/signals.html:6
-msgid "Providing"
-msgstr "Forniti"
-
-#: templates/debug_toolbar/panels/signals.html:7
 msgid "Receivers"
 msgstr "Ricevitori"
 
-#: templates/debug_toolbar/panels/sql.html:7
+#: templates/debug_toolbar/panels/sql.html:6
 #, python-format
 msgid "%(num)s query"
 msgid_plural "%(num)s queries"
 msgstr[0] "%(num)s query"
 msgstr[1] "%(num)s query"
 
-#: templates/debug_toolbar/panels/sql.html:18
+#: templates/debug_toolbar/panels/sql.html:8
+#, python-format
+msgid ""
+"including <abbr title=\"Similar queries are queries with the same SQL, but "
+"potentially different parameters.\">%(count)s similar</abbr>"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:12
+#, python-format
+msgid ""
+"and <abbr title=\"Duplicate queries are identical to each other: they "
+"execute exactly the same SQL and parameters.\">%(dupes)s duplicates</abbr>"
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:34
 msgid "Query"
 msgstr "Query"
 
-#: templates/debug_toolbar/panels/sql.html:19
+#: templates/debug_toolbar/panels/sql.html:35
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
 msgstr "Timeline"
 
-#: templates/debug_toolbar/panels/sql.html:21
-msgid "Action"
-msgstr "Azione"
+#: templates/debug_toolbar/panels/sql.html:52
+#, python-format
+msgid "%(count)s similar queries."
+msgstr ""
 
-#: templates/debug_toolbar/panels/sql.html:64
+#: templates/debug_toolbar/panels/sql.html:58
+#, python-format
+msgid "Duplicated %(dupes)s times."
+msgstr ""
+
+#: templates/debug_toolbar/panels/sql.html:95
 msgid "Connection:"
 msgstr "Connessione:"
 
-#: templates/debug_toolbar/panels/sql.html:66
+#: templates/debug_toolbar/panels/sql.html:97
 msgid "Isolation level:"
 msgstr "Isolation level:"
 
-#: templates/debug_toolbar/panels/sql.html:69
+#: templates/debug_toolbar/panels/sql.html:100
 msgid "Transaction status:"
 msgstr "Stato transazione:"
 
-#: templates/debug_toolbar/panels/sql.html:83
+#: templates/debug_toolbar/panels/sql.html:114
 msgid "(unknown)"
 msgstr "(sconosciuto)"
 
-#: templates/debug_toolbar/panels/sql.html:92
+#: templates/debug_toolbar/panels/sql.html:123
 msgid "No SQL queries were recorded during this request."
 msgstr "Nessuna Query SQL è stata registrata durante questa richiesta"
 
-#: templates/debug_toolbar/panels/sql_explain.html:3
-#: templates/debug_toolbar/panels/sql_profile.html:3
-#: templates/debug_toolbar/panels/sql_select.html:3
-#: templates/debug_toolbar/panels/template_source.html:3
-msgid "Back"
-msgstr "Indietro"
-
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
-msgstr "SQL spiegato"
+msgstr "SQL spigato"
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
@@ -560,48 +588,44 @@ msgstr "SQL selezionato"
 msgid "Empty set"
 msgstr "Insieme vuoto"
 
-#: templates/debug_toolbar/panels/staticfiles.html:4
+#: templates/debug_toolbar/panels/staticfiles.html:3
 msgid "Static file path"
 msgid_plural "Static file paths"
 msgstr[0] "Percorso file statici"
 msgstr[1] "Percorsi file statici"
 
-#: templates/debug_toolbar/panels/staticfiles.html:8
+#: templates/debug_toolbar/panels/staticfiles.html:7
 #, python-format
 msgid "(prefix %(prefix)s)"
 msgstr "(prefisso %(prefix)s)"
 
-#: templates/debug_toolbar/panels/staticfiles.html:12
-#: templates/debug_toolbar/panels/staticfiles.html:23
-#: templates/debug_toolbar/panels/staticfiles.html:35
+#: templates/debug_toolbar/panels/staticfiles.html:11
+#: templates/debug_toolbar/panels/staticfiles.html:22
+#: templates/debug_toolbar/panels/staticfiles.html:34
 #: templates/debug_toolbar/panels/templates.html:10
-#: templates/debug_toolbar/panels/templates.html:28
-#: templates/debug_toolbar/panels/templates.html:43
+#: templates/debug_toolbar/panels/templates.html:30
+#: templates/debug_toolbar/panels/templates.html:47
 msgid "None"
 msgstr "Nessuno"
 
-#: templates/debug_toolbar/panels/staticfiles.html:15
+#: templates/debug_toolbar/panels/staticfiles.html:14
 msgid "Static file app"
 msgid_plural "Static file apps"
 msgstr[0] "App file statici"
 msgstr[1] "App file statici"
 
-#: templates/debug_toolbar/panels/staticfiles.html:26
+#: templates/debug_toolbar/panels/staticfiles.html:25
 msgid "Static file"
 msgid_plural "Static files"
 msgstr[0] ""
 msgstr[1] "Files statici"
 
-#: templates/debug_toolbar/panels/staticfiles.html:40
+#: templates/debug_toolbar/panels/staticfiles.html:39
 #, python-format
 msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
 msgstr[0] "%(payload_count)s file"
 msgstr[1] "%(payload_count)s file"
-
-#: templates/debug_toolbar/panels/staticfiles.html:44
-msgid "Path"
-msgstr "Percorso"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
@@ -619,12 +643,12 @@ msgid_plural "Templates"
 msgstr[0] ""
 msgstr[1] "Template"
 
-#: templates/debug_toolbar/panels/templates.html:21
-#: templates/debug_toolbar/panels/templates.html:37
+#: templates/debug_toolbar/panels/templates.html:22
+#: templates/debug_toolbar/panels/templates.html:40
 msgid "Toggle context"
 msgstr "Cambia contesto"
 
-#: templates/debug_toolbar/panels/templates.html:31
+#: templates/debug_toolbar/panels/templates.html:33
 msgid "Context processor"
 msgid_plural "Context processors"
 msgstr[0] "Context processor"
@@ -650,10 +674,31 @@ msgstr "Attributo"
 msgid "Milliseconds since navigation start (+length)"
 msgstr "Millisecondi dall'inizio della navigazione (+lunghezza)"
 
-#: templates/debug_toolbar/panels/versions.html:5
+#: templates/debug_toolbar/panels/versions.html:10
+msgid "Package"
+msgstr ""
+
+#: templates/debug_toolbar/panels/versions.html:11
 msgid "Name"
 msgstr "Nome"
 
-#: templates/debug_toolbar/panels/versions.html:6
+#: templates/debug_toolbar/panels/versions.html:12
 msgid "Version"
 msgstr "Versione"
+
+#: templates/debug_toolbar/redirect.html:10
+msgid "Location:"
+msgstr "Location:"
+
+#: templates/debug_toolbar/redirect.html:12
+msgid ""
+"The Django Debug Toolbar has intercepted a redirect to the above URL for "
+"debug viewing purposes. You can click the above link to continue with the "
+"redirect as normal."
+msgstr "Django Debug Toolbar ha intercettato un redirect verso la URL indicata per visualizzare il debug, Puoi cliccare sul link sopra per continuare normalmente con la redirezione."
+
+#: views.py:15
+msgid ""
+"Data for this panel isn't available anymore. Please reload the page and "
+"retry."
+msgstr "Non sono più disponibili dati per questo pannello. Ricarica la pagina e riprova."
