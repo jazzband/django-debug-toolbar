@@ -148,7 +148,6 @@ if django.VERSION < (3, 2):
             actual_cache = super().__getitem__(alias)
             return CacheStatTracker(actual_cache)
 
-
 else:
 
     class CacheHandlerPatch(CacheHandler):
