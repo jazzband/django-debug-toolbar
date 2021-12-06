@@ -28,12 +28,12 @@ repos:
     -   id: rst-backticks
     -   id: rst-directive-colons
 -   repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.5.0
+    rev: v2.5.1
     hooks:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.3.0
+    rev: v8.4.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -41,7 +41,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/psf/black
-    rev: 21.11b1
+    rev: 21.12b0
     hooks:
     -   id: black
         language_version: python3
