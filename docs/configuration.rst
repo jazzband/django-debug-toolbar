@@ -134,7 +134,10 @@ Toolbar options
 
      Please note that the debug toolbar isn't hardened for use in production
      environments or on public servers. You should be aware of the implications
-     to the security of your servers when using your own callback.
+     to the security of your servers when using your own callback. One known
+     implication is that it is possible to execute arbitrary SQL through the
+     SQL panel when the ``SECRET_KEY`` value is leaked somehow.
+
 
 Panel options
 ~~~~~~~~~~~~~
