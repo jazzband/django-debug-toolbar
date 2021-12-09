@@ -101,6 +101,20 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertContains(response, "</div>\n</body>")
 
     def test_cache_page(self):
+        # Clear the cache before testing the views. Other tests that use cached_view
+        # may run earlier and cause fewer cache calls.
+        cache.clear()
+        self.client.get("/cached_view/")
+        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
+        self.client.get("/cached_view/")
+        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 5)
+
+    @override_settings(ROOT_URLCONF="tests.urls_use_package_urls")
+    def test_include_package_urls(self):
+        """Test urlsconf that uses the debug_toolbar.urls in the include call"""
+        # Clear the cache before testing the views. Other tests that use cached_view
+        # may run earlier and cause fewer cache calls.
+        cache.clear()
         self.client.get("/cached_view/")
         self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
         self.client.get("/cached_view/")
