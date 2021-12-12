@@ -4,6 +4,9 @@ Change log
 Next version
 ------------
 
+3.2.3 (2021-12-12)
+------------------
+
 * Changed cache monkey-patching for Django 3.2+ to iterate over existing
   caches and patch them individually rather than attempting to patch
   ``django.core.caches`` as a whole. The ``middleware.cache`` is still
