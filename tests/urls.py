@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from django.urls import include, path, re_path
 
-import debug_toolbar
-
 from . import views
 from .models import NonAsciiRepr
 
@@ -25,5 +23,5 @@ urlpatterns = [
     path("redirect/", views.redirect_view),
     path("login_without_redirect/", LoginView.as_view(redirect_field_name=None)),
     path("admin/", admin.site.urls),
-    path("__debug__/", include(debug_toolbar.urls)),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
