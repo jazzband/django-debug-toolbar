@@ -141,7 +141,9 @@ class NormalCursorWrapper(BaseCursorWrapper):
 
                 def strip_GeomFromEWKB(param):
                     if isinstance(param, str):
-                        return param.lstrip("ST_GeomFromEWKB('\\x").rstrip("'::bytea)")
+                        return param.split("ST_GeomFromEWKB('\\x", maxsplit=1)[
+                            0
+                        ].rsplit("'::bytea)", maxsplit=1)[0]
                     return param
 
                 params = [strip_GeomFromEWKB(param) for param in params]
