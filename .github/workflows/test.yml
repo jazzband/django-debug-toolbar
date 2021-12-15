@@ -142,6 +142,73 @@ jobs:
       with:
         name: Python ${{ matrix.python-version }}
 
+  postgis:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+
+    services:
+      postgres:
+        image: postgis/postgis:14-3.1
+        env:
+          POSTGRES_DB: debug_toolbar
+          POSTGRES_USER: debug_toolbar
+          POSTGRES_PASSWORD: debug_toolbar
+        ports:
+        - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key:
+          ${{ matrix.python-version }}-v1-${{ hashFiles('**/setup.cfg') }}-${{ hashFiles('**/tox.ini') }}
+        restore-keys: |
+          ${{ matrix.python-version }}-v1-
+
+    - name: Install enchant (only for docs)
+      run: |
+        sudo apt-get -qq update
+        sudo apt-get -y install enchant
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade tox tox-gh-actions
+
+    - name: Test with tox
+      run: tox
+      env:
+        DB_BACKEND: postgis
+        DB_HOST: localhost
+        DB_PORT: 5432
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        name: Python ${{ matrix.python-version }}
+
   sqlite:
     runs-on: ubuntu-latest
     strategy:

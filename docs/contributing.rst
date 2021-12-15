@@ -89,6 +89,11 @@ databases)::
     psql> CREATE DATABASE debug_toolbar;
     psql> GRANT ALL PRIVILEGES ON DATABASE debug_toolbar to debug_toolbar;
 
+If you're going to test the PostGIS integration locally the PostgreSQL user
+will need to be a super user in order to create the extensions.
+
+    psql> ALTER USER debug_toolbar WITH SUPERUSER;
+
 For MySQL/MariaDB in a ``mysql`` shell::
 
     mysql> CREATE DATABASE debug_toolbar;
