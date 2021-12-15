@@ -1,24 +1,34 @@
-====================
-Django Debug Toolbar
-====================
+=====================================
+Django Debug Toolbar |latest-version|
+=====================================
 
-.. image:: https://jazzband.co/static/img/badge.svg
+|jazzband| |build-status| |codecov| |docs| |python-support| |django-support|
+
+.. |latest-version| image:: https://img.shields.io/pypi/v/django-debug-toolbar.svg
+   :target: https://pypi.python.org/pypi/django-debug-toolbar
+   :alt: Latest version on PyPI
+
+.. |jazzband| image:: https://jazzband.co/static/img/badge.svg
    :target: https://jazzband.co/
    :alt: Jazzband
 
-.. image:: https://github.com/jazzband/django-debug-toolbar/workflows/Test/badge.svg
+.. |build-status| image:: https://github.com/jazzband/django-debug-toolbar/workflows/Test/badge.svg
    :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
 
-.. image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/main/graph/badge.svg
+.. |codecov| image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/jazzband/django-debug-toolbar
    :alt: Test coverage status
 
-.. image:: https://img.shields.io/pypi/pyversions/django-debug-toolbar
+.. |docs| image:: https://img.shields.io/readthedocs/django-debug-toolbar/latest.svg
+   :target: https://readthedocs.org/projects/django-debug-toolbar/
+   :alt: Documentation status
+
+.. |python-support| image:: https://img.shields.io/pypi/pyversions/django-debug-toolbar
    :target: https://pypi.python.org/pypi/django-debug-toolbar
    :alt: Supported Python versions
 
-.. image:: https://img.shields.io/pypi/djversions/django-debug-toolbar
+.. |django-support| image:: https://img.shields.io/pypi/djversions/django-debug-toolbar
    :target: https://pypi.org/project/django-debug-toolbar
    :alt: Supported Django versions
 
