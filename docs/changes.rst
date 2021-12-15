@@ -4,6 +4,9 @@ Change log
 Next version
 ------------
 
+3.2.4 (2021-12-15)
+------------------
+
 * Revert PR 1426 - Fixes issue with SQL parameters having leading and
   trailing characters stripped away.
 
