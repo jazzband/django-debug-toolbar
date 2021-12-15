@@ -1,11 +1,9 @@
-import json
 import os
 import re
 import unittest
 
 import django
 import html5lib
-from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
 from django.core.cache import cache
@@ -18,7 +16,6 @@ from django.test.utils import override_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels import Panel
-from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.toolbar import DebugToolbar
 
 from .base import BaseTestCase, IntegrationTestCase
@@ -309,28 +306,6 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
                 url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
             )
             self.assertEqual(response.status_code, 404)
-
-    @unittest.skipUnless(settings.USE_GIS, "Test only valid with gis support")
-    def test_sql_explain_gis(self):
-        from django.contrib.gis.geos import GEOSGeometry
-
-        from .models import Location
-
-        db_table = Location._meta.db_table
-
-        url = "/__debug__/sql_explain/"
-        geom = GEOSGeometry("POLYGON((0 0, 0 1, 1 1, 0 0))")
-        data = {
-            "sql": f'SELECT "{db_table}"."point" FROM "{db_table}" WHERE "{db_table}"."point" @ {geom.hex} LIMIT 1',
-            "raw_sql": f'SELECT "{db_table}"."point" FROM "{db_table}" WHERE "{db_table}"."point" @ %s LIMIT 1',
-            "params": json.dumps([geom.hex]),
-            "alias": "default",
-            "duration": "0",
-        }
-        data["hash"] = SQLSelectForm().make_hash(data)
-
-        response = self.client.post(url, data=data)
-        self.assertEqual(response.status_code, 200)
 
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
