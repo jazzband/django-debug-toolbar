@@ -82,10 +82,11 @@ jobs:
       max-parallel: 5
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        database: ['postgres', 'postgis']
 
     services:
       postgres:
-        image: postgres
+        image: postgis/postgis:14-3.1
         env:
           POSTGRES_DB: debug_toolbar
           POSTGRES_USER: debug_toolbar
@@ -133,7 +134,7 @@ jobs:
     - name: Test with tox
       run: tox
       env:
-        DB_BACKEND: postgresql
+        DB_BACKEND: ${{ matrix.database }}
         DB_HOST: localhost
         DB_PORT: 5432
 
