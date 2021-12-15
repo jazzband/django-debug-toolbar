@@ -4,6 +4,8 @@ Change log
 Next version
 ------------
 
+* Removed support for Django 3.1.
+
 3.2.4 (2021-12-15)
 ------------------
 
