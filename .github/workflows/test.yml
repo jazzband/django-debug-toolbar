@@ -121,10 +121,10 @@ jobs:
         restore-keys: |
           ${{ matrix.python-version }}-v1-
 
-    - name: Install enchant (only for docs)
+    - name: Install enchant (only for docs) and gdal-bin (for postgis)
       run: |
         sudo apt-get -qq update
-        sudo apt-get -y install enchant
+        sudo apt-get -y install enchant gdal-bin
 
     - name: Install dependencies
       run: |
