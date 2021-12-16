@@ -212,7 +212,7 @@ jobs:
       - name: Combine coverage & fail if it's <100%.
         run: |
           python -m coverage combine
-          python -m coverage html --skip-covered --skip-empty
+          python -m coverage html
           python -m coverage report
 
       - name: Upload HTML report if check failed.
