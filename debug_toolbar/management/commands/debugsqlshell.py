@@ -1,11 +1,10 @@
 from time import time
 
-import django
 import sqlparse
 from django.core.management.commands.shell import Command
 from django.db import connection
 
-if connection.vendor == "postgresql" and django.VERSION >= (3, 0, 0):
+if connection.vendor == "postgresql":
     from django.db.backends.postgresql import base as base_module
 else:
     from django.db.backends import utils as base_module

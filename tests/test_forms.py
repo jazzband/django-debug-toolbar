@@ -1,17 +1,11 @@
 from datetime import datetime
 
-import django
 from django import forms
 from django.test import TestCase
 
 from debug_toolbar.forms import SignedDataForm
 
-# Django 3.1 uses sha256 by default.
-SIGNATURE = (
-    "v02QBcJplEET6QXHNWejnRcmSENWlw6_RjxLTR7QG9g"
-    if django.VERSION >= (3, 1)
-    else "ukcAFUqYhUUnqT-LupnYoo-KvFg"
-)
+SIGNATURE = "v02QBcJplEET6QXHNWejnRcmSENWlw6_RjxLTR7QG9g"
 
 DATA = {"value": "foo", "date": datetime(2020, 1, 1)}
 SIGNED_DATA = f'{{"date": "2020-01-01 00:00:00", "value": "foo"}}:{SIGNATURE}'

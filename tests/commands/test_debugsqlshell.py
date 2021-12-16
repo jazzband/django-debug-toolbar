@@ -1,14 +1,13 @@
 import io
 import sys
 
-import django
 from django.contrib.auth.models import User
 from django.core import management
 from django.db import connection
 from django.test import TestCase
 from django.test.utils import override_settings
 
-if connection.vendor == "postgresql" and django.VERSION >= (3, 0, 0):
+if connection.vendor == "postgresql":
     from django.db.backends.postgresql import base as base_module
 else:
     from django.db.backends import utils as base_module

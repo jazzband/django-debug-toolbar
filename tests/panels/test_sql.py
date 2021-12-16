@@ -15,16 +15,7 @@ import debug_toolbar.panels.sql.tracking as sql_tracking
 from debug_toolbar import settings as dt_settings
 
 from ..base import BaseTestCase
-
-try:
-    from psycopg2._json import Json as PostgresJson
-except ImportError:
-    PostgresJson = None
-
-if connection.vendor == "postgresql":
-    from ..models import PostgresJSON as PostgresJSONModel
-else:
-    PostgresJSONModel = None
+from ..models import PostgresJSON
 
 
 class SQLPanelTestCase(BaseTestCase):
@@ -138,12 +129,9 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 3)
 
-        if (
-            django.VERSION >= (3, 1)
-            # Django 4.1 started passing true/false back for boolean
-            # comparisons in MySQL.
-            and not (django.VERSION >= (4, 1) and connection.vendor == "mysql")
-        ):
+        # Django 4.1 started passing true/false back for boolean
+        # comparisons in MySQL.
+        if not (django.VERSION >= (4, 1) and connection.vendor == "mysql"):
             self.assertEqual(
                 tuple([q[1]["params"] for q in self.panel._queries]),
                 ('["Foo"]', "[10, 1]", '["2017-12-22 16:07:01"]'),
@@ -160,7 +148,7 @@ class SQLPanelTestCase(BaseTestCase):
     def test_json_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
 
-        list(PostgresJSONModel.objects.filter(field__contains={"foo": "bar"}))
+        list(PostgresJSON.objects.filter(field__contains={"foo": "bar"}))
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
@@ -171,11 +159,6 @@ class SQLPanelTestCase(BaseTestCase):
             self.panel._queries[0][1]["params"],
             '["{\\"foo\\": \\"bar\\"}"]',
         )
-        if django.VERSION < (3, 1):
-            self.assertIsInstance(
-                self.panel._queries[0][1]["raw_params"][0],
-                PostgresJson,
-            )
 
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
