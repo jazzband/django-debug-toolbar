@@ -235,6 +235,17 @@ Path: ``debug_toolbar_mongo.panel.MongoDebugPanel``
 
 Adds MongoDB debugging information.
 
+MrBenn Toolbar Plugin
+~~~~~~~~~~~~~~~~~~~~~
+
+URL: https://github.com/andytwoods/mrbenn
+
+Path: ``mrbenn_panel.panel.MrBennPanel``
+
+Allows you to quickly open template files and views directly in your IDE!
+In addition to the path above, you need to add ``mrbenn_panel`` in
+``INSTALLED_APPS``
+
 Neo4j
 ~~~~~
 
