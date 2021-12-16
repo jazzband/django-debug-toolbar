@@ -49,11 +49,11 @@ def sql_explain(request, verified_data):
                 # SQLite's EXPLAIN dumps the low-level opcodes generated for a query;
                 # EXPLAIN QUERY PLAN dumps a more human-readable summary
                 # See https://www.sqlite.org/lang_explain.html for details
-                cursor.execute("EXPLAIN QUERY PLAN {}".format(sql), params)
+                cursor.execute(f"EXPLAIN QUERY PLAN {sql}", params)
             elif vendor == "postgresql":
-                cursor.execute("EXPLAIN ANALYZE {}".format(sql), params)
+                cursor.execute(f"EXPLAIN ANALYZE {sql}", params)
             else:
-                cursor.execute("EXPLAIN {}".format(sql), params)
+                cursor.execute(f"EXPLAIN {sql}", params)
             headers = [d[0] for d in cursor.description]
             result = cursor.fetchall()
 

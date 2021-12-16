@@ -15,16 +15,7 @@ import debug_toolbar.panels.sql.tracking as sql_tracking
 from debug_toolbar import settings as dt_settings
 
 from ..base import BaseTestCase
-
-try:
-    from psycopg2._json import Json as PostgresJson
-except ImportError:
-    PostgresJson = None
-
-if connection.vendor == "postgresql":
-    from ..models import PostgresJSON as PostgresJSONModel
-else:
-    PostgresJSONModel = None
+from ..models import JSON
 
 
 class SQLPanelTestCase(BaseTestCase):
@@ -145,22 +136,19 @@ class SQLPanelTestCase(BaseTestCase):
             and not (django.VERSION >= (4, 1) and connection.vendor == "mysql")
         ):
             self.assertEqual(
-                tuple([q[1]["params"] for q in self.panel._queries]),
+                tuple(q[1]["params"] for q in self.panel._queries),
                 ('["Foo"]', "[10, 1]", '["2017-12-22 16:07:01"]'),
             )
         else:
             self.assertEqual(
-                tuple([q[1]["params"] for q in self.panel._queries]),
+                tuple(q[1]["params"] for q in self.panel._queries),
                 ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
             )
 
-    @unittest.skipUnless(
-        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
-    )
     def test_json_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
 
-        list(PostgresJSONModel.objects.filter(field__contains={"foo": "bar"}))
+        list(JSON.objects.filter(field__contains={"foo": "bar"}))
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
@@ -171,11 +159,6 @@ class SQLPanelTestCase(BaseTestCase):
             self.panel._queries[0][1]["params"],
             '["{\\"foo\\": \\"bar\\"}"]',
         )
-        if django.VERSION < (3, 1):
-            self.assertIsInstance(
-                self.panel._queries[0][1]["raw_params"][0],
-                PostgresJson,
-            )
 
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
@@ -244,7 +227,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 2)
 
         self.assertEqual(
-            tuple([q[1]["params"] for q in self.panel._queries]),
+            tuple(q[1]["params"] for q in self.panel._queries),
             (
                 '["Foo", true, false, "2017-12-22 16:07:01"]',
                 " ".join(
@@ -263,7 +246,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel only inserts content after generate_stats and
         not the process_request.
         """
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("café", self.panel.content)
@@ -279,7 +262,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel inserts locals() content.
         """
         local_var = "<script>alert('test');</script>"  # noqa: F841
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertIn("local_var", self.panel.content)
@@ -293,7 +276,7 @@ class SQLPanelTestCase(BaseTestCase):
         """
         Test that the panel does not insert locals() content.
         """
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertNotIn("djdt-locals", self.panel.content)

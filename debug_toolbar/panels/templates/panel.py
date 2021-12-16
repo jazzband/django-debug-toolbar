@@ -42,7 +42,7 @@ def _request_context_bind_template(self, template):
     self.context_processors = OrderedDict()
     updates = {}
     for processor in processors:
-        name = "{}.{}".format(processor.__module__, processor.__name__)
+        name = f"{processor.__module__}.{processor.__name__}"
         context = processor(self.request)
         self.context_processors[name] = context
         updates.update(context)

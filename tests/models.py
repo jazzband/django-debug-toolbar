@@ -11,19 +11,8 @@ class Binary(models.Model):
     field = models.BinaryField()
 
 
-try:
-    from django.db.models import JSONField
-except ImportError:  # Django<3.1
-    try:
-        from django.contrib.postgres.fields import JSONField
-    except ImportError:  # psycopg2 not installed
-        JSONField = None
-
-
-if JSONField:
-
-    class PostgresJSON(models.Model):
-        field = JSONField()
+class JSON(models.Model):
+    field = models.JSONField()
 
 
 if settings.USE_GIS:

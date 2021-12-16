@@ -2,7 +2,6 @@ import os
 import re
 import unittest
 
-import django
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import signing
@@ -444,10 +443,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
         # The key None (without quotes) exists in the list of template
         # variables.
-        if django.VERSION < (3, 0):
-            self.assertIn("None: &#39;&#39;", response.json()["content"])
-        else:
-            self.assertIn("None: &#x27;&#x27;", response.json()["content"])
+        self.assertIn("None: &#x27;&#x27;", response.json()["content"])
 
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")

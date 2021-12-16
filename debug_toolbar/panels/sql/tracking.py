@@ -17,8 +17,6 @@ except ImportError:
 class SQLQueryTriggered(Exception):
     """Thrown when template panel triggers a query"""
 
-    pass
-
 
 class ThreadLocalState(local):
     def __init__(self):
