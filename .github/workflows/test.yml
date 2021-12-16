@@ -213,7 +213,7 @@ jobs:
         run: |
           python -m coverage combine
           python -m coverage html --skip-covered --skip-empty
-          python -m coverage report --fail-under=100
+          python -m coverage report
 
       - name: Upload HTML report if check failed.
         uses: actions/upload-artifact@v2
