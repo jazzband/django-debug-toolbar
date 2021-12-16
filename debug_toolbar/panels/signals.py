@@ -97,7 +97,7 @@ class SignalsPanel(Panel):
                     receiver_class_name = getattr(
                         receiver.__self__, "__class__", type
                     ).__name__
-                    text = "{}.{}".format(receiver_class_name, receiver_name)
+                    text = f"{receiver_class_name}.{receiver_name}"
                 else:
                     text = receiver_name
                 receivers.append(text)

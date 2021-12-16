@@ -44,7 +44,7 @@ def template_source(request):
         except TemplateDoesNotExist:
             pass
     else:
-        source = "Template Does Not Exist: {}".format(template_origin_name)
+        source = f"Template Does Not Exist: {template_origin_name}"
 
     try:
         from pygments import highlight

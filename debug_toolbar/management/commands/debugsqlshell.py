@@ -27,7 +27,7 @@ class PrintQueryWrapper(base_module.CursorDebugWrapper):
             end_time = time()
             duration = (end_time - start_time) * 1000
             formatted_sql = sqlparse.format(raw_sql, reindent=True)
-            print("{} [{:.2f}ms]".format(formatted_sql, duration))
+            print(f"{formatted_sql} [{duration:.2f}ms]")
 
 
 base_module.CursorDebugWrapper = PrintQueryWrapper

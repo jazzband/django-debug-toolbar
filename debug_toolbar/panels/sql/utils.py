@@ -26,8 +26,8 @@ def reformat_sql(sql, with_toggle=False):
     if not with_toggle:
         return formatted
     simple = simplify(parse_sql(sql, aligned_indent=False))
-    uncollapsed = '<span class="djDebugUncollapsed">{}</span>'.format(simple)
-    collapsed = '<span class="djDebugCollapsed djdt-hidden">{}</span>'.format(formatted)
+    uncollapsed = f'<span class="djDebugUncollapsed">{simple}</span>'
+    collapsed = f'<span class="djDebugCollapsed djdt-hidden">{formatted}</span>'
     return collapsed + uncollapsed
 
 
