@@ -141,6 +141,15 @@ Third-party panels
 
 If you'd like to add a panel to this list, please submit a pull request!
 
+MrBenn Toolbar Plugin
+~~~~~~~~~~
+
+URL: https://github.com/andytwoods/mrbenn
+
+Path: ``mrbenn_panel.panel.MrBennPanel``
+
+Allows you to quickly open template files and views directly in your IDE! In addition to the path above, you need to add ``mrbenn_panel`` in ``INSTALLED_APPS``
+
 Flamegraph
 ~~~~~~~~~~
 
