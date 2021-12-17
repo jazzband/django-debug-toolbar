@@ -87,8 +87,7 @@ Add django-debug-toolbar's URLs to your project's URLconf:
     ]
 
 This example uses the ``__debug__`` prefix, but you can use any prefix that
-doesn't clash with your application's URLs. Note the lack of quotes around
-``debug_toolbar.urls``.
+doesn't clash with your application's URLs.
 
 5. Add the Middleware
 ^^^^^^^^^^^^^^^^^^^^^
