@@ -30,7 +30,7 @@ class FunctionCall:
 
     def background(self):
         r, g, b = hsv_to_rgb(*self.hsv)
-        return "rgb({:f}%,{:f}%,{:f}%)".format(r * 100, g * 100, b * 100)
+        return f"rgb({r * 100:f}%,{g * 100:f}%,{b * 100:f}%)"
 
     def func_std_string(self):  # match what old profile produced
         func_name = self.func

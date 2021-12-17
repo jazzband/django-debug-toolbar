@@ -63,7 +63,7 @@ class CacheStatTracker(BaseCache):
         self.cache = cache
 
     def __repr__(self):
-        return str("<CacheStatTracker for %s>") % repr(self.cache)
+        return "<CacheStatTracker for %s>" % repr(self.cache)
 
     def _get_func_info(self):
         frame = sys._getframe(3)

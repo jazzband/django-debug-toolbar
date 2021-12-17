@@ -133,12 +133,12 @@ class SQLPanelTestCase(BaseTestCase):
         # comparisons in MySQL.
         if not (django.VERSION >= (4, 1) and connection.vendor == "mysql"):
             self.assertEqual(
-                tuple([q[1]["params"] for q in self.panel._queries]),
+                tuple(q[1]["params"] for q in self.panel._queries),
                 ('["Foo"]', "[10, 1]", '["2017-12-22 16:07:01"]'),
             )
         else:
             self.assertEqual(
-                tuple([q[1]["params"] for q in self.panel._queries]),
+                tuple(q[1]["params"] for q in self.panel._queries),
                 ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
             )
 
@@ -227,7 +227,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 2)
 
         self.assertEqual(
-            tuple([q[1]["params"] for q in self.panel._queries]),
+            tuple(q[1]["params"] for q in self.panel._queries),
             (
                 '["Foo", true, false, "2017-12-22 16:07:01"]',
                 " ".join(
@@ -246,7 +246,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel only inserts content after generate_stats and
         not the process_request.
         """
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("café", self.panel.content)
@@ -262,7 +262,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel inserts locals() content.
         """
         local_var = "<script>alert('test');</script>"  # noqa: F841
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertIn("local_var", self.panel.content)
@@ -276,7 +276,7 @@ class SQLPanelTestCase(BaseTestCase):
         """
         Test that the panel does not insert locals() content.
         """
-        list(User.objects.filter(username="café".encode("utf-8")))
+        list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertNotIn("djdt-locals", self.panel.content)

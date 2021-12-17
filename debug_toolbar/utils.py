@@ -27,7 +27,7 @@ def get_module_path(module_name):
     try:
         module = import_module(module_name)
     except ImportError as e:
-        raise ImproperlyConfigured("Error importing HIDE_IN_STACKTRACES: {}".format(e))
+        raise ImproperlyConfigured(f"Error importing HIDE_IN_STACKTRACES: {e}")
     else:
         source_path = inspect.getsourcefile(module)
         if source_path.endswith("__init__.py"):
@@ -157,7 +157,7 @@ def get_name_from_obj(obj):
 
     if hasattr(obj, "__module__"):
         module = obj.__module__
-        name = "{}.{}".format(module, name)
+        name = f"{module}.{name}"
 
     return name
 
