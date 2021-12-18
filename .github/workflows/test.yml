@@ -209,7 +209,7 @@ jobs:
         with:
           name: coverage-data
 
-      - name: Combine coverage & fail if it's <100%.
+      - name: Combine coverage & check percentage
         run: |
           python -m coverage combine
           python -m coverage html
