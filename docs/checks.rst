@@ -15,4 +15,6 @@ Debug Toolbar setup and configuration:
   ``MIDDLEWARE_CLASSES`` setting.
 * **debug_toolbar.W005**: Setting ``DEBUG_TOOLBAR_PANELS`` is empty.
 * **debug_toolbar.W006**: At least one ``DjangoTemplates`` ``TEMPLATES``
-  configuration needs to have ``APP_DIRS`` set to ``True``.
+  configuration needs to have
+  ``django.template.loaders.app_directories.Loader`` included in
+  ``["OPTIONS"]["loaders"]`` or ``APP_DIRS`` set to ``True``.

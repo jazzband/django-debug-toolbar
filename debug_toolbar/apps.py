@@ -22,6 +22,24 @@ class DebugToolbarConfig(AppConfig):
         DebugToolbar.get_panel_classes()
 
 
+def check_template_config(config):
+    """
+    Checks if a template configuration is valid.
+
+    The toolbar requires either the toolbars to be unspecified or
+    ``django.template.loaders.app_directories.Loader`` to be
+    included in the loaders.
+    If custom loaders are specified, then APP_DIRS must be True.
+    """
+    app_dirs = config.get("APP_DIRS", False)
+    loaders = config.get("OPTIONS", {}).get("loaders", None)
+    # By default the app loader is included.
+    has_app_loaders = (
+        loaders is None or "django.template.loaders.app_directories.Loader" in loaders
+    )
+    return has_app_loaders or app_dirs
+
+
 @register
 def check_middleware(app_configs, **kwargs):
     from debug_toolbar.middleware import DebugToolbarMiddleware
@@ -30,13 +48,16 @@ def check_middleware(app_configs, **kwargs):
     gzip_index = None
     debug_toolbar_indexes = []
 
-    if all(not config.get("APP_DIRS", False) for config in settings.TEMPLATES):
+    if all(not check_template_config(config) for config in settings.TEMPLATES):
         errors.append(
             Warning(
                 "At least one DjangoTemplates TEMPLATES configuration needs "
-                "to have APP_DIRS set to True.",
+                "to use django.template.loaders.app_directories.Loader or "
+                "have APP_DIRS set to True.",
                 hint=(
-                    "Use APP_DIRS=True for at least one "
+                    "Include django.template.loaders.app_directories.Loader "
+                    'in ["OPTIONS"]["loaders"]. Alternatively use '
+                    "APP_DIRS=True for at least one "
                     "django.template.backends.django.DjangoTemplates "
                     "backend configuration."
                 ),
