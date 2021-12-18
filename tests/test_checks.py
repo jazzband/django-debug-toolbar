@@ -134,21 +134,27 @@ class ChecksTestCase(SimpleTestCase):
                         "django.template.context_processors.request",
                         "django.contrib.auth.context_processors.auth",
                         "django.contrib.messages.context_processors.messages",
-                    ]
+                    ],
+                    "loaders": [
+                        "django.template.loaders.filesystem.Loader",
+                    ],
                 },
             },
         ]
     )
-    def test_templates_is_using_app_dirs_false(self):
+    def test_check_w006_invalid(self):
         errors = run_checks()
         self.assertEqual(
             errors,
             [
                 Warning(
-                    "At least one DjangoTemplates TEMPLATES configuration "
-                    "needs to have APP_DIRS set to True.",
+                    "At least one DjangoTemplates TEMPLATES configuration needs "
+                    "to use django.template.loaders.app_directories.Loader or "
+                    "have APP_DIRS set to True.",
                     hint=(
-                        "Use APP_DIRS=True for at least one "
+                        "Include django.template.loaders.app_directories.Loader "
+                        'in ["OPTIONS"]["loaders"]. Alternatively use '
+                        "APP_DIRS=True for at least one "
                         "django.template.backends.django.DjangoTemplates "
                         "backend configuration."
                     ),
@@ -156,3 +162,39 @@ class ChecksTestCase(SimpleTestCase):
                 )
             ],
         )
+
+    @override_settings(
+        TEMPLATES=[
+            {
+                "NAME": "use_loaders",
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "APP_DIRS": False,
+                "OPTIONS": {
+                    "context_processors": [
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.request",
+                        "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
+                    ],
+                    "loaders": [
+                        "django.template.loaders.app_directories.Loader",
+                    ],
+                },
+            },
+            {
+                "NAME": "use_app_dirs",
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    "context_processors": [
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.request",
+                        "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
+                    ],
+                },
+            },
+        ]
+    )
+    def test_check_w006_valid(self):
+        self.assertEqual(run_checks(), [])
