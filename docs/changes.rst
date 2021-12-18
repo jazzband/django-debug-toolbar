@@ -5,7 +5,7 @@ Next version
 ------------
 
 * Removed support for Django < 3.2.
-* Update check ``W006`` to look for
+* Updated check ``W006`` to look for
   ``django.template.loaders.app_directories.Loader``.
 
 3.2.4 (2021-12-15)
