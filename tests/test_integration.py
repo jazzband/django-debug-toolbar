@@ -96,6 +96,15 @@ class DebugToolbarTestCase(BaseTestCase):
         # check toolbar insertion before "</body>"
         self.assertContains(response, "</div>\n</body>")
 
+    def test_middleware_no_injection_when_encoded(self):
+        def get_response(request):
+            response = HttpResponse("<html><body></body></html>")
+            response["Content-Encoding"] = "something"
+            return response
+
+        response = DebugToolbarMiddleware(get_response)(self.request)
+        self.assertEqual(response.content, b"<html><body></body></html>")
+
     def test_cache_page(self):
         # Clear the cache before testing the views. Other tests that use cached_view
         # may run earlier and cause fewer cache calls.
