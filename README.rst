@@ -2,7 +2,7 @@
 Django Debug Toolbar |latest-version|
 =====================================
 
-|jazzband| |build-status| |codecov| |docs| |python-support| |django-support|
+|jazzband| |build-status| |docs| |python-support| |django-support|
 
 .. |latest-version| image:: https://img.shields.io/pypi/v/django-debug-toolbar.svg
    :target: https://pypi.python.org/pypi/django-debug-toolbar
@@ -15,10 +15,6 @@ Django Debug Toolbar |latest-version|
 .. |build-status| image:: https://github.com/jazzband/django-debug-toolbar/workflows/Test/badge.svg
    :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
-
-.. |codecov| image:: https://codecov.io/gh/jazzband/django-debug-toolbar/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/jazzband/django-debug-toolbar
-   :alt: Test coverage status
 
 .. |docs| image:: https://img.shields.io/readthedocs/django-debug-toolbar/latest.svg
    :target: https://readthedocs.org/projects/django-debug-toolbar/
