@@ -3,7 +3,7 @@
 *~
 .idea
 build
-.coverage
+.coverage*
 dist
 django_debug_toolbar.egg-info
 docs/_build
