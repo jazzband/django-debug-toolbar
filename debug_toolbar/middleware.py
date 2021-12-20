@@ -78,7 +78,7 @@ class DebugToolbarMiddleware:
         content_type = response.get("Content-Type", "").split(";")[0]
         if (
             getattr(response, "streaming", False)
-            or "gzip" in content_encoding
+            or content_encoding != ""
             or content_type not in _HTML_TYPES
         ):
             return response
