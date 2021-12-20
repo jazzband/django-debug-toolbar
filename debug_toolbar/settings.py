@@ -1,6 +1,8 @@
 from functools import lru_cache
 
 from django.conf import settings
+from django.dispatch import receiver
+from django.test.signals import setting_changed
 
 CONFIG_DEFAULTS = {
     # Toolbar options
@@ -71,3 +73,18 @@ def get_panels():
     except AttributeError:
         PANELS = PANELS_DEFAULTS
     return PANELS
+
+
+@receiver(setting_changed)
+def update_toolbar_config(*, setting, **kwargs):
+    """
+    Refresh configuration when overriding settings.
+    """
+    if setting == "DEBUG_TOOLBAR_CONFIG":
+        get_config.cache_clear()
+    elif setting == "DEBUG_TOOLBAR_PANELS":
+        from debug_toolbar.toolbar import DebugToolbar
+
+        get_panels.cache_clear()
+        DebugToolbar._panel_classes = None
+        # Not implemented: invalidate debug_toolbar.urls.
