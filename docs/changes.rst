@@ -7,6 +7,9 @@ Next version
 * Removed support for Django < 3.2.
 * Updated check ``W006`` to look for
   ``django.template.loaders.app_directories.Loader``.
+* Reset settings when overridden in tests. Packages or projects using
+  django-debug-toolbar can now use Django’s test settings tools, like
+  ``@override_settings``, to reconfigure the toolbar during tests.
 
 3.2.4 (2021-12-15)
 ------------------
