@@ -1,3 +1,5 @@
+let controller = null;
+
 const $$ = {
     on(root, eventName, selector, fn) {
         root.addEventListener(eventName, function (event) {
@@ -5,7 +7,7 @@ const $$ = {
             if (root.contains(target)) {
                 fn.call(target, event);
             }
-        });
+        }, {'signal': controller.signal});
     },
     onPanelRender(root, panelId, fn) {
         /*
@@ -20,7 +22,7 @@ const $$ = {
             if (event.detail.panelId === panelId) {
                 fn.call(event);
             }
-        });
+        }, {'signal': controller.signal});
     },
     show(element) {
         element.classList.remove("djdt-hidden");
@@ -69,6 +71,11 @@ const $$ = {
     },
 };
 
+function resetAbortController(){
+    controller = new AbortController();
+};
+resetAbortController();
+
 function ajax(url, init) {
     init = Object.assign({ credentials: "same-origin" }, init);
     return fetch(url, init)
@@ -104,4 +111,4 @@ function ajaxForm(element) {
     return ajax(url, ajaxData);
 }
 
-export { $$, ajax, ajaxForm };
+export { $$, ajax, ajaxForm, controller, resetAbortController };
