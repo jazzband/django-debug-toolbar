@@ -1,3 +1,4 @@
+import copy
 import html
 
 from django.test import RequestFactory, override_settings
@@ -92,6 +93,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         toolbar = list(DebugToolbar._store.values())[0]
         content = toolbar.get_panel_by_id("HistoryPanel").content
         self.assertIn("bar", content)
+        self.assertIn('name="exclude_history" value="True"', content)
 
     def test_history_sidebar_invalid(self):
         response = self.client.get(reverse("djdt:history_sidebar"))
@@ -101,12 +103,27 @@ class HistoryViewsTestCase(IntegrationTestCase):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
         store_id = list(DebugToolbar._store)[0]
-        data = {"store_id": store_id}
+        data = {"store_id": store_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             set(response.json()),
             self.PANEL_KEYS,
+        )
+
+    def test_history_sidebar_includes_history(self):
+        """Validate the history sidebar view."""
+        self.client.get("/json_view/")
+        panel_keys = copy.copy(self.PANEL_KEYS)
+        panel_keys.add("HistoryPanel")
+        panel_keys.add("RedirectsPanel")
+        store_id = list(DebugToolbar._store)[0]
+        data = {"store_id": store_id}
+        response = self.client.get(reverse("djdt:history_sidebar"), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            set(response.json()),
+            panel_keys,
         )
 
     @override_settings(
@@ -116,7 +133,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
         store_id = list(DebugToolbar._store)[0]
-        data = {"store_id": store_id}
+        data = {"store_id": store_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -126,14 +143,14 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.client.get("/json_view/")
 
         # Querying old store_id should return in empty response
-        data = {"store_id": store_id}
+        data = {"store_id": store_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {})
 
         # Querying with latest store_id
         latest_store_id = list(DebugToolbar._store)[0]
-        data = {"store_id": latest_store_id}
+        data = {"store_id": latest_store_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

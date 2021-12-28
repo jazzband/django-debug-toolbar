@@ -9,3 +9,4 @@ class HistoryStoreForm(forms.Form):
     """
 
     store_id = forms.CharField(widget=forms.HiddenInput())
+    exclude_history = forms.BooleanField(widget=forms.HiddenInput(), required=False)

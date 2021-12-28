@@ -4,6 +4,7 @@ The main DebugToolbar class that loads and renders the Toolbar.
 
 import uuid
 from collections import OrderedDict
+from functools import lru_cache
 
 from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
@@ -130,7 +131,7 @@ class DebugToolbar:
             # Load URLs in a temporary variable for thread safety.
             # Global URLs
             urlpatterns = [
-                path("render_panel/", views.render_panel, name="render_panel")
+                path("render_panel/", views.render_panel, name="render_panel"),
             ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():
@@ -154,3 +155,21 @@ class DebugToolbar:
         except Resolver404:
             return False
         return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
+
+    @staticmethod
+    @lru_cache(maxsize=128)
+    def get_observe_request():
+        # If OBSERVE_REQUEST_CALLBACK is a string, which is the recommended
+        # setup, resolve it to the corresponding callable.
+        func_or_path = dt_settings.get_config()["OBSERVE_REQUEST_CALLBACK"]
+        if isinstance(func_or_path, str):
+            return import_string(func_or_path)
+        else:
+            return func_or_path
+
+
+def observe_request(request):
+    """
+    Determine whether to update the toolbar from a client side request.
+    """
+    return not DebugToolbar.is_toolbar_request(request)
