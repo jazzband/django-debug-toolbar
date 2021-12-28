@@ -49,6 +49,8 @@ class DebugToolbarMiddleware:
 
         toolbar = DebugToolbar(request, self.get_response)
 
+        self.configure_toolbar(request, toolbar)
+
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
             panel.enable_instrumentation()
@@ -88,6 +90,9 @@ class DebugToolbarMiddleware:
             if "Content-Length" in response:
                 response["Content-Length"] = len(response.content)
         return response
+
+    def configure_toolbar(self, request, toolbar):
+        pass
 
     @staticmethod
     def insert_toolbar(request, response, rendered):
