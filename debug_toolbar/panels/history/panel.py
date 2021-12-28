@@ -20,6 +20,14 @@ class HistoryPanel(Panel):
     nav_title = _("History")
     template = "debug_toolbar/panels/history.html"
 
+    def get_headers(self, request):
+        headers = super().get_headers(request)
+        observe_request = self.toolbar.get_observe_request()
+        store_id = getattr(self.toolbar, "store_id")
+        if store_id and observe_request(request):
+            headers["DJDT-STORE-ID"] = store_id
+        return headers
+
     @property
     def enabled(self):
         # Do not show the history panel if the panels are rendered on request
@@ -83,7 +91,9 @@ class HistoryPanel(Panel):
         for id, toolbar in reversed(self.toolbar._store.items()):
             stores[id] = {
                 "toolbar": toolbar,
-                "form": HistoryStoreForm(initial={"store_id": id}),
+                "form": HistoryStoreForm(
+                    initial={"store_id": id, "exclude_history": True}
+                ),
             }
 
         return render_to_string(
@@ -92,7 +102,10 @@ class HistoryPanel(Panel):
                 "current_store_id": self.toolbar.store_id,
                 "stores": stores,
                 "refresh_form": HistoryStoreForm(
-                    initial={"store_id": self.toolbar.store_id}
+                    initial={
+                        "store_id": self.toolbar.store_id,
+                        "exclude_history": True,
+                    }
                 ),
             },
         )

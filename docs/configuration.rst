@@ -138,6 +138,18 @@ Toolbar options
      implication is that it is possible to execute arbitrary SQL through the
      SQL panel when the ``SECRET_KEY`` value is leaked somehow.
 
+.. _OBSERVE_REQUEST_CALLBACK:
+
+* ``OBSERVE_REQUEST_CALLBACK``
+
+  Default: ``'debug_toolbar.middleware.observe_request'``
+
+  This is the dotted path to a function used for determining whether the
+  toolbar should update on AJAX requests or not. The default checks are that
+  the request doesn't originate from the toolbar itself, EG that
+  ``is_toolbar_request`` is false for a given request.
+
+
 
 Panel options
 ~~~~~~~~~~~~~

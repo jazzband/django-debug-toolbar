@@ -11,6 +11,10 @@
      data-store-id="{{ toolbar.store_id }}"
      data-render-panel-url="{% url 'djdt:render_panel' %}"
      {% endif %}
+     {% url 'djdt:history_sidebar' as history_url %}
+     {% if history_url %}
+     data-sidebar-url="{{ history_url }}"
+     {% endif %}
      data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
      {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
   <div class="djdt-hidden" id="djDebugToolbar">

@@ -1,4 +1,4 @@
-import { $$, ajaxForm } from "./utils.js";
+import { $$, ajaxForm, replaceToolbarState } from "./utils.js";
 
 const djDebug = document.getElementById("djDebug");
 
@@ -12,9 +12,6 @@ function difference(setA, setB) {
 
 /**
  * Create an array of dataset properties from a NodeList.
- * @param nodes
- * @param key
- * @returns {[]}
  */
 function pluckData(nodes, key) {
     const data = [];
@@ -31,7 +28,7 @@ function refreshHistory() {
         pluckData(container.querySelectorAll("tr[data-store-id]"), "storeId")
     );
 
-    return ajaxForm(formTarget)
+    ajaxForm(formTarget)
         .then(function (data) {
             // Remove existing rows first then re-populate with new data
             container
@@ -75,36 +72,32 @@ function refreshHistory() {
         });
 }
 
-$$.on(djDebug, "click", ".switchHistory", function (event) {
-    event.preventDefault();
-    const newStoreId = this.dataset.storeId;
-    const tbody = this.closest("tbody");
+function switchHistory(newStoreId) {
+    const formTarget = djDebug.querySelector(
+        ".switchHistory[data-store-id='" + newStoreId + "']"
+    );
+    const tbody = formTarget.closest("tbody");
 
     const highlighted = tbody.querySelector(".djdt-highlighted");
     if (highlighted) {
         highlighted.classList.remove("djdt-highlighted");
     }
-    this.closest("tr").classList.add("djdt-highlighted");
+    formTarget.closest("tr").classList.add("djdt-highlighted");
 
-    ajaxForm(this).then(function (data) {
-        djDebug.setAttribute("data-store-id", newStoreId);
-        // Check if response is empty, it could be due to an expired store_id.
+    ajaxForm(formTarget).then(function (data) {
         if (Object.keys(data).length === 0) {
             const container = document.getElementById("djdtHistoryRequests");
             container.querySelector(
                 'button[data-store-id="' + newStoreId + '"]'
             ).innerHTML = "Switch [EXPIRED]";
-        } else {
-            Object.keys(data).forEach(function (panelId) {
-                const panel = document.getElementById(panelId);
-                if (panel) {
-                    panel.outerHTML = data[panelId].content;
-                    document.getElementById("djdt-" + panelId).outerHTML =
-                        data[panelId].button;
-                }
-            });
         }
+        replaceToolbarState(newStoreId, data);
     });
+}
+
+$$.on(djDebug, "click", ".switchHistory", function (event) {
+    event.preventDefault();
+    switchHistory(this.dataset.storeId);
 });
 
 $$.on(djDebug, "click", ".refreshHistory", function (event) {

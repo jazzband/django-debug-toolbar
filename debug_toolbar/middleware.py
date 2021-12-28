@@ -67,11 +67,12 @@ class DebugToolbarMiddleware:
             panel.generate_stats(request, response)
             panel.generate_server_timing(request, response)
 
-        response = self.generate_server_timing_header(response, toolbar.enabled_panels)
-
         # Always render the toolbar for the history panel, even if it is not
         # included in the response.
         rendered = toolbar.render_toolbar()
+
+        for header, value in self.get_headers(request, toolbar.enabled_panels).items():
+            response.headers[header] = value
 
         # Check for responses where the toolbar can't be inserted.
         content_encoding = response.get("Content-Encoding", "")
@@ -96,22 +97,12 @@ class DebugToolbarMiddleware:
         return response
 
     @staticmethod
-    def generate_server_timing_header(response, panels):
-        data = []
-
+    def get_headers(request, panels):
+        headers = {}
         for panel in panels:
-            stats = panel.get_server_timing_stats()
-            if not stats:
-                continue
-
-            for key, record in stats.items():
-                # example: `SQLPanel_sql_time;dur=0;desc="SQL 0 queries"`
-                data.append(
-                    '{}_{};dur={};desc="{}"'.format(
-                        panel.panel_id, key, record.get("value"), record.get("title")
-                    )
-                )
-
-        if data:
-            response["Server-Timing"] = ", ".join(data)
-        return response
+            for header, value in panel.get_headers(request).items():
+                if header in headers:
+                    headers[header] += f", {value}"
+                else:
+                    headers[header] = value
+        return headers

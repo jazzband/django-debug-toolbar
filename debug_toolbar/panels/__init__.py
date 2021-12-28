@@ -192,15 +192,40 @@ class Panel:
         """
         return self.get_response(request)
 
+    def get_headers(self, request):
+        """
+        Get headers the panel needs to set.
+
+        Called after :meth:`process_request
+        <debug_toolbar.panels.Panel.generate_stats>` and
+        :meth:`process_request<debug_toolbar.panels.Panel.generate_stats>`
+
+        Header values will be appended if multiple panels need to set it.
+
+        By default it sets the Server-Timing header.
+
+        Return dict of headers to be appended.
+        """
+        headers = {}
+        stats = self.get_server_timing_stats()
+        if stats:
+            headers["Server-Timing"] = ", ".join(
+                # example: `SQLPanel_sql_time;dur=0;desc="SQL 0 queries"`
+                '{}_{};dur={};desc="{}"'.format(
+                    self.panel_id, key, record.get("value"), record.get("title")
+                )
+                for key, record in stats.items()
+            )
+        return headers
+
     def generate_stats(self, request, response):
         """
-        Called after :meth:`process_request
-        <debug_toolbar.panels.Panel.process_request>`, but may not be executed
-        on every request. This will only be called if the toolbar will be
-        inserted into the request.
-
         Write panel logic related to the response there. Post-process data
         gathered while the view executed. Save data with :meth:`record_stats`.
+
+        Called after :meth:`process_request
+        <debug_toolbar.panels.Panel.process_request>`.
+
 
         Does not return a value.
         """
