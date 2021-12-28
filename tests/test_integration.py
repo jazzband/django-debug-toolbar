@@ -105,6 +105,22 @@ class DebugToolbarTestCase(BaseTestCase):
         response = DebugToolbarMiddleware(get_response)(self.request)
         self.assertEqual(response.content, b"<html><body></body></html>")
 
+    def test_optional_js_css(self):
+        def get_response(request):
+            return regular_view(request, "tuturu")
+
+        class NoStaticMiddleware(DebugToolbarMiddleware):
+            def configure_toolbar(self, request, toolbar):
+                toolbar.should_render_js = toolbar.should_render_css = False
+
+        response = DebugToolbarMiddleware(get_response)(self.request)
+        self.assertContains(response, b"<link")
+        self.assertContains(response, b"<script")
+
+        response = NoStaticMiddleware(get_response)(self.request)
+        self.assertNotContains(response, b"<link")
+        self.assertNotContains(response, b"<script")
+
     def test_cache_page(self):
         # Clear the cache before testing the views. Other tests that use cached_view
         # may run earlier and cause fewer cache calls.

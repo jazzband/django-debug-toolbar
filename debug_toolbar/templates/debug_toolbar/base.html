@@ -1,10 +1,14 @@
 {% load i18n static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" media="print">
-<link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}">
+  {% if toolbar.should_render_css %}
+    <link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" media="print">
+    <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}">
+  {% endif %}
 {% endblock %}
 {% block js %}
-<script type="module" src="{% static 'debug_toolbar/js/toolbar.js' %}" async></script>
+  {% if toolbar.should_render_js %}
+    <script type="module" src="{% static 'debug_toolbar/js/toolbar.js' %}" async></script>
+  {% endif %}
 {% endblock %}
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      {% if not toolbar.should_render_panels %}
