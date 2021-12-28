@@ -34,6 +34,7 @@ class DebugToolbar:
         self.stats = {}
         self.server_timing_stats = {}
         self.store_id = None
+        self.root_tag_extra_attrs = self.config["ROOT_TAG_EXTRA_ATTRS"]
         self.should_render_css = self.should_render_js = True
 
     # Manage panels

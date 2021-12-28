@@ -121,6 +121,25 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertNotContains(response, b"<link")
         self.assertNotContains(response, b"<script")
 
+    def test_dynamic_root_extra_attr(self):
+        def get_response(request):
+            return regular_view(request, "nani")
+
+        class DynamicExtraAttrMiddleware(DebugToolbarMiddleware):
+            def configure_toolbar(self, request, toolbar):
+                if request.headers.get("test") == "omae":
+                    toolbar.root_tag_extra_attrs = "omae wa"
+                if request.headers.get("test") == "mou":
+                    toolbar.root_tag_extra_attrs = "mou shindeiru"
+
+        request = rf.get("/", HTTP_TEST="omae")
+        response = DynamicExtraAttrMiddleware(get_response)(request)
+        self.assertContains(response, b"omae wa")
+
+        request = rf.get("/", HTTP_TEST="mou")
+        response = DynamicExtraAttrMiddleware(get_response)(request)
+        self.assertContains(response, b"mou shindeiru")
+
     def test_cache_page(self):
         # Clear the cache before testing the views. Other tests that use cached_view
         # may run earlier and cause fewer cache calls.
