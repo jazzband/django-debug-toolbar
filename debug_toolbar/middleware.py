@@ -83,6 +83,14 @@ class DebugToolbarMiddleware:
         ):
             return response
 
+        response, did_insert = self.insert_toolbar(request, response, rendered)
+        if did_insert:
+            if "Content-Length" in response:
+                response["Content-Length"] = len(response.content)
+        return response
+
+    @staticmethod
+    def insert_toolbar(request, response, rendered):
         # Insert the toolbar in the response.
         content = response.content.decode(response.charset)
         insert_before = dt_settings.get_config()["INSERT_BEFORE"]
@@ -91,9 +99,8 @@ class DebugToolbarMiddleware:
         if len(bits) > 1:
             bits[-2] += rendered
             response.content = insert_before.join(bits)
-            if "Content-Length" in response:
-                response["Content-Length"] = len(response.content)
-        return response
+            return response, True
+        return response, False
 
     @staticmethod
     def generate_server_timing_header(response, panels):
