@@ -89,6 +89,10 @@ class CacheStatTracker(BaseCache):
         return self.cache.set(*args, **kwargs)
 
     @send_signal
+    def get_or_set(self, *args, **kwargs):
+        return self.cache.get_or_set(*args, **kwargs)
+
+    @send_signal
     def touch(self, *args, **kwargs):
         return self.cache.touch(*args, **kwargs)
 
@@ -169,6 +173,7 @@ class CachePanel(Panel):
                 ("add", 0),
                 ("get", 0),
                 ("set", 0),
+                ("get_or_set", 0),
                 ("touch", 0),
                 ("delete", 0),
                 ("clear", 0),
@@ -197,7 +202,7 @@ class CachePanel(Panel):
         backend=None,
         **kw,
     ):
-        if name == "get":
+        if name == "get" or name == "get_or_set":
             if return_value is None:
                 self.misses += 1
             else:
