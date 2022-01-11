@@ -4,6 +4,7 @@ Change log
 Next version
 ------------
 
+* Track calls to :py:meth:`django.core.caches.cache.get_or_set`.
 * Removed support for Django < 3.2.
 * Updated check ``W006`` to look for
   ``django.template.loaders.app_directories.Loader``.
