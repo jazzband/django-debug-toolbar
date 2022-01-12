@@ -1,4 +1,5 @@
 import re
+from functools import lru_cache
 
 import sqlparse
 from django.utils.html import escape
@@ -32,8 +33,23 @@ def reformat_sql(sql, with_toggle=False):
 
 
 def parse_sql(sql, aligned_indent=False):
+    return _parse_sql(
+        sql,
+        dt_settings.get_config()["PRETTIFY_SQL"],
+        aligned_indent,
+    )
+
+
+@lru_cache(maxsize=128)
+def _parse_sql(sql, pretty, aligned_indent):
+    stack = get_filter_stack(pretty, aligned_indent)
+    return "".join(stack.run(sql))
+
+
+@lru_cache(maxsize=None)
+def get_filter_stack(prettify, aligned_indent):
     stack = sqlparse.engine.FilterStack()
-    if dt_settings.get_config()["PRETTIFY_SQL"]:
+    if prettify:
         stack.enable_grouping()
     if aligned_indent:
         stack.stmtprocess.append(
@@ -41,13 +57,14 @@ def parse_sql(sql, aligned_indent=False):
         )
     stack.preprocess.append(BoldKeywordFilter())  # add our custom filter
     stack.postprocess.append(sqlparse.filters.SerializerUnicode())  # tokens -> strings
-    return "".join(stack.run(sql))
+    return stack
+
+
+simplify_re = re.compile(r"SELECT</strong> (...........*?) <strong>FROM")
 
 
 def simplify(sql):
-    expr = r"SELECT</strong> (...........*?) <strong>FROM"
-    sub = r"SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM"
-    return re.sub(expr, sub, sql)
+    return simplify_re.sub(r"SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM", sql)
 
 
 def contrasting_color_generator():
