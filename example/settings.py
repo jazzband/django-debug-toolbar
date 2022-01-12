@@ -57,6 +57,8 @@ TEMPLATES = [
     }
 ]
 
+USE_TZ = True
+
 WSGI_APPLICATION = "example.wsgi.application"
 
 

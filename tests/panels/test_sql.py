@@ -121,7 +121,13 @@ class SQLPanelTestCase(BaseTestCase):
             .filter(group_count__lt=10)
             .filter(group_count__gt=1)
         )
-        list(User.objects.filter(date_joined=datetime.datetime(2017, 12, 22, 16, 7, 1)))
+        list(
+            User.objects.filter(
+                date_joined=datetime.datetime(
+                    2017, 12, 22, 16, 7, 1, tzinfo=datetime.timezone.utc
+                )
+            )
+        )
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
@@ -129,18 +135,27 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 3)
 
-        # Django 4.1 started passing true/false back for boolean
-        # comparisons in MySQL.
-        if not (django.VERSION >= (4, 1) and connection.vendor == "mysql"):
-            self.assertEqual(
-                tuple(q[1]["params"] for q in self.panel._queries),
-                ('["Foo"]', "[10, 1]", '["2017-12-22 16:07:01"]'),
-            )
+        if connection.vendor == "mysql" and django.VERSION >= (4, 1):
+            # Django 4.1 started passing true/false back for boolean
+            # comparisons in MySQL.
+            expected_bools = '["Foo", true, false]'
         else:
-            self.assertEqual(
-                tuple(q[1]["params"] for q in self.panel._queries),
-                ('["Foo", true, false]', "[10, 1]", '["2017-12-22 16:07:01"]'),
-            )
+            expected_bools = '["Foo"]'
+
+        if connection.vendor == "postgresql":
+            # PostgreSQL always includes timezone
+            expected_datetime = '["2017-12-22 16:07:01+00:00"]'
+        else:
+            expected_datetime = '["2017-12-22 16:07:01"]'
+
+        self.assertEqual(
+            tuple(q[1]["params"] for q in self.panel._queries),
+            (
+                expected_bools,
+                "[10, 1]",
+                expected_datetime,
+            ),
+        )
 
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"

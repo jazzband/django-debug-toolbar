@@ -1,14 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django import forms
 from django.test import TestCase
 
 from debug_toolbar.forms import SignedDataForm
 
-SIGNATURE = "v02QBcJplEET6QXHNWejnRcmSENWlw6_RjxLTR7QG9g"
+SIGNATURE = "-WiogJKyy4E8Om00CrFSy0T6XHObwBa6Zb46u-vmeYE"
 
-DATA = {"value": "foo", "date": datetime(2020, 1, 1)}
-SIGNED_DATA = f'{{"date": "2020-01-01 00:00:00", "value": "foo"}}:{SIGNATURE}'
+DATA = {"value": "foo", "date": datetime(2020, 1, 1, tzinfo=timezone.utc)}
+SIGNED_DATA = f'{{"date": "2020-01-01 00:00:00+00:00", "value": "foo"}}:{SIGNATURE}'
 
 
 class FooForm(forms.Form):
@@ -32,7 +32,7 @@ class TestSignedDataForm(TestCase):
             form.verified_data(),
             {
                 "value": "foo",
-                "date": "2020-01-01 00:00:00",
+                "date": "2020-01-01 00:00:00+00:00",
             },
         )
         # Take it back to the foo form to validate the datetime is serialized
