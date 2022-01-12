@@ -69,6 +69,8 @@ TEMPLATES = [
     },
 ]
 
+USE_TZ = True
+
 STATIC_ROOT = os.path.join(BASE_DIR, "tests", "static")
 
 STATIC_URL = "/static/"
