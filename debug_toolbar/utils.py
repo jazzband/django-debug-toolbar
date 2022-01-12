@@ -3,12 +3,12 @@ import os.path
 import re
 import sys
 from importlib import import_module
-from itertools import chain
+from pprint import pformat
 
 import django
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
-from django.template.loader import render_to_string
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from debug_toolbar import settings as dt_settings
@@ -69,26 +69,31 @@ def tidy_stacktrace(stack):
 
 
 def render_stacktrace(trace):
-    stacktrace = []
-    for frame in trace:
-        params = (v for v in chain(frame[0].rsplit(os.path.sep, 1), frame[1:]))
-        params_dict = {str(idx): v for idx, v in enumerate(params)}
-        try:
-            stacktrace.append(params_dict)
-        except KeyError:
-            # This frame doesn't have the expected format, so skip it and move
-            # on to the next one
-            continue
-
-    return mark_safe(
-        render_to_string(
-            "debug_toolbar/panels/sql_stacktrace.html",
-            {
-                "stacktrace": stacktrace,
-                "show_locals": dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"],
-            },
+    show_locals = dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]
+    html = ""
+    for abspath, lineno, func, code, locals_ in trace:
+        directory, filename = abspath.rsplit(os.path.sep, 1)
+        html += format_html(
+            (
+                '<span class="djdt-path">{}/</span>'
+                + '<span class="djdt-file">{}</span> in'
+                + ' <span class="djdt-func">{}</span>'
+                + '(<span class="djdt-lineno">{}</span>)\n'
+                + '  <span class="djdt-code">{}</span>\n'
+            ),
+            directory,
+            filename,
+            func,
+            lineno,
+            code,
         )
-    )
+        if show_locals:
+            html += format_html(
+                '  <pre class="djdt-locals">{}</pre>\n',
+                pformat(locals_),
+            )
+        html += "\n"
+    return mark_safe(html)
 
 
 def get_template_info():

@@ -1,4 +1,0 @@
-{% for s in stacktrace %}<span class="djdt-path">{{s.0}}/</span><span class="djdt-file">{{s.1}}</span> in <span class="djdt-func">{{s.3}}</span>(<span class="djdt-lineno">{{s.2}}</span>)
-  <span class="djdt-code">{{s.4}}</span>
-  {% if show_locals %}<pre class="djdt-locals">{{s.5|pprint}}</pre>{% endif %}
-{% endfor %}
