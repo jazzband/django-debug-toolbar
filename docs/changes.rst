@@ -11,6 +11,7 @@ Next version
 * Reset settings when overridden in tests. Packages or projects using
   django-debug-toolbar can now use Django’s test settings tools, like
   ``@override_settings``, to reconfigure the toolbar during tests.
+* Optimize rendering of SQL panel, saving about 15% of its run time.
 
 3.2.4 (2021-12-15)
 ------------------
