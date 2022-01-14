@@ -1,19 +1,28 @@
-import { $$, ajaxForm } from "./utils.js";
+import { $$, ajaxForm, pluckData } from "./utils.js";
 
 const djDebug = document.getElementById("djDebug");
 
-$$.on(djDebug, "click", ".switchHistory", function (event) {
-    event.preventDefault();
-    const newStoreId = this.dataset.storeId;
-    const tbody = this.closest("tbody");
+function difference(setA, setB) {
+    const _difference = new Set(setA);
+    for (const elem of setB) {
+        _difference.delete(elem);
+    }
+    return _difference;
+}
+
+function switchHistory(newStoreId) {
+    const formTarget = djDebug.querySelector(
+        ".switchHistory[data-store-id='" + newStoreId + "']"
+    );
+    const tbody = formTarget.closest("tbody");
 
     const highlighted = tbody.querySelector(".djdt-highlighted");
     if (highlighted) {
         highlighted.classList.remove("djdt-highlighted");
     }
-    this.closest("tr").classList.add("djdt-highlighted");
+    formTarget.closest("tr").classList.add("djdt-highlighted");
 
-    ajaxForm(this).then(function (data) {
+    ajaxForm(formTarget).then(function (data) {
         djDebug.setAttribute("data-store-id", newStoreId);
         // Check if response is empty, it could be due to an expired store_id.
         if (Object.keys(data).length === 0) {
@@ -32,20 +41,53 @@ $$.on(djDebug, "click", ".switchHistory", function (event) {
             });
         }
     });
+}
+
+function refreshHistory() {
+    const formTarget = djDebug.querySelector(".refreshHistory");
+    const container = document.getElementById("djdtHistoryRequests");
+    const oldIds = new Set(
+        pluckData(container.querySelectorAll("tr[data-store-id]"), "storeId")
+    );
+
+    return ajaxForm(formTarget)
+        .then(function (data) {
+            // Remove existing rows first then re-populate with new data
+            container
+                .querySelectorAll("tr[data-store-id]")
+                .forEach(function (node) {
+                    node.remove();
+                });
+            data.requests.forEach(function (request) {
+                container.innerHTML = request.content + container.innerHTML;
+            });
+        })
+        .then(function () {
+            const allIds = new Set(
+                pluckData(
+                    container.querySelectorAll("tr[data-store-id]"),
+                    "storeId"
+                )
+            );
+            const newIds = difference(allIds, oldIds);
+            const lastRequestId = newIds.values().next().value;
+            return {
+                allIds,
+                newIds,
+                lastRequestId,
+            };
+        });
+}
+
+$$.on(djDebug, "click", ".switchHistory", function (event) {
+    event.preventDefault();
+    switchHistory(this.dataset.storeId);
 });
 
 $$.on(djDebug, "click", ".refreshHistory", function (event) {
     event.preventDefault();
-    const container = document.getElementById("djdtHistoryRequests");
-    ajaxForm(this).then(function (data) {
-        // Remove existing rows first then re-populate with new data
-        container
-            .querySelectorAll("tr[data-store-id]")
-            .forEach(function (node) {
-                node.remove();
-            });
-        data.requests.forEach(function (request) {
-            container.innerHTML = request.content + container.innerHTML;
-        });
-    });
+    refreshHistory();
 });
+
+window.djdt.refreshHistory = refreshHistory;
+window.djdt.switchHistory = switchHistory;

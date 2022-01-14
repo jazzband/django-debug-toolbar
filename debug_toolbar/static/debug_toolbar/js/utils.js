@@ -98,6 +98,14 @@ function ajax(url, init) {
         });
 }
 
+function pluckData(array, key) {
+    const data = [];
+    array.forEach(function (obj) {
+        data.push(obj.dataset[key]);
+    });
+    return data;
+}
+
 function ajaxForm(element) {
     const form = element.closest("form");
     const url = new URL(form.action);
@@ -111,4 +119,4 @@ function ajaxForm(element) {
     return ajax(url, ajaxData);
 }
 
-export { $$, ajax, ajaxForm, controller, resetAbortController };
+export { $$, ajax, ajaxForm, controller, resetAbortController, pluckData };
