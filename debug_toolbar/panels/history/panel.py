@@ -4,7 +4,7 @@ from collections import OrderedDict
 from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
 from django.templatetags.static import static
-from django.urls import path
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -20,6 +20,15 @@ class HistoryPanel(Panel):
     title = _("History")
     nav_title = _("History")
     template = "debug_toolbar/panels/history.html"
+
+    def process_request(self, request):
+        response = super().process_request(request)
+        if not self.toolbar.should_render_panels():
+            self.toolbar.store()
+            response["DJ-TOOLBAR-URL"] = (
+                reverse("djdt:render_base") + f"?store_id={self.toolbar.store_id}"
+            )
+        return response
 
     @property
     def enabled(self):

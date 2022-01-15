@@ -10,6 +10,26 @@ function difference(setA, setB) {
     return _difference;
 }
 
+function replaceToolbarState(newStoreId, data) {
+    djDebug.setAttribute("data-store-id", newStoreId);
+    // Check if response is empty, it could be due to an expired store_id.
+    if (Object.keys(data).length === 0) {
+        const container = document.getElementById("djdtHistoryRequests");
+        container.querySelector(
+            'button[data-store-id="' + newStoreId + '"]'
+        ).innerHTML = "Switch [EXPIRED]";
+    } else {
+        Object.keys(data).forEach(function (panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.outerHTML = data[panelId].content;
+                document.getElementById("djdt-" + panelId).outerHTML =
+                    data[panelId].button;
+            }
+        });
+    }
+}
+
 function switchHistory(newStoreId) {
     const formTarget = djDebug.querySelector(
         ".switchHistory[data-store-id='" + newStoreId + "']"
@@ -23,23 +43,7 @@ function switchHistory(newStoreId) {
     formTarget.closest("tr").classList.add("djdt-highlighted");
 
     ajaxForm(formTarget).then(function (data) {
-        djDebug.setAttribute("data-store-id", newStoreId);
-        // Check if response is empty, it could be due to an expired store_id.
-        if (Object.keys(data).length === 0) {
-            const container = document.getElementById("djdtHistoryRequests");
-            container.querySelector(
-                'button[data-store-id="' + newStoreId + '"]'
-            ).innerHTML = "Switch [EXPIRED]";
-        } else {
-            Object.keys(data).forEach(function (panelId) {
-                const panel = document.getElementById(panelId);
-                if (panel) {
-                    panel.outerHTML = data[panelId].content;
-                    document.getElementById("djdt-" + panelId).outerHTML =
-                        data[panelId].button;
-                }
-            });
-        }
+        replaceToolbarState(newStoreId, data);
     });
 }
 

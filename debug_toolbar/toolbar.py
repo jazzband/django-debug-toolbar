@@ -132,7 +132,8 @@ class DebugToolbar:
             # Load URLs in a temporary variable for thread safety.
             # Global URLs
             urlpatterns = [
-                path("render_panel/", views.render_panel, name="render_panel")
+                path("render_panel/", views.render_panel, name="render_panel"),
+                path("render_base/", views.render_base, name="render_base"),
             ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():
