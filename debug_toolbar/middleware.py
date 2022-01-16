@@ -49,8 +49,6 @@ class DebugToolbarMiddleware:
 
         toolbar = DebugToolbar(request, self.get_response)
 
-        self.configure_toolbar(request, toolbar)
-
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
             panel.enable_instrumentation()
@@ -85,17 +83,6 @@ class DebugToolbarMiddleware:
         ):
             return response
 
-        response, did_insert = self.insert_toolbar(request, response, rendered)
-        if did_insert:
-            if "Content-Length" in response:
-                response["Content-Length"] = len(response.content)
-        return response
-
-    def configure_toolbar(self, request, toolbar):
-        pass
-
-    @staticmethod
-    def insert_toolbar(request, response, rendered):
         # Insert the toolbar in the response.
         content = response.content.decode(response.charset)
         insert_before = dt_settings.get_config()["INSERT_BEFORE"]
@@ -104,8 +91,9 @@ class DebugToolbarMiddleware:
         if len(bits) > 1:
             bits[-2] += rendered
             response.content = insert_before.join(bits)
-            return response, True
-        return response, False
+            if "Content-Length" in response:
+                response["Content-Length"] = len(response.content)
+        return response
 
     @staticmethod
     def generate_server_timing_header(response, panels):
