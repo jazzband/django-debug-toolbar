@@ -4,7 +4,7 @@ from collections import OrderedDict
 from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
 from django.templatetags.static import static
-from django.urls import path, reverse
+from django.urls import path
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -29,9 +29,8 @@ class HistoryPanel(Panel):
             sig = SignedDataForm(
                 initial=HistoryStoreForm(initial={"store_id": store_id}).initial
             ).initial.get("signed")
-            response["dj-history-sidebar-url"] = reverse("djdt:history_sidebar")
             response["DJ-TOOLBAR-STORE-ID"] = store_id
-            response["DJ-TOOLBAR-SIGNATURE"] = sig
+            response["DJ-TOOLBAR-STORE-ID-SIGNATURE"] = sig
         return response
 
     @property

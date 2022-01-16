@@ -220,6 +220,9 @@ const djdt = {
         } else {
             djdt.hide_toolbar();
         }
+        if (djDebug.dataset.sidebarUrl !== undefined) {
+            djdt.update_on_ajax();
+        }
     },
     hide_panels() {
         const djDebug = document.getElementById("djDebug");
@@ -277,6 +280,35 @@ const djdt = {
         localStorage.setItem("djdt.show", "true");
         window.removeEventListener("resize", djdt.ensure_handle_visibility);
     },
+    update_on_ajax() {
+        const sidebar_url =
+            document.getElementById("djDebug").dataset.sidebarUrl;
+
+        const origOpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function () {
+            this.addEventListener("load", function () {
+                if (
+                    this.responseURL !== "" &&
+                    this.responseURL.indexOf("__debug__") === -1
+                ) {
+                    let signed = this.getResponseHeader(
+                        "dj-toolbar-store-id-signature"
+                    );
+                    const store_id = this.getResponseHeader(
+                        "dj-toolbar-store-id"
+                    );
+                    if (signed !== null) {
+                        signed = encodeURIComponent(signed);
+                        const dest = `${sidebar_url}?signed=${signed}`;
+                        ajax(dest).then(function (data) {
+                            replaceToolbarState(store_id, data);
+                        });
+                    }
+                }
+            });
+            origOpen.apply(this, arguments);
+        };
+    },
     cookie: {
         get(key) {
             if (!document.cookie.includes(key)) {
@@ -318,30 +350,6 @@ const djdt = {
             return value;
         },
     },
-};
-
-const origOpen = XMLHttpRequest.prototype.open;
-XMLHttpRequest.prototype.open = function () {
-    this.addEventListener("load", function () {
-        if (
-            this.responseURL !== "" &&
-            this.responseURL.indexOf("__debug__") === -1
-        ) {
-            let signed = this.getResponseHeader("dj-toolbar-signature");
-            const store_id = this.getResponseHeader("dj-toolbar-store-id");
-            const history_sidebar_url = this.getResponseHeader(
-                "dj-history-sidebar-url"
-            );
-            if (signed !== null) {
-                signed = encodeURIComponent(signed);
-                const dest = `${history_sidebar_url}?signed=${signed}`;
-                ajax(dest).then(function (data) {
-                    replaceToolbarState(store_id, data);
-                });
-            }
-        }
-    });
-    origOpen.apply(this, arguments);
 };
 
 window.djdt = {

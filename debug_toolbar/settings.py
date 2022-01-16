@@ -37,6 +37,7 @@ CONFIG_DEFAULTS = {
     "SHOW_TEMPLATE_CONTEXT": True,
     "SKIP_TEMPLATE_PREFIXES": ("django/forms/widgets/", "admin/widgets/"),
     "SQL_WARNING_THRESHOLD": 500,  # milliseconds
+    "UPDATE_ON_AJAX": False,
 }
 
 

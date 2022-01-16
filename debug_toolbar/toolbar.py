@@ -89,6 +89,11 @@ class DebugToolbar:
             render_panels = self.request.META["wsgi.multiprocess"]
         return render_panels
 
+    def should_update_on_ajax(self):
+        """Determine whether the toolbar should consider ajax requests as updates or not"""
+        should_watch = self.config["UPDATE_ON_AJAX"]
+        return should_watch
+
     # Handle storing toolbars in memory and fetching them later on
 
     _store = OrderedDict()
