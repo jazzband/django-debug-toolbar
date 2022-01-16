@@ -26,9 +26,6 @@ class HistoryPanel(Panel):
         if not self.toolbar.should_render_panels():
             self.toolbar.store()
             store_id = self.toolbar.store_id
-            response["DJ-TOOLBAR-BASE-URL"] = (
-                reverse("djdt:render_base") + f"?store_id={store_id}"
-            )
             sig = SignedDataForm(
                 initial=HistoryStoreForm(initial={"store_id": store_id}).initial
             ).initial.get("signed")

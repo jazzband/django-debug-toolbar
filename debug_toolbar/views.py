@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 
@@ -22,17 +22,3 @@ def render_panel(request):
         content = panel.content
         scripts = panel.scripts
     return JsonResponse({"content": content, "scripts": scripts})
-
-
-@require_show_toolbar
-def render_base(request):
-    """Render the contents of a panel"""
-    toolbar = DebugToolbar.fetch(request.GET["store_id"])
-    if toolbar is None:
-        content = _(
-            "Data for this toolbar isn't available anymore. "
-            "Please reload the page and retry."
-        )
-        content = "<p>%s</p>" % escape(content)
-    content = toolbar.render_toolbar()
-    return HttpResponse(content)

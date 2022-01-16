@@ -34,7 +34,6 @@ class DebugToolbar:
         self.stats = {}
         self.server_timing_stats = {}
         self.store_id = None
-        self.root_tag_extra_attrs = self.config["ROOT_TAG_EXTRA_ATTRS"]
         self.should_render_css = self.should_render_js = True
 
     # Manage panels
@@ -133,7 +132,6 @@ class DebugToolbar:
             # Global URLs
             urlpatterns = [
                 path("render_panel/", views.render_panel, name="render_panel"),
-                path("render_base/", views.render_base, name="render_base"),
             ]
             # Per-panel URLs
             for panel_class in cls.get_panel_classes():
