@@ -2,12 +2,16 @@ let controller = null;
 
 const $$ = {
     on(root, eventName, selector, fn) {
-        root.addEventListener(eventName, function (event) {
-            const target = event.target.closest(selector);
-            if (root.contains(target)) {
-                fn.call(target, event);
-            }
-        }, {'signal': controller.signal});
+        root.addEventListener(
+            eventName,
+            function (event) {
+                const target = event.target.closest(selector);
+                if (root.contains(target)) {
+                    fn.call(target, event);
+                }
+            },
+            { signal: controller.signal }
+        );
     },
     onPanelRender(root, panelId, fn) {
         /*
@@ -18,11 +22,15 @@ const $$ = {
         panelId: The Id of the panel.
         fn: A function to execute when the event is triggered.
          */
-        root.addEventListener("djdt.panel.render", function (event) {
-            if (event.detail.panelId === panelId) {
-                fn.call(event);
-            }
-        }, {'signal': controller.signal});
+        root.addEventListener(
+            "djdt.panel.render",
+            function (event) {
+                if (event.detail.panelId === panelId) {
+                    fn.call(event);
+                }
+            },
+            { signal: controller.signal }
+        );
     },
     show(element) {
         element.classList.remove("djdt-hidden");
@@ -71,9 +79,9 @@ const $$ = {
     },
 };
 
-function resetAbortController(){
+function resetAbortController() {
     controller = new AbortController();
-};
+}
 resetAbortController();
 
 function ajax(url, init) {
@@ -119,4 +127,26 @@ function ajaxForm(element) {
     return ajax(url, ajaxData);
 }
 
-export { $$, ajax, ajaxForm, controller, resetAbortController, pluckData };
+function replaceToolbarState(newStoreId, data) {
+    const djDebug = document.getElementById("djDebug");
+    djDebug.setAttribute("data-store-id", newStoreId);
+    // Check if response is empty, it could be due to an expired store_id.
+    Object.keys(data).forEach(function (panelId) {
+        const panel = document.getElementById(panelId);
+        if (panel) {
+            panel.outerHTML = data[panelId].content;
+            document.getElementById("djdt-" + panelId).outerHTML =
+                data[panelId].button;
+        }
+    });
+}
+
+export {
+    $$,
+    ajax,
+    ajaxForm,
+    controller,
+    resetAbortController,
+    pluckData,
+    replaceToolbarState,
+};

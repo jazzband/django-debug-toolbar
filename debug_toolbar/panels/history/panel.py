@@ -25,9 +25,16 @@ class HistoryPanel(Panel):
         response = super().process_request(request)
         if not self.toolbar.should_render_panels():
             self.toolbar.store()
-            response["DJ-TOOLBAR-URL"] = (
-                reverse("djdt:render_base") + f"?store_id={self.toolbar.store_id}"
+            store_id = self.toolbar.store_id
+            response["DJ-TOOLBAR-BASE-URL"] = (
+                reverse("djdt:render_base") + f"?store_id={store_id}"
             )
+            sig = SignedDataForm(
+                initial=HistoryStoreForm(initial={"store_id": store_id}).initial
+            ).initial.get("signed")
+            response["dj-history-sidebar-url"] = reverse("djdt:history_sidebar")
+            response["DJ-TOOLBAR-STORE-ID"] = store_id
+            response["DJ-TOOLBAR-SIGNATURE"] = sig
         return response
 
     @property

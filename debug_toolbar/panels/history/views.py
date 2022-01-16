@@ -22,8 +22,6 @@ def history_sidebar(request, verified_data):
             # RESULTS_CACHE_SIZE
             return JsonResponse(context)
         for panel in toolbar.panels:
-            if not panel.is_historical:
-                continue
             panel_context = {"panel": panel}
             context[panel.panel_id] = {
                 "button": render_to_string(

@@ -1,4 +1,10 @@
-import { $$, ajax, controller, resetAbortController } from "./utils.js";
+import {
+    $$,
+    ajax,
+    controller,
+    resetAbortController,
+    replaceToolbarState,
+} from "./utils.js";
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
@@ -8,7 +14,7 @@ function onKeyDown(event) {
 
 const djdt = {
     handleDragged: false,
-    abort(){
+    abort() {
         controller.abort();
         resetAbortController();
     },
@@ -146,19 +152,23 @@ const djdt = {
                 });
         });
 
-        document
-            .getElementById("djHideToolBarButton")
-            .addEventListener("click", function (event) {
+        document.getElementById("djHideToolBarButton").addEventListener(
+            "click",
+            function (event) {
                 event.preventDefault();
                 djdt.hide_toolbar();
-            }, {'signal': controller.signal});
-        document
-            .getElementById("djShowToolBarButton")
-            .addEventListener("click", function () {
+            },
+            { signal: controller.signal }
+        );
+        document.getElementById("djShowToolBarButton").addEventListener(
+            "click",
+            function () {
                 if (!djdt.handleDragged) {
                     djdt.show_toolbar();
                 }
-            }, {'signal': controller.signal});
+            },
+            { signal: controller.signal }
+        );
         let startPageY, baseY;
         const handle = document.getElementById("djDebugToolbarHandle");
         function onHandleMove(event) {
@@ -178,25 +188,31 @@ const djdt = {
                 djdt.handleDragged = true;
             }
         }
-        document
-            .getElementById("djShowToolBarButton")
-            .addEventListener("mousedown", function (event) {
+        document.getElementById("djShowToolBarButton").addEventListener(
+            "mousedown",
+            function (event) {
                 event.preventDefault();
                 startPageY = event.pageY;
                 baseY = handle.offsetTop - startPageY;
                 document.addEventListener("mousemove", onHandleMove);
-            }, {'signal': controller.signal});
-        document.addEventListener("mouseup", function (event) {
-            document.removeEventListener("mousemove", onHandleMove);
-            if (djdt.handleDragged) {
-                event.preventDefault();
-                localStorage.setItem("djdt.top", handle.offsetTop);
-                requestAnimationFrame(function () {
-                    djdt.handleDragged = false;
-                });
-                djdt.ensure_handle_visibility();
-            }
-        }, {'signal': controller.signal});
+            },
+            { signal: controller.signal }
+        );
+        document.addEventListener(
+            "mouseup",
+            function (event) {
+                document.removeEventListener("mousemove", onHandleMove);
+                if (djdt.handleDragged) {
+                    event.preventDefault();
+                    localStorage.setItem("djdt.top", handle.offsetTop);
+                    requestAnimationFrame(function () {
+                        djdt.handleDragged = false;
+                    });
+                    djdt.ensure_handle_visibility();
+                }
+            },
+            { signal: controller.signal }
+        );
         const show =
             localStorage.getItem("djdt.show") || djDebug.dataset.defaultShow;
         if (show === "true") {
@@ -232,7 +248,9 @@ const djdt = {
         const handle = document.getElementById("djDebugToolbarHandle");
         $$.show(handle);
         djdt.ensure_handle_visibility();
-        window.addEventListener("resize", djdt.ensure_handle_visibility, {'signal': controller.signal});
+        window.addEventListener("resize", djdt.ensure_handle_visibility, {
+            signal: controller.signal,
+        });
         document.removeEventListener("keydown", onKeyDown);
 
         localStorage.setItem("djdt.show", "false");
@@ -251,7 +269,9 @@ const djdt = {
         }
     },
     show_toolbar() {
-        document.addEventListener("keydown", onKeyDown, {'signal': controller.signal});
+        document.addEventListener("keydown", onKeyDown, {
+            signal: controller.signal,
+        });
         $$.hide(document.getElementById("djDebugToolbarHandle"));
         $$.show(document.getElementById("djDebugToolbar"));
         localStorage.setItem("djdt.show", "true");
@@ -299,6 +319,31 @@ const djdt = {
         },
     },
 };
+
+const origOpen = XMLHttpRequest.prototype.open;
+XMLHttpRequest.prototype.open = function () {
+    this.addEventListener("load", function () {
+        if (
+            this.responseURL !== "" &&
+            this.responseURL.indexOf("__debug__") === -1
+        ) {
+            let signed = this.getResponseHeader("dj-toolbar-signature");
+            const store_id = this.getResponseHeader("dj-toolbar-store-id");
+            const history_sidebar_url = this.getResponseHeader(
+                "dj-history-sidebar-url"
+            );
+            if (signed !== null) {
+                signed = encodeURIComponent(signed);
+                const dest = `${history_sidebar_url}?signed=${signed}`;
+                ajax(dest).then(function (data) {
+                    replaceToolbarState(store_id, data);
+                });
+            }
+        }
+    });
+    origOpen.apply(this, arguments);
+};
+
 window.djdt = {
     show_toolbar: djdt.show_toolbar,
     hide_toolbar: djdt.hide_toolbar,
@@ -311,5 +356,7 @@ window.djdt = {
 if (document.readyState !== "loading") {
     djdt.init();
 } else {
-    document.addEventListener("DOMContentLoaded", djdt.init, {'signal': controller.signal});
+    document.addEventListener("DOMContentLoaded", djdt.init, {
+        signal: controller.signal,
+    });
 }
