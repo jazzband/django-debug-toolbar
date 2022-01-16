@@ -29,6 +29,8 @@ function switchHistory(newStoreId) {
                 'button[data-store-id="' + newStoreId + '"]'
             ).innerHTML = "Switch [EXPIRED]";
         }
+        //we're already in history panel, so handle locally vs replacing active html
+        delete data.HistoryPanel;
         replaceToolbarState(newStoreId, data);
     });
 }
@@ -78,6 +80,3 @@ $$.on(djDebug, "click", ".refreshHistory", function (event) {
     event.preventDefault();
     refreshHistory();
 });
-
-window.djdt.refreshHistory = refreshHistory;
-window.djdt.switchHistory = switchHistory;
