@@ -12,6 +12,7 @@ Next version
   django-debug-toolbar can now use Django’s test settings tools, like
   ``@override_settings``, to reconfigure the toolbar during tests.
 * Optimize rendering of SQL panel, saving about 30% of its run time.
+* New records in history panel will flash green.
 
 3.2.4 (2021-12-15)
 ------------------
