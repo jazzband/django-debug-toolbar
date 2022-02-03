@@ -1,6 +1,6 @@
+import contextvars
 import datetime
 import json
-from threading import local
 from time import time
 
 from django.utils.encoding import force_str
@@ -13,29 +13,11 @@ try:
 except ImportError:
     PostgresJson = None
 
+recording = contextvars.ContextVar("debug-toolbar-recording", default=True)
+
 
 class SQLQueryTriggered(Exception):
     """Thrown when template panel triggers a query"""
-
-    pass
-
-
-class ThreadLocalState(local):
-    def __init__(self):
-        self.enabled = True
-
-    @property
-    def Wrapper(self):
-        if self.enabled:
-            return NormalCursorWrapper
-        return ExceptionCursorWrapper
-
-    def recording(self, v):
-        self.enabled = v
-
-
-state = ThreadLocalState()
-recording = state.recording  # export function
 
 
 def wrap_cursor(connection, panel):
@@ -50,16 +32,22 @@ def wrap_cursor(connection, panel):
             # See:
             # https://github.com/jazzband/django-debug-toolbar/pull/615
             # https://github.com/jazzband/django-debug-toolbar/pull/896
-            return state.Wrapper(
-                connection._djdt_cursor(*args, **kwargs), connection, panel
-            )
+            if recording.get():
+                wrapper = NormalCursorWrapper
+            else:
+                wrapper = ExceptionCursorWrapper
+            return wrapper(connection._djdt_cursor(*args, **kwargs), connection, panel)
 
         def chunked_cursor(*args, **kwargs):
             # prevent double wrapping
             # solves https://github.com/jazzband/django-debug-toolbar/issues/1239
             cursor = connection._djdt_chunked_cursor(*args, **kwargs)
             if not isinstance(cursor, BaseCursorWrapper):
-                return state.Wrapper(cursor, connection, panel)
+                if recording.get():
+                    wrapper = NormalCursorWrapper
+                else:
+                    wrapper = ExceptionCursorWrapper
+                return wrapper(cursor, connection, panel)
             return cursor
 
         connection.cursor = cursor
