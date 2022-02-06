@@ -54,19 +54,25 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
 
-    @patch("debug_toolbar.panels.sql.tracking.state", wraps=sql_tracking.state)
-    def test_cursor_wrapper_singleton(self, mock_state):
+    @patch(
+        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
+        wraps=sql_tracking.NormalCursorWrapper,
+    )
+    def test_cursor_wrapper_singleton(self, mock_wrapper):
         list(User.objects.all())
 
         # ensure that cursor wrapping is applied only once
-        self.assertEqual(mock_state.Wrapper.call_count, 1)
+        self.assertEqual(mock_wrapper.call_count, 1)
 
-    @patch("debug_toolbar.panels.sql.tracking.state", wraps=sql_tracking.state)
-    def test_chunked_cursor_wrapper_singleton(self, mock_state):
+    @patch(
+        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
+        wraps=sql_tracking.NormalCursorWrapper,
+    )
+    def test_chunked_cursor_wrapper_singleton(self, mock_wrapper):
         list(User.objects.all().iterator())
 
         # ensure that cursor wrapping is applied only once
-        self.assertEqual(mock_state.Wrapper.call_count, 1)
+        self.assertEqual(mock_wrapper.call_count, 1)
 
     def test_generate_server_timing(self):
         self.assertEqual(len(self.panel._queries), 0)
