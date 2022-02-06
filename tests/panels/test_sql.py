@@ -1,7 +1,9 @@
+import asyncio
 import datetime
 import os
 import unittest
 from unittest.mock import patch
+from asgiref.sync import sync_to_async
 
 import django
 from django.contrib.auth.models import User
@@ -72,6 +74,33 @@ class SQLPanelTestCase(BaseTestCase):
         list(User.objects.all().iterator())
 
         # ensure that cursor wrapping is applied only once
+        self.assertEqual(mock_wrapper.call_count, 1)
+
+    @patch(
+        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
+        wraps=sql_tracking.NormalCursorWrapper,
+    )
+    async def test_cursor_wrapper_async(self, mock_wrapper):
+        await sync_to_async(list)(User.objects.all())
+
+        self.assertEqual(mock_wrapper.call_count, 1)
+
+    @patch(
+        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
+        wraps=sql_tracking.NormalCursorWrapper,
+    )
+    async def test_cursor_wrapper_asyncio_ctx(self, mock_wrapper):
+        self.assertTrue(sql_tracking.recording.get())
+        await sync_to_async(list)(User.objects.all())
+
+        async def task():
+            sql_tracking.recording.set(False)
+            await sync_to_async(list)(User.objects.all())
+
+        # Ensure this is called in another context
+        await asyncio.create_task(task())
+        # Because it was called in another context, it should not have affected ours
+        self.assertTrue(sql_tracking.recording.get())
         self.assertEqual(mock_wrapper.call_count, 1)
 
     def test_generate_server_timing(self):
