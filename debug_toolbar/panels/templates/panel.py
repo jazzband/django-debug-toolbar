@@ -118,7 +118,7 @@ class TemplatesPanel(Panel):
                                 value.model._meta.label,
                             )
                         else:
-                            recording(False)
+                            recording.set(False)
                             try:
                                 saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
@@ -130,7 +130,7 @@ class TemplatesPanel(Panel):
                             else:
                                 temp_layer[key] = value
                             finally:
-                                recording(True)
+                                recording.set(True)
                     pformatted = pformat(temp_layer)
                     self.pformat_layers.append((context_layer, pformatted))
                 context_list.append(pformatted)
