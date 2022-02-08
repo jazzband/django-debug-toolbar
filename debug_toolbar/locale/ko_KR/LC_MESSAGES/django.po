@@ -9,106 +9,101 @@ msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-08 17:02+0500\n"
-"PO-Revision-Date: 2012-03-31 20:10+0000\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2022-02-08 20:40+0900\n"
+"Last-Translator: 양영광 <immutable000@gmail.com>\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: apps.py:15
 msgid "Debug Toolbar"
-msgstr ""
+msgstr "Debug Toolbar"
 
 #: panels/cache.py:227
 msgid "Cache"
-msgstr ""
+msgstr "캐시"
 
 #: panels/cache.py:234
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(time).2f 밀리초 동안 %(cache_calls)d번 호출"
 
 #: panels/cache.py:246
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "백엔드에서 %(count)d개의 캐시 호출"
 
 #: panels/headers.py:33
 msgid "Headers"
-msgstr ""
+msgstr "헤더"
 
 #: panels/history/panel.py:20 panels/history/panel.py:21
 msgid "History"
-msgstr ""
+msgstr "히스토리"
 
 #: panels/logging.py:63
 msgid "Logging"
-msgstr ""
+msgstr "로깅"
 
 #: panels/logging.py:69
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s개의 메세지"
 
 #: panels/logging.py:73
 msgid "Log messages"
-msgstr ""
+msgstr "로그 메세지"
 
 #: panels/profiling.py:150
 msgid "Profiling"
-msgstr ""
+msgstr "프로파일링"
 
 #: panels/redirects.py:14
 msgid "Intercept redirects"
-msgstr ""
+msgstr "리다이렉션 가로채기"
 
 #: panels/request.py:16
 msgid "Request"
-msgstr ""
+msgstr "요청"
 
 #: panels/request.py:36
 msgid "<no view>"
-msgstr ""
+msgstr "<view 없음>"
 
 #: panels/request.py:53
 msgid "<unavailable>"
-msgstr ""
+msgstr "<사용할 수 없음>"
 
 #: panels/settings.py:24
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 #: panels/settings.py:27
 #, python-format
 msgid "Settings from %s"
-msgstr ""
+msgstr "설정 %s"
 
 #: panels/signals.py:58
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1개의 시그널 %(num_receivers)d개의 리시버"
 
 #: panels/signals.py:66
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_signals)d개의 시그널 %(num_receivers)d개의 리시버"
 
 #: panels/signals.py:73
 msgid "Signals"
-msgstr ""
+msgstr "시그널"
 
 #: panels/sql/panel.py:24
 msgid "Autocommit"
@@ -132,66 +127,63 @@ msgstr ""
 
 #: panels/sql/panel.py:40
 msgid "Idle"
-msgstr ""
+msgstr "유휴"
 
 #: panels/sql/panel.py:41
 msgid "Active"
-msgstr ""
+msgstr "활성"
 
 #: panels/sql/panel.py:42
 msgid "In transaction"
-msgstr ""
+msgstr "트랜잭션"
 
 #: panels/sql/panel.py:43
 msgid "In error"
-msgstr ""
+msgstr "에러"
 
 #: panels/sql/panel.py:44
 msgid "Unknown"
-msgstr ""
+msgstr "알 수 없음"
 
 #: panels/sql/panel.py:109
 msgid "SQL"
-msgstr ""
+msgstr "SQL"
 
 #: panels/sql/panel.py:114
 #, python-format
 msgid "%(query_count)d query in %(sql_time).2fms"
 msgid_plural "%(query_count)d queries in %(sql_time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(sql_time).2f 밀리초 동안 %(query_count)d개의 쿼리"
 
 #: panels/sql/panel.py:127
 #, python-format
 msgid "SQL queries from %(count)d connection"
 msgid_plural "SQL queries from %(count)d connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "SQL 쿼리 %(count)d개의 커넥션"
 
 #: panels/staticfiles.py:85
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr ""
+msgstr "정적 파일 (%(num_found)s개 찾음, %(num_used)s개 사용됨)"
 
 #: panels/staticfiles.py:106
 msgid "Static files"
-msgstr ""
+msgstr "정적 파일"
 
 #: panels/staticfiles.py:112
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_used)s개의 파일 사용됨"
 
 #: panels/templates/panel.py:144
 msgid "Templates"
-msgstr ""
+msgstr "템플릿"
 
 #: panels/templates/panel.py:149
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
-msgstr ""
+msgstr "템플릿 (%(num_templates)s개 렌더링)"
 
 #: panels/templates/panel.py:181
 msgid "No origin"
@@ -244,7 +236,7 @@ msgstr ""
 
 #: panels/timer.py:47
 msgid "Elapsed time"
-msgstr ""
+msgstr "경과 시간"
 
 #: panels/timer.py:47
 #, python-format
@@ -253,7 +245,7 @@ msgstr ""
 
 #: panels/timer.py:49
 msgid "Context switches"
-msgstr ""
+msgstr "컨텍스트 스위치"
 
 #: panels/timer.py:50
 #, python-format
@@ -262,88 +254,88 @@ msgstr ""
 
 #: panels/versions.py:19
 msgid "Versions"
-msgstr ""
+msgstr "버전"
 
 #: templates/debug_toolbar/base.html:18
 msgid "Hide toolbar"
-msgstr ""
+msgstr "툴바 숨기기"
 
 #: templates/debug_toolbar/base.html:18
 msgid "Hide"
-msgstr ""
+msgstr "숨기기"
 
 #: templates/debug_toolbar/base.html:25
 msgid "Show toolbar"
-msgstr ""
+msgstr "툴바 열기"
 
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Disable for next and successive requests"
-msgstr ""
+msgstr "다음 요청부터 비활성화 됩니다."
 
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Enable for next and successive requests"
-msgstr ""
+msgstr "다음 요청부터 활성화 됩니다."
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
-msgstr ""
+msgstr "개요"
 
 #: templates/debug_toolbar/panels/cache.html:6
 msgid "Total calls"
-msgstr ""
+msgstr "총 요청 개수"
 
 #: templates/debug_toolbar/panels/cache.html:7
 msgid "Total time"
-msgstr ""
+msgstr "총 소요 시간"
 
 #: templates/debug_toolbar/panels/cache.html:8
 msgid "Cache hits"
-msgstr ""
+msgstr "캐시 적중"
 
 #: templates/debug_toolbar/panels/cache.html:9
 msgid "Cache misses"
-msgstr ""
+msgstr "캐시 비적중"
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
-msgstr ""
+msgstr "명령"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
-msgstr ""
+msgstr "호추"
 
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:36
 msgid "Time (ms)"
-msgstr ""
+msgstr "시간 (ms)"
 
 #: templates/debug_toolbar/panels/cache.html:44
 msgid "Type"
-msgstr ""
+msgstr "타입"
 
 #: templates/debug_toolbar/panels/cache.html:45
 #: templates/debug_toolbar/panels/request.html:8
 msgid "Arguments"
-msgstr ""
+msgstr "매개변수"
 
 #: templates/debug_toolbar/panels/cache.html:46
 #: templates/debug_toolbar/panels/request.html:9
 msgid "Keyword arguments"
-msgstr ""
+msgstr "키워드 매개변수"
 
 #: templates/debug_toolbar/panels/cache.html:47
 msgid "Backend"
-msgstr ""
+msgstr "백엔드"
 
 #: templates/debug_toolbar/panels/headers.html:3
 msgid "Request headers"
-msgstr ""
+msgstr "요청 헤더"
 
 #: templates/debug_toolbar/panels/headers.html:8
 #: templates/debug_toolbar/panels/headers.html:27
 #: templates/debug_toolbar/panels/headers.html:48
 msgid "Key"
-msgstr ""
+msgstr "키"
 
 #: templates/debug_toolbar/panels/headers.html:9
 #: templates/debug_toolbar/panels/headers.html:28
@@ -353,73 +345,74 @@ msgstr ""
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
-msgstr ""
+msgstr "값"
 
 #: templates/debug_toolbar/panels/headers.html:22
 msgid "Response headers"
-msgstr ""
+msgstr "응답 헤더"
 
 #: templates/debug_toolbar/panels/headers.html:41
 msgid "WSGI environ"
-msgstr ""
+msgstr "WSGI 환경"
 
 #: templates/debug_toolbar/panels/headers.html:43
 msgid ""
 "Since the WSGI environ inherits the environment of the server, only a "
 "significant subset is shown below."
 msgstr ""
+"WSGI 환경이 서버 환경을 상속하므로 아래에는 중요한 하위 집합만 표시됩니다."
 
 #: templates/debug_toolbar/panels/history.html:10
 msgid "Method"
-msgstr ""
+msgstr "메서드"
 
 #: templates/debug_toolbar/panels/history.html:11
 #: templates/debug_toolbar/panels/staticfiles.html:43
 msgid "Path"
-msgstr ""
+msgstr "경로"
 
 #: templates/debug_toolbar/panels/history.html:12
 msgid "Request Variables"
-msgstr ""
+msgstr "요청 변수"
 
 #: templates/debug_toolbar/panels/history.html:13
 msgid "Status"
-msgstr ""
+msgstr "상태 코드"
 
 #: templates/debug_toolbar/panels/history.html:14
 #: templates/debug_toolbar/panels/sql.html:37
 msgid "Action"
-msgstr ""
+msgstr "액션"
 
 #: templates/debug_toolbar/panels/history_tr.html:22
 #: templates/debug_toolbar/panels/request_variables.html:10
 msgid "Variable"
-msgstr ""
+msgstr "변수"
 
 #: templates/debug_toolbar/panels/logging.html:6
 msgid "Level"
-msgstr ""
+msgstr "레벨"
 
 #: templates/debug_toolbar/panels/logging.html:8
 msgid "Channel"
-msgstr ""
+msgstr "채널"
 
 #: templates/debug_toolbar/panels/logging.html:9
 msgid "Message"
-msgstr ""
+msgstr "메세지"
 
 #: templates/debug_toolbar/panels/logging.html:10
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Location"
-msgstr ""
+msgstr "위치"
 
 #: templates/debug_toolbar/panels/logging.html:26
 msgid "No messages logged"
-msgstr ""
+msgstr "로그 메세지 없음"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
-msgstr ""
+msgstr "호출"
 
 #: templates/debug_toolbar/panels/profiling.html:6
 msgid "CumTime"
@@ -436,70 +429,69 @@ msgstr ""
 
 #: templates/debug_toolbar/panels/profiling.html:10
 msgid "Count"
-msgstr ""
+msgstr "개수"
 
 #: templates/debug_toolbar/panels/request.html:3
 msgid "View information"
-msgstr ""
+msgstr "View 정보"
 
 #: templates/debug_toolbar/panels/request.html:7
 msgid "View function"
-msgstr ""
+msgstr "View 함수"
 
 #: templates/debug_toolbar/panels/request.html:10
 msgid "URL name"
-msgstr ""
+msgstr "URL 명칭"
 
 #: templates/debug_toolbar/panels/request.html:24
 msgid "Cookies"
-msgstr ""
+msgstr "쿠키"
 
 #: templates/debug_toolbar/panels/request.html:27
 msgid "No cookies"
-msgstr ""
+msgstr "쿠키 없음"
 
 #: templates/debug_toolbar/panels/request.html:31
 msgid "Session data"
-msgstr ""
+msgstr "세션 데이터"
 
 #: templates/debug_toolbar/panels/request.html:34
 msgid "No session data"
-msgstr ""
+msgstr "세션 데이터 없음"
 
 #: templates/debug_toolbar/panels/request.html:38
 msgid "GET data"
-msgstr ""
+msgstr "GET 요청 데이터"
 
 #: templates/debug_toolbar/panels/request.html:41
 msgid "No GET data"
-msgstr ""
+msgstr "GET 요청 데이터 없음"
 
 #: templates/debug_toolbar/panels/request.html:45
 msgid "POST data"
-msgstr ""
+msgstr "POST 요청 데이터"
 
 #: templates/debug_toolbar/panels/request.html:48
 msgid "No POST data"
-msgstr ""
+msgstr "POST 요청 데이터 없음"
 
 #: templates/debug_toolbar/panels/settings.html:5
 msgid "Setting"
-msgstr ""
+msgstr "설정"
 
 #: templates/debug_toolbar/panels/signals.html:5
 msgid "Signal"
-msgstr ""
+msgstr "시그널"
 
 #: templates/debug_toolbar/panels/signals.html:6
 msgid "Receivers"
-msgstr ""
+msgstr "리시버"
 
 #: templates/debug_toolbar/panels/sql.html:6
 #, python-format
 msgid "%(num)s query"
 msgid_plural "%(num)s queries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s개의 쿼리"
 
 #: templates/debug_toolbar/panels/sql.html:8
 #, python-format
@@ -507,6 +499,8 @@ msgid ""
 "including <abbr title=\"Similar queries are queries with the same SQL, but "
 "potentially different parameters.\">%(count)s similar</abbr>"
 msgstr ""
+"<abbr title=\"유사한 쿼리는 동일한 SQL이지만 잠재적으로 다른 매개변수를 사"
+"용하는 쿼리입니다.\">%(count)s 개의 유사한</abbr> 쿼리 포함"
 
 #: templates/debug_toolbar/panels/sql.html:12
 #, python-format
@@ -514,83 +508,84 @@ msgid ""
 "and <abbr title=\"Duplicate queries are identical to each other: they "
 "execute exactly the same SQL and parameters.\">%(dupes)s duplicates</abbr>"
 msgstr ""
+"그리고 <abbr title=\"중복 쿼리는 서로 동일합니다. 정확히 동일한 SQL 및 매개"
+"변수를 실행합니다.\">%(dupes)s개의 중복</abbr>"
 
 #: templates/debug_toolbar/panels/sql.html:34
 msgid "Query"
-msgstr ""
+msgstr "쿼리"
 
 #: templates/debug_toolbar/panels/sql.html:35
 #: templates/debug_toolbar/panels/timer.html:36
 msgid "Timeline"
-msgstr ""
+msgstr "타임라인"
 
 #: templates/debug_toolbar/panels/sql.html:52
 #, python-format
 msgid "%(count)s similar queries."
-msgstr ""
+msgstr "%(count)s개의 유사한 쿼리"
 
 #: templates/debug_toolbar/panels/sql.html:58
 #, python-format
 msgid "Duplicated %(dupes)s times."
-msgstr ""
+msgstr "%(dupes)s번 중복됩니다."
 
 #: templates/debug_toolbar/panels/sql.html:95
 msgid "Connection:"
-msgstr ""
+msgstr "커넥션:"
 
 #: templates/debug_toolbar/panels/sql.html:97
 msgid "Isolation level:"
-msgstr ""
+msgstr "격리 수준:"
 
 #: templates/debug_toolbar/panels/sql.html:100
 msgid "Transaction status:"
-msgstr ""
+msgstr "트랜잭션 상태:"
 
 #: templates/debug_toolbar/panels/sql.html:114
 msgid "(unknown)"
-msgstr ""
+msgstr "(알 수 없음)"
 
 #: templates/debug_toolbar/panels/sql.html:123
 msgid "No SQL queries were recorded during this request."
-msgstr ""
+msgstr "이 요청을 처리하는 동안 기록된 SQL 쿼리가 없습니다."
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
-msgstr ""
+msgstr "SQL 설명"
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
 #: templates/debug_toolbar/panels/sql_select.html:9
 msgid "Executed SQL"
-msgstr ""
+msgstr "실행된 SQL 구문"
 
 #: templates/debug_toolbar/panels/sql_explain.html:13
 #: templates/debug_toolbar/panels/sql_profile.html:14
 #: templates/debug_toolbar/panels/sql_select.html:13
 msgid "Database"
-msgstr ""
+msgstr "데이터베이스"
 
 #: templates/debug_toolbar/panels/sql_profile.html:4
 msgid "SQL profiled"
-msgstr ""
+msgstr "SQL 성능 분석"
 
 #: templates/debug_toolbar/panels/sql_profile.html:37
 msgid "Error"
-msgstr ""
+msgstr "에러"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
-msgstr ""
+msgstr "선택된 SQL 구문"
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
-msgstr ""
+msgstr "빈 셋"
 
 #: templates/debug_toolbar/panels/staticfiles.html:3
 msgid "Static file path"
 msgid_plural "Static file paths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "정적 파일 경로"
 
 #: templates/debug_toolbar/panels/staticfiles.html:7
 #, python-format
@@ -609,84 +604,78 @@ msgstr ""
 #: templates/debug_toolbar/panels/staticfiles.html:14
 msgid "Static file app"
 msgid_plural "Static file apps"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "정적 파일 앱"
 
 #: templates/debug_toolbar/panels/staticfiles.html:25
 msgid "Static file"
 msgid_plural "Static files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "정적 파일"
 
 #: templates/debug_toolbar/panels/staticfiles.html:39
 #, python-format
 msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(payload_count)s개 파일"
 
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
-msgstr ""
+msgstr "템플릿 소스:"
 
 #: templates/debug_toolbar/panels/templates.html:2
 msgid "Template path"
 msgid_plural "Template paths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "템플릿 경로"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "템플릿"
 
 #: templates/debug_toolbar/panels/templates.html:22
 #: templates/debug_toolbar/panels/templates.html:40
 msgid "Toggle context"
-msgstr ""
+msgstr "컨텍스트 토글"
 
 #: templates/debug_toolbar/panels/templates.html:33
 msgid "Context processor"
 msgid_plural "Context processors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "컨텍스트 프로세서"
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
-msgstr ""
+msgstr "리소스 사용량"
 
 #: templates/debug_toolbar/panels/timer.html:10
 msgid "Resource"
-msgstr ""
+msgstr "리소스"
 
 #: templates/debug_toolbar/panels/timer.html:26
 msgid "Browser timing"
-msgstr ""
+msgstr "브라우저 타이밍"
 
 #: templates/debug_toolbar/panels/timer.html:35
 msgid "Timing attribute"
-msgstr ""
+msgstr "타이밍 속성"
 
 #: templates/debug_toolbar/panels/timer.html:37
 msgid "Milliseconds since navigation start (+length)"
-msgstr ""
+msgstr "탐색 시작후 밀리초 소요 (+길이)"
 
 #: templates/debug_toolbar/panels/versions.html:10
 msgid "Package"
-msgstr ""
+msgstr "패키지"
 
 #: templates/debug_toolbar/panels/versions.html:11
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: templates/debug_toolbar/panels/versions.html:12
 msgid "Version"
-msgstr ""
+msgstr "버전"
 
 #: templates/debug_toolbar/redirect.html:10
 msgid "Location:"
-msgstr ""
+msgstr "위치:"
 
 #: templates/debug_toolbar/redirect.html:12
 msgid ""
@@ -694,9 +683,14 @@ msgid ""
 "debug viewing purposes. You can click the above link to continue with the "
 "redirect as normal."
 msgstr ""
+"Django Debug Toolbar는 디버그 보기를 제공하기 위해 위 URL으로 리다이렉션을 "
+"가로챘습니다. 위 링크를 클릭하여 정상적으로 리다이렉션을 계속 할수 있습니"
+"다."
 
 #: views.py:15
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
 msgstr ""
+"이 패널의 데이터는 더이상 사용할 수 없습니다. 페이지를 새로고침한 뒤 다시 "
+"시도하십시오."
