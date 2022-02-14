@@ -210,7 +210,7 @@ def getframeinfo(frame, context=1):
         for line in first_lines[:2]:
             # File coding may be specified. Match pattern from PEP-263
             # (https://www.python.org/dev/peps/pep-0263/)
-            match = re.search(br"coding[:=]\s*([-\w.]+)", line)
+            match = re.search(rb"coding[:=]\s*([-\w.]+)", line)
             if match:
                 encoding = match.group(1).decode("ascii")
                 break

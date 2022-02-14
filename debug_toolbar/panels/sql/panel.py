@@ -122,14 +122,11 @@ class SQLPanel(Panel):
     @property
     def title(self):
         count = len(self._databases)
-        return (
-            ngettext(
-                "SQL queries from %(count)d connection",
-                "SQL queries from %(count)d connections",
-                count,
-            )
-            % {"count": count}
-        )
+        return ngettext(
+            "SQL queries from %(count)d connection",
+            "SQL queries from %(count)d connections",
+            count,
+        ) % {"count": count}
 
     template = "debug_toolbar/panels/sql.html"
 
