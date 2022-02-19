@@ -607,7 +607,7 @@
 #djDebug .djdt-highlighted {
     background-color: lightgrey;
 }
-@keyframes flash-new {
+@keyframes djdt-flash-new {
     from {
         background-color: green;
     }
@@ -616,7 +616,7 @@
     }
 }
 #djDebug .flash-new {
-    animation: flash-new 1s;
+    animation: djdt-flash-new 1s;
 }
 
 .djdt-hidden {
