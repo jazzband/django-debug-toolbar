@@ -102,8 +102,8 @@ Style
 
 The Django Debug Toolbar uses `black <https://github.com/psf/black>`__ to
 format code and additionally uses flake8 and isort. The toolbar uses
-`pre-commit <https://pre-commit>`__ to automatically apply our style guidelines
-when a commit is made. Set up pre-commit before committing with:
+`pre-commit <https://pre-commit.com>`__ to automatically apply our style
+guidelines when a commit is made. Set up pre-commit before committing with:
 
     $ pre-commit install
 
