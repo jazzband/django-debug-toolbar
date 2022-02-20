@@ -143,16 +143,24 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_refresh(self):
         """Verify refresh history response has request variables."""
-        data = {"foo": "bar"}
-        self.client.get("/json_view/", data, content_type="application/json")
-        data = {"store_id": "foo"}
-        response = self.client.get(reverse("djdt:history_refresh"), data=data)
+        self.client.get("/json_view/", {"foo": "bar"}, content_type="application/json")
+        self.client.get(
+            "/json_view/", {"spam": "eggs"}, content_type="application/json"
+        )
+
+        response = self.client.get(
+            reverse("djdt:history_refresh"), data={"store_id": "foo"}
+        )
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        self.assertEqual(len(data["requests"]), 1)
+        self.assertEqual(len(data["requests"]), 2)
 
-        store_id = list(DebugToolbar._store)[0]
-        self.assertIn(html.escape(store_id), data["requests"][0]["content"])
+        store_ids = list(DebugToolbar._store)
+        self.assertIn(html.escape(store_ids[0]), data["requests"][0]["content"])
+        self.assertIn(html.escape(store_ids[1]), data["requests"][1]["content"])
 
         for val in ["foo", "bar"]:
             self.assertIn(val, data["requests"][0]["content"])
+
+        for val in ["spam", "eggs"]:
+            self.assertIn(val, data["requests"][1]["content"])
