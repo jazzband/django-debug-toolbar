@@ -15,5 +15,21 @@
       </ul>
       <p><a href="/admin/">Django Admin</a></p>
     {% endcache %}
+    <p>
+      <span>Value </span>
+      <span id="session-value">{{ request.session.value|default:0 }}</span>
+      <button id="increment" data-url="{% url 'ajax_increment' %}" type="button">Increment</button>
+    </p>
+  <script>
+    const increment = document.querySelector("#increment");
+    const value = document.querySelector("#session-value");
+    increment.addEventListener("click", function () {
+      fetch(increment.dataset.url).then( function (response) {
+        response.json().then(function(data) {
+          value.innerHTML = data.value;
+        });
+      });
+    });
+  </script>
   </body>
 </html>
