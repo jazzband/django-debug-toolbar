@@ -43,8 +43,8 @@ def history_refresh(request):
 
     if form.is_valid():
         requests = []
-        # Convert to list to handle mutations happenening in parallel
-        for id, toolbar in list(DebugToolbar._store.items())[::-1]:
+        # Convert to list to handle mutations happening in parallel
+        for id, toolbar in list(DebugToolbar._store.items()):
             requests.append(
                 {
                     "id": id,
