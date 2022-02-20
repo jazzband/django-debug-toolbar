@@ -236,26 +236,20 @@ class CachePanel(Panel):
     @property
     def nav_subtitle(self):
         cache_calls = len(self.calls)
-        return (
-            ngettext(
-                "%(cache_calls)d call in %(time).2fms",
-                "%(cache_calls)d calls in %(time).2fms",
-                cache_calls,
-            )
-            % {"cache_calls": cache_calls, "time": self.total_time}
-        )
+        return ngettext(
+            "%(cache_calls)d call in %(time).2fms",
+            "%(cache_calls)d calls in %(time).2fms",
+            cache_calls,
+        ) % {"cache_calls": cache_calls, "time": self.total_time}
 
     @property
     def title(self):
         count = len(getattr(settings, "CACHES", ["default"]))
-        return (
-            ngettext(
-                "Cache calls from %(count)d backend",
-                "Cache calls from %(count)d backends",
-                count,
-            )
-            % {"count": count}
-        )
+        return ngettext(
+            "Cache calls from %(count)d backend",
+            "Cache calls from %(count)d backends",
+            count,
+        ) % {"count": count}
 
     def enable_instrumentation(self):
         for alias in cache.caches:

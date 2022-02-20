@@ -53,22 +53,16 @@ class SignalsPanel(Panel):
         # here we have to handle a double count translation, hence the
         # hard coding of one signal
         if num_signals == 1:
-            return (
-                ngettext(
-                    "%(num_receivers)d receiver of 1 signal",
-                    "%(num_receivers)d receivers of 1 signal",
-                    num_receivers,
-                )
-                % {"num_receivers": num_receivers}
-            )
-        return (
-            ngettext(
-                "%(num_receivers)d receiver of %(num_signals)d signals",
-                "%(num_receivers)d receivers of %(num_signals)d signals",
+            return ngettext(
+                "%(num_receivers)d receiver of 1 signal",
+                "%(num_receivers)d receivers of 1 signal",
                 num_receivers,
-            )
-            % {"num_receivers": num_receivers, "num_signals": num_signals}
-        )
+            ) % {"num_receivers": num_receivers}
+        return ngettext(
+            "%(num_receivers)d receiver of %(num_signals)d signals",
+            "%(num_receivers)d receivers of %(num_signals)d signals",
+            num_receivers,
+        ) % {"num_receivers": num_receivers, "num_signals": num_signals}
 
     title = _("Signals")
 
