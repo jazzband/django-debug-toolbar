@@ -14,7 +14,7 @@ from django.urls import path, resolve
 from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 
-from debug_toolbar import settings as dt_settings
+from debug_toolbar import APP_NAME, settings as dt_settings
 
 
 class DebugToolbar:
@@ -144,8 +144,6 @@ class DebugToolbar:
         """
         Determine if the request is for a DebugToolbar view.
         """
-        from debug_toolbar.urls import app_name
-
         # The primary caller of this function is in the middleware which may
         # not have resolver_match set.
         try:
@@ -154,7 +152,7 @@ class DebugToolbar:
             )
         except Resolver404:
             return False
-        return resolver_match.namespaces and resolver_match.namespaces[-1] == app_name
+        return resolver_match.namespaces and resolver_match.namespaces[-1] == APP_NAME
 
     @staticmethod
     @lru_cache(maxsize=128)
