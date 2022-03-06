@@ -87,7 +87,7 @@ class Panel:
         Template used to render :attr:`content`.
 
         Mandatory, unless the panel sets :attr:`has_content` to ``False`` or
-        overrides `attr`:content`.
+        overrides :attr:`content`.
         """
         raise NotImplementedError
 
@@ -248,6 +248,6 @@ class Panel:
         This will be called as a part of the Django checks system when the
         application is being setup.
 
-        Return a list of :class: `django.core.checks.CheckMessage` instances.
+        Return a list of :class:`django.core.checks.CheckMessage` instances.
         """
         return []
