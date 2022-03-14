@@ -15,7 +15,7 @@ repos:
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.31.0
+    rev: v2.31.1
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
@@ -43,7 +43,7 @@ repos:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.10.0
+    rev: v8.11.0
     hooks:
     -   id: eslint
         files: \.js?$
