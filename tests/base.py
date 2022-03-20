@@ -35,7 +35,7 @@ class BaseTestCase(TestCase):
         parser = html5lib.HTMLParser()
         parser.parseFragment(content)
         if parser.errors:
-            msg_parts = ["Content is invalid HTML:"]
+            msg_parts = ["Invalid HTML:"]
             lines = content.split("\n")
             for position, errorcode, datavars in parser.errors:
                 msg_parts.append("  %s" % html5lib.constants.E[errorcode] % datavars)
