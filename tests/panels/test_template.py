@@ -47,7 +47,7 @@ class TemplatesPanelTestCase(BaseTestCase):
 
         User.objects.create(username="admin")
         bad_repr = TemplateReprForm()
-        t = Template("{{ bad_repr }}")
+        t = Template("<table>{{ bad_repr }}</table>")
         c = Context({"bad_repr": bad_repr})
         html = t.render(c)
         self.assertIsNotNone(html)
