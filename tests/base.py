@@ -33,7 +33,7 @@ class BaseTestCase(TestCase):
 
     def assertValidHTML(self, content, msg=None):
         parser = html5lib.HTMLParser()
-        parser.parseFragment(self.panel.content)
+        parser.parseFragment(content)
         if parser.errors:
             default_msg = ["Content is invalid HTML:"]
             lines = content.split("\n")
