@@ -1,4 +1,5 @@
 import logging
+from unittest.mock import patch
 
 from debug_toolbar.panels.logging import (
     MESSAGE_IF_STRING_REPRESENTATION_INVALID,
@@ -86,3 +87,10 @@ class LoggingPanelTestCase(BaseTestCase):
         self.assertEqual(
             MESSAGE_IF_STRING_REPRESENTATION_INVALID, records[0]["message"]
         )
+
+    @patch("sys.stderr")
+    def test_fallback_logging(self, mock_stderr):
+        # make sure the log reaches stderr even though logging set up
+        # its own handler during its import
+        self.logger.warning("hello")
+        mock_stderr.write.assert_called_once_with("hello\n")
