@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.2.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
@@ -11,11 +11,11 @@ repos:
     hooks:
     -   id: flake8
 -   repo: https://github.com/pycqa/doc8
-    rev: 0.10.1
+    rev: 0.11.1
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.31.1
+    rev: v2.32.0
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
@@ -38,12 +38,12 @@ repos:
     -   id: rst-backticks
     -   id: rst-directive-colons
 -   repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.5.1
+    rev: v2.6.2
     hooks:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.11.0
+    rev: v8.13.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -51,7 +51,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 22.3.0
     hooks:
     -   id: black
         language_version: python3
