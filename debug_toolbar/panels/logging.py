@@ -45,6 +45,24 @@ class ThreadTrackingHandler(logging.Handler):
         self.collector.collect(record)
 
 
+# Preserve Python's fallback log mechanism before adding ThreadTrackingHandler.
+
+# If the root logger has no handlers attached then everything that reaches it goes
+# to the "handler of last resort".
+# So a Django app that doesn't explicitly configure the root logger actually logs
+# through logging.lastResort.
+# However, logging.lastResort is not used after ThreadTrackingHandler gets added to
+# the root logger below. This means that users who have LoggingPanel enabled might
+# find their logs are gone from their app as soon as they install DDT.
+# Explicitly adding logging.lastResort to logging.root's handler sidesteps this
+# potential confusion.
+# Note that if root has already been configured, or logging.lastResort has been
+# removed, then the configuration is unchanged, so users who configured their
+# logging aren't exposed to the opposite confusion of seeing extra log lines from
+# their app.
+if not logging.root.hasHandlers() and logging.lastResort is not None:
+    logging.root.addHandler(logging.lastResort)
+
 # We don't use enable/disable_instrumentation because logging is global.
 # We can't add thread-local logging handlers. Hopefully logging is cheap.
 

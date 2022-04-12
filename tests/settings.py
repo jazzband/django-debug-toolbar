@@ -11,7 +11,10 @@ SECRET_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-LOGGING_CONFIG = None  # avoids spurious output in tests
+LOGGING = {  # avoids spurious output in tests
+    "version": 1,
+    "disable_existing_loggers": True,
+}
 
 
 # Application definition
