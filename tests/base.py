@@ -31,18 +31,16 @@ class BaseTestCase(TestCase):
     def get_response(self, request):
         return self._get_response(request)
 
-    def assertValidHTML(self, content, msg=None):
+    def assertValidHTML(self, content):
         parser = html5lib.HTMLParser()
-        parser.parseFragment(self.panel.content)
+        parser.parseFragment(content)
         if parser.errors:
-            default_msg = ["Content is invalid HTML:"]
+            msg_parts = ["Invalid HTML:"]
             lines = content.split("\n")
             for position, errorcode, datavars in parser.errors:
-                default_msg.append("  %s" % html5lib.constants.E[errorcode] % datavars)
-                default_msg.append("    %s" % lines[position[0] - 1])
-
-            msg = self._formatMessage(msg, "\n".join(default_msg))
-            raise self.failureException(msg)
+                msg_parts.append("  %s" % html5lib.constants.E[errorcode] % datavars)
+                msg_parts.append("    %s" % lines[position[0] - 1])
+            raise self.failureException("\n".join(msg_parts))
 
 
 class IntegrationTestCase(TestCase):
