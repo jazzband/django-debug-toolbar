@@ -154,6 +154,8 @@ class SQLPanel(Panel):
             unwrap_cursor(connection)
 
     def get_context(self):
+        queries = []
+
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
         query_similar = defaultdict(lambda: defaultdict(int))
@@ -192,8 +194,8 @@ class SQLPanel(Panel):
 
             trans_ids = {}
             trans_id = None
-            i = 0
-            for alias, query in self._queries:
+            for alias, recorded_query in self._queries:
+                query = dict(recorded_query)
                 query_similar[alias][similar_key(query)] += 1
                 query_duplicates[alias][duplicate_key(query)] += 1
 
@@ -202,7 +204,7 @@ class SQLPanel(Panel):
 
                 if trans_id != last_trans_id:
                     if last_trans_id:
-                        self._queries[(i - 1)][1]["ends_trans"] = True
+                        queries[-1]["ends_trans"] = True
                     trans_ids[alias] = trans_id
                     if trans_id:
                         query["starts_trans"] = True
@@ -234,12 +236,13 @@ class SQLPanel(Panel):
                 query["end_offset"] = query["width_ratio"] + query["start_offset"]
                 width_ratio_tally += query["width_ratio"]
                 query["stacktrace"] = render_stacktrace(query["stacktrace"])
-                i += 1
 
                 query["trace_color"] = trace_colors[query["stacktrace"]]
 
+                queries.append(query)
+
             if trans_id:
-                self._queries[(i - 1)][1]["ends_trans"] = True
+                queries[-1]["ends_trans"] = True
 
         # Queries are similar / duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
@@ -261,7 +264,8 @@ class SQLPanel(Panel):
             for alias, queries in query_duplicates.items()
         }
 
-        for alias, query in self._queries:
+        for query in queries:
+            alias = query["alias"]
             try:
                 (query["similar_count"], query["similar_color"]) = query_similar_colors[
                     alias
@@ -288,7 +292,7 @@ class SQLPanel(Panel):
             "databases": sorted(
                 self._databases.items(), key=lambda x: -x[1]["time_spent"]
             ),
-            "queries": [q for a, q in self._queries],
+            "queries": queries,
             "sql_time": self._sql_time,
         }
 
