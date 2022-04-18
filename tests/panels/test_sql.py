@@ -176,9 +176,7 @@ class SQLPanelTestCase(BaseTestCase):
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
-
-        # ensure query was logged
-        self.assertEqual(len(self.panel._queries), 3)
+        queries = self.panel.get_context()["queries"]
 
         if connection.vendor == "mysql" and django.VERSION >= (4, 1):
             # Django 4.1 started passing true/false back for boolean
@@ -194,7 +192,7 @@ class SQLPanelTestCase(BaseTestCase):
             expected_datetime = '["2017-12-22 16:07:01"]'
 
         self.assertEqual(
-            tuple(q[1]["params"] for q in self.panel._queries),
+            tuple(q["params"] for q in queries),
             (
                 expected_bools,
                 "[10, 1]",

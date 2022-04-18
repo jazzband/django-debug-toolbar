@@ -1,11 +1,37 @@
+import datetime
 import re
 from functools import lru_cache
 
 import sqlparse
+from django.utils.encoding import force_str
 from django.utils.html import escape
 from sqlparse import tokens as T
 
 from debug_toolbar import settings as dt_settings
+
+try:
+    from psycopg2._json import Json as PostgresJson
+except ImportError:
+    PostgresJson = None
+
+
+def decode_param(param):
+    if PostgresJson and isinstance(param, PostgresJson):
+        return param.dumps(param.adapted)
+    # If a sequence type, decode each element separately
+    if isinstance(param, (tuple, list)):
+        return [decode_param(element) for element in param]
+
+    # If a dictionary type, decode each value separately
+    if isinstance(param, dict):
+        return {key: decode_param(value) for key, value in param.items()}
+
+    # make sure datetime, date and time are converted to string by force_str
+    CONVERT_TYPES = (datetime.datetime, datetime.date, datetime.time)
+    try:
+        return force_str(param, strings_only=not isinstance(param, CONVERT_TYPES))
+    except UnicodeDecodeError:
+        return "(encoded string)"
 
 
 class BoldKeywordFilter:

@@ -1,17 +1,8 @@
 import contextvars
-import datetime
-import json
 from time import time
-
-from django.utils.encoding import force_str
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
-
-try:
-    from psycopg2._json import Json as PostgresJson
-except ImportError:
-    PostgresJson = None
 
 recording = contextvars.ContextVar("debug-toolbar-recording", default=True)
 
@@ -104,24 +95,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
             return {key: self._quote_expr(value) for key, value in params.items()}
         return [self._quote_expr(p) for p in params]
 
-    def _decode(self, param):
-        if PostgresJson and isinstance(param, PostgresJson):
-            return param.dumps(param.adapted)
-        # If a sequence type, decode each element separately
-        if isinstance(param, (tuple, list)):
-            return [self._decode(element) for element in param]
-
-        # If a dictionary type, decode each value separately
-        if isinstance(param, dict):
-            return {key: self._decode(value) for key, value in param.items()}
-
-        # make sure datetime, date and time are converted to string by force_str
-        CONVERT_TYPES = (datetime.datetime, datetime.date, datetime.time)
-        try:
-            return force_str(param, strings_only=not isinstance(param, CONVERT_TYPES))
-        except UnicodeDecodeError:
-            return "(encoded string)"
-
     def _record(self, method, sql, params):
         start_time = time()
         try:
@@ -133,11 +106,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 stacktrace = tidy_stacktrace(reversed(get_stack()))
             else:
                 stacktrace = []
-            _params = ""
-            try:
-                _params = json.dumps(self._decode(params))
-            except TypeError:
-                pass  # object not JSON serializable
             template_info = get_template_info()
 
             alias = getattr(self.db, "alias", "default")
@@ -156,7 +124,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 ),
                 "duration": duration,
                 "raw_sql": sql,
-                "params": _params,
                 "raw_params": params,
                 "stacktrace": stacktrace,
                 "is_slow": duration > dt_settings.get_config()["SQL_WARNING_THRESHOLD"],

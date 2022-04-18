@@ -1,3 +1,4 @@
+import json
 import uuid
 from collections import defaultdict
 from copy import copy
@@ -12,7 +13,11 @@ from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.panels.sql.tracking import unwrap_cursor, wrap_cursor
-from debug_toolbar.panels.sql.utils import contrasting_color_generator, reformat_sql
+from debug_toolbar.panels.sql.utils import (
+    contrasting_color_generator,
+    decode_param,
+    reformat_sql,
+)
 from debug_toolbar.utils import render_stacktrace
 
 
@@ -196,6 +201,14 @@ class SQLPanel(Panel):
             trans_id = None
             for alias, recorded_query in self._queries:
                 query = dict(recorded_query)
+
+                try:
+                    params = json.dumps(decode_param(query["raw_params"]))
+                except TypeError:
+                    # object not JSON serializable
+                    params = ""
+                query["params"] = params
+
                 query_similar[alias][similar_key(query)] += 1
                 query_duplicates[alias][duplicate_key(query)] += 1
 
