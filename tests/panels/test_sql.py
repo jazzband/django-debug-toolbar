@@ -234,8 +234,7 @@ class SQLPanelTestCase(BaseTestCase):
 
         self.assertEqual(len(self.panel._queries), 1)
         self.assertIn(
-            "<strong>SELECT</strong> * <strong>FROM</strong>"
-            " tests_binary <strong>WHERE</strong> field =",
+            "SELECT * FROM tests_binary WHERE field =",
             self.panel._queries[0][1]["sql"],
         )
 
@@ -301,18 +300,17 @@ class SQLPanelTestCase(BaseTestCase):
             ),
         )
 
-    def test_insert_content(self):
+    def test_content(self):
         """
-        Test that the panel only inserts content after generate_stats and
-        not the process_request.
+        Test that the panel only records statistics once the content is accessed.
         """
         list(User.objects.filter(username="café".encode()))
         response = self.panel.process_request(self.request)
-        # ensure the panel does not have content yet.
-        self.assertNotIn("café", self.panel.content)
         self.panel.generate_stats(self.request, response)
+        self.assertFalse(self.panel.get_stats())
         # ensure the panel renders correctly.
         content = self.panel.content
+        self.assertTrue(self.panel.get_stats())
         self.assertIn("café", content)
         self.assertValidHTML(content)
 
@@ -438,7 +436,8 @@ class SQLPanelTestCase(BaseTestCase):
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
-        pretty_sql = self.panel._queries[-1][1]["sql"]
+        context = self.panel.get_context()
+        pretty_sql = context["queries"][-1]["sql"]
         self.assertEqual(len(self.panel._queries), 1)
 
         # Reset the queries
@@ -448,8 +447,9 @@ class SQLPanelTestCase(BaseTestCase):
         list(User.objects.filter(username__istartswith="spam"))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
+        context = self.panel.get_context()
         self.assertEqual(len(self.panel._queries), 1)
-        self.assertNotEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+        self.assertNotEqual(pretty_sql, context["queries"][-1]["sql"])
 
         self.panel._queries = []
         # Run it again, but with prettyify back on.
@@ -459,8 +459,9 @@ class SQLPanelTestCase(BaseTestCase):
         list(User.objects.filter(username__istartswith="spam"))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
+        context = self.panel.get_context()
         self.assertEqual(len(self.panel._queries), 1)
-        self.assertEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+        self.assertEqual(pretty_sql, context["queries"][-1]["sql"])
 
     @override_settings(
         DEBUG=True,

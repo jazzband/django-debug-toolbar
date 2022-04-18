@@ -130,6 +130,12 @@ class SQLPanel(Panel):
 
     template = "debug_toolbar/panels/sql.html"
 
+    @property
+    def content(self):
+        if not self.get_stats():
+            self.record_stats(self.get_context())
+        return super().content
+
     @classmethod
     def get_urls(cls):
         return [
@@ -147,7 +153,7 @@ class SQLPanel(Panel):
         for connection in connections.all():
             unwrap_cursor(connection)
 
-    def generate_stats(self, request, response):
+    def get_context(self):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
         query_similar = defaultdict(lambda: defaultdict(int))
@@ -278,15 +284,13 @@ class SQLPanel(Panel):
             except KeyError:
                 pass
 
-        self.record_stats(
-            {
-                "databases": sorted(
-                    self._databases.items(), key=lambda x: -x[1]["time_spent"]
-                ),
-                "queries": [q for a, q in self._queries],
-                "sql_time": self._sql_time,
-            }
-        )
+        return {
+            "databases": sorted(
+                self._databases.items(), key=lambda x: -x[1]["time_spent"]
+            ),
+            "queries": [q for a, q in self._queries],
+            "sql_time": self._sql_time,
+        }
 
     def generate_server_timing(self, request, response):
         title = f"SQL {len(self._queries)} queries"
