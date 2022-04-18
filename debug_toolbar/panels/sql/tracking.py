@@ -148,7 +148,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
             # For logging purposes, make sure it's str.
             sql = str(sql)
 
-            params = {
+            kwargs = {
                 "vendor": vendor,
                 "alias": alias,
                 "sql": self.db.ops.last_executed_query(
@@ -174,7 +174,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                     iso_level = conn.isolation_level
                 except conn.InternalError:
                     iso_level = "unknown"
-                params.update(
+                kwargs.update(
                     {
                         "trans_id": self.logger.get_transaction_id(alias),
                         "trans_status": conn.get_transaction_status(),
@@ -184,7 +184,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 )
 
             # We keep `sql` to maintain backwards compatibility
-            self.logger.record(**params)
+            self.logger.record(**kwargs)
 
     def callproc(self, procname, params=None):
         return self._record(self.cursor.callproc, procname, params)
