@@ -289,7 +289,5 @@ class SQLPanel(Panel):
         )
 
     def generate_server_timing(self, request, response):
-        stats = self.get_stats()
-        title = "SQL {} queries".format(len(stats.get("queries", [])))
-        value = stats.get("sql_time", 0)
-        self.record_server_timing("sql_time", title, value)
+        title = f"SQL {len(self._queries)} queries"
+        self.record_server_timing("sql_time", title, self._sql_time)
