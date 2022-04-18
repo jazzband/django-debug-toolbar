@@ -182,7 +182,7 @@ class NormalCursorWrapper(DjDTCursorWrapper):
             else:
                 sql = str(sql)
 
-            params = {
+            kwargs = {
                 "vendor": vendor,
                 "alias": alias,
                 "sql": self._last_executed_query(sql, params),
@@ -228,7 +228,7 @@ class NormalCursorWrapper(DjDTCursorWrapper):
                 else:
                     trans_id = None
 
-                params.update(
+                kwargs.update(
                     {
                         "trans_id": trans_id,
                         "trans_status": conn.info.transaction_status,
@@ -237,7 +237,7 @@ class NormalCursorWrapper(DjDTCursorWrapper):
                 )
 
             # We keep `sql` to maintain backwards compatibility
-            self.logger.record(**params)
+            self.logger.record(**kwargs)
 
     def callproc(self, procname, params=None):
         return self._record(super().callproc, procname, params)
