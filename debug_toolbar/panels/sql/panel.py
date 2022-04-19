@@ -6,6 +6,7 @@ from django.db import connections
 from django.urls import path
 from django.utils.translation import gettext_lazy as _, ngettext
 
+from debug_toolbar import settings as dt_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
@@ -204,6 +205,8 @@ class SQLPanel(Panel):
         duplicate_query_groups = defaultdict(list)
 
         if self._queries:
+            sql_warning_threshold = dt_settings.get_config()["SQL_WARNING_THRESHOLD"]
+
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
             for n, db in enumerate(self._databases.values()):
@@ -261,6 +264,12 @@ class SQLPanel(Panel):
 
                 if query["sql"]:
                     query["sql"] = reformat_sql(query["sql"], with_toggle=True)
+
+                query["is_slow"] = query["duration"] > sql_warning_threshold
+                query["is_select"] = (
+                    query["raw_sql"].lower().lstrip().startswith("select")
+                )
+
                 query["rgb_color"] = self._databases[alias]["rgb_color"]
                 try:
                     query["width_ratio"] = (query["duration"] / self._sql_time) * 100
