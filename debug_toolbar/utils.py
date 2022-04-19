@@ -90,7 +90,12 @@ hidden_paths = [
 ]
 
 
+# os.path.realpath() is expensive since it has to hit the filesystem.  Since
+# omit_path() is called for each stack frame in tidy_stacktrace(), apply the
+# LRUCache() decorator to reduce the cost.
+@LRUCache()
 def omit_path(path):
+    path = os.path.realpath(path)
     return any(path.startswith(hidden_path) for hidden_path in hidden_paths)
 
 
@@ -105,7 +110,7 @@ def tidy_stacktrace(stack):
     """
     trace = []
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
-        if omit_path(os.path.realpath(path)):
+        if omit_path(path):
             continue
         text = "".join(text).strip() if text else ""
         frame_locals = (
