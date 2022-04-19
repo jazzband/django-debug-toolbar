@@ -167,19 +167,18 @@ def get_name_from_obj(obj):
     return name
 
 
-def getframeinfo(frame, context=1):
+def getframeinfo(frame):
     """
     Get information about a frame or traceback object.
 
     A tuple of five things is returned: the filename, the line number of
     the current line, the function name, a list of lines of context from
     the source code, and the index of the current line within that list.
-    The optional second argument specifies the number of lines of context
-    to return, which are centered around the current line.
 
     This originally comes from ``inspect`` but is modified to handle issues
     with ``findsource()``.
     """
+    context = 1
     if inspect.istraceback(frame):
         lineno = frame.tb_lineno
         frame = frame.tb_frame
@@ -232,7 +231,7 @@ def get_sorted_request_variable(variable):
         return [(k, variable.getlist(k)) for k in sorted(variable)]
 
 
-def get_stack(context=1):
+def get_stack():
     """
     Get a list of records for a frame and all higher (calling) frames.
 
@@ -244,7 +243,7 @@ def get_stack(context=1):
     frame = sys._getframe(1)
     framelist = []
     while frame:
-        framelist.append((frame,) + getframeinfo(frame, context))
+        framelist.append((frame,) + getframeinfo(frame))
         frame = frame.f_back
     return framelist
 
