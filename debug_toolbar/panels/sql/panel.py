@@ -8,6 +8,7 @@ from django.db import connections
 from django.urls import path
 from django.utils.translation import gettext_lazy as _, ngettext
 
+from debug_toolbar import settings as dt_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
@@ -180,6 +181,7 @@ class SQLPanel(Panel):
             return (query["raw_sql"], saferepr(raw_params))
 
         if self._queries:
+            sql_warning_threshold = dt_settings.get_config()["SQL_WARNING_THRESHOLD"]
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
             for n, db in enumerate(self._databases.values()):
@@ -236,6 +238,11 @@ class SQLPanel(Panel):
 
                 query["form"] = SignedDataForm(
                     auto_id=None, initial=SQLSelectForm(initial=copy(query)).initial
+                )
+
+                query["is_slow"] = query["duration"] > sql_warning_threshold
+                query["is_select"] = (
+                    query["raw_sql"].lower().lstrip().startswith("select")
                 )
 
                 if query["sql"]:

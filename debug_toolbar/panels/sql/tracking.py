@@ -126,8 +126,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 "raw_sql": sql,
                 "raw_params": params,
                 "stacktrace": stacktrace,
-                "is_slow": duration > dt_settings.get_config()["SQL_WARNING_THRESHOLD"],
-                "is_select": sql.lower().strip().startswith("select"),
                 "template_info": template_info,
             }
 
