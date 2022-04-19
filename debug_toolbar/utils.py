@@ -222,10 +222,7 @@ def getframeinfo(frame, context=1):
                 break
         lines = [line.decode(encoding, "replace") for line in lines]
 
-    if hasattr(inspect, "Traceback"):
-        return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
-    else:
-        return (filename, lineno, frame.f_code.co_name, lines, index)
+    return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
 
 
 def get_sorted_request_variable(variable):
