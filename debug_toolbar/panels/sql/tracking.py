@@ -7,7 +7,6 @@ import django.test.testcases
 from django.db.backends.utils import CursorWrapper
 from django.utils.encoding import force_str
 
-from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack_trace, get_template_info
 
 try:
@@ -191,10 +190,6 @@ class NormalCursorWrapper(DjDTCursorWrapper):
                 "params": _params,
                 "raw_params": params,
                 "stacktrace": get_stack_trace(skip=2),
-                "is_slow": (
-                    duration > dt_settings.get_config()["SQL_WARNING_THRESHOLD"]
-                ),
-                "is_select": sql.lower().strip().startswith("select"),
                 "template_info": template_info,
             }
 
