@@ -1,3 +1,4 @@
+import functools
 import inspect
 import os.path
 import re
@@ -17,6 +18,54 @@ try:
     import threading
 except ImportError:
     threading = None
+
+
+# A lighter-weight (and somewhat less-featureful) alternative to the
+# functools.lru_cache decorator.  Does not support keyword arguments.  Does not
+# use any locking internally, as the worst result of any race condition would
+# be a slight inaccuracy in the cache entry access count, possibly resulting in
+# a more-recently-accessed entry being discarded if the cache is too full.  Its
+# main distinctive is that it supports an optional key function, which
+# transforms the function arguments into a cache key if the original arguments
+# cannot or should not be used as a cache key.
+class LRUCache:
+    SENTINEL = object()
+    DEFAULT_MAX_SIZE = 256
+
+    class Entry:
+        def __init__(self, value):
+            self.value = value
+            self.access_count = 0
+
+    def __init__(self, key_func=None, max_size=None):
+        self.cache = {}
+        self.counter = 0
+        self.key_func = key_func
+        if max_size is None:
+            max_size = self.DEFAULT_MAX_SIZE
+        self.max_size = max_size
+
+    def __call__(self, f):
+        @functools.wraps(f)
+        def wrapper(*args):
+            if self.key_func is None:
+                cache_key = args
+            else:
+                cache_key = self.key_func(*args)
+            entry = self.cache.get(cache_key, self.SENTINEL)
+            if entry is self.SENTINEL:
+                entry = self.Entry(f(*args))
+                while len(self.cache) >= self.max_size:
+                    lru_key, _ = min(
+                        self.cache.items(), key=lambda item: item[1].access_count
+                    )
+                    self.cache.pop(lru_key, None)
+                self.cache[cache_key] = entry
+            self.counter += 1
+            entry.access_count = self.counter
+            return entry.value
+
+        return wrapper
 
 
 # Figure out some paths
@@ -167,6 +216,13 @@ def get_name_from_obj(obj):
     return name
 
 
+# getframeinfo() is quite expensive as it hits the filesystem multiple
+# times.  Apply the LRUCache decorator to reduce this cost.  Using the frame
+# objects in cache keys directly is undesirable as it would cause the frames
+# (and their associated locals) to stay in memory indefinitely.  Instead use
+# the filename and line number as the cache key (this has the happy benefit of
+# improving the cache hit rate as well).
+@LRUCache(key_func=lambda frame: (frame.f_code.co_filename, frame.f_lineno))
 def getframeinfo(frame):
     """
     Get information about a frame or traceback object.
