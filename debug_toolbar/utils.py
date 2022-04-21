@@ -47,12 +47,11 @@ def omit_path(path):
 
 def tidy_stacktrace(stack):
     """
-    Clean up stacktrace and remove all entries that:
-    1. Are part of Django (except contrib apps)
-    2. Are part of socketserver (used by Django's dev server)
-    3. Are the last entry (which is part of our stacktracing code)
+    Clean up stacktrace and remove all entries that are excluded by the
+    HIDE_IN_STACKTRACES setting.
 
-    ``stack`` should be a list of frame tuples from ``inspect.stack()``
+    ``stack`` should be a list of frame tuples from ``inspect.stack()`` or
+    ``debug_toolbar.utils.get_stack()``.
     """
     trace = []
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
