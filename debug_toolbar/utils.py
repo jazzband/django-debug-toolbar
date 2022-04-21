@@ -6,7 +6,6 @@ import warnings
 from importlib import import_module
 from pprint import pformat
 
-import django
 from asgiref.local import Local
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
@@ -22,10 +21,6 @@ except ImportError:
 
 
 _local_data = Local()
-
-
-# Figure out some paths
-django_path = os.path.realpath(os.path.dirname(django.__file__))
 
 
 def get_module_path(module_name):
