@@ -61,6 +61,7 @@ def wrap_cursor(connection, panel):
 def unwrap_cursor(connection):
     if hasattr(connection, "_djdt_cursor"):
         del connection._djdt_cursor
+        del connection._djdt_chunked_cursor
         del connection.cursor
         del connection.chunked_cursor
 
