@@ -156,7 +156,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 pass  # object not JSON serializable
             template_info = get_template_info()
 
-            alias = getattr(self.db, "alias", "default")
+            alias = self.db.alias
             conn = self.db.connection
             vendor = getattr(conn, "vendor", "unknown")
 
