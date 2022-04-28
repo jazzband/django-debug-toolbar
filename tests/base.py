@@ -1,7 +1,7 @@
 import html5lib
 from asgiref.local import Local
 from django.http import HttpResponse
-from django.test import Client, RequestFactory, TestCase
+from django.test import Client, RequestFactory, TestCase, TransactionTestCase
 
 from debug_toolbar.toolbar import DebugToolbar
 
@@ -29,7 +29,7 @@ class ToolbarTestClient(Client):
 rf = RequestFactory()
 
 
-class BaseTestCase(TestCase):
+class BaseMixin:
     client_class = ToolbarTestClient
 
     panel_id = None
@@ -65,6 +65,14 @@ class BaseTestCase(TestCase):
                 msg_parts.append("  %s" % html5lib.constants.E[errorcode] % datavars)
                 msg_parts.append("    %s" % lines[position[0] - 1])
             raise self.failureException("\n".join(msg_parts))
+
+
+class BaseTestCase(BaseMixin, TestCase):
+    pass
+
+
+class BaseMultiDBTestCase(BaseMixin, TransactionTestCase):
+    databases = {"default", "replica"}
 
 
 class IntegrationTestCase(TestCase):
