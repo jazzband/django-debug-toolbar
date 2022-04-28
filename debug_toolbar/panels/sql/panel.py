@@ -67,14 +67,15 @@ class SQLPanel(Panel):
     def get_transaction_id(self, alias):
         if alias not in connections:
             return
-        conn = connections[alias].connection
+        connection = connections[alias]
+        conn = connection.connection
         if not conn:
             return
 
-        if conn.vendor == "postgresql":
+        if connection.vendor == "postgresql":
             cur_status = conn.get_transaction_status()
         else:
-            raise ValueError(conn.vendor)
+            raise ValueError(connection.vendor)
 
         last_status = self._transaction_status.get(alias)
         self._transaction_status[alias] = cur_status
