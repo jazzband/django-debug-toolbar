@@ -4,6 +4,9 @@ Change log
 Next version
 ------------
 
+3.3.0 (2022-04-28)
+------------------
+
 * Track calls to :py:meth:`django.core.caches.cache.get_or_set`.
 * Removed support for Django < 3.2.
 * Updated check ``W006`` to look for
