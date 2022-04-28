@@ -60,10 +60,22 @@ def wrap_cursor(connection, panel):
 
 def unwrap_cursor(connection):
     if hasattr(connection, "_djdt_cursor"):
+        # Sometimes the cursor()/chunked_cursor() methods of the DatabaseWrapper
+        # instance are already monkey patched before wrap_cursor() is called.  (In
+        # particular, Django's SimpleTestCase monkey patches those methods for any
+        # disallowed databases to raise an exception if they are accessed.)  Thus only
+        # delete our monkey patch if the method we saved is the same as the class
+        # method.  Otherwise, restore the prior monkey patch from our saved method.
+        if connection._djdt_cursor == connection.__class__.cursor:
+            del connection.cursor
+        else:
+            connection.cursor = connection._djdt_cursor
         del connection._djdt_cursor
+        if connection._djdt_chunked_cursor == connection.__class__.chunked_cursor:
+            del connection.chunked_cursor
+        else:
+            connection.chunked_cursor = connection._djdt_chunked_cursor
         del connection._djdt_chunked_cursor
-        del connection.cursor
-        del connection.chunked_cursor
 
 
 class BaseCursorWrapper:
