@@ -43,7 +43,7 @@ repos:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.13.0
+    rev: v8.14.0
     hooks:
     -   id: eslint
         files: \.js?$
