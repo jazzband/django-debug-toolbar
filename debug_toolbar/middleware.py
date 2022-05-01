@@ -4,7 +4,7 @@ Debug Toolbar middleware
 
 import re
 from functools import lru_cache
-from ipaddress import IPv4Address, IPv4Network, AddressValueError
+from ipaddress import AddressValueError, IPv4Address, IPv4Network
 
 from django.conf import settings
 from django.utils.module_loading import import_string
@@ -19,7 +19,7 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    if settings.DEBUG is True and hasattr(settings, 'INTERNAL_IPS'):
+    if settings.DEBUG is True and hasattr(settings, "INTERNAL_IPS"):
         for ip in settings.INTERNAL_IPS:
             try:
                 if IPv4Address(request.META.get("REMOTE_ADDR")) in IPv4Network(ip):
@@ -27,6 +27,7 @@ def show_toolbar(request):
             except AddressValueError:
                 pass
     return False
+
 
 @lru_cache()
 def get_show_toolbar():
