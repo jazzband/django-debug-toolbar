@@ -72,10 +72,16 @@ def render_stacktrace(trace):
     show_locals = dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]
     html = ""
     for abspath, lineno, func, code, locals_ in trace:
-        directory, filename = abspath.rsplit(os.path.sep, 1)
+        if os.path.sep in abspath:
+            directory, filename = abspath.rsplit(os.path.sep, 1)
+            # We want the separator to appear in the UI so add it back.
+            directory += os.path.sep
+        else:
+            directory = ""
+            filename = abspath
         html += format_html(
             (
-                '<span class="djdt-path">{}/</span>'
+                '<span class="djdt-path">{}</span>'
                 + '<span class="djdt-file">{}</span> in'
                 + ' <span class="djdt-func">{}</span>'
                 + '(<span class="djdt-lineno">{}</span>)\n'
