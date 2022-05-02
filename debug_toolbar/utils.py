@@ -77,6 +77,7 @@ def render_stacktrace(trace):
             # We want the separator to appear in the UI so add it back.
             directory += os.path.sep
         else:
+            # abspath could be something like "<frozen importlib._bootstrap>"
             directory = ""
             filename = abspath
         html += format_html(
