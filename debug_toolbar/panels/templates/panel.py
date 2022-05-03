@@ -13,7 +13,7 @@ from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, recording
+from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, allow_sql
 from debug_toolbar.panels.templates import views
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
@@ -118,7 +118,7 @@ class TemplatesPanel(Panel):
                                 value.model._meta.label,
                             )
                         else:
-                            token = recording.set(False)
+                            token = allow_sql.set(False)
                             try:
                                 saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
@@ -130,7 +130,7 @@ class TemplatesPanel(Panel):
                             else:
                                 temp_layer[key] = value
                             finally:
-                                recording.reset(token)
+                                allow_sql.reset(token)
                     pformatted = pformat(temp_layer)
                     self.pformat_layers.append((context_layer, pformatted))
                 context_list.append(pformatted)

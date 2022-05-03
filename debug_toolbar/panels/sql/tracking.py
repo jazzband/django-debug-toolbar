@@ -13,7 +13,10 @@ try:
 except ImportError:
     PostgresJson = None
 
-recording = contextvars.ContextVar("debug-toolbar-recording", default=True)
+# Prevents SQL queries from being sent to the DB. It's used
+# by the TemplatePanel to prevent the toolbar from issuing
+# additional queries.
+allow_sql = contextvars.ContextVar("debug-toolbar-allow-sql", default=True)
 
 
 class SQLQueryTriggered(Exception):
@@ -32,7 +35,7 @@ def wrap_cursor(connection, panel):
             # See:
             # https://github.com/jazzband/django-debug-toolbar/pull/615
             # https://github.com/jazzband/django-debug-toolbar/pull/896
-            if recording.get():
+            if allow_sql.get():
                 wrapper = NormalCursorWrapper
             else:
                 wrapper = ExceptionCursorWrapper
@@ -43,7 +46,7 @@ def wrap_cursor(connection, panel):
             # solves https://github.com/jazzband/django-debug-toolbar/issues/1239
             cursor = connection._djdt_chunked_cursor(*args, **kwargs)
             if not isinstance(cursor, BaseCursorWrapper):
-                if recording.get():
+                if allow_sql.get():
                     wrapper = NormalCursorWrapper
                 else:
                     wrapper = ExceptionCursorWrapper
