@@ -18,7 +18,6 @@ from debug_toolbar import settings as dt_settings
 
 from ..base import BaseTestCase
 from ..models import PostgresJSON
-from ..sync import database_sync_to_async
 
 
 def sql_call(use_iterator=False):
@@ -98,19 +97,21 @@ class SQLPanelTestCase(BaseTestCase):
         wraps=sql_tracking.NormalCursorWrapper,
     )
     async def test_cursor_wrapper_asyncio_ctx(self, mock_wrapper):
-        self.assertTrue(sql_tracking.recording.get())
+        self.assertTrue(sql_tracking.allow_sql.get())
         await sync_to_async(sql_call)()
 
         async def task():
-            sql_tracking.recording.set(False)
-            # Calling this in another context requires the db connections
-            # to be closed properly.
-            await database_sync_to_async(sql_call)()
+            sql_tracking.allow_sql.set(False)
+            # By disabling sql_tracking.allow_sql, we are indicating that any
+            # future SQL queries should be stopped. If SQL query occurs,
+            # it raises an exception.
+            with self.assertRaises(sql_tracking.SQLQueryTriggered):
+                await sync_to_async(sql_call)()
 
         # Ensure this is called in another context
         await asyncio.create_task(task())
         # Because it was called in another context, it should not have affected ours
-        self.assertTrue(sql_tracking.recording.get())
+        self.assertTrue(sql_tracking.allow_sql.get())
         self.assertEqual(mock_wrapper.call_count, 1)
 
     def test_generate_server_timing(self):
