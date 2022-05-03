@@ -4,6 +4,10 @@ Change log
 Next version
 ------------
 
+* Fixed issue of stacktrace having frames that have no path to the file,
+  but are instead a stringified version of the code such as
+  ``'<frozen importlib._bootstrap>'``.
+
 3.3.0 (2022-04-28)
 ------------------
 
