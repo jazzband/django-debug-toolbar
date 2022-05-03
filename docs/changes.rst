@@ -5,8 +5,10 @@ Next version
 ------------
 
 * Fixed issue of stacktrace having frames that have no path to the file,
-  but are instead a stringified version of the code such as
+  but are instead a string of the code such as
   ``'<frozen importlib._bootstrap>'``.
+* Renamed internal SQL tracking context var from ``recording`` to
+  ``allow_sql``.
 
 3.3.0 (2022-04-28)
 ------------------
