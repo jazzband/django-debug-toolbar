@@ -1,8 +1,8 @@
 Change log
 ==========
 
-Next version
-------------
+3.4.0 (2022-05-03)
+------------------
 
 * Fixed issue of stacktrace having frames that have no path to the file,
   but are instead a string of the code such as
