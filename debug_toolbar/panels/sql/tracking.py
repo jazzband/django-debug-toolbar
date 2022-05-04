@@ -10,8 +10,10 @@ from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
 
 try:
     from psycopg2._json import Json as PostgresJson
+    from psycopg2.extensions import STATUS_IN_TRANSACTION
 except ImportError:
     PostgresJson = None
+    STATUS_IN_TRANSACTION = None
 
 # Prevents SQL queries from being sent to the DB. It's used
 # by the TemplatePanel to prevent the toolbar from issuing
@@ -139,6 +141,14 @@ class NormalCursorWrapper(BaseCursorWrapper):
             return "(encoded string)"
 
     def _record(self, method, sql, params):
+        alias = self.db.alias
+        vendor = self.db.vendor
+
+        if vendor == "postgresql":
+            # The underlying DB connection (as opposed to Django's wrapper)
+            conn = self.db.connection
+            initial_conn_status = conn.status
+
         start_time = time()
         try:
             return method(sql, params)
@@ -155,10 +165,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
             except TypeError:
                 pass  # object not JSON serializable
             template_info = get_template_info()
-
-            alias = self.db.alias
-            conn = self.db.connection
-            vendor = self.db.vendor
 
             # Sql might be an object (such as psycopg Composed).
             # For logging purposes, make sure it's str.
@@ -190,9 +196,29 @@ class NormalCursorWrapper(BaseCursorWrapper):
                     iso_level = conn.isolation_level
                 except conn.InternalError:
                     iso_level = "unknown"
+                # PostgreSQL does not expose any sort of transaction ID, so it is
+                # necessary to generate synthetic transaction IDs here.  If the
+                # connection was not in a transaction when the query started, and was
+                # after the query finished, a new transaction definitely started, so get
+                # a new transaction ID from logger.new_transaction_id().  If the query
+                # was in a transaction both before and after executing, make the
+                # assumption that it is the same transaction and get the current
+                # transaction ID from logger.current_transaction_id().  There is an edge
+                # case where Django can start a transaction before the first query
+                # executes, so in that case logger.current_transaction_id() will
+                # generate a new transaction ID since one does not already exist.
+                final_conn_status = conn.status
+                if final_conn_status == STATUS_IN_TRANSACTION:
+                    if initial_conn_status == STATUS_IN_TRANSACTION:
+                        trans_id = self.logger.current_transaction_id(alias)
+                    else:
+                        trans_id = self.logger.new_transaction_id(alias)
+                else:
+                    trans_id = None
+
                 params.update(
                     {
-                        "trans_id": self.logger.get_transaction_id(alias),
+                        "trans_id": trans_id,
                         "trans_status": conn.get_transaction_status(),
                         "iso_level": iso_level,
                         "encoding": conn.encoding,

@@ -61,36 +61,29 @@ class SQLPanel(Panel):
         self._num_queries = 0
         self._queries = []
         self._databases = {}
-        self._transaction_status = {}
+        # synthetic transaction IDs, keyed by DB alias
         self._transaction_ids = {}
 
-    def get_transaction_id(self, alias):
-        if alias not in connections:
-            return
-        connection = connections[alias]
-        conn = connection.connection
-        if not conn:
-            return
+    def new_transaction_id(self, alias):
+        """
+        Generate and return a new synthetic transaction ID for the specified DB alias.
+        """
+        trans_id = uuid.uuid4().hex
+        self._transaction_ids[alias] = trans_id
+        return trans_id
 
-        if connection.vendor == "postgresql":
-            cur_status = conn.get_transaction_status()
-        else:
-            raise ValueError(connection.vendor)
-
-        last_status = self._transaction_status.get(alias)
-        self._transaction_status[alias] = cur_status
-
-        if not cur_status:
-            # No available state
-            return None
-
-        if cur_status != last_status:
-            if cur_status:
-                self._transaction_ids[alias] = uuid.uuid4().hex
-            else:
-                self._transaction_ids[alias] = None
-
-        return self._transaction_ids[alias]
+    def current_transaction_id(self, alias):
+        """
+        Return the current synthetic transaction ID for the specified DB alias.
+        """
+        trans_id = self._transaction_ids.get(alias)
+        # Sometimes it is not possible to detect the beginning of the first transaction,
+        # so current_transaction_id() will be called before new_transaction_id().  In
+        # that case there won't yet be a transaction ID. so it is necessary to generate
+        # one using new_transaction_id().
+        if trans_id is None:
+            trans_id = self.new_transaction_id(alias)
+        return trans_id
 
     def record(self, alias, **kwargs):
         self._queries.append((alias, kwargs))
