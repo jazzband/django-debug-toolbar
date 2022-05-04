@@ -221,7 +221,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
                         "trans_id": trans_id,
                         "trans_status": conn.get_transaction_status(),
                         "iso_level": iso_level,
-                        "encoding": conn.encoding,
                     }
                 )
 
