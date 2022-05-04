@@ -16,7 +16,7 @@ from django.test.utils import override_settings
 import debug_toolbar.panels.sql.tracking as sql_tracking
 from debug_toolbar import settings as dt_settings
 
-from ..base import BaseTestCase
+from ..base import BaseMultiDBTestCase, BaseTestCase
 from ..models import PostgresJSON
 
 
@@ -506,3 +506,24 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(template_name, "included.html")
         self.assertEqual(template_info["context"][0]["content"].strip(), "{{ users }}")
         self.assertEqual(template_info["context"][0]["highlight"], True)
+
+
+class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
+    panel_id = "SQLPanel"
+
+    def test_aliases(self):
+        self.assertFalse(self.panel._queries)
+
+        list(User.objects.all())
+        list(User.objects.using("replica").all())
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+
+        self.assertTrue(self.panel._queries)
+
+        query = self.panel._queries[0]
+        self.assertEqual(query[0], "default")
+
+        query = self.panel._queries[-1]
+        self.assertEqual(query[0], "replica")
