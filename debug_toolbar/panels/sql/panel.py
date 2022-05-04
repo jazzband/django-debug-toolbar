@@ -178,23 +178,25 @@ class SQLPanel(Panel):
                     rgb[nn] = nc
                 db["rgb_color"] = rgb
 
-            trans_ids = {}
-            trans_id = None
-            i = 0
+            # the last query recorded for each DB alias
+            last_by_alias = {}
             for alias, query in self._queries:
                 query_similar[alias][similar_key(query)] += 1
                 query_duplicates[alias][duplicate_key(query)] += 1
 
                 trans_id = query.get("trans_id")
-                last_trans_id = trans_ids.get(alias)
+                prev_query = last_by_alias.get(alias, {})
+                prev_trans_id = prev_query.get("trans_id")
 
-                if trans_id != last_trans_id:
-                    if last_trans_id:
-                        self._queries[(i - 1)][1]["ends_trans"] = True
-                    trans_ids[alias] = trans_id
-                    if trans_id:
+                # If two consecutive queries for a given DB alias have different
+                # transaction ID values, a transaction started, finished, or both, so
+                # annotate the queries as appropriate.
+                if trans_id != prev_trans_id:
+                    if prev_trans_id is not None:
+                        prev_query["ends_trans"] = True
+                    if trans_id is not None:
                         query["starts_trans"] = True
-                if trans_id:
+                if trans_id is not None:
                     query["in_trans"] = True
 
                 query["alias"] = alias
@@ -222,12 +224,16 @@ class SQLPanel(Panel):
                 query["end_offset"] = query["width_ratio"] + query["start_offset"]
                 width_ratio_tally += query["width_ratio"]
                 query["stacktrace"] = render_stacktrace(query["stacktrace"])
-                i += 1
 
                 query["trace_color"] = trace_colors[query["stacktrace"]]
 
-            if trans_id:
-                self._queries[(i - 1)][1]["ends_trans"] = True
+                last_by_alias[alias] = query
+
+            # Close out any transactions that were in progress, since there is no
+            # explicit way to know when a transaction finishes.
+            for final_query in last_by_alias.values():
+                if final_query.get("trans_id") is not None:
+                    final_query["ends_trans"] = True
 
         # Queries are similar / duplicates only if there's as least 2 of them.
         # Also, to hide queries, we need to give all the duplicate groups an id
