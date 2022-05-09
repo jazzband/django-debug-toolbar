@@ -2,8 +2,8 @@
 System checks
 =============
 
-The following :doc:`system checks <topics/checks>` help verify the Django
-Debug Toolbar setup and configuration:
+The following :external:doc:`system checks <topics/checks>` help verify the
+Django Debug Toolbar setup and configuration:
 
 * **debug_toolbar.W001**: ``debug_toolbar.middleware.DebugToolbarMiddleware``
   is missing from ``MIDDLEWARE``.
