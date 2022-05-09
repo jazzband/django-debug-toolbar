@@ -15,12 +15,12 @@ repos:
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.32.0
+    rev: v2.32.1
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
 -   repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.5.0
+    rev: 1.6.1
     hooks:
     -   id: django-upgrade
         args: [--target-version, "3.2"]
@@ -43,7 +43,7 @@ repos:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.14.0
+    rev: v8.15.0
     hooks:
     -   id: eslint
         files: \.js?$
