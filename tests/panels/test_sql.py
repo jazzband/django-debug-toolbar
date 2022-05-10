@@ -7,7 +7,7 @@ from unittest.mock import patch
 import django
 from asgiref.sync import sync_to_async
 from django.contrib.auth.models import User
-from django.db import connection
+from django.db import connection, transaction
 from django.db.models import Count
 from django.db.utils import DatabaseError
 from django.shortcuts import render
@@ -527,3 +527,93 @@ class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
 
         query = self.panel._queries[-1]
         self.assertEqual(query[0], "replica")
+
+    def test_transaction_status(self):
+        """
+        Test case for tracking the transaction status is properly associated with
+        queries on PostgreSQL, and that transactions aren't broken on other database
+        engines.
+        """
+        self.assertEqual(len(self.panel._queries), 0)
+
+        with transaction.atomic():
+            list(User.objects.all())
+            list(User.objects.using("replica").all())
+
+            with transaction.atomic(using="replica"):
+                list(User.objects.all())
+                list(User.objects.using("replica").all())
+
+        with transaction.atomic():
+            list(User.objects.all())
+
+        list(User.objects.using("replica").all())
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+
+        if connection.vendor == "postgresql":
+            # Connection tracking is currently only implemented for PostgreSQL.
+            self.assertEqual(len(self.panel._queries), 6)
+
+            query = self.panel._queries[0]
+            self.assertEqual(query[0], "default")
+            self.assertIsNotNone(query[1]["trans_id"])
+            self.assertTrue(query[1]["starts_trans"])
+            self.assertTrue(query[1]["in_trans"])
+            self.assertFalse("end_trans" in query[1])
+
+            query = self.panel._queries[-1]
+            self.assertEqual(query[0], "replica")
+            self.assertIsNone(query[1]["trans_id"])
+            self.assertFalse("starts_trans" in query[1])
+            self.assertFalse("in_trans" in query[1])
+            self.assertFalse("end_trans" in query[1])
+
+            query = self.panel._queries[2]
+            self.assertEqual(query[0], "default")
+            self.assertIsNotNone(query[1]["trans_id"])
+            self.assertEqual(
+                query[1]["trans_id"], self.panel._queries[0][1]["trans_id"]
+            )
+            self.assertFalse("starts_trans" in query[1])
+            self.assertTrue(query[1]["in_trans"])
+            self.assertTrue(query[1]["ends_trans"])
+
+            query = self.panel._queries[3]
+            self.assertEqual(query[0], "replica")
+            self.assertIsNotNone(query[1]["trans_id"])
+            self.assertNotEqual(
+                query[1]["trans_id"], self.panel._queries[0][1]["trans_id"]
+            )
+            self.assertTrue(query[1]["starts_trans"])
+            self.assertTrue(query[1]["in_trans"])
+            self.assertTrue(query[1]["ends_trans"])
+
+            query = self.panel._queries[4]
+            self.assertEqual(query[0], "default")
+            self.assertIsNotNone(query[1]["trans_id"])
+            self.assertNotEqual(
+                query[1]["trans_id"], self.panel._queries[0][1]["trans_id"]
+            )
+            self.assertNotEqual(
+                query[1]["trans_id"], self.panel._queries[3][1]["trans_id"]
+            )
+            self.assertTrue(query[1]["starts_trans"])
+            self.assertTrue(query[1]["in_trans"])
+            self.assertTrue(query[1]["ends_trans"])
+
+            query = self.panel._queries[5]
+            self.assertEqual(query[0], "replica")
+            self.assertIsNone(query[1]["trans_id"])
+            self.assertFalse("starts_trans" in query[1])
+            self.assertFalse("in_trans" in query[1])
+            self.assertFalse("end_trans" in query[1])
+        else:
+            # Ensure that nothing was recorded for other database engines.
+            self.assertTrue(self.panel._queries)
+            for query in self.panel._queries:
+                self.assertFalse("trans_id" in query[1])
+                self.assertFalse("starts_trans" in query[1])
+                self.assertFalse("in_trans" in query[1])
+                self.assertFalse("end_trans" in query[1])
