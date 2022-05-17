@@ -1,10 +1,12 @@
 import inspect
+import linecache
 import os.path
 import sys
 from importlib import import_module
 from pprint import pformat
 
 import django
+from asgiref.local import Local
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
 from django.utils.html import format_html
@@ -16,6 +18,9 @@ try:
     import threading
 except ImportError:
     threading = None
+
+
+_local_data = Local()
 
 
 # Figure out some paths
@@ -240,6 +245,99 @@ def get_stack(context=1):
         framelist.append((frame,) + getframeinfo(frame, context))
         frame = frame.f_back
     return framelist
+
+
+def _stack_frames(depth=1):
+    frame = inspect.currentframe()
+    while frame is not None:
+        if depth > 0:
+            depth -= 1
+        else:
+            yield frame
+        frame = frame.f_back
+
+
+class _StackTraceRecorder:
+    def __init__(self, excluded_paths):
+        self.excluded_paths = excluded_paths
+        self.filename_cache = {}
+        self.is_excluded_cache = {}
+
+    def get_source_file(self, frame):
+        frame_filename = frame.f_code.co_filename
+
+        value = self.filename_cache.get(frame_filename)
+        if value is None:
+            filename = inspect.getsourcefile(frame)
+            if filename is None:
+                is_source = False
+                filename = frame_filename
+            else:
+                is_source = True
+                # Ensure linecache validity the first time this recorder
+                # encounters the filename in this frame.
+                linecache.checkcache(filename)
+            value = (filename, is_source)
+            self.filename_cache[frame_filename] = value
+
+        return value
+
+    def is_excluded_path(self, path):
+        excluded = self.is_excluded_cache.get(path)
+        if excluded is None:
+            resolved_path = os.path.realpath(path)
+            excluded = any(
+                resolved_path.startswith(excluded_path)
+                for excluded_path in self.excluded_paths
+            )
+            self.is_excluded_cache[path] = excluded
+        return excluded
+
+    def get_stack_trace(self, include_locals=False, depth=1):
+        trace = []
+        for frame in _stack_frames(depth=depth + 1):
+            filename, is_source = self.get_source_file(frame)
+
+            if self.is_excluded_path(filename):
+                continue
+
+            line_no = frame.f_lineno
+            func_name = frame.f_code.co_name
+
+            if is_source:
+                module = inspect.getmodule(frame, filename)
+                module_globals = module.__dict__ if module is not None else None
+                source_line = linecache.getline(
+                    filename, line_no, module_globals
+                ).strip()
+            else:
+                source_line = ""
+
+            frame_locals = frame.f_locals if include_locals else None
+
+            trace.append((filename, line_no, func_name, source_line, frame_locals))
+        trace.reverse()
+        return trace
+
+
+def get_stack_trace(depth=1):
+    config = dt_settings.get_config()
+    if config["ENABLE_STACKTRACES"]:
+        stack_trace_recorder = getattr(_local_data, "stack_trace_recorder", None)
+        if stack_trace_recorder is None:
+            stack_trace_recorder = _StackTraceRecorder(hidden_paths)
+            _local_data.stack_trace_recorder = stack_trace_recorder
+        return stack_trace_recorder.get_stack_trace(
+            include_locals=config["ENABLE_STACKTRACES_LOCALS"],
+            depth=depth,
+        )
+    else:
+        return []
+
+
+def clear_stack_trace_caches():
+    if hasattr(_local_data, "stack_trace_recorder"):
+        del _local_data.stack_trace_recorder
 
 
 class ThreadCollector:

@@ -10,6 +10,7 @@ from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
+from debug_toolbar.utils import clear_stack_trace_caches
 
 _HTML_TYPES = ("text/html", "application/xhtml+xml")
 
@@ -56,6 +57,7 @@ class DebugToolbarMiddleware:
             # Run panels like Django middleware.
             response = toolbar.process_request(request)
         finally:
+            clear_stack_trace_caches()
             # Deactivate instrumentation ie. monkey-unpatch. This must run
             # regardless of the response. Keep 'return' clauses below.
             for panel in reversed(toolbar.enabled_panels):
