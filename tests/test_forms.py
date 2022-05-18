@@ -7,7 +7,7 @@ from debug_toolbar.forms import SignedDataForm
 
 SIGNATURE = "-WiogJKyy4E8Om00CrFSy0T6XHObwBa6Zb46u-vmeYE"
 
-DATA = {"value": "foo", "date": datetime(2020, 1, 1, tzinfo=timezone.utc)}
+DATA = {"date": datetime(2020, 1, 1, tzinfo=timezone.utc), "value": "foo"}
 SIGNED_DATA = f'{{"date": "2020-01-01 00:00:00+00:00", "value": "foo"}}:{SIGNATURE}'
 
 

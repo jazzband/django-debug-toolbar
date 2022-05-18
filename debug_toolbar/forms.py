@@ -47,7 +47,6 @@ class SignedDataForm(forms.Form):
 
     @classmethod
     def sign(cls, data):
-        items = sorted(data.items(), key=lambda item: item[0])
         return signing.Signer(salt=cls.salt).sign(
-            json.dumps({key: force_str(value) for key, value in items})
+            json.dumps({key: force_str(value) for key, value in data.items()})
         )
