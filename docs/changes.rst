@@ -3,6 +3,10 @@ Change log
 
 * Removed third party panels which have been archived on GitHub.
 * Added Django 4.1a1 to the CI matrix.
+* Stopped crashing when ``request.GET`` and ``request.POST`` are neither
+  dictionaries nor ``QueryDict`` instances. Using anything but ``QueryDict``
+  instances isn't a valid use of Django but, again, django-debug-toolbar
+  shouldn't crash.
 
 3.4.0 (2022-05-03)
 ------------------

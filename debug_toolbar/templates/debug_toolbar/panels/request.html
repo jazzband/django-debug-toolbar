@@ -20,28 +20,28 @@
   </tbody>
 </table>
 
-{% if cookies %}
+{% if cookies.list or cookies.raw %}
   <h4>{% trans "Cookies" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=cookies %}
 {% else %}
   <h4>{% trans "No cookies" %}</h4>
 {% endif %}
 
-{% if session %}
+{% if session.list or session.raw %}
   <h4>{% trans "Session data" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=session %}
 {% else %}
   <h4>{% trans "No session data" %}</h4>
 {% endif %}
 
-{% if get %}
+{% if get.list or get.raw %}
   <h4>{% trans "GET data" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=get %}
 {% else %}
   <h4>{% trans "No GET data" %}</h4>
 {% endif %}
 
-{% if post %}
+{% if post.list or post.raw %}
   <h4>{% trans "POST data" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=post %}
 {% else %}

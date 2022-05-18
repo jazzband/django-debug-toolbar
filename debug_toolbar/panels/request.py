@@ -61,9 +61,11 @@ class RequestPanel(Panel):
         if hasattr(request, "session"):
             self.record_stats(
                 {
-                    "session": [
-                        (k, request.session.get(k))
-                        for k in sorted(request.session.keys())
-                    ]
+                    "session": {
+                        "list": [
+                            (k, request.session.get(k))
+                            for k in sorted(request.session.keys())
+                        ]
+                    }
                 }
             )

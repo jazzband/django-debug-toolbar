@@ -591,6 +591,13 @@
 #djDebug .djdt-stack pre.djdt-locals {
     margin: 0 27px 27px 27px;
 }
+#djDebug .djdt-raw {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-top: 0.8em;
+    padding: 5px;
+    white-space: pre-wrap;
+}
 
 #djDebug .djdt-width-20 {
     width: 20%;

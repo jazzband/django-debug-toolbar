@@ -85,6 +85,19 @@ class RequestPanelTestCase(BaseTestCase):
         self.assertIn("foo", content)
         self.assertIn("bar", content)
 
+    def test_list_for_request_in_method_post(self):
+        """
+        Verify that the toolbar doesn't crash if request.POST contains unexpected data.
+
+        See https://github.com/jazzband/django-debug-toolbar/issues/1621
+        """
+        self.request.POST = [{"a": 1}, {"b": 2}]
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        # ensure the panel POST request data is processed correctly.
+        content = self.panel.content
+        self.assertIn("[{&#x27;a&#x27;: 1}, {&#x27;b&#x27;: 2}]", content)
+
     def test_namespaced_url(self):
         self.request.path = "/admin/login/"
         response = self.panel.process_request(self.request)
