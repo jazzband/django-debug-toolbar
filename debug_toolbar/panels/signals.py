@@ -76,7 +76,7 @@ class SignalsPanel(Panel):
 
     def generate_stats(self, request, response):
         signals = []
-        for name, signal in sorted(self.signals.items(), key=lambda x: x[0]):
+        for name, signal in sorted(self.signals.items()):
             receivers = []
             for receiver in signal.receivers:
                 receiver = receiver[1]
