@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from os.path import join, normpath
 
 from django.conf import settings
@@ -137,7 +136,7 @@ class StaticFilesPanel(panels.Panel):
         of relative and file system paths which that finder was able
         to find.
         """
-        finders_mapping = OrderedDict()
+        finders_mapping = {}
         for finder in finders.get_finders():
             try:
                 for path, finder_storage in finder.list([]):

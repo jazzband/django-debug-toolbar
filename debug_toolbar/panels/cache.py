@@ -1,7 +1,6 @@
 import inspect
 import sys
 import time
-from collections import OrderedDict
 
 try:
     from django.utils.connection import ConnectionProxy
@@ -168,25 +167,23 @@ class CachePanel(Panel):
         self.hits = 0
         self.misses = 0
         self.calls = []
-        self.counts = OrderedDict(
-            (
-                ("add", 0),
-                ("get", 0),
-                ("set", 0),
-                ("get_or_set", 0),
-                ("touch", 0),
-                ("delete", 0),
-                ("clear", 0),
-                ("get_many", 0),
-                ("set_many", 0),
-                ("delete_many", 0),
-                ("has_key", 0),
-                ("incr", 0),
-                ("decr", 0),
-                ("incr_version", 0),
-                ("decr_version", 0),
-            )
-        )
+        self.counts = {
+            "add": 0,
+            "get": 0,
+            "set": 0,
+            "get_or_set": 0,
+            "touch": 0,
+            "delete": 0,
+            "clear": 0,
+            "get_many": 0,
+            "set_many": 0,
+            "delete_many": 0,
+            "has_key": 0,
+            "incr": 0,
+            "decr": 0,
+            "incr_version": 0,
+            "decr_version": 0,
+        }
         cache_called.connect(self._store_call_info)
 
     def _store_call_info(
