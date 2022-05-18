@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -36,21 +34,19 @@ class HeadersPanel(Panel):
 
     def process_request(self, request):
         wsgi_env = list(sorted(request.META.items()))
-        self.request_headers = OrderedDict(
-            (unmangle(k), v) for (k, v) in wsgi_env if is_http_header(k)
-        )
+        self.request_headers = {
+            unmangle(k): v for (k, v) in wsgi_env if is_http_header(k)
+        }
         if "Cookie" in self.request_headers:
             self.request_headers["Cookie"] = "=> see Request panel"
-        self.environ = OrderedDict(
-            (k, v) for (k, v) in wsgi_env if k in self.ENVIRON_FILTER
-        )
+        self.environ = {k: v for (k, v) in wsgi_env if k in self.ENVIRON_FILTER}
         self.record_stats(
             {"request_headers": self.request_headers, "environ": self.environ}
         )
         return super().process_request(request)
 
     def generate_stats(self, request, response):
-        self.response_headers = OrderedDict(sorted(response.items()))
+        self.response_headers = dict(sorted(response.items()))
         self.record_stats({"response_headers": self.response_headers})
 
 

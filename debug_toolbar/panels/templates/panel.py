@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from contextlib import contextmanager
 from os.path import normpath
 from pprint import pformat, saferepr
@@ -39,7 +38,7 @@ def _request_context_bind_template(self, template):
     self.template = template
     # Set context processors according to the template engine's settings.
     processors = template.engine.template_context_processors + self._processors
-    self.context_processors = OrderedDict()
+    self.context_processors = {}
     updates = {}
     for processor in processors:
         name = f"{processor.__module__}.{processor.__name__}"

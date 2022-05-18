@@ -28,6 +28,9 @@ class DebugToolbar:
             if panel.enabled:
                 get_response = panel.process_request
         self.process_request = get_response
+        # Use OrderedDict for the _panels attribute so that items can be efficiently
+        # removed using FIFO order in the DebugToolbar.store() method.  The .popitem()
+        # method of Python's built-in dict only supports LIFO removal.
         self._panels = OrderedDict()
         while panels:
             panel = panels.pop()

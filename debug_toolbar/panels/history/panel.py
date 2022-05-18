@@ -1,5 +1,4 @@
 import json
-from collections import OrderedDict
 
 from django.http.request import RawPostDataException
 from django.template.loader import render_to_string
@@ -87,7 +86,7 @@ class HistoryPanel(Panel):
 
         Fetch every store for the toolbar and include it in the template.
         """
-        stores = OrderedDict()
+        stores = {}
         for id, toolbar in reversed(self.toolbar._store.items()):
             stores[id] = {
                 "toolbar": toolbar,

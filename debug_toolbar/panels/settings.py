@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.views.debug import get_default_exception_reporter_filter
@@ -23,9 +21,5 @@ class SettingsPanel(Panel):
 
     def generate_stats(self, request, response):
         self.record_stats(
-            {
-                "settings": OrderedDict(
-                    sorted(get_safe_settings().items(), key=lambda s: s[0])
-                )
-            }
+            {"settings": dict(sorted(get_safe_settings().items(), key=lambda s: s[0]))}
         )
