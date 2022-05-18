@@ -1,6 +1,9 @@
 Change log
 ==========
 
+* Removed third party panels which have been archived on GitHub.
+* Added Django 4.1a1 to the CI matrix.
+
 3.4.0 (2022-05-03)
 ------------------
 
