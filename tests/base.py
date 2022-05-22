@@ -1,13 +1,37 @@
 import html5lib
+from asgiref.local import Local
 from django.http import HttpResponse
-from django.test import RequestFactory, TestCase
+from django.test import Client, RequestFactory, TestCase
 
 from debug_toolbar.toolbar import DebugToolbar
+
+
+class ToolbarTestClient(Client):
+    def request(self, **request):
+        # Use a thread/async task context-local variable to guard against a
+        # concurrent _created signal from a different thread/task.
+        data = Local()
+        data.toolbar = None
+
+        def handle_toolbar_created(sender, toolbar=None, **kwargs):
+            data.toolbar = toolbar
+
+        DebugToolbar._created.connect(handle_toolbar_created)
+        try:
+            response = super().request(**request)
+        finally:
+            DebugToolbar._created.disconnect(handle_toolbar_created)
+        response.toolbar = data.toolbar
+
+        return response
+
 
 rf = RequestFactory()
 
 
 class BaseTestCase(TestCase):
+    client_class = ToolbarTestClient
+
     panel_id = None
 
     def setUp(self):
