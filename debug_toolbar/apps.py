@@ -17,9 +17,10 @@ class DebugToolbarConfig(AppConfig):
     def ready(self):
         from debug_toolbar.toolbar import DebugToolbar
 
-        # Import the panels when the app is ready. This allows panels
-        # like CachePanel to enable the instrumentation immediately.
-        DebugToolbar.get_panel_classes()
+        # Import the panels when the app is ready and call their ready() methods.  This
+        # allows panels like CachePanel to enable their instrumentation immediately.
+        for cls in DebugToolbar.get_panel_classes():
+            cls.ready()
 
 
 def check_template_config(config):
