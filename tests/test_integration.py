@@ -109,10 +109,10 @@ class DebugToolbarTestCase(BaseTestCase):
         # Clear the cache before testing the views. Other tests that use cached_view
         # may run earlier and cause fewer cache calls.
         cache.clear()
-        self.client.get("/cached_view/")
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
-        self.client.get("/cached_view/")
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 5)
+        response = self.client.get("/cached_view/")
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 3)
+        response = self.client.get("/cached_view/")
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 2)
 
     @override_settings(ROOT_URLCONF="tests.urls_use_package_urls")
     def test_include_package_urls(self):
@@ -120,17 +120,17 @@ class DebugToolbarTestCase(BaseTestCase):
         # Clear the cache before testing the views. Other tests that use cached_view
         # may run earlier and cause fewer cache calls.
         cache.clear()
-        self.client.get("/cached_view/")
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
-        self.client.get("/cached_view/")
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 5)
+        response = self.client.get("/cached_view/")
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 3)
+        response = self.client.get("/cached_view/")
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 2)
 
     def test_low_level_cache_view(self):
         """Test cases when low level caching API is used within a request."""
-        self.client.get("/cached_low_level_view/")
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 2)
-        self.client.get("/cached_low_level_view/")
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 3)
+        response = self.client.get("/cached_low_level_view/")
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 2)
+        response = self.client.get("/cached_low_level_view/")
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 1)
 
     def test_cache_disable_instrumentation(self):
         """
@@ -139,10 +139,10 @@ class DebugToolbarTestCase(BaseTestCase):
         """
         self.assertIsNone(cache.set("UseCacheAfterToolbar.before", None))
         self.assertIsNone(cache.set("UseCacheAfterToolbar.after", None))
-        self.client.get("/execute_sql/")
+        response = self.client.get("/execute_sql/")
         self.assertEqual(cache.get("UseCacheAfterToolbar.before"), 1)
         self.assertEqual(cache.get("UseCacheAfterToolbar.after"), 1)
-        self.assertEqual(len(self.toolbar.get_panel_by_id("CachePanel").calls), 0)
+        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 0)
 
     def test_is_toolbar_request(self):
         self.request.path = "/__debug__/render_panel/"

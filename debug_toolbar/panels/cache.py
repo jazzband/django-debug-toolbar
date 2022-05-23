@@ -1,18 +1,9 @@
-import inspect
-import sys
+import functools
 import time
 
-try:
-    from django.utils.connection import ConnectionProxy
-except ImportError:
-    ConnectionProxy = None
-
+from asgiref.local import Local
 from django.conf import settings
-from django.core import cache
-from django.core.cache import DEFAULT_CACHE_ALIAS, CacheHandler
-from django.core.cache.backends.base import BaseCache
-from django.dispatch import Signal
-from django.middleware import cache as middleware_cache
+from django.core.cache import CacheHandler, caches
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar import settings as dt_settings
@@ -24,134 +15,25 @@ from debug_toolbar.utils import (
     tidy_stacktrace,
 )
 
-cache_called = Signal()
-
-
-def send_signal(method):
-    def wrapped(self, *args, **kwargs):
-        t = time.time()
-        value = method(self, *args, **kwargs)
-        t = time.time() - t
-
-        if dt_settings.get_config()["ENABLE_STACKTRACES"]:
-            stacktrace = tidy_stacktrace(reversed(get_stack()))
-        else:
-            stacktrace = []
-
-        template_info = get_template_info()
-        cache_called.send(
-            sender=self.__class__,
-            time_taken=t,
-            name=method.__name__,
-            return_value=value,
-            args=args,
-            kwargs=kwargs,
-            trace=stacktrace,
-            template_info=template_info,
-            backend=self.cache,
-        )
-        return value
-
-    return wrapped
-
-
-class CacheStatTracker(BaseCache):
-    """A small class used to track cache calls."""
-
-    def __init__(self, cache):
-        self.cache = cache
-
-    def __repr__(self):
-        return "<CacheStatTracker for %s>" % repr(self.cache)
-
-    def _get_func_info(self):
-        frame = sys._getframe(3)
-        info = inspect.getframeinfo(frame)
-        return (info[0], info[1], info[2], info[3])
-
-    def __contains__(self, key):
-        return self.cache.__contains__(key)
-
-    def __getattr__(self, name):
-        return getattr(self.cache, name)
-
-    @send_signal
-    def add(self, *args, **kwargs):
-        return self.cache.add(*args, **kwargs)
-
-    @send_signal
-    def get(self, *args, **kwargs):
-        return self.cache.get(*args, **kwargs)
-
-    @send_signal
-    def set(self, *args, **kwargs):
-        return self.cache.set(*args, **kwargs)
-
-    @send_signal
-    def get_or_set(self, *args, **kwargs):
-        return self.cache.get_or_set(*args, **kwargs)
-
-    @send_signal
-    def touch(self, *args, **kwargs):
-        return self.cache.touch(*args, **kwargs)
-
-    @send_signal
-    def delete(self, *args, **kwargs):
-        return self.cache.delete(*args, **kwargs)
-
-    @send_signal
-    def clear(self, *args, **kwargs):
-        return self.cache.clear(*args, **kwargs)
-
-    @send_signal
-    def has_key(self, *args, **kwargs):
-        # Ignore flake8 rules for has_key since we need to support caches
-        # that may be using has_key.
-        return self.cache.has_key(*args, **kwargs)  # noqa: W601
-
-    @send_signal
-    def incr(self, *args, **kwargs):
-        return self.cache.incr(*args, **kwargs)
-
-    @send_signal
-    def decr(self, *args, **kwargs):
-        return self.cache.decr(*args, **kwargs)
-
-    @send_signal
-    def get_many(self, *args, **kwargs):
-        return self.cache.get_many(*args, **kwargs)
-
-    @send_signal
-    def set_many(self, *args, **kwargs):
-        self.cache.set_many(*args, **kwargs)
-
-    @send_signal
-    def delete_many(self, *args, **kwargs):
-        self.cache.delete_many(*args, **kwargs)
-
-    @send_signal
-    def incr_version(self, *args, **kwargs):
-        return self.cache.incr_version(*args, **kwargs)
-
-    @send_signal
-    def decr_version(self, *args, **kwargs):
-        return self.cache.decr_version(*args, **kwargs)
-
-
-class CacheHandlerPatch(CacheHandler):
-    def __init__(self, settings=None):
-        self._djdt_wrap = True
-        super().__init__(settings=settings)
-
-    def create_connection(self, alias):
-        actual_cache = super().create_connection(alias)
-        if self._djdt_wrap:
-            return CacheStatTracker(actual_cache)
-        else:
-            return actual_cache
-
-
-middleware_cache.caches = CacheHandlerPatch()
+# The order of the methods in this list determines the order in which they are listed in
+# the Commands table in the panel content.
+WRAPPED_CACHE_METHODS = [
+    "add",
+    "get",
+    "set",
+    "get_or_set",
+    "touch",
+    "delete",
+    "clear",
+    "get_many",
+    "set_many",
+    "delete_many",
+    "has_key",
+    "incr",
+    "decr",
+    "incr_version",
+    "decr_version",
+]
 
 
 class CachePanel(Panel):
@@ -161,43 +43,57 @@ class CachePanel(Panel):
 
     template = "debug_toolbar/panels/cache.html"
 
+    _context_locals = Local()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.total_time = 0
         self.hits = 0
         self.misses = 0
         self.calls = []
-        self.counts = {
-            "add": 0,
-            "get": 0,
-            "set": 0,
-            "get_or_set": 0,
-            "touch": 0,
-            "delete": 0,
-            "clear": 0,
-            "get_many": 0,
-            "set_many": 0,
-            "delete_many": 0,
-            "has_key": 0,
-            "incr": 0,
-            "decr": 0,
-            "incr_version": 0,
-            "decr_version": 0,
-        }
-        cache_called.connect(self._store_call_info)
+        self.counts = {name: 0 for name in WRAPPED_CACHE_METHODS}
+
+    @classmethod
+    def current_instance(cls):
+        """
+        Return the currently enabled CachePanel instance or None.
+
+        If a request is in process with a CachePanel enabled, this will return that
+        panel (based on the current thread or async task).  Otherwise it will return
+        None.
+        """
+        return getattr(cls._context_locals, "current_instance", None)
+
+    @classmethod
+    def ready(cls):
+        if not hasattr(CacheHandler, "_djdt_patched"):
+            # Wrap the CacheHander.create_connection() method to monkey patch any new
+            # cache connections that are opened while instrumentation is enabled.  In
+            # the interests of thread safety, this is done once at startup time and
+            # never removed.
+            original_method = CacheHandler.create_connection
+
+            @functools.wraps(original_method)
+            def wrapper(self, alias):
+                cache = original_method(self, alias)
+                panel = cls.current_instance()
+                if panel is not None:
+                    panel._monkey_patch_cache(cache)
+                return cache
+
+            CacheHandler.create_connection = wrapper
+            CacheHandler._djdt_patched = True
 
     def _store_call_info(
         self,
-        sender,
-        name=None,
-        time_taken=0,
-        return_value=None,
-        args=None,
-        kwargs=None,
-        trace=None,
-        template_info=None,
-        backend=None,
-        **kw,
+        name,
+        time_taken,
+        return_value,
+        args,
+        kwargs,
+        trace,
+        template_info,
+        backend,
     ):
         if name == "get" or name == "get_or_set":
             if return_value is None:
@@ -226,6 +122,69 @@ class CachePanel(Panel):
             }
         )
 
+    def _record_call(self, cache, name, original_method, args, kwargs):
+        # Some cache backends implement certain cache methods in terms of other cache
+        # methods (e.g. get_or_set() in terms of get() and add()).  In order to only
+        # record the calls made directly by the user code, set the _djdt_recording flag
+        # here to cause the monkey patched cache methods to skip recording additional
+        # calls made during the course of this call.
+        cache._djdt_recording = True
+        t = time.time()
+        value = original_method(*args, **kwargs)
+        t = time.time() - t
+        cache._djdt_recording = False
+
+        if dt_settings.get_config()["ENABLE_STACKTRACES"]:
+            stacktrace = tidy_stacktrace(reversed(get_stack()))
+        else:
+            stacktrace = []
+
+        self._store_call_info(
+            name=name,
+            time_taken=t,
+            return_value=value,
+            args=args,
+            kwargs=kwargs,
+            trace=stacktrace,
+            template_info=get_template_info(),
+            backend=cache,
+        )
+        return value
+
+    def _monkey_patch_method(self, cache, name):
+        original_method = getattr(cache, name)
+
+        @functools.wraps(original_method)
+        def wrapper(*args, **kwargs):
+            # If this call is being made as part of the implementation of another cache
+            # method, don't record it.
+            if cache._djdt_recording:
+                return original_method(*args, **kwargs)
+            else:
+                return self._record_call(cache, name, original_method, args, kwargs)
+
+        wrapper._djdt_wrapped = original_method
+        setattr(cache, name, wrapper)
+
+    def _monkey_patch_cache(self, cache):
+        if not hasattr(cache, "_djdt_patched"):
+            for name in WRAPPED_CACHE_METHODS:
+                self._monkey_patch_method(cache, name)
+            cache._djdt_patched = True
+            cache._djdt_recording = False
+
+    @staticmethod
+    def _unmonkey_patch_cache(cache):
+        if hasattr(cache, "_djdt_patched"):
+            for name in WRAPPED_CACHE_METHODS:
+                original_method = getattr(cache, name)._djdt_wrapped
+                if original_method.__func__ == getattr(cache.__class__, name):
+                    delattr(cache, name)
+                else:
+                    setattr(cache, name, original_method)
+            del cache._djdt_patched
+            del cache._djdt_recording
+
     # Implement the Panel API
 
     nav_title = _("Cache")
@@ -249,26 +208,23 @@ class CachePanel(Panel):
         ) % {"count": count}
 
     def enable_instrumentation(self):
-        for alias in cache.caches:
-            if not isinstance(cache.caches[alias], CacheStatTracker):
-                cache.caches[alias] = CacheStatTracker(cache.caches[alias])
-
-        if not isinstance(middleware_cache.caches, CacheHandlerPatch):
-            middleware_cache.caches = cache.caches
-
-        # Wrap the patched cache inside Django's ConnectionProxy
-        if ConnectionProxy:
-            cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
+        # Monkey patch all open cache connections.  Django maintains cache connections
+        # on a per-thread/async task basis, so this will not affect any concurrent
+        # requests.  The monkey patch of CacheHander.create_connection() installed in
+        # the .ready() method will ensure that any new cache connections that get opened
+        # during this request will also be monkey patched.
+        for cache in caches.all(initialized_only=True):
+            self._monkey_patch_cache(cache)
+        # Mark this panel instance as the current one for the active thread/async task
+        # context.  This will be used by the CacheHander.create_connection() monkey
+        # patch.
+        self._context_locals.current_instance = self
 
     def disable_instrumentation(self):
-        for alias in cache.caches:
-            if isinstance(cache.caches[alias], CacheStatTracker):
-                cache.caches[alias] = cache.caches[alias].cache
-        if ConnectionProxy:
-            cache.cache = ConnectionProxy(cache.caches, DEFAULT_CACHE_ALIAS)
-        # While it can be restored to the original, any views that were
-        # wrapped with the cache_page decorator will continue to use a
-        # monkey patched cache.
+        if hasattr(self._context_locals, "current_instance"):
+            del self._context_locals.current_instance
+        for cache in caches.all(initialized_only=True):
+            self._unmonkey_patch_cache(cache)
 
     def generate_stats(self, request, response):
         self.record_stats(

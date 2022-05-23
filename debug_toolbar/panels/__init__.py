@@ -114,6 +114,19 @@ class Panel:
         """
         return []
 
+    # Panel early initialization
+
+    @classmethod
+    def ready(cls):
+        """
+        Perform early initialization for the panel.
+
+        This should only include initialization or instrumentation that needs to
+        be done unconditionally for the panel regardless of whether it is
+        enabled for a particular request.  It should be idempotent.
+        """
+        pass
+
     # URLs for panel-specific views
 
     @classmethod
