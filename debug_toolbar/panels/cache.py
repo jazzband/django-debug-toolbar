@@ -101,11 +101,12 @@ class CachePanel(Panel):
             else:
                 self.hits += 1
         elif name == "get_many":
-            for key, value in return_value.items():
-                if value is None:
-                    self.misses += 1
-                else:
-                    self.hits += 1
+            if "keys" in kwargs:
+                keys = kwargs["keys"]
+            else:
+                keys = args[0]
+            self.hits += len(return_value)
+            self.misses += len(keys) - len(return_value)
         time_taken *= 1000
 
         self.total_time += time_taken

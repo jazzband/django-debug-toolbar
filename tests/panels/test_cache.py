@@ -26,6 +26,23 @@ class CachePanelTestCase(BaseTestCase):
         second_cache.get("foo")
         self.assertEqual(len(self.panel.calls), 2)
 
+    def test_hits_and_misses(self):
+        cache.cache.clear()
+        cache.cache.get("foo")
+        self.assertEqual(self.panel.hits, 0)
+        self.assertEqual(self.panel.misses, 1)
+        cache.cache.set("foo", 1)
+        cache.cache.get("foo")
+        self.assertEqual(self.panel.hits, 1)
+        self.assertEqual(self.panel.misses, 1)
+        cache.cache.get_many(["foo", "bar"])
+        self.assertEqual(self.panel.hits, 2)
+        self.assertEqual(self.panel.misses, 2)
+        cache.cache.set("bar", 2)
+        cache.cache.get_many(keys=["foo", "bar"])
+        self.assertEqual(self.panel.hits, 4)
+        self.assertEqual(self.panel.misses, 2)
+
     def test_get_or_set_value(self):
         cache.cache.get_or_set("baz", "val")
         self.assertEqual(cache.cache.get("baz"), "val")
