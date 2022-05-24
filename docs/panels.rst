@@ -141,6 +141,18 @@ Third-party panels
 
 If you'd like to add a panel to this list, please submit a pull request!
 
+Flame Graphs
+~~~~~~~~~~~~
+
+URL: https://gitlab.com/living180/pyflame
+
+Path: ``pyflame.djdt.panel.FlamegraphPanel``
+
+Displays a flame graph for visualizing the performance profile of the request,
+using Brendan Gregg's `flamegraph.pl script
+<https://github.com/brendangregg/FlameGraph/flamegraph.pl>`_ to perform the
+heavy lifting.
+
 HTML Tidy/Validator
 ~~~~~~~~~~~~~~~~~~~
 
