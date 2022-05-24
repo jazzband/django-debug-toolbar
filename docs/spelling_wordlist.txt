@@ -25,6 +25,7 @@ pre
 profiler
 psycopg
 py
+pyflame
 pylibmc
 Pympler
 querysets

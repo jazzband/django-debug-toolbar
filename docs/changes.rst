@@ -7,6 +7,7 @@ Change log
   dictionaries nor ``QueryDict`` instances. Using anything but ``QueryDict``
   instances isn't a valid use of Django but, again, django-debug-toolbar
   shouldn't crash.
+* Added pyflame (for flame graphs) to the list of third-party panels.
 
 3.4.0 (2022-05-03)
 ------------------
