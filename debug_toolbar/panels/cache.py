@@ -6,14 +6,8 @@ from django.conf import settings
 from django.core.cache import CacheHandler, caches
 from django.utils.translation import gettext_lazy as _, ngettext
 
-from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
-from debug_toolbar.utils import (
-    get_stack,
-    get_template_info,
-    render_stacktrace,
-    tidy_stacktrace,
-)
+from debug_toolbar.utils import get_stack_trace, get_template_info, render_stacktrace
 
 # The order of the methods in this list determines the order in which they are listed in
 # the Commands table in the panel content.
@@ -135,18 +129,13 @@ class CachePanel(Panel):
         t = time.time() - t
         cache._djdt_recording = False
 
-        if dt_settings.get_config()["ENABLE_STACKTRACES"]:
-            stacktrace = tidy_stacktrace(reversed(get_stack()))
-        else:
-            stacktrace = []
-
         self._store_call_info(
             name=name,
             time_taken=t,
             return_value=value,
             args=args,
             kwargs=kwargs,
-            trace=stacktrace,
+            trace=get_stack_trace(),
             template_info=get_template_info(),
             backend=cache,
         )
