@@ -6,7 +6,7 @@ from time import time
 from django.utils.encoding import force_str
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.utils import get_stack, get_template_info, tidy_stacktrace
+from debug_toolbar.utils import get_stack_trace, get_template_info
 
 try:
     from psycopg2._json import Json as PostgresJson
@@ -155,10 +155,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
         finally:
             stop_time = time()
             duration = (stop_time - start_time) * 1000
-            if dt_settings.get_config()["ENABLE_STACKTRACES"]:
-                stacktrace = tidy_stacktrace(reversed(get_stack()))
-            else:
-                stacktrace = []
             _params = ""
             try:
                 _params = json.dumps(self._decode(params))
@@ -180,7 +176,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 "raw_sql": sql,
                 "params": _params,
                 "raw_params": params,
-                "stacktrace": stacktrace,
+                "stacktrace": get_stack_trace(),
                 "start_time": start_time,
                 "stop_time": stop_time,
                 "is_slow": duration > dt_settings.get_config()["SQL_WARNING_THRESHOLD"],
