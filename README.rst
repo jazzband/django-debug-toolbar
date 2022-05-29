@@ -16,7 +16,7 @@ Django Debug Toolbar |latest-version|
    :target: https://github.com/jazzband/django-debug-toolbar/actions
    :alt: Build Status
 
-.. |coverage| image:: https://img.shields.io/badge/Coverage-89%25-green
+.. |coverage| image:: https://img.shields.io/badge/Coverage-93%25-green
    :target: https://github.com/jazzband/django-debug-toolbar/actions/workflows/test.yml?query=branch%3Amain
    :alt: Test coverage status
 
