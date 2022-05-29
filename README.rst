@@ -5,7 +5,7 @@ Django Debug Toolbar |latest-version|
 |jazzband| |build-status| |coverage| |docs| |python-support| |django-support|
 
 .. |latest-version| image:: https://img.shields.io/pypi/v/django-debug-toolbar.svg
-   :target: https://pypi.python.org/pypi/django-debug-toolbar
+   :target: https://pypi.org/project/django-debug-toolbar/
    :alt: Latest version on PyPI
 
 .. |jazzband| image:: https://jazzband.co/static/img/badge.svg
@@ -25,11 +25,11 @@ Django Debug Toolbar |latest-version|
    :alt: Documentation status
 
 .. |python-support| image:: https://img.shields.io/pypi/pyversions/django-debug-toolbar
-   :target: https://pypi.python.org/pypi/django-debug-toolbar
+   :target: https://pypi.org/project/django-debug-toolbar/
    :alt: Supported Python versions
 
 .. |django-support| image:: https://img.shields.io/pypi/djversions/django-debug-toolbar
-   :target: https://pypi.org/project/django-debug-toolbar
+   :target: https://pypi.org/project/django-debug-toolbar/
    :alt: Supported Django versions
 
 The Django Debug Toolbar is a configurable set of panels that display various
