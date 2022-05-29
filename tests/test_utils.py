@@ -1,6 +1,11 @@
 import unittest
 
-from debug_toolbar.utils import get_name_from_obj, render_stacktrace
+from debug_toolbar.utils import (
+    get_name_from_obj,
+    get_stack,
+    render_stacktrace,
+    tidy_stacktrace,
+)
 
 
 class GetNameFromObjTestCase(unittest.TestCase):
@@ -47,3 +52,13 @@ class RenderStacktraceTestCase(unittest.TestCase):
             '<span class="djdt-file">&lt;frozen importlib._bootstrap&gt;</span> in',
             result,
         )
+
+
+class StackTraceTestCase(unittest.TestCase):
+    def test_deprecated_functions(self):
+        with self.assertWarns(DeprecationWarning):
+            stack = get_stack()
+        self.assertEqual(stack[0][1], __file__)
+        with self.assertWarns(DeprecationWarning):
+            stack_trace = tidy_stacktrace(reversed(stack))
+        self.assertEqual(stack_trace[-1][0], __file__)
