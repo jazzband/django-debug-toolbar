@@ -60,6 +60,21 @@ def _duplicate_query_key(query):
     return (query["raw_sql"], saferepr(raw_params))
 
 
+def _process_query_groups(query_groups, databases, colors, name):
+    counts = defaultdict(int)
+    for (alias, key), query_group in query_groups.items():
+        count = len(query_group)
+        # Queries are similar / duplicates only if there are at least 2 of them.
+        if count > 1:
+            color = next(colors)
+            for query in query_group:
+                query[f"{name}_count"] = count
+                query[f"{name}_color"] = color
+            counts[alias] += count
+    for alias, db_info in databases.items():
+        db_info[f"{name}_count"] = counts[alias]
+
+
 class SQLPanel(Panel):
     """
     Panel that displays information about the SQL queries run while processing
@@ -156,8 +171,8 @@ class SQLPanel(Panel):
     def generate_stats(self, request, response):
         colors = contrasting_color_generator()
         trace_colors = defaultdict(lambda: next(colors))
-        query_similar = defaultdict(lambda: defaultdict(int))
-        query_duplicates = defaultdict(lambda: defaultdict(int))
+        similar_query_groups = defaultdict(list)
+        duplicate_query_groups = defaultdict(list)
 
         if self._queries:
             width_ratio_tally = 0
@@ -180,8 +195,10 @@ class SQLPanel(Panel):
             # the last query recorded for each DB alias
             last_by_alias = {}
             for alias, query in self._queries:
-                query_similar[alias][_similar_query_key(query)] += 1
-                query_duplicates[alias][_duplicate_query_key(query)] += 1
+                similar_query_groups[(alias, _similar_query_key(query))].append(query)
+                duplicate_query_groups[(alias, _duplicate_query_key(query))].append(
+                    query
+                )
 
                 trans_id = query.get("trans_id")
                 prev_query = last_by_alias.get(alias, {})
@@ -234,48 +251,13 @@ class SQLPanel(Panel):
                 if final_query.get("trans_id") is not None:
                     final_query["ends_trans"] = True
 
-        # Queries are similar / duplicates only if there's as least 2 of them.
-        # Also, to hide queries, we need to give all the duplicate groups an id
-        query_colors = contrasting_color_generator()
-        query_similar_colors = {
-            alias: {
-                query: (similar_count, next(query_colors))
-                for query, similar_count in queries.items()
-                if similar_count >= 2
-            }
-            for alias, queries in query_similar.items()
-        }
-        query_duplicates_colors = {
-            alias: {
-                query: (duplicate_count, next(query_colors))
-                for query, duplicate_count in queries.items()
-                if duplicate_count >= 2
-            }
-            for alias, queries in query_duplicates.items()
-        }
-
-        for alias, query in self._queries:
-            try:
-                (query["similar_count"], query["similar_color"]) = query_similar_colors[
-                    alias
-                ][_similar_query_key(query)]
-                (
-                    query["duplicate_count"],
-                    query["duplicate_color"],
-                ) = query_duplicates_colors[alias][_duplicate_query_key(query)]
-            except KeyError:
-                pass
-
-        for alias, alias_info in self._databases.items():
-            try:
-                alias_info["similar_count"] = sum(
-                    e[0] for e in query_similar_colors[alias].values()
-                )
-                alias_info["duplicate_count"] = sum(
-                    e[0] for e in query_duplicates_colors[alias].values()
-                )
-            except KeyError:
-                pass
+        group_colors = contrasting_color_generator()
+        _process_query_groups(
+            similar_query_groups, self._databases, group_colors, "similar"
+        )
+        _process_query_groups(
+            duplicate_query_groups, self._databases, group_colors, "duplicate"
+        )
 
         self.record_stats(
             {
