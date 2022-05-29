@@ -10,6 +10,7 @@ Change log
 * Added pyflame (for flame graphs) to the list of third-party panels.
 * Fixed the cache panel to correctly count cache misses from the get_many()
   cache method.
+* Removed some obsolete compatibility code from the stack trace recording code.
 
 3.4.0 (2022-05-03)
 ------------------
