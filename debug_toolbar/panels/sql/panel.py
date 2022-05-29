@@ -48,6 +48,18 @@ def get_transaction_status_display(vendor, level):
     return choices.get(level)
 
 
+def _similar_query_key(query):
+    return query["raw_sql"]
+
+
+def _duplicate_query_key(query):
+    raw_params = () if query["raw_params"] is None else tuple(query["raw_params"])
+    # saferepr() avoids problems because of unhashable types
+    # (e.g. lists) when used as dictionary keys.
+    # https://github.com/jazzband/django-debug-toolbar/issues/1091
+    return (query["raw_sql"], saferepr(raw_params))
+
+
 class SQLPanel(Panel):
     """
     Panel that displays information about the SQL queries run while processing
@@ -147,19 +159,6 @@ class SQLPanel(Panel):
         query_similar = defaultdict(lambda: defaultdict(int))
         query_duplicates = defaultdict(lambda: defaultdict(int))
 
-        # The keys used to determine similar and duplicate queries.
-        def similar_key(query):
-            return query["raw_sql"]
-
-        def duplicate_key(query):
-            raw_params = (
-                () if query["raw_params"] is None else tuple(query["raw_params"])
-            )
-            # saferepr() avoids problems because of unhashable types
-            # (e.g. lists) when used as dictionary keys.
-            # https://github.com/jazzband/django-debug-toolbar/issues/1091
-            return (query["raw_sql"], saferepr(raw_params))
-
         if self._queries:
             width_ratio_tally = 0
             factor = int(256.0 / (len(self._databases) * 2.5))
@@ -181,8 +180,8 @@ class SQLPanel(Panel):
             # the last query recorded for each DB alias
             last_by_alias = {}
             for alias, query in self._queries:
-                query_similar[alias][similar_key(query)] += 1
-                query_duplicates[alias][duplicate_key(query)] += 1
+                query_similar[alias][_similar_query_key(query)] += 1
+                query_duplicates[alias][_duplicate_query_key(query)] += 1
 
                 trans_id = query.get("trans_id")
                 prev_query = last_by_alias.get(alias, {})
@@ -259,11 +258,11 @@ class SQLPanel(Panel):
             try:
                 (query["similar_count"], query["similar_color"]) = query_similar_colors[
                     alias
-                ][similar_key(query)]
+                ][_similar_query_key(query)]
                 (
                     query["duplicate_count"],
                     query["duplicate_color"],
-                ) = query_duplicates_colors[alias][duplicate_key(query)]
+                ) = query_duplicates_colors[alias][_duplicate_query_key(query)]
             except KeyError:
                 pass
 
