@@ -2,6 +2,7 @@ import inspect
 import linecache
 import os.path
 import sys
+import warnings
 from importlib import import_module
 from pprint import pformat
 
@@ -49,6 +50,15 @@ def omit_path(path):
     return any(path.startswith(hidden_path) for hidden_path in hidden_paths)
 
 
+def _stack_trace_deprecation_warning():
+    warnings.warn(
+        "get_stack() and tidy_stacktrace() are deprecated in favor of"
+        " get_stack_trace()",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+
 def tidy_stacktrace(stack):
     """
     Clean up stacktrace and remove all entries that are excluded by the
@@ -57,6 +67,8 @@ def tidy_stacktrace(stack):
     ``stack`` should be a list of frame tuples from ``inspect.stack()`` or
     ``debug_toolbar.utils.get_stack()``.
     """
+    _stack_trace_deprecation_warning()
+
     trace = []
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
         if omit_path(os.path.realpath(path)):
@@ -239,6 +251,8 @@ def get_stack(context=1):
 
     Modified version of ``inspect.stack()`` which calls our own ``getframeinfo()``
     """
+    _stack_trace_deprecation_warning()
+
     frame = sys._getframe(1)
     framelist = []
     while frame:
