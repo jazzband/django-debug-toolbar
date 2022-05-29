@@ -11,6 +11,17 @@ Change log
 * Fixed the cache panel to correctly count cache misses from the get_many()
   cache method.
 * Removed some obsolete compatibility code from the stack trace recording code.
+* Added a new mechanism for capturing stack traces which includes per-request
+  caching to reduce expensive file system operations.  Updated the cache and
+  SQL panels to record stack traces using this new mechanism.
+
+Deprecated features
+~~~~~~~~~~~~~~~~~~~
+
+* The ``debug_toolbar.utils.get_stack()`` and
+  ``debug_toolbar.utils.tidy_stacktrace()`` functions are deprecated in favor
+  of the new ``debug_toolbar.utils.get_stack_trace()`` function.  They will
+  removed in the next major version of the Debug Toolbar.
 
 3.4.0 (2022-05-03)
 ------------------
