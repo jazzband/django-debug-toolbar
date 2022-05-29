@@ -1,12 +1,21 @@
 Change log
 ==========
 
+* Properly implemented tracking and display of PostgreSQL transactions.
 * Removed third party panels which have been archived on GitHub.
 * Added Django 4.1a1 to the CI matrix.
 * Stopped crashing when ``request.GET`` and ``request.POST`` are neither
   dictionaries nor ``QueryDict`` instances. Using anything but ``QueryDict``
   instances isn't a valid use of Django but, again, django-debug-toolbar
   shouldn't crash.
+* Fixed the cache panel to work correctly in the presence of concurrency by
+  avoiding the use of signals.
+* Reworked the cache panel instrumentation mechanism to monkey patch methods on
+  the cache instances directly instead of replacing cache instances with
+  wrapper classes.
+* Added a :meth:`debug_toolbar.panels.Panel.ready` class method that panels can
+  override to perform any initialization or instrumentation that needs to be
+  done unconditionally at startup time.
 * Added pyflame (for flame graphs) to the list of third-party panels.
 * Fixed the cache panel to correctly count cache misses from the get_many()
   cache method.
