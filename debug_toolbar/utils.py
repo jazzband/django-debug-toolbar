@@ -3,11 +3,9 @@ import linecache
 import os.path
 import sys
 import warnings
-from importlib import import_module
 from pprint import pformat
 
 from asgiref.local import Local
-from django.core.exceptions import ImproperlyConfigured
 from django.template import Node
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -23,26 +21,17 @@ except ImportError:
 _local_data = Local()
 
 
-def get_module_path(module_name):
-    try:
-        module = import_module(module_name)
-    except ImportError as e:
-        raise ImproperlyConfigured(f"Error importing HIDE_IN_STACKTRACES: {e}")
-    else:
-        source_path = inspect.getsourcefile(module)
-        if source_path.endswith("__init__.py"):
-            source_path = os.path.dirname(source_path)
-        return os.path.realpath(source_path)
-
-
-hidden_paths = [
-    get_module_path(module_name)
-    for module_name in dt_settings.get_config()["HIDE_IN_STACKTRACES"]
-]
-
-
-def omit_path(path):
-    return any(path.startswith(hidden_path) for hidden_path in hidden_paths)
+def _is_excluded_frame(frame, excluded_modules):
+    if not excluded_modules:
+        return False
+    frame_module = frame.f_globals.get("__name__")
+    if not isinstance(frame_module, str):
+        return False
+    return any(
+        frame_module == excluded_module
+        or frame_module.startswith(excluded_module + ".")
+        for excluded_module in excluded_modules
+    )
 
 
 def _stack_trace_deprecation_warning():
@@ -65,8 +54,9 @@ def tidy_stacktrace(stack):
     _stack_trace_deprecation_warning()
 
     trace = []
+    excluded_modules = dt_settings.get_config()["HIDE_IN_STACKTRACES"]
     for frame, path, line_no, func_name, text in (f[:5] for f in stack):
-        if omit_path(os.path.realpath(path)):
+        if _is_excluded_frame(frame, excluded_modules):
             continue
         text = "".join(text).strip() if text else ""
         frame_locals = (
@@ -267,10 +257,8 @@ def _stack_frames(depth=1):
 
 
 class _StackTraceRecorder:
-    def __init__(self, excluded_paths):
-        self.excluded_paths = excluded_paths
+    def __init__(self):
         self.filename_cache = {}
-        self.is_excluded_cache = {}
 
     def get_source_file(self, frame):
         frame_filename = frame.f_code.co_filename
@@ -291,24 +279,13 @@ class _StackTraceRecorder:
 
         return value
 
-    def is_excluded_path(self, path):
-        excluded = self.is_excluded_cache.get(path)
-        if excluded is None:
-            resolved_path = os.path.realpath(path)
-            excluded = any(
-                resolved_path.startswith(excluded_path)
-                for excluded_path in self.excluded_paths
-            )
-            self.is_excluded_cache[path] = excluded
-        return excluded
-
-    def get_stack_trace(self, include_locals=False, depth=1):
+    def get_stack_trace(self, excluded_modules=None, include_locals=False, depth=1):
         trace = []
         for frame in _stack_frames(depth=depth + 1):
-            filename, is_source = self.get_source_file(frame)
-
-            if self.is_excluded_path(filename):
+            if _is_excluded_frame(frame, excluded_modules):
                 continue
+
+            filename, is_source = self.get_source_file(frame)
 
             line_no = frame.f_lineno
             func_name = frame.f_code.co_name
@@ -334,9 +311,10 @@ def get_stack_trace(depth=1):
     if config["ENABLE_STACKTRACES"]:
         stack_trace_recorder = getattr(_local_data, "stack_trace_recorder", None)
         if stack_trace_recorder is None:
-            stack_trace_recorder = _StackTraceRecorder(hidden_paths)
+            stack_trace_recorder = _StackTraceRecorder()
             _local_data.stack_trace_recorder = stack_trace_recorder
         return stack_trace_recorder.get_stack_trace(
+            excluded_modules=config["HIDE_IN_STACKTRACES"],
             include_locals=config["ENABLE_STACKTRACES_LOCALS"],
             depth=depth,
         )
