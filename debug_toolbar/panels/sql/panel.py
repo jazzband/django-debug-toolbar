@@ -1,7 +1,6 @@
 import uuid
 from collections import defaultdict
 from copy import copy
-from pprint import saferepr
 
 from django.db import connections
 from django.urls import path
@@ -54,10 +53,10 @@ def _similar_query_key(query):
 
 def _duplicate_query_key(query):
     raw_params = () if query["raw_params"] is None else tuple(query["raw_params"])
-    # saferepr() avoids problems because of unhashable types
+    # repr() avoids problems because of unhashable types
     # (e.g. lists) when used as dictionary keys.
     # https://github.com/jazzband/django-debug-toolbar/issues/1091
-    return (query["raw_sql"], saferepr(raw_params))
+    return (query["raw_sql"], repr(raw_params))
 
 
 def _process_query_groups(query_groups, databases, colors, name):
