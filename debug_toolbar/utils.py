@@ -308,18 +308,17 @@ class _StackTraceRecorder:
 
 def get_stack_trace(*, depth=1):
     config = dt_settings.get_config()
-    if config["ENABLE_STACKTRACES"]:
-        stack_trace_recorder = getattr(_local_data, "stack_trace_recorder", None)
-        if stack_trace_recorder is None:
-            stack_trace_recorder = _StackTraceRecorder()
-            _local_data.stack_trace_recorder = stack_trace_recorder
-        return stack_trace_recorder.get_stack_trace(
-            excluded_modules=config["HIDE_IN_STACKTRACES"],
-            include_locals=config["ENABLE_STACKTRACES_LOCALS"],
-            depth=depth,
-        )
-    else:
+    if not config["ENABLE_STACKTRACES"]:
         return []
+    stack_trace_recorder = getattr(_local_data, "stack_trace_recorder", None)
+    if stack_trace_recorder is None:
+        stack_trace_recorder = _StackTraceRecorder()
+        _local_data.stack_trace_recorder = stack_trace_recorder
+    return stack_trace_recorder.get_stack_trace(
+        excluded_modules=config["HIDE_IN_STACKTRACES"],
+        include_locals=config["ENABLE_STACKTRACES_LOCALS"],
+        depth=depth,
+    )
 
 
 def clear_stack_trace_caches():
