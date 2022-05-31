@@ -279,7 +279,7 @@ class _StackTraceRecorder:
 
         return value
 
-    def get_stack_trace(self, excluded_modules=None, include_locals=False, depth=1):
+    def get_stack_trace(self, *, excluded_modules=None, include_locals=False, depth=1):
         trace = []
         for frame in _stack_frames(depth=depth + 1):
             if _is_excluded_frame(frame, excluded_modules):
@@ -306,7 +306,7 @@ class _StackTraceRecorder:
         return trace
 
 
-def get_stack_trace(depth=1):
+def get_stack_trace(*, depth=1):
     config = dt_settings.get_config()
     if config["ENABLE_STACKTRACES"]:
         stack_trace_recorder = getattr(_local_data, "stack_trace_recorder", None)
