@@ -111,8 +111,9 @@ class SQLPanel(Panel):
             trans_id = self.new_transaction_id(alias)
         return trans_id
 
-    def record(self, alias, **kwargs):
-        self._queries.append((alias, kwargs))
+    def record(self, **kwargs):
+        self._queries.append(kwargs)
+        alias = kwargs["alias"]
         if alias not in self._databases:
             self._databases[alias] = {
                 "time_spent": kwargs["duration"],
@@ -193,7 +194,9 @@ class SQLPanel(Panel):
 
             # the last query recorded for each DB alias
             last_by_alias = {}
-            for alias, query in self._queries:
+            for query in self._queries:
+                alias = query["alias"]
+
                 similar_query_groups[(alias, _similar_query_key(query))].append(query)
                 duplicate_query_groups[(alias, _duplicate_query_key(query))].append(
                     query
@@ -214,7 +217,6 @@ class SQLPanel(Panel):
                 if trans_id is not None:
                     query["in_trans"] = True
 
-                query["alias"] = alias
                 if "iso_level" in query:
                     query["iso_level"] = get_isolation_level_display(
                         query["vendor"], query["iso_level"]
@@ -263,7 +265,7 @@ class SQLPanel(Panel):
                 "databases": sorted(
                     self._databases.items(), key=lambda x: -x[1]["time_spent"]
                 ),
-                "queries": [q for a, q in self._queries],
+                "queries": self._queries,
                 "sql_time": self._sql_time,
             }
         )

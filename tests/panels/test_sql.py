@@ -44,13 +44,13 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
         query = self.panel._queries[0]
-        self.assertEqual(query[0], "default")
-        self.assertTrue("sql" in query[1])
-        self.assertTrue("duration" in query[1])
-        self.assertTrue("stacktrace" in query[1])
+        self.assertEqual(query["alias"], "default")
+        self.assertTrue("sql" in query)
+        self.assertTrue("duration" in query)
+        self.assertTrue("stacktrace" in query)
 
         # ensure the stacktrace is populated
-        self.assertTrue(len(query[1]["stacktrace"]) > 0)
+        self.assertTrue(len(query["stacktrace"]) > 0)
 
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
@@ -128,7 +128,7 @@ class SQLPanelTestCase(BaseTestCase):
         query = self.panel._queries[0]
 
         expected_data = {
-            "sql_time": {"title": "SQL 1 queries", "value": query[1]["duration"]}
+            "sql_time": {"title": "SQL 1 queries", "value": query["duration"]}
         }
 
         self.assertEqual(self.panel.get_server_timing_stats(), expected_data)
@@ -195,7 +195,7 @@ class SQLPanelTestCase(BaseTestCase):
             expected_datetime = '["2017-12-22 16:07:01"]'
 
         self.assertEqual(
-            tuple(q[1]["params"] for q in self.panel._queries),
+            tuple(query["params"] for query in self.panel._queries),
             (
                 expected_bools,
                 "[10, 1]",
@@ -217,7 +217,7 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
         self.assertEqual(
-            self.panel._queries[0][1]["params"],
+            self.panel._queries[0]["params"],
             '["{\\"foo\\": \\"bar\\"}"]',
         )
 
@@ -237,7 +237,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertIn(
             "<strong>SELECT</strong> * <strong>FROM</strong>"
             " tests_binary <strong>WHERE</strong> field =",
-            self.panel._queries[0][1]["sql"],
+            self.panel._queries[0]["sql"],
         )
 
     @unittest.skipUnless(connection.vendor != "sqlite", "Test invalid for SQLite")
@@ -288,7 +288,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 2)
 
         self.assertEqual(
-            tuple(q[1]["params"] for q in self.panel._queries),
+            tuple(query["params"] for query in self.panel._queries),
             (
                 '["Foo", true, false, "2017-12-22 16:07:01"]',
                 " ".join(
@@ -375,9 +375,9 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 1)
 
         query = self.panel._queries[0]
-        self.assertEqual(query[0], "default")
-        self.assertTrue("sql" in query[1])
-        self.assertEqual(query[1]["sql"], 'select "username" from "auth_user"')
+        self.assertEqual(query["alias"], "default")
+        self.assertTrue("sql" in query)
+        self.assertEqual(query["sql"], 'select "username" from "auth_user"')
 
     def test_disable_stacktraces(self):
         self.assertEqual(len(self.panel._queries), 0)
@@ -388,13 +388,13 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
         query = self.panel._queries[0]
-        self.assertEqual(query[0], "default")
-        self.assertTrue("sql" in query[1])
-        self.assertTrue("duration" in query[1])
-        self.assertTrue("stacktrace" in query[1])
+        self.assertEqual(query["alias"], "default")
+        self.assertTrue("sql" in query)
+        self.assertTrue("duration" in query)
+        self.assertTrue("stacktrace" in query)
 
         # ensure the stacktrace is empty
-        self.assertEqual([], query[1]["stacktrace"])
+        self.assertEqual([], query["stacktrace"])
 
     @override_settings(
         DEBUG=True,
@@ -418,13 +418,13 @@ class SQLPanelTestCase(BaseTestCase):
         # template is loaded and basic.html extends base.html.
         self.assertEqual(len(self.panel._queries), 2)
         query = self.panel._queries[0]
-        self.assertEqual(query[0], "default")
-        self.assertTrue("sql" in query[1])
-        self.assertTrue("duration" in query[1])
-        self.assertTrue("stacktrace" in query[1])
+        self.assertEqual(query["alias"], "default")
+        self.assertTrue("sql" in query)
+        self.assertTrue("duration" in query)
+        self.assertTrue("stacktrace" in query)
 
         # ensure the stacktrace is populated
-        self.assertTrue(len(query[1]["stacktrace"]) > 0)
+        self.assertTrue(len(query["stacktrace"]) > 0)
 
     @override_settings(
         DEBUG_TOOLBAR_CONFIG={"PRETTIFY_SQL": True},
@@ -439,7 +439,7 @@ class SQLPanelTestCase(BaseTestCase):
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
-        pretty_sql = self.panel._queries[-1][1]["sql"]
+        pretty_sql = self.panel._queries[-1]["sql"]
         self.assertEqual(len(self.panel._queries), 1)
 
         # Reset the queries
@@ -450,7 +450,7 @@ class SQLPanelTestCase(BaseTestCase):
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertEqual(len(self.panel._queries), 1)
-        self.assertNotEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+        self.assertNotEqual(pretty_sql, self.panel._queries[-1]["sql"])
 
         self.panel._queries = []
         # Run it again, but with prettyify back on.
@@ -461,7 +461,7 @@ class SQLPanelTestCase(BaseTestCase):
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertEqual(len(self.panel._queries), 1)
-        self.assertEqual(pretty_sql, self.panel._queries[-1][1]["sql"])
+        self.assertEqual(pretty_sql, self.panel._queries[-1]["sql"])
 
     @override_settings(
         DEBUG=True,
@@ -479,7 +479,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 1)
 
         query = self.panel._queries[0]
-        template_info = query[1]["template_info"]
+        template_info = query["template_info"]
         template_name = os.path.basename(template_info["name"])
         self.assertEqual(template_name, "flat.html")
         self.assertEqual(template_info["context"][2]["content"].strip(), "{{ users }}")
@@ -501,7 +501,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 1)
 
         query = self.panel._queries[0]
-        template_info = query[1]["template_info"]
+        template_info = query["template_info"]
         template_name = os.path.basename(template_info["name"])
         self.assertEqual(template_name, "included.html")
         self.assertEqual(template_info["context"][0]["content"].strip(), "{{ users }}")
@@ -524,45 +524,37 @@ class SQLPanelTestCase(BaseTestCase):
 
         queries = self.panel._queries
         query = queries[0]
-        self.assertEqual(query[1]["similar_count"], 3)
-        self.assertEqual(query[1]["duplicate_count"], 2)
+        self.assertEqual(query["similar_count"], 3)
+        self.assertEqual(query["duplicate_count"], 2)
 
         query = queries[1]
-        self.assertEqual(query[1]["similar_count"], 3)
-        self.assertEqual(query[1]["duplicate_count"], 2)
+        self.assertEqual(query["similar_count"], 3)
+        self.assertEqual(query["duplicate_count"], 2)
 
         query = queries[2]
-        self.assertEqual(query[1]["similar_count"], 3)
-        self.assertTrue("duplicate_count" not in query[1])
+        self.assertEqual(query["similar_count"], 3)
+        self.assertTrue("duplicate_count" not in query)
 
         query = queries[3]
-        self.assertEqual(query[1]["similar_count"], 2)
-        self.assertTrue("duplicate_count" not in query[1])
+        self.assertEqual(query["similar_count"], 2)
+        self.assertTrue("duplicate_count" not in query)
 
         query = queries[4]
-        self.assertEqual(query[1]["similar_count"], 2)
-        self.assertTrue("duplicate_count" not in query[1])
+        self.assertEqual(query["similar_count"], 2)
+        self.assertTrue("duplicate_count" not in query)
 
         query = queries[5]
-        self.assertTrue("similar_count" not in query[1])
-        self.assertTrue("duplicate_count" not in query[1])
+        self.assertTrue("similar_count" not in query)
+        self.assertTrue("duplicate_count" not in query)
 
-        self.assertEqual(queries[0][1]["similar_color"], queries[1][1]["similar_color"])
-        self.assertEqual(queries[0][1]["similar_color"], queries[2][1]["similar_color"])
-        self.assertEqual(
-            queries[0][1]["duplicate_color"], queries[1][1]["duplicate_color"]
-        )
-        self.assertNotEqual(
-            queries[0][1]["similar_color"], queries[0][1]["duplicate_color"]
-        )
+        self.assertEqual(queries[0]["similar_color"], queries[1]["similar_color"])
+        self.assertEqual(queries[0]["similar_color"], queries[2]["similar_color"])
+        self.assertEqual(queries[0]["duplicate_color"], queries[1]["duplicate_color"])
+        self.assertNotEqual(queries[0]["similar_color"], queries[0]["duplicate_color"])
 
-        self.assertEqual(queries[3][1]["similar_color"], queries[4][1]["similar_color"])
-        self.assertNotEqual(
-            queries[0][1]["similar_color"], queries[3][1]["similar_color"]
-        )
-        self.assertNotEqual(
-            queries[0][1]["duplicate_color"], queries[3][1]["similar_color"]
-        )
+        self.assertEqual(queries[3]["similar_color"], queries[4]["similar_color"])
+        self.assertNotEqual(queries[0]["similar_color"], queries[3]["similar_color"])
+        self.assertNotEqual(queries[0]["duplicate_color"], queries[3]["similar_color"])
 
 
 class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
@@ -580,10 +572,10 @@ class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
         self.assertTrue(self.panel._queries)
 
         query = self.panel._queries[0]
-        self.assertEqual(query[0], "default")
+        self.assertEqual(query["alias"], "default")
 
         query = self.panel._queries[-1]
-        self.assertEqual(query[0], "replica")
+        self.assertEqual(query["alias"], "replica")
 
     def test_transaction_status(self):
         """
@@ -614,63 +606,55 @@ class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
             self.assertEqual(len(self.panel._queries), 6)
 
             query = self.panel._queries[0]
-            self.assertEqual(query[0], "default")
-            self.assertIsNotNone(query[1]["trans_id"])
-            self.assertTrue(query[1]["starts_trans"])
-            self.assertTrue(query[1]["in_trans"])
-            self.assertFalse("end_trans" in query[1])
+            self.assertEqual(query["alias"], "default")
+            self.assertIsNotNone(query["trans_id"])
+            self.assertTrue(query["starts_trans"])
+            self.assertTrue(query["in_trans"])
+            self.assertFalse("end_trans" in query)
 
             query = self.panel._queries[-1]
-            self.assertEqual(query[0], "replica")
-            self.assertIsNone(query[1]["trans_id"])
-            self.assertFalse("starts_trans" in query[1])
-            self.assertFalse("in_trans" in query[1])
-            self.assertFalse("end_trans" in query[1])
+            self.assertEqual(query["alias"], "replica")
+            self.assertIsNone(query["trans_id"])
+            self.assertFalse("starts_trans" in query)
+            self.assertFalse("in_trans" in query)
+            self.assertFalse("end_trans" in query)
 
             query = self.panel._queries[2]
-            self.assertEqual(query[0], "default")
-            self.assertIsNotNone(query[1]["trans_id"])
-            self.assertEqual(
-                query[1]["trans_id"], self.panel._queries[0][1]["trans_id"]
-            )
-            self.assertFalse("starts_trans" in query[1])
-            self.assertTrue(query[1]["in_trans"])
-            self.assertTrue(query[1]["ends_trans"])
+            self.assertEqual(query["alias"], "default")
+            self.assertIsNotNone(query["trans_id"])
+            self.assertEqual(query["trans_id"], self.panel._queries[0]["trans_id"])
+            self.assertFalse("starts_trans" in query)
+            self.assertTrue(query["in_trans"])
+            self.assertTrue(query["ends_trans"])
 
             query = self.panel._queries[3]
-            self.assertEqual(query[0], "replica")
-            self.assertIsNotNone(query[1]["trans_id"])
-            self.assertNotEqual(
-                query[1]["trans_id"], self.panel._queries[0][1]["trans_id"]
-            )
-            self.assertTrue(query[1]["starts_trans"])
-            self.assertTrue(query[1]["in_trans"])
-            self.assertTrue(query[1]["ends_trans"])
+            self.assertEqual(query["alias"], "replica")
+            self.assertIsNotNone(query["trans_id"])
+            self.assertNotEqual(query["trans_id"], self.panel._queries[0]["trans_id"])
+            self.assertTrue(query["starts_trans"])
+            self.assertTrue(query["in_trans"])
+            self.assertTrue(query["ends_trans"])
 
             query = self.panel._queries[4]
-            self.assertEqual(query[0], "default")
-            self.assertIsNotNone(query[1]["trans_id"])
-            self.assertNotEqual(
-                query[1]["trans_id"], self.panel._queries[0][1]["trans_id"]
-            )
-            self.assertNotEqual(
-                query[1]["trans_id"], self.panel._queries[3][1]["trans_id"]
-            )
-            self.assertTrue(query[1]["starts_trans"])
-            self.assertTrue(query[1]["in_trans"])
-            self.assertTrue(query[1]["ends_trans"])
+            self.assertEqual(query["alias"], "default")
+            self.assertIsNotNone(query["trans_id"])
+            self.assertNotEqual(query["trans_id"], self.panel._queries[0]["trans_id"])
+            self.assertNotEqual(query["trans_id"], self.panel._queries[3]["trans_id"])
+            self.assertTrue(query["starts_trans"])
+            self.assertTrue(query["in_trans"])
+            self.assertTrue(query["ends_trans"])
 
             query = self.panel._queries[5]
-            self.assertEqual(query[0], "replica")
-            self.assertIsNone(query[1]["trans_id"])
-            self.assertFalse("starts_trans" in query[1])
-            self.assertFalse("in_trans" in query[1])
-            self.assertFalse("end_trans" in query[1])
+            self.assertEqual(query["alias"], "replica")
+            self.assertIsNone(query["trans_id"])
+            self.assertFalse("starts_trans" in query)
+            self.assertFalse("in_trans" in query)
+            self.assertFalse("end_trans" in query)
         else:
             # Ensure that nothing was recorded for other database engines.
             self.assertTrue(self.panel._queries)
             for query in self.panel._queries:
-                self.assertFalse("trans_id" in query[1])
-                self.assertFalse("starts_trans" in query[1])
-                self.assertFalse("in_trans" in query[1])
-                self.assertFalse("end_trans" in query[1])
+                self.assertFalse("trans_id" in query)
+                self.assertFalse("starts_trans" in query)
+                self.assertFalse("in_trans" in query)
+                self.assertFalse("end_trans" in query)
