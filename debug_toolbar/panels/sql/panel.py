@@ -112,7 +112,6 @@ class SQLPanel(Panel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._sql_time = 0
-        self._num_queries = 0
         self._queries = []
         self._databases = {}
         # synthetic transaction IDs, keyed by DB alias
@@ -151,7 +150,6 @@ class SQLPanel(Panel):
             self._databases[alias]["time_spent"] += kwargs["duration"]
             self._databases[alias]["num_queries"] += 1
         self._sql_time += kwargs["duration"]
-        self._num_queries += 1
 
     # Implement the Panel API
 
@@ -159,12 +157,13 @@ class SQLPanel(Panel):
 
     @property
     def nav_subtitle(self):
+        query_count = len(self._queries)
         return ngettext(
             "%(query_count)d query in %(sql_time).2fms",
             "%(query_count)d queries in %(sql_time).2fms",
-            self._num_queries,
+            query_count,
         ) % {
-            "query_count": self._num_queries,
+            "query_count": query_count,
             "sql_time": self._sql_time,
         }
 
