@@ -111,7 +111,6 @@ class SQLPanel(Panel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._offset = {k: len(connections[k].queries) for k in connections}
         self._sql_time = 0
         self._num_queries = 0
         self._queries = []
