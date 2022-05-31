@@ -135,7 +135,7 @@ class CachePanel(Panel):
             return_value=value,
             args=args,
             kwargs=kwargs,
-            trace=get_stack_trace(),
+            trace=get_stack_trace(skip=2),
             template_info=get_template_info(),
             backend=cache,
         )

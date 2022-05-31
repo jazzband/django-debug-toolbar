@@ -176,7 +176,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 "raw_sql": sql,
                 "params": _params,
                 "raw_params": params,
-                "stacktrace": get_stack_trace(),
+                "stacktrace": get_stack_trace(skip=2),
                 "start_time": start_time,
                 "stop_time": stop_time,
                 "is_slow": duration > dt_settings.get_config()["SQL_WARNING_THRESHOLD"],
