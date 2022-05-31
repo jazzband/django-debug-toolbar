@@ -246,11 +246,12 @@ def get_stack(context=1):
     return framelist
 
 
-def _stack_frames(depth=1):
+def _stack_frames(*, skip=0):
+    skip += 1  # Skip the frame for this generator.
     frame = inspect.currentframe()
     while frame is not None:
-        if depth > 0:
-            depth -= 1
+        if skip > 0:
+            skip -= 1
         else:
             yield frame
         frame = frame.f_back
@@ -279,9 +280,10 @@ class _StackTraceRecorder:
 
         return value
 
-    def get_stack_trace(self, *, excluded_modules=None, include_locals=False, depth=1):
+    def get_stack_trace(self, *, excluded_modules=None, include_locals=False, skip=0):
         trace = []
-        for frame in _stack_frames(depth=depth + 1):
+        skip += 1  # Skip the frame for this method.
+        for frame in _stack_frames(skip=skip):
             if _is_excluded_frame(frame, excluded_modules):
                 continue
 
@@ -306,10 +308,25 @@ class _StackTraceRecorder:
         return trace
 
 
-def get_stack_trace(*, depth=1):
+def get_stack_trace(*, skip=0):
+    """
+    Return a processed stack trace for the current call stack.
+
+    If the ``ENABLE_STACKTRACES`` setting is False, return an empty :class:`list`.
+    Otherwise return a :class:`list` of processed stack frame tuples (file name, line
+    number, function name, source line, frame locals) for the current call stack.  The
+    first entry in the list will be for the bottom of the stack and the last entry will
+    be for the top of the stack.
+
+    ``skip`` is an :class:`int` indicating the number of stack frames above the frame
+    for this function to omit from the stack trace.  The default value of ``0`` means
+    that the entry for the caller of this function will be the last entry in the
+    returned stack trace.
+    """
     config = dt_settings.get_config()
     if not config["ENABLE_STACKTRACES"]:
         return []
+    skip += 1  # Skip the frame for this function.
     stack_trace_recorder = getattr(_local_data, "stack_trace_recorder", None)
     if stack_trace_recorder is None:
         stack_trace_recorder = _StackTraceRecorder()
@@ -317,7 +334,7 @@ def get_stack_trace(*, depth=1):
     return stack_trace_recorder.get_stack_trace(
         excluded_modules=config["HIDE_IN_STACKTRACES"],
         include_locals=config["ENABLE_STACKTRACES_LOCALS"],
-        depth=depth,
+        skip=skip,
     )
 
 
