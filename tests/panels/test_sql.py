@@ -507,6 +507,63 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(template_info["context"][0]["content"].strip(), "{{ users }}")
         self.assertEqual(template_info["context"][0]["highlight"], True)
 
+    def test_similar_and_duplicate_grouping(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        User.objects.filter(id=1).count()
+        User.objects.filter(id=1).count()
+        User.objects.filter(id=2).count()
+        User.objects.filter(id__lt=10).count()
+        User.objects.filter(id__lt=20).count()
+        User.objects.filter(id__gt=10, id__lt=20).count()
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+
+        self.assertEqual(len(self.panel._queries), 6)
+
+        queries = self.panel._queries
+        query = queries[0]
+        self.assertEqual(query[1]["similar_count"], 3)
+        self.assertEqual(query[1]["duplicate_count"], 2)
+
+        query = queries[1]
+        self.assertEqual(query[1]["similar_count"], 3)
+        self.assertEqual(query[1]["duplicate_count"], 2)
+
+        query = queries[2]
+        self.assertEqual(query[1]["similar_count"], 3)
+        self.assertTrue("duplicate_count" not in query[1])
+
+        query = queries[3]
+        self.assertEqual(query[1]["similar_count"], 2)
+        self.assertTrue("duplicate_count" not in query[1])
+
+        query = queries[4]
+        self.assertEqual(query[1]["similar_count"], 2)
+        self.assertTrue("duplicate_count" not in query[1])
+
+        query = queries[5]
+        self.assertTrue("similar_count" not in query[1])
+        self.assertTrue("duplicate_count" not in query[1])
+
+        self.assertEqual(queries[0][1]["similar_color"], queries[1][1]["similar_color"])
+        self.assertEqual(queries[0][1]["similar_color"], queries[2][1]["similar_color"])
+        self.assertEqual(
+            queries[0][1]["duplicate_color"], queries[1][1]["duplicate_color"]
+        )
+        self.assertNotEqual(
+            queries[0][1]["similar_color"], queries[0][1]["duplicate_color"]
+        )
+
+        self.assertEqual(queries[3][1]["similar_color"], queries[4][1]["similar_color"])
+        self.assertNotEqual(
+            queries[0][1]["similar_color"], queries[3][1]["similar_color"]
+        )
+        self.assertNotEqual(
+            queries[0][1]["duplicate_color"], queries[3][1]["similar_color"]
+        )
+
 
 class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
     panel_id = "SQLPanel"
