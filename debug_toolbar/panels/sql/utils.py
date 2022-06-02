@@ -1,4 +1,3 @@
-import re
 from functools import lru_cache
 from html import escape
 
@@ -6,6 +5,38 @@ import sqlparse
 from sqlparse import tokens as T
 
 from debug_toolbar import settings as dt_settings
+
+
+class ElideSelectListsFilter:
+    """sqlparse filter to elide the select list in SELECT ... FROM clauses"""
+
+    def process(self, stream):
+        for token_type, value in stream:
+            yield token_type, value
+            if token_type in T.Keyword and value.upper() == "SELECT":
+                yield from self.elide_until_from(stream)
+
+    @staticmethod
+    def elide_until_from(stream):
+        select_list_characters = 0
+        select_list_tokens = []
+        for token_type, value in stream:
+            if token_type in T.Keyword and value.upper() == "FROM":
+                # Do not elide a select list of 12 characters or fewer to preserve
+                #    SELECT COUNT(*) FROM ...
+                # and
+                #    SELECT (1) AS `a` FROM ...
+                # queries.
+                if select_list_characters <= 12:
+                    yield from select_list_tokens
+                else:
+                    # U+2022: Unicode character 'BULLET'
+                    yield T.Other, " \u2022\u2022\u2022 "
+                yield token_type, value
+                break
+            if select_list_characters <= 12:
+                select_list_characters += len(value)
+                select_list_tokens.append((token_type, value))
 
 
 class BoldKeywordFilter:
@@ -39,48 +70,43 @@ class EscapedStringSerializer:
 
 
 def reformat_sql(sql, with_toggle=False):
-    formatted = parse_sql(sql, aligned_indent=True)
+    formatted = parse_sql(sql)
     if not with_toggle:
         return formatted
-    simple = simplify(parse_sql(sql, aligned_indent=False))
-    uncollapsed = f'<span class="djDebugUncollapsed">{simple}</span>'
+    simplified = parse_sql(sql, simplify=True)
+    uncollapsed = f'<span class="djDebugUncollapsed">{simplified}</span>'
     collapsed = f'<span class="djDebugCollapsed djdt-hidden">{formatted}</span>'
     return collapsed + uncollapsed
 
 
-def parse_sql(sql, aligned_indent=False):
+def parse_sql(sql, *, simplify=False):
     return _parse_sql(
         sql,
-        dt_settings.get_config()["PRETTIFY_SQL"],
-        aligned_indent,
+        prettify=dt_settings.get_config()["PRETTIFY_SQL"],
+        simplify=simplify,
     )
 
 
 @lru_cache(maxsize=128)
-def _parse_sql(sql, pretty, aligned_indent):
-    stack = get_filter_stack(pretty, aligned_indent)
+def _parse_sql(sql, *, prettify, simplify):
+    stack = get_filter_stack(prettify=prettify, simplify=simplify)
     return "".join(stack.run(sql))
 
 
 @lru_cache(maxsize=None)
-def get_filter_stack(prettify, aligned_indent):
+def get_filter_stack(*, prettify, simplify):
     stack = sqlparse.engine.FilterStack()
     if prettify:
         stack.enable_grouping()
-    if aligned_indent:
+    if simplify:
+        stack.preprocess.append(ElideSelectListsFilter())
+    else:
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
     stack.preprocess.append(BoldKeywordFilter())
     stack.postprocess.append(EscapedStringSerializer())  # Statement -> str
     return stack
-
-
-simplify_re = re.compile(r"SELECT</strong> (...........*?) <strong>FROM")
-
-
-def simplify(sql):
-    return simplify_re.sub(r"SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM", sql)
 
 
 def contrasting_color_generator():
