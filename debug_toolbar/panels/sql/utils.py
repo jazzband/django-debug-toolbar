@@ -15,10 +15,27 @@ class BoldKeywordFilter:
         for token_type, value in stream:
             is_keyword = token_type in T.Keyword
             if is_keyword:
-                yield T.Text, "<strong>"
-            yield token_type, escape(value, quote=False)
+                yield T.Other, "<strong>"
+            yield token_type, value
             if is_keyword:
-                yield T.Text, "</strong>"
+                yield T.Other, "</strong>"
+
+
+def escaped_value(token):
+    # Don't escape T.Whitespace tokens because AlignedIndentFilter inserts its tokens as
+    # T.Whitesapce, and in our case those tokens are actually HTML.
+    if token.ttype in (T.Other, T.Whitespace):
+        return token.value
+    return escape(token.value, quote=False)
+
+
+class EscapedStringSerializer:
+    """sqlparse post-processor to convert a Statement into a string escaped for
+    inclusion in HTML ."""
+
+    @staticmethod
+    def process(stmt):
+        return "".join(escaped_value(token) for token in stmt.flatten())
 
 
 def reformat_sql(sql, with_toggle=False):
@@ -55,7 +72,7 @@ def get_filter_stack(prettify, aligned_indent):
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
     stack.preprocess.append(BoldKeywordFilter())
-    stack.postprocess.append(sqlparse.filters.SerializerUnicode())  # tokens -> strings
+    stack.postprocess.append(EscapedStringSerializer())  # Statement -> str
     return stack
 
 
