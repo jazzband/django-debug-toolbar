@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v4.3.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
@@ -15,7 +15,7 @@ repos:
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.32.1
+    rev: v2.34.0
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
@@ -43,7 +43,7 @@ repos:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.16.0
+    rev: v8.17.0
     hooks:
     -   id: eslint
         files: \.js?$
