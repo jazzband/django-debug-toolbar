@@ -3,7 +3,7 @@ Change log
 
 * Properly implemented tracking and display of PostgreSQL transactions.
 * Removed third party panels which have been archived on GitHub.
-* Added Django 4.1a1 to the CI matrix.
+* Added Django 4.1b1 to the CI matrix.
 * Stopped crashing when ``request.GET`` and ``request.POST`` are neither
   dictionaries nor ``QueryDict`` instances. Using anything but ``QueryDict``
   instances isn't a valid use of Django but, again, django-debug-toolbar
@@ -23,6 +23,10 @@ Change log
 * Added a new mechanism for capturing stack traces which includes per-request
   caching to reduce expensive file system operations.  Updated the cache and
   SQL panels to record stack traces using this new mechanism.
+* Changed the ``docs`` tox environment to allow passing posargs. This allows
+  e.g. building a HTML version of the docs using ``tox -e docs html``.
+* Stayed on top of pre-commit hook updates.
+* Replaced ``OrderedDict`` by ``dict`` where possible.
 
 Deprecated features
 ~~~~~~~~~~~~~~~~~~~
