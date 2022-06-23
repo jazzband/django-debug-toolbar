@@ -23,8 +23,9 @@ Change log
 * Added a new mechanism for capturing stack traces which includes per-request
   caching to reduce expensive file system operations.  Updated the cache and
   SQL panels to record stack traces using this new mechanism.
-* Changed the ``docs`` tox environment to allow passing posargs. This allows
-  e.g. building a HTML version of the docs using ``tox -e docs html``.
+* Changed the ``docs`` tox environment to allow passing positional arguments.
+  This allows e.g. building a HTML version of the docs using ``tox -e docs
+  html``.
 * Stayed on top of pre-commit hook updates.
 * Replaced ``OrderedDict`` by ``dict`` where possible.
 
