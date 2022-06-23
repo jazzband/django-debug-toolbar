@@ -1,6 +1,9 @@
 Change log
 ==========
 
+3.5.0 (2022-06-23)
+------------------
+
 * Properly implemented tracking and display of PostgreSQL transactions.
 * Removed third party panels which have been archived on GitHub.
 * Added Django 4.1b1 to the CI matrix.
