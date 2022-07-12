@@ -99,6 +99,20 @@ class HistoryViewsTestCase(IntegrationTestCase):
         response = self.client.get(reverse("djdt:history_sidebar"))
         self.assertEqual(response.status_code, 400)
 
+    def test_history_headers(self):
+        """Validate the headers injected from the history panel."""
+        response = self.client.get("/json_view/")
+        store_id = list(DebugToolbar._store)[0]
+        self.assertEqual(response.headers["djdt-store-id"], store_id)
+
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={"OBSERVE_REQUEST_CALLBACK": lambda request: False}
+    )
+    def test_history_headers_unobserved(self):
+        """Validate the headers aren't injected from the history panel."""
+        response = self.client.get("/json_view/")
+        self.assertNotIn("djdt-store-id", response.headers)
+
     def test_history_sidebar(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")

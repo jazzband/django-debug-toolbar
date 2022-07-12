@@ -264,8 +264,13 @@ const djdt = {
         const origOpen = XMLHttpRequest.prototype.open;
         XMLHttpRequest.prototype.open = function () {
             this.addEventListener("load", function () {
-                let store_id = this.getResponseHeader("djdt-store-id");
-                if (store_id !== null) {
+                // Chromium emits a "Refused to get unsafe header" uncatchable warning
+                // when the header can't be fetched. While it doesn't impede execution
+                // it's worrisome to developers.
+                if (
+                    this.getAllResponseHeaders().indexOf("djdt-store-id") >= 0
+                ) {
+                    let store_id = this.getResponseHeader("djdt-store-id");
                     store_id = encodeURIComponent(store_id);
                     const dest = `${sidebar_url}?store_id=${store_id}`;
                     slowjax(dest).then(function (data) {

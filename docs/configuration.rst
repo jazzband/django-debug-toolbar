@@ -142,7 +142,7 @@ Toolbar options
 
 * ``OBSERVE_REQUEST_CALLBACK``
 
-  Default: ``'debug_toolbar.middleware.observe_request'``
+  Default: ``'debug_toolbar.toolbar.observe_request'``
 
   This is the dotted path to a function used for determining whether the
   toolbar should update on AJAX requests or not. The default checks are that
