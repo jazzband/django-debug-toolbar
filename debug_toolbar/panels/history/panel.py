@@ -24,7 +24,7 @@ class HistoryPanel(Panel):
         observe_request = self.toolbar.get_observe_request()
         store_id = getattr(self.toolbar, "store_id")
         if store_id and observe_request(request):
-            headers["DJDT-STORE-ID"] = store_id
+            headers["djdt-store-id"] = store_id
         return headers
 
     @property
