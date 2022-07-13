@@ -69,7 +69,7 @@ def simplify(sql):
 
 def contrasting_color_generator():
     """
-    Generate constrasting colors by varying most significant bit of RGB first,
+    Generate contrasting colors by varying most significant bit of RGB first,
     and then vary subsequent bits systematically.
     """
 

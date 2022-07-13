@@ -444,7 +444,7 @@ class SQLPanelTestCase(BaseTestCase):
 
         # Reset the queries
         self.panel._queries = []
-        # Run it again, but with prettyify off. Verify that it's different.
+        # Run it again, but with prettify off. Verify that it's different.
         dt_settings.get_config()["PRETTIFY_SQL"] = False
         list(User.objects.filter(username__istartswith="spam"))
         response = self.panel.process_request(self.request)
@@ -453,7 +453,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertNotEqual(pretty_sql, self.panel._queries[-1]["sql"])
 
         self.panel._queries = []
-        # Run it again, but with prettyify back on.
+        # Run it again, but with prettify back on.
         # This is so we don't have to check what PRETTIFY_SQL does exactly,
         # but we know it's doing something.
         dt_settings.get_config()["PRETTIFY_SQL"] = True
