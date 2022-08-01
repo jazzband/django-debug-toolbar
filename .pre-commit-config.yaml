@@ -7,15 +7,15 @@ repos:
     -   id: trailing-whitespace
     -   id: mixed-line-ending
 -   repo: https://github.com/pycqa/flake8
-    rev: 4.0.1
+    rev: 5.0.2
     hooks:
     -   id: flake8
 -   repo: https://github.com/pycqa/doc8
-    rev: 0.11.2
+    rev: v1.0.0
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.37.2
+    rev: v2.37.3
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
@@ -43,7 +43,7 @@ repos:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.20.0
+    rev: v8.21.0
     hooks:
     -   id: eslint
         files: \.js?$
