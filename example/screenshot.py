@@ -5,6 +5,7 @@ import signal
 import subprocess
 from time import sleep
 
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -54,7 +55,7 @@ def set_viewport_size(selenium, width, height):
 def submit_form(selenium, data):
     url = selenium.current_url
     for name, value in data.items():
-        el = selenium.find_element_by_name(name)
+        el = selenium.find_element(By.NAME, name)
         el.send_keys(value)
     el.send_keys(Keys.RETURN)
     WebDriverWait(selenium, timeout=5).until(EC.url_changes(url))
@@ -72,12 +73,12 @@ def main():
 
                 selenium.get("http://localhost:8000/admin/auth/user/")
                 # Check if SQL Panel is already visible:
-                sql_panel = selenium.find_element_by_id("djdt-SQLPanel")
+                sql_panel = selenium.find_element(By.ID, "djdt-SQLPanel")
                 if not sql_panel:
                     # Open the admin sidebar.
-                    el = selenium.find_element_by_id("djDebugToolbarHandle")
+                    el = selenium.find_element(By.ID, "djDebugToolbarHandle")
                     el.click()
-                    sql_panel = selenium.find_element_by_id("djdt-SQLPanel")
+                    sql_panel = selenium.find_element(By.ID, "djdt-SQLPanel")
                 # Open the SQL panel.
                 sql_panel.click()
 

@@ -482,18 +482,18 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
     def test_basic(self):
         self.get("/regular/basic/")
-        version_panel = self.selenium.find_element_by_id("VersionsPanel")
+        version_panel = self.selenium.find_element(By.ID, "VersionsPanel")
 
         # Versions panel isn't loaded
         with self.assertRaises(NoSuchElementException):
-            version_panel.find_element_by_tag_name("table")
+            version_panel.find_element(By.TAG_NAME, "table")
 
         # Click to show the versions panel
-        self.selenium.find_element_by_class_name("VersionsPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, "VersionsPanel").click()
 
         # Version panel loads
         table = self.wait.until(
-            lambda selenium: version_panel.find_element_by_tag_name("table")
+            lambda selenium: version_panel.find_element(By.TAG_NAME, "table")
         )
         self.assertIn("Name", table.text)
         self.assertIn("Version", table.text)
@@ -505,10 +505,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     )
     def test_basic_jinja(self):
         self.get("/regular_jinja/basic")
-        template_panel = self.selenium.find_element_by_id("TemplatesPanel")
+        template_panel = self.selenium.find_element(By.ID, "TemplatesPanel")
 
         # Click to show the template panel
-        self.selenium.find_element_by_class_name("TemplatesPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, "TemplatesPanel").click()
 
         self.assertIn("Templates (2 rendered)", template_panel.text)
         self.assertIn("base.html", template_panel.text)
@@ -523,18 +523,20 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.get("/regular_jinja/basic")
         # Make a new request so the history panel has more than one option.
         self.get("/execute_sql/")
-        template_panel = self.selenium.find_element_by_id("HistoryPanel")
+        template_panel = self.selenium.find_element(By.ID, "HistoryPanel")
         # Record the current side panel of buttons for later comparison.
-        previous_button_panel = self.selenium.find_element_by_id(
-            "djDebugPanelList"
+        previous_button_panel = self.selenium.find_element(
+            By.ID, "djDebugPanelList"
         ).text
 
         # Click to show the history panel
-        self.selenium.find_element_by_class_name("HistoryPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, "HistoryPanel").click()
         # Click to switch back to the jinja page view snapshot
-        list(template_panel.find_elements_by_css_selector("button"))[-1].click()
+        list(template_panel.find_elements(By.CSS_SELECTOR, "button"))[-1].click()
 
-        current_button_panel = self.selenium.find_element_by_id("djDebugPanelList").text
+        current_button_panel = self.selenium.find_element(
+            By.ID, "djDebugPanelList"
+        ).text
         # Verify the button side panels have updated.
         self.assertNotEqual(previous_button_panel, current_button_panel)
         self.assertNotIn("1 query", current_button_panel)
@@ -543,14 +545,14 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     @override_settings(DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 0})
     def test_expired_store(self):
         self.get("/regular/basic/")
-        version_panel = self.selenium.find_element_by_id("VersionsPanel")
+        version_panel = self.selenium.find_element(By.ID, "VersionsPanel")
 
         # Click to show the version panel
-        self.selenium.find_element_by_class_name("VersionsPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, "VersionsPanel").click()
 
         # Version panel doesn't loads
         error = self.wait.until(
-            lambda selenium: version_panel.find_element_by_tag_name("p")
+            lambda selenium: version_panel.find_element(By.TAG_NAME, "p")
         )
         self.assertIn("Data for this panel isn't available anymore.", error.text)
 
@@ -574,31 +576,31 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     )
     def test_django_cached_template_loader(self):
         self.get("/regular/basic/")
-        version_panel = self.selenium.find_element_by_id("TemplatesPanel")
+        version_panel = self.selenium.find_element(By.ID, "TemplatesPanel")
 
         # Click to show the templates panel
-        self.selenium.find_element_by_class_name("TemplatesPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, "TemplatesPanel").click()
 
         # Templates panel loads
         trigger = self.wait.until(
-            lambda selenium: version_panel.find_element_by_css_selector(".remoteCall")
+            lambda selenium: version_panel.find_element(By.CSS_SELECTOR, ".remoteCall")
         )
         trigger.click()
 
         # Verify the code is displayed
         self.wait.until(
-            lambda selenium: self.selenium.find_element_by_css_selector(
-                "#djDebugWindow code"
+            lambda selenium: self.selenium.find_element(
+                By.CSS_SELECTOR, "#djDebugWindow code"
             )
         )
 
     def test_sql_action_and_go_back(self):
         self.get("/execute_sql/")
-        sql_panel = self.selenium.find_element_by_id("SQLPanel")
-        debug_window = self.selenium.find_element_by_id("djDebugWindow")
+        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+        debug_window = self.selenium.find_element(By.ID, "djDebugWindow")
 
         # Click to show the SQL panel
-        self.selenium.find_element_by_class_name("SQLPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
 
         # SQL panel loads
         button = self.wait.until(
@@ -611,7 +613,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("SQL selected", debug_window.text)
 
         # Close the SQL selected window
-        debug_window.find_element_by_class_name("djDebugClose").click()
+        debug_window.find_element(By.CLASS_NAME, "djDebugClose").click()
         self.wait.until(EC.invisibility_of_element(debug_window))
 
         # SQL panel is still visible
@@ -620,7 +622,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     @override_settings(DEBUG_TOOLBAR_PANELS=["tests.test_integration.BuggyPanel"])
     def test_displays_server_error(self):
         self.get("/regular/basic/")
-        debug_window = self.selenium.find_element_by_id("djDebugWindow")
-        self.selenium.find_element_by_class_name("BuggyPanel").click()
+        debug_window = self.selenium.find_element(By.ID, "djDebugWindow")
+        self.selenium.find_element(By.CLASS_NAME, "BuggyPanel").click()
         self.wait.until(EC.visibility_of(debug_window))
         self.assertEqual(debug_window.text, "»\n500: Internal Server Error")
