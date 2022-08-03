@@ -32,4 +32,8 @@ def signed_data_view(view):
             )
         return HttpResponseBadRequest("Invalid signature")
 
+    # We have changed the signature, so need to remove `__wrapped__` to
+    # avoid confusing type checking tools
+    del inner.__wrapped__
+
     return inner

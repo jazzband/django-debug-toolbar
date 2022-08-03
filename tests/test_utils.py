@@ -1,8 +1,10 @@
+import inspect
 import unittest
 
 from django.test import override_settings
 
 import debug_toolbar.utils
+from debug_toolbar.decorators import signed_data_view
 from debug_toolbar.utils import (
     get_name_from_obj,
     get_stack,
@@ -80,3 +82,22 @@ class StackTraceTestCase(unittest.TestCase):
         with self.assertWarns(DeprecationWarning):
             stack_trace = tidy_stacktrace(reversed(stack))
         self.assertEqual(stack_trace[-1][0], __file__)
+
+
+class DecoratorsTestCase(unittest.TestCase):
+    def test_signed_data_view_signature(self):
+        # Ensure signed_data_view decorator sets an appropriate signature
+
+        # This matters only to tools that type-check the URLconf, (e.g.
+        # django-urlconfchecks), to avoid the nuisance of those tools flagging
+        # django-debug-toolbar views as incorrectly typed.
+
+        def some_view(request, verified_data):
+            pass
+
+        decorated_view = signed_data_view(some_view)
+
+        # `verified_data` is a parameter to some_view:
+        self.assertIn("verified_data", inspect.signature(some_view).parameters)
+        # but not to the decorated_view:
+        self.assertNotIn("verified_data", inspect.signature(decorated_view).parameters)
