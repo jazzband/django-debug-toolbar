@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Pending
+-------
+* Remove decorator ``signed_data_view`` as it was causing issues with
+  django-urlconfchecks.
+
 3.5.0 (2022-06-23)
 ------------------
 

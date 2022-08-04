@@ -2,15 +2,27 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
-from debug_toolbar.decorators import require_show_toolbar, signed_data_view
+from debug_toolbar.decorators import require_show_toolbar
+from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels.sql.forms import SQLSelectForm
+
+
+def get_signed_data(request):
+    """Unpack a signed data form, if invalid returns None"""
+    data = request.GET if request.method == "GET" else request.POST
+    signed_form = SignedDataForm(data)
+    if signed_form.is_valid():
+        return signed_form.verified_data()
+    return None
 
 
 @csrf_exempt
 @require_show_toolbar
-@signed_data_view
-def sql_select(request, verified_data):
+def sql_select(request):
     """Returns the output of the SQL SELECT statement"""
+    verified_data = get_signed_data(request)
+    if not verified_data:
+        return HttpResponseBadRequest("Invalid signature")
     form = SQLSelectForm(verified_data)
 
     if form.is_valid():
@@ -35,9 +47,11 @@ def sql_select(request, verified_data):
 
 @csrf_exempt
 @require_show_toolbar
-@signed_data_view
-def sql_explain(request, verified_data):
+def sql_explain(request):
     """Returns the output of the SQL EXPLAIN on the given query"""
+    verified_data = get_signed_data(request)
+    if not verified_data:
+        return HttpResponseBadRequest("Invalid signature")
     form = SQLSelectForm(verified_data)
 
     if form.is_valid():
@@ -71,9 +85,11 @@ def sql_explain(request, verified_data):
 
 @csrf_exempt
 @require_show_toolbar
-@signed_data_view
-def sql_profile(request, verified_data):
+def sql_profile(request):
     """Returns the output of running the SQL and getting the profiling statistics"""
+    verified_data = get_signed_data(request)
+    if not verified_data:
+        return HttpResponseBadRequest("Invalid signature")
     form = SQLSelectForm(verified_data)
 
     if form.is_valid():
