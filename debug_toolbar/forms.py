@@ -21,7 +21,6 @@ class SignedDataForm(forms.Form):
             panel_form = PanelForm(signed_form.verified_data)
             if panel_form.is_valid():
                 # Success
-    Or wrap the FBV with ``debug_toolbar.decorators.signed_data_view``
     """
 
     salt = "django_debug_toolbar"
