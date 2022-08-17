@@ -3,7 +3,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.template import Origin, TemplateDoesNotExist
 from django.template.engine import Engine
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html, mark_safe
 
 from debug_toolbar.decorators import require_show_toolbar
 
@@ -50,12 +50,11 @@ def template_source(request):
         from pygments import highlight
         from pygments.formatters import HtmlFormatter
         from pygments.lexers import HtmlDjangoLexer
-
+    except ModuleNotFoundError:
+        source = format_html("<code>{}</code>", source)
+    else:
         source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
         source = mark_safe(source)
-        source.pygmentized = True
-    except ImportError:
-        pass
 
     content = render_to_string(
         "debug_toolbar/panels/template_source.html",
