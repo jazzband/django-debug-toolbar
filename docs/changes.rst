@@ -4,8 +4,19 @@ Change log
 Pending
 -------
 
+3.6.0 (2022-08-17)
+------------------
+
 * Remove decorator ``signed_data_view`` as it was causing issues with
   `django-urlconfchecks <https://github.com/AliSayyah/django-urlconfchecks/>`__.
+* Added pygments to the test environment and fixed a crash when using the
+  template panel with Django 4.1 and pygments installed.
+* Stayed on top of pre-commit hook and GitHub actions updates.
+* Added some workarounds to avoid a Chromium warning which was worrisome to
+  developers.
+* Avoided using deprecated Selenium methods to find elements.
+* Raised the minimum Django version from 3.2 to 3.2.4 so that we can take
+  advantage of backported improvements to the cache connection handler.
 
 3.5.0 (2022-06-23)
 ------------------

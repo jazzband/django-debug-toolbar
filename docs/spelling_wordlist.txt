@@ -1,5 +1,6 @@
 backend
 backends
+backported
 checkbox
 contrib
 django
@@ -30,9 +31,12 @@ pylibmc
 Pympler
 querysets
 refactoring
+resizing
+spellchecking
 spooler
 stacktrace
 stacktraces
+startup
 timeline
 tox
 Transifex
