@@ -52,7 +52,6 @@ def template_source(request):
         from pygments.lexers import HtmlDjangoLexer
     except ModuleNotFoundError:
         source = format_html("<code>{}</code>", source)
-        pass
     else:
         source = highlight(source, HtmlDjangoLexer(), HtmlFormatter())
         source = mark_safe(source)
