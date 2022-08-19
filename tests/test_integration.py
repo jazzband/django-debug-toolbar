@@ -174,6 +174,12 @@ class DebugToolbarTestCase(BaseTestCase):
         self.request.path = "/__debug__/render_panel/"
         self.assertTrue(self.toolbar.is_toolbar_request(self.request))
 
+    def test_data_gone(self):
+        response = self.client.get(
+            "/__debug__/render_panel/?store_id=GONE&panel_id=RequestPanel"
+        )
+        self.assertIn("Please reload the page and retry.", response.json()["content"])
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(IntegrationTestCase):
