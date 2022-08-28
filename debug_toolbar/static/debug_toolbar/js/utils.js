@@ -77,7 +77,7 @@ function ajax(url, init) {
                 return response.json();
             }
             return Promise.reject(
-                new Error(response.status + ": " + response.statusText)
+                new Error(response.status + ": " + response.statusText),
             );
         })
         .catch(function (error) {
