@@ -9,7 +9,7 @@ urlpatterns = [
     re_path(
         r"^resolving1/(.+)/(.+)/$", views.resolving_view, name="positional-resolving"
     ),
-    re_path(r"^resolving2/(?P<arg1>.+)/(?P<arg2>.+)/$", views.resolving_view),
+    path("resolving2/<path:arg1>/<path:arg2>/", views.resolving_view),
     re_path(r"^resolving3/(.+)/$", views.resolving_view, {"arg2": "default"}),
     re_path(r"^regular/(?P<title>.*)/$", views.regular_view),
     re_path(r"^template_response/(?P<title>.*)/$", views.template_response_view),
