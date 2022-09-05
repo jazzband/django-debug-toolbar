@@ -20,7 +20,7 @@ repos:
     -   id: pyupgrade
         args: [--py37-plus]
 -   repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.8.0
+    rev: 1.9.0
     hooks:
     -   id: django-upgrade
         args: [--target-version, "3.2"]
@@ -43,7 +43,7 @@ repos:
     -   id: prettier
         types_or: [javascript, css]
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.22.0
+    rev: v8.23.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -51,7 +51,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/psf/black
-    rev: 22.6.0
+    rev: 22.8.0
     hooks:
     -   id: black
         language_version: python3
