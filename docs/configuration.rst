@@ -261,7 +261,7 @@ Panel options
 
 * ``PROFILER_THRESHOLD_RATIO``
 
-  Default: ``10``
+  Default: ``8``
 
   Panel: profiling
 
