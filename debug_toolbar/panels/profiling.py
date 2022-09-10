@@ -3,6 +3,7 @@ import os
 from colorsys import hsv_to_rgb
 from pstats import Stats
 
+from django.conf import settings
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
@@ -31,6 +32,21 @@ class FunctionCall:
     def background(self):
         r, g, b = hsv_to_rgb(*self.hsv)
         return f"rgb({r * 100:f}%,{g * 100:f}%,{b * 100:f}%)"
+
+    def is_project_func(self):
+        """
+        Check if the function is from the project code.
+
+        Project code is identified by the BASE_DIR setting
+        which is used in Django projects by default.
+        """
+        if hasattr(settings, "BASE_DIR"):
+            file_name, _, _ = self.func
+            return (
+                str(settings.BASE_DIR) in file_name
+                and "/site-packages" not in file_name
+            )
+        return None
 
     def func_std_string(self):  # match what old profile produced
         func_name = self.func
@@ -133,7 +149,10 @@ class ProfilingPanel(Panel):
         func.has_subfuncs = False
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
-                if subfunc.stats[3] >= cum_time:
+                # Always include the user's code
+                if subfunc.stats[3] >= cum_time or (
+                    subfunc.is_project_func() and subfunc.stats[3] > 0
+                ):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time)
 

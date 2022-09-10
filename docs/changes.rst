@@ -7,6 +7,8 @@ Pending
 * Added Profiling panel setting ``PROFILER_THRESHOLD_RATIO`` to give users
   better control over how many function calls are included. A higher value
   will include more data, but increase render time.
+* Update Profiling panel to include try to always include user code. This
+  code is more important to developers than dependency code.
 
 
 3.6.0 (2022-08-17)

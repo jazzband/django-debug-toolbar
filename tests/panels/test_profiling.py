@@ -33,6 +33,7 @@ class ProfilingPanelTestCase(BaseTestCase):
         # ensure the panel renders correctly.
         content = self.panel.content
         self.assertIn("regular_view", content)
+        self.assertIn("get_template", content)
         self.assertValidHTML(content)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"PROFILER_THRESHOLD_RATIO": 1})
@@ -45,7 +46,8 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, response)
         # ensure the panel renders but doesn't include our function.
         content = self.panel.content
-        self.assertNotIn("regular_view", content)
+        self.assertIn("regular_view", content)
+        self.assertNotIn("get_template", content)
         self.assertValidHTML(content)
 
     def test_listcomp_escaped(self):
