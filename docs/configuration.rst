@@ -270,7 +270,7 @@ Panel options
   render of the profiling panel, but will exclude data.
 
   This value is used to determine the threshold of cumulative time to include
-  the nested functions. The threshold is calculated by the root calls
+  the nested functions. The threshold is calculated by the root calls'
   cumulative time divided by this ratio.
 
 * ``SHOW_TEMPLATE_CONTEXT``
