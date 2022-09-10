@@ -128,14 +128,14 @@ class ProfilingPanel(Panel):
         self.profiler = cProfile.Profile()
         return self.profiler.runcall(super().process_request, request)
 
-    def add_node(self, func_list, func, max_depth, cum_time=0.1):
+    def add_node(self, func_list, func, max_depth, cum_time):
         func_list.append(func)
         func.has_subfuncs = False
         if func.depth < max_depth:
             for subfunc in func.subfuncs():
                 if subfunc.stats[3] >= cum_time:
                     func.has_subfuncs = True
-                    self.add_node(func_list, subfunc, max_depth, cum_time=cum_time)
+                    self.add_node(func_list, subfunc, max_depth, cum_time)
 
     def generate_stats(self, request, response):
         if not hasattr(self, "profiler"):
@@ -150,10 +150,13 @@ class ProfilingPanel(Panel):
         if root_func in self.stats.stats:
             root = FunctionCall(self.stats, root_func, depth=0)
             func_list = []
+            cum_time_threshold = (
+                root.stats[3] / dt_settings.get_config()["PROFILER_THRESHOLD_RATIO"]
+            )
             self.add_node(
                 func_list,
                 root,
                 dt_settings.get_config()["PROFILER_MAX_DEPTH"],
-                root.stats[3] / 8,
+                cum_time_threshold,
             )
             self.record_stats({"func_list": func_list})

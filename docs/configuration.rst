@@ -259,6 +259,20 @@ Panel options
   This setting affects the depth of function calls in the profiler's
   analysis.
 
+* ``PROFILER_THRESHOLD_RATIO``
+
+  Default: ``10``
+
+  Panel: profiling
+
+  This setting affects the which calls are included in the profile. A higher
+  value will include more function calls. A lower value will result in a faster
+  render of the profiling panel, but will exclude data.
+
+  This value is used to determine the threshold of cumulative time to include
+  the nested functions. The threshold is calculated by the root calls
+  cumulative time divided by this ratio.
+
 * ``SHOW_TEMPLATE_CONTEXT``
 
   Default: ``True``
