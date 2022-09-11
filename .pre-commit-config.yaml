@@ -42,6 +42,8 @@ repos:
     hooks:
     -   id: prettier
         types_or: [javascript, css]
+        args:
+        -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.23.0
     hooks:

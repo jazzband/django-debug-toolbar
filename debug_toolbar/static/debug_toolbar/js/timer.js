@@ -33,7 +33,7 @@ function insertBrowserTiming() {
                 ")</td>";
             row.querySelector("rect").setAttribute(
                 "width",
-                getCSSWidth(stat, endStat),
+                getCSSWidth(stat, endStat)
             );
         } else {
             // Render a point in time

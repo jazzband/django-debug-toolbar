@@ -31,13 +31,13 @@ const djdt = {
                     this.parentElement.classList.add("djdt-active");
 
                     const inner = current.querySelector(
-                            ".djDebugPanelContent .djdt-scroll",
+                            ".djDebugPanelContent .djdt-scroll"
                         ),
                         store_id = djDebug.dataset.storeId;
                     if (store_id && inner.children.length === 0) {
                         const url = new URL(
                             djDebug.dataset.renderPanelUrl,
-                            window.location,
+                            window.location
                         );
                         url.searchParams.append("store_id", store_id);
                         url.searchParams.append("panel_id", panelId);
@@ -49,18 +49,18 @@ const djdt = {
                             djDebug.dispatchEvent(
                                 new CustomEvent("djdt.panel.render", {
                                     detail: { panelId: panelId },
-                                }),
+                                })
                             );
                         });
                     } else {
                         djDebug.dispatchEvent(
                             new CustomEvent("djdt.panel.render", {
                                 detail: { panelId: panelId },
-                            }),
+                            })
                         );
                     }
                 }
-            },
+            }
         );
         $$.on(djDebug, "click", ".djDebugClose", function () {
             djdt.hide_one_level();
@@ -76,9 +76,9 @@ const djdt = {
                     {
                         path: "/",
                         expires: 10,
-                    },
+                    }
                 );
-            },
+            }
         );
 
         // Used by the SQL and template panels
@@ -219,7 +219,7 @@ const djdt = {
         // set handle position
         const handleTop = Math.min(
             localStorage.getItem("djdt.top") || 0,
-            window.innerHeight - handle.offsetWidth,
+            window.innerHeight - handle.offsetWidth
         );
         handle.style.top = handleTop + "px";
     },
