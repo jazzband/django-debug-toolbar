@@ -10,6 +10,10 @@ Pending
 * Update Profiling panel to include try to always include user code. This
   code is more important to developers than dependency code.
 * Highlight the project function calls in the profiling panel.
+* Added Profiling panel setting ``PROFILER_CAPTURE_PROJECT_CODE`` to allow
+  users to disable the inclusion of all project code. This will be useful
+  to project setups that have dependencies installed under
+  ``settings.BASE_DIR``.
 
 
 3.6.0 (2022-08-17)

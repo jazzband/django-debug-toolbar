@@ -44,7 +44,8 @@ class FunctionCall:
             file_name, _, _ = self.func
             return (
                 str(settings.BASE_DIR) in file_name
-                and "/site-packages" not in file_name
+                and "/site-packages/" not in file_name
+                and "/dist-packages/" not in file_name
             )
         return None
 
@@ -139,6 +140,7 @@ class ProfilingPanel(Panel):
     title = _("Profiling")
 
     template = "debug_toolbar/panels/profiling.html"
+    capture_project_code = dt_settings.get_config()["PROFILER_CAPTURE_PROJECT_CODE"]
 
     def process_request(self, request):
         self.profiler = cProfile.Profile()
@@ -151,7 +153,9 @@ class ProfilingPanel(Panel):
             for subfunc in func.subfuncs():
                 # Always include the user's code
                 if subfunc.stats[3] >= cum_time or (
-                    subfunc.is_project_func() and subfunc.stats[3] > 0
+                    self.capture_project_code
+                    and subfunc.is_project_func()
+                    and subfunc.stats[3] > 0
                 ):
                     func.has_subfuncs = True
                     self.add_node(func_list, subfunc, max_depth, cum_time)

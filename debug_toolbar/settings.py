@@ -33,6 +33,7 @@ CONFIG_DEFAULTS = {
         "django.utils.functional",
     ),
     "PRETTIFY_SQL": True,
+    "PROFILER_CAPTURE_PROJECT_CODE": True,
     "PROFILER_MAX_DEPTH": 10,
     "PROFILER_THRESHOLD_RATIO": 8,
     "SHOW_TEMPLATE_CONTEXT": True,

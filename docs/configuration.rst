@@ -250,6 +250,18 @@ Panel options
     WHERE "auth_user"."username" = '''test_username'''
     LIMIT 21
 
+* ``PROFILER_CAPTURE_PROJECT_CODE``
+
+  Default: ``True``
+
+  Panel: profiling
+
+  When enabled this setting will include all project function calls in the
+  panel. Project code is defined as files in the path defined at
+  ``settings.BASE_DIR``. If you install dependencies under
+  ``settings.BASE_DIR`` in a directory other than ``sites-packages`` or
+  ``dist-packages`` you may need to disable this setting.
+
 * ``PROFILER_MAX_DEPTH``
 
   Default: ``10``
