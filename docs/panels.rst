@@ -133,7 +133,8 @@ with the ``DISABLE_PANELS`` configuration option.
 The panel will include all function calls made by your project if you're using
 the setting ``settings.BASE_DIR`` to point to your project's root directory.
 If a function is in a file within that directory and does not include
-``"/site-packages/"`` in the path, it will be included.
+``"/site-packages/"`` or ``"/dist-packages/"`` in the path, it will be
+included.
 
 Third-party panels
 ------------------
