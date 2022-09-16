@@ -77,6 +77,8 @@ by disabling some configuration options that are enabled by default:
 
 - ``ENABLE_STACKTRACES`` for the SQL and cache panels,
 - ``SHOW_TEMPLATE_CONTEXT`` for the template panel.
+- ``PROFILER_CAPTURE_PROJECT_CODE`` and ``PROFILER_THRESHOLD_RATIO`` for the
+  profiling panel.
 
 Also, check ``SKIP_TEMPLATE_PREFIXES`` when you're using template-based
 form widgets.

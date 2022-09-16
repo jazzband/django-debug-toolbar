@@ -4,6 +4,16 @@ Change log
 Pending
 -------
 
+* Added Profiling panel setting ``PROFILER_THRESHOLD_RATIO`` to give users
+  better control over how many function calls are included. A higher value
+  will include more data, but increase render time.
+* Update Profiling panel to include try to always include user code. This
+  code is more important to developers than dependency code.
+* Highlight the project function calls in the profiling panel.
+* Added Profiling panel setting ``PROFILER_CAPTURE_PROJECT_CODE`` to allow
+  users to disable the inclusion of all project code. This will be useful
+  to project setups that have dependencies installed under
+  ``settings.BASE_DIR``.
 * The toolbar's font stack now prefers system UI fonts.
 
 3.6.0 (2022-08-17)

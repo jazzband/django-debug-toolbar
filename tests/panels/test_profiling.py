@@ -33,6 +33,21 @@ class ProfilingPanelTestCase(BaseTestCase):
         # ensure the panel renders correctly.
         content = self.panel.content
         self.assertIn("regular_view", content)
+        self.assertIn("render", content)
+        self.assertValidHTML(content)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"PROFILER_THRESHOLD_RATIO": 1})
+    def test_cum_time_threshold(self):
+        """
+        Test that cumulative time threshold excludes calls
+        """
+        self._get_response = lambda request: regular_view(request, "profiling")
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        # ensure the panel renders but doesn't include our function.
+        content = self.panel.content
+        self.assertIn("regular_view", content)
+        self.assertNotIn("render", content)
         self.assertValidHTML(content)
 
     def test_listcomp_escaped(self):
