@@ -14,7 +14,7 @@ Pending
   users to disable the inclusion of all project code. This will be useful
   to project setups that have dependencies installed under
   ``settings.BASE_DIR``.
-
+* The toolbar's font stack now prefers system UI fonts.
 
 3.6.0 (2022-08-17)
 ------------------
