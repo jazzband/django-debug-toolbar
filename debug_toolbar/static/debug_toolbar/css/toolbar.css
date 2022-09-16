@@ -64,6 +64,7 @@
 #djDebug tr,
 #djDebug th,
 #djDebug td,
+#djDebug summary,
 #djDebug button {
     margin: 0;
     padding: 0;
@@ -159,7 +160,7 @@
     text-decoration: none;
     display: block;
     font-size: 16px;
-    padding: 10px 10px 5px 25px;
+    padding: 7px 10px 8px 25px;
     color: #fff;
 }
 #djDebug #djDebugToolbar li > div.djdt-disabled {
@@ -178,6 +179,7 @@
 
 #djDebug #djDebugToolbar li.djdt-active:before {
     content: "▶";
+    font-family: sans-serif;
     position: absolute;
     left: 0;
     top: 50%;
@@ -388,18 +390,19 @@
     position: absolute;
     top: 4px;
     right: 15px;
-    height: 16px;
-    width: 16px;
     line-height: 16px;
-    padding: 5px;
     border: 6px solid #ddd;
     border-radius: 50%;
     background: #fff;
     color: #ddd;
-    text-align: center;
     font-weight: 900;
     font-size: 20px;
-    box-sizing: content-box;
+    height: 36px;
+    width: 36px;
+    padding: 0 0 5px;
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
 }
 
 #djDebug .djdt-panelContent .djDebugClose:hover {
