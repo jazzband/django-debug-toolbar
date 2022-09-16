@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* The toolbar's font stack now prefers system UI fonts.
+
 3.6.0 (2022-08-17)
 ------------------
 

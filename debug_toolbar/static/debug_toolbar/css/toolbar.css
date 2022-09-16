@@ -76,7 +76,9 @@
     color: #000;
     vertical-align: baseline;
     background-color: transparent;
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+        Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     text-align: left;
     text-shadow: none;
     white-space: normal;
@@ -237,13 +239,30 @@
     font-size: 16px;
 }
 
+#djDebug pre,
 #djDebug code {
     display: block;
-    font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console",
-        monospace;
+    font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+        "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+        "Fira Mono", "Droid Sans Mono", "Courier New", monospace,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+    overflow: auto;
+}
+
+#djDebug code {
     font-size: 12px;
     white-space: pre;
-    overflow: auto;
+}
+
+#djDebug pre {
+    white-space: pre-wrap;
+    color: #555;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    background-color: #fff;
+    padding: 2px 3px;
+    margin-bottom: 3px;
 }
 
 #djDebug .djdt-panelContent {
@@ -562,19 +581,7 @@
 #djDebug .djSQLDetailsDiv {
     margin-top: 0.8em;
 }
-#djDebug pre {
-    white-space: pre-wrap;
-    color: #555;
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    background-color: #fff;
-    display: block;
-    overflow: auto;
-    padding: 2px 3px;
-    margin-bottom: 3px;
-    font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console",
-        monospace;
-}
+
 #djDebug .djdt-stack span {
     color: #000;
     font-weight: bold;
