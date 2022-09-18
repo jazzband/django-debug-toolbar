@@ -60,15 +60,11 @@ class RequestPanel(Panel):
 
         if hasattr(request, "session"):
             try:
-                session_list = [(k, request.session.get(k))
-                                for k in sorted(request.session.keys())]
+                session_list = [
+                    (k, request.session.get(k)) for k in sorted(request.session.keys())
+                ]
             except TypeError:
-                session_list = [(k, request.session.get(k))
-                                for k in request.session.keys()]
-            self.record_stats(
-                {
-                    "session": {
-                        "list": session_list
-                    }
-                }
-            )
+                session_list = [
+                    (k, request.session.get(k)) for k in request.session.keys()
+                ]
+            self.record_stats({"session": {"list": session_list}})
