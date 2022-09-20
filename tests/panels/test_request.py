@@ -123,3 +123,15 @@ class RequestPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, response)
         panel_stats = self.panel.get_stats()
         self.assertEqual(panel_stats["session"], data)
+        
+        self.request.session = {
+            "b": "b-value",
+            "a": "a-value",
+        }
+        data = {
+            "list": [("a", "a-value"), ("b", "b-value")]
+        }
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        panel_stats = self.panel.get_stats()
+        self.assertEqual(panel_stats["session"], data)        
