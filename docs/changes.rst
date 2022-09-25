@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+3.7.0 (2022-09-25)
+------------------
+
 * Added Profiling panel setting ``PROFILER_THRESHOLD_RATIO`` to give users
   better control over how many function calls are included. A higher value
   will include more data, but increase render time.
