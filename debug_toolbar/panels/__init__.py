@@ -20,7 +20,12 @@ class Panel:
         return self.__class__.__name__
 
     @property
-    def enabled(self):
+    def enabled(self) -> bool:
+        # The user's cookies should override the default value
+        cookie_value = self.toolbar.request.COOKIES.get("djdt" + self.panel_id)
+        if cookie_value is not None:
+            return cookie_value == "on"
+
         # Check to see if settings has a default value for it
         disabled_panels = dt_settings.get_config()["DISABLE_PANELS"]
         panel_path = get_name_from_obj(self)
@@ -28,16 +33,10 @@ class Panel:
         # panel module, but can be disabled without panel in the path.
         # For that reason, replace .panel. in the path and check for that
         # value in the disabled panels as well.
-        disable_panel = (
-            panel_path in disabled_panels
-            or panel_path.replace(".panel.", ".") in disabled_panels
+        return (
+            panel_path not in disabled_panels
+            and panel_path.replace(".panel.", ".") not in disabled_panels
         )
-        if disable_panel:
-            default = "off"
-        else:
-            default = "on"
-        # The user's cookies should override the default value
-        return self.toolbar.request.COOKIES.get("djdt" + self.panel_id, default) == "on"
 
     # Titles and content
 
