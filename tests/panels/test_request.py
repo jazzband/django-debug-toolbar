@@ -104,3 +104,32 @@ class RequestPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, response)
         panel_stats = self.panel.get_stats()
         self.assertEqual(panel_stats["view_urlname"], "admin:login")
+
+    def test_session_list_sorted_or_not(self):
+        """
+        Verify the session is sorted when all keys are strings.
+
+        See  https://github.com/jazzband/django-debug-toolbar/issues/1668
+        """
+        self.request.session = {
+            1: "value",
+            "data": ["foo", "bar", 1],
+            (2, 3): "tuple_key",
+        }
+        data = {
+            "list": [(1, "value"), ("data", ["foo", "bar", 1]), ((2, 3), "tuple_key")]
+        }
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        panel_stats = self.panel.get_stats()
+        self.assertEqual(panel_stats["session"], data)
+
+        self.request.session = {
+            "b": "b-value",
+            "a": "a-value",
+        }
+        data = {"list": [("a", "a-value"), ("b", "b-value")]}
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        panel_stats = self.panel.get_stats()
+        self.assertEqual(panel_stats["session"], data)

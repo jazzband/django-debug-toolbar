@@ -16,6 +16,8 @@ Pending
   ``settings.BASE_DIR``.
 * The toolbar's font stack now prefers system UI fonts. Tweaked paddings,
   margins and alignments a bit in the CSS code.
+* Only sort the session dictionary when the keys are all strings. Fixes a
+  bug that causes the toolbar to crash when non-strings are used as keys.
 
 3.6.0 (2022-08-17)
 ------------------
