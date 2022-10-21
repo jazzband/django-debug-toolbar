@@ -427,7 +427,10 @@ common methods available.
 
 .. js:function:: djdt.show_toolbar
 
-    Shows the toolbar.
+    Shows the toolbar. This can be used to rerender the toolbar when reloading the
+    entire DOM. For example, then using `HTMX's boosting`_.
+
+.. _HTMX's boosting: https://htmx.org/docs/#boosting
 
 Events
 ^^^^^^

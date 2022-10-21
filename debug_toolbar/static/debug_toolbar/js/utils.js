@@ -1,5 +1,6 @@
 const $$ = {
     on(root, eventName, selector, fn) {
+        root.removeEventListener(eventName, fn);
         root.addEventListener(eventName, function (event) {
             const target = event.target.closest(selector);
             if (root.contains(target)) {

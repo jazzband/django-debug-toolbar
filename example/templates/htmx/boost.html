@@ -1,0 +1,27 @@
+{% load cache %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Index of Tests</title>
+    <script src="//unpkg.com/htmx.org@1.8.2"></script>
+  </head>
+  <body hx-boost="true">
+    <h1>Index of Tests</h1>
+    <ul>
+      <li><a href="/jquery/">jQuery 3.3.1</a></li>
+      <li><a href="/mootools/">MooTools 1.6.0</a></li>
+      <li><a href="/prototype/">Prototype 1.7.3.0</a></li>
+    </ul>
+    <p><a href="/admin/">Django Admin</a></p>
+    <script>
+      if (typeof htmx !== "undefined") {
+        htmx.on("htmx:afterSettle", function(detail) {
+          if (detail.target instanceof HTMLBodyElement) {
+            djdt.show_toolbar();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
