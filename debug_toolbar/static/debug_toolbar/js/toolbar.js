@@ -261,6 +261,15 @@ const djdt = {
             document.getElementById("djDebug").dataset.sidebarUrl;
         const slowjax = debounce(ajax, 200);
 
+        function handleAjaxResponse(storeId) {
+            storeId = encodeURIComponent(storeId);
+            const dest = `${sidebar_url}?store_id=${storeId}`;
+            slowjax(dest).then(function (data) {
+                replaceToolbarState(storeId, data);
+            });
+        }
+
+        // Patch XHR / traditional AJAX requests
         const origOpen = XMLHttpRequest.prototype.open;
         XMLHttpRequest.prototype.open = function () {
             this.addEventListener("load", function () {
@@ -270,15 +279,24 @@ const djdt = {
                 if (
                     this.getAllResponseHeaders().indexOf("djdt-store-id") >= 0
                 ) {
-                    let store_id = this.getResponseHeader("djdt-store-id");
-                    store_id = encodeURIComponent(store_id);
-                    const dest = `${sidebar_url}?store_id=${store_id}`;
-                    slowjax(dest).then(function (data) {
-                        replaceToolbarState(store_id, data);
-                    });
+                    handleAjaxResponse(this.getResponseHeader("djdt-store-id"));
                 }
             });
             origOpen.apply(this, arguments);
+        };
+
+        const origFetch = window.fetch;
+        window.fetch = function (url, options) {
+            const promise = origFetch(url, options);
+            promise.then(function (response) {
+                if (response.headers.get("djdt-store-id") !== null) {
+                    handleAjaxResponse(response.headers.get("djdt-store-id"));
+                }
+                // Don't resolve the response via .json(). Instead
+                // continue to return it to allow the caller to consume as needed.
+                return response;
+            });
+            return promise;
         };
     },
     cookie: {

@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+* Auto-update History panel for JavaScript ``fetch`` requests.
+
+
 3.7.0 (2022-09-25)
 ------------------
 
