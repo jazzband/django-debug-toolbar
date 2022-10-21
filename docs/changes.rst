@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Added protection against division by 0 in timer.js
+
 3.7.0 (2022-09-25)
 ------------------
 

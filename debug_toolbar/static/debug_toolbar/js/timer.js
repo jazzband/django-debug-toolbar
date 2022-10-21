@@ -6,7 +6,13 @@ function insertBrowserTiming() {
         timingEnd = performance.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;
     function getLeft(stat) {
-        return ((performance.timing[stat] - timingOffset) / totalTime) * 100.0;
+        if (totalTime !== 0) {
+            return (
+                ((performance.timing[stat] - timingOffset) / totalTime) * 100.0
+            );
+        } else {
+            return 0;
+        }
     }
     function getCSSWidth(stat, endStat) {
         let width =
