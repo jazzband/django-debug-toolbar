@@ -5,6 +5,7 @@ Pending
 -------
 
 * Added protection against division by 0 in timer.js
+* Auto-update History panel for JavaScript ``fetch`` requests.
 
 3.7.0 (2022-09-25)
 ------------------
