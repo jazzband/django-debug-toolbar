@@ -18,17 +18,29 @@
     <p>
       <span>Value </span>
       <span id="session-value">{{ request.session.value|default:0 }}</span>
-      <button id="increment" data-url="{% url 'ajax_increment' %}" type="button">Increment</button>
+      <button id="incrementFetch" data-url="{% url 'ajax_increment' %}" type="button">Increment via fetch</button>
+      <button id="incrementXHR" data-url="{% url 'ajax_increment' %}" type="button">Increment via XHR</button>
     </p>
   <script>
-    const increment = document.querySelector("#increment");
+    const incrementFetch = document.querySelector("#incrementFetch");
+    const incrementXHR = document.querySelector("#incrementXHR");
     const value = document.querySelector("#session-value");
-    increment.addEventListener("click", function () {
-      fetch(increment.dataset.url).then( function (response) {
+    incrementFetch.addEventListener("click", function () {
+      fetch(incrementFetch.dataset.url).then( function (response) {
         response.json().then(function(data) {
           value.innerHTML = data.value;
         });
       });
+    });
+    incrementXHR.addEventListener("click", function () {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          value.innerHTML = JSON.parse(xhr.response).value;
+        }
+      }
+      xhr.open('GET', incrementXHR.dataset.url, true);
+      xhr.send('');
     });
   </script>
   </body>
