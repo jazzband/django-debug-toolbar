@@ -286,8 +286,8 @@ const djdt = {
         };
 
         const origFetch = window.fetch;
-        window.fetch = function (url, options) {
-            const promise = origFetch(url, options);
+        window.fetch = function () {
+            const promise = origFetch.apply(this, arguments);
             promise.then(function (response) {
                 if (response.headers.get("djdt-store-id") !== null) {
                     handleAjaxResponse(response.headers.get("djdt-store-id"));
