@@ -223,7 +223,7 @@ event handler to your code:
     {% endif %}
 
 
-The use of ``{% if debug %}``` requires
+The use of ``{% if debug %}`` requires
 `django.template.context_processors.debug`_ be included in the
 ``'context_processors'`` option of the `TEMPLATES`_ setting. Django's
 default configuration includes this context processor.
