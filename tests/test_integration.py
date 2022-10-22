@@ -269,6 +269,26 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             )
             self.assertEqual(response.status_code, 404)
 
+    def test_template_source_errors(self):
+        url = "/__debug__/template_source/"
+
+        response = self.client.get(url, {})
+        self.assertContains(
+            response, '"template_origin" key is required', status_code=400
+        )
+
+        template = get_template("basic.html")
+        response = self.client.get(
+            url,
+            {"template_origin": signing.dumps(template.template.origin.name) + "xyz"},
+        )
+        self.assertContains(response, '"template_origin" is invalid', status_code=400)
+
+        response = self.client.get(
+            url, {"template_origin": signing.dumps("does_not_exist.html")}
+        )
+        self.assertContains(response, "Template Does Not Exist: does_not_exist.html")
+
     def test_sql_select_checks_show_toolbar(self):
         url = "/__debug__/sql_select/"
         data = {
