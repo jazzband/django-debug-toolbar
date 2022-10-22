@@ -34,6 +34,15 @@ except ImportError:
 rf = RequestFactory()
 
 
+def toolbar_store_id():
+    def get_response(request):
+        return HttpResponse()
+
+    toolbar = DebugToolbar(rf.get("/"), get_response)
+    toolbar.store()
+    return toolbar.store_id
+
+
 class BuggyPanel(Panel):
     def title(self):
         return "BuggyPanel"
@@ -213,13 +222,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             raise self.failureException(msg)
 
     def test_render_panel_checks_show_toolbar(self):
-        def get_response(request):
-            return HttpResponse()
-
-        toolbar = DebugToolbar(rf.get("/"), get_response)
-        toolbar.store()
         url = "/__debug__/render_panel/"
-        data = {"store_id": toolbar.store_id, "panel_id": "VersionsPanel"}
+        data = {"store_id": toolbar_store_id(), "panel_id": "VersionsPanel"}
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
@@ -444,7 +448,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"DISABLE_PANELS": set()})
-    def test_intcercept_redirects(self):
+    def test_intercept_redirects(self):
         response = self.client.get("/redirect/")
         self.assertEqual(response.status_code, 200)
         # Link to LOCATION header.
@@ -463,6 +467,13 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         ]
         for expected in expected_partials:
             self.assertTrue(re.compile(expected).search(server_timing))
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": True})
+    def test_timer_panel(self):
+        response = self.client.get("/regular/basic/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "/debug_toolbar/js/timer.js")
+        # print(response.content.decode("utf-8"))
 
     def test_auth_login_view_without_redirect(self):
         response = self.client.get("/login_without_redirect/")
