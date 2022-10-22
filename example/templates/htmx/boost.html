@@ -15,9 +15,9 @@
     </ul>
     <p><a href="/admin/">Django Admin</a></p>
     <script>
-      if (typeof htmx !== "undefined") {
+      if (typeof window.htmx !== "undefined") {
         htmx.on("htmx:afterSettle", function(detail) {
-          if (detail.target instanceof HTMLBodyElement) {
+          if (typeof window.djdt !== "undefined" && detail.target instanceof HTMLBodyElement) {
             djdt.show_toolbar();
           }
         });
