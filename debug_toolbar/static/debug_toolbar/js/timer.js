@@ -1,7 +1,6 @@
 import { $$ } from "./utils.js";
 
 function insertBrowserTiming() {
-    console.log(["inserted"]);
     const timingOffset = performance.timing.navigationStart,
         timingEnd = performance.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;

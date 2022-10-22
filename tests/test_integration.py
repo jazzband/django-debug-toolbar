@@ -472,8 +472,10 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
     def test_timer_panel(self):
         response = self.client.get("/regular/basic/")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "/debug_toolbar/js/timer.js")
-        # print(response.content.decode("utf-8"))
+        self.assertContains(
+            response,
+            '<script type="module" src="/static/debug_toolbar/js/timer.js" async>',
+        )
 
     def test_auth_login_view_without_redirect(self):
         response = self.client.get("/login_without_redirect/")
