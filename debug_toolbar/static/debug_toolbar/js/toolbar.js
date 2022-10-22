@@ -6,6 +6,15 @@ function onKeyDown(event) {
     }
 }
 
+function getDebugElement() {
+    // Fetch the debug element from the DOM.
+    // This is used to avoid writing the element's id
+    // everywhere the element is being selected. A fixed reference
+    // to the element should be avoided because the entire DOM could
+    // be reloaded such as via HTMX boosting.
+    return document.getElementById("djDebug");
+}
+
 const djdt = {
     handleDragged: false,
     init() {
@@ -28,7 +37,7 @@ const djdt = {
                     $$.show(current);
                     this.parentElement.classList.add("djdt-active");
 
-                    const djDebug = djdt.get_debug_element();
+                    const djDebug = getDebugElement();
                     const inner = current.querySelector(
                             ".djDebugPanelContent .djdt-scroll"
                         ),
@@ -193,7 +202,7 @@ const djdt = {
                 djdt.ensure_handle_visibility();
             }
         });
-        const djDebug = djdt.get_debug_element();
+        const djDebug = getDebugElement();
         // Make sure the debug element is rendered at least once.
         // show_toolbar will continue to show it in the future if the
         // entire DOM is reloaded.
@@ -210,7 +219,7 @@ const djdt = {
         }
     },
     hide_panels() {
-        const djDebug = djdt.get_debug_element();
+        const djDebug = getDebugElement();
         $$.hide(document.getElementById("djDebugWindow"));
         djDebug.querySelectorAll(".djdt-panelContent").forEach(function (e) {
             $$.hide(e);
@@ -346,9 +355,6 @@ const djdt = {
             return value;
         },
     },
-    get_debug_element: function () {
-        return document.getElementById("djDebug");
-    },
 };
 window.djdt = {
     show_toolbar: djdt.show_toolbar,
@@ -356,7 +362,6 @@ window.djdt = {
     init: djdt.init,
     close: djdt.hide_one_level,
     cookie: djdt.cookie,
-    get_debug_element: djdt.get_debug_element,
 };
 
 if (document.readyState !== "loading") {
