@@ -2,19 +2,26 @@ import { $$, ajax, replaceToolbarState, debounce } from "./utils.js";
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
-        djdt.hide_one_level();
+        djdt.hideOneLevel();
     }
+}
+
+function getDebugElement() {
+    // Fetch the debug element from the DOM.
+    // This is used to avoid writing the element's id
+    // everywhere the element is being selected. A fixed reference
+    // to the element should be avoided because the entire DOM could
+    // be reloaded such as via HTMX boosting.
+    return document.getElementById("djDebug");
 }
 
 const djdt = {
     handleDragged: false,
     init() {
-        const djDebug = document.getElementById("djDebug");
-        $$.show(djDebug);
         $$.on(
-            document.getElementById("djDebugPanelList"),
+            document.body,
             "click",
-            "li a",
+            "#djDebugPanelList li a",
             function (event) {
                 event.preventDefault();
                 if (!this.className) {
@@ -23,23 +30,24 @@ const djdt = {
                 const panelId = this.className;
                 const current = document.getElementById(panelId);
                 if ($$.visible(current)) {
-                    djdt.hide_panels();
+                    djdt.hidePanels();
                 } else {
-                    djdt.hide_panels();
+                    djdt.hidePanels();
 
                     $$.show(current);
                     this.parentElement.classList.add("djdt-active");
 
+                    const djDebug = getDebugElement();
                     const inner = current.querySelector(
                             ".djDebugPanelContent .djdt-scroll"
                         ),
-                        store_id = djDebug.dataset.storeId;
-                    if (store_id && inner.children.length === 0) {
+                        storeId = djDebug.dataset.storeId;
+                    if (storeId && inner.children.length === 0) {
                         const url = new URL(
                             djDebug.dataset.renderPanelUrl,
                             window.location
                         );
-                        url.searchParams.append("store_id", store_id);
+                        url.searchParams.append("store_id", storeId);
                         url.searchParams.append("panel_id", panelId);
                         ajax(url).then(function (data) {
                             inner.previousElementSibling.remove(); // Remove AJAX loader
@@ -62,13 +70,13 @@ const djdt = {
                 }
             }
         );
-        $$.on(djDebug, "click", ".djDebugClose", function () {
-            djdt.hide_one_level();
+        $$.on(document.body, "click", "#djDebug .djDebugClose", function () {
+            djdt.hideOneLevel();
         });
         $$.on(
-            djDebug,
+            document.body,
             "click",
-            ".djDebugPanelButton input[type=checkbox]",
+            "#djDebug .djDebugPanelButton input[type=checkbox]",
             function () {
                 djdt.cookie.set(
                     this.dataset.cookie,
@@ -82,22 +90,22 @@ const djdt = {
         );
 
         // Used by the SQL and template panels
-        $$.on(djDebug, "click", ".remoteCall", function (event) {
+        $$.on(document.body, "click", "#djDebug .remoteCall", function (event) {
             event.preventDefault();
 
             let url;
-            const ajax_data = {};
+            const ajaxData = {};
 
             if (this.tagName === "BUTTON") {
                 const form = this.closest("form");
                 url = this.formAction;
-                ajax_data.method = form.method.toUpperCase();
-                ajax_data.body = new FormData(form);
+                ajaxData.method = form.method.toUpperCase();
+                ajaxData.body = new FormData(form);
             } else if (this.tagName === "A") {
                 url = this.href;
             }
 
-            ajax(url, ajax_data).then(function (data) {
+            ajax(url, ajaxData).then(function (data) {
                 const win = document.getElementById("djDebugWindow");
                 win.innerHTML = data.content;
                 $$.show(win);
@@ -105,28 +113,28 @@ const djdt = {
         });
 
         // Used by the cache, profiling and SQL panels
-        $$.on(djDebug, "click", ".djToggleSwitch", function () {
+        $$.on(document.body, "click", "#djDebug .djToggleSwitch", function () {
             const id = this.dataset.toggleId;
             const toggleOpen = "+";
             const toggleClose = "-";
-            const open_me = this.textContent === toggleOpen;
+            const openMe = this.textContent === toggleOpen;
             const name = this.dataset.toggleName;
             const container = document.getElementById(name + "_" + id);
             container
                 .querySelectorAll(".djDebugCollapsed")
                 .forEach(function (e) {
-                    $$.toggle(e, open_me);
+                    $$.toggle(e, openMe);
                 });
             container
                 .querySelectorAll(".djDebugUncollapsed")
                 .forEach(function (e) {
-                    $$.toggle(e, !open_me);
+                    $$.toggle(e, !openMe);
                 });
             const self = this;
             this.closest(".djDebugPanelContent")
                 .querySelectorAll(".djToggleDetails_" + id)
                 .forEach(function (e) {
-                    if (open_me) {
+                    if (openMe) {
                         e.classList.add("djSelected");
                         e.classList.remove("djUnselected");
                         self.textContent = toggleClose;
@@ -142,19 +150,16 @@ const djdt = {
                 });
         });
 
-        document
-            .getElementById("djHideToolBarButton")
-            .addEventListener("click", function (event) {
-                event.preventDefault();
-                djdt.hide_toolbar();
-            });
-        document
-            .getElementById("djShowToolBarButton")
-            .addEventListener("click", function () {
-                if (!djdt.handleDragged) {
-                    djdt.show_toolbar();
-                }
-            });
+        $$.on(document.body, "click", "#djHideToolBarButton", function (event) {
+            event.preventDefault();
+            djdt.hideToolbar();
+        });
+
+        $$.on(document.body, "click", "#djShowToolBarButton", function () {
+            if (!djdt.handleDragged) {
+                djdt.showToolbar();
+            }
+        });
         let startPageY, baseY;
         const handle = document.getElementById("djDebugToolbarHandle");
         function onHandleMove(event) {
@@ -174,14 +179,18 @@ const djdt = {
                 djdt.handleDragged = true;
             }
         }
-        document
-            .getElementById("djShowToolBarButton")
-            .addEventListener("mousedown", function (event) {
+        $$.on(
+            document.body,
+            "mousedown",
+            "#djShowToolBarButton",
+            function (event) {
                 event.preventDefault();
                 startPageY = event.pageY;
                 baseY = handle.offsetTop - startPageY;
                 document.addEventListener("mousemove", onHandleMove);
-            });
+            }
+        );
+
         document.addEventListener("mouseup", function (event) {
             document.removeEventListener("mousemove", onHandleMove);
             if (djdt.handleDragged) {
@@ -190,22 +199,27 @@ const djdt = {
                 requestAnimationFrame(function () {
                     djdt.handleDragged = false;
                 });
-                djdt.ensure_handle_visibility();
+                djdt.ensureHandleVisibility();
             }
         });
+        const djDebug = getDebugElement();
+        // Make sure the debug element is rendered at least once.
+        // showToolbar will continue to show it in the future if the
+        // entire DOM is reloaded.
+        $$.show(djDebug);
         const show =
             localStorage.getItem("djdt.show") || djDebug.dataset.defaultShow;
         if (show === "true") {
-            djdt.show_toolbar();
+            djdt.showToolbar();
         } else {
-            djdt.hide_toolbar();
+            djdt.hideToolbar();
         }
         if (djDebug.dataset.sidebarUrl !== undefined) {
-            djdt.update_on_ajax();
+            djdt.updateOnAjax();
         }
     },
-    hide_panels() {
-        const djDebug = document.getElementById("djDebug");
+    hidePanels() {
+        const djDebug = getDebugElement();
         $$.hide(document.getElementById("djDebugWindow"));
         djDebug.querySelectorAll(".djdt-panelContent").forEach(function (e) {
             $$.hide(e);
@@ -214,7 +228,7 @@ const djdt = {
             e.classList.remove("djdt-active");
         });
     },
-    ensure_handle_visibility() {
+    ensureHandleVisibility() {
         const handle = document.getElementById("djDebugToolbarHandle");
         // set handle position
         const handleTop = Math.min(
@@ -223,47 +237,48 @@ const djdt = {
         );
         handle.style.top = handleTop + "px";
     },
-    hide_toolbar() {
-        djdt.hide_panels();
+    hideToolbar() {
+        djdt.hidePanels();
 
         $$.hide(document.getElementById("djDebugToolbar"));
 
         const handle = document.getElementById("djDebugToolbarHandle");
         $$.show(handle);
-        djdt.ensure_handle_visibility();
-        window.addEventListener("resize", djdt.ensure_handle_visibility);
+        djdt.ensureHandleVisibility();
+        window.addEventListener("resize", djdt.ensureHandleVisibility);
         document.removeEventListener("keydown", onKeyDown);
 
         localStorage.setItem("djdt.show", "false");
     },
-    hide_one_level() {
+    hideOneLevel() {
         const win = document.getElementById("djDebugWindow");
         if ($$.visible(win)) {
             $$.hide(win);
         } else {
             const toolbar = document.getElementById("djDebugToolbar");
             if (toolbar.querySelector("li.djdt-active")) {
-                djdt.hide_panels();
+                djdt.hidePanels();
             } else {
-                djdt.hide_toolbar();
+                djdt.hideToolbar();
             }
         }
     },
-    show_toolbar() {
+    showToolbar() {
         document.addEventListener("keydown", onKeyDown);
+        $$.show(document.getElementById("djDebug"));
         $$.hide(document.getElementById("djDebugToolbarHandle"));
         $$.show(document.getElementById("djDebugToolbar"));
         localStorage.setItem("djdt.show", "true");
-        window.removeEventListener("resize", djdt.ensure_handle_visibility);
+        window.removeEventListener("resize", djdt.ensureHandleVisibility);
     },
-    update_on_ajax() {
-        const sidebar_url =
+    updateOnAjax() {
+        const sidebarUrl =
             document.getElementById("djDebug").dataset.sidebarUrl;
         const slowjax = debounce(ajax, 200);
 
         function handleAjaxResponse(storeId) {
             storeId = encodeURIComponent(storeId);
-            const dest = `${sidebar_url}?store_id=${storeId}`;
+            const dest = `${sidebarUrl}?store_id=${storeId}`;
             slowjax(dest).then(function (data) {
                 replaceToolbarState(storeId, data);
             });
@@ -342,10 +357,10 @@ const djdt = {
     },
 };
 window.djdt = {
-    show_toolbar: djdt.show_toolbar,
-    hide_toolbar: djdt.hide_toolbar,
+    show_toolbar: djdt.showToolbar,
+    hide_toolbar: djdt.hideToolbar,
     init: djdt.init,
-    close: djdt.hide_one_level,
+    close: djdt.hideOneLevel,
     cookie: djdt.cookie,
 };
 

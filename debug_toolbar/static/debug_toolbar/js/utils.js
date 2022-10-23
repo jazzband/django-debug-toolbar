@@ -1,5 +1,6 @@
 const $$ = {
     on(root, eventName, selector, fn) {
+        root.removeEventListener(eventName, fn);
         root.addEventListener(eventName, function (event) {
             const target = event.target.closest(selector);
             if (root.contains(target)) {
@@ -107,7 +108,7 @@ function ajaxForm(element) {
 function replaceToolbarState(newStoreId, data) {
     const djDebug = document.getElementById("djDebug");
     djDebug.setAttribute("data-store-id", newStoreId);
-    // Check if response is empty, it could be due to an expired store_id.
+    // Check if response is empty, it could be due to an expired storeId.
     Object.keys(data).forEach(function (panelId) {
         const panel = document.getElementById(panelId);
         if (panel) {

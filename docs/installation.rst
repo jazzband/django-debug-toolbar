@@ -199,3 +199,37 @@ The Debug Toolbar currently doesn't support Django Channels or async projects.
 If you are using Django channels are having issues getting panels to load,
 please review the documentation for the configuration option
 :ref:`RENDER_PANELS <RENDER_PANELS>`.
+
+
+HTMX
+^^^^
+
+If you're using `HTMX`_ to `boost a page`_ you will need to add the following
+event handler to your code:
+
+.. code-block:: javascript
+
+    {% if debug %}
+        if (typeof window.htmx !== "undefined") {
+            htmx.on("htmx:afterSettle", function(detail) {
+                if (
+                    typeof window.djdt !== "undefined"
+                    && detail.target instanceof HTMLBodyElement
+                ) {
+                    djdt.show_toolbar();
+                }
+            });
+        }
+    {% endif %}
+
+
+The use of ``{% if debug %}`` requires
+`django.template.context_processors.debug`_ be included in the
+``'context_processors'`` option of the `TEMPLATES`_ setting. Django's
+default configuration includes this context processor.
+
+
+.. _HTMX: https://htmx.org/
+.. _boost a page: https://htmx.org/docs/#boosting
+.. _django.template.context_processors.debug: https://docs.djangoproject.com/en/4.1/ref/templates/api/#django-template-context-processors-debug
+.. _TEMPLATES: https://docs.djangoproject.com/en/4.1/ref/settings/#std-setting-TEMPLATES
