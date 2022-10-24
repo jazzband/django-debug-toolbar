@@ -6,7 +6,7 @@ Jinja2
 
 # Testing
 
-coverage
+coverage[toml]
 flake8
 html5lib
 isort
@@ -23,4 +23,3 @@ sphinxcontrib-spelling
 
 pre-commit
 transifex-client
-wheel

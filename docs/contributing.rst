@@ -152,8 +152,8 @@ The release itself requires the following steps:
 
 #. Update supported Python and Django versions:
 
-   - ``setup.cfg`` ``python_requires`` and ``install_requires`` options
-   - ``setup.cfg`` trove classifiers
+   - ``pyproject.toml`` options ``requires-python``, ``dependencies``,
+     and ``classifiers``
    - ``README.rst``
 
    Commit.
@@ -167,12 +167,12 @@ The release itself requires the following steps:
    Commit.
 
 #. Bump version numbers in ``docs/changes.rst``, ``docs/conf.py``,
-   ``README.rst``, ``debug_toolbar/__init__.py`` and ``setup.cfg``.
+   ``README.rst``, and ``debug_toolbar/__init__.py``.
    Add the release date to ``docs/changes.rst``. Commit.
 
 #. Tag the new version.
 
-#. ``python setup.py sdist bdist_wheel upload``.
+#. ``tox packaging``.
 
 #. Push the commit and the tag.
 
