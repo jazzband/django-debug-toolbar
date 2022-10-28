@@ -5,15 +5,29 @@ function insertBrowserTiming() {
         timingEnd = performance.timing.loadEventEnd,
         totalTime = timingEnd - timingOffset;
     function getLeft(stat) {
-        return ((performance.timing[stat] - timingOffset) / totalTime) * 100.0;
+        if (totalTime !== 0) {
+            return (
+                ((performance.timing[stat] - timingOffset) / totalTime) * 100.0
+            );
+        } else {
+            return 0;
+        }
     }
     function getCSSWidth(stat, endStat) {
-        let width =
-            ((performance.timing[endStat] - performance.timing[stat]) /
-                totalTime) *
-            100.0;
-        // Calculate relative percent (same as sql panel logic)
-        width = (100.0 * width) / (100.0 - getLeft(stat));
+        let width = 0;
+        if (totalTime !== 0) {
+            width =
+                ((performance.timing[endStat] - performance.timing[stat]) /
+                    totalTime) *
+                100.0;
+        }
+        const denominator = 100.0 - getLeft(stat);
+        if (denominator !== 0) {
+            // Calculate relative percent (same as sql panel logic)
+            width = (100.0 * width) / denominator;
+        } else {
+            width = 0;
+        }
         return width < 1 ? "2px" : width + "%";
     }
     function addRow(tbody, stat, endStat) {

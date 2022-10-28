@@ -4,13 +4,13 @@ Change log
 Pending
 -------
 
+* Added protection against division by 0 in timer.js
 * Auto-update History panel for JavaScript ``fetch`` requests.
 * Support `HTMX boosting <https://htmx.org/docs/#boosting/>`__ and
   re-rendering the toolbar after the DOM has been replaced. This reworks
   the JavaScript integration to put most event handlers on document.body.
   This means we'll have slightly slower performance, but it's easier
   to handle re-rendering the toolbar when the DOM has been replaced.
-
 
 3.7.0 (2022-09-25)
 ------------------
