@@ -172,7 +172,7 @@ The release itself requires the following steps:
 
 #. Tag the new version.
 
-#. ``tox packaging``.
+#. ``tox -e packaging``.
 
 #. Push the commit and the tag.
 
