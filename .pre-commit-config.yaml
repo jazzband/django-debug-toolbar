@@ -15,12 +15,12 @@ repos:
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.1.0
+    rev: v3.2.0
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
 -   repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.10.0
+    rev: 1.11.0
     hooks:
     -   id: django-upgrade
         args: [--target-version, "3.2"]
@@ -38,14 +38,14 @@ repos:
     -   id: rst-backticks
     -   id: rst-directive-colons
 -   repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.2
+    rev: v3.0.0-alpha.4
     hooks:
     -   id: prettier
         types_or: [javascript, css]
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.25.0
+    rev: v8.26.0
     hooks:
     -   id: eslint
         files: \.js?$

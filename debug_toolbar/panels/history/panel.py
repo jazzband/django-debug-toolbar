@@ -60,7 +60,7 @@ class HistoryPanel(Panel):
             if (
                 not data
                 and request.body
-                and request.META.get("CONTENT_TYPE") == "application/json"
+                and request.headers.get("content-type") == "application/json"
             ):
                 try:
                     data = json.loads(request.body)
