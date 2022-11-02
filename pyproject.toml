@@ -44,21 +44,9 @@ Download = "https://pypi.org/project/django-debug-toolbar/"
 Homepage = "https://github.com/jazzband/django-debug-toolbar"
 
 
-[tool.hatch.version]
-path = "debug_toolbar/__init__.py"
-
-[tool.hatch.build.targets.wheel]
-packages = ["debug_toolbar"]
-
-[tool.hatch.build.targets.sdist]
-include = [
-    "/debug_toolbar",
-    "/CONTRIBUTING.md",
-]
-
-[tool.isort]
-combine_as_imports = true
-profile = "black"
+[tool.coverage.html]
+skip_covered = true
+skip_empty = true
 
 [tool.coverage.run]
 branch = true
@@ -73,6 +61,18 @@ source = ["src", ".tox/*/site-packages"]
 fail_under = 93
 show_missing = true
 
-[tool.coverage.html]
-skip_covered = true
-skip_empty = true
+[tool.hatch.build.targets.sdist]
+include = [
+    "/debug_toolbar",
+    "/CONTRIBUTING.md",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["debug_toolbar"]
+
+[tool.hatch.version]
+path = "debug_toolbar/__init__.py"
+
+[tool.isort]
+combine_as_imports = true
+profile = "black"
