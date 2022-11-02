@@ -189,21 +189,23 @@ const djdt = {
                 baseY = handle.offsetTop - startPageY;
                 document.addEventListener("mousemove", onHandleMove);
 
-                document.addEventListener("mouseup", function (event) {
-                    document.removeEventListener("mousemove", onHandleMove);
-                    if (djdt.handleDragged) {
-                        event.preventDefault();
-                        localStorage.setItem("djdt.top", handle.offsetTop);
-                        requestAnimationFrame(function () {
-                            djdt.handleDragged = false;
-                        });
-                        djdt.ensureHandleVisibility();
-                    }
-                }, {once: true});
-
+                document.addEventListener(
+                    "mouseup",
+                    function (event) {
+                        document.removeEventListener("mousemove", onHandleMove);
+                        if (djdt.handleDragged) {
+                            event.preventDefault();
+                            localStorage.setItem("djdt.top", handle.offsetTop);
+                            requestAnimationFrame(function () {
+                                djdt.handleDragged = false;
+                            });
+                            djdt.ensureHandleVisibility();
+                        }
+                    },
+                    { once: true }
+                );
             }
         );
-
 
         const djDebug = getDebugElement();
         // Make sure the debug element is rendered at least once.
