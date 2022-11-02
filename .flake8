@@ -1,0 +1,4 @@
+# TODO: move this to pyproject.toml when supported, see https://github.com/PyCQA/flake8/issues/234
+
+[flake8]
+extend-ignore = E203, E501
