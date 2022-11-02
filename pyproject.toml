@@ -7,7 +7,7 @@ name = "django-debug-toolbar"
 dynamic = ["version"]
 description = "A configurable set of panels that display various debug information about the current request/response."
 readme = "README.rst"
-license = "BSD-3-Clause"
+license = {text = "BSD-3-Clause"}
 requires-python = ">=3.7"
 authors = [
     { name = "Rob Hudson", email = "rob@cogit8.org" },
