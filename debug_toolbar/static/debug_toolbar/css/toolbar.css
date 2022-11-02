@@ -622,7 +622,7 @@
     max-height: 100%;
 }
 #djDebug .djdt-highlighted {
-    background-color: lightgrey;
+    background-color: lightgrey!important;
 }
 #djDebug tr.djdt-highlighted.djdt-profile-row {
     background-color: #ffc;
