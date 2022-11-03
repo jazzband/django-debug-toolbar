@@ -356,7 +356,7 @@
     margin-top: 0.8em;
     overflow: auto;
 }
-#djDebug .djdt-panelContent tbody > tr:nth-child(odd) {
+#djDebug .djdt-panelContent tbody > tr:nth-child(odd):not(.djdt-highlighted) {
     background-color: #f5f5f5;
 }
 #djDebug .djdt-panelContent tbody td,
@@ -621,8 +621,8 @@
 #djDebug .djdt-max-height-100 {
     max-height: 100%;
 }
-#djDebug .djdt-highlighted {
-    background-color: lightgrey !important;
+#djDebug .djdt-highlighted{
+    background-color: lightgrey;
 }
 #djDebug tr.djdt-highlighted.djdt-profile-row {
     background-color: #ffc;
