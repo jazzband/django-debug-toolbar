@@ -356,7 +356,7 @@
     margin-top: 0.8em;
     overflow: auto;
 }
-#djDebug .djdt-panelContent tbody > tr:nth-child(odd) {
+#djDebug .djdt-panelContent tbody > tr:nth-child(odd):not(.djdt-highlighted) {
     background-color: #f5f5f5;
 }
 #djDebug .djdt-panelContent tbody td,
