@@ -1,16 +1,24 @@
 [build-system]
-requires = ["hatchling"]
 build-backend = "hatchling.build"
+requires = [
+  "hatchling",
+]
 
 [project]
-name = "django-debug-toolbar"
-dynamic = ["version"]
+name = "django_debug_toolbar"
 description = "A configurable set of panels that display various debug information about the current request/response."
 readme = "README.rst"
-license = "BSD-3-Clause"
-requires-python = ">=3.7"
+license = {text = "BSD-3-Clause"}
 authors = [
     { name = "Rob Hudson", email = "rob@cogit8.org" },
+]
+requires-python = ">=3.7"
+dependencies = [
+  "Django>=3.2.4",
+  "sqlparse>=0.2",
+]
+dynamic = [
+  "version",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -31,30 +39,14 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dependencies = [
-    "Django >= 3.2.4",
-    "sqlparse >= 0.2.0",
-]
-
 [project.urls]
 Download = "https://pypi.org/project/django-debug-toolbar/"
 Homepage = "https://github.com/jazzband/django-debug-toolbar"
 
-[tool.hatch.version]
-path = "debug_toolbar/__init__.py"
 
-[tool.hatch.build.targets.wheel]
-packages = ["debug_toolbar"]
-
-[tool.hatch.build.targets.sdist]
-include = [
-    "/debug_toolbar",
-    "/CONTRIBUTING.md",
-]
-
-[tool.isort]
-combine_as_imports = true
-profile = "black"
+[tool.coverage.html]
+skip_covered = true
+skip_empty = true
 
 [tool.coverage.run]
 branch = true
@@ -69,6 +61,18 @@ source = ["src", ".tox/*/site-packages"]
 fail_under = 93
 show_missing = true
 
-[tool.coverage.html]
-skip_covered = true
-skip_empty = true
+[tool.hatch.build.targets.sdist]
+include = [
+    "/debug_toolbar",
+    "/CONTRIBUTING.md",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["debug_toolbar"]
+
+[tool.hatch.version]
+path = "debug_toolbar/__init__.py"
+
+[tool.isort]
+combine_as_imports = true
+profile = "black"

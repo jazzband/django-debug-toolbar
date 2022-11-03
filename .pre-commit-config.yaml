@@ -2,6 +2,7 @@ repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
     hooks:
+    -   id: check-toml
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
@@ -58,3 +59,11 @@ repos:
     -   id: black
         language_version: python3
         entry: black --target-version=py37
+-   repo: https://github.com/tox-dev/pyproject-fmt
+    rev: 0.3.5
+    hooks:
+      - id: pyproject-fmt
+-   repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.10.1
+    hooks:
+      - id: validate-pyproject
