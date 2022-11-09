@@ -1,0 +1,56 @@
+{% load cache %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Index of Tests</title>
+    <script src="//unpkg.com/@hotwired/turbo@7.2.4"></script>
+  </head>
+  <body>
+    <h1>Turbo Index - Page {{page_num|default:"1"}}</h1>
+
+    <p>
+      For the debug panel to remain through page navigation, add the setting:
+      <pre>
+DEBUG_TOOLBAR_CONFIG = {
+  "ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent"
+}
+      </pre>
+    </p>
+    <ul>
+      <li><a href="/admin/">Django Admin</a></li>
+      <li><a href="{% url "turbo" %}">Turbo - Page 1</a></li>
+      <li><a href="{% url "turbo2" %}">Turbo - Page 2</a></li>
+    </ul>
+
+    <p>
+      <span>Value </span>
+      <span id="session-value">{{ request.session.value|default:0 }}</span>
+      <button id="incrementFetch" data-url="{% url 'ajax_increment' %}" type="button">Increment via fetch</button>
+      <button id="incrementXHR" data-url="{% url 'ajax_increment' %}" type="button">Increment via XHR</button>
+    </p>
+    <script>
+      const incrementFetch = document.querySelector("#incrementFetch");
+      const incrementXHR = document.querySelector("#incrementXHR");
+      const value = document.querySelector("#session-value");
+      incrementFetch.addEventListener("click", function () {
+        fetch(incrementFetch.dataset.url).then( function (response) {
+          response.json().then(function(data) {
+            value.innerHTML = data.value;
+          });
+        });
+      });
+      incrementXHR.addEventListener("click", function () {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4) {
+            value.innerHTML = JSON.parse(xhr.response).value;
+          }
+        }
+        xhr.open('GET', incrementXHR.dataset.url, true);
+        xhr.send('');
+      });
+    </script>
+    <a href="{% url "home" %}">Home</a>
+  </body>
+</html>

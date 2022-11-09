@@ -61,6 +61,7 @@ USE_TZ = True
 
 WSGI_APPLICATION = "example.wsgi.application"
 
+DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
 
 # Cache and database
 

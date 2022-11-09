@@ -20,6 +20,44 @@ Browsers have become more aggressive with caching static assets, such as
 JavaScript and CSS files. Check your browser's development console, and if
 you see errors, try a hard browser refresh or clearing your cache.
 
+Working with htmx and Turbo
+----------------------------
+
+Libraries such as `htmx <https://htmx.org/>`_ and
+`Turbo <https://turbo.hotwired.dev/>`_ need additional configuration to retain
+the toolbar handle element through page renders. This can be done by
+configuring the :ref:`ROOT_TAG_EXTRA_ATTRS <ROOT_TAG_EXTRA_ATTRS>` to include
+the relevant JavaScript library's attribute.
+
+htmx
+~~~~
+
+The attribute `htmx <https://htmx.org/>`_ uses is
+`hx-preserve <https://htmx.org/attributes/hx-preserve/>`_.
+
+Update your settings to include:
+
+.. code-block:: python
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "ROOT_TAG_EXTRA_ATTRS": "hx-preserve"
+    }
+
+Hotwire Turbo
+~~~~~~~~~~~~~
+
+The attribute `Turbo <https://turbo.hotwired.dev/>`_ uses is
+`data-turbo-permanent <https://turbo.hotwired.dev/reference/attributes>`_
+
+Update your settings to include:
+
+.. code-block:: python
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent"
+    }
+
+
 Performance considerations
 --------------------------
 

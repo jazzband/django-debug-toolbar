@@ -8,6 +8,8 @@ fallbacks
 flamegraph
 flatpages
 frontend
+Hotwire
+htmx
 inlining
 isort
 Jazzband

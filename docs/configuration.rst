@@ -98,6 +98,8 @@ Toolbar options
 
   The toolbar keeps up to this many results in memory.
 
+.. _ROOT_TAG_EXTRA_ATTRS:
+
 * ``ROOT_TAG_EXTRA_ATTRS``
 
   Default: ``''``

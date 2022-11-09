@@ -3,25 +3,28 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Index of Tests</title>
-    <script src="//unpkg.com/htmx.org@1.8.2"></script>
+    <title>Index of Tests (htmx)</title>
+    <script src="//unpkg.com/htmx.org@1.8.4"></script>
   </head>
   <body hx-boost="true">
-    <h1>Index of Tests</h1>
+    <h1>Index of Tests (htmx) - Page {{page_num|default:"1"}}</h1>
+
+    <p>
+      For the debug panel to remain through page navigation, add the setting:
+      <pre>
+DEBUG_TOOLBAR_CONFIG = {
+  "ROOT_TAG_EXTRA_ATTRS": "hx-preserve"
+}
+      </pre>
+    </p>
+
     <ul>
-      <li><a href="/jquery/">jQuery 3.3.1</a></li>
-      <li><a href="/mootools/">MooTools 1.6.0</a></li>
-      <li><a href="/prototype/">Prototype 1.7.3.0</a></li>
+        <li><a href="/admin/">Django Admin</a></li>
+        <li><a href="{% url "htmx" %}">HTMX - Page 1</a></li>
+        <li><a href="{% url "htmx2" %}">HTMX- Page 2</a></li>
     </ul>
-    <p><a href="/admin/">Django Admin</a></p>
-    <script>
-      if (typeof window.htmx !== "undefined") {
-        htmx.on("htmx:afterSettle", function(detail) {
-          if (typeof window.djdt !== "undefined" && detail.target instanceof HTMLBodyElement) {
-            djdt.show_toolbar();
-          }
-        });
-      }
-    </script>
+
+    <a href="{% url "home" %}">Home</a>
+
   </body>
 </html>
