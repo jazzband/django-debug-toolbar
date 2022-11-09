@@ -665,3 +665,14 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.CLASS_NAME, "BuggyPanel").click()
         self.wait.until(EC.visibility_of(debug_window))
         self.assertEqual(debug_window.text, "»\n500: Internal Server Error")
+
+    def test_toolbar_language_will_render_to_default_language_when_not_set(self):
+        self.get("/regular/basic/")
+        hide_button = self.selenium.find_element(By.ID, "djHideToolBarButton")
+        assert hide_button.text == "Hide »"
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"TOOLBAR_LANGUAGE": "pt-br"})
+    def test_toolbar_language_will_render_to_locale_when_set(self):
+        self.get("/regular/basic/")
+        hide_button = self.selenium.find_element(By.ID, "djHideToolBarButton")
+        assert hide_button.text == "Esconder »"

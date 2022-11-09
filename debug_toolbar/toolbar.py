@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 from django.urls import path, resolve
 from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
+from django.utils.translation import get_language, override as lang_override
 
 from debug_toolbar import APP_NAME, settings as dt_settings
 
@@ -76,7 +77,9 @@ class DebugToolbar:
             self.store()
         try:
             context = {"toolbar": self}
-            return render_to_string("debug_toolbar/base.html", context)
+            lang = self.config["TOOLBAR_LANGUAGE"] or get_language()
+            with lang_override(lang):
+                return render_to_string("debug_toolbar/base.html", context)
         except TemplateSyntaxError:
             if not apps.is_installed("django.contrib.staticfiles"):
                 raise ImproperlyConfigured(

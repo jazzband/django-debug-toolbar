@@ -149,7 +149,18 @@ Toolbar options
   the request doesn't originate from the toolbar itself, EG that
   ``is_toolbar_request`` is false for a given request.
 
+* ``TOOLBAR_LANGUAGE``
 
+  Default: ``None``
+
+  The language used to render the toolbar. If no value is supplied, then the
+  application's current language will be used. This setting can be used to
+  render the toolbar in a different language than what the application is
+  rendered in. For example, if you wish to use English for development,
+  but want to render your application in French, you would set this to
+  ``"en-us"`` and `settings.LANGUAGE_CODE`_ to ``"fr"``.
+
+.. _settings.LANGUAGE_CODE: https://docs.djangoproject.com/en/stable/ref/settings/#std-setting-LANGUAGE_CODE
 
 Panel options
 ~~~~~~~~~~~~~

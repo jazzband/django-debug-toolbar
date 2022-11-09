@@ -40,6 +40,7 @@ CONFIG_DEFAULTS = {
     "SKIP_TEMPLATE_PREFIXES": ("django/forms/widgets/", "admin/widgets/"),
     "SQL_WARNING_THRESHOLD": 500,  # milliseconds
     "OBSERVE_REQUEST_CALLBACK": "debug_toolbar.toolbar.observe_request",
+    "TOOLBAR_LANGUAGE": None,
 }
 
 
