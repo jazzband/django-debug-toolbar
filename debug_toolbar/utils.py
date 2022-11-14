@@ -4,13 +4,14 @@ import os.path
 import sys
 import warnings
 from pprint import pformat
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from asgiref.local import Local
 from django.template import Node
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeString, mark_safe
 
-from debug_toolbar import settings as dt_settings
+from debug_toolbar import settings as dt_settings, stubs
 
 try:
     import threading
@@ -21,7 +22,7 @@ except ImportError:
 _local_data = Local()
 
 
-def _is_excluded_frame(frame, excluded_modules):
+def _is_excluded_frame(frame: Any, excluded_modules: Optional[Sequence[str]]) -> bool:
     if not excluded_modules:
         return False
     frame_module = frame.f_globals.get("__name__")
@@ -34,7 +35,7 @@ def _is_excluded_frame(frame, excluded_modules):
     )
 
 
-def _stack_trace_deprecation_warning():
+def _stack_trace_deprecation_warning() -> None:
     warnings.warn(
         "get_stack() and tidy_stacktrace() are deprecated in favor of"
         " get_stack_trace()",
@@ -43,7 +44,7 @@ def _stack_trace_deprecation_warning():
     )
 
 
-def tidy_stacktrace(stack):
+def tidy_stacktrace(stack: List[stubs.InspectStack]) -> stubs.TidyStackTrace:
     """
     Clean up stacktrace and remove all entries that are excluded by the
     HIDE_IN_STACKTRACES setting.
@@ -68,7 +69,7 @@ def tidy_stacktrace(stack):
     return trace
 
 
-def render_stacktrace(trace):
+def render_stacktrace(trace: stubs.TidyStackTrace) -> SafeString:
     show_locals = dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]
     html = ""
     for abspath, lineno, func, code, locals_ in trace:
@@ -103,7 +104,7 @@ def render_stacktrace(trace):
     return mark_safe(html)
 
 
-def get_template_info():
+def get_template_info() -> Optional[Dict[str, Any]]:
     template_info = None
     cur_frame = sys._getframe().f_back
     try:
@@ -131,7 +132,7 @@ def get_template_info():
     return template_info
 
 
-def get_template_context(node, context, context_lines=3):
+def get_template_context(node, context, context_lines=3) -> stubs.TemplateContext:
     line, source_lines, name = get_template_source_from_exception_info(node, context)
     debug_context = []
     start = max(1, line - context_lines)
@@ -146,7 +147,9 @@ def get_template_context(node, context, context_lines=3):
     return {"name": name, "context": debug_context}
 
 
-def get_template_source_from_exception_info(node, context):
+def get_template_source_from_exception_info(
+    node: Node, context: stubs.RequestContext
+) -> Tuple[int, List[Tuple[int, str]], str]:
     if context.template.origin == node.origin:
         exception_info = context.template.get_exception_info(
             Exception("DDT"), node.token
@@ -161,7 +164,7 @@ def get_template_source_from_exception_info(node, context):
     return line, source_lines, name
 
 
-def get_name_from_obj(obj):
+def get_name_from_obj(obj: Any) -> str:
     if hasattr(obj, "__name__"):
         name = obj.__name__
     else:
@@ -174,7 +177,7 @@ def get_name_from_obj(obj):
     return name
 
 
-def getframeinfo(frame, context=1):
+def getframeinfo(frame: Any, context=1) -> inspect.Traceback:
     """
     Get information about a frame or traceback object.
 
@@ -227,7 +230,7 @@ def get_sorted_request_variable(variable):
         return {"raw": variable}
 
 
-def get_stack(context=1):
+def get_stack(context=1) -> List[stubs.InspectStack]:
     """
     Get a list of records for a frame and all higher (calling) frames.
 
@@ -280,7 +283,13 @@ class _StackTraceRecorder:
 
         return value
 
-    def get_stack_trace(self, *, excluded_modules=None, include_locals=False, skip=0):
+    def get_stack_trace(
+        self,
+        *,
+        excluded_modules: Optional[Sequence[str]] = None,
+        include_locals: bool = False,
+        skip: int = 0,
+    ):
         trace = []
         skip += 1  # Skip the frame for this method.
         for frame in _stack_frames(skip=skip):
