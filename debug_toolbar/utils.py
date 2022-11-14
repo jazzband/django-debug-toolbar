@@ -132,7 +132,7 @@ def get_template_info() -> Optional[Dict[str, Any]]:
     return template_info
 
 
-def get_template_context(node, context, context_lines=3) -> stubs.TemplateContext:
+def get_template_context(node, context, context_lines=3) -> Dict[str, Any]:
     line, source_lines, name = get_template_source_from_exception_info(node, context)
     debug_context = []
     start = max(1, line - context_lines)

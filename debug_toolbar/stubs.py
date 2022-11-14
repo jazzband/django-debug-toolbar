@@ -1,4 +1,4 @@
-from typing import Any, List, NamedTuple, Optional, Tuple, TypedDict
+from typing import Any, List, NamedTuple, Optional, Tuple
 
 from django import template as dj_template
 
@@ -13,17 +13,6 @@ class InspectStack(NamedTuple):
 
 
 TidyStackTrace = List[Tuple[str, int, str, str, Optional[Any]]]
-
-
-class DebugContext(TypedDict):
-    num: int
-    content: str
-    highlight: bool
-
-
-class TemplateContext(TypedDict):
-    name: str
-    context: List[DebugContext]
 
 
 class RenderContext(dj_template.context.RenderContext):
