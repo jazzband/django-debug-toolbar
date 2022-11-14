@@ -4,9 +4,10 @@ import os.path
 import sys
 import warnings
 from pprint import pformat
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 from asgiref.local import Local
+from django.http import QueryDict
 from django.template import Node
 from django.utils.html import format_html
 from django.utils.safestring import SafeString, mark_safe
@@ -216,7 +217,9 @@ def getframeinfo(frame: Any, context=1) -> inspect.Traceback:
     return inspect.Traceback(filename, lineno, frame.f_code.co_name, lines, index)
 
 
-def get_sorted_request_variable(variable):
+def get_sorted_request_variable(
+    variable: Union[Dict[str, Any], QueryDict]
+) -> Dict[str, Union[List[Tuple[str, Any]], Any]]:
     """
     Get a data structure for showing a sorted list of variables from the
     request data.
