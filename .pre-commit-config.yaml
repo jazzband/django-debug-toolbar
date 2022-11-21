@@ -16,12 +16,12 @@ repos:
     hooks:
     -   id: doc8
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.0
+    rev: v3.2.2
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
 -   repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.11.0
+    rev: 1.12.0
     hooks:
     -   id: django-upgrade
         args: [--target-version, "3.2"]
@@ -46,7 +46,7 @@ repos:
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.27.0
+    rev: v8.28.0
     hooks:
     -   id: eslint
         files: \.js?$
