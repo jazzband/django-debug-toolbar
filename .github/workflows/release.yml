@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install -U build hatchling
+          python -m pip install -U build hatchling twine
 
       - name: Build package
         run: |
