@@ -8,6 +8,7 @@ fallbacks
 flamegraph
 flatpages
 frontend
+Hatchling
 Hotwire
 htmx
 inlining
@@ -23,6 +24,8 @@ memcache
 memcached
 middleware
 middlewares
+mousedown
+mouseup
 multi
 neo
 paddings

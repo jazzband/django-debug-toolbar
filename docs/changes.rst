@@ -7,10 +7,14 @@ Pending
 * Added protection against division by 0 in timer.js
 * Auto-update History panel for JavaScript ``fetch`` requests.
 * Support `HTMX boosting <https://htmx.org/docs/#boosting/>`__ and
-  re-rendering the toolbar after the DOM has been replaced. This reworks
-  the JavaScript integration to put most event handlers on document.body.
-  This means we'll have slightly slower performance, but it's easier
-  to handle re-rendering the toolbar when the DOM has been replaced.
+  `Turbo <https://turbo.hotwired.dev/>`__ pages.
+* Simplify logic for ``Panel.enabled`` property by checking cookies earlier.
+* Include panel scripts in content when ``RENDER_PANELS`` is set to True.
+* Create one-time mouseup listener for each mousedown when dragging the
+  handle.
+* Update package metadata to use Hatchling.
+* Fix highlighting on history panel so odd rows are highlighted when
+  selected.
 
 3.7.0 (2022-09-25)
 ------------------
