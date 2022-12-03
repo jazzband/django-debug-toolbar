@@ -4,6 +4,12 @@ Change log
 Pending
 -------
 
+3.8.1 (2022-12-03)
+------------------
+
+* Fixed release process by re-adding twine to release dependencies. No
+  functional change.
+
 3.8.0 (2022-12-03)
 ------------------
 
