@@ -15,6 +15,7 @@ Pending
 * Update package metadata to use Hatchling.
 * Fix highlighting on history panel so odd rows are highlighted when
   selected.
+* Formalize support for Python 3.11.
 
 3.7.0 (2022-09-25)
 ------------------
