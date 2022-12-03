@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+3.8.0 (2022-12-03)
+------------------
+
 * Added protection against division by 0 in timer.js
 * Auto-update History panel for JavaScript ``fetch`` requests.
 * Support `HTMX boosting <https://htmx.org/docs/#boosting/>`__ and
