@@ -12,7 +12,7 @@ from django.template import Node
 from django.utils.html import format_html
 from django.utils.safestring import SafeString, mark_safe
 
-from debug_toolbar import settings as dt_settings, stubs
+from debug_toolbar import _stubs as stubs, settings as dt_settings
 
 try:
     import threading
