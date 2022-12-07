@@ -671,8 +671,51 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         hide_button = self.selenium.find_element(By.ID, "djHideToolBarButton")
         assert hide_button.text == "Hide »"
 
+        self.get("/execute_sql/")
+        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+
+        # Click to show the SQL panel
+        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+
+        table = self.wait.until(
+            lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
+        )
+        self.assertIn("Query", table.text)
+        self.assertIn("Action", table.text)
+
     @override_settings(DEBUG_TOOLBAR_CONFIG={"TOOLBAR_LANGUAGE": "pt-br"})
     def test_toolbar_language_will_render_to_locale_when_set(self):
         self.get("/regular/basic/")
         hide_button = self.selenium.find_element(By.ID, "djHideToolBarButton")
         assert hide_button.text == "Esconder »"
+
+        self.get("/execute_sql/")
+        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+
+        # Click to show the SQL panel
+        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+
+        table = self.wait.until(
+            lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
+        )
+        self.assertIn("Query", table.text)
+        self.assertIn("Linha", table.text)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"TOOLBAR_LANGUAGE": "en-us"})
+    @override_settings(LANGUAGE_CODE="de")
+    def test_toolbar_language_will_render_to_locale_when_set_both(self):
+        self.get("/regular/basic/")
+        hide_button = self.selenium.find_element(By.ID, "djHideToolBarButton")
+        assert hide_button.text == "Hide »"
+
+        self.get("/execute_sql/")
+        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+
+        # Click to show the SQL panel
+        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+
+        table = self.wait.until(
+            lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
+        )
+        self.assertIn("Query", table.text)
+        self.assertIn("Action", table.text)
