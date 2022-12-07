@@ -1,6 +1,10 @@
 from django.http import JsonResponse
 from django.utils.html import escape
-from django.utils.translation import get_language, gettext as _, override as lang_override
+from django.utils.translation import (
+    get_language,
+    gettext as _,
+    override as lang_override,
+)
 
 from debug_toolbar.decorators import require_show_toolbar
 from debug_toolbar.toolbar import DebugToolbar
