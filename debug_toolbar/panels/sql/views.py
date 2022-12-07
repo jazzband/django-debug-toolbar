@@ -2,7 +2,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
-from debug_toolbar.decorators import require_show_toolbar
+from debug_toolbar.decorators import render_with_toolbar_language, require_show_toolbar
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 
@@ -18,6 +18,7 @@ def get_signed_data(request):
 
 @csrf_exempt
 @require_show_toolbar
+@render_with_toolbar_language
 def sql_select(request):
     """Returns the output of the SQL SELECT statement"""
     verified_data = get_signed_data(request)
@@ -47,6 +48,7 @@ def sql_select(request):
 
 @csrf_exempt
 @require_show_toolbar
+@render_with_toolbar_language
 def sql_explain(request):
     """Returns the output of the SQL EXPLAIN on the given query"""
     verified_data = get_signed_data(request)
@@ -85,6 +87,7 @@ def sql_explain(request):
 
 @csrf_exempt
 @require_show_toolbar
+@render_with_toolbar_language
 def sql_profile(request):
     """Returns the output of running the SQL and getting the profiling statistics"""
     verified_data = get_signed_data(request)

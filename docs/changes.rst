@@ -6,6 +6,7 @@ Pending
 
 * Use ``TOOLBAR_LANGUAGE`` setting when rendering individual panels
   that are loaded via AJAX.
+* Add decorator for rendering toolbar views with ``TOOLBAR_LANGUAGE``.
 
 3.8.1 (2022-12-03)
 ------------------
