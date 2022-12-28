@@ -8,62 +8,63 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-14 10:25-0500\n"
+"POT-Creation-Date: 2022-12-28 09:30-0600\n"
 "PO-Revision-Date: 2021-09-30 18:42+0000\n"
 "Last-Translator: Ali Soltani <alisoltanics@gmail.com>\n"
-"Language-Team: Persian (http://www.transifex.com/django-debug-toolbar/django-debug-toolbar/language/fa/)\n"
+"Language-Team: Persian (http://www.transifex.com/django-debug-toolbar/django-"
+"debug-toolbar/language/fa/)\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fa\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: apps.py:15
 msgid "Debug Toolbar"
 msgstr "نوار ابزار دیباگ"
 
-#: panels/cache.py:227
+#: panels/cache.py:180
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:234
+#: panels/cache.py:186
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/cache.py:246
+#: panels/cache.py:195
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/headers.py:33
+#: panels/headers.py:31
 msgid "Headers"
 msgstr "هدر ها"
 
-#: panels/history/panel.py:20 panels/history/panel.py:21
+#: panels/history/panel.py:18 panels/history/panel.py:19
 msgid "History"
 msgstr "تاریخچه"
 
-#: panels/logging.py:63
+#: panels/logging.py:81
 msgid "Logging"
 msgstr "لاگ"
 
-#: panels/logging.py:69
+#: panels/logging.py:87
 #, python-format
 msgid "%(count)s message"
 msgid_plural "%(count)s messages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/logging.py:73
+#: panels/logging.py:91
 msgid "Log messages"
 msgstr "پیام های لاگ"
 
-#: panels/profiling.py:150
+#: panels/profiling.py:140
 msgid "Profiling"
 msgstr "نمایه سازی"
 
@@ -83,117 +84,117 @@ msgstr ""
 msgid "<unavailable>"
 msgstr ""
 
-#: panels/settings.py:24
+#: panels/settings.py:17
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: panels/settings.py:27
+#: panels/settings.py:20
 #, python-format
 msgid "Settings from %s"
 msgstr "تنظیمات از %s"
 
-#: panels/signals.py:58
+#: panels/signals.py:57
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/signals.py:66
+#: panels/signals.py:62
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/signals.py:73
+#: panels/signals.py:67
 msgid "Signals"
 msgstr "signal ها"
 
-#: panels/sql/panel.py:24
+#: panels/sql/panel.py:23
 msgid "Autocommit"
 msgstr "کامیت خودکار"
 
-#: panels/sql/panel.py:25
+#: panels/sql/panel.py:24
 msgid "Read uncommitted"
 msgstr ""
 
-#: panels/sql/panel.py:26
+#: panels/sql/panel.py:25
 msgid "Read committed"
 msgstr ""
 
-#: panels/sql/panel.py:27
+#: panels/sql/panel.py:26
 msgid "Repeatable read"
 msgstr ""
 
-#: panels/sql/panel.py:28
+#: panels/sql/panel.py:27
 msgid "Serializable"
 msgstr "قابل سریالایز شدن"
 
-#: panels/sql/panel.py:40
+#: panels/sql/panel.py:39
 msgid "Idle"
 msgstr "IDLE"
 
-#: panels/sql/panel.py:41
+#: panels/sql/panel.py:40
 msgid "Active"
 msgstr "فعال"
 
-#: panels/sql/panel.py:42
+#: panels/sql/panel.py:41
 msgid "In transaction"
 msgstr "در تراکنش"
 
-#: panels/sql/panel.py:43
+#: panels/sql/panel.py:42
 msgid "In error"
 msgstr "در خطا"
 
-#: panels/sql/panel.py:44
+#: panels/sql/panel.py:43
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: panels/sql/panel.py:109
+#: panels/sql/panel.py:130
 msgid "SQL"
 msgstr "اس کیو ال"
 
-#: panels/sql/panel.py:114
+#: panels/sql/panel.py:135
 #, python-format
 msgid "%(query_count)d query in %(sql_time).2fms"
 msgid_plural "%(query_count)d queries in %(sql_time).2fms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/sql/panel.py:127
+#: panels/sql/panel.py:147
 #, python-format
 msgid "SQL queries from %(count)d connection"
 msgid_plural "SQL queries from %(count)d connections"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/staticfiles.py:85
+#: panels/staticfiles.py:84
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
 msgstr ""
 
-#: panels/staticfiles.py:106
+#: panels/staticfiles.py:105
 msgid "Static files"
 msgstr "فایل های استاتیک"
 
-#: panels/staticfiles.py:112
+#: panels/staticfiles.py:111
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
 msgstr[0] ""
 msgstr[1] ""
 
-#: panels/templates/panel.py:144
+#: panels/templates/panel.py:143
 msgid "Templates"
 msgstr "تمپلیت ها"
 
-#: panels/templates/panel.py:149
+#: panels/templates/panel.py:148
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "تمپلیت ها (%(num_templates)s rendered)"
 
-#: panels/templates/panel.py:181
+#: panels/templates/panel.py:180
 msgid "No origin"
 msgstr "بدون origin"
 
@@ -264,15 +265,15 @@ msgstr ""
 msgid "Versions"
 msgstr "ورژن ها"
 
-#: templates/debug_toolbar/base.html:18
+#: templates/debug_toolbar/base.html:22
 msgid "Hide toolbar"
 msgstr "پنهان کردن toolbar"
 
-#: templates/debug_toolbar/base.html:18
+#: templates/debug_toolbar/base.html:22
 msgid "Hide"
 msgstr "پنهان کردن"
 
-#: templates/debug_toolbar/base.html:25
+#: templates/debug_toolbar/base.html:29
 msgid "Show toolbar"
 msgstr "نمایش toolbar"
 
@@ -302,7 +303,9 @@ msgstr "Cache hits"
 
 #: templates/debug_toolbar/panels/cache.html:9
 msgid "Cache misses"
-msgstr "Cache misses\n "
+msgstr ""
+"Cache misses\n"
+" "
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
@@ -349,7 +352,7 @@ msgstr "کلید"
 #: templates/debug_toolbar/panels/headers.html:28
 #: templates/debug_toolbar/panels/headers.html:49
 #: templates/debug_toolbar/panels/history_tr.html:23
-#: templates/debug_toolbar/panels/request_variables.html:11
+#: templates/debug_toolbar/panels/request_variables.html:12
 #: templates/debug_toolbar/panels/settings.html:6
 #: templates/debug_toolbar/panels/timer.html:11
 msgid "Value"
@@ -367,7 +370,9 @@ msgstr "محیط WSGI"
 msgid ""
 "Since the WSGI environ inherits the environment of the server, only a "
 "significant subset is shown below."
-msgstr "از آنجا که محیط WSGI محیط سرور را به ارث می برد ، فقط یک زیر مجموعه مهم در زیر نشان داده شده است."
+msgstr ""
+"از آنجا که محیط WSGI محیط سرور را به ارث می برد ، فقط یک زیر مجموعه مهم در "
+"زیر نشان داده شده است."
 
 #: templates/debug_toolbar/panels/history.html:10
 msgid "Method"
@@ -392,7 +397,7 @@ msgid "Action"
 msgstr "اکشن"
 
 #: templates/debug_toolbar/panels/history_tr.html:22
-#: templates/debug_toolbar/panels/request_variables.html:10
+#: templates/debug_toolbar/panels/request_variables.html:11
 msgid "Variable"
 msgstr "متغیر"
 
