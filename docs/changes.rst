@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Fixed PostgreSQL raw query with a tuple parameter during on explain.
+
 3.8.1 (2022-12-03)
 ------------------
 

@@ -221,6 +221,26 @@ class SQLPanelTestCase(BaseTestCase):
             '["{\\"foo\\": \\"bar\\"}"]',
         )
 
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
+    def test_tuple_param_conversion(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        list(
+            PostgresJSON.objects.raw(
+                "SELECT * FROM tests_postgresjson WHERE field ->> 'key' IN %s",
+                [("a", "b'")],
+            )
+        )
+
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 1)
+        self.assertEqual(self.panel._queries[0]["params"], '[["a", "b\'"]]')
+
     def test_binary_param_force_text(self):
         self.assertEqual(len(self.panel._queries), 0)
 
