@@ -350,9 +350,18 @@ Third-party panels must subclass :class:`~debug_toolbar.panels.Panel`,
 according to the public API described below. Unless noted otherwise, all
 methods are optional.
 
-Panels can ship their own templates, static files and views. All views should
-be decorated with ``debug_toolbar.decorators.require_show_toolbar`` to prevent
-unauthorized access. There is no public CSS API at this time.
+Panels can ship their own templates, static files and views.
+
+Any views defined for the third-party panel use the following decorators:
+
+- ``debug_toolbar.decorators.require_show_toolbar`` - Prevents unauthorized
+  access to the view.
+- ``debug_toolbar.decorators.render_with_toolbar_language`` - Supports
+  internationalization for any content rendered by the view. This will render
+  the response with the :ref:`TOOLBAR_LANGUAGE <TOOLBAR_LANGUAGE>` rather than
+  :setting:`LANGUAGE_CODE`.
+
+There is no public CSS API at this time.
 
 .. autoclass:: debug_toolbar.panels.Panel
 

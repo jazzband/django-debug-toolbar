@@ -5,6 +5,9 @@ Pending
 -------
 
 * Fixed PostgreSQL raw query with a tuple parameter during on explain.
+* Use ``TOOLBAR_LANGUAGE`` setting when rendering individual panels
+  that are loaded via AJAX.
+* Add decorator for rendering toolbar views with ``TOOLBAR_LANGUAGE``.
 
 3.8.1 (2022-12-03)
 ------------------
@@ -27,6 +30,7 @@ Pending
 * Fix highlighting on history panel so odd rows are highlighted when
   selected.
 * Formalize support for Python 3.11.
+* Added ``TOOLBAR_LANGUAGE`` setting.
 
 3.7.0 (2022-09-25)
 ------------------
