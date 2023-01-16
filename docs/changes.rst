@@ -4,6 +4,7 @@ Change log
 Pending
 -------
 
+* Fixed PostgreSQL raw query with a tuple parameter during on explain.
 * Use ``TOOLBAR_LANGUAGE`` setting when rendering individual panels
   that are loaded via AJAX.
 * Add decorator for rendering toolbar views with ``TOOLBAR_LANGUAGE``.

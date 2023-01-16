@@ -120,6 +120,8 @@ class NormalCursorWrapper(BaseCursorWrapper):
             return params
         if isinstance(params, dict):
             return {key: self._quote_expr(value) for key, value in params.items()}
+        if isinstance(params, tuple):
+            return tuple(self._quote_expr(p) for p in params)
         return [self._quote_expr(p) for p in params]
 
     def _decode(self, param):
