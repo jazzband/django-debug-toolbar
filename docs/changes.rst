@@ -9,6 +9,10 @@ Pending
 * Use ``TOOLBAR_LANGUAGE`` setting when rendering individual panels
   that are loaded via AJAX.
 * Add decorator for rendering toolbar views with ``TOOLBAR_LANGUAGE``.
+* Removed the logging panel. The panel's implementation was too complex, caused
+  memory leaks and sometimes very verbose and hard to silence output in some
+  environments (but not others). The maintainers judged that time and effort is
+  better invested elsewhere.
 
 3.8.1 (2022-12-03)
 ------------------

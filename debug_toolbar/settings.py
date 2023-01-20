@@ -1,3 +1,4 @@
+import warnings
 from functools import lru_cache
 
 from django.conf import settings
@@ -64,7 +65,6 @@ PANELS_DEFAULTS = [
     "debug_toolbar.panels.templates.TemplatesPanel",
     "debug_toolbar.panels.cache.CachePanel",
     "debug_toolbar.panels.signals.SignalsPanel",
-    "debug_toolbar.panels.logging.LoggingPanel",
     "debug_toolbar.panels.redirects.RedirectsPanel",
     "debug_toolbar.panels.profiling.ProfilingPanel",
 ]
@@ -76,6 +76,14 @@ def get_panels():
         PANELS = list(settings.DEBUG_TOOLBAR_PANELS)
     except AttributeError:
         PANELS = PANELS_DEFAULTS
+
+    logging_panel = "debug_toolbar.panels.logging.LoggingPanel"
+    if logging_panel in PANELS:
+        PANELS = [panel for panel in PANELS if panel != logging_panel]
+        warnings.warn(
+            f"Please remove {logging_panel} from your DEBUG_TOOLBAR_PANELS setting.",
+            DeprecationWarning,
+        )
     return PANELS
 
 

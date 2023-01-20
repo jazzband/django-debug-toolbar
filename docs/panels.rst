@@ -97,13 +97,6 @@ Signal
 
 List of signals and receivers.
 
-Logging
-~~~~~~~
-
-.. class:: debug_toolbar.panels.logging.LoggingPanel
-
-Logging output via Python's built-in :mod:`logging` module.
-
 Redirects
 ~~~~~~~~~
 
