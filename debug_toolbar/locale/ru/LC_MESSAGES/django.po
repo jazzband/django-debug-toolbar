@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-28 09:30-0600\n"
+"POT-Creation-Date: 2023-01-20 17:23+0100\n"
 "PO-Revision-Date: 2021-08-14 15:25+0000\n"
 "Last-Translator: Tim Schilling\n"
 "Language-Team: Russian (http://www.transifex.com/django-debug-toolbar/django-"
@@ -57,23 +57,6 @@ msgstr "Заголовки"
 #: panels/history/panel.py:18 panels/history/panel.py:19
 msgid "History"
 msgstr ""
-
-#: panels/logging.py:81
-msgid "Logging"
-msgstr "Логи"
-
-#: panels/logging.py:87
-#, python-format
-msgid "%(count)s message"
-msgid_plural "%(count)s messages"
-msgstr[0] "%(count)s сообщение"
-msgstr[1] "%(count)s сообщений"
-msgstr[2] "%(count)s сообщений"
-msgstr[3] "%(count)s сообщений"
-
-#: panels/logging.py:91
-msgid "Log messages"
-msgstr "Сообщения в логе"
 
 #: panels/profiling.py:140
 msgid "Profiling"
@@ -230,7 +213,6 @@ msgid "Total: %0.2fms"
 msgstr "Итого: %0.2fms"
 
 #: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
-#: templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
@@ -419,27 +401,6 @@ msgstr "Действие"
 #: templates/debug_toolbar/panels/request_variables.html:11
 msgid "Variable"
 msgstr "Переменная"
-
-#: templates/debug_toolbar/panels/logging.html:6
-msgid "Level"
-msgstr "Уровень"
-
-#: templates/debug_toolbar/panels/logging.html:8
-msgid "Channel"
-msgstr "Канал"
-
-#: templates/debug_toolbar/panels/logging.html:9
-msgid "Message"
-msgstr "Сообщение"
-
-#: templates/debug_toolbar/panels/logging.html:10
-#: templates/debug_toolbar/panels/staticfiles.html:44
-msgid "Location"
-msgstr "Место"
-
-#: templates/debug_toolbar/panels/logging.html:26
-msgid "No messages logged"
-msgstr "Сообщений нет"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
@@ -660,6 +621,10 @@ msgstr[1] "%(payload_count)s файла"
 msgstr[2] "%(payload_count)s файлов"
 msgstr[3] "%(payload_count)s файлов"
 
+#: templates/debug_toolbar/panels/staticfiles.html:44
+msgid "Location"
+msgstr "Место"
+
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
 msgstr "Источник шаблона:"
@@ -738,7 +703,7 @@ msgstr ""
 "Django Debug Toolbar в перехватил редирект на адрес, указанный выше. Вы "
 "можете нажать на ссылку, чтобы выполнить переход самостоятельно."
 
-#: views.py:15
+#: views.py:16
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."

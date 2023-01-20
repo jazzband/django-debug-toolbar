@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-28 09:30-0600\n"
+"POT-Creation-Date: 2023-01-20 17:23+0100\n"
 "PO-Revision-Date: 2014-04-25 19:53+0000\n"
 "Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/django-"
@@ -46,20 +46,6 @@ msgstr "HTTP 头"
 #: panels/history/panel.py:18 panels/history/panel.py:19
 msgid "History"
 msgstr ""
-
-#: panels/logging.py:81
-msgid "Logging"
-msgstr "日志"
-
-#: panels/logging.py:87
-#, python-format
-msgid "%(count)s message"
-msgid_plural "%(count)s messages"
-msgstr[0] "%(count)s 条消息"
-
-#: panels/logging.py:91
-msgid "Log messages"
-msgstr "日志信息"
 
 #: panels/profiling.py:140
 msgid "Profiling"
@@ -204,7 +190,6 @@ msgid "Total: %0.2fms"
 msgstr "总共：%0.2f 毫秒"
 
 #: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
-#: templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
@@ -393,27 +378,6 @@ msgstr "功能"
 #: templates/debug_toolbar/panels/request_variables.html:11
 msgid "Variable"
 msgstr "变量"
-
-#: templates/debug_toolbar/panels/logging.html:6
-msgid "Level"
-msgstr "级别"
-
-#: templates/debug_toolbar/panels/logging.html:8
-msgid "Channel"
-msgstr "频道"
-
-#: templates/debug_toolbar/panels/logging.html:9
-msgid "Message"
-msgstr "消息"
-
-#: templates/debug_toolbar/panels/logging.html:10
-#: templates/debug_toolbar/panels/staticfiles.html:44
-msgid "Location"
-msgstr "位置"
-
-#: templates/debug_toolbar/panels/logging.html:26
-msgid "No messages logged"
-msgstr "没有消息被记录"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
@@ -620,6 +584,10 @@ msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
 msgstr[0] "%(payload_count)s 个文件"
 
+#: templates/debug_toolbar/panels/staticfiles.html:44
+msgid "Location"
+msgstr "位置"
+
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
 msgstr "模板源："
@@ -689,7 +657,7 @@ msgstr ""
 "Django Debug Toolbar 为了调试目的拦截了一个重定向到上面 URL 的请求。  您可以"
 "点击上面的链接继续执行重定向操作。"
 
-#: views.py:15
+#: views.py:16
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."

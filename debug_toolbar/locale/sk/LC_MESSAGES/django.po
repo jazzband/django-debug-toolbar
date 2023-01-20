@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-28 09:30-0600\n"
+"POT-Creation-Date: 2023-01-20 17:23+0100\n"
 "PO-Revision-Date: 2021-06-24 13:37+0200\n"
 "Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/django-debug-"
@@ -56,23 +56,6 @@ msgstr "Hlavičky"
 #: panels/history/panel.py:18 panels/history/panel.py:19
 msgid "History"
 msgstr ""
-
-#: panels/logging.py:81
-msgid "Logging"
-msgstr "Zápis"
-
-#: panels/logging.py:87
-#, python-format
-msgid "%(count)s message"
-msgid_plural "%(count)s messages"
-msgstr[0] "%(count)s správa"
-msgstr[1] "%(count)s správy"
-msgstr[2] "%(count)s správy"
-msgstr[3] "%(count)s správ"
-
-#: panels/logging.py:91
-msgid "Log messages"
-msgstr "Správy zápisu"
 
 #: panels/profiling.py:140
 msgid "Profiling"
@@ -232,7 +215,6 @@ msgid "Total: %0.2fms"
 msgstr "Celkovo: %0.2fms"
 
 #: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
-#: templates/debug_toolbar/panels/logging.html:7
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
@@ -423,27 +405,6 @@ msgstr "Akcia"
 #: templates/debug_toolbar/panels/request_variables.html:11
 msgid "Variable"
 msgstr "Premenná"
-
-#: templates/debug_toolbar/panels/logging.html:6
-msgid "Level"
-msgstr "Úroveň"
-
-#: templates/debug_toolbar/panels/logging.html:8
-msgid "Channel"
-msgstr "Kanál"
-
-#: templates/debug_toolbar/panels/logging.html:9
-msgid "Message"
-msgstr "Správa"
-
-#: templates/debug_toolbar/panels/logging.html:10
-#: templates/debug_toolbar/panels/staticfiles.html:44
-msgid "Location"
-msgstr "Poloha"
-
-#: templates/debug_toolbar/panels/logging.html:26
-msgid "No messages logged"
-msgstr "Žiadne správy neboli zaznamenané"
 
 #: templates/debug_toolbar/panels/profiling.html:5
 msgid "Call"
@@ -665,6 +626,10 @@ msgstr[1] "%(payload_count)s súbory"
 msgstr[2] "%(payload_count)s súbora"
 msgstr[3] "%(payload_count)s súborov"
 
+#: templates/debug_toolbar/panels/staticfiles.html:44
+msgid "Location"
+msgstr "Poloha"
+
 #: templates/debug_toolbar/panels/template_source.html:4
 msgid "Template source:"
 msgstr "Zdrojový kód šablóny:"
@@ -743,7 +708,7 @@ msgstr ""
 "Django Debug Toolbar zachytil presmerovanie na vyššie uvedenú URL pre účely "
 "ladenia. Pre normálne presmerovanie môžete kliknúť na vyššie uvedený odkaz."
 
-#: views.py:15
+#: views.py:16
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
