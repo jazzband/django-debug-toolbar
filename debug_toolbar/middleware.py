@@ -22,7 +22,7 @@ def show_toolbar(request):
     return settings.DEBUG and request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS
 
 
-@lru_cache()
+@lru_cache
 def get_show_toolbar():
     # If SHOW_TOOLBAR_CALLBACK is a string, which is the recommended
     # setup, resolve it to the corresponding callable.

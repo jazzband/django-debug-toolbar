@@ -5,6 +5,7 @@ Pending
 -------
 
 * Added Django 4.2a1 to the CI.
+* Dropped support for Python 3.7.
 * Fixed PostgreSQL raw query with a tuple parameter during on explain.
 * Use ``TOOLBAR_LANGUAGE`` setting when rendering individual panels
   that are loaded via AJAX.
