@@ -148,6 +148,9 @@ Prior to a release, the English ``.po`` file must be updated with ``make
 translatable_strings`` and pushed to Transifex. Once translators have done
 their job, ``.po`` files must be downloaded with ``make update_translations``.
 
+To publish a release you have to be a `django-debug-toolbar project lead at
+Jazzband <https://jazzband.co/projects/django-debug-toolbar>`__.
+
 The release itself requires the following steps:
 
 #. Update supported Python and Django versions:
@@ -172,9 +175,9 @@ The release itself requires the following steps:
 
 #. Tag the new version.
 
-#. ``tox -e packaging``.
-
 #. Push the commit and the tag.
+
+#. Publish the release from the Jazzband website.
 
 #. Change the default version of the docs to point to the latest release:
    https://readthedocs.org/dashboard/django-debug-toolbar/versions/
