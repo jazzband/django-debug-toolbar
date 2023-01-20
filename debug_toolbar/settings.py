@@ -45,7 +45,7 @@ CONFIG_DEFAULTS = {
 }
 
 
-@lru_cache()
+@lru_cache
 def get_config():
     USER_CONFIG = getattr(settings, "DEBUG_TOOLBAR_CONFIG", {})
     CONFIG = CONFIG_DEFAULTS.copy()
@@ -70,7 +70,7 @@ PANELS_DEFAULTS = [
 ]
 
 
-@lru_cache()
+@lru_cache
 def get_panels():
     try:
         PANELS = list(settings.DEBUG_TOOLBAR_PANELS)
