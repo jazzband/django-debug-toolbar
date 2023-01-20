@@ -1,3 +1,4 @@
+import django
 from django.contrib.auth.models import User
 from django.template import Context, RequestContext, Template
 from django.test import override_settings
@@ -47,7 +48,10 @@ class TemplatesPanelTestCase(BaseTestCase):
 
         User.objects.create(username="admin")
         bad_repr = TemplateReprForm()
-        t = Template("<table>{{ bad_repr }}</table>")
+        if django.VERSION < (5,):
+            t = Template("<table>{{ bad_repr }}</table>")
+        else:
+            t = Template("{{ bad_repr }}")
         c = Context({"bad_repr": bad_repr})
         html = t.render(c)
         self.assertIsNotNone(html)
