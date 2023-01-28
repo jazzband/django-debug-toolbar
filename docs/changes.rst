@@ -26,7 +26,7 @@ Pending
 
 * Added protection against division by 0 in timer.js
 * Auto-update History panel for JavaScript ``fetch`` requests.
-* Support `HTMX boosting <https://htmx.org/docs/#boosting/>`__ and
+* Support `HTMX boosting <https://htmx.org/docs/#boosting>`__ and
   `Turbo <https://turbo.hotwired.dev/>`__ pages.
 * Simplify logic for ``Panel.enabled`` property by checking cookies earlier.
 * Include panel scripts in content when ``RENDER_PANELS`` is set to True.
