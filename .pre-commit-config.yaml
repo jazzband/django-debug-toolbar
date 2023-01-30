@@ -26,7 +26,7 @@ repos:
     -   id: django-upgrade
         args: [--target-version, "3.2"]
 -   repo: https://github.com/pycqa/isort
-    rev: 5.11.4
+    rev: 5.12.0
     hooks:
     -   id: isort
 -   repo: https://github.com/pre-commit/pygrep-hooks
@@ -46,7 +46,7 @@ repos:
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.32.0
+    rev: v8.33.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -60,10 +60,10 @@ repos:
         language_version: python3
         entry: black --target-version=py38
 -   repo: https://github.com/tox-dev/pyproject-fmt
-    rev: 0.4.1
+    rev: 0.6.0
     hooks:
       - id: pyproject-fmt
 -   repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.10.1
+    rev: v0.12.1
     hooks:
       - id: validate-pyproject
