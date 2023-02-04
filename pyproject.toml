@@ -13,13 +13,6 @@ authors = [
     { name = "Rob Hudson" },
 ]
 requires-python = ">=3.8"
-dependencies = [
-  "Django>=3.2.4",
-  "sqlparse>=0.2",
-]
-dynamic = [
-  "version",
-]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -39,6 +32,13 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "Django>=3.2.4",
+  "sqlparse>=0.2",
 ]
 [project.urls]
 Download = "https://pypi.org/project/django-debug-toolbar/"
