@@ -53,7 +53,6 @@ class DebugConfiguredStorage(LazyObject):
     """
 
     def _setup(self):
-
         configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
 
         class DebugStaticFilesStorage(configured_storage_cls):

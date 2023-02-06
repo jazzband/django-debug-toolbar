@@ -25,7 +25,6 @@ def render_with_toolbar_language(view):
 
     @functools.wraps(view)
     def inner(request, *args, **kwargs):
-
         lang = dt_settings.get_config()["TOOLBAR_LANGUAGE"] or get_language()
         with language_override(lang):
             return view(request, *args, **kwargs)
