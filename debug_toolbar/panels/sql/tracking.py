@@ -10,6 +10,7 @@ from debug_toolbar.utils import get_stack_trace, get_template_info
 
 try:
     import psycopg
+
     PostgresJson = psycopg.types.json.Jsonb
     STATUS_IN_TRANSACTION = psycopg.pq.TransactionStatus.INTRANS
 except ImportError:

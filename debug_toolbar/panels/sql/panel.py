@@ -17,23 +17,28 @@ from debug_toolbar.utils import render_stacktrace
 
 def get_isolation_level_display(vendor, level):
     if vendor == "postgresql":
-
         try:
             import psycopg
+
             choices = {
                 # AUTOCOMMIT level does not exists in psycopg3
-                psycopg.IsolationLevel.READ_UNCOMMITTED : _("Read uncommitted"),
+                psycopg.IsolationLevel.READ_UNCOMMITTED: _("Read uncommitted"),
                 psycopg.IsolationLevel.READ_COMMITTED: _("Read committed"),
                 psycopg.IsolationLevel.REPEATABLE_READ: _("Repeatable read"),
                 psycopg.IsolationLevel.SERIALIZABLE: _("Serializable"),
             }
         except ImportError:
             import psycopg2.extensions
+
             choices = {
                 psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT: _("Autocommit"),
-                psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: _("Read uncommitted"),
+                psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED: _(
+                    "Read uncommitted"
+                ),
                 psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED: _("Read committed"),
-                psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: _("Repeatable read"),
+                psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ: _(
+                    "Repeatable read"
+                ),
                 psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE: _("Serializable"),
             }
 
@@ -44,9 +49,9 @@ def get_isolation_level_display(vendor, level):
 
 def get_transaction_status_display(vendor, level):
     if vendor == "postgresql":
-
         try:
             import psycopg
+
             choices = {
                 psycopg.pq.TransactionStatus.IDLE: _("Idle"),
                 psycopg.pq.TransactionStatus.ACTIVE: _("Active"),
@@ -56,6 +61,7 @@ def get_transaction_status_display(vendor, level):
             }
         except ImportError:
             import psycopg2.extensions
+
             choices = {
                 psycopg2.extensions.TRANSACTION_STATUS_IDLE: _("Idle"),
                 psycopg2.extensions.TRANSACTION_STATUS_ACTIVE: _("Active"),
