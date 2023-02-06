@@ -14,6 +14,8 @@ Pending
   memory leaks and sometimes very verbose and hard to silence output in some
   environments (but not others). The maintainers judged that time and effort is
   better invested elsewhere.
+* Added support for pyscorg3.
+* Added pyscorg3 to the CI.
 
 3.8.1 (2022-12-03)
 ------------------
