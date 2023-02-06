@@ -155,7 +155,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
         if vendor == "postgresql":
             # The underlying DB connection (as opposed to Django's wrapper)
             conn = self.db.connection
-            initial_conn_status = conn.info.status
+            initial_conn_status = conn.info.transaction_status
 
         start_time = time()
         try:
@@ -214,7 +214,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 # case where Django can start a transaction before the first query
                 # executes, so in that case logger.current_transaction_id() will
                 # generate a new transaction ID since one does not already exist.
-                final_conn_status = conn.info.status
+                final_conn_status = conn.info.transaction_status
                 if final_conn_status == STATUS_IN_TRANSACTION:
                     if initial_conn_status == STATUS_IN_TRANSACTION:
                         trans_id = self.logger.current_transaction_id(alias)
@@ -223,6 +223,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 else:
                     trans_id = None
 
+                print(trans_id)
                 params.update(
                     {
                         "trans_id": trans_id,
