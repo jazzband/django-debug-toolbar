@@ -224,7 +224,6 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 else:
                     trans_id = None
 
-                print(trans_id)
                 params.update(
                     {
                         "trans_id": trans_id,
