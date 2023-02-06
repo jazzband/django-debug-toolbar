@@ -9,11 +9,16 @@ from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_stack_trace, get_template_info
 
 try:
-    from psycopg2._json import Json as PostgresJson
-    from psycopg2.extensions import STATUS_IN_TRANSACTION
+    import psycopg
+    PostgresJson = psycopg.types.json.Jsonb
+    STATUS_IN_TRANSACTION = psycopg.pq.TransactionStatus.INTRANS
 except ImportError:
-    PostgresJson = None
-    STATUS_IN_TRANSACTION = None
+    try:
+        from psycopg2._json import Json as PostgresJson
+        from psycopg2.extensions import STATUS_IN_TRANSACTION
+    except ImportError:
+        PostgresJson = None
+        STATUS_IN_TRANSACTION = None
 
 # Prevents SQL queries from being sent to the DB. It's used
 # by the TemplatePanel to prevent the toolbar from issuing
@@ -126,7 +131,8 @@ class NormalCursorWrapper(BaseCursorWrapper):
 
     def _decode(self, param):
         if PostgresJson and isinstance(param, PostgresJson):
-            return param.dumps(param.adapted)
+            return param.dumps(param.obj)
+
         # If a sequence type, decode each element separately
         if isinstance(param, (tuple, list)):
             return [self._decode(element) for element in param]
@@ -149,7 +155,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
         if vendor == "postgresql":
             # The underlying DB connection (as opposed to Django's wrapper)
             conn = self.db.connection
-            initial_conn_status = conn.status
+            initial_conn_status = conn.info.status
 
         start_time = time()
         try:
@@ -166,7 +172,10 @@ class NormalCursorWrapper(BaseCursorWrapper):
 
             # Sql might be an object (such as psycopg Composed).
             # For logging purposes, make sure it's str.
-            sql = str(sql)
+            if vendor == "postgresql" and not isinstance(sql, str):
+                sql = sql.as_string(conn)
+            else:
+                sql = str(sql)
 
             params = {
                 "vendor": vendor,
@@ -205,7 +214,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 # case where Django can start a transaction before the first query
                 # executes, so in that case logger.current_transaction_id() will
                 # generate a new transaction ID since one does not already exist.
-                final_conn_status = conn.status
+                final_conn_status = conn.info.status
                 if final_conn_status == STATUS_IN_TRANSACTION:
                     if initial_conn_status == STATUS_IN_TRANSACTION:
                         trans_id = self.logger.current_transaction_id(alias)
@@ -217,7 +226,7 @@ class NormalCursorWrapper(BaseCursorWrapper):
                 params.update(
                     {
                         "trans_id": trans_id,
-                        "trans_status": conn.get_transaction_status(),
+                        "trans_status": conn.info.transaction_status,
                         "iso_level": iso_level,
                     }
                 )

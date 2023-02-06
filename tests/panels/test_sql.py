@@ -225,14 +225,33 @@ class SQLPanelTestCase(BaseTestCase):
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
     def test_tuple_param_conversion(self):
+        """
+        For psycopg3 You cannot use IN %s with a tuple
+        https://www.psycopg.org/psycopg3/docs/basic/from_pg2.html#you-cannot-use-in-s-with-a-tuple
+        """
+
+        is_psycopg3 = True
+        try:
+            from psycopg import sql
+        except ImportError:
+            is_psycopg3 = False
+
         self.assertEqual(len(self.panel._queries), 0)
 
-        list(
-            PostgresJSON.objects.raw(
-                "SELECT * FROM tests_postgresjson WHERE field ->> 'key' IN %s",
-                [("a", "b'")],
+        if is_psycopg3:
+            list(
+                PostgresJSON.objects.raw(
+                    "SELECT * FROM tests_postgresjson WHERE field ->> 'key' = ANY(%s)",
+                    [["a", "b'"]],
+                )
             )
-        )
+        else:
+            list(
+                PostgresJSON.objects.raw(
+                    "SELECT * FROM tests_postgresjson WHERE field ->> 'key' IN %s",
+                    [("a", "b'")],
+                )
+            )
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
@@ -377,12 +396,15 @@ class SQLPanelTestCase(BaseTestCase):
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
-    def test_execute_with_psycopg2_composed_sql(self):
+    def test_execute_with_psycopg_composed_sql(self):
         """
-        Test command executed using a Composed psycopg2 object is logged.
-        Ref: http://initd.org/psycopg/docs/sql.html
+        Test command executed using a Composed psycopg object is logged.
+        Ref: https://www.psycopg.org/psycopg3/docs/api/sql.html
         """
-        from psycopg2 import sql
+        try:
+            from psycopg import sql
+        except ImportError:
+            from psycopg2 import sql
 
         self.assertEqual(len(self.panel._queries), 0)
 
