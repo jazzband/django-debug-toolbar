@@ -231,7 +231,7 @@ class SQLPanelTestCase(BaseTestCase):
         """
         is_psycopg3 = True
         try:
-            import psycopg
+            import psycopg  # noqa: F401
         except ImportError:
             is_psycopg3 = False
 
