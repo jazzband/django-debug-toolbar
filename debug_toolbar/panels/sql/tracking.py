@@ -133,10 +133,10 @@ class NormalCursorWrapper(BaseCursorWrapper):
     def _decode(self, param):
         if PostgresJson and isinstance(param, PostgresJson):
             # psycopg3
-            if hasattr(param, 'obj'):
+            if hasattr(param, "obj"):
                 return param.dumps(param.obj)
             # psycopg2
-            if hasattr(param, 'adapted'):
+            if hasattr(param, "adapted"):
                 return param.dumps(param.adapted)
 
         # If a sequence type, decode each element separately
