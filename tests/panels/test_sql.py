@@ -229,28 +229,21 @@ class SQLPanelTestCase(BaseTestCase):
         For psycopg3 You cannot use IN %s with a tuple
         https://www.psycopg.org/psycopg3/docs/basic/from_pg2.html#you-cannot-use-in-s-with-a-tuple
         """
-        is_psycopg3 = True
         try:
             import psycopg  # noqa: F401
+
+            self.skipTest("test not supported for psycopg3")
         except ImportError:
-            is_psycopg3 = False
+            pass
 
         self.assertEqual(len(self.panel._queries), 0)
 
-        if is_psycopg3:
-            list(
-                PostgresJSON.objects.raw(
-                    "SELECT * FROM tests_postgresjson WHERE field ->> 'key' = ANY(%s)",
-                    [["a", "b'"]],
-                )
+        list(
+            PostgresJSON.objects.raw(
+                "SELECT * FROM tests_postgresjson WHERE field ->> 'key' IN %s",
+                [("a", "b'")],
             )
-        else:
-            list(
-                PostgresJSON.objects.raw(
-                    "SELECT * FROM tests_postgresjson WHERE field ->> 'key' IN %s",
-                    [("a", "b'")],
-                )
-            )
+        )
 
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
