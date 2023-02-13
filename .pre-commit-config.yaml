@@ -46,7 +46,7 @@ repos:
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.33.0
+    rev: v8.34.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -60,7 +60,7 @@ repos:
         language_version: python3
         entry: black --target-version=py38
 -   repo: https://github.com/tox-dev/pyproject-fmt
-    rev: 0.6.0
+    rev: 0.8.0
     hooks:
       - id: pyproject-fmt
 -   repo: https://github.com/abravalheri/validate-pyproject
