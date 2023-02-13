@@ -5,7 +5,7 @@ requires = [
 ]
 
 [project]
-name = "django_debug_toolbar"
+name = "django-debug-toolbar"
 description = "A configurable set of panels that display various debug information about the current request/response."
 readme = "README.rst"
 license = {text = "BSD-3-Clause"}
