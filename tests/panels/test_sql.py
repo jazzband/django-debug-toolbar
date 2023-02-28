@@ -16,6 +16,11 @@ from django.test.utils import override_settings
 import debug_toolbar.panels.sql.tracking as sql_tracking
 from debug_toolbar import settings as dt_settings
 
+try:
+    import psycopg
+except ImportError:
+    psycopg = None
+
 from ..base import BaseMultiDBTestCase, BaseTestCase
 from ..models import PostgresJSON
 
@@ -222,9 +227,13 @@ class SQLPanelTestCase(BaseTestCase):
         )
 
     @unittest.skipUnless(
-        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+        connection.vendor == "postgresql" and psycopg is None,
+        "Test valid only on PostgreSQL with psycopg2",
     )
     def test_tuple_param_conversion(self):
+        """
+        Regression test for tuple parameter conversion.
+        """
         self.assertEqual(len(self.panel._queries), 0)
 
         list(
@@ -377,12 +386,15 @@ class SQLPanelTestCase(BaseTestCase):
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
-    def test_execute_with_psycopg2_composed_sql(self):
+    def test_execute_with_psycopg_composed_sql(self):
         """
-        Test command executed using a Composed psycopg2 object is logged.
-        Ref: http://initd.org/psycopg/docs/sql.html
+        Test command executed using a Composed psycopg object is logged.
+        Ref: https://www.psycopg.org/psycopg3/docs/api/sql.html
         """
-        from psycopg2 import sql
+        try:
+            from psycopg import sql
+        except ImportError:
+            from psycopg2 import sql
 
         self.assertEqual(len(self.panel._queries), 0)
 
