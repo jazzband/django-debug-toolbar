@@ -3,7 +3,7 @@ import linecache
 import os.path
 import sys
 import warnings
-from pprint import pformat
+from pprint import PrettyPrinter, pformat
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 from asgiref.local import Local
@@ -62,7 +62,7 @@ def tidy_stacktrace(stack: List[stubs.InspectStack]) -> stubs.TidyStackTrace:
             continue
         text = "".join(text).strip() if text else ""
         frame_locals = (
-            frame.f_locals
+            pformat(frame.f_locals)
             if dt_settings.get_config()["ENABLE_STACKTRACES_LOCALS"]
             else None
         )
@@ -99,7 +99,7 @@ def render_stacktrace(trace: stubs.TidyStackTrace) -> SafeString:
         if show_locals:
             html += format_html(
                 '  <pre class="djdt-locals">{}</pre>\n',
-                pformat(locals_),
+                locals_,
             )
         html += "\n"
     return mark_safe(html)
@@ -266,6 +266,8 @@ def _stack_frames(*, skip=0):
 
 
 class _StackTraceRecorder:
+    pretty_printer = PrettyPrinter()
+
     def __init__(self):
         self.filename_cache = {}
 
@@ -315,7 +317,10 @@ class _StackTraceRecorder:
             else:
                 source_line = ""
 
-            frame_locals = frame.f_locals if include_locals else None
+            if include_locals:
+                frame_locals = self.pretty_printer.pformat(frame.f_locals)
+            else:
+                frame_locals = None
 
             trace.append((filename, line_no, func_name, source_line, frame_locals))
         trace.reverse()

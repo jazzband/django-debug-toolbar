@@ -80,3 +80,26 @@ class StackTraceTestCase(unittest.TestCase):
         with self.assertWarns(DeprecationWarning):
             stack_trace = tidy_stacktrace(reversed(stack))
         self.assertEqual(stack_trace[-1][0], __file__)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"ENABLE_STACKTRACES_LOCALS": True})
+    def test_locals(self):
+        # This wrapper class is necessary to mask the repr() of the list
+        # returned by get_stack_trace(); otherwise the 'test_locals_value_1'
+        # string will also be present in rendered_stack_2.
+        class HideRepr:
+            def __init__(self, value):
+                self.value = value
+
+        x = "test_locals_value_1"
+        stack_1_wrapper = HideRepr(get_stack_trace())
+
+        x = x.replace("1", "2")
+        stack_2_wrapper = HideRepr(get_stack_trace())
+
+        rendered_stack_1 = render_stacktrace(stack_1_wrapper.value)
+        self.assertIn("test_locals_value_1", rendered_stack_1)
+        self.assertNotIn("test_locals_value_2", rendered_stack_1)
+
+        rendered_stack_2 = render_stacktrace(stack_2_wrapper.value)
+        self.assertNotIn("test_locals_value_1", rendered_stack_2)
+        self.assertIn("test_locals_value_2", rendered_stack_2)

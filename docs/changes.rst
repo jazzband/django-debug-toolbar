@@ -15,6 +15,11 @@ Pending
   environments (but not others). The maintainers judged that time and effort is
   better invested elsewhere.
 * Added support for psycopg3.
+* When ``ENABLE_STACKTRACE_LOCALS`` is ``True``, the stack frames' locals dicts
+  will be converted to strings when the stack trace is captured rather when it
+  is rendered, so that the correct values will be displayed in the rendered
+  stack trace, as they may have changed between the time the stack trace was
+  captured and when it is rendered.
 
 3.8.1 (2022-12-03)
 ------------------
