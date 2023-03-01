@@ -3,6 +3,7 @@ backends
 backported
 checkbox
 contrib
+dicts
 django
 fallbacks
 flamegraph
