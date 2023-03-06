@@ -166,7 +166,7 @@ class DebugToolbar:
         return resolver_match.namespaces and resolver_match.namespaces[-1] == APP_NAME
 
     @staticmethod
-    @lru_cache(maxsize=128)
+    @lru_cache(maxsize=None)
     def get_observe_request():
         # If OBSERVE_REQUEST_CALLBACK is a string, which is the recommended
         # setup, resolve it to the corresponding callable.
