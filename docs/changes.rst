@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.0.0 (2023-03-14)
+------------------
+
 * Added Django 4.2a1 to the CI.
 * Dropped support for Python 3.7.
 * Fixed PostgreSQL raw query with a tuple parameter during on explain.
