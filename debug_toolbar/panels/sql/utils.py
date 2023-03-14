@@ -1,8 +1,8 @@
 import re
 from functools import lru_cache
+from html import escape
 
 import sqlparse
-from django.utils.html import escape
 from sqlparse import tokens as T
 
 from debug_toolbar import settings as dt_settings
@@ -16,7 +16,7 @@ class BoldKeywordFilter:
             is_keyword = token_type in T.Keyword
             if is_keyword:
                 yield T.Text, "<strong>"
-            yield token_type, escape(value)
+            yield token_type, escape(value, quote=False)
             if is_keyword:
                 yield T.Text, "</strong>"
 
