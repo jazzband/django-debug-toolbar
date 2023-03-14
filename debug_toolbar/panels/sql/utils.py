@@ -8,13 +8,18 @@ from debug_toolbar import settings as dt_settings
 
 
 class ElideSelectListsFilter:
-    """sqlparse filter to elide the select list in SELECT ... FROM clauses"""
+    """sqlparse filter to elide the select list from top-level SELECT ... FROM clauses,
+    if present"""
 
     def process(self, stream):
+        allow_elision = True
         for token_type, value in stream:
             yield token_type, value
-            if token_type in T.Keyword and value.upper() == "SELECT":
-                yield from self.elide_until_from(stream)
+            if token_type in T.Keyword:
+                keyword = value.upper()
+                if allow_elision and keyword == "SELECT":
+                    yield from self.elide_until_from(stream)
+                allow_elision = keyword in ["EXCEPT", "INTERSECT", "UNION"]
 
     @staticmethod
     def elide_until_from(stream):

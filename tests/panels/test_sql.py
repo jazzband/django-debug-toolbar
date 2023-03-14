@@ -510,6 +510,44 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertNotIn("\u2022", self.panel._queries[1]["sql"])
         self.assertIn("\u2022", self.panel._queries[2]["sql"])
 
+    def test_top_level_simplification(self):
+        """
+        Test case to validate that top-level select lists get elided, but other select
+        lists for subselects do not.
+        """
+        list(User.objects.filter(id__in=User.objects.filter(is_staff=True)))
+        list(User.objects.filter(id__lt=20).union(User.objects.filter(id__gt=10)))
+        if connection.vendor != "mysql":
+            list(
+                User.objects.filter(id__lt=20).intersection(
+                    User.objects.filter(id__gt=10)
+                )
+            )
+            list(
+                User.objects.filter(id__lt=20).difference(
+                    User.objects.filter(id__gt=10)
+                )
+            )
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        if connection.vendor != "mysql":
+            self.assertEqual(len(self.panel._queries), 4)
+        else:
+            self.assertEqual(len(self.panel._queries), 2)
+        # WHERE ... IN SELECT ... queries should have only one elided select list
+        self.assertEqual(self.panel._queries[0]["sql"].count("SELECT"), 4)
+        self.assertEqual(self.panel._queries[0]["sql"].count("\u2022"), 3)
+        # UNION queries should have two elidid select lists
+        self.assertEqual(self.panel._queries[1]["sql"].count("SELECT"), 4)
+        self.assertEqual(self.panel._queries[1]["sql"].count("\u2022"), 6)
+        if connection.vendor != "mysql":
+            # INTERSECT queries should have two elidid select lists
+            self.assertEqual(self.panel._queries[2]["sql"].count("SELECT"), 4)
+            self.assertEqual(self.panel._queries[2]["sql"].count("\u2022"), 6)
+            # EXCEPT queries should have two elidid select lists
+            self.assertEqual(self.panel._queries[3]["sql"].count("SELECT"), 4)
+            self.assertEqual(self.panel._queries[3]["sql"].count("\u2022"), 6)
+
     @override_settings(
         DEBUG=True,
     )
