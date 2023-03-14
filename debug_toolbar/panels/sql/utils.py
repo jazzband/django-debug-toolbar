@@ -12,7 +12,6 @@ class BoldKeywordFilter:
     """sqlparse filter to bold SQL keywords"""
 
     def process(self, stream):
-        """Process the token stream"""
         for token_type, value in stream:
             is_keyword = token_type in T.Keyword
             if is_keyword:
@@ -55,7 +54,7 @@ def get_filter_stack(prettify, aligned_indent):
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
-    stack.preprocess.append(BoldKeywordFilter())  # add our custom filter
+    stack.preprocess.append(BoldKeywordFilter())
     stack.postprocess.append(sqlparse.filters.SerializerUnicode())  # tokens -> strings
     return stack
 
