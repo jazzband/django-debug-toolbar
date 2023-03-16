@@ -20,6 +20,7 @@ Pending
   is rendered, so that the correct values will be displayed in the rendered
   stack trace, as they may have changed between the time the stack trace was
   captured and when it is rendered.
+* Added Sort and Search functionality for ``SQLPanel``
 
 3.8.1 (2022-12-03)
 ------------------
