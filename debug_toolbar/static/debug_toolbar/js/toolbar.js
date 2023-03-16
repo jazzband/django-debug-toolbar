@@ -1,6 +1,4 @@
 import { $$, ajax, replaceToolbarState, debounce } from "./utils.js";
-import DataTable from './dataTables.js';
-import jQuery from "./jquery.js";
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
@@ -22,6 +20,7 @@ const djdt = {
     init() {
         const djDebug = getDebugElement();
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
+            // console.group("On Click");
             event.preventDefault();
             if (!this.className) {
                 return;
@@ -29,6 +28,7 @@ const djdt = {
             const panelId = this.className;
             const current = document.getElementById(panelId);
             if ($$.visible(current)) {
+                // console.log("hide Panels");
                 djdt.hidePanels();
             } else {
                 djdt.hidePanels();
@@ -66,6 +66,8 @@ const djdt = {
                     );
                 }
             }
+            // console.info(panelId);
+            // console.groupEnd("On Click");
         });
         $$.on(djDebug, "click", ".djDebugClose", function () {
             djdt.hideOneLevel();
@@ -85,15 +87,6 @@ const djdt = {
                 );
             }
         );
-
-        $$.onPanelRender(djDebug, "SQLPanel", ()=>{
-            // console.info("SQL Pannel rendered");
-            let sqlTable = new DataTable(".sql-table",{
-                columnDefs: [
-                    { targets: [0, 1, 3, 5], orderable: false,  }
-                ],
-            });
-        })
 
         // Used by the SQL and template panels
         $$.on(djDebug, "click", ".remoteCall", function (event) {
@@ -157,7 +150,10 @@ const djdt = {
                 });
             // console.info(`${id} sql info is being rendered`)
             // console.groupEnd("SQL Expand")
-            jQuery(`#sqlDetails_${id}`).insertAfter(`#sqlMain_${id}`)
+            document.querySelector(`#sqlMain_${id}`).insertAdjacentElement(
+                'afterend',
+                document.querySelector(`#sqlDetails_${id}`)
+            )
         });
 
         $$.on(djDebug, "click", "#djHideToolBarButton", function (event) {

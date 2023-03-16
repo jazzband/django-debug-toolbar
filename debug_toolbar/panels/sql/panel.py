@@ -3,8 +3,8 @@ from collections import defaultdict
 from copy import copy
 
 from django.db import connections
-from django.urls import path
 from django.templatetags.static import static
+from django.urls import path
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar.forms import SignedDataForm
@@ -181,8 +181,7 @@ class SQLPanel(Panel):
     @property
     def scripts(self):
         scripts = super().scripts
-        scripts.append(static("debug_toolbar/js/jquery.js"))
-        scripts.append(static("debug_toolbar/js/dataTables.js"))
+        scripts.append(static("debug_toolbar/js/sql.js"))
         return scripts
 
     template = "debug_toolbar/panels/sql.html"

@@ -12,3 +12,4 @@ htmlcov
 .tox
 geckodriver.log
 coverage.xml
+.venv/
