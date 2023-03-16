@@ -150,10 +150,12 @@ const djdt = {
                 });
             // console.info(`${id} sql info is being rendered`)
             // console.groupEnd("SQL Expand")
-            document.querySelector(`#sqlMain_${id}`).insertAdjacentElement(
-                'afterend',
-                document.querySelector(`#sqlDetails_${id}`)
-            )
+            document
+                .querySelector(`#sqlMain_${id}`)
+                .insertAdjacentElement(
+                    "afterend",
+                    document.querySelector(`#sqlDetails_${id}`)
+                );
         });
 
         $$.on(djDebug, "click", "#djHideToolBarButton", function (event) {

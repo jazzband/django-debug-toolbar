@@ -5,13 +5,13 @@ const djDebug = document.getElementById("djDebug");
 
 // Insert the browser sql now since it's possible for this
 // script to miss the initial panel load event.
-let table = new DataTable(".sql-table", {
+const table = new DataTable(".sql-table", {
     columnDefs: [{ targets: [0, 1, 3, 5], orderable: false }],
 });
 
-$$.onPanelRender(djDebug, "SQLPanel", function(){
+$$.onPanelRender(djDebug, "SQLPanel", function () {
     new DataTable(".sql-table", {
         retrieve: true,
         columnDefs: [{ targets: [0, 1, 3, 5], orderable: false }],
     });
-})
+});
