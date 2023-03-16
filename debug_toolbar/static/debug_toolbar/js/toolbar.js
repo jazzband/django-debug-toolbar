@@ -1,4 +1,6 @@
 import { $$, ajax, replaceToolbarState, debounce } from "./utils.js";
+import DataTable from './dataTables.js';
+import jQuery from "./jquery.js";
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
@@ -84,6 +86,15 @@ const djdt = {
             }
         );
 
+        $$.onPanelRender(djDebug, "SQLPanel", ()=>{
+            // console.info("SQL Pannel rendered");
+            let sqlTable = new DataTable(".sql-table",{
+                columnDefs: [
+                    { targets: [0, 1, 3, 5], orderable: false,  }
+                ],
+            });
+        })
+
         // Used by the SQL and template panels
         $$.on(djDebug, "click", ".remoteCall", function (event) {
             event.preventDefault();
@@ -109,6 +120,7 @@ const djdt = {
 
         // Used by the cache, profiling and SQL panels
         $$.on(djDebug, "click", ".djToggleSwitch", function () {
+            // console.group("SQL Expand")
             const id = this.dataset.toggleId;
             const toggleOpen = "+";
             const toggleClose = "-";
@@ -143,6 +155,9 @@ const djdt = {
                         switch_.textContent = self.textContent;
                     }
                 });
+            // console.info(`${id} sql info is being rendered`)
+            // console.groupEnd("SQL Expand")
+            jQuery(`#sqlDetails_${id}`).insertAfter(`#sqlMain_${id}`)
         });
 
         $$.on(djDebug, "click", "#djHideToolBarButton", function (event) {

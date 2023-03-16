@@ -19,7 +19,7 @@
 </ul>
 
 {% if queries %}
-  <table>
+  <table class="sql-table">
     <colgroup>
       <col>
       <col>
@@ -31,7 +31,8 @@
     <thead>
       <tr>
         <th></th>
-        <th colspan="2">{% trans "Query" %}</th>
+        <th></th>
+        <th>{% trans "Query" %}</th>
         <th>{% trans "Timeline" %}</th>
         <th>{% trans "Time (ms)" %}</th>
         <th>{% trans "Action" %}</th>
@@ -89,8 +90,9 @@
           </td>
         </tr>
         <tr class="djUnselected {% if query.is_slow %} djDebugRowWarning{% endif %} djToggleDetails_{{ forloop.counter }}" id="sqlDetails_{{ forloop.counter }}">
-          <td colspan="2"></td>
-          <td colspan="4">
+          <td></td>
+          <td></td>
+          <td>
             <div class="djSQLDetailsDiv">
               <p><strong>{% trans "Connection:" %}</strong> {{ query.alias }}</p>
               {% if query.iso_level %}
@@ -115,6 +117,9 @@
               {% endif %}
             </div>
           </td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       {% endfor %}
     </tbody>
