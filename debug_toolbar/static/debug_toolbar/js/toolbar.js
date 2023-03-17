@@ -20,7 +20,6 @@ const djdt = {
     init() {
         const djDebug = getDebugElement();
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
-            // console.group("On Click");
             event.preventDefault();
             if (!this.className) {
                 return;
@@ -28,7 +27,6 @@ const djdt = {
             const panelId = this.className;
             const current = document.getElementById(panelId);
             if ($$.visible(current)) {
-                // console.log("hide Panels");
                 djdt.hidePanels();
             } else {
                 djdt.hidePanels();
@@ -66,8 +64,6 @@ const djdt = {
                     );
                 }
             }
-            // console.info(panelId);
-            // console.groupEnd("On Click");
         });
         $$.on(djDebug, "click", ".djDebugClose", function () {
             djdt.hideOneLevel();
@@ -113,7 +109,6 @@ const djdt = {
 
         // Used by the cache, profiling and SQL panels
         $$.on(djDebug, "click", ".djToggleSwitch", function () {
-            // console.group("SQL Expand")
             const id = this.dataset.toggleId;
             const toggleOpen = "+";
             const toggleClose = "-";
@@ -148,12 +143,12 @@ const djdt = {
                         switch_.textContent = self.textContent;
                     }
                 });
-            // console.info(`${id} sql info is being rendered`)
-            // console.groupEnd("SQL Expand")
-            document.querySelector(`#sqlMain_${id}`).insertAdjacentElement(
-                'afterend',
-                document.querySelector(`#sqlDetails_${id}`)
-            )
+            document
+                .querySelector(`#sqlMain_${id}`)
+                .insertAdjacentElement(
+                    "afterend",
+                    document.querySelector(`#sqlDetails_${id}`)
+                );
         });
 
         $$.on(djDebug, "click", "#djHideToolBarButton", function (event) {
