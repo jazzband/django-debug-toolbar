@@ -111,11 +111,11 @@ def _parse_sql(sql, *, prettify, simplify):
 @lru_cache(maxsize=None)
 def get_filter_stack(*, prettify, simplify):
     stack = sqlparse.engine.FilterStack()
-    if prettify:
-        stack.enable_grouping()
     if simplify:
         stack.preprocess.append(ElideSelectListsFilter())
     else:
+        if prettify:
+            stack.enable_grouping()
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
