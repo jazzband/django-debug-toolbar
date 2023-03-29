@@ -2,6 +2,8 @@ from functools import lru_cache
 from html import escape
 
 import sqlparse
+from django.dispatch import receiver
+from django.test.signals import setting_changed
 from sqlparse import tokens as T
 
 from debug_toolbar import settings as dt_settings
@@ -94,27 +96,19 @@ def reformat_sql(sql, with_toggle=False):
     return collapsed + uncollapsed
 
 
-def parse_sql(sql, *, simplify=False):
-    return _parse_sql(
-        sql,
-        prettify=dt_settings.get_config()["PRETTIFY_SQL"],
-        simplify=simplify,
-    )
-
-
 @lru_cache(maxsize=128)
-def _parse_sql(sql, *, prettify, simplify):
-    stack = get_filter_stack(prettify=prettify, simplify=simplify)
+def parse_sql(sql, *, simplify=False):
+    stack = get_filter_stack(simplify=simplify)
     return "".join(stack.run(sql))
 
 
 @lru_cache(maxsize=None)
-def get_filter_stack(*, prettify, simplify):
+def get_filter_stack(*, simplify):
     stack = sqlparse.engine.FilterStack()
     if simplify:
         stack.preprocess.append(ElideSelectListsFilter())
     else:
-        if prettify:
+        if dt_settings.get_config()["PRETTIFY_SQL"]:
             stack.enable_grouping()
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
@@ -122,6 +116,13 @@ def get_filter_stack(*, prettify, simplify):
     stack.stmtprocess.append(BoldKeywordFilter())
     stack.postprocess.append(EscapedStringSerializer())  # Statement -> str
     return stack
+
+
+@receiver(setting_changed)
+def clear_caches(*, setting, **kwargs):
+    if setting == "DEBUG_TOOLBAR_CONFIG":
+        parse_sql.cache_clear()
+        get_filter_stack.cache_clear()
 
 
 def contrasting_color_generator():
