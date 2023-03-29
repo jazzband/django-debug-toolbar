@@ -50,14 +50,21 @@ class ElideSelectListsFilter:
 class BoldKeywordFilter:
     """sqlparse filter to bold SQL keywords"""
 
-    def process(self, stream):
-        for token_type, value in stream:
-            is_keyword = token_type in T.Keyword
-            if is_keyword:
-                yield T.Other, "<strong>"
-            yield token_type, value
-            if is_keyword:
-                yield T.Other, "</strong>"
+    def process(self, stmt):
+        idx = 0
+        while idx < len(stmt.tokens):
+            token = stmt[idx]
+            if token.is_keyword:
+                stmt.insert_before(idx, sqlparse.sql.Token(T.Other, "<strong>"))
+                stmt.insert_after(
+                    idx + 1,
+                    sqlparse.sql.Token(T.Other, "</strong>"),
+                    skip_ws=False,
+                )
+                idx += 2
+            elif token.is_group:
+                self.process(token)
+            idx += 1
 
 
 def escaped_value(token):
@@ -112,7 +119,7 @@ def get_filter_stack(*, prettify, simplify):
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
-    stack.preprocess.append(BoldKeywordFilter())
+    stack.stmtprocess.append(BoldKeywordFilter())
     stack.postprocess.append(EscapedStringSerializer())  # Statement -> str
     return stack
 
