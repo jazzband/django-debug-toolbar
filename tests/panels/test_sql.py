@@ -495,6 +495,21 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 1)
         self.assertEqual(pretty_sql, self.panel._queries[-1]["sql"])
 
+    def test_simplification(self):
+        """
+        Test case to validate that select lists for .count() and .exist() queries do not
+        get elided, but other select lists do.
+        """
+        User.objects.count()
+        User.objects.exists()
+        list(User.objects.values_list("id"))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        self.assertEqual(len(self.panel._queries), 3)
+        self.assertNotIn("\u2022", self.panel._queries[0]["sql"])
+        self.assertNotIn("\u2022", self.panel._queries[1]["sql"])
+        self.assertIn("\u2022", self.panel._queries[2]["sql"])
+
     @override_settings(
         DEBUG=True,
     )
