@@ -18,25 +18,28 @@ class ElideSelectListsFilter:
 
     @staticmethod
     def elide_until_from(stream):
-        select_list_characters = 0
-        select_list_tokens = []
+        has_dot = False
+        saved_tokens = []
         for token_type, value in stream:
             if token_type in T.Keyword and value.upper() == "FROM":
-                # Do not elide a select list of 12 characters or fewer to preserve
-                #    SELECT COUNT(*) FROM ...
+                # Do not elide a select lists that do not contain dots (used to separate
+                # table names from column names) in order to preserve
+                #    SELECT COUNT(*) AS `__count` FROM ...
                 # and
                 #    SELECT (1) AS `a` FROM ...
                 # queries.
-                if select_list_characters <= 12:
-                    yield from select_list_tokens
+                if not has_dot:
+                    yield from saved_tokens
                 else:
                     # U+2022: Unicode character 'BULLET'
                     yield T.Other, " \u2022\u2022\u2022 "
                 yield token_type, value
                 break
-            if select_list_characters <= 12:
-                select_list_characters += len(value)
-                select_list_tokens.append((token_type, value))
+            if not has_dot:
+                if token_type in T.Punctuation and value == ".":
+                    has_dot = True
+                else:
+                    saved_tokens.append((token_type, value))
 
 
 class BoldKeywordFilter:
