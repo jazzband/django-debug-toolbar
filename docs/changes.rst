@@ -20,6 +20,10 @@ Pending
   is rendered, so that the correct values will be displayed in the rendered
   stack trace, as they may have changed between the time the stack trace was
   captured and when it is rendered.
+* Enabled per-DB port specification for tox.  Tox will now check the
+  ``MYSQL_DB_PORT``, ``POSTGRESQL_DB_PORT``, and ``POSTGIS_DB_PORT``
+  environment variables to override the DB port for mysql, postgresql, and
+  postgis environments, respectively.
 
 3.8.1 (2022-12-03)
 ------------------
