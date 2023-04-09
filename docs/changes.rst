@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Added support for the new STORAGES setting in Django 4.2 for static files.
+
 4.0.0 (2023-04-03)
 ------------------
 
