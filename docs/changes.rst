@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+* Improved SQL statement formatting performance.  Additionally, fixed the
+  indentation of ``CASE`` statements and stopped simplifying ``.count()``
+  queries.
 * Added support for the new STORAGES setting in Django 4.2 for static files.
 
 4.0.0 (2023-04-03)
@@ -25,9 +28,6 @@ Pending
   is rendered, so that the correct values will be displayed in the rendered
   stack trace, as they may have changed between the time the stack trace was
   captured and when it is rendered.
-* Improved SQL statement formatting performance.  Additionally, fixed the
-  indentation of ``CASE`` statements and stopped simplifying ``.count()``
-  queries.
 
 3.8.1 (2022-12-03)
 ------------------
