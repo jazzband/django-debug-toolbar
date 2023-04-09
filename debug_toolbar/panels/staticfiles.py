@@ -3,7 +3,6 @@ from os.path import join, normpath
 from django.conf import settings
 from django.contrib.staticfiles import finders, storage
 from django.core.checks import Warning
-from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
 from django.utils.translation import gettext_lazy as _, ngettext
 
@@ -53,7 +52,17 @@ class DebugConfiguredStorage(LazyObject):
     """
 
     def _setup(self):
-        configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
+        try:
+            # From Django 4.2 use django.core.files.storage.storages in favor
+            # of the deprecated django.core.files.storage.get_storage_class
+            from django.core.files.storage import storages
+
+            configured_storage_cls = storages["staticfiles"].__class__
+        except ImportError:
+            # Backwards compatibility for Django versions prior to 4.2
+            from django.core.files.storage import get_storage_class
+
+            configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
 
         class DebugStaticFilesStorage(configured_storage_cls):
             def __init__(self, collector, *args, **kwargs):
