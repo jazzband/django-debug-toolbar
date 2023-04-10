@@ -8,7 +8,7 @@ Pending
   indentation of ``CASE`` statements and stopped simplifying ``.count()``
   queries.
 * Added support for the new STORAGES setting in Django 4.2 for static files.
-* Added theming support
+* Added support for theme overrides.
 
 4.0.0 (2023-04-03)
 ------------------
