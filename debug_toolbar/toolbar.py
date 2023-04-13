@@ -43,7 +43,7 @@ class DebugToolbar:
         self.stats = {}
         self.server_timing_stats = {}
         self.store_id = None
-
+        self.cache_key = 'djangodebug_'
         self._created.send(request, toolbar=self)
 
     # Manage panels
@@ -76,6 +76,8 @@ class DebugToolbar:
         """
         if not self.should_render_panels():
             self.store()
+        if self.tests_run():
+            return ""
         try:
             context = {"toolbar": self}
             lang = self.config["TOOLBAR_LANGUAGE"] or get_language()
@@ -90,6 +92,9 @@ class DebugToolbar:
                 )
             else:
                 raise
+
+    def tests_run(self):
+        return self.config.get('TESTS_RUN', False)
 
     def should_render_panels(self):
         """Determine whether the panels should be rendered during the request
@@ -110,13 +115,56 @@ class DebugToolbar:
         if self.store_id:
             return
         self.store_id = uuid.uuid4().hex
-        self._store[self.store_id] = self
-        for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
-            self._store.popitem(last=False)
+
+        from django.core.cache import cache
+
+        data = {
+            'stats': self.stats,
+            'server_timing_stats': self.server_timing_stats,
+        }
+
+        cache.set(f'{self.cache_key}{self.store_id}', data, self.config['CACHE_TIME'])
+
+        # self._store[self.store_id] = self
+        # for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
+        #     self._store.popitem(last=False)
 
     @classmethod
-    def fetch(cls, store_id):
-        return cls._store.get(store_id)
+    def fetch(cls, tb, store_id):
+        from django.core.cache import cache
+
+        data = cache.get(f'{tb.cache_key}{store_id}')
+        if data:
+            tb.stats = data.get('stats', {})
+            tb.server_timing_stats = data.get('server_timing_stats', {})
+
+            sql_plugin_data = tb.stats.get('SQLPanel')
+            if sql_plugin_data:
+                databases_data = sql_plugin_data.get('databases', [('default', {})])[0][1]
+                tb._panels.get('SQLPanel')._num_queries = databases_data.get('num_queries')
+                tb._panels.get('SQLPanel')._sql_time = sql_plugin_data.get('sql_time')
+        tb.store_id = store_id
+        return tb
+        # return cls._store.get(store_id)
+
+    @classmethod
+    def fetch_all(cls, tb):
+        from django.core.cache import cache
+        import copy
+
+        data_dict = {}
+        key_list = cache.keys(f'{tb.cache_key}*')
+        for key in key_list:
+            store_id = key.split('_')[1]
+            data = cache.get(key)
+            new_tb = copy.copy(tb)
+            new_tb.stats = data['stats']
+            new_tb.server_timing_stats = data['server_timing_stats']
+            new_tb.store_id = store_id
+            data_dict[store_id] = new_tb
+
+        return data_dict
+
 
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.

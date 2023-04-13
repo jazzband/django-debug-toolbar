@@ -10,7 +10,8 @@ from debug_toolbar.toolbar import DebugToolbar
 @render_with_toolbar_language
 def render_panel(request):
     """Render the contents of a panel"""
-    toolbar = DebugToolbar.fetch(request.GET["store_id"])
+    tb = DebugToolbar(request, request)
+    toolbar = DebugToolbar.fetch(tb, request.GET["store_id"])
     if toolbar is None:
         content = _(
             "Data for this panel isn't available anymore. "

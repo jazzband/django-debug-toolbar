@@ -14,7 +14,8 @@ def history_sidebar(request):
 
     if form.is_valid():
         store_id = form.cleaned_data["store_id"]
-        toolbar = DebugToolbar.fetch(store_id)
+        tb = DebugToolbar(request, request)
+        toolbar = DebugToolbar.fetch(tb, store_id)
         exclude_history = form.cleaned_data["exclude_history"]
         context = {}
         if toolbar is None:
@@ -46,7 +47,9 @@ def history_refresh(request):
     if form.is_valid():
         requests = []
         # Convert to list to handle mutations happening in parallel
-        for id, toolbar in list(DebugToolbar._store.items()):
+        tb = DebugToolbar(request, request)
+        list_obj = DebugToolbar.fetch_all(tb)
+        for id, toolbar in list(list_obj.items()):
             requests.append(
                 {
                     "id": id,

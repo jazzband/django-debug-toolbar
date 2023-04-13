@@ -87,7 +87,10 @@ class HistoryPanel(Panel):
         Fetch every store for the toolbar and include it in the template.
         """
         stores = {}
-        for id, toolbar in reversed(self.toolbar._store.items()):
+
+        list_obj = self.toolbar.fetch_all(self.toolbar)
+        for id, toolbar in reversed(list_obj.items()):
+
             stores[id] = {
                 "toolbar": toolbar,
                 "form": HistoryStoreForm(
