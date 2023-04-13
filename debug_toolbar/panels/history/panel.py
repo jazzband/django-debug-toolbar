@@ -90,7 +90,6 @@ class HistoryPanel(Panel):
 
         list_obj = self.toolbar.fetch_all(self.toolbar)
         for id, toolbar in reversed(list_obj.items()):
-
             stores[id] = {
                 "toolbar": toolbar,
                 "form": HistoryStoreForm(
