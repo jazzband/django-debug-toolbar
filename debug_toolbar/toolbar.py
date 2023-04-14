@@ -119,37 +119,28 @@ class DebugToolbar:
         from django.core.cache import cache
 
         data = {
-            "stats": self.stats,
-            "server_timing_stats": self.server_timing_stats,
+            'stats': self.stats,
+            'server_timing_stats': self.server_timing_stats,
         }
 
-        cache.set(f"{self.cache_key}{self.store_id}", data, self.config["CACHE_TIME"])
-
-        # self._store[self.store_id] = self
-        # for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
-        #     self._store.popitem(last=False)
+        cache.set(f'{self.cache_key}{self.store_id}', data, self.config['CACHE_TIME'])
 
     @classmethod
     def fetch(cls, tb, store_id):
         from django.core.cache import cache
 
-        data = cache.get(f"{tb.cache_key}{store_id}")
+        data = cache.get(f'{tb.cache_key}{store_id}')
         if data:
-            tb.stats = data.get("stats", {})
-            tb.server_timing_stats = data.get("server_timing_stats", {})
+            tb.stats = data.get('stats', {})
+            tb.server_timing_stats = data.get('server_timing_stats', {})
 
-            sql_plugin_data = tb.stats.get("SQLPanel")
+            sql_plugin_data = tb.stats.get('SQLPanel')
             if sql_plugin_data:
-                databases_data = sql_plugin_data.get("databases", [("default", {})])[0][
-                    1
-                ]
-                tb._panels.get("SQLPanel")._num_queries = databases_data.get(
-                    "num_queries"
-                )
-                tb._panels.get("SQLPanel")._sql_time = sql_plugin_data.get("sql_time")
+                databases_data = sql_plugin_data.get('databases', [('default', {})])[0][1]
+                tb._panels.get('SQLPanel')._num_queries = databases_data.get('num_queries')
+                tb._panels.get('SQLPanel')._sql_time = sql_plugin_data.get('sql_time')
         tb.store_id = store_id
         return tb
-        # return cls._store.get(store_id)
 
     @classmethod
     def fetch_all(cls, tb):
@@ -158,13 +149,13 @@ class DebugToolbar:
         from django.core.cache import cache
 
         data_dict = {}
-        key_list = cache.keys(f"{tb.cache_key}*")
+        key_list = cache.keys(f'{tb.cache_key}*')
         for key in key_list:
-            store_id = key.split("_")[1]
+            store_id = key.split('_')[1]
             data = cache.get(key)
             new_tb = copy.copy(tb)
-            new_tb.stats = data["stats"]
-            new_tb.server_timing_stats = data["server_timing_stats"]
+            new_tb.stats = data['stats']
+            new_tb.server_timing_stats = data['server_timing_stats']
             new_tb.store_id = store_id
             data_dict[store_id] = new_tb
 
