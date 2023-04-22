@@ -97,7 +97,7 @@ class DebugToolbar:
         """
         render_panels = self.config["RENDER_PANELS"]
         if render_panels is None:
-            render_panels = self.request.META["wsgi.multiprocess"]
+            render_panels = self.request.META.get("wsgi.multiprocess", False)
         return render_panels
 
     # Handle storing toolbars in memory and fetching them later on
