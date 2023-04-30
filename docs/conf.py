@@ -59,8 +59,11 @@ html_theme = "default"
 # html_static_path = ['_static']
 
 intersphinx_mapping = {
-    "https://docs.python.org/": None,
-    "https://docs.djangoproject.com/en/dev/": "https://docs.djangoproject.com/en/dev/_objects/",
+    "python": ("https://docs.python.org/", None),
+    "django": (
+        "https://docs.djangoproject.com/en/dev/",
+        "https://docs.djangoproject.com/en/dev/_objects/",
+    ),
 }
 
 # -- Options for Read the Docs -----------------------------------------------
