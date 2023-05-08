@@ -353,7 +353,7 @@ you preferred Roboto instead of the default list of fonts you could add a
     {% block css %}{{ block.super }}
     <style>
         :root {
-            --font-family-primary: 'Roboto', sans-serif;
+            --djdt-font-family-primary: 'Roboto', sans-serif;
         }
     </style>
     {% endblock %}
