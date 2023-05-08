@@ -30,6 +30,27 @@ WRAPPED_CACHE_METHODS = [
 ]
 
 
+def _monkey_patch_method(cache, name):
+    original_method = getattr(cache, name)
+
+    @functools.wraps(original_method)
+    def wrapper(*args, **kwargs):
+        panel = cache._djdt_panel
+        if panel is None:
+            return original_method(*args, **kwargs)
+        else:
+            return panel._record_call(cache, name, original_method, args, kwargs)
+
+    setattr(cache, name, wrapper)
+
+
+def _monkey_patch_cache(cache):
+    if not hasattr(cache, "_djdt_patched"):
+        for name in WRAPPED_CACHE_METHODS:
+            _monkey_patch_method(cache, name)
+        cache._djdt_patched = True
+
+
 class CachePanel(Panel):
     """
     Panel that displays the cache statistics.
@@ -72,7 +93,8 @@ class CachePanel(Panel):
                 cache = original_method(self, alias)
                 panel = cls.current_instance()
                 if panel is not None:
-                    panel._monkey_patch_cache(cache)
+                    _monkey_patch_cache(cache)
+                    cache._djdt_panel = panel
                 return cache
 
             CacheHandler.create_connection = wrapper
@@ -120,14 +142,17 @@ class CachePanel(Panel):
     def _record_call(self, cache, name, original_method, args, kwargs):
         # Some cache backends implement certain cache methods in terms of other cache
         # methods (e.g. get_or_set() in terms of get() and add()).  In order to only
-        # record the calls made directly by the user code, set the _djdt_recording flag
-        # here to cause the monkey patched cache methods to skip recording additional
-        # calls made during the course of this call.
-        cache._djdt_recording = True
-        t = time.time()
-        value = original_method(*args, **kwargs)
-        t = time.time() - t
-        cache._djdt_recording = False
+        # record the calls made directly by the user code, set the cache's _djdt_panel
+        # attribute to None before invoking the original method, which will cause the
+        # monkey-patched cache methods to skip recording additional calls made during
+        # the course of this call, and then reset it back afterward.
+        cache._djdt_panel = None
+        try:
+            t = time.time()
+            value = original_method(*args, **kwargs)
+            t = time.time() - t
+        finally:
+            cache._djdt_panel = self
 
         self._store_call_info(
             name=name,
@@ -140,40 +165,6 @@ class CachePanel(Panel):
             backend=cache,
         )
         return value
-
-    def _monkey_patch_method(self, cache, name):
-        original_method = getattr(cache, name)
-
-        @functools.wraps(original_method)
-        def wrapper(*args, **kwargs):
-            # If this call is being made as part of the implementation of another cache
-            # method, don't record it.
-            if cache._djdt_recording:
-                return original_method(*args, **kwargs)
-            else:
-                return self._record_call(cache, name, original_method, args, kwargs)
-
-        wrapper._djdt_wrapped = original_method
-        setattr(cache, name, wrapper)
-
-    def _monkey_patch_cache(self, cache):
-        if not hasattr(cache, "_djdt_patched"):
-            for name in WRAPPED_CACHE_METHODS:
-                self._monkey_patch_method(cache, name)
-            cache._djdt_patched = True
-            cache._djdt_recording = False
-
-    @staticmethod
-    def _unmonkey_patch_cache(cache):
-        if hasattr(cache, "_djdt_patched"):
-            for name in WRAPPED_CACHE_METHODS:
-                original_method = getattr(cache, name)._djdt_wrapped
-                if original_method.__func__ == getattr(cache.__class__, name):
-                    delattr(cache, name)
-                else:
-                    setattr(cache, name, original_method)
-            del cache._djdt_patched
-            del cache._djdt_recording
 
     # Implement the Panel API
 
@@ -204,7 +195,8 @@ class CachePanel(Panel):
         # the .ready() method will ensure that any new cache connections that get opened
         # during this request will also be monkey patched.
         for cache in caches.all(initialized_only=True):
-            self._monkey_patch_cache(cache)
+            _monkey_patch_cache(cache)
+            cache._djdt_panel = self
         # Mark this panel instance as the current one for the active thread/async task
         # context.  This will be used by the CacheHander.create_connection() monkey
         # patch.
@@ -214,7 +206,7 @@ class CachePanel(Panel):
         if hasattr(self._context_locals, "current_instance"):
             del self._context_locals.current_instance
         for cache in caches.all(initialized_only=True):
-            self._unmonkey_patch_cache(cache)
+            cache._djdt_panel = None
 
     def generate_stats(self, request, response):
         self.record_stats(
