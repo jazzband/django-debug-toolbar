@@ -338,3 +338,26 @@ Here's what a slightly customized toolbar configuration might look like::
         # Panel options
         'SQL_WARNING_THRESHOLD': 100,   # milliseconds
     }
+
+Theming support
+---------------
+The debug toolbar uses CSS variables to define fonts. This allows changing
+fonts without having to override many individual CSS rules. For example, if
+you preferred Roboto instead of the default list of fonts you could add a
+**debug_toolbar/base.html** template override to your project:
+
+.. code-block:: django
+
+    {% extends 'debug_toolbar/base.html' %}
+
+    {% block extrastyle %}{{ block.super }}
+    <style>
+        :root {
+            --font-family-primary: 'Roboto', sans-serif;
+        }
+    </style>
+    {% endblock %}
+
+The list of CSS variables are defined at
+`debug_toolbar/static/debug_toolbar/css/toolbar.css
+<https://github.com/jazzband/django-debug-toolbar/blob/main/debug_toolbar/static/debug_toolbar/css/toolbar.css>`_
