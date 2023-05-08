@@ -350,7 +350,7 @@ you preferred Roboto instead of the default list of fonts you could add a
 
     {% extends 'debug_toolbar/base.html' %}
 
-    {% block extrastyle %}{{ block.super }}
+    {% block css %}{{ block.super }}
     <style>
         :root {
             --font-family-primary: 'Roboto', sans-serif;
