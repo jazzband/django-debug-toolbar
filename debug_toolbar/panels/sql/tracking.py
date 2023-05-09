@@ -63,7 +63,6 @@ def wrap_cursor(connection, panel):
 
         connection.cursor = cursor
         connection.chunked_cursor = chunked_cursor
-        return cursor
 
 
 def unwrap_cursor(connection):
