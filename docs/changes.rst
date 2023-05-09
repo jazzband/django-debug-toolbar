@@ -9,6 +9,9 @@ Pending
   queries.
 * Added support for the new STORAGES setting in Django 4.2 for static files.
 * Added support for theme overrides.
+* Reworked the cache panel instrumentation code to no longer attempt to undo
+  monkey patching of cache methods, as that turned out to be fragile in the
+  presence of other code which also monkey patches those methods.
 
 4.0.0 (2023-04-03)
 ------------------
