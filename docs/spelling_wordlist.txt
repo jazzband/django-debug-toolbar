@@ -40,12 +40,14 @@ Pympler
 querysets
 refactoring
 resizing
+Roboto
 spellchecking
 spooler
 stacktrace
 stacktraces
 startup
 timeline
+theming
 tox
 Transifex
 unhashable
