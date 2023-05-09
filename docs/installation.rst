@@ -10,7 +10,9 @@ fully functional.
 1. Install the Package
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The recommended way to install the Debug Toolbar is via pip_::
+The recommended way to install the Debug Toolbar is via pip_:
+
+.. code-block:: console
 
     $ python -m pip install django-debug-toolbar
 
@@ -20,9 +22,11 @@ If you aren't familiar with pip, you may also obtain a copy of the
 .. _pip: https://pip.pypa.io/
 
 To test an upcoming release, you can install the in-development version
-instead with the following command::
+instead with the following command:
 
-     $ python -m pip install -e git+https://github.com/jazzband/django-debug-toolbar.git#egg=django-debug-toolbar
+.. code-block:: console
+
+    $ python -m pip install -e git+https://github.com/jazzband/django-debug-toolbar.git#egg=django-debug-toolbar
 
 If you're upgrading from a previous version, you should review the
 :doc:`change log <changes>` and look for specific upgrade instructions.
@@ -64,7 +68,9 @@ Second, ensure that your ``TEMPLATES`` setting contains a
 3. Install the App
 ^^^^^^^^^^^^^^^^^^
 
-Add ``"debug_toolbar"`` to your ``INSTALLED_APPS`` setting::
+Add ``"debug_toolbar"`` to your ``INSTALLED_APPS`` setting:
+
+.. code-block:: python
 
     INSTALLED_APPS = [
         # ...
@@ -83,7 +89,7 @@ Add django-debug-toolbar's URLs to your project's URLconf:
 
     urlpatterns = [
         # ...
-        path('__debug__/', include('debug_toolbar.urls')),
+        path("__debug__/", include("debug_toolbar.urls")),
     ]
 
 This example uses the ``__debug__`` prefix, but you can use any prefix that
