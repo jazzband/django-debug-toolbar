@@ -10,7 +10,7 @@ from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
 from debug_toolbar.panels.sql.forms import SQLSelectForm
-from debug_toolbar.panels.sql.tracking import unwrap_cursor, wrap_cursor
+from debug_toolbar.panels.sql.tracking import wrap_cursor
 from debug_toolbar.panels.sql.utils import contrasting_color_generator, reformat_sql
 from debug_toolbar.utils import render_stacktrace
 
@@ -190,11 +190,12 @@ class SQLPanel(Panel):
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.
         for connection in connections.all():
-            wrap_cursor(connection, self)
+            wrap_cursor(connection)
+            connection._djdt_logger = self
 
     def disable_instrumentation(self):
         for connection in connections.all():
-            unwrap_cursor(connection)
+            connection._djdt_logger = None
 
     def generate_stats(self, request, response):
         colors = contrasting_color_generator()

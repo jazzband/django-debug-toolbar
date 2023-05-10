@@ -3,6 +3,7 @@ import datetime
 import json
 from time import time
 
+import django.test.testcases
 from django.utils.encoding import force_str
 
 from debug_toolbar import settings as dt_settings
@@ -31,10 +32,15 @@ class SQLQueryTriggered(Exception):
     """Thrown when template panel triggers a query"""
 
 
-def wrap_cursor(connection, panel):
+def wrap_cursor(connection):
+    # If running a Django SimpleTestCase, which isn't allowed to access the database,
+    # don't perform any monkey patching.
+    if isinstance(connection.cursor, django.test.testcases._DatabaseFailure):
+        return
     if not hasattr(connection, "_djdt_cursor"):
         connection._djdt_cursor = connection.cursor
         connection._djdt_chunked_cursor = connection.chunked_cursor
+        connection._djdt_logger = None
 
         def cursor(*args, **kwargs):
             # Per the DB API cursor() does not accept any arguments. There's
@@ -43,46 +49,31 @@ def wrap_cursor(connection, panel):
             # See:
             # https://github.com/jazzband/django-debug-toolbar/pull/615
             # https://github.com/jazzband/django-debug-toolbar/pull/896
+            logger = connection._djdt_logger
+            cursor = connection._djdt_cursor(*args, **kwargs)
+            if logger is None:
+                return cursor
             if allow_sql.get():
                 wrapper = NormalCursorWrapper
             else:
                 wrapper = ExceptionCursorWrapper
-            return wrapper(connection._djdt_cursor(*args, **kwargs), connection, panel)
+            return wrapper(cursor, connection, logger)
 
         def chunked_cursor(*args, **kwargs):
             # prevent double wrapping
             # solves https://github.com/jazzband/django-debug-toolbar/issues/1239
+            logger = connection._djdt_logger
             cursor = connection._djdt_chunked_cursor(*args, **kwargs)
-            if not isinstance(cursor, BaseCursorWrapper):
+            if logger is not None and not isinstance(cursor, BaseCursorWrapper):
                 if allow_sql.get():
                     wrapper = NormalCursorWrapper
                 else:
                     wrapper = ExceptionCursorWrapper
-                return wrapper(cursor, connection, panel)
+                return wrapper(cursor, connection, logger)
             return cursor
 
         connection.cursor = cursor
         connection.chunked_cursor = chunked_cursor
-
-
-def unwrap_cursor(connection):
-    if hasattr(connection, "_djdt_cursor"):
-        # Sometimes the cursor()/chunked_cursor() methods of the DatabaseWrapper
-        # instance are already monkey patched before wrap_cursor() is called.  (In
-        # particular, Django's SimpleTestCase monkey patches those methods for any
-        # disallowed databases to raise an exception if they are accessed.)  Thus only
-        # delete our monkey patch if the method we saved is the same as the class
-        # method.  Otherwise, restore the prior monkey patch from our saved method.
-        if connection._djdt_cursor == connection.__class__.cursor:
-            del connection.cursor
-        else:
-            connection.cursor = connection._djdt_cursor
-        del connection._djdt_cursor
-        if connection._djdt_chunked_cursor == connection.__class__.chunked_cursor:
-            del connection.chunked_cursor
-        else:
-            connection.chunked_cursor = connection._djdt_chunked_cursor
-        del connection._djdt_chunked_cursor
 
 
 class BaseCursorWrapper:
