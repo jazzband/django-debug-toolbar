@@ -73,5 +73,5 @@ source = ["src", ".tox/*/site-packages"]
 
 [tool.coverage.report]
 # Update coverage badge link in README.rst when fail_under changes
-fail_under = 93
+fail_under = 94
 show_missing = true
