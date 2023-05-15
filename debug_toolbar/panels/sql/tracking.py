@@ -33,8 +33,14 @@ class SQLQueryTriggered(Exception):
 
 
 def wrap_cursor(connection):
-    # If running a Django SimpleTestCase, which isn't allowed to access the database,
-    # don't perform any monkey patching.
+    # When running a SimpleTestCase, Django monkey patches some DatabaseWrapper
+    # methods, including .cursor() and .chunked_cursor(), to raise an exception
+    # if the test code tries to access the database, and then undoes the monkey
+    # patching when the test case is finished.  If we monkey patch those methods
+    # also, Django's process of undoing those monkey patches will fail.  To
+    # avoid this failure, and because database access is not allowed during a
+    # SimpleTextCase anyway, skip applying our instrumentation monkey patches if
+    # we detect that Django has already monkey patched DatabaseWrapper.cursor().
     if isinstance(connection.cursor, django.test.testcases._DatabaseFailure):
         return
     if not hasattr(connection, "_djdt_cursor"):
