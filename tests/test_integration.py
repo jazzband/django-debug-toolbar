@@ -533,7 +533,8 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = bool(os.environ.get("CI"))
+        if os.environ.get("CI"):
+            options.add_argument("-headless")
         cls.selenium = webdriver.Firefox(options=options)
 
     @classmethod
