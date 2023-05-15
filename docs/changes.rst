@@ -12,6 +12,8 @@ Pending
 * Reworked the cache panel instrumentation code to no longer attempt to undo
   monkey patching of cache methods, as that turned out to be fragile in the
   presence of other code which also monkey patches those methods.
+* Update all timing code that used :py:func:`time.time()` to use
+  :py:func:`time.perf_counter()` instead.
 
 4.0.0 (2023-04-03)
 ------------------

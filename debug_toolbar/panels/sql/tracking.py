@@ -1,7 +1,7 @@
 import contextvars
 import datetime
 import json
-from time import time
+from time import perf_counter
 
 import django.test.testcases
 from django.db.backends.utils import CursorWrapper
@@ -162,11 +162,11 @@ class NormalCursorWrapper(DjDTCursorWrapper):
             conn = self.db.connection
             initial_conn_status = conn.info.transaction_status
 
-        start_time = time()
+        start_time = perf_counter()
         try:
             return method(sql, params)
         finally:
-            stop_time = time()
+            stop_time = perf_counter()
             duration = (stop_time - start_time) * 1000
             _params = ""
             try:

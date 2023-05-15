@@ -1,4 +1,4 @@
-import time
+from time import perf_counter
 
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -59,7 +59,7 @@ class TimerPanel(Panel):
         return scripts
 
     def process_request(self, request):
-        self._start_time = time.time()
+        self._start_time = perf_counter()
         if self.has_content:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
         return super().process_request(request)
@@ -67,7 +67,7 @@ class TimerPanel(Panel):
     def generate_stats(self, request, response):
         stats = {}
         if hasattr(self, "_start_time"):
-            stats["total_time"] = (time.time() - self._start_time) * 1000
+            stats["total_time"] = (perf_counter() - self._start_time) * 1000
         if hasattr(self, "_start_rusage"):
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
             stats["utime"] = 1000 * self._elapsed_ru("ru_utime")

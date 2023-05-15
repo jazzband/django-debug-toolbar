@@ -1,5 +1,5 @@
 import functools
-import time
+from time import perf_counter
 
 from asgiref.local import Local
 from django.conf import settings
@@ -148,9 +148,9 @@ class CachePanel(Panel):
         # the course of this call, and then reset it back afterward.
         cache._djdt_panel = None
         try:
-            t = time.time()
+            start_time = perf_counter()
             value = original_method(*args, **kwargs)
-            t = time.time() - t
+            t = perf_counter() - start_time
         finally:
             cache._djdt_panel = self
 
