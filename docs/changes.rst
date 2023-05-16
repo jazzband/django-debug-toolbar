@@ -14,6 +14,12 @@ Pending
   presence of other code which also monkey patches those methods.
 * Update all timing code that used :py:func:`time.time()` to use
   :py:func:`time.perf_counter()` instead.
+* Made the check on ``request.META["wsgi.multiprocess"]`` optional, but
+  defaults to forcing the toolbar to render the panels on each request. This
+  is because it's likely an ASGI application that's serving the responses
+  and that's more likely to be an incompatible setup. If you find that this
+  is incorrect for you in particular, you can use the ``RENDER_PANELS``
+  setting to forcibly control this logic.
 
 4.0.0 (2023-04-03)
 ------------------
