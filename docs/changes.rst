@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.1.0 (2023-05-15)
+------------------
+
 * Improved SQL statement formatting performance.  Additionally, fixed the
   indentation of ``CASE`` statements and stopped simplifying ``.count()``
   queries.
