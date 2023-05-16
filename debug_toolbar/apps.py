@@ -32,8 +32,26 @@ def check_template_config(config):
     included in the loaders.
     If custom loaders are specified, then APP_DIRS must be True.
     """
+
+    def flat_loaders(loaders):
+        """
+        Recursively flatten the settings list of template loaders.
+
+        Check for (loader, [child_loaders]) tuples.
+        Django's default cached loader uses this pattern.
+        """
+        for loader in loaders:
+            if isinstance(loader, tuple):
+                yield loader[0]
+                yield from flat_loaders(loader[1])
+            else:
+                yield loader
+
     app_dirs = config.get("APP_DIRS", False)
     loaders = config.get("OPTIONS", {}).get("loaders", None)
+    if loaders:
+        loaders = list(flat_loaders(loaders))
+
     # By default the app loader is included.
     has_app_loaders = (
         loaders is None or "django.template.loaders.app_directories.Loader" in loaders

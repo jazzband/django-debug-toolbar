@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Adjusted app directories system check to allow for nested template loaders.
+
 4.1.0 (2023-05-15)
 ------------------
 
