@@ -198,3 +198,32 @@ class ChecksTestCase(SimpleTestCase):
     )
     def test_check_w006_valid(self):
         self.assertEqual(run_checks(), [])
+
+    @override_settings(
+        TEMPLATES=[
+            {
+                "NAME": "use_loaders",
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "APP_DIRS": False,
+                "OPTIONS": {
+                    "context_processors": [
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.request",
+                        "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
+                    ],
+                    "loaders": [
+                        (
+                            "django.template.loaders.cached.Loader",
+                            [
+                                "django.template.loaders.filesystem.Loader",
+                                "django.template.loaders.app_directories.Loader",
+                            ],
+                        ),
+                    ],
+                },
+            },
+        ]
+    )
+    def test_check_w006_valid_nested_loaders(self):
+        self.assertEqual(run_checks(), [])
