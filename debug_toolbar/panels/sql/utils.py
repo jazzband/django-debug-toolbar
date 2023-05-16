@@ -132,7 +132,7 @@ def contrasting_color_generator():
     """
 
     def rgb_to_hex(rgb):
-        return "#%02x%02x%02x" % tuple(rgb)
+        return "#{:02x}{:02x}{:02x}".format(*tuple(rgb))
 
     triples = [
         (1, 0, 0),

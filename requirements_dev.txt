@@ -7,9 +7,7 @@ Jinja2
 # Testing
 
 coverage[toml]
-flake8
 html5lib
-isort
 selenium
 tox
 black
