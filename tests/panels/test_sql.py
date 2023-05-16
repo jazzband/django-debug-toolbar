@@ -21,7 +21,7 @@ except ImportError:
     psycopg = None
 
 from ..base import BaseMultiDBTestCase, BaseTestCase
-from ..models import PostgresJSON
+from ..models import Binary, PostgresJSON
 
 
 def sql_call(use_iterator=False):
@@ -149,7 +149,7 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 2)
 
         # non-ASCII bytes parameters
-        list(User.objects.filter(username="café".encode()))
+        list(Binary.objects.filter(field__in=["café".encode()]))
         self.assertEqual(len(self.panel._queries), 3)
 
         response = self.panel.process_request(self.request)
@@ -335,7 +335,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel only inserts content after generate_stats and
         not the process_request.
         """
-        list(User.objects.filter(username="café".encode()))
+        list(User.objects.filter(username="café"))
         response = self.panel.process_request(self.request)
         # ensure the panel does not have content yet.
         self.assertNotIn("café", self.panel.content)
@@ -351,7 +351,7 @@ class SQLPanelTestCase(BaseTestCase):
         Test that the panel inserts locals() content.
         """
         local_var = "<script>alert('test');</script>"  # noqa: F841
-        list(User.objects.filter(username="café".encode()))
+        list(User.objects.filter(username="café"))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertIn("local_var", self.panel.content)
@@ -365,7 +365,7 @@ class SQLPanelTestCase(BaseTestCase):
         """
         Test that the panel does not insert locals() content.
         """
-        list(User.objects.filter(username="café".encode()))
+        list(User.objects.filter(username="café"))
         response = self.panel.process_request(self.request)
         self.panel.generate_stats(self.request, response)
         self.assertNotIn("djdt-locals", self.panel.content)
