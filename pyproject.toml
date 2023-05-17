@@ -43,12 +43,6 @@ dependencies = [
 Download = "https://pypi.org/project/django-debug-toolbar/"
 Homepage = "https://github.com/jazzband/django-debug-toolbar"
 
-[tool.hatch.build.targets.sdist]
-include = [
-    "/debug_toolbar",
-    "/CONTRIBUTING.md",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["debug_toolbar"]
 
