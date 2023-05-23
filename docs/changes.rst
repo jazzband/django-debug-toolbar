@@ -154,7 +154,7 @@ Deprecated features
 3.3.0 (2022-04-28)
 ------------------
 
-* Track calls to :py:meth:`django.core.caches.cache.get_or_set`.
+* Track calls to :py:meth:`django.core.cache.cache.get_or_set`.
 * Removed support for Django < 3.2.
 * Updated check ``W006`` to look for
   ``django.template.loaders.app_directories.Loader``.
@@ -176,7 +176,7 @@ Deprecated features
 
 * Changed cache monkey-patching for Django 3.2+ to iterate over existing
   caches and patch them individually rather than attempting to patch
-  ``django.core.caches`` as a whole. The ``middleware.cache`` is still
+  ``django.core.cache`` as a whole. The ``middleware.cache`` is still
   being patched as a whole in order to attempt to catch any cache
   usages before ``enable_instrumentation`` is called.
 * Add check ``W006`` to warn that the toolbar is incompatible with
@@ -298,7 +298,7 @@ Deprecated features
   ``localStorage``.
 * Updated the code to avoid a few deprecation warnings and resource warnings.
 * Started loading JavaScript as ES6 modules.
-* Added support for :meth:`cache.touch() <django.core.caches.cache.touch>` when
+* Added support for :meth:`cache.touch() <django.core.cache.cache.touch>` when
   using django-debug-toolbar.
 * Eliminated more inline CSS.
 * Updated ``tox.ini`` and ``Makefile`` to use isort>=5.
