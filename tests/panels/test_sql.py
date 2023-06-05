@@ -24,7 +24,7 @@ from ..base import BaseMultiDBTestCase, BaseTestCase
 from ..models import Binary, PostgresJSON
 
 
-def sql_call(use_iterator=False):
+def sql_call(*, use_iterator=False):
     qs = User.objects.all()
     if use_iterator:
         qs = qs.iterator()
@@ -105,7 +105,7 @@ class SQLPanelTestCase(BaseTestCase):
         await sync_to_async(sql_call)()
 
         async def task():
-            sql_tracking.allow_sql.set(False)
+            sql_tracking.allow_sql.set(False)  # noqa: FBT003
             # By disabling sql_tracking.allow_sql, we are indicating that any
             # future SQL queries should be stopped. If SQL query occurs,
             # it raises an exception.

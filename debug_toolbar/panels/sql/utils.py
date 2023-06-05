@@ -86,7 +86,7 @@ class EscapedStringSerializer:
         return "".join(escaped_value(token) for token in stmt.flatten())
 
 
-def reformat_sql(sql, with_toggle=False):
+def reformat_sql(sql, *, with_toggle=False):
     formatted = parse_sql(sql)
     if not with_toggle:
         return formatted

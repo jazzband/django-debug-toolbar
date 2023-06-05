@@ -81,7 +81,7 @@ extend-select = [
   # flake8-2020
   # "YTT",
   # flake8-boolean-trap
-  # "FBT",
+  "FBT",
   # flake8-bugbear
   "B",
   # flake8-builtins

@@ -117,7 +117,7 @@ class TemplatesPanel(Panel):
                                 value.model._meta.label,
                             )
                         else:
-                            token = allow_sql.set(False)
+                            token = allow_sql.set(False)  # noqa: FBT003
                             try:
                                 saferepr(value)  # this MAY trigger a db query
                             except SQLQueryTriggered:
