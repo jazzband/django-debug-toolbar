@@ -93,7 +93,7 @@ extend-select = [
   # flake8-logging-format
   "G",
   # flake8-pie
-  # "PIE",
+  "PIE",
   # flake8-simplify
   # "SIM",
   # flake8-gettext

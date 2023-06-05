@@ -124,7 +124,6 @@ class Panel:
         be done unconditionally for the panel regardless of whether it is
         enabled for a particular request.  It should be idempotent.
         """
-        pass
 
     # URLs for panel-specific views
 
