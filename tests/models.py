@@ -11,9 +11,15 @@ class NonAsciiRepr:
 class Binary(models.Model):
     field = models.BinaryField()
 
+    def __str__(self):
+        return ""
+
 
 class PostgresJSON(models.Model):
     field = JSONField()
+
+    def __str__(self):
+        return ""
 
 
 if settings.USE_GIS:
@@ -21,3 +27,6 @@ if settings.USE_GIS:
 
     class Location(gismodels.Model):
         point = gismodels.PointField()
+
+        def __str__(self):
+            return ""

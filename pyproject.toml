@@ -66,24 +66,65 @@ source = ["src", ".tox/*/site-packages"]
 fail_under = 94
 show_missing = true
 
+[tool.ruff]
+extend-select = [
+  # pyflakes, pycodestyle
+  "F", "E", "W",
+  # mmcabe
+  # "C90",
+  # isort
+  "I",
+  # pep8-naming
+  # "N",
+  # pyupgrade
+  "UP",
+  # flake8-2020
+  # "YTT",
+  # flake8-boolean-trap
+  # "FBT",
+  # flake8-bugbear
+  "B",
+  # flake8-builtins
+  # "A",
+  # flake8-comprehensions
+  "C4",
+  # flake8-django
+  "DJ",
+  # flake8-logging-format
+  "G",
+  # flake8-pie
+  # "PIE",
+  # flake8-simplify
+  # "SIM",
+  # flake8-gettext
+  "INT",
+  # pygrep-hooks
+  "PGH",
+  # pylint
+  # "PL",
+  # unused noqa
+  "RUF100",
+]
+extend-ignore = [
+  # Allow zip() without strict=
+  "B905",
+  # No line length errors
+  "E501",
+]
+fix = true
+show-fixes = true
+target-version = "py38"
+
 [tool.ruff.isort]
 combine-as-imports = true
 
-[tool.ruff]
-select = [
-    # flake8/Pyflakes
-    "F",
-    # flake8/pycodestyle
-    "E",
-    "W",
-    # isort
-    "I",
-    # pyupgrade
-    "UP",
-    # pygrep-hooks
-    "PGH",
+[tool.ruff.mccabe]
+max-complexity = 15
+
+[tool.ruff.per-file-ignores]
+"*/migrat*/*" = [
+  # Allow using PascalCase model names in migrations
+  "N806",
+  # Ignore the fact that migration files are invalid module names
+  "N999",
 ]
-ignore = [
-    "E501",
-]
-target-version = "py38"

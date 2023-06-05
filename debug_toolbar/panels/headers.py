@@ -33,7 +33,7 @@ class HeadersPanel(Panel):
     template = "debug_toolbar/panels/headers.html"
 
     def process_request(self, request):
-        wsgi_env = list(sorted(request.META.items()))
+        wsgi_env = sorted(request.META.items())
         self.request_headers = {
             unmangle(k): v for (k, v) in wsgi_env if is_http_header(k)
         }

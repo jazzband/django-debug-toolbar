@@ -83,6 +83,7 @@ def get_panels():
         warnings.warn(
             f"Please remove {logging_panel} from your DEBUG_TOOLBAR_PANELS setting.",
             DeprecationWarning,
+            stacklevel=1,
         )
     return PANELS
 

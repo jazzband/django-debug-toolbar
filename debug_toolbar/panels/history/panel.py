@@ -22,7 +22,7 @@ class HistoryPanel(Panel):
     def get_headers(self, request):
         headers = super().get_headers(request)
         observe_request = self.toolbar.get_observe_request()
-        store_id = getattr(self.toolbar, "store_id")
+        store_id = self.toolbar.store_id
         if store_id and observe_request(request):
             headers["djdt-store-id"] = store_id
         return headers

@@ -90,7 +90,7 @@ def _duplicate_query_key(query):
 
 def _process_query_groups(query_groups, databases, colors, name):
     counts = defaultdict(int)
-    for (alias, key), query_group in query_groups.items():
+    for (alias, _key), query_group in query_groups.items():
         count = len(query_group)
         # Queries are similar / duplicates only if there are at least 2 of them.
         if count > 1:

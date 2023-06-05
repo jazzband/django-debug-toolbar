@@ -86,7 +86,7 @@ class DebugToolbar:
                     "The debug toolbar requires the staticfiles contrib app. "
                     "Add 'django.contrib.staticfiles' to INSTALLED_APPS and "
                     "define STATIC_URL in your settings."
-                )
+                ) from None
             else:
                 raise
 

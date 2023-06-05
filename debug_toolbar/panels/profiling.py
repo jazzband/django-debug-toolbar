@@ -13,7 +13,7 @@ from debug_toolbar.panels import Panel
 
 class FunctionCall:
     def __init__(
-        self, statobj, func, depth=0, stats=None, id=0, parent_ids=[], hsv=(0, 0.5, 1)
+        self, statobj, func, depth=0, stats=None, id=0, parent_ids=None, hsv=(0, 0.5, 1)
     ):
         self.statobj = statobj
         self.func = func
@@ -23,7 +23,7 @@ class FunctionCall:
             self.stats = statobj.stats[func][:4]
         self.depth = depth
         self.id = id
-        self.parent_ids = parent_ids
+        self.parent_ids = parent_ids or []
         self.hsv = hsv
 
     def parent_classes(self):

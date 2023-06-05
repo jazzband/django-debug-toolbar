@@ -37,8 +37,8 @@ class SQLSelectForm(forms.Form):
 
         try:
             return json.loads(value)
-        except ValueError:
-            raise ValidationError("Is not valid JSON")
+        except ValueError as exc:
+            raise ValidationError("Is not valid JSON") from exc
 
     def clean_alias(self):
         value = self.cleaned_data["alias"]

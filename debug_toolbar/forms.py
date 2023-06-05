@@ -38,8 +38,8 @@ class SignedDataForm(forms.Form):
                 signing.Signer(salt=self.salt).unsign(self.cleaned_data["signed"])
             )
             return verified
-        except signing.BadSignature:
-            raise ValidationError("Bad signature")
+        except signing.BadSignature as exc:
+            raise ValidationError("Bad signature") from exc
 
     def verified_data(self):
         return self.is_valid() and self.cleaned_data["signed"]
