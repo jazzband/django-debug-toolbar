@@ -421,7 +421,9 @@ common methods available.
     :param value: The value to be set.
 
     :param options: The options for the value to be set. It should contain the
-        properties ``expires`` and ``path``.
+        properties ``expires`` and ``path``. The properties ``domain``,
+        ``secure`` and ``samesite`` are also supported. ``samesite`` defaults
+        to ``lax`` if not provided.
 
 .. js:function:: djdt.hide_toolbar
 
