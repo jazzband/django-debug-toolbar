@@ -88,10 +88,7 @@ class FunctionCall:
         for func, stats in self.statobj.all_callees[self.func].items():
             i += 1
             h1 = h + (i / count) / (self.depth + 1)
-            if stats[3] == 0:
-                s1 = 0
-            else:
-                s1 = s * (stats[3] / self.stats[3])
+            s1 = 0 if stats[3] == 0 else s * (stats[3] / self.stats[3])
             yield FunctionCall(
                 self.statobj,
                 func,

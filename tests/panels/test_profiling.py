@@ -88,7 +88,6 @@ class ProfilingPanelIntegrationTestCase(IntegrationTestCase):
         self.assertContains(response, "Profiling")
         self.assertEqual(User.objects.count(), 1)
 
-        with self.assertRaises(IntegrityError):
-            with transaction.atomic():
-                response = self.client.get("/new_user/")
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            response = self.client.get("/new_user/")
         self.assertEqual(User.objects.count(), 1)

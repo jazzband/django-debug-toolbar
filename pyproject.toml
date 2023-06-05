@@ -95,7 +95,7 @@ extend-select = [
   # flake8-pie
   "PIE",
   # flake8-simplify
-  # "SIM",
+  "SIM",
   # flake8-gettext
   "INT",
   # pygrep-hooks

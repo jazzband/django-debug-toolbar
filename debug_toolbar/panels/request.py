@@ -64,7 +64,5 @@ class RequestPanel(Panel):
                     (k, request.session.get(k)) for k in sorted(request.session.keys())
                 ]
             except TypeError:
-                session_list = [
-                    (k, request.session.get(k)) for k in request.session.keys()
-                ]
+                session_list = [(k, request.session.get(k)) for k in request.session]
             self.record_stats({"session": {"list": session_list}})

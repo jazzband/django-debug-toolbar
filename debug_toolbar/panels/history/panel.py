@@ -1,3 +1,4 @@
+import contextlib
 import json
 
 from django.http.request import RawPostDataException
@@ -62,10 +63,9 @@ class HistoryPanel(Panel):
                 and request.body
                 and request.headers.get("content-type") == "application/json"
             ):
-                try:
+                with contextlib.suppress(ValueError):
                     data = json.loads(request.body)
-                except ValueError:
-                    pass
+
         except RawPostDataException:
             # It is not guaranteed that we may read the request data (again).
             data = None

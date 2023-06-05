@@ -1,3 +1,4 @@
+import contextlib
 import contextvars
 import datetime
 import json
@@ -59,10 +60,7 @@ def wrap_cursor(connection):
             cursor = connection._djdt_cursor(*args, **kwargs)
             if logger is None:
                 return cursor
-            if allow_sql.get():
-                wrapper = NormalCursorWrapper
-            else:
-                wrapper = ExceptionCursorWrapper
+            wrapper = NormalCursorWrapper if allow_sql.get() else ExceptionCursorWrapper
             return wrapper(cursor.cursor, connection, logger)
 
         def chunked_cursor(*args, **kwargs):
@@ -174,10 +172,9 @@ class NormalCursorWrapper(DjDTCursorWrapper):
             stop_time = perf_counter()
             duration = (stop_time - start_time) * 1000
             _params = ""
-            try:
+            with contextlib.suppress(TypeError):
+                # object JSON serializable?
                 _params = json.dumps(self._decode(params))
-            except TypeError:
-                pass  # object not JSON serializable
             template_info = get_template_info()
 
             # Sql might be an object (such as psycopg Composed).
