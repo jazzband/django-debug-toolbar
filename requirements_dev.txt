@@ -16,6 +16,7 @@ black
 
 Sphinx
 sphinxcontrib-spelling
+sphinx-rtd-theme>1
 
 # Other tools
 
