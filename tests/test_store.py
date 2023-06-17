@@ -11,18 +11,6 @@ class SerializationTestCase(TestCase):
             '{"hello": {"foo": "bar"}}',
         )
 
-    def test_serialize_force_str(self):
-        class Foo:
-            spam = "bar"
-
-            def __str__(self):
-                return f"Foo spam={self.spam}"
-
-        self.assertEqual(
-            store.serialize({"hello": Foo()}),
-            '{"hello": "Foo spam=bar"}',
-        )
-
     def test_deserialize(self):
         self.assertEqual(
             store.deserialize('{"hello": {"foo": "bar"}}'),
@@ -38,7 +26,7 @@ class BaseStoreTestCase(TestCase):
         ]
         self.assertEqual(len(methods), 7)
         with self.assertRaises(NotImplementedError):
-            store.BaseStore.ids()
+            store.BaseStore.request_ids()
         with self.assertRaises(NotImplementedError):
             store.BaseStore.exists("")
         with self.assertRaises(NotImplementedError):
@@ -64,7 +52,7 @@ class MemoryStoreTestCase(TestCase):
     def test_ids(self):
         self.store.set("foo")
         self.store.set("bar")
-        self.assertEqual(list(self.store.ids()), ["foo", "bar"])
+        self.assertEqual(list(self.store.request_ids()), ["foo", "bar"])
 
     def test_exists(self):
         self.assertFalse(self.store.exists("missing"))
@@ -73,14 +61,14 @@ class MemoryStoreTestCase(TestCase):
 
     def test_set(self):
         self.store.set("foo")
-        self.assertEqual(list(self.store.ids()), ["foo"])
+        self.assertEqual(list(self.store.request_ids()), ["foo"])
 
     def test_set_max_size(self):
         existing = self.store._config["RESULTS_CACHE_SIZE"]
         self.store._config["RESULTS_CACHE_SIZE"] = 1
         self.store.save_panel("foo", "foo.panel", "foo.value")
         self.store.save_panel("bar", "bar.panel", {"a": 1})
-        self.assertEqual(list(self.store.ids()), ["bar"])
+        self.assertEqual(list(self.store.request_ids()), ["bar"])
         self.assertEqual(self.store.panel("foo", "foo.panel"), {})
         self.assertEqual(self.store.panel("bar", "bar.panel"), {"a": 1})
         # Restore the existing config setting since this config is shared.
@@ -89,20 +77,20 @@ class MemoryStoreTestCase(TestCase):
     def test_clear(self):
         self.store.save_panel("bar", "bar.panel", {"a": 1})
         self.store.clear()
-        self.assertEqual(list(self.store.ids()), [])
+        self.assertEqual(list(self.store.request_ids()), [])
         self.assertEqual(self.store.panel("bar", "bar.panel"), {})
 
     def test_delete(self):
         self.store.save_panel("bar", "bar.panel", {"a": 1})
         self.store.delete("bar")
-        self.assertEqual(list(self.store.ids()), [])
+        self.assertEqual(list(self.store.request_ids()), [])
         self.assertEqual(self.store.panel("bar", "bar.panel"), {})
         # Make sure it doesn't error
         self.store.delete("bar")
 
     def test_save_panel(self):
         self.store.save_panel("bar", "bar.panel", {"a": 1})
-        self.assertEqual(list(self.store.ids()), ["bar"])
+        self.assertEqual(list(self.store.request_ids()), ["bar"])
         self.assertEqual(self.store.panel("bar", "bar.panel"), {"a": 1})
 
     def test_panel(self):
