@@ -20,7 +20,7 @@ jobs:
       mariadb:
         image: mariadb
         env:
-          MYSQL_ROOT_PASSWORD: debug_toolbar
+          MARIADB_ROOT_PASSWORD: debug_toolbar
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
