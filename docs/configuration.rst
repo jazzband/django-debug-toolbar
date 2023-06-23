@@ -150,6 +150,15 @@ Toolbar options
   the request doesn't originate from the toolbar itself, EG that
   ``is_toolbar_request`` is false for a given request.
 
+.. _TOOLBAR_STORE_CLASS:
+
+* ``TOOLBAR_STORE_CLASS``
+
+  Default: ``"debug_toolbar.store.MemoryStore"``
+
+  The path to the class to be used for storing the toolbar's data per request.
+
+
 .. _TOOLBAR_LANGUAGE:
 
 * ``TOOLBAR_LANGUAGE``
