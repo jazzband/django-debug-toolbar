@@ -11,6 +11,8 @@ Pending
   ``djdt.cookie.set``.
 * Converted ``StaticFilesPanel`` to no longer use a thread collector. Instead,
   it collects the used static files in a ``ContextVar``.
+* Added check ``debug_toolbar.W007`` to warn when JavaScript files are
+  resolving to the wrong content type.
 
 4.1.0 (2023-05-15)
 ------------------

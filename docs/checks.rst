@@ -18,3 +18,6 @@ Django Debug Toolbar setup and configuration:
   configuration needs to have
   ``django.template.loaders.app_directories.Loader`` included in
   ``["OPTIONS"]["loaders"]`` or ``APP_DIRS`` set to ``True``.
+* **debug_toolbar.W007**: JavaScript files are resolving to the wrong content
+  type. Refer to :external:ref:`Django's explanation of
+  mimetypes on Windows <staticfiles-development-view>`.

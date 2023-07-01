@@ -1,4 +1,5 @@
 import inspect
+import mimetypes
 
 from django.apps import AppConfig
 from django.conf import settings
@@ -174,3 +175,37 @@ def check_panels(app_configs, **kwargs):
             )
         )
     return errors
+
+
+@register()
+def js_mimetype_check(app_configs, **kwargs):
+    """
+    Check that JavaScript files are resolving to the correct content type.
+    """
+    javascript_types = {
+        # Macs
+        "application/javascript",
+        # Windows
+        "text/javascript",
+    }
+    check_failed = not set(mimetypes.guess_type("toolbar.js")).intersection(
+        javascript_types
+    )
+    if check_failed:
+        return [
+            Warning(
+                "JavaScript files are resolving to the wrong content type.",
+                hint="The Django Debug Toolbar may not load properly while mimetypes are misconfigured. "
+                "See the Django documentation for an explanation of why this occurs.\n"
+                "https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/#static-file-development-view\n"
+                "\n"
+                "This typically occurs on Windows machines. The suggested solution is to modify "
+                "HKEY_CLASSES_ROOT in the registry.\n"
+                "\n"
+                "; Specify ContentType for JavaScript files\n"
+                "[HKEY_CLASSES_ROOT\\.js]\n"
+                '"Content Type"="text/javascript"',
+                id="debug_toolbar.W007",
+            )
+        ]
+    return []
