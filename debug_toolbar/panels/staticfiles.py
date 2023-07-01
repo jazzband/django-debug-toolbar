@@ -1,3 +1,5 @@
+import contextlib
+from contextvars import ContextVar
 from os.path import join, normpath
 
 from django.conf import settings
@@ -7,12 +9,6 @@ from django.utils.functional import LazyObject
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from debug_toolbar import panels
-from debug_toolbar.utils import ThreadCollector
-
-try:
-    import threading
-except ImportError:
-    threading = None
 
 
 class StaticFile:
@@ -33,15 +29,8 @@ class StaticFile:
         return storage.staticfiles_storage.url(self.path)
 
 
-class FileCollector(ThreadCollector):
-    def collect(self, path, thread=None):
-        # handle the case of {% static "admin/" %}
-        if path.endswith("/"):
-            return
-        super().collect(StaticFile(path), thread)
-
-
-collector = FileCollector()
+# This will collect the StaticFile instances across threads.
+used_static_files = ContextVar("djdt_static_used_static_files")
 
 
 class DebugConfiguredStorage(LazyObject):
@@ -65,15 +54,16 @@ class DebugConfiguredStorage(LazyObject):
             configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
 
         class DebugStaticFilesStorage(configured_storage_cls):
-            def __init__(self, collector, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                self.collector = collector
-
             def url(self, path):
-                self.collector.collect(path)
+                with contextlib.suppress(LookupError):
+                    # For LookupError:
+                    # The ContextVar wasn't set yet. Since the toolbar wasn't properly
+                    # configured to handle this request, we don't need to capture
+                    # the static file.
+                    used_static_files.get().append(StaticFile(path))
                 return super().url(path)
 
-        self._wrapped = DebugStaticFilesStorage(collector)
+        self._wrapped = DebugStaticFilesStorage()
 
 
 _original_storage = storage.staticfiles_storage
@@ -97,7 +87,7 @@ class StaticFilesPanel(panels.Panel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_found = 0
-        self._paths = {}
+        self.used_paths = []
 
     def enable_instrumentation(self):
         storage.staticfiles_storage = DebugConfiguredStorage()
@@ -120,18 +110,22 @@ class StaticFilesPanel(panels.Panel):
         ) % {"num_used": num_used}
 
     def process_request(self, request):
-        collector.clear_collection()
-        return super().process_request(request)
+        reset_token = used_static_files.set([])
+        response = super().process_request(request)
+        # Make a copy of the used paths so that when the
+        # ContextVar is reset, our panel still has the data.
+        self.used_paths = used_static_files.get().copy()
+        # Reset the ContextVar to be empty again, removing the reference
+        # to the list of used files.
+        used_static_files.reset(reset_token)
+        return response
 
     def generate_stats(self, request, response):
-        used_paths = collector.get_collection()
-        self._paths[threading.current_thread()] = used_paths
-
         self.record_stats(
             {
                 "num_found": self.num_found,
-                "num_used": len(used_paths),
-                "staticfiles": used_paths,
+                "num_used": len(self.used_paths),
+                "staticfiles": self.used_paths,
                 "staticfiles_apps": self.get_staticfiles_apps(),
                 "staticfiles_dirs": self.get_staticfiles_dirs(),
                 "staticfiles_finders": self.get_staticfiles_finders(),

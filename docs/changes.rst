@@ -9,6 +9,8 @@ Pending
   <https://beta.ruff.rs/>`__.
 * Converted cookie keys to lowercase. Fixed the ``samesite`` argument to
   ``djdt.cookie.set``.
+* Converted ``StaticFilesPanel`` to no longer use a thread collector. Instead,
+  it collects the used static files in a ``ContextVar``.
 
 4.1.0 (2023-05-15)
 ------------------
