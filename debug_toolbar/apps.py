@@ -182,12 +182,8 @@ def js_mimetype_check(app_configs, **kwargs):
     """
     Check that JavaScript files are resolving to the correct content type.
     """
-    javascript_types = {
-        # Macs
-        "application/javascript",
-        # Windows
-        "text/javascript",
-    }
+    # Those types are fine. Different OSes return different types.
+    javascript_types = {"application/javascript", "text/javascript"}
     check_failed = not set(mimetypes.guess_type("toolbar.js")).intersection(
         javascript_types
     )
