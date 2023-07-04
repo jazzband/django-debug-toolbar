@@ -249,11 +249,11 @@ class ChecksTestCase(SimpleTestCase):
                     "https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/#static-file-development-view\n"
                     "\n"
                     "This typically occurs on Windows machines. The suggested solution is to modify "
-                    "HKEY_CLASSES_ROOT in the registry.\n"
+                    "HKEY_CLASSES_ROOT in the registry to specify the content type for JavaScript "
+                    "files.\n"
                     "\n"
-                    "; Specify ContentType for JavaScript files\n"
                     "[HKEY_CLASSES_ROOT\\.js]\n"
-                    '"Content Type"="text/javascript"',
+                    '"Content Type"="application/javascript"',
                     id="debug_toolbar.W007",
                 )
             ],

@@ -182,7 +182,8 @@ def js_mimetype_check(app_configs, **kwargs):
     """
     Check that JavaScript files are resolving to the correct content type.
     """
-    # Those types are fine. Different OSes return different types.
+    # Ideally application/javascript is returned, but text/javascript is
+    # acceptable.
     javascript_types = {"application/javascript", "text/javascript"}
     check_failed = not set(mimetypes.guess_type("toolbar.js")).intersection(
         javascript_types
@@ -196,11 +197,11 @@ def js_mimetype_check(app_configs, **kwargs):
                 "https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/#static-file-development-view\n"
                 "\n"
                 "This typically occurs on Windows machines. The suggested solution is to modify "
-                "HKEY_CLASSES_ROOT in the registry.\n"
+                "HKEY_CLASSES_ROOT in the registry to specify the content type for JavaScript "
+                "files.\n"
                 "\n"
-                "; Specify ContentType for JavaScript files\n"
                 "[HKEY_CLASSES_ROOT\\.js]\n"
-                '"Content Type"="text/javascript"',
+                '"Content Type"="application/javascript"',
                 id="debug_toolbar.W007",
             )
         ]
