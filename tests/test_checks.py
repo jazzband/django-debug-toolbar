@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest.mock import patch
 
 import django
 from django.conf import settings
@@ -227,3 +228,33 @@ class ChecksTestCase(SimpleTestCase):
     )
     def test_check_w006_valid_nested_loaders(self):
         self.assertEqual(run_checks(), [])
+
+    @patch("debug_toolbar.apps.mimetypes.guess_type")
+    def test_check_w007_valid(self, mocked_guess_type):
+        mocked_guess_type.return_value = ("text/javascript", None)
+        self.assertEqual(run_checks(), [])
+        mocked_guess_type.return_value = ("application/javascript", None)
+        self.assertEqual(run_checks(), [])
+
+    @patch("debug_toolbar.apps.mimetypes.guess_type")
+    def test_check_w007_invalid(self, mocked_guess_type):
+        mocked_guess_type.return_value = ("text/plain", None)
+        self.assertEqual(
+            run_checks(),
+            [
+                Warning(
+                    "JavaScript files are resolving to the wrong content type.",
+                    hint="The Django Debug Toolbar may not load properly while mimetypes are misconfigured. "
+                    "See the Django documentation for an explanation of why this occurs.\n"
+                    "https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/#static-file-development-view\n"
+                    "\n"
+                    "This typically occurs on Windows machines. The suggested solution is to modify "
+                    "HKEY_CLASSES_ROOT in the registry to specify the content type for JavaScript "
+                    "files.\n"
+                    "\n"
+                    "[HKEY_CLASSES_ROOT\\.js]\n"
+                    '"Content Type"="application/javascript"',
+                    id="debug_toolbar.W007",
+                )
+            ],
+        )
