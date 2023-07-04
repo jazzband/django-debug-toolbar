@@ -390,9 +390,14 @@ There is no public CSS API at this time.
 
     .. automethod:: debug_toolbar.panels.Panel.generate_stats
 
+    .. automethod:: debug_toolbar.panels.Panel.deserialize_stats
+
+    .. automethod:: debug_toolbar.panels.Panel.serialize_stats
+
     .. automethod:: debug_toolbar.panels.Panel.get_headers
 
     .. automethod:: debug_toolbar.panels.Panel.run_checks
+
 
 .. _javascript-api:
 

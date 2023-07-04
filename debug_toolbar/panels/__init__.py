@@ -175,6 +175,28 @@ class Panel:
         """
         return self.toolbar.stats.get(self.panel_id, {})
 
+    def deserialize_stats(self, data):
+        """
+        Deserialize stats coming from the store.
+
+        This is responsible for converting stored stats back into python
+        types. For example, converting a value back into a ``datetime``
+        instance.
+        """
+        return data
+
+    def serialize_stats(self, stats):
+        """
+        Serialize stats for the store.
+
+        Must be called after :meth:`record_stats`.
+
+        This is responsible for converting stats into types that can be
+        stored. For example, converting a ``datetime`` instance into a
+        string.
+        """
+        return stats
+
     def record_server_timing(self, key, title, value):
         """
         Store data gathered by the panel. ``stats`` is a :class:`dict`.
