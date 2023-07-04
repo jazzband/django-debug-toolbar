@@ -37,6 +37,7 @@ CONFIG_DEFAULTS = {
     "PROFILER_CAPTURE_PROJECT_CODE": True,
     "PROFILER_MAX_DEPTH": 10,
     "PROFILER_THRESHOLD_RATIO": 8,
+    "SERIALIZATION_WARNINGS": True,
     "SHOW_TEMPLATE_CONTEXT": True,
     "SKIP_TEMPLATE_PREFIXES": ("django/forms/widgets/", "admin/widgets/"),
     "SQL_WARNING_THRESHOLD": 500,  # milliseconds

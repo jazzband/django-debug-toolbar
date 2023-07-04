@@ -1,5 +1,6 @@
 import contextlib
 import json
+import logging
 from collections import defaultdict, deque
 from typing import Any, Dict, Iterable
 
@@ -7,6 +8,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
+
+logger = logging.getLogger(__name__)
 
 
 def serialize(data: Any) -> str:
@@ -103,7 +106,14 @@ class MemoryStore(BaseStore):
     def save_panel(cls, request_id: str, panel_id: str, data: Any = None):
         """Save the panel data for the given request_id"""
         cls.set(request_id)
-        cls._request_store[request_id][panel_id] = serialize(data)
+        try:
+            cls._request_store[request_id][panel_id] = serialize(data)
+        except TypeError:
+            if dt_settings.get_config()["SERIALIZATION_WARNINGS"]:
+                log = "Panel (%s) failed to serialized data %s properly."
+                logger.warning(log % (panel_id, data))
+            else:
+                raise
 
     @classmethod
     def panel(cls, request_id: str, panel_id: str) -> Any:
