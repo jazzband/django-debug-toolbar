@@ -13,6 +13,8 @@ Pending
   it collects the used static files in a ``ContextVar``.
 * Added check ``debug_toolbar.W007`` to warn when JavaScript files are
   resolving to the wrong content type.
+* Fixed SQL statement recording under PostgreSQL for queries encoded as byte
+  strings.
 
 4.1.0 (2023-05-15)
 ------------------

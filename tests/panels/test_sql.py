@@ -158,6 +158,17 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the panel renders correctly
         self.assertIn("café", self.panel.content)
 
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
+    def test_bytes_query(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        with connection.cursor() as cursor:
+            cursor.execute(b"SELECT 1")
+
+        self.assertEqual(len(self.panel._queries), 1)
+
     def test_param_conversion(self):
         self.assertEqual(len(self.panel._queries), 0)
 
