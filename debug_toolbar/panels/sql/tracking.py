@@ -180,7 +180,10 @@ class NormalCursorWrapper(DjDTCursorWrapper):
             # Sql might be an object (such as psycopg Composed).
             # For logging purposes, make sure it's str.
             if vendor == "postgresql" and not isinstance(sql, str):
-                sql = sql.as_string(conn)
+                if isinstance(sql, bytes):
+                    sql = sql.decode("utf-8")
+                else:
+                    sql = sql.as_string(conn)
             else:
                 sql = str(sql)
 
