@@ -31,20 +31,20 @@ repos:
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.44.0
+    rev: v8.45.0
     hooks:
     -   id: eslint
         files: \.js?$
         types: [file]
         args:
         - --fix
--   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.0.277'
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.0.278'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
 -   repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
     -   id: black
         language_version: python3
