@@ -18,9 +18,7 @@ class RedirectsPanel(Panel):
         if 300 <= response.status_code < 400:
             redirect_to = response.get("Location")
             if redirect_to:
-                status_line = "{} {}".format(
-                    response.status_code, response.reason_phrase
-                )
+                status_line = f"{response.status_code} {response.reason_phrase}"
                 cookies = response.cookies
                 context = {"redirect_to": redirect_to, "status_line": status_line}
                 # Using SimpleTemplateResponse avoids running global context processors.
