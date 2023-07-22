@@ -36,6 +36,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Get pip cache dir
       id: pip-cache
@@ -110,6 +111,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Get pip cache dir
       id: pip-cache
@@ -163,6 +165,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Get pip cache dir
       id: pip-cache
