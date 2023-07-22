@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Add Python 3.12 to test matrix.
+
 4.2.0 (2023-08-10)
 ------------------
 
