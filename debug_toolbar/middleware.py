@@ -6,7 +6,7 @@ import re
 from functools import lru_cache
 
 from django.conf import settings
-from django.utils.decorators import sync_and_async_middleware
+from django.utils.decorators import async_only_middleware
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -34,7 +34,7 @@ def get_show_toolbar():
         return func_or_path
 
 
-@sync_and_async_middleware
+@async_only_middleware
 class DebugToolbarMiddleware:
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
@@ -44,11 +44,11 @@ class DebugToolbarMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
+    async def __call__(self, request):
         # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
         if not show_toolbar(request) or DebugToolbar.is_toolbar_request(request):
-            return self.get_response(request)
+            return await self.get_response(request)
 
         toolbar = DebugToolbar(request, self.get_response)
 
@@ -57,7 +57,7 @@ class DebugToolbarMiddleware:
             panel.enable_instrumentation()
         try:
             # Run panels like Django middleware.
-            response = toolbar.process_request(request)
+            response = await toolbar.process_request(request)
         finally:
             clear_stack_trace_caches()
             # Deactivate instrumentation ie. monkey-unpatch. This must run

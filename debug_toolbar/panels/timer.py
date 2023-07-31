@@ -58,11 +58,11 @@ class TimerPanel(Panel):
         scripts.append(static("debug_toolbar/js/timer.js"))
         return scripts
 
-    def process_request(self, request):
+    async def process_request(self, request):
         self._start_time = perf_counter()
         if self.has_content:
             self._start_rusage = resource.getrusage(resource.RUSAGE_SELF)
-        return super().process_request(request)
+        return await super().process_request(request)
 
     def generate_stats(self, request, response):
         stats = {}

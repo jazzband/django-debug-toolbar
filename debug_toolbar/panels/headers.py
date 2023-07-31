@@ -32,7 +32,7 @@ class HeadersPanel(Panel):
 
     template = "debug_toolbar/panels/headers.html"
 
-    def process_request(self, request):
+    async def process_request(self, request):
         wsgi_env = sorted(request.META.items())
         self.request_headers = {
             unmangle(k): v for (k, v) in wsgi_env if is_http_header(k)
@@ -43,7 +43,7 @@ class HeadersPanel(Panel):
         self.record_stats(
             {"request_headers": self.request_headers, "environ": self.environ}
         )
-        return super().process_request(request)
+        return await super().process_request(request)
 
     def generate_stats(self, request, response):
         self.response_headers = dict(sorted(response.items()))

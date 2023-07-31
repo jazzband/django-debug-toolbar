@@ -13,8 +13,8 @@ class RedirectsPanel(Panel):
 
     nav_title = _("Intercept redirects")
 
-    def process_request(self, request):
-        response = super().process_request(request)
+    async def process_request(self, request):
+        response = await super().process_request(request)
         if 300 <= response.status_code < 400:
             redirect_to = response.get("Location")
             if redirect_to:

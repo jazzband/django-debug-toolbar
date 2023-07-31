@@ -119,9 +119,9 @@ class StaticFilesPanel(panels.Panel):
             "%(num_used)s file used", "%(num_used)s files used", num_used
         ) % {"num_used": num_used}
 
-    def process_request(self, request):
+    async def process_request(self, request):
         collector.clear_collection()
-        return super().process_request(request)
+        return await super().process_request(request)
 
     def generate_stats(self, request, response):
         used_paths = collector.get_collection()

@@ -139,7 +139,7 @@ class ProfilingPanel(Panel):
     template = "debug_toolbar/panels/profiling.html"
     capture_project_code = dt_settings.get_config()["PROFILER_CAPTURE_PROJECT_CODE"]
 
-    def process_request(self, request):
+    async def process_request(self, request):
         self.profiler = cProfile.Profile()
         return self.profiler.runcall(super().process_request, request)
 

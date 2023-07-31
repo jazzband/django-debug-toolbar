@@ -192,7 +192,7 @@ class Panel:
 
     # Standard middleware methods
 
-    def process_request(self, request):
+    async def process_request(self, request):
         """
         Like __call__ in Django's middleware.
 
@@ -201,7 +201,7 @@ class Panel:
 
         Return the existing response or overwrite it.
         """
-        return self.get_response(request)
+        return await self.get_response(request)
 
     def get_headers(self, request):
         """
