@@ -31,7 +31,7 @@ repos:
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.45.0
+    rev: v8.46.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -39,7 +39,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.0.278'
+    rev: 'v0.0.281'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
