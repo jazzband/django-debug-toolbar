@@ -96,40 +96,43 @@ class TemplatesPanel(Panel):
                 if pformatted is None:
                     temp_layer = {}
                     for key, value in context_layer.items():
-                        # Replace any request elements - they have a large
-                        # Unicode representation and the request data is
-                        # already made available from the Request panel.
-                        if isinstance(value, http.HttpRequest):
-                            temp_layer[key] = "<<request>>"
-                        # Replace the debugging sql_queries element. The SQL
-                        # data is already made available from the SQL panel.
-                        elif key == "sql_queries" and isinstance(value, list):
-                            temp_layer[key] = "<<sql_queries>>"
-                        # Replace LANGUAGES, which is available in i18n context
-                        # processor
-                        elif key == "LANGUAGES" and isinstance(value, tuple):
-                            temp_layer[key] = "<<languages>>"
-                        # QuerySet would trigger the database: user can run the
-                        # query from SQL Panel
-                        elif isinstance(value, (QuerySet, RawQuerySet)):
-                            temp_layer[key] = "<<{} of {}>>".format(
-                                value.__class__.__name__.lower(),
-                                value.model._meta.label,
-                            )
-                        else:
-                            token = allow_sql.set(False)  # noqa: FBT003
-                            try:
-                                saferepr(value)  # this MAY trigger a db query
-                            except SQLQueryTriggered:
-                                temp_layer[key] = "<<triggers database query>>"
-                            except UnicodeEncodeError:
-                                temp_layer[key] = "<<Unicode encode error>>"
-                            except Exception:
-                                temp_layer[key] = "<<unhandled exception>>"
+                        try:
+                            # Replace any request elements - they have a large
+                            # Unicode representation and the request data is
+                            # already made available from the Request panel.
+                            if isinstance(value, http.HttpRequest):
+                                temp_layer[key] = "<<request>>"
+                            # Replace the debugging sql_queries element. The SQL
+                            # data is already made available from the SQL panel.
+                            elif key == "sql_queries" and isinstance(value, list):
+                                temp_layer[key] = "<<sql_queries>>"
+                            # Replace LANGUAGES, which is available in i18n context
+                            # processor
+                            elif key == "LANGUAGES" and isinstance(value, tuple):
+                                temp_layer[key] = "<<languages>>"
+                            # QuerySet would trigger the database: user can run the
+                            # query from SQL Panel
+                            elif isinstance(value, (QuerySet, RawQuerySet)):
+                                temp_layer[key] = "<<{} of {}>>".format(
+                                    value.__class__.__name__.lower(),
+                                    value.model._meta.label,
+                                )
                             else:
-                                temp_layer[key] = value
-                            finally:
-                                allow_sql.reset(token)
+                                token = allow_sql.set(False)  # noqa: FBT003
+                                try:
+                                    saferepr(value)  # this MAY trigger a db query
+                                except SQLQueryTriggered:
+                                    temp_layer[key] = "<<triggers database query>>"
+                                except UnicodeEncodeError:
+                                    temp_layer[key] = "<<Unicode encode error>>"
+                                except Exception:
+                                    temp_layer[key] = "<<unhandled exception>>"
+                                else:
+                                    temp_layer[key] = value
+                                finally:
+                                    allow_sql.reset(token)
+                        except Exception as exc:
+                            temp_layer[key] = f"<<unable to format, got {exc!r}>>"
                     pformatted = pformat(temp_layer)
                     self.pformat_layers.append((context_layer, pformatted))
                 context_list.append(pformatted)

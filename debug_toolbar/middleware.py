@@ -6,6 +6,7 @@ import re
 from functools import lru_cache
 
 from django.conf import settings
+from django.utils.decorators import sync_and_async_middleware
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -33,6 +34,7 @@ def get_show_toolbar():
         return func_or_path
 
 
+@sync_and_async_middleware
 class DebugToolbarMiddleware:
     """
     Middleware to set up Debug Toolbar on incoming request and render toolbar
