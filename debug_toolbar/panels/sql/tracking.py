@@ -40,7 +40,7 @@ def wrap_cursor(connection):
     # patching when the test case is finished.  If we monkey patch those methods
     # also, Django's process of undoing those monkey patches will fail.  To
     # avoid this failure, and because database access is not allowed during a
-    # SimpleTextCase anyway, skip applying our instrumentation monkey patches if
+    # SimpleTestCase anyway, skip applying our instrumentation monkey patches if
     # we detect that Django has already monkey patched DatabaseWrapper.cursor().
     if isinstance(connection.cursor, django.test.testcases._DatabaseFailure):
         return
