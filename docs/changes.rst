@@ -15,6 +15,8 @@ Pending
   resolving to the wrong content type.
 * Fixed SQL statement recording under PostgreSQL for queries encoded as byte
   strings.
+* Patch the ``CursorWrapper`` class with a mixin class to support multiple
+  base wrapper classes.
 
 4.1.0 (2023-05-15)
 ------------------
