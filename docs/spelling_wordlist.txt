@@ -30,6 +30,7 @@ memcache
 memcached
 middleware
 middlewares
+mixin
 mousedown
 mouseup
 multi
