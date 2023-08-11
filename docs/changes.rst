@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.2.0 (2023-08-10)
+------------------
+
 * Adjusted app directories system check to allow for nested template loaders.
 * Switched from flake8, isort and pyupgrade to `ruff
   <https://beta.ruff.rs/>`__.
