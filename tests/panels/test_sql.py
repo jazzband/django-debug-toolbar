@@ -2,12 +2,13 @@ import asyncio
 import datetime
 import os
 import unittest
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import django
 from asgiref.sync import sync_to_async
 from django.contrib.auth.models import User
 from django.db import connection, transaction
+from django.db.backends.utils import CursorDebugWrapper, CursorWrapper
 from django.db.models import Count
 from django.db.utils import DatabaseError
 from django.shortcuts import render
@@ -68,39 +69,59 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertEqual(len(self.panel._queries), 1)
 
     @patch(
-        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
-        wraps=sql_tracking.NormalCursorWrapper,
+        "debug_toolbar.panels.sql.tracking.patch_cursor_wrapper_with_mixin",
+        wraps=sql_tracking.patch_cursor_wrapper_with_mixin,
     )
-    def test_cursor_wrapper_singleton(self, mock_wrapper):
+    def test_cursor_wrapper_singleton(self, mock_patch_cursor_wrapper):
         sql_call()
-
         # ensure that cursor wrapping is applied only once
-        self.assertEqual(mock_wrapper.call_count, 1)
+        self.assertIn(
+            mock_patch_cursor_wrapper.mock_calls,
+            [
+                [call(CursorWrapper, sql_tracking.NormalCursorMixin)],
+                # CursorDebugWrapper is used if the test is called with `--debug-sql`
+                [call(CursorDebugWrapper, sql_tracking.NormalCursorMixin)],
+            ],
+        )
 
     @patch(
-        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
-        wraps=sql_tracking.NormalCursorWrapper,
+        "debug_toolbar.panels.sql.tracking.patch_cursor_wrapper_with_mixin",
+        wraps=sql_tracking.patch_cursor_wrapper_with_mixin,
     )
-    def test_chunked_cursor_wrapper_singleton(self, mock_wrapper):
+    def test_chunked_cursor_wrapper_singleton(self, mock_patch_cursor_wrapper):
         sql_call(use_iterator=True)
 
         # ensure that cursor wrapping is applied only once
-        self.assertEqual(mock_wrapper.call_count, 1)
+        self.assertIn(
+            mock_patch_cursor_wrapper.mock_calls,
+            [
+                [call(CursorWrapper, sql_tracking.NormalCursorMixin)],
+                # CursorDebugWrapper is used if the test is called with `--debug-sql`
+                [call(CursorDebugWrapper, sql_tracking.NormalCursorMixin)],
+            ],
+        )
 
     @patch(
-        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
-        wraps=sql_tracking.NormalCursorWrapper,
+        "debug_toolbar.panels.sql.tracking.patch_cursor_wrapper_with_mixin",
+        wraps=sql_tracking.patch_cursor_wrapper_with_mixin,
     )
-    async def test_cursor_wrapper_async(self, mock_wrapper):
+    async def test_cursor_wrapper_async(self, mock_patch_cursor_wrapper):
         await sync_to_async(sql_call)()
 
-        self.assertEqual(mock_wrapper.call_count, 1)
+        self.assertIn(
+            mock_patch_cursor_wrapper.mock_calls,
+            [
+                [call(CursorWrapper, sql_tracking.NormalCursorMixin)],
+                # CursorDebugWrapper is used if the test is called with `--debug-sql`
+                [call(CursorDebugWrapper, sql_tracking.NormalCursorMixin)],
+            ],
+        )
 
     @patch(
-        "debug_toolbar.panels.sql.tracking.NormalCursorWrapper",
-        wraps=sql_tracking.NormalCursorWrapper,
+        "debug_toolbar.panels.sql.tracking.patch_cursor_wrapper_with_mixin",
+        wraps=sql_tracking.patch_cursor_wrapper_with_mixin,
     )
-    async def test_cursor_wrapper_asyncio_ctx(self, mock_wrapper):
+    async def test_cursor_wrapper_asyncio_ctx(self, mock_patch_cursor_wrapper):
         self.assertTrue(sql_tracking.allow_sql.get())
         await sync_to_async(sql_call)()
 
@@ -116,7 +137,21 @@ class SQLPanelTestCase(BaseTestCase):
         await asyncio.create_task(task())
         # Because it was called in another context, it should not have affected ours
         self.assertTrue(sql_tracking.allow_sql.get())
-        self.assertEqual(mock_wrapper.call_count, 1)
+
+        self.assertIn(
+            mock_patch_cursor_wrapper.mock_calls,
+            [
+                [
+                    call(CursorWrapper, sql_tracking.NormalCursorMixin),
+                    call(CursorWrapper, sql_tracking.ExceptionCursorMixin),
+                ],
+                # CursorDebugWrapper is used if the test is called with `--debug-sql`
+                [
+                    call(CursorDebugWrapper, sql_tracking.NormalCursorMixin),
+                    call(CursorDebugWrapper, sql_tracking.ExceptionCursorMixin),
+                ],
+            ],
+        )
 
     def test_generate_server_timing(self):
         self.assertEqual(len(self.panel._queries), 0)

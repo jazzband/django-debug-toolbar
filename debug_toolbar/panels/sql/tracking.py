@@ -5,7 +5,6 @@ import json
 from time import perf_counter
 
 import django.test.testcases
-from django.db.backends.utils import CursorWrapper
 from django.utils.encoding import force_str
 
 from debug_toolbar.utils import get_stack_trace, get_template_info
@@ -60,34 +59,42 @@ def wrap_cursor(connection):
             cursor = connection._djdt_cursor(*args, **kwargs)
             if logger is None:
                 return cursor
-            wrapper = NormalCursorWrapper if allow_sql.get() else ExceptionCursorWrapper
-            return wrapper(cursor.cursor, connection, logger)
+            mixin = NormalCursorMixin if allow_sql.get() else ExceptionCursorMixin
+            return patch_cursor_wrapper_with_mixin(cursor.__class__, mixin)(
+                cursor.cursor, connection, logger
+            )
 
         def chunked_cursor(*args, **kwargs):
             # prevent double wrapping
             # solves https://github.com/jazzband/django-debug-toolbar/issues/1239
             logger = connection._djdt_logger
             cursor = connection._djdt_chunked_cursor(*args, **kwargs)
-            if logger is not None and not isinstance(cursor, DjDTCursorWrapper):
-                if allow_sql.get():
-                    wrapper = NormalCursorWrapper
-                else:
-                    wrapper = ExceptionCursorWrapper
-                return wrapper(cursor.cursor, connection, logger)
+            if logger is not None and not isinstance(cursor, DjDTCursorWrapperMixin):
+                mixin = NormalCursorMixin if allow_sql.get() else ExceptionCursorMixin
+                return patch_cursor_wrapper_with_mixin(cursor.__class__, mixin)(
+                    cursor.cursor, connection, logger
+                )
             return cursor
 
         connection.cursor = cursor
         connection.chunked_cursor = chunked_cursor
 
 
-class DjDTCursorWrapper(CursorWrapper):
+def patch_cursor_wrapper_with_mixin(base_wrapper, mixin):
+    class DjDTCursorWrapper(mixin, base_wrapper):
+        pass
+
+    return DjDTCursorWrapper
+
+
+class DjDTCursorWrapperMixin:
     def __init__(self, cursor, db, logger):
         super().__init__(cursor, db)
         # logger must implement a ``record`` method
         self.logger = logger
 
 
-class ExceptionCursorWrapper(DjDTCursorWrapper):
+class ExceptionCursorMixin(DjDTCursorWrapperMixin):
     """
     Wraps a cursor and raises an exception on any operation.
     Used in Templates panel.
@@ -97,7 +104,7 @@ class ExceptionCursorWrapper(DjDTCursorWrapper):
         raise SQLQueryTriggered()
 
 
-class NormalCursorWrapper(DjDTCursorWrapper):
+class NormalCursorMixin(DjDTCursorWrapperMixin):
     """
     Wraps a cursor and logs queries.
     """
