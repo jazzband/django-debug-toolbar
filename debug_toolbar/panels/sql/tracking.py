@@ -59,7 +59,7 @@ def wrap_cursor(connection):
             cursor = connection._djdt_cursor(*args, **kwargs)
             if logger is None:
                 return cursor
-            mixin = NormalCursorWrapper if allow_sql.get() else ExceptionCursorWrapper
+            mixin = NormalCursorMixin if allow_sql.get() else ExceptionCursorMixin
             return patch_cursor_wrapper_with_mixin(cursor.__class__, mixin)(
                 cursor.cursor, connection, logger
             )
@@ -70,10 +70,7 @@ def wrap_cursor(connection):
             logger = connection._djdt_logger
             cursor = connection._djdt_chunked_cursor(*args, **kwargs)
             if logger is not None and not isinstance(cursor, DjDTCursorWrapperMixin):
-                if allow_sql.get():
-                    mixin = NormalCursorWrapper
-                else:
-                    mixin = ExceptionCursorWrapper
+                mixin = NormalCursorMixin if allow_sql.get() else ExceptionCursorMixin
                 return patch_cursor_wrapper_with_mixin(cursor.__class__, mixin)(
                     cursor.cursor, connection, logger
                 )
@@ -97,7 +94,7 @@ class DjDTCursorWrapperMixin:
         self.logger = logger
 
 
-class ExceptionCursorWrapper(DjDTCursorWrapperMixin):
+class ExceptionCursorMixin(DjDTCursorWrapperMixin):
     """
     Wraps a cursor and raises an exception on any operation.
     Used in Templates panel.
@@ -107,7 +104,7 @@ class ExceptionCursorWrapper(DjDTCursorWrapperMixin):
         raise SQLQueryTriggered()
 
 
-class NormalCursorWrapper(DjDTCursorWrapperMixin):
+class NormalCursorMixin(DjDTCursorWrapperMixin):
     """
     Wraps a cursor and logs queries.
     """

@@ -78,9 +78,9 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertIn(
             mock_patch_cursor_wrapper.mock_calls,
             [
-                [call(CursorWrapper, sql_tracking.NormalCursorWrapper)],
+                [call(CursorWrapper, sql_tracking.NormalCursorMixin)],
                 # CursorDebugWrapper is used if the test is called with `--debug-sql`
-                [call(CursorDebugWrapper, sql_tracking.NormalCursorWrapper)],
+                [call(CursorDebugWrapper, sql_tracking.NormalCursorMixin)],
             ],
         )
 
@@ -95,9 +95,9 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertIn(
             mock_patch_cursor_wrapper.mock_calls,
             [
-                [call(CursorWrapper, sql_tracking.NormalCursorWrapper)],
+                [call(CursorWrapper, sql_tracking.NormalCursorMixin)],
                 # CursorDebugWrapper is used if the test is called with `--debug-sql`
-                [call(CursorDebugWrapper, sql_tracking.NormalCursorWrapper)],
+                [call(CursorDebugWrapper, sql_tracking.NormalCursorMixin)],
             ],
         )
 
@@ -111,9 +111,9 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertIn(
             mock_patch_cursor_wrapper.mock_calls,
             [
-                [call(CursorWrapper, sql_tracking.NormalCursorWrapper)],
+                [call(CursorWrapper, sql_tracking.NormalCursorMixin)],
                 # CursorDebugWrapper is used if the test is called with `--debug-sql`
-                [call(CursorDebugWrapper, sql_tracking.NormalCursorWrapper)],
+                [call(CursorDebugWrapper, sql_tracking.NormalCursorMixin)],
             ],
         )
 
@@ -142,13 +142,13 @@ class SQLPanelTestCase(BaseTestCase):
             mock_patch_cursor_wrapper.mock_calls,
             [
                 [
-                    call(CursorWrapper, sql_tracking.NormalCursorWrapper),
-                    call(CursorWrapper, sql_tracking.ExceptionCursorWrapper),
+                    call(CursorWrapper, sql_tracking.NormalCursorMixin),
+                    call(CursorWrapper, sql_tracking.ExceptionCursorMixin),
                 ],
                 # CursorDebugWrapper is used if the test is called with `--debug-sql`
                 [
-                    call(CursorDebugWrapper, sql_tracking.NormalCursorWrapper),
-                    call(CursorDebugWrapper, sql_tracking.ExceptionCursorWrapper),
+                    call(CursorDebugWrapper, sql_tracking.NormalCursorMixin),
+                    call(CursorDebugWrapper, sql_tracking.ExceptionCursorMixin),
                 ],
             ],
         )
