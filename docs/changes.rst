@@ -4,7 +4,7 @@ Change log
 Pending
 -------
 
-* Removed outdated third-party panels from the list
+* Removed outdated third-party panels from the list.
 
 4.2.0 (2023-08-10)
 ------------------
