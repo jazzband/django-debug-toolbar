@@ -13,12 +13,12 @@ def history_sidebar(request):
     form = HistoryStoreForm(request.GET)
 
     if form.is_valid():
-        store_id = form.cleaned_data["store_id"]
-        toolbar = DebugToolbar.fetch(store_id)
+        request_id = form.cleaned_data["request_id"]
+        toolbar = DebugToolbar.fetch(request_id)
         exclude_history = form.cleaned_data["exclude_history"]
         context = {}
         if toolbar is None:
-            # When the store_id has been popped already due to
+            # When the request_id has been popped already due to
             # RESULTS_CACHE_SIZE
             return JsonResponse(context)
         for panel in toolbar.panels:
@@ -58,7 +58,7 @@ def history_refresh(request):
                                 "toolbar": toolbar,
                                 "form": HistoryStoreForm(
                                     initial={
-                                        "store_id": id,
+                                        "request_id": id,
                                         "exclude_history": True,
                                     }
                                 ),

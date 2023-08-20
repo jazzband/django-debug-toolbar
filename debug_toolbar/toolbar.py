@@ -42,7 +42,7 @@ class DebugToolbar:
             self._panels[panel.panel_id] = panel
         self.stats = {}
         self.server_timing_stats = {}
-        self.store_id = None
+        self.request_id = None
         self._created.send(request, toolbar=self)
 
     # Manage panels
@@ -110,16 +110,16 @@ class DebugToolbar:
 
     def store(self):
         # Store already exists.
-        if self.store_id:
+        if self.request_id:
             return
-        self.store_id = uuid.uuid4().hex
-        self._store[self.store_id] = self
+        self.request_id = uuid.uuid4().hex
+        self._store[self.request_id] = self
         for _ in range(self.config["RESULTS_CACHE_SIZE"], len(self._store)):
             self._store.popitem(last=False)
 
     @classmethod
-    def fetch(cls, store_id):
-        return cls._store.get(store_id)
+    def fetch(cls, request_id):
+        return cls._store.get(request_id)
 
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.

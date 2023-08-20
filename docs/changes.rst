@@ -9,6 +9,8 @@ Serializable (don't include in main)
   storage mechanism. Defaults to ``debug_toolbar.store.MemoryStore``.
 * Added setting ``SUPPRESS_SERIALIZATION_ERRORS`` to suppress
   warnings when a ``TypeError`` occurs during a panel's serialization.
+* Rename ``store_id`` properties to ``request_id`` and ``Toolbar.store`` to
+  ``Toolbar.init_store``.
 
 
 Pending

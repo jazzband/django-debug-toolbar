@@ -34,13 +34,13 @@ except ImportError:
 rf = RequestFactory()
 
 
-def toolbar_store_id():
+def toolbar_request_id():
     def get_response(request):
         return HttpResponse()
 
     toolbar = DebugToolbar(rf.get("/"), get_response)
     toolbar.store()
-    return toolbar.store_id
+    return toolbar.request_id
 
 
 class BuggyPanel(Panel):
@@ -214,7 +214,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_data_gone(self):
         response = self.client.get(
-            "/__debug__/render_panel/?store_id=GONE&panel_id=RequestPanel"
+            "/__debug__/render_panel/?request_id=GONE&panel_id=RequestPanel"
         )
         self.assertIn("Please reload the page and retry.", response.json()["content"])
 
@@ -252,7 +252,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_render_panel_checks_show_toolbar(self):
         url = "/__debug__/render_panel/"
-        data = {"store_id": toolbar_store_id(), "panel_id": "VersionsPanel"}
+        data = {"request_id": toolbar_request_id(), "panel_id": "VersionsPanel"}
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
@@ -442,7 +442,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get(url)
         self.assertIn(b'id="djDebug"', response.content)
         # Verify the store id is not included.
-        self.assertNotIn(b"data-store-id", response.content)
+        self.assertNotIn(b"data-request-id", response.content)
         # Verify the history panel was disabled
         self.assertIn(
             b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
@@ -462,7 +462,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get(url)
         self.assertIn(b'id="djDebug"', response.content)
         # Verify the store id is included.
-        self.assertIn(b"data-store-id", response.content)
+        self.assertIn(b"data-request-id", response.content)
         # Verify the history panel was not disabled
         self.assertNotIn(
             b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
@@ -512,10 +512,10 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         parser = html5lib.HTMLParser()
         doc = parser.parse(response.content)
         el = doc.find(".//*[@id='djDebug']")
-        store_id = el.attrib["data-store-id"]
+        request_id = el.attrib["data-request-id"]
         response = self.client.get(
             "/__debug__/render_panel/",
-            {"store_id": store_id, "panel_id": "TemplatesPanel"},
+            {"request_id": request_id, "panel_id": "TemplatesPanel"},
         )
         self.assertEqual(response.status_code, 200)
         # The key None (without quotes) exists in the list of template

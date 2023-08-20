@@ -37,13 +37,13 @@ const djdt = {
                 const inner = current.querySelector(
                         ".djDebugPanelContent .djdt-scroll"
                     ),
-                    storeId = djDebug.dataset.storeId;
-                if (storeId && inner.children.length === 0) {
+                    requestId = djDebug.dataset.requestId;
+                if (requestId && inner.children.length === 0) {
                     const url = new URL(
                         djDebug.dataset.renderPanelUrl,
                         window.location
                     );
-                    url.searchParams.append("store_id", storeId);
+                    url.searchParams.append("request_id", requestId);
                     url.searchParams.append("panel_id", panelId);
                     ajax(url).then(function (data) {
                         inner.previousElementSibling.remove(); // Remove AJAX loader
@@ -270,11 +270,11 @@ const djdt = {
             document.getElementById("djDebug").dataset.sidebarUrl;
         const slowjax = debounce(ajax, 200);
 
-        function handleAjaxResponse(storeId) {
-            storeId = encodeURIComponent(storeId);
-            const dest = `${sidebarUrl}?store_id=${storeId}`;
+        function handleAjaxResponse(requestId) {
+            requestId = encodeURIComponent(requestId);
+            const dest = `${sidebarUrl}?request_id=${requestId}`;
             slowjax(dest).then(function (data) {
-                replaceToolbarState(storeId, data);
+                replaceToolbarState(requestId, data);
             });
         }
 
@@ -286,9 +286,11 @@ const djdt = {
                 // when the header can't be fetched. While it doesn't impede execution
                 // it's worrisome to developers.
                 if (
-                    this.getAllResponseHeaders().indexOf("djdt-store-id") >= 0
+                    this.getAllResponseHeaders().indexOf("djdt-request-id") >= 0
                 ) {
-                    handleAjaxResponse(this.getResponseHeader("djdt-store-id"));
+                    handleAjaxResponse(
+                        this.getResponseHeader("djdt-request-id")
+                    );
                 }
             });
             origOpen.apply(this, arguments);
@@ -298,8 +300,8 @@ const djdt = {
         window.fetch = function () {
             const promise = origFetch.apply(this, arguments);
             promise.then(function (response) {
-                if (response.headers.get("djdt-store-id") !== null) {
-                    handleAjaxResponse(response.headers.get("djdt-store-id"));
+                if (response.headers.get("djdt-request-id") !== null) {
+                    handleAjaxResponse(response.headers.get("djdt-request-id"));
                 }
                 // Don't resolve the response via .json(). Instead
                 // continue to return it to allow the caller to consume as needed.
