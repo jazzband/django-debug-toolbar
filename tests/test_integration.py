@@ -15,6 +15,7 @@ from django.test.utils import override_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels import Panel
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
 from .base import BaseTestCase, IntegrationTestCase
@@ -39,7 +40,7 @@ def toolbar_request_id():
         return HttpResponse()
 
     toolbar = DebugToolbar(rf.get("/"), get_response)
-    toolbar.store()
+    toolbar.init_store()
     return toolbar.request_id
 
 
@@ -252,7 +253,9 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_render_panel_checks_show_toolbar(self):
         url = "/__debug__/render_panel/"
-        data = {"request_id": toolbar_request_id(), "panel_id": "VersionsPanel"}
+        request_id = toolbar_request_id()
+        get_store().save_panel(request_id, "VersionsPanel", {"value": "Test data"})
+        data = {"request_id": request_id, "panel_id": "VersionsPanel"}
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
@@ -268,18 +271,20 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_middleware_render_toolbar_json(self):
         """Verify the toolbar is rendered and data is stored for a json request."""
-        self.assertEqual(len(DebugToolbar._store), 0)
+        store = get_store()
+        self.assertEqual(len(list(store.request_ids())), 0)
 
         data = {"foo": "bar"}
         response = self.client.get("/json_view/", data, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode("utf-8"), '{"foo": "bar"}')
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(DebugToolbar._store), 1)
-        toolbar = list(DebugToolbar._store.values())[0]
+        request_ids = list(store.request_ids())
+        self.assertEqual(len(request_ids), 1)
+        toolbar = DebugToolbar.fetch(request_ids[0])
         self.assertEqual(
             toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
-            {"foo": ["bar"]},
+            {"foo": "bar"},
         )
 
     def test_template_source_checks_show_toolbar(self):

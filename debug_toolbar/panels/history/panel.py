@@ -86,12 +86,11 @@ class HistoryPanel(Panel):
 
         Fetch every store for the toolbar and include it in the template.
         """
-        stores = {}
-        for id, toolbar in reversed(self.toolbar._store.items()):
-            stores[id] = {
-                "toolbar": toolbar,
+        toolbar_history = {}
+        for request_id in reversed(self.toolbar.store.request_ids()):
+            toolbar_history[request_id] = {
                 "form": HistoryStoreForm(
-                    initial={"request_id": id, "exclude_history": True}
+                    initial={"request_id": request_id, "exclude_history": True}
                 ),
             }
 
@@ -99,7 +98,7 @@ class HistoryPanel(Panel):
             self.template,
             {
                 "current_request_id": self.toolbar.request_id,
-                "stores": stores,
+                "toolbar_history": toolbar_history,
                 "refresh_form": HistoryStoreForm(
                     initial={
                         "request_id": self.toolbar.request_id,

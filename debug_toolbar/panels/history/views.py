@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 
 from debug_toolbar.decorators import render_with_toolbar_language, require_show_toolbar
 from debug_toolbar.panels.history.forms import HistoryStoreForm
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
 
@@ -46,19 +47,20 @@ def history_refresh(request):
     if form.is_valid():
         requests = []
         # Convert to list to handle mutations happening in parallel
-        for id, toolbar in list(DebugToolbar._store.items()):
+        for request_id in get_store().request_ids():
+            toolbar = DebugToolbar.fetch(request_id)
             requests.append(
                 {
-                    "id": id,
+                    "id": request_id,
                     "content": render_to_string(
                         "debug_toolbar/panels/history_tr.html",
                         {
-                            "id": id,
+                            "id": request_id,
                             "store_context": {
                                 "toolbar": toolbar,
                                 "form": HistoryStoreForm(
                                     initial={
-                                        "request_id": id,
+                                        "request_id": request_id,
                                         "exclude_history": True,
                                     }
                                 ),

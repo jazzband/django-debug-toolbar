@@ -126,5 +126,5 @@ class MemoryStore(BaseStore):
             return deserialize(data)
 
 
-def get_store():
+def get_store() -> BaseStore:
     return import_string(dt_settings.get_config()["TOOLBAR_STORE_CLASS"])

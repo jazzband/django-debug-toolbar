@@ -3,6 +3,7 @@ from asgiref.local import Local
 from django.http import HttpResponse
 from django.test import Client, RequestFactory, TestCase, TransactionTestCase
 
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
 
@@ -82,6 +83,5 @@ class IntegrationTestCase(TestCase):
         # The HistoryPanel keeps track of previous stores in memory.
         # This bleeds into other tests and violates their idempotency.
         # Clear the store before each test.
-        for key in list(DebugToolbar._store.keys()):
-            del DebugToolbar._store[key]
+        get_store().clear()
         super().setUp()

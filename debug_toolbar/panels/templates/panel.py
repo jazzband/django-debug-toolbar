@@ -9,6 +9,7 @@ from django.template import RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
 from django.urls import path
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -179,7 +180,7 @@ class TemplatesPanel(Panel):
             else:
                 template.origin_name = _("No origin")
                 template.origin_hash = ""
-            info["template"] = template
+            info["template"] = force_str(template)
             # Clean up context for better readability
             if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]:
                 context_list = template_data.get("context", [])
@@ -188,7 +189,14 @@ class TemplatesPanel(Panel):
 
         # Fetch context_processors/template_dirs from any template
         if self.templates:
-            context_processors = self.templates[0]["context_processors"]
+            context_processors = (
+                {
+                    key: force_str(value)
+                    for key, value in self.templates[0]["context_processors"].items()
+                }
+                if self.templates[0]["context_processors"]
+                else None
+            )
             template = self.templates[0]["template"]
             # django templates have the 'engine' attribute, while jinja
             # templates use 'backend'

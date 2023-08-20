@@ -1,5 +1,5 @@
 {% load i18n %}
-<tr class="{% if id == current_request_id %}djdt-highlighted{% endif %}" id="historyMain_{{ id }}" data-request-id="{{ id }}">
+<tr class="{% if request_id == current_request_id %}djdt-highlighted{% endif %}" id="historyMain_{{ request_id }}" data-request-id="{{ request_id }}">
     <td>
         {{ store_context.toolbar.stats.HistoryPanel.time|escape }}
     </td>
@@ -10,8 +10,8 @@
         <p>{{ store_context.toolbar.stats.HistoryPanel.request_url|truncatechars:100|escape }}</p>
     </td>
     <td>
-        <button type="button" class="djToggleSwitch" data-toggle-name="historyMain" data-toggle-id="{{ id }}">+</button>
-        <div class="djUnselected djToggleDetails_{{ id }}">
+        <button type="button" class="djToggleSwitch" data-toggle-name="historyMain" data-toggle-id="{{ request_id }}">+</button>
+        <div class="djUnselected djToggleDetails_{{ request_id }}">
           <table>
             <colgroup>
               <col class="djdt-width-20">
@@ -44,7 +44,7 @@
     <td class="djdt-actions">
         <form method="get" action="{% url 'djdt:history_sidebar' %}">
             {{ store_context.form }}
-            <button data-request-id="{{ id }}" class="switchHistory">Switch</button>
+            <button data-request-id="{{ request_id }}" class="switchHistory">Switch</button>
         </form>
     </td>
 </tr>

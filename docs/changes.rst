@@ -11,7 +11,12 @@ Serializable (don't include in main)
   warnings when a ``TypeError`` occurs during a panel's serialization.
 * Rename ``store_id`` properties to ``request_id`` and ``Toolbar.store`` to
   ``Toolbar.init_store``.
-
+* Support ``Panel`` instances with stored stats via
+  ``Panel.load_stats_from_store``.
+* Swapped ``Toolbar._store`` for the ``get_store()`` class.
+* Created a ``StoredDebugToolbar`` that support creating an instance of the
+  toolbar representing an old request. It should only be used for fetching
+  panels' contents.
 
 Pending
 -------

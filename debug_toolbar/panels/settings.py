@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from django.views.debug import get_default_exception_reporter_filter
 
@@ -20,4 +21,11 @@ class SettingsPanel(Panel):
         return _("Settings from %s") % settings.SETTINGS_MODULE
 
     def generate_stats(self, request, response):
-        self.record_stats({"settings": dict(sorted(get_safe_settings().items()))})
+        self.record_stats(
+            {
+                "settings": {
+                    key: force_str(value)
+                    for key, value in sorted(get_safe_settings().items())
+                }
+            }
+        )

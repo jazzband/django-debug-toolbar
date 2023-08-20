@@ -4,8 +4,10 @@ import html
 from django.test import RequestFactory, override_settings
 from django.urls import resolve, reverse
 
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
+from .. import settings as test_settings
 from ..base import BaseTestCase, IntegrationTestCase
 
 rf = RequestFactory()
@@ -77,19 +79,20 @@ class HistoryViewsTestCase(IntegrationTestCase):
         "TemplatesPanel",
         "CachePanel",
         "SignalsPanel",
-        "ProfilingPanel",
     }
 
     def test_history_panel_integration_content(self):
         """Verify the history panel's content renders properly.."""
-        self.assertEqual(len(DebugToolbar._store), 0)
+        store = get_store()
+        self.assertEqual(len(list(store.request_ids())), 0)
 
         data = {"foo": "bar"}
         self.client.get("/json_view/", data, content_type="application/json")
 
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(DebugToolbar._store), 1)
-        toolbar = list(DebugToolbar._store.values())[0]
+        request_ids = list(store.request_ids())
+        self.assertEqual(len(request_ids), 1)
+        toolbar = DebugToolbar.fetch(request_ids[0])
         content = toolbar.get_panel_by_id("HistoryPanel").content
         self.assertIn("bar", content)
         self.assertIn('name="exclude_history" value="True"', content)
@@ -101,7 +104,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     def test_history_headers(self):
         """Validate the headers injected from the history panel."""
         response = self.client.get("/json_view/")
-        request_id = list(DebugToolbar._store)[0]
+        request_id = list(get_store().request_ids())[0]
         self.assertEqual(response.headers["djdt-request-id"], request_id)
 
     @override_settings(
@@ -115,7 +118,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     def test_history_sidebar(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
-        request_id = list(DebugToolbar._store)[0]
+        request_id = list(get_store().request_ids())[0]
         data = {"request_id": request_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -129,8 +132,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.client.get("/json_view/")
         panel_keys = copy.copy(self.PANEL_KEYS)
         panel_keys.add("HistoryPanel")
-        panel_keys.add("RedirectsPanel")
-        request_id = list(DebugToolbar._store)[0]
+        request_id = list(get_store().request_ids())[0]
         data = {"request_id": request_id}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -139,13 +141,11 @@ class HistoryViewsTestCase(IntegrationTestCase):
             panel_keys,
         )
 
-    @override_settings(
-        DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 1, "RENDER_PANELS": False}
-    )
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": False})
     def test_history_sidebar_expired_request_id(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
-        request_id = list(DebugToolbar._store)[0]
+        request_id = list(get_store().request_ids())[0]
         data = {"request_id": request_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
@@ -153,7 +153,9 @@ class HistoryViewsTestCase(IntegrationTestCase):
             set(response.json()),
             self.PANEL_KEYS,
         )
-        self.client.get("/json_view/")
+        # Make enough requests to unset the original
+        for _i in range(test_settings.DEBUG_TOOLBAR_CONFIG["RESULTS_CACHE_SIZE"]):
+            self.client.get("/json_view/")
 
         # Querying old request_id should return in empty response
         data = {"request_id": request_id, "exclude_history": True}
@@ -162,10 +164,11 @@ class HistoryViewsTestCase(IntegrationTestCase):
         self.assertEqual(response.json(), {})
 
         # Querying with latest request_id
-        latest_request_id = list(DebugToolbar._store)[0]
+        latest_request_id = list(get_store().request_ids())[0]
         data = {"request_id": latest_request_id, "exclude_history": True}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)
         self.assertEqual(response.status_code, 200)
+
         self.assertEqual(
             set(response.json()),
             self.PANEL_KEYS,
@@ -185,7 +188,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         data = response.json()
         self.assertEqual(len(data["requests"]), 2)
 
-        request_ids = list(DebugToolbar._store)
+        request_ids = list(get_store().request_ids())
         self.assertIn(html.escape(request_ids[0]), data["requests"][0]["content"])
         self.assertIn(html.escape(request_ids[1]), data["requests"][1]["content"])
 
