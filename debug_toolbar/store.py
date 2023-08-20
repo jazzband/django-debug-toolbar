@@ -109,7 +109,7 @@ class MemoryStore(BaseStore):
         try:
             cls._request_store[request_id][panel_id] = serialize(data)
         except TypeError:
-            if dt_settings.get_config()["SERIALIZATION_WARNINGS"]:
+            if dt_settings.get_config()["SUPPRESS_SERIALIZATION_ERRORS"]:
                 log = "Panel (%s) failed to serialized data %s properly."
                 logger.warning(log % (panel_id, data))
             else:
