@@ -22,7 +22,7 @@ Serializable (don't include in main)
   this id and avoid passing SQL to be executed.
 * Move the formatting logic of SQL queries to just before rendering in
   ``SQLPanel.content``.
-
+* Make ``Panel.panel_id`` a class member.
 
 Pending
 -------

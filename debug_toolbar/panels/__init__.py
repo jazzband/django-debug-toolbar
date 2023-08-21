@@ -1,4 +1,5 @@
 from django.template.loader import render_to_string
+from django.utils.functional import classproperty
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_name_from_obj
@@ -16,9 +17,9 @@ class Panel:
 
     # Private panel properties
 
-    @property
-    def panel_id(self):
-        return self.__class__.__name__
+    @classproperty
+    def panel_id(cls):
+        return cls.__name__
 
     @property
     def enabled(self) -> bool:

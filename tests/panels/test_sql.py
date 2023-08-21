@@ -34,7 +34,7 @@ def sql_call(*, use_iterator=False):
 
 
 class SQLPanelTestCase(BaseTestCase):
-    panel_id = "SQLPanel"
+    panel_id = SQLPanel.panel_id
 
     def test_disabled(self):
         config = {"DISABLE_PANELS": {"debug_toolbar.panels.sql.SQLPanel"}}
@@ -699,7 +699,7 @@ class SQLPanelTestCase(BaseTestCase):
 
 
 class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
-    panel_id = "SQLPanel"
+    panel_id = SQLPanel.panel_id
 
     def test_aliases(self):
         self.assertFalse(self.panel._queries)

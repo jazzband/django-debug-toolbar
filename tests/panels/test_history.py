@@ -4,6 +4,7 @@ import html
 from django.test import RequestFactory, override_settings
 from django.urls import resolve, reverse
 
+from debug_toolbar.panels.history import HistoryPanel
 from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
@@ -14,7 +15,7 @@ rf = RequestFactory()
 
 
 class HistoryPanelTestCase(BaseTestCase):
-    panel_id = "HistoryPanel"
+    panel_id = HistoryPanel.panel_id
 
     def test_disabled(self):
         config = {"DISABLE_PANELS": {"debug_toolbar.panels.history.HistoryPanel"}}
@@ -93,7 +94,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         request_ids = list(store.request_ids())
         self.assertEqual(len(request_ids), 1)
         toolbar = DebugToolbar.fetch(request_ids[0])
-        content = toolbar.get_panel_by_id("HistoryPanel").content
+        content = toolbar.get_panel_by_id(HistoryPanel.panel_id).content
         self.assertIn("bar", content)
         self.assertIn('name="exclude_history" value="True"', content)
 
@@ -131,7 +132,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
         panel_keys = copy.copy(self.PANEL_KEYS)
-        panel_keys.add("HistoryPanel")
+        panel_keys.add(HistoryPanel.panel_id)
         request_id = list(get_store().request_ids())[0]
         data = {"request_id": request_id}
         response = self.client.get(reverse("djdt:history_sidebar"), data=data)

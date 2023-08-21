@@ -6,13 +6,15 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.test.utils import override_settings
 
+from debug_toolbar.panels.staticfiles import StaticFilesPanel
+
 from ..base import BaseTestCase
 
 PATH_DOES_NOT_EXIST = os.path.join(settings.BASE_DIR, "tests", "invalid_static")
 
 
 class StaticFilesPanelTestCase(BaseTestCase):
-    panel_id = "StaticFilesPanel"
+    panel_id = StaticFilesPanel.panel_id
 
     def test_default_case(self):
         response = self.panel.process_request(self.request)

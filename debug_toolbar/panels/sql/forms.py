@@ -46,14 +46,16 @@ class SQLSelectForm(forms.Form):
         return value
 
     def clean(self):
+        from debug_toolbar.panels.sql import SQLPanel
+
         cleaned_data = super().clean()
         toolbar = DebugToolbar.fetch(
-            self.cleaned_data["request_id"], panel_id="SQLPanel"
+            self.cleaned_data["request_id"], panel_id=SQLPanel.panel_id
         )
         if toolbar is None:
             raise ValidationError(_("Data for this panel isn't available anymore."))
 
-        panel = toolbar.get_panel_by_id("SQLPanel")
+        panel = toolbar.get_panel_by_id(SQLPanel.panel_id)
         # Find the query for this form submission
         query = None
         for q in panel.get_stats()["queries"]:
