@@ -17,6 +17,12 @@ Serializable (don't include in main)
 * Created a ``StoredDebugToolbar`` that support creating an instance of the
   toolbar representing an old request. It should only be used for fetching
   panels' contents.
+* Drop ``raw_params`` from query data.
+* Queries now have a unique ``djdt_query_id``. The SQL forms now reference
+  this id and avoid passing SQL to be executed.
+* Move the formatting logic of SQL queries to just before rendering in
+  ``SQLPanel.content``.
+
 
 Pending
 -------

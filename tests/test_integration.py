@@ -328,15 +328,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertContains(response, "Template Does Not Exist: does_not_exist.html")
 
     def test_sql_select_checks_show_toolbar(self):
+        self.client.get("/execute_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, "SQLPanel")
+        panel = toolbar.get_panel_by_id("SQLPanel")
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_select/"
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": "SELECT * FROM auth_user",
-                    "raw_sql": "SELECT * FROM auth_user",
-                    "params": "{}",
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -354,15 +358,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             self.assertEqual(response.status_code, 404)
 
     def test_sql_explain_checks_show_toolbar(self):
+        self.client.get("/execute_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, "SQLPanel")
+        panel = toolbar.get_panel_by_id("SQLPanel")
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_explain/"
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": "SELECT * FROM auth_user",
-                    "raw_sql": "SELECT * FROM auth_user",
-                    "params": "{}",
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -383,19 +391,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
     def test_sql_explain_postgres_json_field(self):
+        self.client.get("/execute_json_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, "SQLPanel")
+        panel = toolbar.get_panel_by_id("SQLPanel")
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_explain/"
-        base_query = (
-            'SELECT * FROM "tests_postgresjson" WHERE "tests_postgresjson"."field" @>'
-        )
-        query = base_query + """ '{"foo": "bar"}'"""
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": query,
-                    "raw_sql": base_query + " %s",
-                    "params": '["{\\"foo\\": \\"bar\\"}"]',
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -412,15 +420,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             self.assertEqual(response.status_code, 404)
 
     def test_sql_profile_checks_show_toolbar(self):
+        self.client.get("/execute_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, "SQLPanel")
+        panel = toolbar.get_panel_by_id("SQLPanel")
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_profile/"
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": "SELECT * FROM auth_user",
-                    "raw_sql": "SELECT * FROM auth_user",
-                    "params": "{}",
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
