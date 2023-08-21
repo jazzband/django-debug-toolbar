@@ -1,3 +1,5 @@
+import logging
+
 from django.test import TestCase
 from django.test.utils import override_settings
 
@@ -92,6 +94,21 @@ class MemoryStoreTestCase(TestCase):
         self.store.save_panel("bar", "bar.panel", {"a": 1})
         self.assertEqual(list(self.store.request_ids()), ["bar"])
         self.assertEqual(self.store.panel("bar", "bar.panel"), {"a": 1})
+
+    def test_save_panel_serialization_warning(self):
+        """The store should warn the user about a serialization error."""
+        self.assertLogs()
+
+        with self.assertLogs("debug_toolbar.store", level=logging.WARNING) as logs:
+            self.store.save_panel("bar", "bar.panel", {"value": {"foo"}})
+
+        self.assertEqual(
+            logs.output,
+            [
+                "WARNING:debug_toolbar.store:Panel (bar.panel) failed to "
+                "serialized data {'value': {'foo'}} properly."
+            ],
+        )
 
     def test_panel(self):
         self.assertEqual(self.store.panel("missing", "missing"), {})
