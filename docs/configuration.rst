@@ -306,15 +306,6 @@ Panel options
   the nested functions. The threshold is calculated by the root calls'
   cumulative time divided by this ratio.
 
-* ``SUPPRESS_SERIALIZATION_ERRORS``
-
-  Default: ``True``
-
-  If set to ``True`` then panels will log a warning if a ``TypeError`` is
-  raised when attempting to serialize a panel's stats rather than raising an
-  exception.. If set to ``False`` then the ``TypeError`` will be raised. The
-  default will eventually be set to ``False`` and removed entirely.
-
 * ``SHOW_TEMPLATE_CONTEXT``
 
   Default: ``True``

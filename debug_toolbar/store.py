@@ -5,6 +5,7 @@ from collections import defaultdict, deque
 from typing import Any, Dict, Iterable
 
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.encoding import force_str
 from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
@@ -12,11 +13,20 @@ from debug_toolbar import settings as dt_settings
 logger = logging.getLogger(__name__)
 
 
+class DebugToolbarJSONEncoder(DjangoJSONEncoder):
+    def default(self, o):
+        try:
+            return super().default(o)
+        except (TypeError, ValueError):
+            logger.debug("The debug toolbar can't serialize %s into JSON" % o)
+            return force_str(o)
+
+
 def serialize(data: Any) -> str:
     # If this starts throwing an exceptions, consider
     # Subclassing DjangoJSONEncoder and using force_str to
     # make it JSON serializable.
-    return json.dumps(data, cls=DjangoJSONEncoder)
+    return json.dumps(data, cls=DebugToolbarJSONEncoder)
 
 
 def deserialize(data: str) -> Any:
@@ -106,14 +116,7 @@ class MemoryStore(BaseStore):
     def save_panel(cls, request_id: str, panel_id: str, data: Any = None):
         """Save the panel data for the given request_id"""
         cls.set(request_id)
-        try:
-            cls._request_store[request_id][panel_id] = serialize(data)
-        except TypeError:
-            if dt_settings.get_config()["SUPPRESS_SERIALIZATION_ERRORS"]:
-                log = "Panel (%s) failed to serialized data %s properly."
-                logger.warning(log % (panel_id, data))
-            else:
-                raise
+        cls._request_store[request_id][panel_id] = serialize(data)
 
     @classmethod
     def panel(cls, request_id: str, panel_id: str) -> Any:
