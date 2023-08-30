@@ -47,6 +47,9 @@ contributed by the community.
 The current stable version of the Debug Toolbar is 4.1.0. It works on
 Django ≥ 3.2.4.
 
+The Debug Toolbar does not currently support `Django's asynchronous views 
+<https://docs.djangoproject.com/en/dev/topics/async/>`_.
+
 Documentation, including installation and configuration instructions, is
 available at https://django-debug-toolbar.readthedocs.io/.
 
