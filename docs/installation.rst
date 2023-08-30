@@ -7,6 +7,10 @@ Process
 Each of the following steps needs to be configured for the Debug Toolbar to be
 fully functional.
 
+.. warning::
+
+    The Debug Toolbar does not currently support `Django's asynchronous views <https://docs.djangoproject.com/en/dev/topics/async/>`_.
+
 1. Install the Package
 ^^^^^^^^^^^^^^^^^^^^^^
 
