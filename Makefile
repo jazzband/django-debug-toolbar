@@ -6,6 +6,13 @@ example:
 		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
 	python example/manage.py runserver
 
+example_async:
+	python example/manage.py migrate --noinput
+	-DJANGO_SUPERUSER_PASSWORD=p python example/manage.py createsuperuser \
+		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
+	daphne example.asgi:application
+
+
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		python -m django test $${TEST_ARGS:-tests}
