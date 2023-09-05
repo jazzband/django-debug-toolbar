@@ -128,6 +128,16 @@ class MemoryStore(BaseStore):
         else:
             return deserialize(data)
 
+    @classmethod
+    def panels(cls, request_id: str) -> Any:
+        """Fetch all the panel data for the given request_id"""
+        try:
+            panel_mapping = cls._request_store[request_id]
+        except KeyError:
+            return {}
+        for panel, data in panel_mapping.items():
+            yield panel, deserialize(data)
+
 
 def get_store() -> BaseStore:
     return import_string(dt_settings.get_config()["TOOLBAR_STORE_CLASS"])

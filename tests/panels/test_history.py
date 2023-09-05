@@ -104,6 +104,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
 
     def test_history_headers(self):
         """Validate the headers injected from the history panel."""
+        DebugToolbar.get_observe_request.cache_clear()
         response = self.client.get("/json_view/")
         request_id = list(get_store().request_ids())[0]
         self.assertEqual(response.headers["djdt-request-id"], request_id)
@@ -113,6 +114,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
     )
     def test_history_headers_unobserved(self):
         """Validate the headers aren't injected from the history panel."""
+        DebugToolbar.get_observe_request.cache_clear()
         response = self.client.get("/json_view/")
         self.assertNotIn("djdt-request-id", response.headers)
 

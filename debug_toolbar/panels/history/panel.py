@@ -89,6 +89,9 @@ class HistoryPanel(Panel):
         toolbar_history = {}
         for request_id in reversed(self.toolbar.store.request_ids()):
             toolbar_history[request_id] = {
+                "history_stats": self.toolbar.store.panel(
+                    request_id, HistoryPanel.panel_id
+                ),
                 "form": HistoryStoreForm(
                     initial={"request_id": request_id, "exclude_history": True}
                 ),

@@ -79,9 +79,10 @@ class StaticFilesPanel(panels.Panel):
 
     @property
     def title(self):
+        stats = self.get_stats()
         return _("Static files (%(num_found)s found, %(num_used)s used)") % {
-            "num_found": self.num_found,
-            "num_used": self.num_used,
+            "num_found": stats.get("num_found"),
+            "num_used": stats.get("num_used"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -95,16 +96,11 @@ class StaticFilesPanel(panels.Panel):
     def disable_instrumentation(self):
         storage.staticfiles_storage = _original_storage
 
-    @property
-    def num_used(self):
-        stats = self.get_stats()
-        return stats and stats["num_used"]
-
     nav_title = _("Static files")
 
     @property
     def nav_subtitle(self):
-        num_used = self.num_used
+        num_used = self.get_stats().get("num_used")
         return ngettext(
             "%(num_used)s file used", "%(num_used)s files used", num_used
         ) % {"num_used": num_used}

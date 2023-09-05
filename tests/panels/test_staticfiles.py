@@ -26,7 +26,7 @@ class StaticFilesPanelTestCase(BaseTestCase):
         self.assertIn(
             "django.contrib.staticfiles.finders.FileSystemFinder (2 files)", content
         )
-        self.assertEqual(self.panel.num_used, 0)
+        self.assertEqual(self.panel.get_stats()["num_used"], 0)
         self.assertNotEqual(self.panel.num_found, 0)
         expected_apps = ["django.contrib.admin", "debug_toolbar"]
         if settings.USE_GIS:
@@ -75,8 +75,8 @@ class StaticFilesPanelTestCase(BaseTestCase):
         self.assertNotIn(
             "django.contrib.staticfiles.finders.FileSystemFinder (2 files)", content
         )
-        self.assertEqual(self.panel.num_used, 0)
-        self.assertNotEqual(self.panel.num_found, 0)
+        self.assertEqual(self.panel.get_stats()["num_used"], 0)
+        self.assertNotEqual(self.panel.get_stats()["num_found"], 0)
         expected_apps = ["django.contrib.admin", "debug_toolbar"]
         if settings.USE_GIS:
             expected_apps = ["django.contrib.gis"] + expected_apps

@@ -21,6 +21,8 @@ Serializable (don't include in main)
 * Move the formatting logic of SQL queries to just before rendering in
   ``SQLPanel.content``.
 * Make ``Panel.panel_id`` a class member.
+* Update all panels to utilize data from ``Panel.get_stats()`` to load content
+  to render. Specifically for ``Panel.title`` and ``Panel.nav_title``.
 
 Pending
 -------

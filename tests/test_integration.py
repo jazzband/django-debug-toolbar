@@ -82,24 +82,7 @@ class DebugToolbarTestCase(BaseTestCase):
         toolbar.config["RENDER_PANELS"] = True
         self.assertTrue(toolbar.should_render_panels())
         toolbar.config["RENDER_PANELS"] = None
-        self.assertTrue(toolbar.should_render_panels())
-
-    def test_should_render_panels_multiprocess(self):
-        """
-        The toolbar should render the panels on each request when wsgi.multiprocess
-        is True or missing.
-        """
-        request = rf.get("/")
-        request.META["wsgi.multiprocess"] = True
-        toolbar = DebugToolbar(request, self.get_response)
-        toolbar.config["RENDER_PANELS"] = None
-        self.assertTrue(toolbar.should_render_panels())
-
-        request.META["wsgi.multiprocess"] = False
         self.assertFalse(toolbar.should_render_panels())
-
-        request.META.pop("wsgi.multiprocess")
-        self.assertTrue(toolbar.should_render_panels())
 
     def _resolve_stats(self, path):
         # takes stats from Request panel

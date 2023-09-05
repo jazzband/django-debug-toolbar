@@ -55,16 +55,18 @@ def history_refresh(request):
                     "content": render_to_string(
                         "debug_toolbar/panels/history_tr.html",
                         {
-                            "id": request_id,
-                            "store_context": {
-                                "toolbar": toolbar,
-                                "form": HistoryStoreForm(
-                                    initial={
-                                        "request_id": request_id,
-                                        "exclude_history": True,
-                                    }
-                                ),
+                            "request_id": request_id,
+                            "history_context": {
+                                "history_stats": toolbar.store.panel(
+                                    request_id, "HistoryPanel"
+                                )
                             },
+                            "form": HistoryStoreForm(
+                                initial={
+                                    "request_id": request_id,
+                                    "exclude_history": True,
+                                }
+                            ),
                         },
                     ),
                 }
