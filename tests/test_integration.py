@@ -15,6 +15,13 @@ from django.test.utils import override_settings
 from debug_toolbar.forms import SignedDataForm
 from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from debug_toolbar.panels import Panel
+from debug_toolbar.panels.cache import CachePanel
+from debug_toolbar.panels.history import HistoryPanel
+from debug_toolbar.panels.request import RequestPanel
+from debug_toolbar.panels.sql import SQLPanel
+from debug_toolbar.panels.templates import TemplatesPanel
+from debug_toolbar.panels.versions import VersionsPanel
+from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
 from .base import BaseTestCase, IntegrationTestCase
@@ -34,13 +41,13 @@ except ImportError:
 rf = RequestFactory()
 
 
-def toolbar_store_id():
+def toolbar_request_id():
     def get_response(request):
         return HttpResponse()
 
     toolbar = DebugToolbar(rf.get("/"), get_response)
-    toolbar.store()
-    return toolbar.store_id
+    toolbar.init_store()
+    return toolbar.request_id
 
 
 class BuggyPanel(Panel):
@@ -75,29 +82,12 @@ class DebugToolbarTestCase(BaseTestCase):
         toolbar.config["RENDER_PANELS"] = True
         self.assertTrue(toolbar.should_render_panels())
         toolbar.config["RENDER_PANELS"] = None
-        self.assertTrue(toolbar.should_render_panels())
-
-    def test_should_render_panels_multiprocess(self):
-        """
-        The toolbar should render the panels on each request when wsgi.multiprocess
-        is True or missing.
-        """
-        request = rf.get("/")
-        request.META["wsgi.multiprocess"] = True
-        toolbar = DebugToolbar(request, self.get_response)
-        toolbar.config["RENDER_PANELS"] = None
-        self.assertTrue(toolbar.should_render_panels())
-
-        request.META["wsgi.multiprocess"] = False
         self.assertFalse(toolbar.should_render_panels())
-
-        request.META.pop("wsgi.multiprocess")
-        self.assertTrue(toolbar.should_render_panels())
 
     def _resolve_stats(self, path):
         # takes stats from Request panel
         self.request.path = path
-        panel = self.toolbar.get_panel_by_id("RequestPanel")
+        panel = self.toolbar.get_panel_by_id(RequestPanel.panel_id)
         response = panel.process_request(self.request)
         panel.generate_stats(self.request, response)
         return panel.get_stats()
@@ -148,9 +138,13 @@ class DebugToolbarTestCase(BaseTestCase):
         # may run earlier and cause fewer cache calls.
         cache.clear()
         response = self.client.get("/cached_view/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 3)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 3
+        )
         response = self.client.get("/cached_view/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 2)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 2
+        )
 
     @override_settings(ROOT_URLCONF="tests.urls_use_package_urls")
     def test_include_package_urls(self):
@@ -159,16 +153,24 @@ class DebugToolbarTestCase(BaseTestCase):
         # may run earlier and cause fewer cache calls.
         cache.clear()
         response = self.client.get("/cached_view/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 3)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 3
+        )
         response = self.client.get("/cached_view/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 2)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 2
+        )
 
     def test_low_level_cache_view(self):
         """Test cases when low level caching API is used within a request."""
         response = self.client.get("/cached_low_level_view/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 2)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 2
+        )
         response = self.client.get("/cached_low_level_view/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 1)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 1
+        )
 
     def test_cache_disable_instrumentation(self):
         """
@@ -180,7 +182,9 @@ class DebugToolbarTestCase(BaseTestCase):
         response = self.client.get("/execute_sql/")
         self.assertEqual(cache.get("UseCacheAfterToolbar.before"), 1)
         self.assertEqual(cache.get("UseCacheAfterToolbar.after"), 1)
-        self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 0)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id(CachePanel.panel_id).calls), 0
+        )
 
     def test_is_toolbar_request(self):
         self.request.path = "/__debug__/render_panel/"
@@ -214,7 +218,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_data_gone(self):
         response = self.client.get(
-            "/__debug__/render_panel/?store_id=GONE&panel_id=RequestPanel"
+            "/__debug__/render_panel/?request_id=GONE&panel_id=RequestPanel"
         )
         self.assertIn("Please reload the page and retry.", response.json()["content"])
 
@@ -252,7 +256,11 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_render_panel_checks_show_toolbar(self):
         url = "/__debug__/render_panel/"
-        data = {"store_id": toolbar_store_id(), "panel_id": "VersionsPanel"}
+        request_id = toolbar_request_id()
+        get_store().save_panel(
+            request_id, VersionsPanel.panel_id, {"value": "Test data"}
+        )
+        data = {"request_id": request_id, "panel_id": VersionsPanel.panel_id}
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
@@ -268,18 +276,20 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
     def test_middleware_render_toolbar_json(self):
         """Verify the toolbar is rendered and data is stored for a json request."""
-        self.assertEqual(len(DebugToolbar._store), 0)
+        store = get_store()
+        self.assertEqual(len(list(store.request_ids())), 0)
 
         data = {"foo": "bar"}
         response = self.client.get("/json_view/", data, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode("utf-8"), '{"foo": "bar"}')
         # Check the history panel's stats to verify the toolbar rendered properly.
-        self.assertEqual(len(DebugToolbar._store), 1)
-        toolbar = list(DebugToolbar._store.values())[0]
+        request_ids = list(store.request_ids())
+        self.assertEqual(len(request_ids), 1)
+        toolbar = DebugToolbar.fetch(request_ids[0])
         self.assertEqual(
-            toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
-            {"foo": ["bar"]},
+            toolbar.get_panel_by_id(HistoryPanel.panel_id).get_stats()["data"],
+            {"foo": "bar"},
         )
 
     def test_template_source_checks_show_toolbar(self):
@@ -323,15 +333,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertContains(response, "Template Does Not Exist: does_not_exist.html")
 
     def test_sql_select_checks_show_toolbar(self):
+        self.client.get("/execute_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, SQLPanel.panel_id)
+        panel = toolbar.get_panel_by_id(SQLPanel.panel_id)
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_select/"
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": "SELECT * FROM auth_user",
-                    "raw_sql": "SELECT * FROM auth_user",
-                    "params": "{}",
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -349,15 +363,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             self.assertEqual(response.status_code, 404)
 
     def test_sql_explain_checks_show_toolbar(self):
+        self.client.get("/execute_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, SQLPanel.panel_id)
+        panel = toolbar.get_panel_by_id(SQLPanel.panel_id)
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_explain/"
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": "SELECT * FROM auth_user",
-                    "raw_sql": "SELECT * FROM auth_user",
-                    "params": "{}",
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -378,19 +396,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
     def test_sql_explain_postgres_json_field(self):
+        self.client.get("/execute_json_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, SQLPanel.panel_id)
+        panel = toolbar.get_panel_by_id(SQLPanel.panel_id)
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_explain/"
-        base_query = (
-            'SELECT * FROM "tests_postgresjson" WHERE "tests_postgresjson"."field" @>'
-        )
-        query = base_query + """ '{"foo": "bar"}'"""
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": query,
-                    "raw_sql": base_query + " %s",
-                    "params": '["{\\"foo\\": \\"bar\\"}"]',
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -407,15 +425,19 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             self.assertEqual(response.status_code, 404)
 
     def test_sql_profile_checks_show_toolbar(self):
+        self.client.get("/execute_sql/")
+        request_ids = list(get_store().request_ids())
+        request_id = request_ids[-1]
+        toolbar = DebugToolbar.fetch(request_id, SQLPanel.panel_id)
+        panel = toolbar.get_panel_by_id(SQLPanel.panel_id)
+        djdt_query_id = panel.get_stats()["queries"][-1]["djdt_query_id"]
+
         url = "/__debug__/sql_profile/"
         data = {
             "signed": SignedDataForm.sign(
                 {
-                    "sql": "SELECT * FROM auth_user",
-                    "raw_sql": "SELECT * FROM auth_user",
-                    "params": "{}",
-                    "alias": "default",
-                    "duration": "0",
+                    "request_id": request_id,
+                    "djdt_query_id": djdt_query_id,
                 }
             )
         }
@@ -442,7 +464,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get(url)
         self.assertIn(b'id="djDebug"', response.content)
         # Verify the store id is not included.
-        self.assertNotIn(b"data-store-id", response.content)
+        self.assertNotIn(b"data-request-id", response.content)
         # Verify the history panel was disabled
         self.assertIn(
             b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
@@ -462,7 +484,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get(url)
         self.assertIn(b'id="djDebug"', response.content)
         # Verify the store id is included.
-        self.assertIn(b"data-store-id", response.content)
+        self.assertIn(b"data-request-id", response.content)
         # Verify the history panel was not disabled
         self.assertNotIn(
             b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
@@ -512,10 +534,10 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         parser = html5lib.HTMLParser()
         doc = parser.parse(response.content)
         el = doc.find(".//*[@id='djDebug']")
-        store_id = el.attrib["data-store-id"]
+        request_id = el.attrib["data-request-id"]
         response = self.client.get(
             "/__debug__/render_panel/",
-            {"store_id": store_id, "panel_id": "TemplatesPanel"},
+            {"request_id": request_id, "panel_id": TemplatesPanel.panel_id},
         )
         self.assertEqual(response.status_code, 200)
         # The key None (without quotes) exists in the list of template
@@ -551,14 +573,14 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
     def test_basic(self):
         self.get("/regular/basic/")
-        version_panel = self.selenium.find_element(By.ID, "VersionsPanel")
+        version_panel = self.selenium.find_element(By.ID, VersionsPanel.panel_id)
 
         # Versions panel isn't loaded
         with self.assertRaises(NoSuchElementException):
             version_panel.find_element(By.TAG_NAME, "table")
 
         # Click to show the versions panel
-        self.selenium.find_element(By.CLASS_NAME, "VersionsPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, VersionsPanel.panel_id).click()
 
         # Version panel loads
         table = self.wait.until(
@@ -574,10 +596,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     )
     def test_basic_jinja(self):
         self.get("/regular_jinja/basic")
-        template_panel = self.selenium.find_element(By.ID, "TemplatesPanel")
+        template_panel = self.selenium.find_element(By.ID, TemplatesPanel.panel_id)
 
         # Click to show the template panel
-        self.selenium.find_element(By.CLASS_NAME, "TemplatesPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, TemplatesPanel.panel_id).click()
 
         self.assertIn("Templates (2 rendered)", template_panel.text)
         self.assertIn("base.html", template_panel.text)
@@ -592,14 +614,14 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.get("/regular_jinja/basic")
         # Make a new request so the history panel has more than one option.
         self.get("/execute_sql/")
-        template_panel = self.selenium.find_element(By.ID, "HistoryPanel")
+        template_panel = self.selenium.find_element(By.ID, HistoryPanel.panel_id)
         # Record the current side panel of buttons for later comparison.
         previous_button_panel = self.selenium.find_element(
             By.ID, "djDebugPanelList"
         ).text
 
         # Click to show the history panel
-        self.selenium.find_element(By.CLASS_NAME, "HistoryPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, HistoryPanel.panel_id).click()
         # Click to switch back to the jinja page view snapshot
         list(template_panel.find_elements(By.CSS_SELECTOR, "button"))[-1].click()
 
@@ -614,10 +636,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     @override_settings(DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 0})
     def test_expired_store(self):
         self.get("/regular/basic/")
-        version_panel = self.selenium.find_element(By.ID, "VersionsPanel")
+        version_panel = self.selenium.find_element(By.ID, VersionsPanel.panel_id)
 
         # Click to show the version panel
-        self.selenium.find_element(By.CLASS_NAME, "VersionsPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, VersionsPanel.panel_id).click()
 
         # Version panel doesn't loads
         error = self.wait.until(
@@ -645,10 +667,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     )
     def test_django_cached_template_loader(self):
         self.get("/regular/basic/")
-        version_panel = self.selenium.find_element(By.ID, "TemplatesPanel")
+        version_panel = self.selenium.find_element(By.ID, TemplatesPanel.panel_id)
 
         # Click to show the templates panel
-        self.selenium.find_element(By.CLASS_NAME, "TemplatesPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, TemplatesPanel.panel_id).click()
 
         # Templates panel loads
         trigger = self.wait.until(
@@ -665,11 +687,11 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
     def test_sql_action_and_go_back(self):
         self.get("/execute_sql/")
-        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+        sql_panel = self.selenium.find_element(By.ID, SQLPanel.panel_id)
         debug_window = self.selenium.find_element(By.ID, "djDebugWindow")
 
         # Click to show the SQL panel
-        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, SQLPanel.panel_id).click()
 
         # SQL panel loads
         button = self.wait.until(
@@ -692,7 +714,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
     def test_displays_server_error(self):
         self.get("/regular/basic/")
         debug_window = self.selenium.find_element(By.ID, "djDebugWindow")
-        self.selenium.find_element(By.CLASS_NAME, "BuggyPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, BuggyPanel.panel_id).click()
         self.wait.until(EC.visibility_of(debug_window))
         self.assertEqual(debug_window.text, "»\n500: Internal Server Error")
 
@@ -702,10 +724,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         assert hide_button.text == "Hide »"
 
         self.get("/execute_sql/")
-        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+        sql_panel = self.selenium.find_element(By.ID, SQLPanel.panel_id)
 
         # Click to show the SQL panel
-        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, SQLPanel.panel_id).click()
 
         table = self.wait.until(
             lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
@@ -720,10 +742,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         assert hide_button.text == "Esconder »"
 
         self.get("/execute_sql/")
-        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+        sql_panel = self.selenium.find_element(By.ID, SQLPanel.panel_id)
 
         # Click to show the SQL panel
-        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, SQLPanel.panel_id).click()
 
         table = self.wait.until(
             lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
@@ -739,10 +761,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         assert hide_button.text == "Hide »"
 
         self.get("/execute_sql/")
-        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
+        sql_panel = self.selenium.find_element(By.ID, SQLPanel.panel_id)
 
         # Click to show the SQL panel
-        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+        self.selenium.find_element(By.CLASS_NAME, SQLPanel.panel_id).click()
 
         table = self.wait.until(
             lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")

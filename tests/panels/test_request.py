@@ -1,10 +1,12 @@
 from django.http import QueryDict
 
+from debug_toolbar.panels.request import RequestPanel
+
 from ..base import BaseTestCase
 
 
 class RequestPanelTestCase(BaseTestCase):
-    panel_id = "RequestPanel"
+    panel_id = RequestPanel.panel_id
 
     def test_non_ascii_session(self):
         self.request.session = {"où": "où"}

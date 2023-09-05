@@ -1,4 +1,5 @@
 from django.template.loader import render_to_string
+from django.utils.functional import classproperty
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.utils import get_name_from_obj
@@ -12,15 +13,22 @@ class Panel:
     def __init__(self, toolbar, get_response):
         self.toolbar = toolbar
         self.get_response = get_response
+        self.from_store = False
 
     # Private panel properties
 
-    @property
-    def panel_id(self):
-        return self.__class__.__name__
+    @classproperty
+    def panel_id(cls):
+        return cls.__name__
 
     @property
     def enabled(self) -> bool:
+        if self.from_store:
+            # If the toolbar was loaded from the store the existence of
+            # recorded data indicates whether it was enabled or not.
+            # We can't use the remainder of the logic since we don't have
+            # a request to work off of.
+            return bool(self.get_stats())
         # The user's cookies should override the default value
         cookie_value = self.toolbar.request.COOKIES.get("djdt" + self.panel_id)
         if cookie_value is not None:
@@ -168,6 +176,9 @@ class Panel:
         Each call to ``record_stats`` updates the statistics dictionary.
         """
         self.toolbar.stats.setdefault(self.panel_id, {}).update(stats)
+        self.toolbar.store.save_panel(
+            self.toolbar.request_id, self.panel_id, self.toolbar.stats[self.panel_id]
+        )
 
     def get_stats(self):
         """
@@ -250,6 +261,15 @@ class Panel:
 
         Does not return a value.
         """
+
+    def load_stats_from_store(self, data):
+        """
+        Instantiate the panel from serialized data.
+
+        Return the panel instance.
+        """
+        self.toolbar.stats.setdefault(self.panel_id, {}).update(data)
+        self.from_store = True
 
     @classmethod
     def run_checks(cls):

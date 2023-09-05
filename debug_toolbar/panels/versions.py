@@ -14,7 +14,7 @@ class VersionsPanel(Panel):
 
     @property
     def nav_subtitle(self):
-        return "Django %s" % django.get_version()
+        return "Django %s" % self.get_stats()["django_version"]
 
     title = _("Versions")
 
@@ -27,7 +27,11 @@ class VersionsPanel(Panel):
         ]
         versions += list(self.gen_app_versions())
         self.record_stats(
-            {"versions": sorted(versions, key=lambda v: v[0]), "paths": sys.path}
+            {
+                "django_version": django.get_version(),
+                "versions": sorted(versions, key=lambda v: v[0]),
+                "paths": sys.path,
+            }
         )
 
     def gen_app_versions(self):

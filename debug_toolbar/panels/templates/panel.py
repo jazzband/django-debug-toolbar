@@ -9,6 +9,7 @@ from django.template import RequestContext, Template
 from django.test.signals import template_rendered
 from django.test.utils import instrumented_test_render
 from django.urls import path
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
@@ -144,15 +145,16 @@ class TemplatesPanel(Panel):
 
     @property
     def title(self):
-        num_templates = len(self.templates)
+        num_templates = len(self.get_stats()["templates"])
         return _("Templates (%(num_templates)s rendered)") % {
             "num_templates": num_templates
         }
 
     @property
     def nav_subtitle(self):
-        if self.templates:
-            return self.templates[0]["template"].name
+        templates = self.get_stats()["templates"]
+        if templates:
+            return templates[0]["name"]
         return ""
 
     template = "debug_toolbar/panels/templates.html"
@@ -170,7 +172,6 @@ class TemplatesPanel(Panel):
     def generate_stats(self, request, response):
         template_context = []
         for template_data in self.templates:
-            info = {}
             # Clean up some info about templates
             template = template_data["template"]
             if hasattr(template, "origin") and template.origin and template.origin.name:
@@ -179,16 +180,26 @@ class TemplatesPanel(Panel):
             else:
                 template.origin_name = _("No origin")
                 template.origin_hash = ""
-            info["template"] = template
+            context = {
+                "template": force_str(template),
+                "name": template.name,
+            }
             # Clean up context for better readability
             if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]:
                 context_list = template_data.get("context", [])
-                info["context"] = "\n".join(context_list)
-            template_context.append(info)
+                context["context"] = "\n".join(context_list)
+            template_context.append(context)
 
         # Fetch context_processors/template_dirs from any template
         if self.templates:
-            context_processors = self.templates[0]["context_processors"]
+            context_processors = (
+                {
+                    key: force_str(value)
+                    for key, value in self.templates[0]["context_processors"].items()
+                }
+                if self.templates[0]["context_processors"]
+                else None
+            )
             template = self.templates[0]["template"]
             # django templates have the 'engine' attribute, while jinja
             # templates use 'backend'

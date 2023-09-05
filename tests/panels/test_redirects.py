@@ -3,11 +3,13 @@ import copy
 from django.conf import settings
 from django.http import HttpResponse
 
+from debug_toolbar.panels.redirects import RedirectsPanel
+
 from ..base import BaseTestCase
 
 
 class RedirectsPanelTestCase(BaseTestCase):
-    panel_id = "RedirectsPanel"
+    panel_id = RedirectsPanel.panel_id
 
     def test_regular_response(self):
         not_redirect = HttpResponse()

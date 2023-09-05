@@ -5,9 +5,16 @@ from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.views.decorators.cache import cache_page
 
+from tests.models import PostgresJSON
+
 
 def execute_sql(request):
     list(User.objects.all())
+    return render(request, "base.html")
+
+
+def execute_json_sql(request):
+    list(PostgresJSON.objects.filter(field__contains={"foo": "bar"}))
     return render(request, "base.html")
 
 

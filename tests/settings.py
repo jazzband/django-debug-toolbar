@@ -126,5 +126,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 DEBUG_TOOLBAR_CONFIG = {
     # Django's test client sets wsgi.multiprocess to True inappropriately
-    "RENDER_PANELS": False
+    "RENDER_PANELS": False,
+    "RESULTS_CACHE_SIZE": 3,
 }

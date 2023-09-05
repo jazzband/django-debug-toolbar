@@ -7,9 +7,23 @@ Serializable (don't include in main)
 * Defines the ``BaseStore`` interface for request storage mechanisms.
 * Added the setting ``TOOLBAR_STORE_CLASS`` to configure the request
   storage mechanism. Defaults to ``debug_toolbar.store.MemoryStore``.
-* Added setting ``SUPPRESS_SERIALIZATION_ERRORS`` to suppress
-  warnings when a ``TypeError`` occurs during a panel's serialization.
-
+* Rename ``store_id`` properties to ``request_id`` and ``Toolbar.store`` to
+  ``Toolbar.init_store``.
+* Support ``Panel`` instances with stored stats via
+  ``Panel.load_stats_from_store``.
+* Swapped ``Toolbar._store`` for the ``get_store()`` class.
+* Created a ``StoredDebugToolbar`` that support creating an instance of the
+  toolbar representing an old request. It should only be used for fetching
+  panels' contents.
+* Drop ``raw_params`` from query data.
+* Queries now have a unique ``djdt_query_id``. The SQL forms now reference
+  this id and avoid passing SQL to be executed.
+* Move the formatting logic of SQL queries to just before rendering in
+  ``SQLPanel.content``.
+* Make ``Panel.panel_id`` a class member.
+* Update all panels to utilize data from ``Panel.get_stats()`` to load content
+  to render. Specifically for ``Panel.title`` and ``Panel.nav_title``.
+* Extend example app to contain an async version.
 
 Pending
 -------
