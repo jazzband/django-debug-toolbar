@@ -5,8 +5,7 @@ Pending
 -------
 
 * Removed outdated third-party panels from the list.
-* Do not quote SQL params before passing them to mogrify() for display in SQL
-  panel.
+* Avoided the unnecessary work of recursively quoting SQL parameters.
 
 4.2.0 (2023-08-10)
 ------------------
