@@ -22,14 +22,17 @@ async def async_home(request):
 async def async_db(request):
     user_count = await User.objects.acount()
 
-    return await sync_to_async(render)(request, "async_db.html", {"user_count": user_count})
+    return await sync_to_async(render)(
+        request, "async_db.html", {"user_count": user_count}
+    )
 
 
 async def async_db_concurrent(request):
     # Do database queries concurrently
     (user_count, _) = await asyncio.gather(
-        User.objects.acount(),
-        User.objects.filter(username="test").acount()
+        User.objects.acount(), User.objects.filter(username="test").acount()
     )
 
-    return await sync_to_async(render)(request, "async_db.html", {"user_count": user_count})
+    return await sync_to_async(render)(
+        request, "async_db.html", {"user_count": user_count}
+    )
