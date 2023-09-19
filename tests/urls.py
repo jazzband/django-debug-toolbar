@@ -17,6 +17,8 @@ urlpatterns = [
     path("non_ascii_request/", views.regular_view, {"title": NonAsciiRepr()}),
     path("new_user/", views.new_user),
     path("execute_sql/", views.execute_sql),
+    path("async_execute_sql/", views.async_execute_sql),
+    path("async_execute_sql_concurrently/", views.async_execute_sql_concurrently),
     path("cached_view/", views.cached_view),
     path("cached_low_level_view/", views.cached_low_level_view),
     path("json_view/", views.json_view),
