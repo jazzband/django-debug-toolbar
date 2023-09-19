@@ -2,6 +2,7 @@ import django
 from django.contrib.auth.models import User
 from django.template import Context, RequestContext, Template
 from django.test import override_settings
+from django.utils.functional import SimpleLazyObject
 
 from ..base import BaseTestCase, IntegrationTestCase
 from ..forms import TemplateReprForm
@@ -112,6 +113,22 @@ class TemplatesPanelTestCase(BaseTestCase):
             self.panel.templates[0]["context_list"],
             ["{'False': False, 'None': None, 'True': True}"],
         )
+
+    def test_lazyobject(self):
+        response = self.panel.process_request(self.request)
+        t = Template("")
+        c = Context({"lazy": SimpleLazyObject(lambda: "lazy_value")})
+        t.render(c)
+        self.panel.generate_stats(self.request, response)
+        self.assertNotIn("lazy_value", self.panel.content)
+
+    def test_lazyobject_eval(self):
+        response = self.panel.process_request(self.request)
+        t = Template("{{lazy}}")
+        c = Context({"lazy": SimpleLazyObject(lambda: "lazy_value")})
+        self.assertEqual(t.render(c), "lazy_value")
+        self.panel.generate_stats(self.request, response)
+        self.assertIn("lazy_value", self.panel.content)
 
 
 @override_settings(

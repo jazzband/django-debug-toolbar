@@ -7,6 +7,7 @@ Pending
 * Removed outdated third-party panels from the list.
 * Postponed context process in templates panel to include lazy evaluated
   content.
+* Fixed template panel to avoid evaluating ``LazyObject`` when not already evaluated.
 
 4.2.0 (2023-08-10)
 ------------------

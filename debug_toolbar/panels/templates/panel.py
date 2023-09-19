@@ -133,10 +133,15 @@ class TemplatesPanel(Panel):
             if pformatted is None:
                 temp_layer = {}
                 for key, value in context_layer.items():
+                    # Do not force evaluating LazyObject
+                    if hasattr(value, "_wrapped"):
+                        # SimpleLazyObject has __repr__ which includes actual value
+                        # if it has been already evaluated
+                        temp_layer[key] = repr(value)
                     # Replace any request elements - they have a large
                     # Unicode representation and the request data is
                     # already made available from the Request panel.
-                    if isinstance(value, http.HttpRequest):
+                    elif isinstance(value, http.HttpRequest):
                         temp_layer[key] = "<<request>>"
                     # Replace the debugging sql_queries element. The SQL
                     # data is already made available from the SQL panel.
