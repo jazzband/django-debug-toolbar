@@ -252,15 +252,21 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_sql_page(self):
         response = self.client.get("/execute_sql/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1
+        )
 
     def test_async_sql_page(self):
         response = self.client.get("/async_execute_sql/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1
+        )
 
     def test_concurrent_async_sql_page(self):
         response = self.client.get("/async_execute_sql_concurrently/")
-        self.assertEqual(len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2)
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2
+        )
 
 
 @override_settings(DEBUG=True)
@@ -858,27 +864,26 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
     def test_async_sql_action(self):
         self.get("/async_execute_sql/")
-        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
-        debug_window = self.selenium.find_element(By.ID, "djDebugWindow")
+        self.selenium.find_element(By.ID, "SQLPanel")
+        self.selenium.find_element(By.ID, "djDebugWindow")
 
         # Click to show the SQL panel
         self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
 
         # SQL panel loads
-        button = self.wait.until(
+        self.wait.until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
         )
 
-
     def test_concurrent_async_sql_action(self):
         self.get("/async_execute_sql_concurrently/")
-        sql_panel = self.selenium.find_element(By.ID, "SQLPanel")
-        debug_window = self.selenium.find_element(By.ID, "djDebugWindow")
+        self.selenium.find_element(By.ID, "SQLPanel")
+        self.selenium.find_element(By.ID, "djDebugWindow")
 
         # Click to show the SQL panel
         self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
 
         # SQL panel loads
-        button = self.wait.until(
+        self.wait.until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
         )

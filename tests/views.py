@@ -24,7 +24,6 @@ async def async_execute_sql_concurrently(request):
     return render(request, "base.html")
 
 
-
 def regular_view(request, title):
     return render(request, "basic.html", {"title": title})
 

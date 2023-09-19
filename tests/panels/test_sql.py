@@ -103,7 +103,6 @@ class SQLPanelTestCase(BaseTestCase):
         # ensure the stacktrace is populated
         self.assertTrue(len(query["stacktrace"]) > 0)
 
-
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
