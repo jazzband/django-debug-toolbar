@@ -18,6 +18,7 @@ INTERNAL_IPS = ["127.0.0.1", "::1"]
 # Application definition
 
 INSTALLED_APPS = [
+    *(["daphne"] if os.getenv("ASYNC_SERVER", False) else []),  # noqa: FBT003
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -66,6 +67,7 @@ TEMPLATES = [
 USE_TZ = True
 
 WSGI_APPLICATION = "example.wsgi.application"
+ASGI_APPLICATION = "example.asgi.application"
 
 
 # Cache and database
@@ -103,7 +105,6 @@ if os.environ.get("DB_BACKEND", "").lower() == "mysql":
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "example", "static")]
 
-
 # Only enable the toolbar when we're in debug mode and we're
 # not running tests. Django will change DEBUG to be False for
 # tests, so we can't rely on DEBUG alone.
@@ -117,3 +118,26 @@ if ENABLE_DEBUG_TOOLBAR:
     ]
     # Customize the config to support turbo and htmx boosting.
     DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        # Log when an asynchronous handler is adapted for middleware.
+        # See warning here: https://docs.djangoproject.com/en/4.2/topics/async/#async-views
+        "django.request": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_REQUEST_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
