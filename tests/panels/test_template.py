@@ -21,6 +21,7 @@ class TemplatesPanelTestCase(BaseTestCase):
         super().tearDown()
 
     def test_queryset_hook(self):
+        response = self.panel.process_request(self.request)
         t = Template("No context variables here!")
         c = Context(
             {
@@ -29,12 +30,13 @@ class TemplatesPanelTestCase(BaseTestCase):
             }
         )
         t.render(c)
+        self.panel.generate_stats(self.request, response)
 
         # ensure the query was NOT logged
         self.assertEqual(len(self.sql_panel._queries), 0)
 
         self.assertEqual(
-            self.panel.templates[0]["context"],
+            self.panel.templates[0]["context_list"],
             [
                 "{'False': False, 'None': None, 'True': True}",
                 "{'deep_queryset': '<<triggers database query>>',\n"
@@ -99,13 +101,15 @@ class TemplatesPanelTestCase(BaseTestCase):
             self.assertFalse(self.panel.enabled)
 
     def test_empty_context(self):
+        response = self.panel.process_request(self.request)
         t = Template("")
         c = Context({})
         t.render(c)
+        self.panel.generate_stats(self.request, response)
 
         # Includes the builtin context but not the empty one.
         self.assertEqual(
-            self.panel.templates[0]["context"],
+            self.panel.templates[0]["context_list"],
             ["{'False': False, 'None': None, 'True': True}"],
         )
 

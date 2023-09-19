@@ -83,58 +83,11 @@ class TemplatesPanel(Panel):
         if is_debug_toolbar_template:
             return
 
-        context_list = []
-        for context_layer in context.dicts:
-            if hasattr(context_layer, "items") and context_layer:
-                # Check if the layer is in the cache.
-                pformatted = None
-                for key_values, _pformatted in self.pformat_layers:
-                    if key_values == context_layer:
-                        pformatted = _pformatted
-                        break
-
-                if pformatted is None:
-                    temp_layer = {}
-                    for key, value in context_layer.items():
-                        # Replace any request elements - they have a large
-                        # Unicode representation and the request data is
-                        # already made available from the Request panel.
-                        if isinstance(value, http.HttpRequest):
-                            temp_layer[key] = "<<request>>"
-                        # Replace the debugging sql_queries element. The SQL
-                        # data is already made available from the SQL panel.
-                        elif key == "sql_queries" and isinstance(value, list):
-                            temp_layer[key] = "<<sql_queries>>"
-                        # Replace LANGUAGES, which is available in i18n context
-                        # processor
-                        elif key == "LANGUAGES" and isinstance(value, tuple):
-                            temp_layer[key] = "<<languages>>"
-                        # QuerySet would trigger the database: user can run the
-                        # query from SQL Panel
-                        elif isinstance(value, (QuerySet, RawQuerySet)):
-                            temp_layer[key] = "<<{} of {}>>".format(
-                                value.__class__.__name__.lower(),
-                                value.model._meta.label,
-                            )
-                        else:
-                            token = allow_sql.set(False)  # noqa: FBT003
-                            try:
-                                saferepr(value)  # this MAY trigger a db query
-                            except SQLQueryTriggered:
-                                temp_layer[key] = "<<triggers database query>>"
-                            except UnicodeEncodeError:
-                                temp_layer[key] = "<<Unicode encode error>>"
-                            except Exception:
-                                temp_layer[key] = "<<unhandled exception>>"
-                            else:
-                                temp_layer[key] = value
-                            finally:
-                                allow_sql.reset(token)
-                    pformatted = pformat(temp_layer)
-                    self.pformat_layers.append((context_layer, pformatted))
-                context_list.append(pformatted)
-
-        kwargs["context"] = context_list
+        kwargs["context"] = [
+            context_layer
+            for context_layer in context.dicts
+            if hasattr(context_layer, "items") and context_layer
+        ]
         kwargs["context_processors"] = getattr(context, "context_processors", None)
         self.templates.append(kwargs)
 
@@ -167,6 +120,59 @@ class TemplatesPanel(Panel):
     def disable_instrumentation(self):
         template_rendered.disconnect(self._store_template_info)
 
+    def process_context_list(self, context_layers):
+        context_list = []
+        for context_layer in context_layers:
+            # Check if the layer is in the cache.
+            pformatted = None
+            for key_values, _pformatted in self.pformat_layers:
+                if key_values == context_layer:
+                    pformatted = _pformatted
+                    break
+
+            if pformatted is None:
+                temp_layer = {}
+                for key, value in context_layer.items():
+                    # Replace any request elements - they have a large
+                    # Unicode representation and the request data is
+                    # already made available from the Request panel.
+                    if isinstance(value, http.HttpRequest):
+                        temp_layer[key] = "<<request>>"
+                    # Replace the debugging sql_queries element. The SQL
+                    # data is already made available from the SQL panel.
+                    elif key == "sql_queries" and isinstance(value, list):
+                        temp_layer[key] = "<<sql_queries>>"
+                    # Replace LANGUAGES, which is available in i18n context
+                    # processor
+                    elif key == "LANGUAGES" and isinstance(value, tuple):
+                        temp_layer[key] = "<<languages>>"
+                    # QuerySet would trigger the database: user can run the
+                    # query from SQL Panel
+                    elif isinstance(value, (QuerySet, RawQuerySet)):
+                        temp_layer[key] = "<<{} of {}>>".format(
+                            value.__class__.__name__.lower(),
+                            value.model._meta.label,
+                        )
+                    else:
+                        token = allow_sql.set(False)  # noqa: FBT003
+                        try:
+                            saferepr(value)  # this MAY trigger a db query
+                        except SQLQueryTriggered:
+                            temp_layer[key] = "<<triggers database query>>"
+                        except UnicodeEncodeError:
+                            temp_layer[key] = "<<Unicode encode error>>"
+                        except Exception:
+                            temp_layer[key] = "<<unhandled exception>>"
+                        else:
+                            temp_layer[key] = value
+                        finally:
+                            allow_sql.reset(token)
+                pformatted = pformat(temp_layer)
+                self.pformat_layers.append((context_layer, pformatted))
+            context_list.append(pformatted)
+
+        return context_list
+
     def generate_stats(self, request, response):
         template_context = []
         for template_data in self.templates:
@@ -182,8 +188,11 @@ class TemplatesPanel(Panel):
             info["template"] = template
             # Clean up context for better readability
             if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]:
-                context_list = template_data.get("context", [])
-                info["context"] = "\n".join(context_list)
+                if "context_list" not in template_data:
+                    template_data["context_list"] = self.process_context_list(
+                        template_data.get("context", [])
+                    )
+                info["context"] = "\n".join(template_data["context_list"])
             template_context.append(info)
 
         # Fetch context_processors/template_dirs from any template
