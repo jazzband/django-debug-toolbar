@@ -5,6 +5,7 @@ Pending
 -------
 
 * Removed outdated third-party panels from the list.
+* Avoided the unnecessary work of recursively quoting SQL parameters.
 
 4.2.0 (2023-08-10)
 ------------------
