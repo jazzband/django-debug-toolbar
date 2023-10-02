@@ -109,21 +109,6 @@ class NormalCursorMixin(DjDTCursorWrapperMixin):
     Wraps a cursor and logs queries.
     """
 
-    def _quote_expr(self, element):
-        if isinstance(element, str):
-            return "'%s'" % element.replace("'", "''")
-        else:
-            return repr(element)
-
-    def _quote_params(self, params):
-        if not params:
-            return params
-        if isinstance(params, dict):
-            return {key: self._quote_expr(value) for key, value in params.items()}
-        if isinstance(params, tuple):
-            return tuple(self._quote_expr(p) for p in params)
-        return [self._quote_expr(p) for p in params]
-
     def _decode(self, param):
         if PostgresJson and isinstance(param, PostgresJson):
             # psycopg3
@@ -157,9 +142,7 @@ class NormalCursorMixin(DjDTCursorWrapperMixin):
         # process during the .last_executed_query() call.
         self.db._djdt_logger = None
         try:
-            return self.db.ops.last_executed_query(
-                self.cursor, sql, self._quote_params(params)
-            )
+            return self.db.ops.last_executed_query(self.cursor, sql, params)
         finally:
             self.db._djdt_logger = self.logger
 

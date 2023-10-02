@@ -152,27 +152,6 @@ using Brendan Gregg's `flamegraph.pl script
 <https://github.com/brendangregg/FlameGraph/flamegraph.pl>`_ to perform the
 heavy lifting.
 
-HTML Tidy/Validator
-~~~~~~~~~~~~~~~~~~~
-
-URL: https://github.com/joymax/django-dtpanel-htmltidy
-
-Path: ``debug_toolbar_htmltidy.panels.HTMLTidyDebugPanel``
-
-HTML Tidy or HTML Validator is a custom panel that validates your HTML and
-displays warnings and errors.
-
-Inspector
-~~~~~~~~~
-
-URL: https://github.com/santiagobasulto/debug-inspector-panel
-
-Path: ``inspector_panel.panels.inspector.InspectorPanel``
-
-Retrieves and displays information you specify using the ``debug`` statement.
-Inspector panel also logs to the console by default, but may be instructed not
-to.
-
 LDAP Tracing
 ~~~~~~~~~~~~
 
@@ -276,18 +255,6 @@ Path: ``requests_panel.panel.RequestsDebugPanel``
 
 Lists HTTP requests made with the popular `requests <https://requests.readthedocs.io/>`_ library.
 
-Sites
-~~~~~
-
-URL: https://github.com/elvard/django-sites-toolbar
-
-Path: ``sites_toolbar.panels.SitesDebugPanel``
-
-Browse Sites registered in ``django.contrib.sites`` and switch between them.
-Useful to debug project when you use `django-dynamicsites
-<https://bitbucket.org/uysrc/django-dynamicsites/src>`_ which sets SITE_ID
-dynamically.
-
 Template Profiler
 ~~~~~~~~~~~~~~~~~
 
@@ -307,15 +274,6 @@ URL: https://github.com/orf/django-debug-toolbar-template-timings
 Path: ``template_timings_panel.panels.TemplateTimings.TemplateTimings``
 
 Displays template rendering times for your Django application.
-
-User
-~~~~
-
-URL: https://github.com/playfire/django-debug-toolbar-user-panel
-
-Path: ``debug_toolbar_user_panel.panels.UserPanel``
-
-Easily switch between logged in users, see properties of current user.
 
 VCS Info
 ~~~~~~~~
