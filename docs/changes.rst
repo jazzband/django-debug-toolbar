@@ -10,6 +10,7 @@ Pending
   content.
 * Fixed template panel to avoid evaluating ``LazyObject`` when not already
   evaluated.
+* Added support for Django 5.0.
 
 4.2.0 (2023-08-10)
 ------------------
