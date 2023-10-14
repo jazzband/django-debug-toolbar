@@ -4,6 +4,7 @@ Change log
 Pending
 -------
 
+* Added Python 3.12 to test matrix.
 * Removed outdated third-party panels from the list.
 * Avoided the unnecessary work of recursively quoting SQL parameters.
 * Postponed context process in templates panel to include lazy evaluated

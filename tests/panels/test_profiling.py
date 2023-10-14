@@ -1,3 +1,6 @@
+import sys
+import unittest
+
 from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse
@@ -50,6 +53,10 @@ class ProfilingPanelTestCase(BaseTestCase):
         self.assertNotIn("render", content)
         self.assertValidHTML(content)
 
+    @unittest.skipUnless(
+        sys.version_info < (3, 12, 0),
+        "Python 3.12 no longer contains a frame for list comprehensions.",
+    )
     def test_listcomp_escaped(self):
         self._get_response = lambda request: listcomp_view(request)
         response = self.panel.process_request(self.request)
