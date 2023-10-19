@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
     -   id: check-toml
     -   id: check-yaml
@@ -31,7 +31,7 @@ repos:
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.50.0
+    rev: v8.51.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -39,7 +39,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.0.291'
+    rev: 'v0.0.292'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -50,10 +50,10 @@ repos:
         language_version: python3
         entry: black --target-version=py38
 -   repo: https://github.com/tox-dev/pyproject-fmt
-    rev: 1.1.0
+    rev: 1.2.0
     hooks:
       - id: pyproject-fmt
 -   repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.14
+    rev: v0.15
     hooks:
       - id: validate-pyproject
