@@ -18,18 +18,24 @@ class GetNameFromObjTestCase(unittest.TestCase):
             return 1
 
         res = get_name_from_obj(x)
-        self.assertEqual(res, "tests.test_utils.x")
+        self.assertEqual(
+            res, "tests.test_utils.GetNameFromObjTestCase.test_func.<locals>.x"
+        )
 
     def test_lambda(self):
         res = get_name_from_obj(lambda: 1)
-        self.assertEqual(res, "tests.test_utils.<lambda>")
+        self.assertEqual(
+            res, "tests.test_utils.GetNameFromObjTestCase.test_lambda.<locals>.<lambda>"
+        )
 
     def test_class(self):
         class A:
             pass
 
         res = get_name_from_obj(A)
-        self.assertEqual(res, "tests.test_utils.A")
+        self.assertEqual(
+            res, "tests.test_utils.GetNameFromObjTestCase.test_class.<locals>.A"
+        )
 
 
 class RenderStacktraceTestCase(unittest.TestCase):

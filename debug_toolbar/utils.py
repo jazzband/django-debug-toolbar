@@ -162,13 +162,15 @@ def get_template_source_from_exception_info(
 
 
 def get_name_from_obj(obj: Any) -> str:
-    name = obj.__name__ if hasattr(obj, "__name__") else obj.__class__.__name__
-
-    if hasattr(obj, "__module__"):
-        module = obj.__module__
-        name = f"{module}.{name}"
-
-    return name
+    """Get the best name as `str` from a view or a object."""
+    # This is essentially a rewrite of the `django.contrib.admindocs.utils.get_view_name`
+    # https://github.com/django/django/blob/9a22d1769b042a88741f0ff3087f10d94f325d86/django/contrib/admindocs/utils.py#L26-L32
+    if hasattr(obj, "view_class"):
+        klass = obj.view_class
+        return f"{klass.__module__}.{klass.__qualname__}"
+    mod_name = obj.__module__
+    view_name = getattr(obj, "__qualname__", obj.__class__.__name__)
+    return mod_name + "." + view_name
 
 
 def getframeinfo(frame: Any, context: int = 1) -> inspect.Traceback:
