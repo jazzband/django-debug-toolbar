@@ -5,6 +5,7 @@ The main DebugToolbar class that loads and renders the Toolbar.
 import uuid
 from collections import OrderedDict
 from functools import lru_cache
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
 
 from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
@@ -12,7 +13,7 @@ from django.dispatch import Signal
 from django.http import HttpRequest
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
-from django.urls import path, resolve
+from django.urls import URLPattern, path, resolve
 from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 from django.utils.translation import get_language, override as lang_override
@@ -20,6 +21,9 @@ from django.utils.translation import get_language, override as lang_override
 from debug_toolbar import APP_NAME, settings as dt_settings
 
 from ._stubs import GetResponse
+
+if TYPE_CHECKING:
+    from .panels import Panel
 
 
 class DebugToolbar:
@@ -39,32 +43,32 @@ class DebugToolbar:
         # Use OrderedDict for the _panels attribute so that items can be efficiently
         # removed using FIFO order in the DebugToolbar.store() method.  The .popitem()
         # method of Python's built-in dict only supports LIFO removal.
-        self._panels = OrderedDict()
+        self._panels = OrderedDict()  # type: ignore[var-annotated]
         while panels:
             panel = panels.pop()
             self._panels[panel.panel_id] = panel
-        self.stats = {}
-        self.server_timing_stats = {}
-        self.store_id = None
+        self.stats: Dict[str, Any] = {}
+        self.server_timing_stats: Dict[str, Any] = {}
+        self.store_id: Optional[str] = None
         self._created.send(request, toolbar=self)
 
     # Manage panels
 
     @property
-    def panels(self):
+    def panels(self) -> List["Panel"]:
         """
         Get a list of all available panels.
         """
         return list(self._panels.values())
 
     @property
-    def enabled_panels(self):
+    def enabled_panels(self) -> List["Panel"]:
         """
         Get a list of panels enabled for the current request.
         """
         return [panel for panel in self._panels.values() if panel.enabled]
 
-    def get_panel_by_id(self, panel_id):
+    def get_panel_by_id(self, panel_id: str) -> "Panel":
         """
         Get the panel with the given id, which is the class name by default.
         """
@@ -72,7 +76,7 @@ class DebugToolbar:
 
     # Handle rendering the toolbar in HTML
 
-    def render_toolbar(self):
+    def render_toolbar(self) -> str:
         """
         Renders the overall Toolbar with panels inside.
         """
@@ -93,7 +97,7 @@ class DebugToolbar:
             else:
                 raise
 
-    def should_render_panels(self):
+    def should_render_panels(self) -> bool:
         """Determine whether the panels should be rendered during the request
 
         If False, the panels will be loaded via Ajax.
@@ -109,7 +113,7 @@ class DebugToolbar:
 
     # Handle storing toolbars in memory and fetching them later on
 
-    _store = OrderedDict()
+    _store = OrderedDict()  # type: ignore[var-annotated]
 
     def store(self):
         # Store already exists.
@@ -127,7 +131,7 @@ class DebugToolbar:
     # Manually implement class-level caching of panel classes and url patterns
     # because it's more obvious than going through an abstraction.
 
-    _panel_classes = None
+    _panel_classes: Optional[List[Type["Panel"]]] = None
 
     @classmethod
     def get_panel_classes(cls):
@@ -139,10 +143,10 @@ class DebugToolbar:
             cls._panel_classes = panel_classes
         return cls._panel_classes
 
-    _urlpatterns = None
+    _urlpatterns: Optional[List[URLPattern]] = None
 
     @classmethod
-    def get_urls(cls):
+    def get_urls(cls) -> List[URLPattern]:
         if cls._urlpatterns is None:
             from . import views
 
@@ -158,7 +162,7 @@ class DebugToolbar:
         return cls._urlpatterns
 
     @classmethod
-    def is_toolbar_request(cls, request):
+    def is_toolbar_request(cls, request) -> bool:
         """
         Determine if the request is for a DebugToolbar view.
         """
@@ -170,7 +174,10 @@ class DebugToolbar:
             )
         except Resolver404:
             return False
-        return resolver_match.namespaces and resolver_match.namespaces[-1] == APP_NAME
+        return (
+            bool(resolver_match.namespaces)
+            and resolver_match.namespaces[-1] == APP_NAME
+        )
 
     @staticmethod
     @lru_cache(maxsize=None)
@@ -184,7 +191,7 @@ class DebugToolbar:
             return func_or_path
 
 
-def observe_request(request):
+def observe_request(request: HttpRequest):
     """
     Determine whether to update the toolbar from a client side request.
     """
