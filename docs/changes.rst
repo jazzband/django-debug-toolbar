@@ -12,6 +12,8 @@ Pending
 * Fixed template panel to avoid evaluating ``LazyObject`` when not already
   evaluated.
 * Added support for Django 5.0.
+* Refactor the ``utils.get_name_from_obj`` to simulate the behavior of
+  ``django.contrib.admindocs.utils.get_view_name``.
 
 4.2.0 (2023-08-10)
 ------------------
