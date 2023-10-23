@@ -9,6 +9,7 @@ from functools import lru_cache
 from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import Signal
+from django.http import HttpRequest
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.urls import path, resolve
@@ -18,12 +19,14 @@ from django.utils.translation import get_language, override as lang_override
 
 from debug_toolbar import APP_NAME, settings as dt_settings
 
+from ._stubs import GetResponse
+
 
 class DebugToolbar:
     # for internal testing use only
     _created = Signal()
 
-    def __init__(self, request, get_response):
+    def __init__(self, request: HttpRequest, get_response: GetResponse):
         self.request = request
         self.config = dt_settings.get_config().copy()
         panels = []
