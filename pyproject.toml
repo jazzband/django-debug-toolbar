@@ -63,7 +63,6 @@ extend-select = [
   "FBT",    # flake8-boolean-trap
   "I",      # isort
   "INT",    # flake8-gettext
-  # "N",    # pep8-naming
   "PGH",    # pygrep-hooks
   "PIE",    # flake8-pie
   "RUF100", # Unused noqa directive
@@ -74,6 +73,7 @@ extend-select = [
 ]
 extend-ignore = [
   "B905",   # Allow zip() without strict=
+  "SIM108", # Use ternary operator instead of if-else-block
 ]
 fix = true
 line-length = 124
