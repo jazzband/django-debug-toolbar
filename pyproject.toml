@@ -53,33 +53,6 @@ path = "debug_toolbar/__init__.py"
 
 [tool.ruff]
 extend-select = [
-  "F", "E", "W",
-  "I",
-  # pep8-naming
-  # "N",
-  # pyupgrade
-  "UP",
-  # flake8-2020
-  # "YTT",
-  # flake8-boolean-trap
-  "FBT",
-  # flake8-bugbear
-  "B",
-  # flake8-comprehensions
-  "C4",
-  # flake8-django
-  "DJ",
-  # flake8-pie
-  "PIE",
-  # flake8-simplify
-  "SIM",
-  # flake8-gettext
-  "INT",
-  # pygrep-hooks
-  "PGH",
-  # pylint
-  # "PL",
-  # unused noqa
   "RUF100",
 
   "ASYNC",  # flake8-async
@@ -95,6 +68,7 @@ extend-select = [
   # "N",    # pep8-naming
   "PGH",    # pygrep-hooks
   "PIE",    # flake8-pie
+  "RUF100", # Unused noqa directive
   "SIM",    # flake8-simplify
   "SLOT",   # flake8-slots
   "UP",     # pyupgrade
