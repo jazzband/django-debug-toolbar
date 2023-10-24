@@ -73,10 +73,10 @@ extend-select = [
 ]
 extend-ignore = [
   "B905",   # Allow zip() without strict=
+  "E501",   # Ignore line length violations
   "SIM108", # Use ternary operator instead of if-else-block
 ]
 fix = true
-line-length = 124
 show-fixes = true
 target-version = "py38"
 
