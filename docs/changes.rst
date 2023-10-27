@@ -14,6 +14,8 @@ Pending
 * Added support for Django 5.0.
 * Refactor the ``utils.get_name_from_obj`` to simulate the behavior of
   ``django.contrib.admindocs.utils.get_view_name``.
+* Switched from black to the `ruff formatter
+  <https://astral.sh/blog/the-ruff-formatter>`__.
 
 4.2.0 (2023-08-10)
 ------------------
