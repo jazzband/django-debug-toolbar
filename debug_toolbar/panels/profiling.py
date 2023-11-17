@@ -47,12 +47,9 @@ class FunctionCall:
             file_name = os.path.normpath(file_name)
             base_dir = os.path.normpath(base_dir)
 
-            return (
-                file_name.startswith(base_dir)
-                and not any(
-                    directory in file_name.split(os.path.sep)
-                    for directory in ["site-packages", "dist-packages"]
-                )
+            return file_name.startswith(base_dir) and not any(
+                directory in file_name.split(os.path.sep)
+                for directory in ["site-packages", "dist-packages"]
             )
         return None
 
