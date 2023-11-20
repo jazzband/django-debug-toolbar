@@ -24,14 +24,14 @@ repos:
     -   id: rst-backticks
     -   id: rst-directive-colons
 -   repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.3
+    rev: v3.1.0
     hooks:
     -   id: prettier
         types_or: [javascript, css]
         args:
         -  --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.53.0
+    rev: v8.54.0
     hooks:
     -   id: eslint
         files: \.js?$
@@ -39,13 +39,13 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.1.4'
+    rev: 'v0.1.6'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 -   repo: https://github.com/tox-dev/pyproject-fmt
-    rev: 1.4.1
+    rev: 1.5.1
     hooks:
       - id: pyproject-fmt
 -   repo: https://github.com/abravalheri/validate-pyproject
