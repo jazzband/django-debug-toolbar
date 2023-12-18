@@ -213,7 +213,7 @@ def getframeinfo(frame: Any, context: int = 1) -> inspect.Traceback:
 
 
 def get_sorted_request_variable(
-    variable: Union[Dict[str, Any], QueryDict]
+    variable: Union[Dict[str, Any], QueryDict],
 ) -> Dict[str, Union[List[Tuple[str, Any]], Any]]:
     """
     Get a data structure for showing a sorted list of variables from the
