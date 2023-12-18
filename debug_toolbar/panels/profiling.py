@@ -42,10 +42,14 @@ class FunctionCall:
         """
         if hasattr(settings, "BASE_DIR"):
             file_name, _, _ = self.func
-            return (
-                str(settings.BASE_DIR) in file_name
-                and "/site-packages/" not in file_name
-                and "/dist-packages/" not in file_name
+            base_dir = str(settings.BASE_DIR)
+
+            file_name = os.path.normpath(file_name)
+            base_dir = os.path.normpath(base_dir)
+
+            return file_name.startswith(base_dir) and not any(
+                directory in file_name.split(os.path.sep)
+                for directory in ["site-packages", "dist-packages"]
             )
         return None
 
