@@ -5,9 +5,9 @@
     <title>Django Debug Toolbar Redirects Panel: {{ status_line }}</title>
     <script type="module" src="{% static 'debug_toolbar/js/redirect.js' %}" async></script>
   </head>
-  <body>
+  <body aria-live="polite" role="status">
     <h1>{{ status_line }}</h1>
-    <h2>{% trans "Location:" %} <a id="redirect_to" href="{{ redirect_to }}">{{ redirect_to }}</a></h2>
+    <h2>{% trans "Location:" %} <a id="redirect_to" href="{{ redirect_to }}" role="link">{{ redirect_to }}</a></h2>
     <p class="notice">
       {% trans "The Django Debug Toolbar has intercepted a redirect to the above URL for debug viewing purposes. You can click the above link to continue with the redirect as normal." %}
     </p>
