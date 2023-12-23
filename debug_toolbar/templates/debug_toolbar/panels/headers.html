@@ -1,8 +1,8 @@
 {% load i18n %}
 
-<h4>{% trans "Request headers" %}</h4>
+<h4 id="request-headers">{% trans "Request headers" %}</h4>
 
-<table>
+<table aria-labelledby="request-headers">
   <thead>
     <tr>
       <th>{% trans "Key" %}</th>
@@ -19,9 +19,9 @@
   </tbody>
 </table>
 
-<h4>{% trans "Response headers" %}</h4>
+<h4 id="response-headers">{% trans "Response headers" %}</h4>
 
-<table>
+<table aria-labelledby="response-headers">
   <thead>
     <tr>
       <th>{% trans "Key" %}</th>
@@ -38,11 +38,11 @@
   </tbody>
 </table>
 
-<h4>{% trans "WSGI environ" %}</h4>
+<h4 id="wsgi-environ">{% trans "WSGI environ" %}</h4>
 
 <p>{% trans "Since the WSGI environ inherits the environment of the server, only a significant subset is shown below." %}</p>
 
-<table>
+<table aria-labelledby="wsgi-environ">
   <thead>
     <tr>
       <th>{% trans "Key" %}</th>
