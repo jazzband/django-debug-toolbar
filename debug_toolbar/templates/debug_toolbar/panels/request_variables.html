@@ -1,20 +1,20 @@
 {% load i18n %}
 
 {% if variables.list %}
-<table>
+<table role="table" aria-labelledby="request-variables-table-heading">
   <colgroup>
     <col class="djdt-width-20">
     <col>
   </colgroup>
   <thead>
-    <tr>
-      <th>{% trans "Variable" %}</th>
-      <th>{% trans "Value" %}</th>
+    <tr role="row">
+      <th role="columnheader">{% trans "Variable" %}</th>
+      <th role="columnheader">{% trans "Value" %}</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody role="rowgroup">
     {% for key, value in variables.list %}
-      <tr>
+      <tr role="row">
         <td><code>{{ key|pprint }}</code></td>
         <td><code>{{ value|pprint }}</code></td>
       </tr>
