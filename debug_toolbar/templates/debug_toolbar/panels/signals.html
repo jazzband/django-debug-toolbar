@@ -1,14 +1,15 @@
 {% load i18n %}
-<table>
-  <thead>
-    <tr>
-      <th>{% trans "Signal" %}</th>
-      <th>{% trans "Receivers" %}</th>
+
+<table role="table" aria-labelledby="signals-heading">
+  <thead role="rowgroup">
+    <tr role="row">
+      <th role="columnheader">{% trans "Signal" %}</th>
+      <th role="columnheader">{% trans "Receivers" %}</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody role="rowgroup">
     {% for name, receivers in signals %}
-      <tr>
+      <tr role="row">
         <td>{{ name|escape }}</td>
         <td>{{ receivers|join:", " }}</td>
       </tr>
