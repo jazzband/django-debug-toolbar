@@ -1,38 +1,51 @@
 {% load i18n static %}
+
 {% block css %}
-<link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" media="print">
-<link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}">
+    <link rel="stylesheet" href="{% static 'debug_toolbar/css/print.css' %}" media="print">
+    <link rel="stylesheet" href="{% static 'debug_toolbar/css/toolbar.css' %}">
 {% endblock %}
+
 {% block js %}
-<script type="module" src="{% static 'debug_toolbar/js/toolbar.js' %}" async></script>
+    <script type="module" src="{% static 'debug_toolbar/js/toolbar.js' %}" async></script>
 {% endblock %}
+
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      {% if not toolbar.should_render_panels %}
-     data-store-id="{{ toolbar.store_id }}"
-     data-render-panel-url="{% url 'djdt:render_panel' %}"
+         data-store-id="{{ toolbar.store_id }}"
+         data-render-panel-url="{% url 'djdt:render_panel' %}"
      {% endif %}
      {% url 'djdt:history_sidebar' as history_url %}
      {% if history_url %}
-     data-sidebar-url="{{ history_url }}"
+         data-sidebar-url="{{ history_url }}"
      {% endif %}
      data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
-     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
-  <div class="djdt-hidden" id="djDebugToolbar">
-    <ul id="djDebugPanelList">
-      <li><a id="djHideToolBarButton" href="#" title="{% trans 'Hide toolbar' %}">{% trans "Hide" %} »</a></li>
-      {% for panel in toolbar.panels %}
-        {% include "debug_toolbar/includes/panel_button.html" %}
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="djdt-hidden" id="djDebugToolbarHandle">
-    <div title="{% trans 'Show toolbar' %}" id="djShowToolBarButton">
-      <span id="djShowToolBarD">D</span><span id="djShowToolBarJ">J</span>DT
-    </div>
-  </div>
+     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}
+     aria-live="polite"
+     role="status"
+     aria-busy="{% if toolbar.config.SHOW_COLLAPSED %}true{% else %}false{% endif %}">
 
-  {% for panel in toolbar.panels %}
-    {% include "debug_toolbar/includes/panel_content.html" %}
-  {% endfor %}
-  <div id="djDebugWindow" class="djdt-panelContent djdt-hidden"></div>
+    <div class="djdt-hidden" id="djDebugToolbar" aria-hidden="true">
+        <ul id="djDebugPanelList">
+            <li>
+                <a id="djHideToolBarButton" href="#" title="{% trans 'Hide toolbar' %}">
+                    {% trans "Hide" %} »
+                </a>
+            </li>
+            {% for panel in toolbar.panels %}
+                {% include "debug_toolbar/includes/panel_button.html" %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="djdt-hidden" id="djDebugToolbarHandle">
+        <div title="{% trans 'Show toolbar' %}" id="djShowToolBarButton" role="button" tabindex="0">
+            <span id="djShowToolBarD">D</span><span id="djShowToolBarJ">J</span>DT
+        </div>
+    </div>
+
+    {% for panel in toolbar.panels %}
+        {% include "debug_toolbar/includes/panel_content.html" %}
+    {% endfor %}
+
+    <div id="djDebugWindow" class="djdt-panelContent djdt-hidden" aria-hidden="true"></div>
 </div>
