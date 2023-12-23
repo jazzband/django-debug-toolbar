@@ -1,5 +1,5 @@
 {% load i18n %}
-<h4>{% blocktrans count template_dirs|length as template_count %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
+<h4 role="heading" aria-level="2">{% blocktrans count template_dirs|length as template_count %}Template path{% plural %}Template paths{% endblocktrans %}</h4>
 {% if template_dirs %}
   <ol>
     {% for template in template_dirs %}
@@ -10,14 +10,14 @@
   <p>{% trans "None" %}</p>
 {% endif %}
 
-<h4>{% blocktrans count templates|length as template_count %}Template{% plural %}Templates{% endblocktrans %}</h4>
+<h4 role="heading" aria-level="2">{% blocktrans count templates|length as template_count %}Template{% plural %}Templates{% endblocktrans %}</h4>
 {% if templates %}
   <dl>
     {% for template in templates %}
-      <dt><strong><a class="remoteCall toggleTemplate" href="{% url 'djdt:template_source' %}?template={{ template.template.name }}&amp;template_origin={{ template.template.origin_hash }}">{{ template.template.name|addslashes }}</a></strong></dt>
+      <dt role="heading" aria-level="3"><strong><a class="remoteCall toggleTemplate" href="{% url 'djdt:template_source' %}?template={{ template.template.name }}&amp;template_origin={{ template.template.origin_hash }}">{{ template.template.name|addslashes }}</a></strong></dt>
       <dd><samp>{{ template.template.origin_name|addslashes }}</samp></dd>
       {% if template.context %}
-        <dd>
+        <dd role="group">
           <details>
             <summary>{% trans "Toggle context" %}</summary>
             <code class="djTemplateContext">{{ template.context }}</code>
@@ -30,12 +30,12 @@
   <p>{% trans "None" %}</p>
 {% endif %}
 
-<h4>{% blocktrans count context_processors|length as context_processors_count %}Context processor{% plural %}Context processors{% endblocktrans %}</h4>
+<h4 role="heading" aria-level="2">{% blocktrans count context_processors|length as context_processors_count %}Context processor{% plural %}Context processors{% endblocktrans %}</h4>
 {% if context_processors %}
   <dl>
     {% for key, value in context_processors.items %}
-      <dt><strong>{{ key|escape }}</strong></dt>
-      <dd>
+      <dt role="heading" aria-level="3"><strong>{{ key|escape }}</strong></dt>
+      <dd role="group">
         <details>
           <summary>{% trans "Toggle context" %}</summary>
           <code class="djTemplateContext">{{ value|escape }}</code>
