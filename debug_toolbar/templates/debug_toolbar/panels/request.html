@@ -1,17 +1,17 @@
 {% load i18n %}
 
-<h4>{% trans "View information" %}</h4>
-<table>
+<h4 id="view-info-heading">{% trans "View information" %}</h4>
+<table role="table" aria-labelledby="view-info-heading">
   <thead>
-    <tr>
-      <th>{% trans "View function" %}</th>
-      <th>{% trans "Arguments" %}</th>
-      <th>{% trans "Keyword arguments" %}</th>
-      <th>{% trans "URL name" %}</th>
+    <tr role="row">
+      <th role="columnheader">{% trans "View function" %}</th>
+      <th role="columnheader">{% trans "Arguments" %}</th>
+      <th role="columnheader">{% trans "Keyword arguments" %}</th>
+      <th role="columnheader">{% trans "URL name" %}</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
+  <tbody role="rowgroup">
+    <tr role="row">
       <td><code>{{ view_func }}</code></td>
       <td><code>{{ view_args|pprint }}</code></td>
       <td><code>{{ view_kwargs|pprint }}</code></td>
@@ -21,28 +21,28 @@
 </table>
 
 {% if cookies.list or cookies.raw %}
-  <h4>{% trans "Cookies" %}</h4>
+  <h4 id="cookies-heading">{% trans "Cookies" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=cookies %}
 {% else %}
   <h4>{% trans "No cookies" %}</h4>
 {% endif %}
 
 {% if session.list or session.raw %}
-  <h4>{% trans "Session data" %}</h4>
+  <h4 id="session-heading">{% trans "Session data" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=session %}
 {% else %}
   <h4>{% trans "No session data" %}</h4>
 {% endif %}
 
 {% if get.list or get.raw %}
-  <h4>{% trans "GET data" %}</h4>
+  <h4 id="get-heading">{% trans "GET data" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=get %}
 {% else %}
   <h4>{% trans "No GET data" %}</h4>
 {% endif %}
 
 {% if post.list or post.raw %}
-  <h4>{% trans "POST data" %}</h4>
+  <h4 id="post-heading">{% trans "POST data" %}</h4>
   {% include 'debug_toolbar/panels/request_variables.html' with variables=post %}
 {% else %}
   <h4>{% trans "No POST data" %}</h4>
