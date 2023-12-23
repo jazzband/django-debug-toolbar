@@ -1,41 +1,42 @@
 {% load i18n %}
-<div class="djDebugPanelTitle">
+
+<div class="djDebugPanelTitle" role="heading" aria-level="2">
   <button type="button" class="djDebugClose">»</button>
   <h3>{% trans "SQL profiled" %}</h3>
 </div>
 <div class="djDebugPanelContent">
   <div class="djdt-scroll">
     {% if result %}
-      <dl>
-        <dt>{% trans "Executed SQL" %}</dt>
-        <dd>{{ sql|safe }}</dd>
-        <dt>{% trans "Time" %}</dt>
-        <dd>{{ duration }} ms</dd>
-        <dt>{% trans "Database" %}</dt>
-        <dd>{{ alias }}</dd>
+      <dl role="list">
+        <dt role="listitem">{% trans "Executed SQL" %}</dt>
+        <dd role="listitem">{{ sql|safe }}</dd>
+        <dt role="listitem">{% trans "Time" %}</dt>
+        <dd role="listitem">{{ duration }} ms</dd>
+        <dt role="listitem">{% trans "Database" %}</dt>
+        <dd role="listitem">{{ alias }}</dd>
       </dl>
-      <table>
-        <thead>
-          <tr>
+      <table role="table">
+        <thead role="rowgroup">
+          <tr role="row">
             {% for h in headers %}
-              <th>{{ h|upper }}</th>
+              <th role="columnheader">{{ h|upper }}</th>
             {% endfor %}
           </tr>
         </thead>
-        <tbody>
+        <tbody role="rowgroup">
           {% for row in result %}
-            <tr>
+            <tr role="row">
               {% for column in row %}
-                <td>{{ column|escape }}</td>
+                <td role="cell">{{ column|escape }}</td>
               {% endfor %}
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <dl>
-        <dt>{% trans "Error" %}</dt>
-        <dd>{{ result_error }}</dd>
+      <dl role="list">
+        <dt role="listitem">{% trans "Error" %}</dt>
+        <dd role="listitem">{{ result_error }}</dd>
       </dl>
     {% endif %}
   </div>
