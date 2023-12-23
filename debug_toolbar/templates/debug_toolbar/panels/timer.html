@@ -1,5 +1,5 @@
 {% load i18n %}
-<h4>{% trans "Resource usage" %}</h4>
+<h4 role="heading" aria-level="2">{% trans "Resource usage" %}</h4>
 <table>
   <colgroup>
     <col class="djdt-width-20">
@@ -22,8 +22,8 @@
 </table>
 
 <!-- This hidden div is populated and displayed by code in toolbar.timer.js -->
-<div id="djDebugBrowserTiming" class="djdt-hidden">
-  <h4>{% trans "Browser timing" %}</h4>
+<div id="djDebugBrowserTiming" class="djdt-hidden" role="group" aria-labelledby="djDebugBrowserTimingTitle">
+  <h4 id="djDebugBrowserTimingTitle">{% trans "Browser timing" %}</h4>
   <table>
     <colgroup>
       <col class="djdt-width-20">
