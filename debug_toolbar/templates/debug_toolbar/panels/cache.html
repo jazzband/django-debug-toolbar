@@ -1,6 +1,6 @@
 {% load i18n %}
-<h4>{% trans "Summary" %}</h4>
-<table>
+<h4 id="summary-heading">{% trans "Summary" %}</h4>
+<table aria-labelledby="summary-heading">
   <thead>
     <tr>
       <th>{% trans "Total calls" %}</th>
@@ -18,8 +18,8 @@
     </tr>
   </tbody>
 </table>
-<h4>{% trans "Commands" %}</h4>
-<table>
+<h4 id="commands-heading">{% trans "Commands" %}</h4>
+<table aria-labelledby="commands-heading">
   <thead>
     <tr>
       {% for name in counts.keys %}
@@ -36,8 +36,8 @@
   </tbody>
 </table>
 {% if calls %}
-  <h4>{% trans "Calls" %}</h4>
-  <table>
+  <h4 id="calls-heading">{% trans "Calls" %}</h4>
+  <table aria-labelledby="calls-heading">
     <thead>
       <tr>
         <th colspan="2">{% trans "Time (ms)" %}</th>
@@ -59,7 +59,7 @@
           <td>{{ call.kwargs|escape }}</td>
           <td>{{ call.backend }}</td>
         </tr>
-        <tr class="djUnselected djToggleDetails_{{ forloop.counter }}" id="cacheDetails_{{ forloop.counter }}">
+        <tr class="djUnselected djToggleDetails_{{ forloop.counter }}" id="cacheDetails_{{ forloop.counter }}" aria-hidden="true">
           <td colspan="1"></td>
           <td colspan="5"><pre class="djdt-stack">{{ call.trace }}</pre></td>
         </tr>
