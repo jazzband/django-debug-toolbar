@@ -1,7 +1,7 @@
 {% load i18n %}
 
-<li id="djdt-{{ panel.panel_id }}" class="djDebugPanelButton" role="checkbox" aria-checked="{% if panel.enabled %}true{% else %}false{% endif %}">
-  <input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked{% endif %} title="{% if panel.enabled %}{% trans "Disable for next and successive requests" %}{% else %}{% trans "Enable for next and successive requests" %}{% endif %}" aria-label="{% if panel.enabled %}{% trans "Disable for next and successive requests" %}{% else %}{% trans "Enable for next and successive requests" %}{% endif %}">
+<li id="djdt-{{ panel.panel_id }}" class="djDebugPanelButton" role="checkbox">
+  <input type="checkbox" data-cookie="djdt{{ panel.panel_id }}" {% if panel.enabled %}checked title="{% trans "Disable for next and successive requests" %}"{% else %}title="{% trans "Enable for next and successive requests" %}"{% endif %} aria-label="{% if panel.enabled %}{% trans "Disable for next and successive requests" %}{% else %}{% trans "Enable for next and successive requests" %}{% endif %}">
   {% if panel.has_content and panel.enabled %}
     <a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}" role="link">
   {% else %}

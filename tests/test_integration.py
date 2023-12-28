@@ -446,7 +446,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         # Verify the history panel was disabled
         self.assertIn(
             b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
-            b'title="Enable for next and successive requests">',
+            b'title="Enable for next and successive requests" '
+            b'aria-label="Enable for next and successive requests">',
             response.content,
         )
         # Verify the a panel was rendered

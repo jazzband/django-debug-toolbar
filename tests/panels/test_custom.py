@@ -19,9 +19,9 @@ class CustomPanelTestCase(IntegrationTestCase):
         self.assertContains(
             response,
             """
-            <li id="djdt-CustomPanel" class="djDebugPanelButton">
-            <input type="checkbox" checked title="Disable for next and successive requests" data-cookie="djdtCustomPanel">
-            <a class="CustomPanel" href="#" title="Title with special chars &amp;&quot;&#39;&lt;&gt;">
+            <li id="djdt-CustomPanel" class="djDebugPanelButton" role="checkbox">
+            <input type="checkbox" checked title="Disable for next and successive requests" data-cookie="djdtCustomPanel" aria-label="Disable for next and successive requests">
+            <a class="CustomPanel" href="#" title="Title with special chars &amp;&quot;&#39;&lt;&gt;" role="link">
             Title with special chars &amp;&quot;&#39;&lt;&gt;
             </a>
             </li>
@@ -31,14 +31,14 @@ class CustomPanelTestCase(IntegrationTestCase):
         self.assertContains(
             response,
             """
-            <div id="CustomPanel" class="djdt-panelContent djdt-hidden">
+            <div id="CustomPanel" class="djdt-panelContent djdt-hidden" role="region" aria-labelledby="djdt-CustomPanel-title">
             <div class="djDebugPanelTitle">
-            <button type="button" class="djDebugClose">×</button>
+            <button type="button" class="djDebugClose" aria-label="Close">×</button>
             <h3>Title with special chars &amp;&quot;&#39;&lt;&gt;</h3>
             </div>
             <div class="djDebugPanelContent">
-            <div class="djdt-loader"></div>
-            <div class="djdt-scroll"></div>
+            <div class="djdt-loader" role="alert" aria-busy="true"></div>
+            <div class="djdt-scroll" aria-live="polite" aria-atomic="true"></div>
             </div>
             </div>
             """,
