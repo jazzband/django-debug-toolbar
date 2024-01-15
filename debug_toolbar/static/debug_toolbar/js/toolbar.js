@@ -1,4 +1,5 @@
 import { $$, ajax, replaceToolbarState, debounce } from "./utils.js";
+import { refreshHistory } from "./history.js"
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
@@ -19,6 +20,7 @@ const djdt = {
     handleDragged: false,
     init() {
         const djDebug = getDebugElement();
+        console.log(djDebug)
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
             event.preventDefault();
             if (!this.className) {
@@ -49,12 +51,16 @@ const djdt = {
                         inner.previousElementSibling.remove(); // Remove AJAX loader
                         inner.innerHTML = data.content;
                         $$.executeScripts(data.scripts);
+                        if (panelId == "HistoryPanel"){
+                            refreshHistory();
+                        }
                         $$.applyStyles(inner);
                         djDebug.dispatchEvent(
                             new CustomEvent("djdt.panel.render", {
                                 detail: { panelId: panelId },
                             })
                         );
+
                     });
                 } else {
                     djDebug.dispatchEvent(
@@ -62,6 +68,9 @@ const djdt = {
                             detail: { panelId: panelId },
                         })
                     );
+                    if (panelId == "HistoryPanel"){
+                            refreshHistory();
+                        }
                 }
             }
         });
@@ -274,7 +283,9 @@ const djdt = {
             storeId = encodeURIComponent(storeId);
             const dest = `${sidebarUrl}?store_id=${storeId}`;
             slowjax(dest).then(function (data) {
-                replaceToolbarState(storeId, data);
+                if (window.djdt.history_storeId == null){
+                    replaceToolbarState(storeId, data);
+                }
             });
         }
 
@@ -356,6 +367,7 @@ window.djdt = {
     init: djdt.init,
     close: djdt.hideOneLevel,
     cookie: djdt.cookie,
+    history_storeId: null,  // StoreId if we choose to open a past request in the history
 };
 
 if (document.readyState !== "loading") {
