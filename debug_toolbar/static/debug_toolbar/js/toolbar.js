@@ -20,7 +20,6 @@ const djdt = {
     handleDragged: false,
     init() {
         const djDebug = getDebugElement();
-        console.log(djDebug)
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
             event.preventDefault();
             if (!this.className) {
