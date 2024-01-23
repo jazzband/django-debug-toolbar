@@ -163,6 +163,15 @@ Toolbar options
   but want to render your application in French, you would set this to
   ``"en-us"`` and :setting:`LANGUAGE_CODE` to ``"fr"``.
 
+.. _UDPATE_ON_AJAX:
+
+* ``UDPATE_ON_AJAX``
+
+  Default: ``False``
+
+  This setting specifies if  the whole toolbar need to be refresh if an ajax
+  request is done.
+
 Panel options
 ~~~~~~~~~~~~~
 

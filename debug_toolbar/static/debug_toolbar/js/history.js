@@ -76,7 +76,6 @@ function switchHistory(newStoreId) {
     const formTarget = djDebug.querySelector(
         ".switchHistory[data-store-id='" + newStoreId + "']"
     );
-    djdt.history_storeId = newStoreId
     const tbody = formTarget.closest("tbody");
 
     const highlighted = tbody.querySelector(".djdt-highlighted");
@@ -105,5 +104,4 @@ $$.on(djDebug, "click", ".refreshHistory", function (event) {
     event.preventDefault();
     refreshHistory();
 });
-
-export { refreshHistory };
+$$.onPanelRender(djDebug, "HistoryPanel", refreshHistory);
