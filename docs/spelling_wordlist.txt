@@ -57,3 +57,4 @@ tox
 uWSGI
 unhashable
 validator
+ajax
