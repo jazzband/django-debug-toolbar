@@ -6,6 +6,7 @@ Pympler
 Roboto
 Transifex
 Werkzeug
+ajax
 async
 backend
 backends
@@ -57,4 +58,3 @@ tox
 uWSGI
 unhashable
 validator
-ajax
