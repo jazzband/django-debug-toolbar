@@ -19,7 +19,7 @@ const djdt = {
     handleDragged: false,
     init() {
         const djDebug = getDebugElement();
-        window.djdt.update_on_ajax = djDebug.getAttribute("update-on-ajax") === "True"
+        window.djdt.update_on_ajax = djDebug.getAttribute("update-on-ajax") === "True";
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
             event.preventDefault();
             if (!this.className) {

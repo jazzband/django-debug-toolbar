@@ -751,19 +751,18 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("Action", table.text)
 
     def test_ajax_dont_refresh(self):
-        self.get('/ajax/')
+        self.get("/ajax/")
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
         history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
-        self.assertIn('/ajax/', history_panel.text)
-        self.assertNotIn('/json_view/', history_panel.text)
+        self.assertIn("/ajax/", history_panel.text)
+        self.assertNotIn("/json_view/", history_panel.text)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"UDPATE_ON_AJAX": True})
     def test_ajax_refresh(self):
-        self.get('/ajax/')
+        self.get("/ajax/")
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
         history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
-        self.assertNotIn('/ajax/', history_panel.text)
-        self.assertIn('/json_view/', history_panel.text)
-
+        self.assertNotIn("/ajax/", history_panel.text)
+        self.assertIn("/json_view/", history_panel.text)
