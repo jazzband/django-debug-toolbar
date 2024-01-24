@@ -4,6 +4,7 @@
 #
 # Translators:
 # Ali Soltani <alisoltanics@gmail.com>, 2021
+# Elyas Ebrahimpour <eliasebrahimpour@gmail.com>, 2024
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
@@ -31,15 +32,15 @@ msgstr "Cache"
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cache_calls)d فراخوان در %(time).2f میلی‌ثانیه"
+msgstr[1] "%(cache_calls)d فراخوان در %(time).2f میلی‌ثانیه"
 
 #: panels/cache.py:195
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "فراخوان‌های کش از %(count)d بک‌اند"
+msgstr[1] "فراخوان‌های کش از %(count)d بک‌اندها"
 
 #: panels/headers.py:31
 msgid "Headers"
@@ -55,7 +56,7 @@ msgstr "نمایه سازی"
 
 #: panels/redirects.py:14
 msgid "Intercept redirects"
-msgstr ""
+msgstr "رهگیری تغییر مسیرها"
 
 #: panels/request.py:16
 msgid "Request"
@@ -63,11 +64,11 @@ msgstr "ریکوئست"
 
 #: panels/request.py:36
 msgid "<no view>"
-msgstr ""
+msgstr "<بدون نمایش>"
 
 #: panels/request.py:53
 msgid "<unavailable>"
-msgstr ""
+msgstr "<در دسترس نیست>"
 
 #: panels/settings.py:17
 msgid "Settings"
@@ -82,19 +83,19 @@ msgstr "تنظیمات از %s"
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_receivers)d گیرنده از 1 سیگنال"
+msgstr[1] "%(num_receivers)d گیرنده از 1 سیگنال"
 
 #: panels/signals.py:62
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_receivers)d گیرنده از %(num_signals)d سیگنال"
+msgstr[1] "%(num_receivers)d گیرنده از %(num_signals)d سیگنال"
 
 #: panels/signals.py:67
 msgid "Signals"
-msgstr "signal ها"
+msgstr "سیگنال‌ها"
 
 #: panels/sql/panel.py:23
 msgid "Autocommit"
@@ -102,15 +103,15 @@ msgstr "کامیت خودکار"
 
 #: panels/sql/panel.py:24
 msgid "Read uncommitted"
-msgstr ""
+msgstr "خواندن بدون تاثیر"
 
 #: panels/sql/panel.py:25
 msgid "Read committed"
-msgstr ""
+msgstr "خواندن با تاثیر"
 
 #: panels/sql/panel.py:26
 msgid "Repeatable read"
-msgstr ""
+msgstr "خواندن تکرارپذیر"
 
 #: panels/sql/panel.py:27
 msgid "Serializable"
@@ -144,20 +145,21 @@ msgstr "اس کیو ال"
 #, python-format
 msgid "%(query_count)d query in %(sql_time).2fms"
 msgid_plural "%(query_count)d queries in %(sql_time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(query_count)d کوئری در %(sql_time).2f میلی‌ثانیه"
+msgstr[1] "%(query_count)d کوئری در %(sql_time).2f میلی‌ثانیه"
 
 #: panels/sql/panel.py:147
 #, python-format
 msgid "SQL queries from %(count)d connection"
 msgid_plural "SQL queries from %(count)d connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "کوئری‌های SQL از %(count)d اتصال"
+msgstr[1] "کوئری‌های SQL از %(count)d اتصال"
 
 #: panels/staticfiles.py:84
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr ""
+msgstr "فایل‌های استاتیک (%(num_found)s یافته شده، %(num_used)s استفاده شده)"
+
 
 #: panels/staticfiles.py:105
 msgid "Static files"
@@ -167,8 +169,8 @@ msgstr "فایل های استاتیک"
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_used)s فایل استفاده شده"
+msgstr[1] "%(num_used)s فایل استفاده شده"
 
 #: panels/templates/panel.py:143
 msgid "Templates"
@@ -186,12 +188,12 @@ msgstr "بدون origin"
 #: panels/timer.py:25
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
-msgstr ""
+msgstr "پردازنده: %(cum)0.2f میلی‌ثانیه (%(total)0.2f میلی‌ثانیه)"
 
 #: panels/timer.py:30
 #, python-format
 msgid "Total: %0.2fms"
-msgstr ""
+msgstr "مجموع: %0.2f میلی‌ثانیه"
 
 #: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
 #: templates/debug_toolbar/panels/sql_explain.html:11
@@ -207,7 +209,7 @@ msgstr "زمان سی پی یو کاربر"
 #: panels/timer.py:44
 #, python-format
 msgid "%(utime)0.3f msec"
-msgstr ""
+msgstr "%(utime)0.3f میلی‌ثانیه"
 
 #: panels/timer.py:45
 msgid "System CPU time"
@@ -216,7 +218,7 @@ msgstr "زمان CPU سیستم"
 #: panels/timer.py:45
 #, python-format
 msgid "%(stime)0.3f msec"
-msgstr ""
+msgstr "%(stime)0.3f میلی‌ثانیه"
 
 #: panels/timer.py:46
 msgid "Total CPU time"
@@ -234,16 +236,16 @@ msgstr "زمان سپری شده"
 #: panels/timer.py:47
 #, python-format
 msgid "%(total_time)0.3f msec"
-msgstr ""
+msgstr "%(total_time)0.3f میلی‌ثانیه"
 
 #: panels/timer.py:49
 msgid "Context switches"
-msgstr ""
+msgstr "تغییرات زمینه"
 
 #: panels/timer.py:50
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
-msgstr ""
+msgstr "%(vcsw)d اختیاری، %(ivcsw)d غیراختیاری"
 
 #: panels/versions.py:19
 msgid "Versions"
@@ -287,9 +289,7 @@ msgstr "Cache hits"
 
 #: templates/debug_toolbar/panels/cache.html:9
 msgid "Cache misses"
-msgstr ""
-"Cache misses\n"
-" "
+msgstr "عدم دسترسی به کش"
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
@@ -297,7 +297,7 @@ msgstr "دستورات"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
-msgstr "call ها"
+msgstr "فراخوانی ها"
 
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:36
@@ -524,7 +524,7 @@ msgstr "کوئری SQL ای در این ریکوئست ثبت نشده است"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
-msgstr ""
+msgstr "توضیح SQL"
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
@@ -548,7 +548,7 @@ msgstr "خطا"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
-msgstr ""
+msgstr "انتخاب شده SQL"
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
@@ -616,13 +616,13 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/templates.html:22
 #: templates/debug_toolbar/panels/templates.html:40
 msgid "Toggle context"
-msgstr ""
+msgstr "تغییر متن"
 
 #: templates/debug_toolbar/panels/templates.html:33
 msgid "Context processor"
 msgid_plural "Context processors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "پردازشگر محیط"
+msgstr[1] "پردازشگرهای محیط"
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
@@ -642,7 +642,7 @@ msgstr "ویژگی زمان بندی"
 
 #: templates/debug_toolbar/panels/timer.html:37
 msgid "Milliseconds since navigation start (+length)"
-msgstr ""
+msgstr "میلی‌ثانیه از آغاز ناوبری (+length)"
 
 #: templates/debug_toolbar/panels/versions.html:10
 msgid "Package"
@@ -666,6 +666,9 @@ msgid ""
 "debug viewing purposes. You can click the above link to continue with the "
 "redirect as normal."
 msgstr ""
+"نوار ابزار اشکال‌زدای Django یک هدایت به URL بالا را به منظور مشاهده اشکال "
+"توسط ابزار اشکال‌زدای افزونه کرده است. می‌توانید بر روی پیوند بالا کلیک "
+"کنید تا با هدایت به صورت عادی ادامه دهید."
 
 #: views.py:16
 msgid ""
