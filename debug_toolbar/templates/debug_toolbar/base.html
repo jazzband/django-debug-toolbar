@@ -16,7 +16,7 @@
      data-sidebar-url="{{ history_url }}"
      {% endif %}
      data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
-     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}  update-on-ajax="{{ toolbar.config.UDPATE_ON_AJAX|safe }}">
+     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}  data-update-on-fetch="{{ toolbar.config.UPDATE_ON_FETCH|safe }}">
   <div class="djdt-hidden" id="djDebugToolbar">
     <ul id="djDebugPanelList">
       <li><a id="djHideToolBarButton" href="#" title="{% trans 'Hide toolbar' %}">{% trans "Hide" %} »</a></li>

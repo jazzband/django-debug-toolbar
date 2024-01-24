@@ -17,9 +17,10 @@ function getDebugElement() {
 
 const djdt = {
     handleDragged: false,
+    needUpdateOnFetch: false,
     init() {
         const djDebug = getDebugElement();
-        window.djdt.update_on_ajax = djDebug.getAttribute("update-on-ajax") === "True";
+        djdt.needUpdateOnFetch = djDebug.dataset.updateOnFetch === "True";
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
             event.preventDefault();
             if (!this.className) {
@@ -276,7 +277,7 @@ const djdt = {
             storeId = encodeURIComponent(storeId);
             const dest = `${sidebarUrl}?store_id=${storeId}`;
             slowjax(dest).then(function (data) {
-                if (window.djdt.update_on_ajax){
+                if (djdt.needUpdateOnFetch){
                     replaceToolbarState(storeId, data);
                 }
             });
@@ -360,7 +361,6 @@ window.djdt = {
     init: djdt.init,
     close: djdt.hideOneLevel,
     cookie: djdt.cookie,
-    update_on_ajax: false,
 };
 
 if (document.readyState !== "loading") {

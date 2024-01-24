@@ -163,9 +163,9 @@ Toolbar options
   but want to render your application in French, you would set this to
   ``"en-us"`` and :setting:`LANGUAGE_CODE` to ``"fr"``.
 
-.. _UDPATE_ON_AJAX:
+.. _UPDATE_ON_FETCH:
 
-* ``UDPATE_ON_AJAX``
+* ``UPDATE_ON_FETCH``
 
   Default: ``False``
 

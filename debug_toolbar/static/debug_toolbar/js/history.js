@@ -104,4 +104,5 @@ $$.on(djDebug, "click", ".refreshHistory", function (event) {
     event.preventDefault();
     refreshHistory();
 });
+// As we don't refresh the whole toolbar each fetch or ajax request we need to refresh the history when we open the panel
 $$.onPanelRender(djDebug, "HistoryPanel", refreshHistory);

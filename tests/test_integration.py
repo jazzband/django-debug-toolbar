@@ -758,7 +758,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("/ajax/", history_panel.text)
         self.assertNotIn("/json_view/", history_panel.text)
 
-    @override_settings(DEBUG_TOOLBAR_CONFIG={"UDPATE_ON_AJAX": True})
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"UPDATE_ON_FETCH": True})
     def test_ajax_refresh(self):
         self.get("/ajax/")
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
