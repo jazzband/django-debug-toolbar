@@ -17,6 +17,7 @@ Pending
   ``django.contrib.admindocs.utils.get_view_name``.
 * Switched from black to the `ruff formatter
   <https://astral.sh/blog/the-ruff-formatter>`__.
+* Add a setting for refresh or not the toolbar if an ajax request occurs.
 
 4.2.0 (2023-08-10)
 ------------------
