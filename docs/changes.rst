@@ -17,6 +17,8 @@ Pending
   ``django.contrib.admindocs.utils.get_view_name``.
 * Switched from black to the `ruff formatter
   <https://astral.sh/blog/the-ruff-formatter>`__.
+* Changed the default position of the toolbar from top to the upper top
+  position.
 
 4.2.0 (2023-08-10)
 ------------------
