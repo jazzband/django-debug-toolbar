@@ -32,6 +32,20 @@ def sql_call(*, use_iterator=False):
     return list(qs)
 
 
+async def async_sql_call(*, use_iterator=False):
+    qs = User.objects.all()
+    if use_iterator:
+        qs = qs.iterator()
+    return await sync_to_async(list)(qs)
+
+
+async def concurrent_async_sql_call(*, use_iterator=False):
+    qs = User.objects.all()
+    if use_iterator:
+        qs = qs.iterator()
+    return await asyncio.gather(sync_to_async(list)(qs), User.objects.acount())
+
+
 class SQLPanelTestCase(BaseTestCase):
     panel_id = "SQLPanel"
 
@@ -48,6 +62,38 @@ class SQLPanelTestCase(BaseTestCase):
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
+        query = self.panel._queries[0]
+        self.assertEqual(query["alias"], "default")
+        self.assertTrue("sql" in query)
+        self.assertTrue("duration" in query)
+        self.assertTrue("stacktrace" in query)
+
+        # ensure the stacktrace is populated
+        self.assertTrue(len(query["stacktrace"]) > 0)
+
+    async def test_recording_async(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        await async_sql_call()
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 1)
+        query = self.panel._queries[0]
+        self.assertEqual(query["alias"], "default")
+        self.assertTrue("sql" in query)
+        self.assertTrue("duration" in query)
+        self.assertTrue("stacktrace" in query)
+
+        # ensure the stacktrace is populated
+        self.assertTrue(len(query["stacktrace"]) > 0)
+
+    async def test_recording_concurrent_async(self):
+        self.assertEqual(len(self.panel._queries), 0)
+
+        await concurrent_async_sql_call()
+
+        # ensure query was logged
+        self.assertEqual(len(self.panel._queries), 2)
         query = self.panel._queries[0]
         self.assertEqual(query["alias"], "default")
         self.assertTrue("sql" in query)

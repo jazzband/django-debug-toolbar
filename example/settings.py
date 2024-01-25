@@ -16,6 +16,7 @@ INTERNAL_IPS = ["127.0.0.1", "::1"]
 # Application definition
 
 INSTALLED_APPS = [
+    *(["daphne"] if os.getenv("ASYNC_SERVER", False) else []),
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -60,6 +61,7 @@ TEMPLATES = [
 USE_TZ = True
 
 WSGI_APPLICATION = "example.wsgi.application"
+ASGI_APPLICATION = "example.asgi.application"
 
 DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
 
@@ -97,3 +99,26 @@ if os.environ.get("DB_BACKEND", "").lower() == "mysql":
     }
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "example", "static")]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        # Log when an asynchronous handler is adapted for middleware.
+        # See warning here: https://docs.djangoproject.com/en/4.2/topics/async/#async-views
+        "django.request": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_REQUEST_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
