@@ -229,7 +229,7 @@ const djdt = {
         const handle = document.getElementById("djDebugToolbarHandle");
         // set handle position
         const handleTop = Math.min(
-            localStorage.getItem("djdt.top") || 0,
+            localStorage.getItem("djdt.top") || 265,
             window.innerHeight - handle.offsetWidth
         );
         handle.style.top = handleTop + "px";
