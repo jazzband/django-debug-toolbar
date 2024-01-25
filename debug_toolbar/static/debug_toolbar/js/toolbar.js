@@ -57,7 +57,6 @@ const djdt = {
                                 detail: { panelId: panelId },
                             })
                         );
-
                     });
                 } else {
                     djDebug.dispatchEvent(

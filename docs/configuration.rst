@@ -169,8 +169,9 @@ Toolbar options
 
   Default: ``False``
 
-  This setting specifies if  the whole toolbar need to be refresh if an ajax
-  request is done.
+  This controls whether the toolbar should update to the latest AJAX request when it occurs.
+  This is useful to enable if when "boosting" the web application with a JavaScript library such
+  as htmx.
 
 Panel options
 ~~~~~~~~~~~~~
