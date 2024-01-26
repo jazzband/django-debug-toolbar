@@ -170,8 +170,8 @@ Toolbar options
   Default: ``False``
 
   This controls whether the toolbar should update to the latest AJAX
-  request when it occurs. This is useful to enable if when "boosting"
-  the web application with a JavaScript library such as htmx.
+  request when it occurs. This is especially useful when using htmx
+  boosting or similar JavaScript techniques.
 
 Panel options
 ~~~~~~~~~~~~~
