@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import unittest
 
 import html5lib
@@ -755,6 +756,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
         history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        self.wait.until(
+            lambda selenium: self.selenium.find_element(By.CLASS_NAME, "data_success")
+        )
         self.assertIn("/ajax/", history_panel.text)
         self.assertNotIn("/json_view/", history_panel.text)
 
@@ -763,6 +767,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.get("/ajax/")
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
-        history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        # Need to wait until the ajax request is over and json_view is displayed on the toolbar
+        time.sleep(2)
+        history_panel = self.wait.until(
+            lambda selenium: self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        )
         self.assertNotIn("/ajax/", history_panel.text)
         self.assertIn("/json_view/", history_panel.text)
