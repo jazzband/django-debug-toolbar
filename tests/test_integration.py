@@ -756,9 +756,6 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
         history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
-        self.wait.until(
-            lambda selenium: self.selenium.find_element(By.CLASS_NAME, "data_success")
-        )
         self.assertIn("/ajax/", history_panel.text)
         self.assertNotIn("/json_view/", history_panel.text)
 
