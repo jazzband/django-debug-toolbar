@@ -58,3 +58,7 @@ def listcomp_view(request):
 
 def redirect_view(request):
     return HttpResponseRedirect("/regular/redirect/")
+
+
+def ajax_view(request):
+    return render(request, "ajax/ajax.html")

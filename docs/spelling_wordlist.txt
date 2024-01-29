@@ -6,6 +6,7 @@ Pympler
 Roboto
 Transifex
 Werkzeug
+ajax
 async
 backend
 backends

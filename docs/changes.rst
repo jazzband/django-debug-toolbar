@@ -19,6 +19,9 @@ Pending
   <https://astral.sh/blog/the-ruff-formatter>`__.
 * Changed the default position of the toolbar from top to the upper top
   position.
+* Added the setting, ``UPDATE_ON_FETCH`` to control whether the
+  toolbar automatically updates to the latest AJAX request or not.
+  It defaults to ``False``.
 
 4.2.0 (2023-08-10)
 ------------------
