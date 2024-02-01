@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.3.0 (2024-02-01)
+------------------
+
 * Dropped support for Django 4.0.
 * Added Python 3.12 to test matrix.
 * Removed outdated third-party panels from the list.
