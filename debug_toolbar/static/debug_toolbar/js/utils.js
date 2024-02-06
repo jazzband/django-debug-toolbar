@@ -79,7 +79,7 @@ function ajax(url, init) {
                         return Promise.reject(
                             new Error("The response  is a invalid Json object : " + error)
                         );
-                    })
+                    });
             }
             return Promise.reject(
                 new Error(response.status + ": " + response.statusText)
