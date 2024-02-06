@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Display a better error message when request toolbar are not a valid json
+
 4.3.0 (2024-02-01)
 ------------------
 

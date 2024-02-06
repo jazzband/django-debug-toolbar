@@ -77,7 +77,7 @@ function ajax(url, init) {
             if (response.ok) {
                     return response.json().catch(function(error){
                         return Promise.reject(
-                            new Error("The toolbar request response  is a invalid Json object : " + error)
+                            new Error("The response  is a invalid Json object : " + error)
                         );
                     })
             }
