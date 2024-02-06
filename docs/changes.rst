@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.3.0 (2024-02-01)
+------------------
+
 * Dropped support for Django 4.0.
 * Added Python 3.12 to test matrix.
 * Removed outdated third-party panels from the list.
@@ -17,6 +20,11 @@ Pending
   ``django.contrib.admindocs.utils.get_view_name``.
 * Switched from black to the `ruff formatter
   <https://astral.sh/blog/the-ruff-formatter>`__.
+* Changed the default position of the toolbar from top to the upper top
+  position.
+* Added the setting, ``UPDATE_ON_FETCH`` to control whether the
+  toolbar automatically updates to the latest AJAX request or not.
+  It defaults to ``False``.
 
 4.2.0 (2023-08-10)
 ------------------
