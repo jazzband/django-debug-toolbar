@@ -77,7 +77,7 @@
             {% if query.params %}
               {% if query.is_select %}
                 <form method="post">
-                  {{ query.form }}
+                  {{ query.form.as_table }}
                   <button formaction="{% url 'djdt:sql_select' %}" class="remoteCall">Sel</button>
                   <button formaction="{% url 'djdt:sql_explain' %}" class="remoteCall">Expl</button>
                   {% if query.vendor == 'mysql' %}
