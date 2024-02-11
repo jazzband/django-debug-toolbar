@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Render forms with ``as_div`` to silence Django 5.0 deprecation warnings.
+
 4.3.0 (2024-02-01)
 ------------------
 
