@@ -17,8 +17,6 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 3.2",
-  "Framework :: Django :: 4.1",
   "Framework :: Django :: 4.2",
   "Framework :: Django :: 5.0",
   "Intended Audience :: Developers",
@@ -37,7 +35,7 @@ dynamic = [
   "version",
 ]
 dependencies = [
-  "Django>=3.2.4",
+  "Django>=4.2.9",
   "sqlparse>=0.2",
 ]
 [project.urls]

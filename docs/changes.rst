@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Raised the minimum Django version to 4.2.
+
 4.3.0 (2024-02-01)
 ------------------
 
