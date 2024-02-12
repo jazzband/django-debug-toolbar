@@ -48,7 +48,7 @@ def json_view(request):
 
 
 def regular_jinjia_view(request, title):
-    return render(request, "jinja2/basic.jinja", {"title": title})
+    return render(request, "basic.jinja", {"title": title}, using="jinja2")
 
 
 def listcomp_view(request):
