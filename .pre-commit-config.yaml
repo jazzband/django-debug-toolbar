@@ -14,7 +14,7 @@ repos:
     hooks:
     -   id: doc8
 -   repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.15.0
+    rev: 1.16.0
     hooks:
     -   id: django-upgrade
         args: [--target-version, "3.2"]
@@ -32,7 +32,7 @@ repos:
         args:
         - --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.56.0
+    rev: v9.0.0-beta.0
     hooks:
     -   id: eslint
         files: \.js?$
