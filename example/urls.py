@@ -3,7 +3,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from debug_toolbar.toolbar import debug_toolbar_urls
-from example.views import increment
+from example.views import increment, jinja2_view
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
@@ -12,6 +12,7 @@ urlpatterns = [
         TemplateView.as_view(template_name="bad_form.html"),
         name="bad_form",
     ),
+    path("jinja/", jinja2_view, name="jinja"),
     path("jquery/", TemplateView.as_view(template_name="jquery/index.html")),
     path("mootools/", TemplateView.as_view(template_name="mootools/index.html")),
     path("prototype/", TemplateView.as_view(template_name="prototype/index.html")),

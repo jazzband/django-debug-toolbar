@@ -5,6 +5,9 @@ Pending
 -------
 
 * Added check for StreamingHttpResponse in alerts panel.
+* Instrument the Django Jinja2 template backend. This only instruments
+  the immediate template that's rendered. It will not provide stats on
+  any parent templates.
 
 4.4.3 (2024-07-04)
 ------------------
