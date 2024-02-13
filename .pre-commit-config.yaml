@@ -32,11 +32,9 @@ repos:
         args:
         - --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 'v9.0.0-beta.0'
+    rev: v9.0.0-beta.0
     hooks:
     -   id: eslint
-        additional_dependencies:
-            - eslint@9.0.0-beta.0
         files: \.js?$
         types: [file]
         args:
