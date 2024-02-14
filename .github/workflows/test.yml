@@ -69,7 +69,7 @@ jobs:
     - name: Upload coverage data
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-data
+        name: coverage-data-${{ matrix.python-version }}-${{ matrix.os }}-${{ matrix.arch }}-mysql
         path: ".coverage.*"
 
   postgres:
@@ -147,7 +147,7 @@ jobs:
     - name: Upload coverage data
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-data
+        name: coverage-data-${{ matrix.python-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.database }}
         path: ".coverage.*"
 
   sqlite:
@@ -195,7 +195,7 @@ jobs:
     - name: Upload coverage data
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-data
+        name: coverage-data-${{ matrix.python-version }}-${{ matrix.os }}-${{ matrix.arch }}-sqlite
         path: ".coverage.*"
 
   coverage:
@@ -214,7 +214,8 @@ jobs:
       - name: Download coverage data.
         uses: actions/download-artifact@v4
         with:
-          name: coverage-data
+          pattern: coverage-data-*
+          merge-multiple: true
 
       - name: Combine coverage & check percentage
         run: |
