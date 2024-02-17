@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+* Automatically support Docker rather than having the developer write a
+  workaround for ``INTERNAL_IPS``.
+
 4.3.0 (2024-02-01)
 ------------------
 
