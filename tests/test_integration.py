@@ -2,6 +2,7 @@ import os
 import re
 import time
 import unittest
+from unittest.mock import patch
 
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -65,6 +66,14 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_show_toolbar_INTERNAL_IPS(self):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
+
+    @patch("socket.gethostbyname", return_value="127.0.0.255")
+    def test_show_toolbar_docker(self, mocked_gethostbyname):
+        with self.settings(INTERNAL_IPS=[]):
+            # Is true because REMOTE_ADDR is 127.0.0.1 and the 255
+            # is shifted to be 1.
+            self.assertTrue(show_toolbar(self.request))
+        mocked_gethostbyname.assert_called_once_with("host.docker.internal")
 
     def test_should_render_panels_RENDER_PANELS(self):
         """
@@ -257,13 +266,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.get(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -293,13 +304,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.get(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -339,13 +352,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -365,13 +380,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -397,13 +414,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -423,13 +442,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
