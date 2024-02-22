@@ -75,7 +75,11 @@ function ajax(url, init) {
     return fetch(url, init)
         .then(function (response) {
             if (response.ok) {
-                return response.json();
+                    return response.json().catch(function(error){
+                        return Promise.reject(
+                            new Error("The response  is a invalid Json object : " + error)
+                        );
+                    });
             }
             return Promise.reject(
                 new Error(response.status + ": " + response.statusText)
