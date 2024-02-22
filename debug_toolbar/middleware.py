@@ -3,6 +3,7 @@ Debug Toolbar middleware
 """
 
 import re
+import socket
 from functools import lru_cache
 
 from django.conf import settings
@@ -19,7 +20,22 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    return settings.DEBUG and request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS
+    internal_ips = settings.INTERNAL_IPS.copy()
+
+    try:
+        # This is a hack for docker installations. It attempts to look
+        # up the IP address of the docker host.
+        # This is not guaranteed to work.
+        docker_ip = (
+            # Convert the last segment of the IP address to be .1
+            ".".join(socket.gethostbyname("host.docker.internal").rsplit(".")[:-1])
+            + ".1"
+        )
+        internal_ips.append(docker_ip)
+    except socket.gaierror:
+        # It's fine if the lookup errored since they may not be using docker
+        pass
+    return settings.DEBUG and request.META.get("REMOTE_ADDR") in internal_ips
 
 
 @lru_cache(maxsize=None)
