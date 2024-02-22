@@ -9,6 +9,7 @@ Pending
   workaround for ``INTERNAL_IPS``.
 * Display a better error message when the toolbar's requests
   return invalid json.
+* Render forms with ``as_div`` to silence Django 5.0 deprecation warnings.
 
 4.3.0 (2024-02-01)
 ------------------
