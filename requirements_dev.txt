@@ -12,6 +12,10 @@ selenium
 tox
 black
 
+# Integration support
+
+daphne # async in Example app
+
 # Documentation
 
 Sphinx
