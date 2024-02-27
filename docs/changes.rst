@@ -4,6 +4,16 @@ Change log
 Pending
 -------
 
+* Raised the minimum Django version to 4.2.
+* Automatically support Docker rather than having the developer write a
+  workaround for ``INTERNAL_IPS``.
+* Display a better error message when the toolbar's requests
+  return invalid json.
+* Render forms with ``as_div`` to silence Django 5.0 deprecation warnings.
+
+4.3.0 (2024-02-01)
+------------------
+
 * Dropped support for Django 4.0.
 * Added Python 3.12 to test matrix.
 * Removed outdated third-party panels from the list.
@@ -21,6 +31,10 @@ Pending
   position.
 * Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
   docs to help in initial configuration.
+* Added the setting, ``UPDATE_ON_FETCH`` to control whether the
+  toolbar automatically updates to the latest AJAX request or not.
+  It defaults to ``False``.
+
 
 4.2.0 (2023-08-10)
 ------------------

@@ -163,6 +163,16 @@ Toolbar options
   but want to render your application in French, you would set this to
   ``"en-us"`` and :setting:`LANGUAGE_CODE` to ``"fr"``.
 
+.. _UPDATE_ON_FETCH:
+
+* ``UPDATE_ON_FETCH``
+
+  Default: ``False``
+
+  This controls whether the toolbar should update to the latest AJAX
+  request when it occurs. This is especially useful when using htmx
+  boosting or similar JavaScript techniques.
+
 Panel options
 ~~~~~~~~~~~~~
 

@@ -17,8 +17,10 @@ function getDebugElement() {
 
 const djdt = {
     handleDragged: false,
+    needUpdateOnFetch: false,
     init() {
         const djDebug = getDebugElement();
+        djdt.needUpdateOnFetch = djDebug.dataset.updateOnFetch === "True";
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
             event.preventDefault();
             if (!this.className) {
@@ -274,7 +276,9 @@ const djdt = {
             storeId = encodeURIComponent(storeId);
             const dest = `${sidebarUrl}?store_id=${storeId}`;
             slowjax(dest).then(function (data) {
-                replaceToolbarState(storeId, data);
+                if (djdt.needUpdateOnFetch){
+                    replaceToolbarState(storeId, data);
+                }
             });
         }
 
