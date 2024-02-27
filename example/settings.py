@@ -1,15 +1,25 @@
 """Django settings for example project."""
 
 import os
+import sys
+
+import environ
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 # Quick-start development settings - unsuitable for production
 
+env = environ.Env()
+environ.Env.read_env()
+
 SECRET_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
-DEBUG = True
+# DEBUG = True
+
+DEBUG = env("DEBUG", default=bool({"runserver"}.intersection(sys.argv)))
+DEBUG_TOOLBAR_CONFIG = env("DEBUG_TOOLBAR_CONFIG", default="test" in sys.argv)
+DEBUG_TOOLBAR = DEBUG and not DEBUG_TOOLBAR_CONFIG
 
 INTERNAL_IPS = ["127.0.0.1", "::1"]
 

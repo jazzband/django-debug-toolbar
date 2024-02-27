@@ -19,6 +19,8 @@ Pending
   <https://astral.sh/blog/the-ruff-formatter>`__.
 * Changed the default position of the toolbar from top to the upper top
   position.
+* Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
+  docs to help in initial configuration.
 
 4.2.0 (2023-08-10)
 ------------------

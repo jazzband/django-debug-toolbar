@@ -99,7 +99,34 @@ Add django-debug-toolbar's URLs to your project's URLconf:
 This example uses the ``__debug__`` prefix, but you can use any prefix that
 doesn't clash with your application's URLs.
 
-5. Add the Middleware
+5. Configure django-debug-toolbar
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add the following configuration for django-debug-toolbar in your setting:
+
+.. code-block:: python
+
+    import sys
+
+    DEBUG = bool({"runserver"}.intersection(sys.argv))
+
+    DEBUG_TOOLBAR_CONFIG = "test" in sys.argv
+
+    DEBUG_TOOLBAR = DEBUG and not DEBUG_TOOLBAR_CONFIG
+
+
+To explicitly check the ``settings.DEBUG_TOOLBAR_CONFIG``variable before
+including the URLs, add the following code in your ``urls`` file.
+
+.. code-block:: python
+
+    if settings.DEBUG_TOOLBAR_CONFIG:
+
+        import debug_toolbar
+
+        urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+
+6. Add the Middleware
 ^^^^^^^^^^^^^^^^^^^^^
 
 The Debug Toolbar is mostly implemented in a middleware. Add it to your
@@ -122,7 +149,7 @@ The Debug Toolbar is mostly implemented in a middleware. Add it to your
 
 .. _internal-ips:
 
-6. Configure Internal IPs
+7. Configure Internal IPs
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Debug Toolbar is shown only if your IP address is listed in Django’s

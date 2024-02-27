@@ -1,9 +1,10 @@
 import inspect
 import mimetypes
+import sys
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.core.checks import Warning, register
+from django.core.checks import Error, Warning, register
 from django.middleware.gzip import GZipMiddleware
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
@@ -206,3 +207,23 @@ def js_mimetype_check(app_configs, **kwargs):
             )
         ]
     return []
+
+
+@register()
+def debug_toolbar_namespace_check(app_configs, **kwargs):
+    """
+    Check that the Django Debug Toolbar is registered as a namespace.
+    """
+    if (
+        settings.DEBUG is False
+        and dt_settings.get_config()["DEBUG_TOOLBAR_CONFIG"] == "test" in sys.argv
+    ):
+        return [
+            Error(
+                "django debug toolbar  is not a registered namespace ",
+                hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration and run the tests.",
+                id="debug_toolbar.W008",
+            )
+        ]
+    else:
+        return []
