@@ -17,8 +17,6 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 3.2",
-  "Framework :: Django :: 4.1",
   "Framework :: Django :: 4.2",
   "Framework :: Django :: 5.0",
   "Intended Audience :: Developers",
@@ -37,7 +35,7 @@ dynamic = [
   "version",
 ]
 dependencies = [
-  "Django>=3.2.4",
+  "Django>=4.2.9",
   "sqlparse>=0.2",
 ]
 [project.urls]
@@ -51,6 +49,11 @@ packages = ["debug_toolbar"]
 path = "debug_toolbar/__init__.py"
 
 [tool.ruff]
+fix = true
+show-fixes = true
+target-version = "py38"
+
+[tool.ruff.lint]
 extend-select = [
   "ASYNC",  # flake8-async
   "B",      # flake8-bugbear
@@ -75,17 +78,14 @@ extend-ignore = [
   "E501",   # Ignore line length violations
   "SIM108", # Use ternary operator instead of if-else-block
 ]
-fix = true
-show-fixes = true
-target-version = "py38"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 16
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "*/migrat*/*" = [
   "N806",  # Allow using PascalCase model names in migrations
   "N999",  # Ignore the fact that migration files are invalid module names

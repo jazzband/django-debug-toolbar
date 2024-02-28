@@ -1,6 +1,8 @@
 import os
 import re
+import time
 import unittest
+from unittest.mock import patch
 
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -64,6 +66,14 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_show_toolbar_INTERNAL_IPS(self):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
+
+    @patch("socket.gethostbyname", return_value="127.0.0.255")
+    def test_show_toolbar_docker(self, mocked_gethostbyname):
+        with self.settings(INTERNAL_IPS=[]):
+            # Is true because REMOTE_ADDR is 127.0.0.1 and the 255
+            # is shifted to be 1.
+            self.assertTrue(show_toolbar(self.request))
+        mocked_gethostbyname.assert_called_once_with("host.docker.internal")
 
     def test_should_render_panels_RENDER_PANELS(self):
         """
@@ -256,13 +266,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.get(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -292,13 +304,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.get(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -338,13 +352,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -364,13 +380,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -396,13 +414,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -422,13 +442,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -749,3 +771,24 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         )
         self.assertIn("Query", table.text)
         self.assertIn("Action", table.text)
+
+    def test_ajax_dont_refresh(self):
+        self.get("/ajax/")
+        make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
+        make_ajax.click()
+        history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        self.assertIn("/ajax/", history_panel.text)
+        self.assertNotIn("/json_view/", history_panel.text)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"UPDATE_ON_FETCH": True})
+    def test_ajax_refresh(self):
+        self.get("/ajax/")
+        make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
+        make_ajax.click()
+        # Need to wait until the ajax request is over and json_view is displayed on the toolbar
+        time.sleep(2)
+        history_panel = self.wait.until(
+            lambda selenium: self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        )
+        self.assertNotIn("/ajax/", history_panel.text)
+        self.assertIn("/json_view/", history_panel.text)

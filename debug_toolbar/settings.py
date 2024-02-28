@@ -44,6 +44,7 @@ CONFIG_DEFAULTS = {
     "OBSERVE_REQUEST_CALLBACK": "debug_toolbar.toolbar.observe_request",
     "TOOLBAR_LANGUAGE": None,
     "RUNNING_TESTS": "test" in sys.argv,
+    "UPDATE_ON_FETCH": False,
 }
 
 
