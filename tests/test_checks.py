@@ -9,7 +9,7 @@ from django.core.checks import Error, Warning, run_checks
 from django.test import SimpleTestCase, override_settings
 
 from debug_toolbar import settings as dt_settings
-from debug_toolbar.apps import debug_toolbar_namespace_check
+from debug_toolbar.apps import debug_toolbar_installed_when_running_tests_check
 
 PATH_DOES_NOT_EXIST = os.path.join(settings.BASE_DIR, "tests", "invalid_static")
 
@@ -263,71 +263,58 @@ class ChecksTestCase(SimpleTestCase):
             ],
         )
 
-    # @patch("debug_toolbar.apps.debug_toolbar_namespace_check", [])
-    # def test_check_w008_valid(self):
-    #     self.assertEqual(
-    #         run_checks(),
-    #         [
-    #             Error(
-    #                 "debug toolbar  is not a registered namespace",
-    #                 hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration",
-    #                 id="debug_toolbar.W008",
-    #             )
-    #         ],
-    #     )
-
 
 def test_check_w008_valid(self):
     settings.DEBUG = True
-    dt_settings.get_config()["DEBUG_TOOLBAR_CONFIG"] = "test"
-    errors = debug_toolbar_namespace_check(None)
+    dt_settings.get_config()["RUNNING_TESTS"] = "test"
+    errors = debug_toolbar_installed_when_running_tests_check(None)
     self.assertEqual(
         errors,
         [
             Error(
                 "debug toolbar is not a registered namespace",
-                hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration",
+                hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration when running tests",
                 id="debug_toolbar.W008",
             )
         ],
     )
 
-    @patch("debug_toolbar.apps.debug_toolbar_namespace_check", [])
-    def test_debug_toolbar_namespace_check_with_debug_false_and_config_not_test(
+    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
+    def test_debug_toolbar_installed_when_running_tests_check_with_debug_false(
         self, mocked_get_config
     ):
-        mocked_get_config.return_value = {"DEBUG_TOOLBAR_CONFIG": "not_test"}
+        mocked_get_config.return_value = {"RUNNING_TESTS": "not_test"}
         settings.DEBUG = False
-        errors = debug_toolbar_namespace_check(None)
+        errors = debug_toolbar_installed_when_running_tests_check(None)
         self.assertEqual(len(errors), 0)
 
-    @patch("debug_toolbar.apps.debug_toolbar_namespace_check", [])
-    def test_debug_toolbar_namespace_check_with_debug_true_and_config_test(
+    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
+    def test_debug_toolbar_installed_when_running_tests_check_with_debug_true(
         self, mocked_get_config
     ):
-        mocked_get_config.return_value = {"DEBUG_TOOLBAR_CONFIG": "test"}
+        mocked_get_config.return_value = {"RUNNING_TESTS": "test"}
         settings.DEBUG = True
         sys.argv = ["manage.py", "test"]
-        errors = debug_toolbar_namespace_check(None)
+        errors = debug_toolbar_installed_when_running_tests_check(None)
         self.assertEqual(len(errors), 0)
 
-    @patch("debug_toolbar.apps.debug_toolbar_namespace_check", [])
-    def test_debug_toolbar_namespace_check_with_debug_true_and_config_not_test(
+    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
+    def test_debug_toolbar_installed_when_running_tests_check_with_running_tests_not_test(
         self, mock_get_config
     ):
-        mock_get_config.return_value = {"DEBUG_TOOLBAR_CONFIG": "not_test"}
+        mock_get_config.return_value = {"RUNNING_TESTS": "not_test"}
         settings.DEBUG = True
         sys.argv = ["manage.py", "test"]
-        errors = debug_toolbar_namespace_check(None)
+        errors = debug_toolbar_installed_when_running_tests_check(None)
         self.assertEqual(len(errors), 0)
 
-    @patch("debug_toolbar.apps.debug_toolbar_namespace_check", [])
-    def test_debug_toolbar_namespace_check_with_debug_false_and_config_test(
+    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
+    def test_debug_toolbar_installed_when_running_tests_check_with_debug_false_and_running_tests(
         self, mock_get_config
     ):
-        mock_get_config.return_value = {"DEBUG_TOOLBAR_CONFIG": "test"}
+        mock_get_config.return_value = {"RUNNING_TESTS": "test"}
         settings.DEBUG = False
-        errors = debug_toolbar_namespace_check(None)
+        errors = debug_toolbar_installed_when_running_tests_check(None)
         self.assertEqual(
             errors,
             [

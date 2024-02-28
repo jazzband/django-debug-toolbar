@@ -210,13 +210,13 @@ def js_mimetype_check(app_configs, **kwargs):
 
 
 @register()
-def debug_toolbar_namespace_check(app_configs, **kwargs):
+def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     """
-    Check that the Django Debug Toolbar is registered as a namespace.
+    Check that the Django Debug Toolbar is installed and works well with the current tests
     """
     if (
         settings.DEBUG is False
-        and dt_settings.get_config()["DEBUG_TOOLBAR_CONFIG"] == "test" in sys.argv
+        and dt_settings.get_config()["RUNNING_TESTS"] == "test" in sys.argv
     ):
         return [
             Error(

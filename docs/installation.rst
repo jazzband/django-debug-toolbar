@@ -102,7 +102,7 @@ doesn't clash with your application's URLs.
 5. Configure django-debug-toolbar
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add the following configuration for django-debug-toolbar in your setting:
+Add the configuration for django-debug-toolbar in your setting to run tests:
 
 .. code-block:: python
 
@@ -110,17 +110,17 @@ Add the following configuration for django-debug-toolbar in your setting:
 
     DEBUG = bool({"runserver"}.intersection(sys.argv))
 
-    DEBUG_TOOLBAR_CONFIG = "test" in sys.argv
+    RUNNING_TESTS = "test" in sys.argv
 
-    DEBUG_TOOLBAR = DEBUG and not DEBUG_TOOLBAR_CONFIG
+    DEBUG_TOOLBAR = DEBUG and not RUNNING_TESTS
 
 
-To explicitly check the ``settings.DEBUG_TOOLBAR_CONFIG``variable before
+To explicitly check the ``settings.RUNNING_TESTS``variable before
 including the URLs, add the following code in your ``urls`` file.
 
 .. code-block:: python
 
-    if settings.DEBUG_TOOLBAR_CONFIG:
+    if settings.RUNNING_TESTS:
 
         import debug_toolbar
 
