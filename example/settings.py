@@ -11,11 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
-# DEBUG = True
-
-DEBUG = bool({"runserver"}.intersection(sys.argv))
-RUNNING_TESTS = "test" in sys.argv
-DEBUG_TOOLBAR = DEBUG and not RUNNING_TESTS
+DEBUG = True
 
 INTERNAL_IPS = ["127.0.0.1", "::1"]
 
@@ -28,11 +24,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -67,7 +61,6 @@ USE_TZ = True
 
 WSGI_APPLICATION = "example.wsgi.application"
 
-DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
 
 # Cache and database
 
@@ -103,3 +96,18 @@ if os.environ.get("DB_BACKEND", "").lower() == "mysql":
     }
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "example", "static")]
+
+
+# Only enable the toolbar when we're in debug mode and we're
+# not running tests. Django will change DEBUG to be False for
+# tests, so we can't rely on DEBUG alone.
+ENABLE_DEBUG_TOOLBAR = DEBUG and "test" not in sys.argv
+if ENABLE_DEBUG_TOOLBAR:
+    INSTALLED_APPS += [
+        "debug_toolbar",
+    ]
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
+    # Customize the config to support turbo and htmx boosting.
+    DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
