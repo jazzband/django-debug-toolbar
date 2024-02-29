@@ -1,6 +1,5 @@
 import inspect
 import mimetypes
-import sys
 
 from django.apps import AppConfig
 from django.conf import settings
@@ -214,10 +213,7 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     """
     Check that the Django Debug Toolbar is installed and works well with the current tests
     """
-    if (
-        settings.DEBUG is False
-        and dt_settings.get_config()["RUNNING_TESTS"] == "test" in sys.argv
-    ):
+    if settings.DEBUG is not False and dt_settings.get_config()["RUNNING_TESTS"]:
         return [
             Error(
                 "django debug toolbar  is not a registered namespace ",

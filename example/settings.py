@@ -13,7 +13,7 @@ SECRET_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
 # DEBUG = True
 
-DEBUG = default = bool({"runserver"}.intersection(sys.argv))
+DEBUG = bool({"runserver"}.intersection(sys.argv))
 RUNNING_TESTS = "test" in sys.argv
 DEBUG_TOOLBAR = DEBUG and not RUNNING_TESTS
 
