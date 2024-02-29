@@ -211,13 +211,18 @@ def js_mimetype_check(app_configs, **kwargs):
 @register()
 def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     """
-    Check that the Django Debug Toolbar is installed and works well with the current tests
+    Check that the toolbar is not being used when tests are running
     """
-    if settings.DEBUG is not False and dt_settings.get_config()["RUNNING_TESTS"]:
+    if not settings.DEBUG and dt_settings.get_config()["RUNNING_TESTS"]:
         return [
             Error(
-                "django debug toolbar  is not a registered namespace ",
-                hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration and run the tests.",
+                "The Django Debug Toolbar can't be used with tests",
+                hint="Django changes the DEBUG setting to False when running "
+                "tests. By default the Django Debug Toolbar is installed because "
+                "DEBUG is set to True. For most cases, you need to avoid installing "
+                "the toolbar when running tests. If you feel this check is in error, "
+                "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
+                "bypass this check.",
                 id="debug_toolbar.W008",
             )
         ]
