@@ -11,6 +11,8 @@ Pending
   return invalid json.
 * Render forms with ``as_div`` to silence Django 5.0 deprecation warnings.
 * Stayed on top of pre-commit hook updates.
+* Added :doc:`architecture documentation <architecture>` to help
+  on-board new contributors.
 
 4.3.0 (2024-02-01)
 ------------------
