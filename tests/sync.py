@@ -1,6 +1,7 @@
 """
 Taken from channels.db
 """
+
 from asgiref.sync import SyncToAsync
 from django.db import close_old_connections
 
