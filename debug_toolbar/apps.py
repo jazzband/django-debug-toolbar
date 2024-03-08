@@ -213,7 +213,7 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     """
     Check that the toolbar is not being used when tests are running
     """
-    if not settings.DEBUG and dt_settings.get_config()["RUNNING_TESTS"]:
+    if not settings.DEBUG and dt_settings.get_config()["IS_RUNNING_TESTS"]:
         return [
             Error(
                 "The Django Debug Toolbar can't be used with tests",

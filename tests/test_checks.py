@@ -1,5 +1,4 @@
 import os
-import sys
 import unittest
 from unittest.mock import patch
 
@@ -263,65 +262,56 @@ class ChecksTestCase(SimpleTestCase):
             ],
         )
 
-
-def test_check_w008_valid(self):
-    settings.DEBUG = True
-    dt_settings.get_config()["RUNNING_TESTS"] = "test"
-    errors = debug_toolbar_installed_when_running_tests_check(None)
-    self.assertEqual(
-        errors,
-        [
-            Error(
-                "debug toolbar is not a registered namespace",
-                hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration when running tests",
-                id="debug_toolbar.W008",
-            )
-        ],
-    )
-
-    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
-    def test_debug_toolbar_installed_when_running_tests_check_with_debug_false(
-        self, mocked_get_config
-    ):
-        mocked_get_config.return_value = {"RUNNING_TESTS": "not_test"}
-        settings.DEBUG = False
-        errors = debug_toolbar_installed_when_running_tests_check(None)
-        self.assertEqual(len(errors), 0)
-
-    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
-    def test_debug_toolbar_installed_when_running_tests_check_with_debug_true(
-        self, mocked_get_config
-    ):
-        mocked_get_config.return_value = {"RUNNING_TESTS": "test"}
+    def test_check_w008_valid(self):
         settings.DEBUG = True
-        sys.argv = ["manage.py", "test"]
-        errors = debug_toolbar_installed_when_running_tests_check(None)
-        self.assertEqual(len(errors), 0)
-
-    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
-    def test_debug_toolbar_installed_when_running_tests_check_with_running_tests_not_test(
-        self, mock_get_config
-    ):
-        mock_get_config.return_value = {"RUNNING_TESTS": "not_test"}
-        settings.DEBUG = True
-        sys.argv = ["manage.py", "test"]
-        errors = debug_toolbar_installed_when_running_tests_check(None)
-        self.assertEqual(len(errors), 0)
-
-    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
-    def test_debug_toolbar_installed_when_running_tests_check_with_debug_false_and_running_tests(
-        self, mock_get_config
-    ):
-        mock_get_config.return_value = {"RUNNING_TESTS": "test"}
-        settings.DEBUG = False
+        dt_settings.get_config()["IS_RUNNING_TESTS"] = "test"
         errors = debug_toolbar_installed_when_running_tests_check(None)
         self.assertEqual(
+            run_checks(),
             errors,
             [
                 Error(
-                    "django debug toolbar  is not a registered namespace ",
-                    hint="The Django Debug Toolbar is misconfigured, check the documentation for proper configuration and run the tests.",
+                    "The Django Debug Toolbar can't be used with tests",
+                    hint="Django changes the DEBUG setting to False when running "
+                    "tests. By default the Django Debug Toolbar is installed because "
+                    "DEBUG is set to True. For most cases, you need to avoid installing "
+                    "the toolbar when running tests. If you feel this check is in error, "
+                    "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
+                    "bypass this check.",
                     id="debug_toolbar.W008",
                 )
             ],
         )
+
+    @patch("debug_toolbar.apps.debug_toolbar_installed_when_running_tests_check", [])
+    def test_debug_toolbar_installed_when_running_tests(self):
+        with self.settings(DEBUG=False):
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+        with self.settings(DEBUG=True):
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = True
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+        with self.settings(DEBUG=True):
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+        with self.settings(DEBUG=False):
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = True
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(
+                errors,
+                [
+                    Error(
+                        "The Django Debug Toolbar can't be used with tests",
+                        hint="Django changes the DEBUG setting to False when running "
+                        "tests. By default the Django Debug Toolbar is installed because "
+                        "DEBUG is set to True. For most cases, you need to avoid installing "
+                        "the toolbar when running tests. If you feel this check is in error, "
+                        "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
+                        "bypass this check.",
+                        id="debug_toolbar.W008",
+                    )
+                ],
+            )
