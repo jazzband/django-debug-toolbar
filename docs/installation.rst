@@ -82,6 +82,11 @@ Add ``"debug_toolbar"`` to your ``INSTALLED_APPS`` setting:
         # ...
     ]
 
+.. note:: Check  out the configuration example in the
+    [example app](https://github.com/jazzband/django-debug-toolbar/tree/main/example)
+    to learn how to set up the toolbar to function smoothly while running
+    your tests.
+
 4. Add the URLs
 ^^^^^^^^^^^^^^^
 
@@ -99,11 +104,6 @@ Add django-debug-toolbar's URLs to your project's URLconf:
 This example uses the ``__debug__`` prefix, but you can use any prefix that
 doesn't clash with your application's URLs.
 
-> [!NOTE]
-> Check  out the configuration example in the
-[example app](https://github.com/jazzband/django-debug-toolbar/tree/main/example)
-to learn how to set up the toolbar to function smoothly while running your
-tests.
 
 5. Add the Middleware
 ^^^^^^^^^^^^^^^^^^^^^

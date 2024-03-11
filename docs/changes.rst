@@ -29,8 +29,11 @@ Pending
   <https://astral.sh/blog/the-ruff-formatter>`__.
 * Changed the default position of the toolbar from top to the upper top
   position.
-* Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
-  docs to help in initial configuration while running tests.
+* Added a link in the installation docs to a more complete installation
+  example in the example app.
+* Added check to prevent the toolbar from being installed when tests
+  are running.
+* Added test to example app and command to run the example app's tests.
 * Added the setting, ``UPDATE_ON_FETCH`` to control whether the
   toolbar automatically updates to the latest AJAX request or not.
   It defaults to ``False``.
