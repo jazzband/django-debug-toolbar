@@ -81,11 +81,11 @@ Add ``"debug_toolbar"`` to your ``INSTALLED_APPS`` setting:
         "debug_toolbar",
         # ...
     ]
-
 .. note:: Check  out the configuration example in the
-    [example app](https://github.com/jazzband/django-debug-toolbar/tree/main/example)
-    to learn how to set up the toolbar to function smoothly while running
-    your tests.
+   `example app
+   <https://github.com/jazzband/django-debug-toolbar/tree/main/example>`_
+   to learn how to set up the toolbar to function smoothly while running
+   your tests.
 
 4. Add the URLs
 ^^^^^^^^^^^^^^^
