@@ -145,6 +145,11 @@ Toolbar options
 
   Default: ``'debug_toolbar.toolbar.observe_request'``
 
+  .. note::
+
+     This setting is deprecated in favor of the ``UPDATE_ON_FETCH`` and
+     ``SHOW_TOOLBAR_CALLBACK`` settings.
+
   This is the dotted path to a function used for determining whether the
   toolbar should update on AJAX requests or not. The default implementation
   always returns ``True``.
