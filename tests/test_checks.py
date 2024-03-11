@@ -1,13 +1,10 @@
 from unittest.mock import patch
 
-from django.conf import settings
 from django.core.checks import Error, Warning, run_checks
 from django.test import SimpleTestCase, override_settings
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.apps import debug_toolbar_installed_when_running_tests_check
-
-PATH_DOES_NOT_EXIST = os.path.join(settings.BASE_DIR, "tests", "invalid_static")
 
 
 class ChecksTestCase(SimpleTestCase):
