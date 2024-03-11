@@ -10,6 +10,13 @@ Pending
 * Display a better error message when the toolbar's requests
   return invalid json.
 * Render forms with ``as_div`` to silence Django 5.0 deprecation warnings.
+* Stayed on top of pre-commit hook updates.
+* Added :doc:`architecture documentation <architecture>` to help
+  on-board new contributors.
+* Removed the static file path validation check in
+  :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
+  since that check is made redundant by a similar check in Django 4.0 and
+  later.
 
 4.3.0 (2024-02-01)
 ------------------

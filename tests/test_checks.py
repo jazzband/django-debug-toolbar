@@ -1,7 +1,4 @@
-import os
-import unittest
 from unittest.mock import patch
-
 import django
 from django.conf import settings
 from django.core.checks import Error, Warning, run_checks
@@ -11,6 +8,7 @@ from debug_toolbar import settings as dt_settings
 from debug_toolbar.apps import debug_toolbar_installed_when_running_tests_check
 
 PATH_DOES_NOT_EXIST = os.path.join(settings.BASE_DIR, "tests", "invalid_static")
+
 
 
 class ChecksTestCase(SimpleTestCase):
@@ -93,23 +91,6 @@ class ChecksTestCase(SimpleTestCase):
                 id="debug_toolbar.W004",
             ),
             messages,
-        )
-
-    @unittest.skipIf(django.VERSION >= (4,), "Django>=4 handles missing dirs itself.")
-    @override_settings(
-        STATICFILES_DIRS=[PATH_DOES_NOT_EXIST],
-    )
-    def test_panel_check_errors(self):
-        messages = run_checks()
-        self.assertEqual(
-            messages,
-            [
-                Warning(
-                    "debug_toolbar requires the STATICFILES_DIRS directories to exist.",
-                    hint="Running manage.py collectstatic may help uncover the issue.",
-                    id="debug_toolbar.staticfiles.W001",
-                )
-            ],
         )
 
     @override_settings(DEBUG_TOOLBAR_PANELS=[])
@@ -272,38 +253,6 @@ class ChecksTestCase(SimpleTestCase):
             ],
         )
 
-    # def test_debug_toolbar_installed_when_running_tests(self, mocked_get_config):
-    #     with self.settings(DEBUG=False):
-    #         dt_settings.get_config()["IS_RUNNING_TESTS"] = False
-    #         errors = debug_toolbar_installed_when_running_tests_check(None)
-    #         self.assertEqual(len(errors), 0)
-    #     with self.settings(DEBUG=True):
-    #         dt_settings.get_config()["IS_RUNNING_TESTS"] = True
-    #         errors = debug_toolbar_installed_when_running_tests_check(None)
-    #         self.assertEqual(len(errors), 0)
-    #     with self.settings(DEBUG=True):
-    #         dt_settings.get_config()["IS_RUNNING_TESTS"] = False
-    #         errors = debug_toolbar_installed_when_running_tests_check(None)
-    #         self.assertEqual(len(errors), 0)
-    #     with self.settings(DEBUG=False):
-    #         dt_settings.get_config()["IS_RUNNING_TESTS"] = True
-    #         errors = debug_toolbar_installed_when_running_tests_check(None)
-    #         self.assertEqual(
-    #             errors,
-    #             [
-    #                 Error(
-    #                     "The Django Debug Toolbar can't be used with tests",
-    #                     hint="Django changes the DEBUG setting to False when running "
-    #                     "tests. By default the Django Debug Toolbar is installed because "
-    #                     "DEBUG is set to True. For most cases, you need to avoid installing "
-    #                     "the toolbar when running tests. If you feel this check is in error, "
-    #                     "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
-    #                     "bypass this check.",
-    #                     id="debug_toolbar.W008",
-    #                 )
-    #             ],
-
-    # )
 
     def test_debug_toolbar_installed_when_running_tests(self):
         with self.settings(DEBUG=False):

@@ -48,6 +48,12 @@ For convenience, there's an alias for the second command::
 Look at ``example/settings.py`` for running the example with another database
 than SQLite.
 
+Architecture
+------------
+
+There is high-level information on how the Django Debug Toolbar is structured
+in the :doc:`architecture documentation <architecture>`.
+
 Tests
 -----
 

@@ -1,4 +1,5 @@
 """urls.py to test using debug_toolbar.urls in include"""
+
 from django.urls import include, path
 
 import debug_toolbar

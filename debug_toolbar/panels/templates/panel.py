@@ -154,9 +154,9 @@ class TemplatesPanel(Panel):
                     # QuerySet would trigger the database: user can run the
                     # query from SQL Panel
                     elif isinstance(value, (QuerySet, RawQuerySet)):
-                        temp_layer[
-                            key
-                        ] = f"<<{value.__class__.__name__.lower()} of {value.model._meta.label}>>"
+                        temp_layer[key] = (
+                            f"<<{value.__class__.__name__.lower()} of {value.model._meta.label}>>"
+                        )
                     else:
                         token = allow_sql.set(False)  # noqa: FBT003
                         try:
