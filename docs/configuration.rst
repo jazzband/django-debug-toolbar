@@ -146,9 +146,8 @@ Toolbar options
   Default: ``'debug_toolbar.toolbar.observe_request'``
 
   This is the dotted path to a function used for determining whether the
-  toolbar should update on AJAX requests or not. The default checks are that
-  the request doesn't originate from the toolbar itself, EG that
-  ``is_toolbar_request`` is false for a given request.
+  toolbar should update on AJAX requests or not. The default implementation
+  always returns ``True``.
 
 .. _TOOLBAR_LANGUAGE:
 
