@@ -4,7 +4,6 @@ from os.path import join, normpath
 
 from django.conf import settings
 from django.contrib.staticfiles import finders, storage
-from django.core.checks import Warning
 from django.utils.functional import LazyObject
 from django.utils.translation import gettext_lazy as _, ngettext
 
@@ -178,27 +177,3 @@ class StaticFilesPanel(panels.Panel):
                     if app not in apps:
                         apps.append(app)
         return apps
-
-    @classmethod
-    def run_checks(cls):
-        """
-        Check that the integration is configured correctly for the panel.
-
-        Specifically look for static files that haven't been collected yet.
-
-        Return a list of :class: `django.core.checks.CheckMessage` instances.
-        """
-        errors = []
-        for finder in finders.get_finders():
-            try:
-                for path, finder_storage in finder.list([]):
-                    finder_storage.path(path)
-            except OSError:
-                errors.append(
-                    Warning(
-                        "debug_toolbar requires the STATICFILES_DIRS directories to exist.",
-                        hint="Running manage.py collectstatic may help uncover the issue.",
-                        id="debug_toolbar.staticfiles.W001",
-                    )
-                )
-        return errors
