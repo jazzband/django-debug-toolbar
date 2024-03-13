@@ -1,6 +1,7 @@
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
+from debug_toolbar._stubs import GetResponse
 from debug_toolbar.utils import get_name_from_obj
 
 
@@ -9,7 +10,7 @@ class Panel:
     Base class for panels.
     """
 
-    def __init__(self, toolbar, get_response):
+    def __init__(self, toolbar, get_response: GetResponse):
         self.toolbar = toolbar
         self.get_response = get_response
 
