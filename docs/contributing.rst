@@ -85,6 +85,12 @@ or by setting the ``DJANGO_SELENIUM_TESTS`` environment variable::
     $ DJANGO_SELENIUM_TESTS=true make coverage
     $ DJANGO_SELENIUM_TESTS=true tox
 
+Note that by default, ``tox`` enables the Selenium tests for a single test
+environment.  To run the entire ``tox`` test suite with all Selenium tests
+disabled, run the following::
+
+    $ DJANGO_SELENIUM_TESTS= tox
+
 To test via ``tox`` against other databases, you'll need to create the user,
 database and assign the proper permissions. For PostgreSQL in a ``psql``
 shell (note this allows the debug_toolbar user the permission to create
