@@ -21,3 +21,6 @@ Django Debug Toolbar setup and configuration:
 * **debug_toolbar.W007**: JavaScript files are resolving to the wrong content
   type. Refer to :external:ref:`Django's explanation of
   mimetypes on Windows <staticfiles-development-view>`.
+* **debug_toolbar.W008**: The deprecated ``OBSERVE_REQUEST_CALLBACK`` setting
+  is present in ``DEBUG_TOOLBAR_CONFIG``.  Use the ``UPDATE_ON_FETCH`` and/or
+  ``SHOW_TOOLBAR_CALLBACK`` settings instead.
