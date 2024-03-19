@@ -20,6 +20,7 @@ Pending
 * Deprecated the ``OBSERVE_REQUEST_CALLBACK`` setting and added check
   ``debug_toolbar.W008`` to warn when it is present in
   ``DEBUG_TOOLBAR_SETTINGS``.
+* Add a note on the profiling panel document about python 3.12 and after.
 
 4.3.0 (2024-02-01)
 ------------------
