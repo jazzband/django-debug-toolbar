@@ -123,8 +123,9 @@ Profiling information for the processing of the request.
 This panel is included but inactive by default. You can activate it by default
 with the ``DISABLE_PANELS`` configuration option.
 
-For version of python 3.12 and after you need to add --nothreading
-to the runserver. Concurrent requests don't work with the profiling.
+For version of Python 3.12 and later you need to use
+``python -m manage runserver --nothreading``
+Concurrent requests don't work with the profiling panel.
 
 The panel will include all function calls made by your project if you're using
 the setting ``settings.BASE_DIR`` to point to your project's root directory.
