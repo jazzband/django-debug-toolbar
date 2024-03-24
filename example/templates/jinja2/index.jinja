@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>jinja Test</title>
+  </head>
+  <body>
+    <h1>jinja Test</h1>
+    {{ foo }}
+    {% for i in range(10) %}{{ i }}{% endfor %} {# Jinja2 supports range(), Django templates do not #}
+  </body>
+</html>

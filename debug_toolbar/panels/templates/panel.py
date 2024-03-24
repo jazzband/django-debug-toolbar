@@ -14,6 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql.tracking import SQLQueryTriggered, allow_sql
 from debug_toolbar.panels.templates import views
+from debug_toolbar.panels.templates.jinja2 import patch_jinja_render
 
 # Monkey-patch to enable the template_rendered signal. The receiver returns
 # immediately when the panel is disabled to keep the overhead small.
@@ -25,6 +26,7 @@ if Template._render != instrumented_test_render:
     Template.original_render = Template._render
     Template._render = instrumented_test_render
 
+patch_jinja_render()
 
 # Monkey-patch to store items added by template context processors. The
 # overhead is sufficiently small to justify enabling it unconditionally.
