@@ -185,4 +185,4 @@ def observe_request(request):
     """
     Determine whether to update the toolbar from a client side request.
     """
-    return not DebugToolbar.is_toolbar_request(request)
+    return True

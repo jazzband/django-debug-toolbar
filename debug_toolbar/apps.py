@@ -228,3 +228,16 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
         ]
     else:
         return []
+
+def check_settings(app_configs, **kwargs):
+    errors = []
+    USER_CONFIG = getattr(settings, "DEBUG_TOOLBAR_CONFIG", {})
+    if "OBSERVE_REQUEST_CALLBACK" in USER_CONFIG:
+        errors.append(
+            Warning(
+                "The deprecated OBSERVE_REQUEST_CALLBACK setting is present in DEBUG_TOOLBAR_CONFIG.",
+                hint="Use the UPDATE_ON_FETCH and/or SHOW_TOOLBAR_CALLBACK settings instead.",
+                id="debug_toolbar.W008",
+            )
+        )
+    return errors

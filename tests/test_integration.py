@@ -547,7 +547,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
 @unittest.skipUnless(
-    "DJANGO_SELENIUM_TESTS" in os.environ, "selenium tests not requested"
+    os.environ.get("DJANGO_SELENIUM_TESTS"), "selenium tests not requested"
 )
 @override_settings(DEBUG=True)
 class DebugToolbarLiveTestCase(StaticLiveServerTestCase):

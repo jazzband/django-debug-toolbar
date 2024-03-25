@@ -17,6 +17,11 @@ Pending
   :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
   since that check is made redundant by a similar check in Django 4.0 and
   later.
+* Deprecated the ``OBSERVE_REQUEST_CALLBACK`` setting and added check
+  ``debug_toolbar.W008`` to warn when it is present in
+  ``DEBUG_TOOLBAR_SETTINGS``.
+* Add a note on the profiling panel about using Python 3.12 and later
+  about needing ``--nothreading``
 
 4.3.0 (2024-02-01)
 ------------------
