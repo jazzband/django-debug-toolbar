@@ -229,6 +229,7 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     else:
         return []
 
+
 def check_settings(app_configs, **kwargs):
     errors = []
     USER_CONFIG = getattr(settings, "DEBUG_TOOLBAR_CONFIG", {})

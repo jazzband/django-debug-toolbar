@@ -280,6 +280,7 @@ class ChecksTestCase(SimpleTestCase):
                     )
                 ],
             )
+
     @override_settings(
         DEBUG_TOOLBAR_CONFIG={"OBSERVE_REQUEST_CALLBACK": lambda request: False}
     )
@@ -287,4 +288,3 @@ class ChecksTestCase(SimpleTestCase):
         errors = run_checks()
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0].id, "debug_toolbar.W008")
-
