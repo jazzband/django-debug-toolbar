@@ -6,6 +6,9 @@ example:
 		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
 	python example/manage.py runserver
 
+example_test:
+	python example/manage.py test example
+
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		python -m django test $${TEST_ARGS:-tests}

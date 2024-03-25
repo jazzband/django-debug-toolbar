@@ -3,7 +3,7 @@ import mimetypes
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.core.checks import Warning, register
+from django.core.checks import Error, Warning, register
 from django.middleware.gzip import GZipMiddleware
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
@@ -209,6 +209,27 @@ def js_mimetype_check(app_configs, **kwargs):
 
 
 @register()
+def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
+    """
+    Check that the toolbar is not being used when tests are running
+    """
+    if not settings.DEBUG and dt_settings.get_config()["IS_RUNNING_TESTS"]:
+        return [
+            Error(
+                "The Django Debug Toolbar can't be used with tests",
+                hint="Django changes the DEBUG setting to False when running "
+                "tests. By default the Django Debug Toolbar is installed because "
+                "DEBUG is set to True. For most cases, you need to avoid installing "
+                "the toolbar when running tests. If you feel this check is in error, "
+                "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
+                "bypass this check.",
+                id="debug_toolbar.W008",
+            )
+        ]
+    else:
+        return []
+
+
 def check_settings(app_configs, **kwargs):
     errors = []
     USER_CONFIG = getattr(settings, "DEBUG_TOOLBAR_CONFIG", {})
