@@ -32,7 +32,7 @@ repos:
         args:
         - --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.0.0-beta.2
+    rev: v9.0.0-rc.0
     hooks:
     -   id: eslint
         additional_dependencies:
@@ -44,7 +44,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.3.3'
+    rev: 'v0.3.4'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
