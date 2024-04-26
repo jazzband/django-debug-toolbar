@@ -22,7 +22,7 @@ Pending
   ``DEBUG_TOOLBAR_SETTINGS``.
 * Add a note on the profiling panel about using Python 3.12 and later
   about needing ``--nothreading``
-* Added ``RUNNING_TESTS`` setting to allow overriding the
+* Added ``IS_RUNNING_TESTS`` setting to allow overriding the
   ``debug_toolbar.W009`` check to avoid including the toolbar when running
   tests.
 * Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
