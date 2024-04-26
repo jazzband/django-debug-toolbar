@@ -266,7 +266,7 @@ class ChecksTestCase(SimpleTestCase):
                         "the toolbar when running tests. If you feel this check is in error, "
                         "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
                         "bypass this check.",
-                        id="debug_toolbar.W009",
+                        id="debug_toolbar.E001",
                     )
                 ],
             )

@@ -223,7 +223,7 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
                 "the toolbar when running tests. If you feel this check is in error, "
                 "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
                 "bypass this check.",
-                id="debug_toolbar.W009",
+                id="debug_toolbar.E001",
             )
         ]
     else:

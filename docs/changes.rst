@@ -23,7 +23,7 @@ Pending
 * Add a note on the profiling panel about using Python 3.12 and later
   about needing ``--nothreading``
 * Added ``IS_RUNNING_TESTS`` setting to allow overriding the
-  ``debug_toolbar.W009`` check to avoid including the toolbar when running
+  ``debug_toolbar.E001`` check to avoid including the toolbar when running
   tests.
 * Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
   docs to help in initial configuration while running tests.
