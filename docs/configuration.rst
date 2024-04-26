@@ -72,6 +72,17 @@ Toolbar options
   The toolbar searches for this string in the HTML and inserts itself just
   before.
 
+* ``IS_RUNNING_TESTS``
+
+  Default: ``"test" in sys.argv``
+
+  This setting whether the application is running tests. If this resolves to
+  ``True``, the toolbar will prevent you from running tests. This should only
+  be changed if your test command doesn't include ``test`` or if you wish to
+  test your application with the toolbar configured. If you do wish to test
+  your application with the toolbar configured, set this setting to
+  ``False``.
+
 .. _RENDER_PANELS:
 
 * ``RENDER_PANELS``
