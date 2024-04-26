@@ -240,19 +240,21 @@ class ChecksTestCase(SimpleTestCase):
         )
 
     def test_debug_toolbar_installed_when_running_tests(self):
-        with self.settings(DEBUG=False):
-            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
-            errors = debug_toolbar_installed_when_running_tests_check(None)
-            self.assertEqual(len(errors), 0)
         with self.settings(DEBUG=True):
+            # Update the config options because self.settings()
+            # would require redefining DEBUG_TOOLBAR_CONFIG entirely.
             dt_settings.get_config()["IS_RUNNING_TESTS"] = True
             errors = debug_toolbar_installed_when_running_tests_check(None)
             self.assertEqual(len(errors), 0)
-        with self.settings(DEBUG=True):
+
             dt_settings.get_config()["IS_RUNNING_TESTS"] = False
             errors = debug_toolbar_installed_when_running_tests_check(None)
             self.assertEqual(len(errors), 0)
         with self.settings(DEBUG=False):
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+
             dt_settings.get_config()["IS_RUNNING_TESTS"] = True
             errors = debug_toolbar_installed_when_running_tests_check(None)
             self.assertEqual(
