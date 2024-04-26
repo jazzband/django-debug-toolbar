@@ -101,16 +101,6 @@ class ChecksTestCase(SimpleTestCase):
                     "settings.py.",
                     id="debug_toolbar.W005",
                 ),
-                Error(
-                    "The Django Debug Toolbar can't be used with tests",
-                    hint="Django changes the DEBUG setting to False when running "
-                    "tests. By default the Django Debug Toolbar is installed because "
-                    "DEBUG is set to True. For most cases, you need to avoid installing "
-                    "the toolbar when running tests. If you feel this check is in error, "
-                    "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
-                    "bypass this check.",
-                    id="debug_toolbar.W008",
-                ),
             ],
         )
 
@@ -276,13 +266,16 @@ class ChecksTestCase(SimpleTestCase):
                         "the toolbar when running tests. If you feel this check is in error, "
                         "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
                         "bypass this check.",
-                        id="debug_toolbar.W008",
+                        id="debug_toolbar.W009",
                     )
                 ],
             )
 
     @override_settings(
-        DEBUG_TOOLBAR_CONFIG={"OBSERVE_REQUEST_CALLBACK": lambda request: False}
+        DEBUG_TOOLBAR_CONFIG={
+            "OBSERVE_REQUEST_CALLBACK": lambda request: False,
+            "IS_RUNNING_TESTS": False,
+        }
     )
     def test_observe_request_callback_specified(self):
         errors = run_checks()

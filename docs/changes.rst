@@ -22,6 +22,8 @@ Pending
   ``DEBUG_TOOLBAR_SETTINGS``.
 * Add a note on the profiling panel about using Python 3.12 and later
   about needing ``--nothreading``
+* Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
+  docs to help in initial configuration while running tests.
 
 4.3.0 (2024-02-01)
 ------------------

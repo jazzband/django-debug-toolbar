@@ -177,7 +177,7 @@ def check_panels(app_configs, **kwargs):
     return errors
 
 
-@register()
+@register
 def js_mimetype_check(app_configs, **kwargs):
     """
     Check that JavaScript files are resolving to the correct content type.
@@ -208,7 +208,7 @@ def js_mimetype_check(app_configs, **kwargs):
     return []
 
 
-@register()
+@register
 def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     """
     Check that the toolbar is not being used when tests are running
@@ -223,13 +223,14 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
                 "the toolbar when running tests. If you feel this check is in error, "
                 "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
                 "bypass this check.",
-                id="debug_toolbar.W008",
+                id="debug_toolbar.W009",
             )
         ]
     else:
         return []
 
 
+@register
 def check_settings(app_configs, **kwargs):
     errors = []
     USER_CONFIG = getattr(settings, "DEBUG_TOOLBAR_CONFIG", {})
