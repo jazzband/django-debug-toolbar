@@ -22,6 +22,16 @@ Pending
   ``DEBUG_TOOLBAR_SETTINGS``.
 * Add a note on the profiling panel about using Python 3.12 and later
   about needing ``--nothreading``
+* Added ``IS_RUNNING_TESTS`` setting to allow overriding the
+  ``debug_toolbar.E001`` check to avoid including the toolbar when running
+  tests.
+* Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
+  docs to help in initial configuration while running tests.
+* Added a link in the installation docs to a more complete installation
+  example in the example app.
+* Added check to prevent the toolbar from being installed when tests
+  are running.
+* Added test to example app and command to run the example app's tests.
 
 4.3.0 (2024-02-01)
 ------------------

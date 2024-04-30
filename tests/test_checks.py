@@ -1,7 +1,10 @@
 from unittest.mock import patch
 
-from django.core.checks import Warning, run_checks
+from django.core.checks import Error, Warning, run_checks
 from django.test import SimpleTestCase, override_settings
+
+from debug_toolbar import settings as dt_settings
+from debug_toolbar.apps import debug_toolbar_installed_when_running_tests_check
 
 
 class ChecksTestCase(SimpleTestCase):
@@ -97,7 +100,7 @@ class ChecksTestCase(SimpleTestCase):
                     hint="Set DEBUG_TOOLBAR_PANELS to a non-empty list in your "
                     "settings.py.",
                     id="debug_toolbar.W005",
-                )
+                ),
             ],
         )
 
@@ -236,8 +239,45 @@ class ChecksTestCase(SimpleTestCase):
             ],
         )
 
+    def test_debug_toolbar_installed_when_running_tests(self):
+        with self.settings(DEBUG=True):
+            # Update the config options because self.settings()
+            # would require redefining DEBUG_TOOLBAR_CONFIG entirely.
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = True
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+        with self.settings(DEBUG=False):
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(len(errors), 0)
+
+            dt_settings.get_config()["IS_RUNNING_TESTS"] = True
+            errors = debug_toolbar_installed_when_running_tests_check(None)
+            self.assertEqual(
+                errors,
+                [
+                    Error(
+                        "The Django Debug Toolbar can't be used with tests",
+                        hint="Django changes the DEBUG setting to False when running "
+                        "tests. By default the Django Debug Toolbar is installed because "
+                        "DEBUG is set to True. For most cases, you need to avoid installing "
+                        "the toolbar when running tests. If you feel this check is in error, "
+                        "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
+                        "bypass this check.",
+                        id="debug_toolbar.E001",
+                    )
+                ],
+            )
+
     @override_settings(
-        DEBUG_TOOLBAR_CONFIG={"OBSERVE_REQUEST_CALLBACK": lambda request: False}
+        DEBUG_TOOLBAR_CONFIG={
+            "OBSERVE_REQUEST_CALLBACK": lambda request: False,
+            "IS_RUNNING_TESTS": False,
+        }
     )
     def test_observe_request_callback_specified(self):
         errors = run_checks()
