@@ -34,10 +34,6 @@ try:
 except ImportError:
     webdriver = None
 
-try:
-    from django.test import AsyncRequestFactory
-except ImportError:
-    AsyncRequestFactory = None
 
 rf = RequestFactory()
 
@@ -230,7 +226,7 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def test_data_gone(self):
         response = self.client.get(
-                "/__debug__/render_panel/?store_id=GONE&panel_id=RequestPanel"
+            "/__debug__/render_panel/?store_id=GONE&panel_id=RequestPanel"
         )
         self.assertIn("Please reload the page and retry.", response.json()["content"])
 
@@ -273,14 +269,14 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.get(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
         )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                    url, data, headers={"x-requested-with": "XMLHttpRequest"}
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -296,8 +292,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(len(DebugToolbar._store), 1)
         toolbar = list(DebugToolbar._store.values())[0]
         self.assertEqual(
-                toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
-                {"foo": ["bar"]},
+            toolbar.get_panel_by_id("HistoryPanel").get_stats()["data"],
+            {"foo": ["bar"]},
         )
 
     def test_template_source_checks_show_toolbar(self):
@@ -311,14 +307,14 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.get(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
         )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                    url, data, headers={"x-requested-with": "XMLHttpRequest"}
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -327,18 +323,18 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, {})
         self.assertContains(
-                response, '"template_origin" key is required', status_code=400
+            response, '"template_origin" key is required', status_code=400
         )
 
         template = get_template("basic.html")
         response = self.client.get(
-                url,
-                {"template_origin": signing.dumps(template.template.origin.name) + "xyz"},
+            url,
+            {"template_origin": signing.dumps(template.template.origin.name) + "xyz"},
         )
         self.assertContains(response, '"template_origin" is invalid', status_code=400)
 
         response = self.client.get(
-                url, {"template_origin": signing.dumps("does_not_exist.html")}
+            url, {"template_origin": signing.dumps("does_not_exist.html")}
         )
         self.assertContains(response, "Template Does Not Exist: does_not_exist.html")
 
@@ -346,27 +342,27 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         url = "/__debug__/sql_select/"
         data = {
             "signed": SignedDataForm.sign(
-                    {
-                        "sql": "SELECT * FROM auth_user",
-                        "raw_sql": "SELECT * FROM auth_user",
-                        "params": "{}",
-                        "alias": "default",
-                        "duration": "0",
-                    }
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
             )
         }
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
         )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                    url, data, headers={"x-requested-with": "XMLHttpRequest"}
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -374,32 +370,32 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         url = "/__debug__/sql_explain/"
         data = {
             "signed": SignedDataForm.sign(
-                    {
-                        "sql": "SELECT * FROM auth_user",
-                        "raw_sql": "SELECT * FROM auth_user",
-                        "params": "{}",
-                        "alias": "default",
-                        "duration": "0",
-                    }
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
             )
         }
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
         )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                    url, data, headers={"x-requested-with": "XMLHttpRequest"}
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
     @unittest.skipUnless(
-            connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
     def test_sql_explain_postgres_json_field(self):
         url = "/__debug__/sql_explain/"
@@ -409,26 +405,26 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         query = base_query + """ '{"foo": "bar"}'"""
         data = {
             "signed": SignedDataForm.sign(
-                    {
-                        "sql": query,
-                        "raw_sql": base_query + " %s",
-                        "params": '["{\\"foo\\": \\"bar\\"}"]',
-                        "alias": "default",
-                        "duration": "0",
-                    }
+                {
+                    "sql": query,
+                    "raw_sql": base_query + " %s",
+                    "params": '["{\\"foo\\": \\"bar\\"}"]',
+                    "alias": "default",
+                    "duration": "0",
+                }
             )
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
         )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                    url, data, headers={"x-requested-with": "XMLHttpRequest"}
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -436,27 +432,27 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         url = "/__debug__/sql_profile/"
         data = {
             "signed": SignedDataForm.sign(
-                    {
-                        "sql": "SELECT * FROM auth_user",
-                        "raw_sql": "SELECT * FROM auth_user",
-                        "params": "{}",
-                        "alias": "default",
-                        "duration": "0",
-                    }
+                {
+                    "sql": "SELECT * FROM auth_user",
+                    "raw_sql": "SELECT * FROM auth_user",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
             )
         }
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
         )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                    url, data, headers={"x-requested-with": "XMLHttpRequest"}
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -473,9 +469,9 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertNotIn(b"data-store-id", response.content)
         # Verify the history panel was disabled
         self.assertIn(
-                b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
-                b'title="Enable for next and successive requests">',
-                response.content,
+            b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
+            b'title="Enable for next and successive requests">',
+            response.content,
         )
         # Verify the a panel was rendered
         self.assertIn(b"Response headers", response.content)
@@ -493,9 +489,9 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertIn(b"data-store-id", response.content)
         # Verify the history panel was not disabled
         self.assertNotIn(
-                b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
-                b'title="Enable for next and successive requests">',
-                response.content,
+            b'<input type="checkbox" data-cookie="djdtHistoryPanel" '
+            b'title="Enable for next and successive requests">',
+            response.content,
         )
         # Verify the a panel was not rendered
         self.assertNotIn(b"Response headers", response.content)
@@ -530,8 +526,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         response = self.client.get("/regular/basic/")
         self.assertEqual(response.status_code, 200)
         self.assertContains(
-                response,
-                '<script type="module" src="/static/debug_toolbar/js/timer.js" async>',
+            response,
+            '<script type="module" src="/static/debug_toolbar/js/timer.js" async>',
         )
 
     def test_auth_login_view_without_redirect(self):
@@ -542,8 +538,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         el = doc.find(".//*[@id='djDebug']")
         store_id = el.attrib["data-store-id"]
         response = self.client.get(
-                "/__debug__/render_panel/",
-                {"store_id": store_id, "panel_id": "TemplatesPanel"},
+            "/__debug__/render_panel/",
+            {"store_id": store_id, "panel_id": "TemplatesPanel"},
         )
         self.assertEqual(response.status_code, 200)
         # The key None (without quotes) exists in the list of template
@@ -553,7 +549,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
 @unittest.skipUnless(
-        os.environ.get("DJANGO_SELENIUM_TESTS"), "selenium tests not requested"
+    os.environ.get("DJANGO_SELENIUM_TESTS"), "selenium tests not requested"
 )
 @override_settings(DEBUG=True)
 class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
@@ -590,15 +586,15 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         # Version panel loads
         table = self.wait.until(
-                lambda selenium: version_panel.find_element(By.TAG_NAME, "table")
+            lambda selenium: version_panel.find_element(By.TAG_NAME, "table")
         )
         self.assertIn("Name", table.text)
         self.assertIn("Version", table.text)
 
     @override_settings(
-            DEBUG_TOOLBAR_CONFIG={
-                "DISABLE_PANELS": {"debug_toolbar.panels.redirects.RedirectsPanel"}
-            }
+        DEBUG_TOOLBAR_CONFIG={
+            "DISABLE_PANELS": {"debug_toolbar.panels.redirects.RedirectsPanel"}
+        }
     )
     def test_basic_jinja(self):
         self.get("/regular_jinja/basic")
@@ -612,9 +608,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertIn("jinja2/basic.jinja", template_panel.text)
 
     @override_settings(
-            DEBUG_TOOLBAR_CONFIG={
-                "DISABLE_PANELS": {"debug_toolbar.panels.redirects.RedirectsPanel"}
-            }
+        DEBUG_TOOLBAR_CONFIG={
+            "DISABLE_PANELS": {"debug_toolbar.panels.redirects.RedirectsPanel"}
+        }
     )
     def test_rerender_on_history_switch(self):
         self.get("/regular_jinja/basic")
@@ -623,7 +619,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         template_panel = self.selenium.find_element(By.ID, "HistoryPanel")
         # Record the current side panel of buttons for later comparison.
         previous_button_panel = self.selenium.find_element(
-                By.ID, "djDebugPanelList"
+            By.ID, "djDebugPanelList"
         ).text
 
         # Click to show the history panel
@@ -632,7 +628,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         list(template_panel.find_elements(By.CSS_SELECTOR, "button"))[-1].click()
 
         current_button_panel = self.selenium.find_element(
-                By.ID, "djDebugPanelList"
+            By.ID, "djDebugPanelList"
         ).text
         # Verify the button side panels have updated.
         self.assertNotEqual(previous_button_panel, current_button_panel)
@@ -649,27 +645,27 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         # Version panel doesn't loads
         error = self.wait.until(
-                lambda selenium: version_panel.find_element(By.TAG_NAME, "p")
+            lambda selenium: version_panel.find_element(By.TAG_NAME, "p")
         )
         self.assertIn("Data for this panel isn't available anymore.", error.text)
 
     @override_settings(
-            TEMPLATES=[
-                {
-                    "BACKEND": "django.template.backends.django.DjangoTemplates",
-                    "OPTIONS": {
-                        "loaders": [
+        TEMPLATES=[
+            {
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "OPTIONS": {
+                    "loaders": [
+                        (
+                            "django.template.loaders.cached.Loader",
                             (
-                                    "django.template.loaders.cached.Loader",
-                                    (
-                                            "django.template.loaders.filesystem.Loader",
-                                            "django.template.loaders.app_directories.Loader",
-                                    ),
-                            )
-                        ]
-                    },
-                }
-            ],
+                                "django.template.loaders.filesystem.Loader",
+                                "django.template.loaders.app_directories.Loader",
+                            ),
+                        )
+                    ]
+                },
+            }
+        ],
     )
     def test_django_cached_template_loader(self):
         self.get("/regular/basic/")
@@ -680,15 +676,15 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         # Templates panel loads
         trigger = self.wait.until(
-                lambda selenium: version_panel.find_element(By.CSS_SELECTOR, ".remoteCall")
+            lambda selenium: version_panel.find_element(By.CSS_SELECTOR, ".remoteCall")
         )
         trigger.click()
 
         # Verify the code is displayed
         self.wait.until(
-                lambda selenium: self.selenium.find_element(
-                        By.CSS_SELECTOR, "#djDebugWindow code"
-                )
+            lambda selenium: self.selenium.find_element(
+                By.CSS_SELECTOR, "#djDebugWindow code"
+            )
         )
 
     def test_sql_action_and_go_back(self):
@@ -701,7 +697,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         # SQL panel loads
         button = self.wait.until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
         )
         button.click()
 
@@ -736,7 +732,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
 
         table = self.wait.until(
-                lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
+            lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
         )
         self.assertIn("Query", table.text)
         self.assertIn("Action", table.text)
@@ -754,7 +750,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
 
         table = self.wait.until(
-                lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
+            lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
         )
         self.assertIn("Query", table.text)
         self.assertIn("Linha", table.text)
@@ -773,7 +769,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
 
         table = self.wait.until(
-                lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
+            lambda selenium: sql_panel.find_element(By.TAG_NAME, "table")
         )
         self.assertIn("Query", table.text)
         self.assertIn("Action", table.text)
@@ -794,7 +790,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         # Need to wait until the ajax request is over and json_view is displayed on the toolbar
         time.sleep(2)
         history_panel = self.wait.until(
-                lambda selenium: self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+            lambda selenium: self.selenium.find_element(By.ID, "djdt-HistoryPanel")
         )
         self.assertNotIn("/ajax/", history_panel.text)
         self.assertIn("/json_view/", history_panel.text)
@@ -837,3 +833,4 @@ class DebugToolbarAsyncTestCase(BaseTestCase):
         DebugToolbarMiddleware(self.simple_get_response)(request)
 
         assert self.captured_output.getvalue() == "----------\nBe caution, django-debug-toolbar does not support async requests!\n----------\n"
+
