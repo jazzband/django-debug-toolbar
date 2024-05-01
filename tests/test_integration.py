@@ -797,16 +797,17 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
 
 @unittest.skipUnless(
-        AsyncRequestFactory is not None, "Test valid only for django with async requests"
+    AsyncRequestFactory is not None, "Test valid only for django with async requests"
 )
 @override_settings(DEBUG=True)
 class DebugToolbarAsyncTestCase(BaseTestCase):
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.async_rf = AsyncRequestFactory()
-        cls.simple_get_response = lambda *args, **kwargs: HttpResponse("<html><body></body></html>")
+        cls.simple_get_response = lambda *args, **kwargs: HttpResponse(
+            "<html><body></body></html>"
+        )
         cls._default_stdout = sys.stdout
 
     def setUp(self):
@@ -823,14 +824,16 @@ class DebugToolbarAsyncTestCase(BaseTestCase):
         captured_output = io.StringIO()
         sys.stdout = captured_output
 
-        request = self.async_rf.get('/')
+        request = self.async_rf.get("/")
         response = DebugToolbarMiddleware(self.simple_get_response)(request)
 
         self.assertEqual(response.content, b"<html><body></body></html>")
 
     def test_prints_warning_async_is_not_supported(self):
-        request = self.async_rf.get('/')
+        request = self.async_rf.get("/")
         DebugToolbarMiddleware(self.simple_get_response)(request)
 
-        assert self.captured_output.getvalue() == "----------\nBe caution, django-debug-toolbar does not support async requests!\n----------\n"
-
+        assert (
+            self.captured_output.getvalue()
+            == "----------\nBe caution, django-debug-toolbar does not support async requests!\n----------\n"
+        )

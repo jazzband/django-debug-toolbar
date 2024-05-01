@@ -139,6 +139,6 @@ class DebugToolbarMiddleware:
 
     @staticmethod
     def _show_async_request_is_not_supported():
-        print('-' * 10)
-        print('Be caution, django-debug-toolbar does not support async requests!')
-        print('-' * 10)
+        print("-" * 10)
+        print("Be caution, django-debug-toolbar does not support async requests!")
+        print("-" * 10)
