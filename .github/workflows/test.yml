@@ -66,11 +66,6 @@ jobs:
         DB_HOST: 127.0.0.1
         DB_PORT: 3306
 
-    - name: Upload coverage data
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-data-${{ matrix.python-version }}-${{ matrix.os }}-${{ matrix.arch }}-mysql
-        path: ".coverage.*"
 
   postgres:
     runs-on: ubuntu-latest
@@ -144,12 +139,6 @@ jobs:
         DB_HOST: localhost
         DB_PORT: 5432
 
-    - name: Upload coverage data
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-data-${{ matrix.python-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.database }}
-        path: ".coverage.*"
-
   sqlite:
     runs-on: ubuntu-latest
     strategy:
@@ -191,12 +180,6 @@ jobs:
       env:
         DB_BACKEND: sqlite3
         DB_NAME: ":memory:"
-
-    - name: Upload coverage data
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-data-${{ matrix.python-version }}-${{ matrix.os }}-${{ matrix.arch }}-sqlite
-        path: ".coverage.*"
 
   lint:
     runs-on: ubuntu-latest
