@@ -45,6 +45,7 @@ CONFIG_DEFAULTS = {
     "TOOLBAR_LANGUAGE": None,
     "IS_RUNNING_TESTS": "test" in sys.argv,
     "UPDATE_ON_FETCH": False,
+    "DEFAULT_THEME": "auto",
 }
 
 
