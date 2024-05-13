@@ -33,7 +33,8 @@ Pending
   are running.
 * Added test to example app and command to run the example app's tests.
 * Implemented dark mode theme and button to toggle the theme,
-  introduced config var ``DEFAULT_THEME`` to set default theme to use.
+  introduced the ``DEFAULT_THEME`` setting which sets the default theme
+  to use.
 
 4.3.0 (2024-02-01)
 ------------------

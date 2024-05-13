@@ -230,11 +230,7 @@ const djdt = {
                     djDebug.setAttribute("data-theme", "dark");
                     localStorage.setItem("djdt.user-theme", "dark");
                     break;
-                case "dark":
-                    djDebug.setAttribute("data-theme", "auto");
-                    localStorage.setItem("djdt.user-theme", "auto");
-                    break;
-                default:
+                default: /* dark is the default */
                     djDebug.setAttribute("data-theme", "auto");
                     localStorage.setItem("djdt.user-theme", "auto");
                     break;
