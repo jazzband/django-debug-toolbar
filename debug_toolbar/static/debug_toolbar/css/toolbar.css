@@ -721,8 +721,8 @@
     display: none;
 }
 
-#djToggleThemeButton {
-    display: flex !important;
+#djDebug #djDebugToolbar a#djToggleThemeButton {
+    display: flex;
     align-items: center;
     cursor: pointer;
 }
@@ -732,5 +732,5 @@
 #djDebug[data-theme="light"] #djToggleThemeButton svg.theme-light,
 #djDebug[data-theme="dark"] #djToggleThemeButton svg.theme-dark,
 #djDebug[data-theme="auto"] #djToggleThemeButton svg.theme-auto {
-    display: block !important;
+    display: block;
 }
