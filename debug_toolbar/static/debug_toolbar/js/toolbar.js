@@ -1,4 +1,4 @@
-import { $$, ajax, replaceToolbarState, debounce } from "./utils.js";
+import { $$, ajax, debounce, replaceToolbarState } from "./utils.js";
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
@@ -213,6 +213,29 @@ const djdt = {
         if (djDebug.dataset.sidebarUrl !== undefined) {
             djdt.updateOnAjax();
         }
+
+        // Updates the theme using user settings
+        const userTheme = localStorage.getItem("djdt.user-theme");
+        if (userTheme !== null) {
+            djDebug.setAttribute("data-theme", userTheme);
+        }
+        // Adds the listener to the Theme Toggle Button
+        $$.on(djDebug, "click", "#djToggleThemeButton", function () {
+            switch (djDebug.getAttribute("data-theme")) {
+                case "auto":
+                    djDebug.setAttribute("data-theme", "light");
+                    localStorage.setItem("djdt.user-theme", "light");
+                    break;
+                case "light":
+                    djDebug.setAttribute("data-theme", "dark");
+                    localStorage.setItem("djdt.user-theme", "dark");
+                    break;
+                default: /* dark is the default */
+                    djDebug.setAttribute("data-theme", "auto");
+                    localStorage.setItem("djdt.user-theme", "auto");
+                    break;
+            }
+        });
     },
     hidePanels() {
         const djDebug = getDebugElement();
@@ -276,7 +299,7 @@ const djdt = {
             storeId = encodeURIComponent(storeId);
             const dest = `${sidebarUrl}?store_id=${storeId}`;
             slowjax(dest).then(function (data) {
-                if (djdt.needUpdateOnFetch){
+                if (djdt.needUpdateOnFetch) {
                     replaceToolbarState(storeId, data);
                 }
             });

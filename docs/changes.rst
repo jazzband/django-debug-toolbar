@@ -32,6 +32,9 @@ Pending
 * Added check to prevent the toolbar from being installed when tests
   are running.
 * Added test to example app and command to run the example app's tests.
+* Implemented dark mode theme and button to toggle the theme,
+  introduced the ``DEFAULT_THEME`` setting which sets the default theme
+  to use.
 
 4.3.0 (2024-02-01)
 ------------------

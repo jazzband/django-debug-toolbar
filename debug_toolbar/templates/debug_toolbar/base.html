@@ -16,10 +16,16 @@
      data-sidebar-url="{{ history_url }}"
      {% endif %}
      data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
-     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}  data-update-on-fetch="{{ toolbar.config.UPDATE_ON_FETCH }}">
+     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}  data-update-on-fetch="{{ toolbar.config.UPDATE_ON_FETCH }}"
+     data-theme="{{ toolbar.config.DEFAULT_THEME }}">
   <div class="djdt-hidden" id="djDebugToolbar">
     <ul id="djDebugPanelList">
       <li><a id="djHideToolBarButton" href="#" title="{% trans 'Hide toolbar' %}">{% trans "Hide" %} »</a></li>
+      <li>
+        <a id="djToggleThemeButton" href="#" title="{% trans 'Toggle Theme' %}">
+          {% trans "Toggle Theme" %} {% include "debug_toolbar/includes/theme_selector.html" %}
+        </a>
+      </li>
       {% for panel in toolbar.panels %}
         {% include "debug_toolbar/includes/panel_button.html" %}
       {% endfor %}
