@@ -8,9 +8,9 @@ requires = [
 name = "django-debug-toolbar"
 description = "A configurable set of panels that display various debug information about the current request/response."
 readme = "README.rst"
-license = {text = "BSD-3-Clause"}
+license = { text = "BSD-3-Clause" }
 authors = [
-    { name = "Rob Hudson" },
+  { name = "Rob Hudson" },
 ]
 requires-python = ">=3.8"
 classifiers = [
@@ -35,26 +35,26 @@ dynamic = [
   "version",
 ]
 dependencies = [
-  "Django>=4.2.9",
+  "django>=4.2.9",
   "sqlparse>=0.2",
 ]
-[project.urls]
-Download = "https://pypi.org/project/django-debug-toolbar/"
-Homepage = "https://github.com/jazzband/django-debug-toolbar"
+urls.Download = "https://pypi.org/project/django-debug-toolbar/"
+urls.Homepage = "https://github.com/jazzband/django-debug-toolbar"
 
 [tool.hatch.build.targets.wheel]
-packages = ["debug_toolbar"]
+packages = [
+  "debug_toolbar",
+]
 
 [tool.hatch.version]
 path = "debug_toolbar/__init__.py"
 
 [tool.ruff]
-fix = true
-show-fixes = true
 target-version = "py38"
 
-[tool.ruff.lint]
-extend-select = [
+fix = true
+show-fixes = true
+lint.extend-select = [
   "ASYNC",  # flake8-async
   "B",      # flake8-bugbear
   "C4",     # flake8-comprehensions
@@ -73,23 +73,17 @@ extend-select = [
   "UP",     # pyupgrade
   "W",      # pycodestyle warnings
 ]
-extend-ignore = [
+lint.extend-ignore = [
   "B905",   # Allow zip() without strict=
   "E501",   # Ignore line length violations
   "SIM108", # Use ternary operator instead of if-else-block
 ]
-
-[tool.ruff.lint.isort]
-combine-as-imports = true
-
-[tool.ruff.lint.mccabe]
-max-complexity = 16
-
-[tool.ruff.lint.per-file-ignores]
-"*/migrat*/*" = [
-  "N806",  # Allow using PascalCase model names in migrations
-  "N999",  # Ignore the fact that migration files are invalid module names
+lint.per-file-ignores."*/migrat*/*" = [
+  "N806", # Allow using PascalCase model names in migrations
+  "N999", # Ignore the fact that migration files are invalid module names
 ]
+lint.isort.combine-as-imports = true
+lint.mccabe.max-complexity = 16
 
 [tool.coverage.html]
 skip_covered = true
@@ -98,10 +92,15 @@ skip_empty = true
 [tool.coverage.run]
 branch = true
 parallel = true
-source = ["debug_toolbar"]
+source = [
+  "debug_toolbar",
+]
 
 [tool.coverage.paths]
-source = ["src", ".tox/*/site-packages"]
+source = [
+  "src",
+  ".tox/*/site-packages",
+]
 
 [tool.coverage.report]
 # Update coverage badge link in README.rst when fail_under changes
