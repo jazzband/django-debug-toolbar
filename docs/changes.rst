@@ -4,6 +4,10 @@ Change log
 Pending
 -------
 
+
+4.4.0 (2024-05-26)
+------------------
+
 * Raised the minimum Django version to 4.2.
 * Automatically support Docker rather than having the developer write a
   workaround for ``INTERNAL_IPS``.
