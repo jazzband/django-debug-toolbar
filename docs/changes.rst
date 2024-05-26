@@ -5,6 +5,12 @@ Pending
 -------
 
 
+4.4.1 (2024-05-26)
+------------------
+
+* Pin metadata version to 2.2 to be compatible with Jazzband release
+  process.
+
 4.4.0 (2024-05-26)
 ------------------
 
