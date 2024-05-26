@@ -802,19 +802,21 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertEqual(toolbar.get_attribute("data-theme"), "auto")
 
         # The theme toggle button is shown on the toolbar
-        self.assertIn('<a id="djToggleThemeButton', toolbar.text)
+        toggle_button = self.selenium.find_element(By.ID, "djToggleThemeButton")
+        self.assertTrue(toggle_button.is_displayed())
 
         # The theme changes when user clicks the button
-        self.selenium.find_element(By.ID, "djDebugToolbar").click()
+        toggle_button.click()
         self.assertEqual(toolbar.get_attribute("data-theme"), "light")
-        self.selenium.find_element(By.ID, "djDebugToolbar").click()
+        toggle_button.click()
         self.assertEqual(toolbar.get_attribute("data-theme"), "dark")
+        toggle_button.click()
+        self.assertEqual(toolbar.get_attribute("data-theme"), "auto")
+        # Switch back to light.
+        toggle_button.click()
+        self.assertEqual(toolbar.get_attribute("data-theme"), "light")
 
         # Enter the page again to check that user settings is saved
         self.get("/regular/basic/")
         toolbar = self.selenium.find_element(By.ID, "djDebug")
-        self.assertEqual(toolbar.get_attribute("data-theme"), "dark")
-
-        # Set the default again and check that dark changes to auto
-        self.selenium.find_element(By.ID, "djDebugToolbar").click()
-        self.assertEqual(toolbar.get_attribute("data-theme"), "auto")
+        self.assertEqual(toolbar.get_attribute("data-theme"), "light")
