@@ -11,7 +11,6 @@
         monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 
-    color-scheme: light;
     --djdt-font-color: black;
     --djdt-background-color: white;
     --djdt-panel-content-background-color: #eee;
@@ -35,7 +34,6 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        color-scheme: dark;
         --djdt-font-color: #8393a7;
         --djdt-background-color: #1e293bff;
         --djdt-panel-content-background-color: #0f1729ff;
@@ -58,7 +56,6 @@
 }
 
 #djDebug[data-theme="dark"] {
-    color-scheme: dark;
     --djdt-font-color: #8393a7;
     --djdt-background-color: #1e293bff;
     --djdt-panel-content-background-color: #0f1729ff;
