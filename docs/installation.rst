@@ -156,6 +156,30 @@ option.
     able to get the toolbar to work with your docker installation, review
     the code in ``debug_toolbar.middleware.show_toolbar``.
 
+7. Disable the toolbar when running tests (optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you're running tests in your project you shouldn't activate the toolbar. You can do this by adding another setting:
+
+.. code-block:: python
+
+    TESTING = "argv" in sys.argv
+
+    if not TESTING:
+        INSTALLED_APPS = [*INSTALLED_APPS, "debug_toolbar"]
+        MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", *MIDDLEWARE]
+
+You should also modify your URLconf file:
+
+.. code-block:: python
+
+    if not settings.TESTING:
+        urlpatterns = [
+            *urlpatterns,
+            path("__debug__/", include("debug_toolbar.urls")),
+        ]
+
+
 Troubleshooting
 ---------------
 
