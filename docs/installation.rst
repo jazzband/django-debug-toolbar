@@ -164,7 +164,7 @@ can do this by adding another setting:
 
 .. code-block:: python
 
-    TESTING = "argv" in sys.argv
+    TESTING = "test" in sys.argv
 
     if not TESTING:
         INSTALLED_APPS = [
