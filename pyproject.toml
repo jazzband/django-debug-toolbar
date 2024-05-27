@@ -83,6 +83,7 @@ lint.extend-ignore = [
   "B905",   # Allow zip() without strict=
   "E501",   # Ignore line length violations
   "SIM108", # Use ternary operator instead of if-else-block
+  "UP031",  # It's not always wrong to use percent-formatting
 ]
 lint.per-file-ignores."*/migrat*/*" = [
   "N806", # Allow using PascalCase model names in migrations
