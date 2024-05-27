@@ -20,7 +20,7 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    internal_ips = settings.INTERNAL_IPS.copy()
+    internal_ips = list(settings.INTERNAL_IPS)
 
     try:
         # This is a hack for docker installations. It attempts to look

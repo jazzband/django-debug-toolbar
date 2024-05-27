@@ -5,6 +5,7 @@ Pending
 -------
 
 * Removed some CSS which wasn't carefully limited to the toolbar's elements.
+* Stopped assuming that ``INTERNAL_IPS`` is a list.
 
 
 4.4.1 (2024-05-26)
