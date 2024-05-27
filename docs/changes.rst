@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.4.2 (2024-05-27)
+------------------
+
 * Removed some CSS which wasn't carefully limited to the toolbar's elements.
 * Stopped assuming that ``INTERNAL_IPS`` is a list.
 * Added a section to the installation docs about running tests in projects
