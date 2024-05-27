@@ -159,15 +159,22 @@ option.
 7. Disable the toolbar when running tests (optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you're running tests in your project you shouldn't activate the toolbar. You can do this by adding another setting:
+If you're running tests in your project you shouldn't activate the toolbar. You
+can do this by adding another setting:
 
 .. code-block:: python
 
     TESTING = "argv" in sys.argv
 
     if not TESTING:
-        INSTALLED_APPS = [*INSTALLED_APPS, "debug_toolbar"]
-        MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", *MIDDLEWARE]
+        INSTALLED_APPS = [
+            *INSTALLED_APPS,
+            "debug_toolbar",
+        ]
+        MIDDLEWARE = [
+            "debug_toolbar.middleware.DebugToolbarMiddleware",
+            *MIDDLEWARE,
+        ]
 
 You should also modify your URLconf file:
 
@@ -179,6 +186,8 @@ You should also modify your URLconf file:
             path("__debug__/", include("debug_toolbar.urls")),
         ]
 
+Alternatively, you can check out the :ref:`IS_RUNNING_TESTS <IS_RUNNING_TESTS>`
+option.
 
 Troubleshooting
 ---------------

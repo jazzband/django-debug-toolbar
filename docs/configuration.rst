@@ -72,6 +72,8 @@ Toolbar options
   The toolbar searches for this string in the HTML and inserts itself just
   before.
 
+.. _IS_RUNNING_TESTS:
+
 * ``IS_RUNNING_TESTS``
 
   Default: ``"test" in sys.argv``
