@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
-from django.core.checks import Error, Warning, run_checks
+from django.core.checks import Warning, run_checks
 from django.test import SimpleTestCase, override_settings
+from django.urls import NoReverseMatch
 
-from debug_toolbar import settings as dt_settings
 from debug_toolbar.apps import debug_toolbar_installed_when_running_tests_check
 
 
@@ -239,39 +239,70 @@ class ChecksTestCase(SimpleTestCase):
             ],
         )
 
-    def test_debug_toolbar_installed_when_running_tests(self):
-        with self.settings(DEBUG=True):
-            # Update the config options because self.settings()
-            # would require redefining DEBUG_TOOLBAR_CONFIG entirely.
-            dt_settings.get_config()["IS_RUNNING_TESTS"] = True
-            errors = debug_toolbar_installed_when_running_tests_check(None)
-            self.assertEqual(len(errors), 0)
+    @patch("debug_toolbar.apps.reverse")
+    def test_debug_toolbar_installed_when_running_tests(self, reverse):
+        params = [
+            {
+                "debug": True,
+                "running_tests": True,
+                "show_callback_changed": True,
+                "urls_installed": False,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": False,
+                "show_callback_changed": True,
+                "urls_installed": False,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": True,
+                "show_callback_changed": False,
+                "urls_installed": False,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": True,
+                "show_callback_changed": True,
+                "urls_installed": True,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": True,
+                "show_callback_changed": True,
+                "urls_installed": False,
+                "errors": True,
+            },
+        ]
+        for config in params:
+            with self.subTest(**config):
+                config_setting = {
+                    "RENDER_PANELS": False,
+                    "IS_RUNNING_TESTS": config["running_tests"],
+                    "SHOW_TOOLBAR_CALLBACK": (
+                        (lambda *args: True)
+                        if config["show_callback_changed"]
+                        else "debug_toolbar.middleware.show_toolbar"
+                    ),
+                }
+                if config["urls_installed"]:
+                    reverse.side_effect = lambda *args: None
+                else:
+                    reverse.side_effect = NoReverseMatch()
 
-            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
-            errors = debug_toolbar_installed_when_running_tests_check(None)
-            self.assertEqual(len(errors), 0)
-        with self.settings(DEBUG=False):
-            dt_settings.get_config()["IS_RUNNING_TESTS"] = False
-            errors = debug_toolbar_installed_when_running_tests_check(None)
-            self.assertEqual(len(errors), 0)
-
-            dt_settings.get_config()["IS_RUNNING_TESTS"] = True
-            errors = debug_toolbar_installed_when_running_tests_check(None)
-            self.assertEqual(
-                errors,
-                [
-                    Error(
-                        "The Django Debug Toolbar can't be used with tests",
-                        hint="Django changes the DEBUG setting to False when running "
-                        "tests. By default the Django Debug Toolbar is installed because "
-                        "DEBUG is set to True. For most cases, you need to avoid installing "
-                        "the toolbar when running tests. If you feel this check is in error, "
-                        "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
-                        "bypass this check.",
-                        id="debug_toolbar.E001",
-                    )
-                ],
-            )
+                with self.settings(
+                    DEBUG=config["debug"], DEBUG_TOOLBAR_CONFIG=config_setting
+                ):
+                    errors = debug_toolbar_installed_when_running_tests_check(None)
+                    if config["errors"]:
+                        self.assertEqual(len(errors), 1)
+                        self.assertEqual(errors[0].id, "debug_toolbar.E001")
+                    else:
+                        self.assertEqual(len(errors), 0)
 
     @override_settings(
         DEBUG_TOOLBAR_CONFIG={
