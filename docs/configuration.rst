@@ -152,6 +152,16 @@ Toolbar options
      implication is that it is possible to execute arbitrary SQL through the
      SQL panel when the ``SECRET_KEY`` value is leaked somehow.
 
+  .. warning::
+
+     Do not use
+     ``DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}``
+     in your project's settings.py file. The toolbar expects to use
+     ``django.conf.settings.DEBUG``. Using your project's setting's ``DEBUG``
+     is likely to cause unexpected when running your tests. This is because
+     Django automatically sets ``settings.DEBUG = False``, but your project's
+     setting's ``DEBUG`` will still be set to ``True``.
+
 .. _OBSERVE_REQUEST_CALLBACK:
 
 * ``OBSERVE_REQUEST_CALLBACK``
