@@ -7,6 +7,8 @@ Pending
 * Limit ``E001`` check to likely error cases when the
   ``SHOW_TOOLBAR_CALLBACK`` has changed, but the toolbar's URL
   paths aren't installed.
+* Introduce helper function ``debug_toolbar_urls`` to
+  simplify installation.
 
 4.4.2 (2024-05-27)
 ------------------
