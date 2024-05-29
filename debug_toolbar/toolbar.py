@@ -2,16 +2,18 @@
 The main DebugToolbar class that loads and renders the Toolbar.
 """
 
+import re
 import uuid
 from collections import OrderedDict
 from functools import lru_cache
 
 from django.apps import apps
+from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import Signal
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
-from django.urls import path, resolve
+from django.urls import include, path, re_path, resolve
 from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 from django.utils.translation import get_language, override as lang_override
@@ -186,3 +188,27 @@ def observe_request(request):
     Determine whether to update the toolbar from a client side request.
     """
     return True
+
+
+def debug_toolbar_urls(prefix="__debug__"):
+    """
+    Return a URL pattern for serving toolbar in debug mode.
+
+    from django.conf import settings
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
+    urlpatterns = [
+        # ... the rest of your URLconf goes here ...
+    ] + debug_toolbar_urls()
+    """
+    if not prefix:
+        raise ImproperlyConfigured("Empty urls prefix not permitted")
+    elif not settings.DEBUG:
+        # No-op if not in debug mode.
+        return []
+    return [
+        re_path(
+            r"^%s/" % re.escape(prefix.lstrip("/")),
+            include("debug_toolbar.urls"),
+        ),
+    ]

@@ -1,8 +1,8 @@
-from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 from django.views.generic import TemplateView
 
+from debug_toolbar.toolbar import debug_toolbar_urls
 from example.views import increment
 
 urlpatterns = [
@@ -34,9 +34,4 @@ urlpatterns = [
     ),
     path("admin/", admin.site.urls),
     path("ajax/increment", increment, name="ajax_increment"),
-]
-
-if settings.ENABLE_DEBUG_TOOLBAR:
-    urlpatterns += [
-        path("__debug__/", include("debug_toolbar.urls")),
-    ]
+] + debug_toolbar_urls()

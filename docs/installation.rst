@@ -95,14 +95,14 @@ Add django-debug-toolbar's URLs to your project's URLconf:
 .. code-block:: python
 
     from django.urls import include, path
+    from debug_toolbar.toolbar import debug_toolbar_urls
 
     urlpatterns = [
-        # ...
-        path("__debug__/", include("debug_toolbar.urls")),
-    ]
+        # ... the rest of your URLconf goes here ...
+    ] + debug_toolbar_urls()
 
-This example uses the ``__debug__`` prefix, but you can use any prefix that
-doesn't clash with your application's URLs.
+By default this uses the ``__debug__`` prefix for the paths, but you can
+use any prefix that doesn't clash with your application's URLs.
 
 
 5. Add the Middleware
@@ -180,11 +180,13 @@ You should also modify your URLconf file:
 
 .. code-block:: python
 
+    from django.conf import settings
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
     if not settings.TESTING:
         urlpatterns = [
             *urlpatterns,
-            path("__debug__/", include("debug_toolbar.urls")),
-        ]
+        ] + debug_toolbar_urls()
 
 Alternatively, you can check out the :ref:`IS_RUNNING_TESTS <IS_RUNNING_TESTS>`
 option.
