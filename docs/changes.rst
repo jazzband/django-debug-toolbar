@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Fix overriding font-family for both light and dark themes.
+
 4.4.2 (2024-05-27)
 ------------------
 
