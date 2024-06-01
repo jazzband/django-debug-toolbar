@@ -4,7 +4,8 @@ Change log
 Pending
 -------
 
-* Fix overriding font-family for both light and dark themes.
+* Fixed overriding font-family for both light and dark themes.
+* Restored compatibility with ``iptools.IpRangeList``.
 
 4.4.2 (2024-05-27)
 ------------------
