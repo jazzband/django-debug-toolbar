@@ -20,8 +20,14 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    internal_ips = list(settings.INTERNAL_IPS)
+    if not settings.DEBUG:
+        return False
 
+    # Test: settings
+    if request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS:
+        return True
+
+    # Test: Docker
     try:
         # This is a hack for docker installations. It attempts to look
         # up the IP address of the docker host.
@@ -31,11 +37,14 @@ def show_toolbar(request):
             ".".join(socket.gethostbyname("host.docker.internal").rsplit(".")[:-1])
             + ".1"
         )
-        internal_ips.append(docker_ip)
+        if request.META.get("REMOTE_ADDR") == docker_ip:
+            return True
     except socket.gaierror:
         # It's fine if the lookup errored since they may not be using docker
         pass
-    return settings.DEBUG and request.META.get("REMOTE_ADDR") in internal_ips
+
+    # No test passed
+    return False
 
 
 @lru_cache(maxsize=None)
