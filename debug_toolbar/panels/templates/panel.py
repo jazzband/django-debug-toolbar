@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from html.parser import HTMLParser
 from os.path import normpath
 from pprint import pformat, saferepr
 
@@ -56,6 +57,31 @@ def _request_context_bind_template(self, template):
 
 
 RequestContext.bind_template = _request_context_bind_template
+
+
+class FormParser(HTMLParser):
+    """
+    HTML form parser, used to check for invalid configurations
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.in_form = False
+        self.current_form = {}
+        self.forms = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "form":
+            self.in_form = True
+            self.current_form = {"attrs": attrs, "file_inputs": []}
+        elif self.in_form and tag == "input" and attrs.get("type") == "file":
+            self.current_form["file_inputs"].append(attrs)
+
+    def handle_endtag(self, tag):
+        if tag == "form" and self.in_form:
+            self.forms.append(self.current_form)
+            self.in_form = False
 
 
 class TemplatesPanel(Panel):
@@ -177,6 +203,25 @@ class TemplatesPanel(Panel):
 
         return context_list
 
+    def check_invalid_file_form_configuration(self, html_content):
+        parser = FormParser()
+        parser.feed(html_content)
+
+        invalid_forms = []
+        for form in parser.forms:
+            if (
+                form["file_inputs"]
+                and form["attrs"].get("enctype") != "multipart/form-data"
+            ):
+                form_id = form["attrs"].get("id", "no form id")
+                error_message = (
+                    f'Form with id "{form_id}" contains file input but '
+                    f'missing enctype="multipart/form-data".'
+                )
+                invalid_forms.append({"form": form, "error_message": error_message})
+
+        return invalid_forms
+
     def generate_stats(self, request, response):
         template_context = []
         for template_data in self.templates:
@@ -211,10 +256,18 @@ class TemplatesPanel(Panel):
             context_processors = None
             template_dirs = []
 
+        html_content = response.content.decode(response.charset)
+        invalid_file_form_configs = self.check_invalid_file_form_configuration(
+            html_content
+        )
+
         self.record_stats(
             {
                 "templates": template_context,
                 "template_dirs": [normpath(x) for x in template_dirs],
                 "context_processors": context_processors,
+                "invalid_file_form_configs": [
+                    issue["error_message"] for issue in invalid_file_form_configs
+                ],
             }
         )

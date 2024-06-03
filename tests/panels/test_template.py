@@ -68,6 +68,28 @@ class TemplatesPanelTestCase(BaseTestCase):
         self.panel.generate_stats(self.request, response)
         self.assertIn("nôt åscíì", self.panel.content)
 
+    def test_file_form_without_enctype_multipart_form_data(self):
+        """
+        Test that the panel displays a form invalid message when there is
+        a file input but encoding not set to multipart/form-data.
+        """
+        test_form = '<form id="test-form"><input type="file"></form>'
+        result = self.panel.check_invalid_file_form_configuration(test_form)
+
+        expected_error = (
+            'Form with id "test-form" contains file input '
+            'but missing enctype="multipart/form-data".'
+        )
+        self.assertEqual(result[0]["error_message"], expected_error)
+
+    def test_file_form_with_enctype_multipart_form_data(self):
+        test_form = """<form id="test-form" enctype="multipart/form-data">
+        <input type="file">
+        </form>"""
+        result = self.panel.check_invalid_file_form_configuration(test_form)
+
+        self.assertEqual(len(result), 0)
+
     def test_insert_content(self):
         """
         Test that the panel only inserts content after generate_stats and

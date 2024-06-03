@@ -46,3 +46,12 @@
 {% else %}
   <p>{% trans "None" %}</p>
 {% endif %}
+
+{% if invalid_file_form_configs %}
+  <h4>{% blocktrans count invalid_file_form_configs|length as invalid_file_form_configs_count %}Invalid file form configuration{% plural %}Invalid file form configurations{% endblocktrans %}</h4>
+  <dl>
+    {% for invalid_file_form_config in invalid_file_form_configs %}
+      <dt>{{ invalid_file_form_config | escape }}</dt>
+    {% endfor %}
+  </dl>
+{% endif %}
