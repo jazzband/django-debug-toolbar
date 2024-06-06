@@ -81,6 +81,7 @@ class TemplatesPanelTestCase(BaseTestCase):
             'but missing enctype="multipart/form-data".'
         )
         self.assertEqual(result[0]["error_message"], expected_error)
+        self.assertEqual(len(result), 1)
 
     def test_file_form_with_enctype_multipart_form_data(self):
         test_form = """<form id="test-form" enctype="multipart/form-data">
@@ -89,6 +90,21 @@ class TemplatesPanelTestCase(BaseTestCase):
         result = self.panel.check_invalid_file_form_configuration(test_form)
 
         self.assertEqual(len(result), 0)
+
+    def test_file_form_configuration_warning_display(self):
+        """
+        Test that the panel (does not) display[s] a warning when there are (no)
+        forms with file input types but encoding not set to multipart/form-data.
+        """
+        # Should not show issue in subtitle when no invalid configurations
+        self.panel.invalid_file_form_configs_count = 0
+        nav_subtitle = self.panel.nav_subtitle
+        self.assertNotIn("file form configuration issue", nav_subtitle)
+
+        # Should show issue in subtitle when invalid configurations
+        self.panel.invalid_file_form_configs_count = 2
+        nav_subtitle = self.panel.nav_subtitle
+        self.assertIn("2 file form configuration issues found", nav_subtitle)
 
     def test_insert_content(self):
         """

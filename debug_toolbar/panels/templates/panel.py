@@ -130,9 +130,23 @@ class TemplatesPanel(Panel):
 
     @property
     def nav_subtitle(self):
+        subtitle_parts = []
         if self.templates:
-            return self.templates[0]["template"].name
-        return ""
+            template_name = self.templates[0]["template"].name or "No template name"
+            subtitle_parts.append(template_name)
+        if self.invalid_file_form_configs_count:
+            # Add warning for user indicating file form configuration issue
+            issue_text = (
+                "issue" if self.invalid_file_form_configs_count == 1 else "issues"
+            )
+            subtitle_parts.append(
+                f"{self.invalid_file_form_configs_count} file form configuration "
+                f"{issue_text} found"
+            )
+        if len(subtitle_parts) > 1:
+            return " - ".join(subtitle_parts)
+        else:
+            return subtitle_parts[0] if subtitle_parts else ""
 
     template = "debug_toolbar/panels/templates.html"
 
@@ -260,6 +274,7 @@ class TemplatesPanel(Panel):
         invalid_file_form_configs = self.check_invalid_file_form_configuration(
             html_content
         )
+        self.invalid_file_form_configs_count = len(invalid_file_form_configs)
 
         self.record_stats(
             {
