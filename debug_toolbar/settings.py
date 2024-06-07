@@ -58,6 +58,7 @@ def get_config():
 
 
 PANELS_DEFAULTS = [
+    "debug_toolbar.panels.alerts.AlertsPanel",
     "debug_toolbar.panels.history.HistoryPanel",
     "debug_toolbar.panels.versions.VersionsPanel",
     "debug_toolbar.panels.timer.TimerPanel",

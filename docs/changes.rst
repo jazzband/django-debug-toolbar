@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Added alert panel with warning when form is using file fields
+  without proper encoding type.
 * Fixed overriding font-family for both light and dark themes.
 * Restored compatibility with ``iptools.IpRangeList``.
 

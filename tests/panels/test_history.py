@@ -67,6 +67,7 @@ class HistoryPanelTestCase(BaseTestCase):
 @override_settings(DEBUG=True)
 class HistoryViewsTestCase(IntegrationTestCase):
     PANEL_KEYS = {
+        "AlertsPanel",
         "VersionsPanel",
         "TimerPanel",
         "SettingsPanel",

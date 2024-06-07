@@ -9,6 +9,15 @@ Default built-in panels
 
 The following panels are enabled by default.
 
+Alerts
+~~~~~~~
+
+.. class:: debug_toolbar.panels.alerts.AlertsPanel
+
+This panel shows alerts for a set of pre-defined issues. Currently, the only
+issue it checks for is the encoding of a form that takes a file input not
+being set to ``multipart/form-data``.
+
 History
 ~~~~~~~
 
