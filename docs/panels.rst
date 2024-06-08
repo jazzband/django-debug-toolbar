@@ -14,9 +14,11 @@ Alerts
 
 .. class:: debug_toolbar.panels.alerts.AlertsPanel
 
-This panel shows alerts for a set of pre-defined issues. Currently, the only
-issue it checks for is the encoding of a form that takes a file input not
-being set to ``multipart/form-data``.
+This panel shows alerts for a set of pre-defined cases:
+
+- Alerts when the response has a form without the
+  ``enctype="multipart/form-data"`` attribute and the form contains
+  a file input
 
 History
 ~~~~~~~
