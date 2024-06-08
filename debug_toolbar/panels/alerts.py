@@ -51,20 +51,26 @@ class AlertsPanel(Panel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.issues = []
+        self.alerts = []
 
     @property
     def nav_subtitle(self):
-        if self.issues:
-            issue_text = "issue" if len(self.issues) == 1 else "issues"
-            return f"{len(self.issues)} {issue_text} found"
+        alerts = self.get_stats()["alerts"]
+        if alerts:
+            alert_text = "alert" if len(alerts) == 1 else "alerts"
+            return f"{len(alerts)} {alert_text}"
         else:
             return ""
 
-    def add_issue(self, issue):
-        self.issues.append(issue)
+    def add_alert(self, alert):
+        self.alerts.append(alert)
 
     def check_invalid_file_form_configuration(self, html_content):
+        """
+        Inspects HTML content for a form that includes a file input but does
+        not have the encoding type set to multipart/form-data, and warns the
+        user if so.
+        """
         parser = FormParser()
         parser.feed(html_content)
 
@@ -78,18 +84,18 @@ class AlertsPanel(Panel):
                 )
             ):
                 form_id = form["form_attrs"].get("id", "no form id")
-                issue = (
+                alert = (
                     f'Form with id "{form_id}" contains file input but '
                     "does not have multipart/form-data encoding."
                 )
-                self.add_issue({"issue": issue})
-        return self.issues
+                self.add_alert({"alert": alert})
+        return self.alerts
 
     def generate_stats(self, request, response):
         html_content = response.content.decode(response.charset)
         self.check_invalid_file_form_configuration(html_content)
 
-        # Further issue checks can go here
+        # Further alert checks can go here
 
-        # Write all issues to record_stats
-        self.record_stats({"issues": self.issues})
+        # Write all alerts to record_stats
+        self.record_stats({"alerts": self.alerts})

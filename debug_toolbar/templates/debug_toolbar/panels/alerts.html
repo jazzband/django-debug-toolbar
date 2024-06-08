@@ -1,12 +1,12 @@
 {% load i18n %}
 
-{% if issues %}
-  <h4>{% trans "Issues found" %}</h4>
-  {% for issue in issues %}
+{% if alerts %}
+  <h4>{% trans "alerts found" %}</h4>
+  {% for alert in alerts %}
     <ul>
-      <li>{{ issue.issue }}</li>
+      <li>{{ alert.alert }}</li>
     </ul>
   {% endfor %}
 {% else %}
-  <p>No issues found.</p>
+  <p>No alerts found.</p>
 {% endif %}
