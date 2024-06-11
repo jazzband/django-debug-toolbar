@@ -40,6 +40,35 @@ class AlertsPanelTestCase(BaseTestCase):
 
         self.assertEqual(len(result), 0)
 
+    def test_file_form_with_enctype_multipart_form_data_in_button(self):
+        test_form = """<form id="test-form">
+        <input type="file">
+        <input type="submit" formenctype="multipart/form-data">
+        </form>"""
+        result = self.panel.check_invalid_file_form_configuration(test_form)
+
+        self.assertEqual(len(result), 0)
+
+    def test_referenced_file_input_without_enctype_multipart_form_data(self):
+        test_file_input = """<form id="test-form"></form>
+        <input type="file" form = "test-form">"""
+        result = self.panel.check_invalid_file_form_configuration(test_file_input)
+
+        expected_error = (
+            'Input element references form with id "test-form" '
+            "but the form does not have multipart/form-data encoding."
+        )
+        self.assertEqual(result[0]["alert"], expected_error)
+        self.assertEqual(len(result), 1)
+
+    def test_referenced_file_input_with_enctype_multipart_form_data(self):
+        test_file_input = """<form id="test-form" enctype="multipart/form-data">
+        </form>
+        <input type="file" form = "test-form">"""
+        result = self.panel.check_invalid_file_form_configuration(test_file_input)
+
+        self.assertEqual(len(result), 0)
+
     def test_integration_file_form_without_enctype_multipart_form_data(self):
         t = Template('<form id="test-form"><input type="file"></form>')
         c = Context({})

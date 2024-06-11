@@ -16,23 +16,39 @@ class FormParser(HTMLParser):
         self.in_form = False
         self.current_form = {}
         self.forms = []
+        self.form_ids = []
+        self.referenced_file_inputs = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag == "form":
             self.in_form = True
+            form_id = attrs.get("id")
+            if form_id:
+                self.form_ids.append(form_id)
             self.current_form = {
                 "file_form": False,
                 "form_attrs": attrs,
                 "submit_element_attrs": [],
             }
-        elif self.in_form and tag == "input" and attrs.get("type") == "file":
+        elif (
+            self.in_form
+            and tag == "input"
+            and attrs.get("type") == "file"
+            and (not attrs.get("form") or attrs.get("form") == "")
+        ):
             self.current_form["file_form"] = True
-        elif self.in_form and (
-            (tag == "input" and attrs.get("type") in {"submit", "image"})
-            or tag == "button"
+        elif (
+            self.in_form
+            and (
+                (tag == "input" and attrs.get("type") in {"submit", "image"})
+                or tag == "button"
+            )
+            and (not attrs.get("form") or attrs.get("form") == "")
         ):
             self.current_form["submit_element_attrs"].append(attrs)
+        elif tag == "input" and attrs.get("form"):
+            self.referenced_file_inputs.append(attrs)
 
     def handle_endtag(self, tag):
         if tag == "form" and self.in_form:
@@ -74,6 +90,8 @@ class AlertsPanel(Panel):
         parser = FormParser()
         parser.feed(html_content)
 
+        # Check for file inputs directly inside a form that do not reference
+        # any form through the form attribute
         for form in parser.forms:
             if (
                 form["file_form"]
@@ -89,6 +107,23 @@ class AlertsPanel(Panel):
                     "does not have multipart/form-data encoding."
                 )
                 self.add_alert({"alert": alert})
+
+        # Check for file inputs that reference a form
+        form_attrs_by_id = {
+            form["form_attrs"].get("id"): form["form_attrs"] for form in parser.forms
+        }
+
+        for attrs in parser.referenced_file_inputs:
+            form_id = attrs.get("form")
+            if form_id and attrs.get("type") == "file":
+                form_attrs = form_attrs_by_id.get(form_id)
+                if form_attrs and form_attrs.get("enctype") != "multipart/form-data":
+                    alert = (
+                        f'Input element references form with id "{form_id}" '
+                        "but the form does not have multipart/form-data encoding."
+                    )
+                    self.add_alert({"alert": alert})
+
         return self.alerts
 
     def generate_stats(self, request, response):
