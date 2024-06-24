@@ -136,6 +136,7 @@ class ProfilingPanel(Panel):
     Panel that displays profiling information.
     """
 
+    is_async = False
     title = _("Profiling")
 
     template = "debug_toolbar/panels/profiling.html"

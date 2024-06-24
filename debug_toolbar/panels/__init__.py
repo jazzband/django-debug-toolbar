@@ -1,3 +1,4 @@
+from django.core.handlers.asgi import ASGIRequest
 from django.template.loader import render_to_string
 
 from debug_toolbar import settings as dt_settings
@@ -8,6 +9,8 @@ class Panel:
     """
     Base class for panels.
     """
+
+    is_async = True
 
     def __init__(self, toolbar, get_response):
         self.toolbar = toolbar
@@ -21,6 +24,10 @@ class Panel:
 
     @property
     def enabled(self) -> bool:
+        # check if the panel is async compatible
+        if not self.is_async and isinstance(self.toolbar.request, ASGIRequest):
+            return False
+
         # The user's cookies should override the default value
         cookie_value = self.toolbar.request.COOKIES.get("djdt" + self.panel_id)
         if cookie_value is not None:

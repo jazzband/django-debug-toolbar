@@ -6,6 +6,7 @@ import re
 import socket
 from functools import lru_cache
 
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.conf import settings
 from django.utils.module_loading import import_string
 
@@ -62,17 +63,29 @@ class DebugToolbarMiddleware:
     on outgoing response.
     """
 
+    sync_capable = True
+    async_capable = True
+
     def __init__(self, get_response):
         self.get_response = get_response
+        # If get_response is a coroutine function, turns us into async mode so
+        # a thread is not consumed during a whole request.
+        self.async_mode = iscoroutinefunction(self.get_response)
+
+        if self.async_mode:
+            # Mark the class as async-capable, but do the actual switch inside
+            # __call__ to avoid swapping out dunder methods.
+            markcoroutinefunction(self)
 
     def __call__(self, request):
+        # Decide whether the toolbar is active for this request.
+        if self.async_mode:
+            return self.__acall__(request)
         # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
         if not show_toolbar(request) or DebugToolbar.is_toolbar_request(request):
             return self.get_response(request)
-
         toolbar = DebugToolbar(request, self.get_response)
-
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
             panel.enable_instrumentation()
@@ -86,6 +99,36 @@ class DebugToolbarMiddleware:
             for panel in reversed(toolbar.enabled_panels):
                 panel.disable_instrumentation()
 
+        return self._postprocess(request, response, toolbar)
+
+    async def __acall__(self, request):
+        # Decide whether the toolbar is active for this request.
+        show_toolbar = get_show_toolbar()
+        if not show_toolbar(request) or DebugToolbar.is_toolbar_request(request):
+            response = await self.get_response(request)
+            return response
+
+        toolbar = DebugToolbar(request, self.get_response)
+
+        # Activate instrumentation ie. monkey-patch.
+        for panel in toolbar.enabled_panels:
+            panel.enable_instrumentation()
+        try:
+            # Run panels like Django middleware.
+            response = await toolbar.process_request(request)
+        finally:
+            clear_stack_trace_caches()
+            # Deactivate instrumentation ie. monkey-unpatch. This must run
+            # regardless of the response. Keep 'return' clauses below.
+            for panel in reversed(toolbar.enabled_panels):
+                panel.disable_instrumentation()
+
+        return self._postprocess(request, response, toolbar)
+
+    def _postprocess(self, request, response, toolbar):
+        """
+        Post-process the response.
+        """
         # Generate the stats for all requests when the toolbar is being shown,
         # but not necessarily inserted.
         for panel in reversed(toolbar.enabled_panels):
