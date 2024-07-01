@@ -1,6 +1,7 @@
-from typing import Any, List, NamedTuple, Optional, Tuple
+from typing import Any, List, NamedTuple, Optional, Protocol, Tuple
 
 from django import template as dj_template
+from django.http import HttpRequest, HttpResponse
 
 
 class InspectStack(NamedTuple):
@@ -22,3 +23,8 @@ class RenderContext(dj_template.context.RenderContext):
 class RequestContext(dj_template.RequestContext):
     template: dj_template.Template
     render_context: RenderContext
+
+
+class GetResponse(Protocol):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        ...
