@@ -15,6 +15,8 @@ class RequestPanel(Panel):
 
     title = _("Request")
 
+    is_async = False
+
     @property
     def nav_subtitle(self):
         """

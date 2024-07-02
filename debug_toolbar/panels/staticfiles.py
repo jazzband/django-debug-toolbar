@@ -73,6 +73,7 @@ class StaticFilesPanel(panels.Panel):
     A panel to display the found staticfiles.
     """
 
+    is_async = False
     name = "Static files"
     template = "debug_toolbar/panels/staticfiles.html"
 
