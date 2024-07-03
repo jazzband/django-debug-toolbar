@@ -158,7 +158,7 @@ Toolbar options
      ``DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}``
      in your project's settings.py file. The toolbar expects to use
      ``django.conf.settings.DEBUG``. Using your project's setting's ``DEBUG``
-     is likely to cause unexpected when running your tests. This is because
+     is likely to cause unexpected results when running your tests. This is because
      Django automatically sets ``settings.DEBUG = False``, but your project's
      setting's ``DEBUG`` will still be set to ``True``.
 
