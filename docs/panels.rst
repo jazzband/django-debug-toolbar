@@ -18,7 +18,7 @@ This panel shows alerts for a set of pre-defined cases:
 
 - Alerts when the response has a form without the
   ``enctype="multipart/form-data"`` attribute and the form contains
-  a file input
+  a file input.
 
 History
 ~~~~~~~
