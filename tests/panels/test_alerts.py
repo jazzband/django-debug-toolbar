@@ -26,8 +26,24 @@ class AlertsPanelTestCase(BaseTestCase):
         test_form = '<form id="test-form"><input type="file"></form>'
         result = self.panel.check_invalid_file_form_configuration(test_form)
         expected_error = (
-            'Form with id "test-form" contains file input '
-            "but does not have multipart/form-data encoding."
+            'Form with id "test-form" contains file input, '
+            'but does not have the attribute enctype="multipart/form-data".'
+        )
+        self.assertEqual(result[0]["alert"], expected_error)
+        self.assertEqual(len(result), 1)
+
+    def test_file_form_no_id_without_enctype_multipart_form_data(self):
+        """
+        Test that the panel displays a form invalid message when there is
+        a file input but encoding not set to multipart/form-data.
+
+        This should use the message when the form has no id.
+        """
+        test_form = '<form><input type="file"></form>'
+        result = self.panel.check_invalid_file_form_configuration(test_form)
+        expected_error = (
+            "Form contains file input, but does not have "
+            'the attribute enctype="multipart/form-data".'
         )
         self.assertEqual(result[0]["alert"], expected_error)
         self.assertEqual(len(result), 1)
@@ -55,8 +71,8 @@ class AlertsPanelTestCase(BaseTestCase):
         result = self.panel.check_invalid_file_form_configuration(test_file_input)
 
         expected_error = (
-            'Input element references form with id "test-form" '
-            "but the form does not have multipart/form-data encoding."
+            'Input element references form with id "test-form", '
+            'but the form does not have the attribute enctype="multipart/form-data".'
         )
         self.assertEqual(result[0]["alert"], expected_error)
         self.assertEqual(len(result), 1)
@@ -79,7 +95,7 @@ class AlertsPanelTestCase(BaseTestCase):
 
         self.assertIn("1 alert", self.panel.nav_subtitle)
         self.assertIn(
-            "Form with id &quot;test-form&quot; contains file input "
-            "but does not have multipart/form-data encoding.",
+            "Form with id &quot;test-form&quot; contains file input, "
+            "but does not have the attribute enctype=&quot;multipart/form-data&quot;.",
             self.panel.content,
         )

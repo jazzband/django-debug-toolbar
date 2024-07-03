@@ -61,6 +61,18 @@ class AlertsPanel(Panel):
     A panel to alert users to issues.
     """
 
+    messages = {
+        "form_id_missing_enctype": _(
+            'Form with id "{form_id}" contains file input, but does not have the attribute enctype="multipart/form-data".'
+        ),
+        "form_missing_enctype": _(
+            'Form contains file input, but does not have the attribute enctype="multipart/form-data".'
+        ),
+        "input_refs_form_missing_enctype": _(
+            'Input element references form with id "{form_id}", but the form does not have the attribute enctype="multipart/form-data".'
+        ),
+    }
+
     title = _("Alerts")
 
     template = "debug_toolbar/panels/alerts.html"
@@ -101,11 +113,12 @@ class AlertsPanel(Panel):
                     for elem in form["submit_element_attrs"]
                 )
             ):
-                form_id = form["form_attrs"].get("id", "no form id")
-                alert = (
-                    f'Form with id "{form_id}" contains file input but '
-                    "does not have multipart/form-data encoding."
-                )
+                if form_id := form["form_attrs"].get("id"):
+                    alert = self.messages["form_id_missing_enctype"].format(
+                        form_id=form_id
+                    )
+                else:
+                    alert = self.messages["form_missing_enctype"]
                 self.add_alert({"alert": alert})
 
         # Check for file inputs that reference a form
@@ -118,9 +131,8 @@ class AlertsPanel(Panel):
             if form_id and attrs.get("type") == "file":
                 form_attrs = form_attrs_by_id.get(form_id)
                 if form_attrs and form_attrs.get("enctype") != "multipart/form-data":
-                    alert = (
-                        f'Input element references form with id "{form_id}" '
-                        "but the form does not have multipart/form-data encoding."
+                    alert = self.messages["input_refs_form_missing_enctype"].format(
+                        form_id=form_id
                     )
                     self.add_alert({"alert": alert})
 
