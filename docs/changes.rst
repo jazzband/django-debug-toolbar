@@ -6,6 +6,9 @@ Pending
 
 * Fixed overriding font-family for both light and dark themes.
 * Restored compatibility with ``iptools.IpRangeList``.
+* Limit ``E001`` check to likely error cases when the
+  ``SHOW_TOOLBAR_CALLBACK`` has changed, but the toolbar's URL
+  paths aren't installed.
 
 4.4.2 (2024-05-27)
 ------------------

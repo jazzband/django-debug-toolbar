@@ -5,10 +5,12 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.core.checks import Error, Warning, register
 from django.middleware.gzip import GZipMiddleware
+from django.urls import NoReverseMatch, reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from debug_toolbar import settings as dt_settings
+from debug_toolbar import APP_NAME, settings as dt_settings
+from debug_toolbar.settings import CONFIG_DEFAULTS
 
 
 class DebugToolbarConfig(AppConfig):
@@ -213,7 +215,33 @@ def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
     """
     Check that the toolbar is not being used when tests are running
     """
-    if not settings.DEBUG and dt_settings.get_config()["IS_RUNNING_TESTS"]:
+    # Check if show toolbar callback has changed
+    show_toolbar_changed = (
+        dt_settings.get_config()["SHOW_TOOLBAR_CALLBACK"]
+        != CONFIG_DEFAULTS["SHOW_TOOLBAR_CALLBACK"]
+    )
+    try:
+        # Check if the toolbar's urls are installed
+        reverse(f"{APP_NAME}:render_panel")
+        toolbar_urls_installed = True
+    except NoReverseMatch:
+        toolbar_urls_installed = False
+
+    # If the user is using the default SHOW_TOOLBAR_CALLBACK,
+    # then the middleware will respect the change to settings.DEBUG.
+    # However, if the user has changed the callback to:
+    # DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}
+    # where DEBUG is not settings.DEBUG, then it won't pick up that Django'
+    # test runner has changed the value for settings.DEBUG, and the middleware
+    # will inject the toolbar, while the URLs aren't configured leading to a
+    # NoReverseMatch error.
+    likely_error_setup = show_toolbar_changed and not toolbar_urls_installed
+
+    if (
+        not settings.DEBUG
+        and dt_settings.get_config()["IS_RUNNING_TESTS"]
+        and likely_error_setup
+    ):
         return [
             Error(
                 "The Django Debug Toolbar can't be used with tests",
