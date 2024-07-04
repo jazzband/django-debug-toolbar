@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.4.3 (2024-07-04)
+------------------
+
 * Added alert panel with warning when form is using file fields
   without proper encoding type.
 * Fixed overriding font-family for both light and dark themes.
