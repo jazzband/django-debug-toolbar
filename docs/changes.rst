@@ -13,6 +13,7 @@ Pending
   paths aren't installed.
 * Introduce helper function ``debug_toolbar_urls`` to
   simplify installation.
+* Moved "1rem" height/width for SVGs to CSS properties.
 
 4.4.2 (2024-05-27)
 ------------------
