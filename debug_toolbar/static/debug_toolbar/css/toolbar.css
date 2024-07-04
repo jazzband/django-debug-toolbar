@@ -734,4 +734,6 @@
 #djDebug[data-theme="dark"] #djToggleThemeButton svg.theme-dark,
 #djDebug[data-theme="auto"] #djToggleThemeButton svg.theme-auto {
     display: block;
+    height: 1rem;
+    width: 1rem;
 }
