@@ -9,6 +9,17 @@ Default built-in panels
 
 The following panels are enabled by default.
 
+Alerts
+~~~~~~~
+
+.. class:: debug_toolbar.panels.alerts.AlertsPanel
+
+This panel shows alerts for a set of pre-defined cases:
+
+- Alerts when the response has a form without the
+  ``enctype="multipart/form-data"`` attribute and the form contains
+  a file input.
+
 History
 ~~~~~~~
 

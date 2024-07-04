@@ -75,6 +75,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
         "SQLPanel",
         "StaticFilesPanel",
         "TemplatesPanel",
+        "AlertsPanel",
         "CachePanel",
         "SignalsPanel",
         "ProfilingPanel",

@@ -7,6 +7,11 @@ from example.views import increment
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
+    path(
+        "bad-form/",
+        TemplateView.as_view(template_name="bad_form.html"),
+        name="bad_form",
+    ),
     path("jquery/", TemplateView.as_view(template_name="jquery/index.html")),
     path("mootools/", TemplateView.as_view(template_name="mootools/index.html")),
     path("prototype/", TemplateView.as_view(template_name="prototype/index.html")),
