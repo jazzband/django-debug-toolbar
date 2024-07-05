@@ -137,8 +137,20 @@ class TemplatesPanelTestCase(BaseTestCase):
     DEBUG=True, DEBUG_TOOLBAR_PANELS=["debug_toolbar.panels.templates.TemplatesPanel"]
 )
 class JinjaTemplateTestCase(IntegrationTestCase):
-    @expectedFailure
     def test_django_jinja2(self):
+        r = self.client.get("/regular_jinja/foobar/")
+        self.assertContains(r, "Test for foobar (Jinja)")
+        # This should be 2 templates because of the parent template.
+        # See test_django_jinja2_parent_template_instrumented
+        self.assertContains(r, "<h3>Templates (1 rendered)</h3>")
+        self.assertContains(r, "<small>basic.jinja</small>")
+
+    @expectedFailure
+    def test_django_jinja2_parent_template_instrumented(self):
+        """
+        When Jinja2 templates are properly instrumented, the
+        parent template should be instrumented.
+        """
         r = self.client.get("/regular_jinja/foobar/")
         self.assertContains(r, "Test for foobar (Jinja)")
         self.assertContains(r, "<h3>Templates (2 rendered)</h3>")
