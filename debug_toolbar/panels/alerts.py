@@ -83,8 +83,7 @@ class AlertsPanel(Panel):
 
     @property
     def nav_subtitle(self):
-        alerts = self.get_stats()["alerts"]
-        if alerts:
+        if alerts := self.get_stats().get("alerts"):
             alert_text = "alert" if len(alerts) == 1 else "alerts"
             return f"{len(alerts)} {alert_text}"
         else:
