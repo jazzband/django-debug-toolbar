@@ -4,6 +4,12 @@ Change log
 Pending
 -------
 
+4.4.5 (2024-07-05)
+------------------
+
+* Avoided crashing when the alerts panel was skipped.
+* Removed the inadvertently added hard dependency on Jinja2.
+
 4.4.4 (2024-07-05)
 ------------------
 
