@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.template import Context, Template
 
 from ..base import BaseTestCase
@@ -99,3 +99,14 @@ class AlertsPanelTestCase(BaseTestCase):
             "but does not have the attribute enctype=&quot;multipart/form-data&quot;.",
             self.panel.content,
         )
+
+    def test_streaming_response(self):
+        """Test to check for a streaming response."""
+
+        def _render():
+            yield "ok"
+
+        response = StreamingHttpResponse(_render())
+
+        self.panel.generate_stats(self.request, response)
+        self.assertEqual(self.panel.get_stats(), {})
