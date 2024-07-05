@@ -139,7 +139,6 @@ class AlertsPanel(Panel):
         return self.alerts
 
     def generate_stats(self, request, response):
-
         # check if streaming response
         if getattr(response, "streaming", True):
             return
