@@ -6,4 +6,4 @@ class TemplateReprForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all())
 
     def __repr__(self):
-        return repr(self)
+        return str(self)
