@@ -622,10 +622,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
 
         # Click to show the template panel
         self.selenium.find_element(By.CLASS_NAME, "TemplatesPanel").click()
-        # This should be 2 templates rendered. See
+        # This should be 2 templates rendered, including base.html See
         # JinjaTemplateTestCase.test_django_jinja2_parent_template_instrumented
         self.assertIn("Templates (1 rendered)", template_panel.text)
-        self.assertIn("base.html", template_panel.text)
+        self.assertNotIn("base.html", template_panel.text)
         self.assertIn("jinja2/basic.jinja", template_panel.text)
 
     @override_settings(
