@@ -4,6 +4,11 @@ Change log
 Pending
 -------
 
+4.4.3 (2024-07-05)
+------------------
+
+* Added check for StreamingHttpResponse in Alert Panel
+
 4.4.3 (2024-07-04)
 ------------------
 
