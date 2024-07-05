@@ -4,15 +4,12 @@ Change log
 Pending
 -------
 
-4.4.3 (2024-07-05)
-------------------
-
-* Added check for StreamingHttpResponse in Alert Panel
+* Added check for StreamingHttpResponse in alerts panel.
 
 4.4.3 (2024-07-04)
 ------------------
 
-* Added alert panel with warning when form is using file fields
+* Added alerts panel with warning when form is using file fields
   without proper encoding type.
 * Fixed overriding font-family for both light and dark themes.
 * Restored compatibility with ``iptools.IpRangeList``.
