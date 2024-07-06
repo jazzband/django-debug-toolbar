@@ -6,6 +6,7 @@ Pending
 
 * Changed ordering (and grammatical number) of panels and their titles in
   documentation to match actual panel ordering and titles.
+* Added warning "async is not supported"
 
 4.4.5 (2024-07-05)
 ------------------

@@ -1,5 +1,7 @@
+import io
 import os
 import re
+import sys
 import time
 import unittest
 from unittest.mock import patch
@@ -31,6 +33,12 @@ try:
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
     webdriver = None
+
+
+try:
+    from django.test import AsyncRequestFactory
+except ImportError:
+    AsyncRequestFactory = None
 
 
 rf = RequestFactory()
@@ -843,3 +851,46 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.get("/regular/basic/")
         toolbar = self.selenium.find_element(By.ID, "djDebug")
         self.assertEqual(toolbar.get_attribute("data-theme"), "light")
+
+
+@unittest.skipUnless(
+    AsyncRequestFactory is not None, "Test valid only for django with async requests"
+)
+@override_settings(DEBUG=True)
+class DebugToolbarAsyncTestCase(BaseTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.async_rf = AsyncRequestFactory()
+        cls.simple_get_response = lambda *args, **kwargs: HttpResponse(
+            "<html><body></body></html>"
+        )
+        cls._default_stdout = sys.stdout
+
+    def setUp(self):
+        super().setUp()
+        self.captured_output = io.StringIO()
+        sys.stdout = self.captured_output
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        sys.stdout = cls._default_stdout
+
+    def test_do_not_render_toolbar_if_it_was_async_request(self):
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+
+        request = self.async_rf.get("/")
+        response = DebugToolbarMiddleware(self.simple_get_response)(request)
+
+        self.assertEqual(response.content, b"<html><body></body></html>")
+
+    def test_prints_warning_async_is_not_supported(self):
+        request = self.async_rf.get("/")
+        DebugToolbarMiddleware(self.simple_get_response)(request)
+
+        assert (
+            self.captured_output.getvalue()
+            == "----------\nBe caution, django-debug-toolbar does not support async requests!\n----------\n"
+        )

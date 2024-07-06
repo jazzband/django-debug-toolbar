@@ -13,6 +13,11 @@ from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
 from debug_toolbar.utils import clear_stack_trace_caches
 
+try:
+    from django.core.handlers.asgi import ASGIRequest
+except ImportError:
+    ASGIRequest = None
+
 _HTML_TYPES = ("text/html", "application/xhtml+xml")
 
 
@@ -71,6 +76,10 @@ class DebugToolbarMiddleware:
         # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
         if not show_toolbar(request) or DebugToolbar.is_toolbar_request(request):
+            return self.get_response(request)
+
+        if self._check_async_request(request):
+            self._show_async_request_is_not_supported()
             return self.get_response(request)
 
         toolbar = DebugToolbar(request, self.get_response)
@@ -133,3 +142,12 @@ class DebugToolbarMiddleware:
                 else:
                     headers[header] = value
         return headers
+
+    def _check_async_request(self, request) -> bool:
+        return type(request) == ASGIRequest
+
+    @staticmethod
+    def _show_async_request_is_not_supported():
+        print("-" * 10)
+        print("Be caution, django-debug-toolbar does not support async requests!")
+        print("-" * 10)
