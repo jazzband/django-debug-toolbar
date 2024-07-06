@@ -9,17 +9,6 @@ Default built-in panels
 
 The following panels are enabled by default.
 
-Alerts
-~~~~~~~
-
-.. class:: debug_toolbar.panels.alerts.AlertsPanel
-
-This panel shows alerts for a set of pre-defined cases:
-
-- Alerts when the response has a form without the
-  ``enctype="multipart/form-data"`` attribute and the form contains
-  a file input.
-
 History
 ~~~~~~~
 
@@ -33,8 +22,8 @@ snapshot of the toolbar to view that request's stats.
    ``True`` or if the server runs with multiple processes, the History Panel
    will be disabled.
 
-Version
-~~~~~~~
+Versions
+~~~~~~~~
 
 .. class:: debug_toolbar.panels.versions.VersionsPanel
 
@@ -80,19 +69,30 @@ SQL
 
 SQL queries including time to execute and links to EXPLAIN each query.
 
-Template
-~~~~~~~~
-
-.. class:: debug_toolbar.panels.templates.TemplatesPanel
-
-Templates and context used, and their template paths.
-
 Static files
 ~~~~~~~~~~~~
 
 .. class:: debug_toolbar.panels.staticfiles.StaticFilesPanel
 
 Used static files and their locations (via the ``staticfiles`` finders).
+
+Templates
+~~~~~~~~~
+
+.. class:: debug_toolbar.panels.templates.TemplatesPanel
+
+Templates and context used, and their template paths.
+
+Alerts
+~~~~~~~
+
+.. class:: debug_toolbar.panels.alerts.AlertsPanel
+
+This panel shows alerts for a set of pre-defined cases:
+
+- Alerts when the response has a form without the
+  ``enctype="multipart/form-data"`` attribute and the form contains
+  a file input.
 
 Cache
 ~~~~~
@@ -101,8 +101,8 @@ Cache
 
 Cache queries. Is incompatible with Django's per-site caching.
 
-Signal
-~~~~~~
+Signals
+~~~~~~~
 
 .. class:: debug_toolbar.panels.signals.SignalsPanel
 

@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+* Changed ordering (and grammatical number) of panels and their titles in
+  documentation to match actual panel ordering and titles.
+
 4.4.5 (2024-07-05)
 ------------------
 
