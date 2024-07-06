@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.test import RequestFactory
+from django.test import RequestFactory, AsyncRequestFactory
 from django.test.utils import override_settings
 
 from debug_toolbar.forms import SignedDataForm
@@ -33,12 +33,6 @@ try:
     from selenium.webdriver.support.wait import WebDriverWait
 except ImportError:
     webdriver = None
-
-
-try:
-    from django.test import AsyncRequestFactory
-except ImportError:
-    AsyncRequestFactory = None
 
 
 rf = RequestFactory()
@@ -853,9 +847,6 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.assertEqual(toolbar.get_attribute("data-theme"), "light")
 
 
-@unittest.skipUnless(
-    AsyncRequestFactory is not None, "Test valid only for django with async requests"
-)
 @override_settings(DEBUG=True)
 class DebugToolbarAsyncTestCase(BaseTestCase):
     @classmethod
