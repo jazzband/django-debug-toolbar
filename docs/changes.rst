@@ -6,6 +6,7 @@ Pending
 
 * Changed ordering (and grammatical number) of panels and their titles in
   documentation to match actual panel ordering and titles.
+* Skipped processing the alerts panel when response isn't a HTML response.
 
 4.4.5 (2024-07-05)
 ------------------

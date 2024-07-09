@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 from django.utils.translation import gettext_lazy as _
 
 from debug_toolbar.panels import Panel
+from debug_toolbar.utils import is_processable_html_response
 
 
 class FormParser(HTMLParser):
@@ -138,8 +139,7 @@ class AlertsPanel(Panel):
         return self.alerts
 
     def generate_stats(self, request, response):
-        # check if streaming response
-        if getattr(response, "streaming", True):
+        if not is_processable_html_response(response):
             return
 
         html_content = response.content.decode(response.charset)

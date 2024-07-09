@@ -353,3 +353,16 @@ def get_stack_trace(*, skip=0):
 def clear_stack_trace_caches():
     if hasattr(_local_data, "stack_trace_recorder"):
         del _local_data.stack_trace_recorder
+
+
+_HTML_TYPES = ("text/html", "application/xhtml+xml")
+
+
+def is_processable_html_response(response):
+    content_encoding = response.get("Content-Encoding", "")
+    content_type = response.get("Content-Type", "").split(";")[0]
+    return (
+        not getattr(response, "streaming", False)
+        and content_encoding == ""
+        and content_type in _HTML_TYPES
+    )
