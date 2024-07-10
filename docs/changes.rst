@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+4.4.6 (2024-07-10)
+------------------
+
 * Changed ordering (and grammatical number) of panels and their titles in
   documentation to match actual panel ordering and titles.
 * Skipped processing the alerts panel when response isn't a HTML response.
