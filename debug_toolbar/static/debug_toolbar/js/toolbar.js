@@ -1,4 +1,4 @@
-import { $$, ajax, replaceToolbarState, debounce } from "./utils.js";
+import { $$, ajax, debounce, replaceToolbarState } from "./utils.js";
 
 function onKeyDown(event) {
     if (event.keyCode === 27) {
@@ -17,8 +17,10 @@ function getDebugElement() {
 
 const djdt = {
     handleDragged: false,
+    needUpdateOnFetch: false,
     init() {
         const djDebug = getDebugElement();
+        djdt.needUpdateOnFetch = djDebug.dataset.updateOnFetch === "True";
         $$.on(djDebug, "click", "#djDebugPanelList li a", function (event) {
             event.preventDefault();
             if (!this.className) {
@@ -211,6 +213,29 @@ const djdt = {
         if (djDebug.dataset.sidebarUrl !== undefined) {
             djdt.updateOnAjax();
         }
+
+        // Updates the theme using user settings
+        const userTheme = localStorage.getItem("djdt.user-theme");
+        if (userTheme !== null) {
+            djDebug.setAttribute("data-theme", userTheme);
+        }
+        // Adds the listener to the Theme Toggle Button
+        $$.on(djDebug, "click", "#djToggleThemeButton", function () {
+            switch (djDebug.getAttribute("data-theme")) {
+                case "auto":
+                    djDebug.setAttribute("data-theme", "light");
+                    localStorage.setItem("djdt.user-theme", "light");
+                    break;
+                case "light":
+                    djDebug.setAttribute("data-theme", "dark");
+                    localStorage.setItem("djdt.user-theme", "dark");
+                    break;
+                default: /* dark is the default */
+                    djDebug.setAttribute("data-theme", "auto");
+                    localStorage.setItem("djdt.user-theme", "auto");
+                    break;
+            }
+        });
     },
     hidePanels() {
         const djDebug = getDebugElement();
@@ -226,7 +251,7 @@ const djdt = {
         const handle = document.getElementById("djDebugToolbarHandle");
         // set handle position
         const handleTop = Math.min(
-            localStorage.getItem("djdt.top") || 0,
+            localStorage.getItem("djdt.top") || 265,
             window.innerHeight - handle.offsetWidth
         );
         handle.style.top = handleTop + "px";
@@ -274,7 +299,9 @@ const djdt = {
             requestId = encodeURIComponent(requestId);
             const dest = `${sidebarUrl}?request_id=${requestId}`;
             slowjax(dest).then(function (data) {
-                replaceToolbarState(requestId, data);
+                if (djdt.needUpdateOnFetch) {
+                    replaceToolbarState(requestId, data);
+                }
             });
         }
 

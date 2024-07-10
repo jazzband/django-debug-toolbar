@@ -3,6 +3,7 @@ Debug Toolbar middleware
 """
 
 import re
+import socket
 from functools import lru_cache
 
 from django.conf import settings
@@ -10,16 +11,38 @@ from django.utils.module_loading import import_string
 
 from debug_toolbar import settings as dt_settings
 from debug_toolbar.toolbar import DebugToolbar
-from debug_toolbar.utils import clear_stack_trace_caches
-
-_HTML_TYPES = ("text/html", "application/xhtml+xml")
+from debug_toolbar.utils import clear_stack_trace_caches, is_processable_html_response
 
 
 def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    return settings.DEBUG and request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS
+    if not settings.DEBUG:
+        return False
+
+    # Test: settings
+    if request.META.get("REMOTE_ADDR") in settings.INTERNAL_IPS:
+        return True
+
+    # Test: Docker
+    try:
+        # This is a hack for docker installations. It attempts to look
+        # up the IP address of the docker host.
+        # This is not guaranteed to work.
+        docker_ip = (
+            # Convert the last segment of the IP address to be .1
+            ".".join(socket.gethostbyname("host.docker.internal").rsplit(".")[:-1])
+            + ".1"
+        )
+        if request.META.get("REMOTE_ADDR") == docker_ip:
+            return True
+    except socket.gaierror:
+        # It's fine if the lookup errored since they may not be using docker
+        pass
+
+    # No test passed
+    return False
 
 
 @lru_cache(maxsize=None)
@@ -77,13 +100,7 @@ class DebugToolbarMiddleware:
             response.headers[header] = value
 
         # Check for responses where the toolbar can't be inserted.
-        content_encoding = response.get("Content-Encoding", "")
-        content_type = response.get("Content-Type", "").split(";")[0]
-        if (
-            getattr(response, "streaming", False)
-            or content_encoding != ""
-            or content_type not in _HTML_TYPES
-        ):
+        if not is_processable_html_response(response):
             return response
 
         # Insert the toolbar in the response.

@@ -1,6 +1,8 @@
 import os
 import re
+import time
 import unittest
+from unittest.mock import patch
 
 import html5lib
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -71,6 +73,36 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_show_toolbar_INTERNAL_IPS(self):
         with self.settings(INTERNAL_IPS=[]):
             self.assertFalse(show_toolbar(self.request))
+
+    @patch("socket.gethostbyname", return_value="127.0.0.255")
+    def test_show_toolbar_docker(self, mocked_gethostbyname):
+        with self.settings(INTERNAL_IPS=[]):
+            # Is true because REMOTE_ADDR is 127.0.0.1 and the 255
+            # is shifted to be 1.
+            self.assertTrue(show_toolbar(self.request))
+        mocked_gethostbyname.assert_called_once_with("host.docker.internal")
+
+    def test_not_iterating_over_INTERNAL_IPS(self):
+        """Verify that the middleware does not iterate over INTERNAL_IPS in some way.
+
+        Some people use iptools.IpRangeList for their INTERNAL_IPS. This is a class
+        that can quickly answer the question if the setting contain a certain IP address,
+        but iterating over this object will drain all performance / blow up.
+        """
+
+        class FailOnIteration:
+            def __iter__(self):
+                raise RuntimeError(
+                    "The testcase failed: the code should not have iterated over INTERNAL_IPS"
+                )
+
+            def __contains__(self, x):
+                return True
+
+        with self.settings(INTERNAL_IPS=FailOnIteration()):
+            response = self.client.get("/regular/basic/")
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, "djDebug")  # toolbar
 
     def test_should_render_panels_RENDER_PANELS(self):
         """
@@ -264,13 +296,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.get(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -302,13 +336,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.get(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.get(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.get(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -352,13 +388,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -382,13 +420,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -414,13 +454,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -444,13 +486,15 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = self.client.post(url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        response = self.client.post(
+            url, data, headers={"x-requested-with": "XMLHttpRequest"}
+        )
         self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = self.client.post(url, data)
             self.assertEqual(response.status_code, 404)
             response = self.client.post(
-                url, data, HTTP_X_REQUESTED_WITH="XMLHttpRequest"
+                url, data, headers={"x-requested-with": "XMLHttpRequest"}
             )
             self.assertEqual(response.status_code, 404)
 
@@ -547,7 +591,7 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
 @unittest.skipIf(webdriver is None, "selenium isn't installed")
 @unittest.skipUnless(
-    "DJANGO_SELENIUM_TESTS" in os.environ, "selenium tests not requested"
+    os.environ.get("DJANGO_SELENIUM_TESTS"), "selenium tests not requested"
 )
 @override_settings(DEBUG=True)
 class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
@@ -601,9 +645,10 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         # Click to show the template panel
         self.selenium.find_element(By.CLASS_NAME, TemplatesPanel.panel_id).click()
 
-        self.assertIn("Templates (2 rendered)", template_panel.text)
+        # This should be 2 templates rendered, including base.html See
+        # JinjaTemplateTestCase.test_django_jinja2_parent_template_instrumented
+        self.assertIn("Templates (1 rendered)", template_panel.text)
         self.assertIn("base.html", template_panel.text)
-        self.assertIn("jinja2/basic.jinja", template_panel.text)
 
     @override_settings(
         DEBUG_TOOLBAR_CONFIG={
@@ -771,3 +816,52 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         )
         self.assertIn("Query", table.text)
         self.assertIn("Action", table.text)
+
+    def test_ajax_dont_refresh(self):
+        self.get("/ajax/")
+        make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
+        make_ajax.click()
+        history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        self.assertIn("/ajax/", history_panel.text)
+        self.assertNotIn("/json_view/", history_panel.text)
+
+    @override_settings(DEBUG_TOOLBAR_CONFIG={"UPDATE_ON_FETCH": True})
+    def test_ajax_refresh(self):
+        self.get("/ajax/")
+        make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
+        make_ajax.click()
+        # Need to wait until the ajax request is over and json_view is displayed on the toolbar
+        time.sleep(2)
+        history_panel = self.wait.until(
+            lambda selenium: self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        )
+        self.assertNotIn("/ajax/", history_panel.text)
+        self.assertIn("/json_view/", history_panel.text)
+
+    def test_theme_toggle(self):
+        self.get("/regular/basic/")
+
+        toolbar = self.selenium.find_element(By.ID, "djDebug")
+
+        # Check that the default theme is auto
+        self.assertEqual(toolbar.get_attribute("data-theme"), "auto")
+
+        # The theme toggle button is shown on the toolbar
+        toggle_button = self.selenium.find_element(By.ID, "djToggleThemeButton")
+        self.assertTrue(toggle_button.is_displayed())
+
+        # The theme changes when user clicks the button
+        toggle_button.click()
+        self.assertEqual(toolbar.get_attribute("data-theme"), "light")
+        toggle_button.click()
+        self.assertEqual(toolbar.get_attribute("data-theme"), "dark")
+        toggle_button.click()
+        self.assertEqual(toolbar.get_attribute("data-theme"), "auto")
+        # Switch back to light.
+        toggle_button.click()
+        self.assertEqual(toolbar.get_attribute("data-theme"), "light")
+
+        # Enter the page again to check that user settings is saved
+        self.get("/regular/basic/")
+        toolbar = self.selenium.find_element(By.ID, "djDebug")
+        self.assertEqual(toolbar.get_attribute("data-theme"), "light")

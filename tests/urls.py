@@ -22,6 +22,7 @@ urlpatterns = [
     path("cached_low_level_view/", views.cached_low_level_view),
     path("json_view/", views.json_view),
     path("redirect/", views.redirect_view),
+    path("ajax/", views.ajax_view),
     path("login_without_redirect/", LoginView.as_view(redirect_field_name=None)),
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),

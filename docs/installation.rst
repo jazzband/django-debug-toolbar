@@ -7,6 +7,10 @@ Process
 Each of the following steps needs to be configured for the Debug Toolbar to be
 fully functional.
 
+.. warning::
+
+    The Debug Toolbar does not currently support `Django's asynchronous views <https://docs.djangoproject.com/en/dev/topics/async/>`_.
+
 1. Install the Package
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -77,6 +81,11 @@ Add ``"debug_toolbar"`` to your ``INSTALLED_APPS`` setting:
         "debug_toolbar",
         # ...
     ]
+.. note:: Check  out the configuration example in the
+   `example app
+   <https://github.com/jazzband/django-debug-toolbar/tree/main/example>`_
+   to learn how to set up the toolbar to function smoothly while running
+   your tests.
 
 4. Add the URLs
 ^^^^^^^^^^^^^^^
@@ -86,14 +95,15 @@ Add django-debug-toolbar's URLs to your project's URLconf:
 .. code-block:: python
 
     from django.urls import include, path
+    from debug_toolbar.toolbar import debug_toolbar_urls
 
     urlpatterns = [
-        # ...
-        path("__debug__/", include("debug_toolbar.urls")),
-    ]
+        # ... the rest of your URLconf goes here ...
+    ] + debug_toolbar_urls()
 
-This example uses the ``__debug__`` prefix, but you can use any prefix that
-doesn't clash with your application's URLs.
+By default this uses the ``__debug__`` prefix for the paths, but you can
+use any prefix that doesn't clash with your application's URLs.
+
 
 5. Add the Middleware
 ^^^^^^^^^^^^^^^^^^^^^
@@ -141,12 +151,45 @@ option.
 
 .. warning::
 
-    If using Docker the following will set your ``INTERNAL_IPS`` correctly in Debug mode::
+    If using Docker, the toolbar will attempt to look up your host name
+    automatically and treat it as an allowable internal IP. If you're not
+    able to get the toolbar to work with your docker installation, review
+    the code in ``debug_toolbar.middleware.show_toolbar``.
 
-        if DEBUG:
-            import socket  # only if you haven't already imported this
-            hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-            INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+7. Disable the toolbar when running tests (optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you're running tests in your project you shouldn't activate the toolbar. You
+can do this by adding another setting:
+
+.. code-block:: python
+
+    TESTING = "test" in sys.argv
+
+    if not TESTING:
+        INSTALLED_APPS = [
+            *INSTALLED_APPS,
+            "debug_toolbar",
+        ]
+        MIDDLEWARE = [
+            "debug_toolbar.middleware.DebugToolbarMiddleware",
+            *MIDDLEWARE,
+        ]
+
+You should also modify your URLconf file:
+
+.. code-block:: python
+
+    from django.conf import settings
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
+    if not settings.TESTING:
+        urlpatterns = [
+            *urlpatterns,
+        ] + debug_toolbar_urls()
+
+Alternatively, you can check out the :ref:`IS_RUNNING_TESTS <IS_RUNNING_TESTS>`
+option.
 
 Troubleshooting
 ---------------

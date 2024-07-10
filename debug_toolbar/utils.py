@@ -162,13 +162,15 @@ def get_template_source_from_exception_info(
 
 
 def get_name_from_obj(obj: Any) -> str:
-    name = obj.__name__ if hasattr(obj, "__name__") else obj.__class__.__name__
-
-    if hasattr(obj, "__module__"):
-        module = obj.__module__
-        name = f"{module}.{name}"
-
-    return name
+    """Get the best name as `str` from a view or a object."""
+    # This is essentially a rewrite of the `django.contrib.admindocs.utils.get_view_name`
+    # https://github.com/django/django/blob/9a22d1769b042a88741f0ff3087f10d94f325d86/django/contrib/admindocs/utils.py#L26-L32
+    if hasattr(obj, "view_class"):
+        klass = obj.view_class
+        return f"{klass.__module__}.{klass.__qualname__}"
+    mod_name = obj.__module__
+    view_name = getattr(obj, "__qualname__", obj.__class__.__name__)
+    return mod_name + "." + view_name
 
 
 def getframeinfo(frame: Any, context: int = 1) -> inspect.Traceback:
@@ -211,7 +213,7 @@ def getframeinfo(frame: Any, context: int = 1) -> inspect.Traceback:
 
 
 def get_sorted_request_variable(
-    variable: Union[Dict[str, Any], QueryDict]
+    variable: Union[Dict[str, Any], QueryDict],
 ) -> Dict[str, Union[List[Tuple[str, Any]], Any]]:
     """
     Get a data structure for showing a sorted list of variables from the
@@ -351,3 +353,16 @@ def get_stack_trace(*, skip=0):
 def clear_stack_trace_caches():
     if hasattr(_local_data, "stack_trace_recorder"):
         del _local_data.stack_trace_recorder
+
+
+_HTML_TYPES = ("text/html", "application/xhtml+xml")
+
+
+def is_processable_html_response(response):
+    content_encoding = response.get("Content-Encoding", "")
+    content_type = response.get("Content-Type", "").split(";")[0]
+    return (
+        not getattr(response, "streaming", False)
+        and content_encoding == ""
+        and content_type in _HTML_TYPES
+    )

@@ -29,6 +29,7 @@ default value is::
         'debug_toolbar.panels.sql.SQLPanel',
         'debug_toolbar.panels.staticfiles.StaticFilesPanel',
         'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.alerts.AlertsPanel',
         'debug_toolbar.panels.cache.CachePanel',
         'debug_toolbar.panels.signals.SignalsPanel',
         'debug_toolbar.panels.redirects.RedirectsPanel',
@@ -71,6 +72,19 @@ Toolbar options
 
   The toolbar searches for this string in the HTML and inserts itself just
   before.
+
+.. _IS_RUNNING_TESTS:
+
+* ``IS_RUNNING_TESTS``
+
+  Default: ``"test" in sys.argv``
+
+  This setting whether the application is running tests. If this resolves to
+  ``True``, the toolbar will prevent you from running tests. This should only
+  be changed if your test command doesn't include ``test`` or if you wish to
+  test your application with the toolbar configured. If you do wish to test
+  your application with the toolbar configured, set this setting to
+  ``False``.
 
 .. _RENDER_PANELS:
 
@@ -139,16 +153,30 @@ Toolbar options
      implication is that it is possible to execute arbitrary SQL through the
      SQL panel when the ``SECRET_KEY`` value is leaked somehow.
 
+  .. warning::
+
+     Do not use
+     ``DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}``
+     in your project's settings.py file. The toolbar expects to use
+     ``django.conf.settings.DEBUG``. Using your project's setting's ``DEBUG``
+     is likely to cause unexpected results when running your tests. This is because
+     Django automatically sets ``settings.DEBUG = False``, but your project's
+     setting's ``DEBUG`` will still be set to ``True``.
+
 .. _OBSERVE_REQUEST_CALLBACK:
 
 * ``OBSERVE_REQUEST_CALLBACK``
 
   Default: ``'debug_toolbar.toolbar.observe_request'``
 
+  .. note::
+
+     This setting is deprecated in favor of the ``UPDATE_ON_FETCH`` and
+     ``SHOW_TOOLBAR_CALLBACK`` settings.
+
   This is the dotted path to a function used for determining whether the
-  toolbar should update on AJAX requests or not. The default checks are that
-  the request doesn't originate from the toolbar itself, EG that
-  ``is_toolbar_request`` is false for a given request.
+  toolbar should update on AJAX requests or not. The default implementation
+  always returns ``True``.
 
 .. _TOOLBAR_STORE_CLASS:
 
@@ -171,6 +199,24 @@ Toolbar options
   rendered in. For example, if you wish to use English for development,
   but want to render your application in French, you would set this to
   ``"en-us"`` and :setting:`LANGUAGE_CODE` to ``"fr"``.
+
+.. _UPDATE_ON_FETCH:
+
+* ``UPDATE_ON_FETCH``
+
+  Default: ``False``
+
+  This controls whether the toolbar should update to the latest AJAX
+  request when it occurs. This is especially useful when using htmx
+  boosting or similar JavaScript techniques.
+
+.. _DEFAULT_THEME:
+
+* ``DEFAULT_THEME``
+
+  Default: ``"auto"``
+
+  This controls which theme will use the toolbar by default.
 
 Panel options
 ~~~~~~~~~~~~~
@@ -350,10 +396,10 @@ Here's what a slightly customized toolbar configuration might look like::
 
 Theming support
 ---------------
-The debug toolbar uses CSS variables to define fonts. This allows changing
-fonts without having to override many individual CSS rules. For example, if
-you preferred Roboto instead of the default list of fonts you could add a
-**debug_toolbar/base.html** template override to your project:
+The debug toolbar uses CSS variables to define fonts and colors. This allows
+changing fonts and colors without having to override many individual CSS rules.
+For example, if you preferred Roboto instead of the default list of fonts you
+could add a **debug_toolbar/base.html** template override to your project:
 
 .. code-block:: django
 

@@ -43,10 +43,14 @@ class FunctionCall:
         """
         if hasattr(settings, "BASE_DIR"):
             file_name, _, _ = self.func
-            return (
-                str(settings.BASE_DIR) in file_name
-                and "/site-packages/" not in file_name
-                and "/dist-packages/" not in file_name
+            base_dir = str(settings.BASE_DIR)
+
+            file_name = os.path.normpath(file_name)
+            base_dir = os.path.normpath(base_dir)
+
+            return file_name.startswith(base_dir) and not any(
+                directory in file_name.split(os.path.sep)
+                for directory in ["site-packages", "dist-packages"]
             )
         return None
 
@@ -83,12 +87,10 @@ class FunctionCall:
             )
 
     def subfuncs(self):
-        i = 0
         h, s, v = self.hsv
         count = len(self.statobj.all_callees[self.func])
-        for func, stats in self.statobj.all_callees[self.func].items():
-            i += 1
-            h1 = h + (i / count) / (self.depth + 1)
+        for i, (func, stats) in enumerate(self.statobj.all_callees[self.func].items()):
+            h1 = h + ((i + 1) / count) / (self.depth + 1)
             s1 = 0 if stats[3] == 0 else s * (stats[3] / self.stats[3])
             yield FunctionCall(
                 self.statobj,

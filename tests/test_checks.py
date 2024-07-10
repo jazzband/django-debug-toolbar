@@ -1,13 +1,10 @@
-import os
-import unittest
 from unittest.mock import patch
 
-import django
-from django.conf import settings
 from django.core.checks import Warning, run_checks
 from django.test import SimpleTestCase, override_settings
+from django.urls import NoReverseMatch
 
-PATH_DOES_NOT_EXIST = os.path.join(settings.BASE_DIR, "tests", "invalid_static")
+from debug_toolbar.apps import debug_toolbar_installed_when_running_tests_check
 
 
 class ChecksTestCase(SimpleTestCase):
@@ -92,23 +89,6 @@ class ChecksTestCase(SimpleTestCase):
             messages,
         )
 
-    @unittest.skipIf(django.VERSION >= (4,), "Django>=4 handles missing dirs itself.")
-    @override_settings(
-        STATICFILES_DIRS=[PATH_DOES_NOT_EXIST],
-    )
-    def test_panel_check_errors(self):
-        messages = run_checks()
-        self.assertEqual(
-            messages,
-            [
-                Warning(
-                    "debug_toolbar requires the STATICFILES_DIRS directories to exist.",
-                    hint="Running manage.py collectstatic may help uncover the issue.",
-                    id="debug_toolbar.staticfiles.W001",
-                )
-            ],
-        )
-
     @override_settings(DEBUG_TOOLBAR_PANELS=[])
     def test_panels_is_empty(self):
         errors = run_checks()
@@ -120,7 +100,7 @@ class ChecksTestCase(SimpleTestCase):
                     hint="Set DEBUG_TOOLBAR_PANELS to a non-empty list in your "
                     "settings.py.",
                     id="debug_toolbar.W005",
-                )
+                ),
             ],
         )
 
@@ -258,3 +238,79 @@ class ChecksTestCase(SimpleTestCase):
                 )
             ],
         )
+
+    @patch("debug_toolbar.apps.reverse")
+    def test_debug_toolbar_installed_when_running_tests(self, reverse):
+        params = [
+            {
+                "debug": True,
+                "running_tests": True,
+                "show_callback_changed": True,
+                "urls_installed": False,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": False,
+                "show_callback_changed": True,
+                "urls_installed": False,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": True,
+                "show_callback_changed": False,
+                "urls_installed": False,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": True,
+                "show_callback_changed": True,
+                "urls_installed": True,
+                "errors": False,
+            },
+            {
+                "debug": False,
+                "running_tests": True,
+                "show_callback_changed": True,
+                "urls_installed": False,
+                "errors": True,
+            },
+        ]
+        for config in params:
+            with self.subTest(**config):
+                config_setting = {
+                    "RENDER_PANELS": False,
+                    "IS_RUNNING_TESTS": config["running_tests"],
+                    "SHOW_TOOLBAR_CALLBACK": (
+                        (lambda *args: True)
+                        if config["show_callback_changed"]
+                        else "debug_toolbar.middleware.show_toolbar"
+                    ),
+                }
+                if config["urls_installed"]:
+                    reverse.side_effect = lambda *args: None
+                else:
+                    reverse.side_effect = NoReverseMatch()
+
+                with self.settings(
+                    DEBUG=config["debug"], DEBUG_TOOLBAR_CONFIG=config_setting
+                ):
+                    errors = debug_toolbar_installed_when_running_tests_check(None)
+                    if config["errors"]:
+                        self.assertEqual(len(errors), 1)
+                        self.assertEqual(errors[0].id, "debug_toolbar.E001")
+                    else:
+                        self.assertEqual(len(errors), 0)
+
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={
+            "OBSERVE_REQUEST_CALLBACK": lambda request: False,
+            "IS_RUNNING_TESTS": False,
+        }
+    )
+    def test_observe_request_callback_specified(self):
+        errors = run_checks()
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0].id, "debug_toolbar.W008")

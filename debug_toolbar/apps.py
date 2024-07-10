@@ -3,12 +3,14 @@ import mimetypes
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.core.checks import Warning, register
+from django.core.checks import Error, Warning, register
 from django.middleware.gzip import GZipMiddleware
+from django.urls import NoReverseMatch, reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from debug_toolbar import settings as dt_settings
+from debug_toolbar import APP_NAME, settings as dt_settings
+from debug_toolbar.settings import CONFIG_DEFAULTS
 
 
 class DebugToolbarConfig(AppConfig):
@@ -177,7 +179,7 @@ def check_panels(app_configs, **kwargs):
     return errors
 
 
-@register()
+@register
 def js_mimetype_check(app_configs, **kwargs):
     """
     Check that JavaScript files are resolving to the correct content type.
@@ -206,3 +208,66 @@ def js_mimetype_check(app_configs, **kwargs):
             )
         ]
     return []
+
+
+@register
+def debug_toolbar_installed_when_running_tests_check(app_configs, **kwargs):
+    """
+    Check that the toolbar is not being used when tests are running
+    """
+    # Check if show toolbar callback has changed
+    show_toolbar_changed = (
+        dt_settings.get_config()["SHOW_TOOLBAR_CALLBACK"]
+        != CONFIG_DEFAULTS["SHOW_TOOLBAR_CALLBACK"]
+    )
+    try:
+        # Check if the toolbar's urls are installed
+        reverse(f"{APP_NAME}:render_panel")
+        toolbar_urls_installed = True
+    except NoReverseMatch:
+        toolbar_urls_installed = False
+
+    # If the user is using the default SHOW_TOOLBAR_CALLBACK,
+    # then the middleware will respect the change to settings.DEBUG.
+    # However, if the user has changed the callback to:
+    # DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}
+    # where DEBUG is not settings.DEBUG, then it won't pick up that Django'
+    # test runner has changed the value for settings.DEBUG, and the middleware
+    # will inject the toolbar, while the URLs aren't configured leading to a
+    # NoReverseMatch error.
+    likely_error_setup = show_toolbar_changed and not toolbar_urls_installed
+
+    if (
+        not settings.DEBUG
+        and dt_settings.get_config()["IS_RUNNING_TESTS"]
+        and likely_error_setup
+    ):
+        return [
+            Error(
+                "The Django Debug Toolbar can't be used with tests",
+                hint="Django changes the DEBUG setting to False when running "
+                "tests. By default the Django Debug Toolbar is installed because "
+                "DEBUG is set to True. For most cases, you need to avoid installing "
+                "the toolbar when running tests. If you feel this check is in error, "
+                "you can set `DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False` to "
+                "bypass this check.",
+                id="debug_toolbar.E001",
+            )
+        ]
+    else:
+        return []
+
+
+@register
+def check_settings(app_configs, **kwargs):
+    errors = []
+    USER_CONFIG = getattr(settings, "DEBUG_TOOLBAR_CONFIG", {})
+    if "OBSERVE_REQUEST_CALLBACK" in USER_CONFIG:
+        errors.append(
+            Warning(
+                "The deprecated OBSERVE_REQUEST_CALLBACK setting is present in DEBUG_TOOLBAR_CONFIG.",
+                hint="Use the UPDATE_ON_FETCH and/or SHOW_TOOLBAR_CALLBACK settings instead.",
+                id="debug_toolbar.W008",
+            )
+        )
+    return errors

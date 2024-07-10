@@ -1,7 +1,10 @@
+from unittest import expectedFailure
+
 import django
 from django.contrib.auth.models import User
 from django.template import Context, RequestContext, Template
 from django.test import override_settings
+from django.utils.functional import SimpleLazyObject
 
 from debug_toolbar.panels.sql import SQLPanel
 from debug_toolbar.panels.templates import TemplatesPanel
@@ -24,6 +27,7 @@ class TemplatesPanelTestCase(BaseTestCase):
         super().tearDown()
 
     def test_queryset_hook(self):
+        response = self.panel.process_request(self.request)
         t = Template("No context variables here!")
         c = Context(
             {
@@ -32,12 +36,13 @@ class TemplatesPanelTestCase(BaseTestCase):
             }
         )
         t.render(c)
+        self.panel.generate_stats(self.request, response)
 
         # ensure the query was NOT logged
         self.assertEqual(len(self.sql_panel._queries), 0)
 
         self.assertEqual(
-            self.panel.templates[0]["context"],
+            self.panel.templates[0]["context_list"],
             [
                 "{'False': False, 'None': None, 'True': True}",
                 "{'deep_queryset': '<<triggers database query>>',\n"
@@ -102,15 +107,33 @@ class TemplatesPanelTestCase(BaseTestCase):
             self.assertFalse(self.panel.enabled)
 
     def test_empty_context(self):
+        response = self.panel.process_request(self.request)
         t = Template("")
         c = Context({})
         t.render(c)
+        self.panel.generate_stats(self.request, response)
 
         # Includes the builtin context but not the empty one.
         self.assertEqual(
-            self.panel.templates[0]["context"],
+            self.panel.templates[0]["context_list"],
             ["{'False': False, 'None': None, 'True': True}"],
         )
+
+    def test_lazyobject(self):
+        response = self.panel.process_request(self.request)
+        t = Template("")
+        c = Context({"lazy": SimpleLazyObject(lambda: "lazy_value")})
+        t.render(c)
+        self.panel.generate_stats(self.request, response)
+        self.assertNotIn("lazy_value", self.panel.content)
+
+    def test_lazyobject_eval(self):
+        response = self.panel.process_request(self.request)
+        t = Template("{{lazy}}")
+        c = Context({"lazy": SimpleLazyObject(lambda: "lazy_value")})
+        self.assertEqual(t.render(c), "lazy_value")
+        self.panel.generate_stats(self.request, response)
+        self.assertIn("lazy_value", self.panel.content)
 
 
 @override_settings(
@@ -120,8 +143,21 @@ class JinjaTemplateTestCase(IntegrationTestCase):
     def test_django_jinja2(self):
         r = self.client.get("/regular_jinja/foobar/")
         self.assertContains(r, "Test for foobar (Jinja)")
+        # This should be 2 templates because of the parent template.
+        # See test_django_jinja2_parent_template_instrumented
+        self.assertContains(r, "<h3>Templates (1 rendered)</h3>")
+        self.assertContains(r, "<small>basic.jinja</small>")
+
+    @expectedFailure
+    def test_django_jinja2_parent_template_instrumented(self):
+        """
+        When Jinja2 templates are properly instrumented, the
+        parent template should be instrumented.
+        """
+        r = self.client.get("/regular_jinja/foobar/")
+        self.assertContains(r, "Test for foobar (Jinja)")
         self.assertContains(r, "<h3>Templates (2 rendered)</h3>")
-        self.assertContains(r, "<small>jinja2/basic.jinja</small>")
+        self.assertContains(r, "<small>basic.jinja</small>")
 
 
 def context_processor(request):

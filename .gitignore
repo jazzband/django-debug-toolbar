@@ -13,3 +13,5 @@ htmlcov
 geckodriver.log
 coverage.xml
 venv
+.direnv/
+.envrc

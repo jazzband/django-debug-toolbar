@@ -1,3 +1,4 @@
+import sys
 import warnings
 from functools import lru_cache
 
@@ -43,6 +44,9 @@ CONFIG_DEFAULTS = {
     "OBSERVE_REQUEST_CALLBACK": "debug_toolbar.toolbar.observe_request",
     "TOOLBAR_LANGUAGE": None,
     "TOOLBAR_STORE_CLASS": "debug_toolbar.store.MemoryStore",
+    "IS_RUNNING_TESTS": "test" in sys.argv,
+    "UPDATE_ON_FETCH": False,
+    "DEFAULT_THEME": "auto",
 }
 
 
@@ -64,6 +68,7 @@ PANELS_DEFAULTS = [
     "debug_toolbar.panels.sql.SQLPanel",
     "debug_toolbar.panels.staticfiles.StaticFilesPanel",
     "debug_toolbar.panels.templates.TemplatesPanel",
+    "debug_toolbar.panels.alerts.AlertsPanel",
     "debug_toolbar.panels.cache.CachePanel",
     "debug_toolbar.panels.signals.SignalsPanel",
     "debug_toolbar.panels.redirects.RedirectsPanel",

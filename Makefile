@@ -12,6 +12,8 @@ example_async:
 		--noinput --username="$(USER)" --email="$(USER)@mailinator.com"
 	daphne example.asgi:application
 
+example_test:
+	python example/manage.py test example
 
 test:
 	DJANGO_SETTINGS_MODULE=tests.settings \

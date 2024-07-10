@@ -28,7 +28,109 @@ Serializable (don't include in main)
 Pending
 -------
 
+* Changed ordering (and grammatical number) of panels and their titles in
+  documentation to match actual panel ordering and titles.
+* Skipped processing the alerts panel when response isn't a HTML response.
+
+4.4.5 (2024-07-05)
+------------------
+
+* Avoided crashing when the alerts panel was skipped.
+* Removed the inadvertently added hard dependency on Jinja2.
+
+4.4.4 (2024-07-05)
+------------------
+
+* Added check for StreamingHttpResponse in alerts panel.
+* Instrument the Django Jinja2 template backend. This only instruments
+  the immediate template that's rendered. It will not provide stats on
+  any parent templates.
+
+4.4.3 (2024-07-04)
+------------------
+
+* Added alerts panel with warning when form is using file fields
+  without proper encoding type.
+* Fixed overriding font-family for both light and dark themes.
+* Restored compatibility with ``iptools.IpRangeList``.
+* Limit ``E001`` check to likely error cases when the
+  ``SHOW_TOOLBAR_CALLBACK`` has changed, but the toolbar's URL
+  paths aren't installed.
+* Introduce helper function ``debug_toolbar_urls`` to
+  simplify installation.
+* Moved "1rem" height/width for SVGs to CSS properties.
+
+4.4.2 (2024-05-27)
+------------------
+
+* Removed some CSS which wasn't carefully limited to the toolbar's elements.
+* Stopped assuming that ``INTERNAL_IPS`` is a list.
+* Added a section to the installation docs about running tests in projects
+  where the toolbar is being used.
+
+
+4.4.1 (2024-05-26)
+------------------
+
+* Pin metadata version to 2.2 to be compatible with Jazzband release
+  process.
+
+4.4.0 (2024-05-26)
+------------------
+
+* Raised the minimum Django version to 4.2.
+* Automatically support Docker rather than having the developer write a
+  workaround for ``INTERNAL_IPS``.
+* Display a better error message when the toolbar's requests
+  return invalid json.
+* Render forms with ``as_div`` to silence Django 5.0 deprecation warnings.
+* Stayed on top of pre-commit hook updates.
+* Added :doc:`architecture documentation <architecture>` to help
+  on-board new contributors.
+* Removed the static file path validation check in
+  :class:`StaticFilesPanel <debug_toolbar.panels.staticfiles.StaticFilesPanel>`
+  since that check is made redundant by a similar check in Django 4.0 and
+  later.
+* Deprecated the ``OBSERVE_REQUEST_CALLBACK`` setting and added check
+  ``debug_toolbar.W008`` to warn when it is present in
+  ``DEBUG_TOOLBAR_SETTINGS``.
+* Add a note on the profiling panel about using Python 3.12 and later
+  about needing ``--nothreading``
+* Added ``IS_RUNNING_TESTS`` setting to allow overriding the
+  ``debug_toolbar.E001`` check to avoid including the toolbar when running
+  tests.
+* Fixed the bug causing ``'djdt' is not a registered namespace`` and updated
+  docs to help in initial configuration while running tests.
+* Added a link in the installation docs to a more complete installation
+  example in the example app.
+* Added check to prevent the toolbar from being installed when tests
+  are running.
+* Added test to example app and command to run the example app's tests.
+* Implemented dark mode theme and button to toggle the theme,
+  introduced the ``DEFAULT_THEME`` setting which sets the default theme
+  to use.
+
+4.3.0 (2024-02-01)
+------------------
+
+* Dropped support for Django 4.0.
+* Added Python 3.12 to test matrix.
 * Removed outdated third-party panels from the list.
+* Avoided the unnecessary work of recursively quoting SQL parameters.
+* Postponed context process in templates panel to include lazy evaluated
+  content.
+* Fixed template panel to avoid evaluating ``LazyObject`` when not already
+  evaluated.
+* Added support for Django 5.0.
+* Refactor the ``utils.get_name_from_obj`` to simulate the behavior of
+  ``django.contrib.admindocs.utils.get_view_name``.
+* Switched from black to the `ruff formatter
+  <https://astral.sh/blog/the-ruff-formatter>`__.
+* Changed the default position of the toolbar from top to the upper top
+  position.
+* Added the setting, ``UPDATE_ON_FETCH`` to control whether the
+  toolbar automatically updates to the latest AJAX request or not.
+  It defaults to ``False``.
 
 4.2.0 (2023-08-10)
 ------------------

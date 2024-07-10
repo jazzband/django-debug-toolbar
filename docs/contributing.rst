@@ -48,6 +48,12 @@ For convenience, there's an alias for the second command::
 Look at ``example/settings.py`` for running the example with another database
 than SQLite.
 
+Architecture
+------------
+
+There is high-level information on how the Django Debug Toolbar is structured
+in the :doc:`architecture documentation <architecture>`.
+
 Tests
 -----
 
@@ -78,6 +84,12 @@ or by setting the ``DJANGO_SELENIUM_TESTS`` environment variable::
     $ DJANGO_SELENIUM_TESTS=true make test
     $ DJANGO_SELENIUM_TESTS=true make coverage
     $ DJANGO_SELENIUM_TESTS=true tox
+
+Note that by default, ``tox`` enables the Selenium tests for a single test
+environment.  To run the entire ``tox`` test suite with all Selenium tests
+disabled, run the following::
+
+    $ DJANGO_SELENIUM_TESTS= tox
 
 To test via ``tox`` against other databases, you'll need to create the user,
 database and assign the proper permissions. For PostgreSQL in a ``psql``

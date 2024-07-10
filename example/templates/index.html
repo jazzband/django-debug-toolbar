@@ -9,11 +9,13 @@
     <h1>Index of Tests</h1>
     {% cache 10 index_cache %}
       <ul>
+        <li><a href="{% url 'jinja' %}">Jinja2</a></li>
         <li><a href="/jquery/">jQuery 3.3.1</a></li>
         <li><a href="/mootools/">MooTools 1.6.0</a></li>
         <li><a href="/prototype/">Prototype 1.7.3.0</a></li>
-        <li><a href="/turbo/">Hotwire Turbo</a></li>
-        <li><a href="/htmx/">htmx</a></li>
+        <li><a href="{% url 'turbo' %}">Hotwire Turbo</a></li>
+        <li><a href="{% url 'htmx' %}">htmx</a></li>
+        <li><a href="{% url 'bad_form' %}">Bad form</a></li>
       </ul>
       <p><a href="/admin/">Django Admin</a></p>
     {% endcache %}

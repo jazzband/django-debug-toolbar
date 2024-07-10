@@ -6,6 +6,7 @@ Pympler
 Roboto
 Transifex
 Werkzeug
+ajax
 async
 backend
 backends
@@ -35,6 +36,7 @@ mousedown
 mouseup
 multi
 neo
+nothreading
 paddings
 pre
 profiler
@@ -46,6 +48,7 @@ pyupgrade
 querysets
 refactoring
 resizing
+runserver
 spellchecking
 spooler
 stacktrace

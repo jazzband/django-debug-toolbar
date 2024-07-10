@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+  <div id="click_for_ajax">click for ajax</div>
+
+  <script>
+
+  let click_for_ajax = document.getElementById("click_for_ajax");
+  function send_ajax() {
+    let xhr = new XMLHttpRequest();
+    let url = '/json_view/';
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+        }
+    }
+    xhr.send();
+  }
+  document.addEventListener("click", (event) => {send_ajax()});
+  </script>
+{% endblock %}

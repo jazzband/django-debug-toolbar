@@ -12,3 +12,4 @@ Django Debug Toolbar
    commands
    changes
    contributing
+   architecture
