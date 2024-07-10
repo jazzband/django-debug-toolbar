@@ -112,7 +112,7 @@ class TemplatesPanel(Panel):
     def nav_subtitle(self):
         templates = self.get_stats()["templates"]
         if templates:
-            return self.templates[0]["template"].name
+            return templates[0]["template"]["name"]
         return ""
 
     template = "debug_toolbar/panels/templates.html"
@@ -196,7 +196,11 @@ class TemplatesPanel(Panel):
             else:
                 template.origin_name = _("No origin")
                 template.origin_hash = ""
-            info["template"] = template
+            info["template"] = {
+                "name": template.name,
+                "origin_name": template.origin_name,
+                "origin_hash": template.origin_hash,
+            }
             # Clean up context for better readability
             if self.toolbar.config["SHOW_TEMPLATE_CONTEXT"]:
                 if "context_list" not in template_data:
