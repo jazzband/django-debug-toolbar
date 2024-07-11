@@ -25,7 +25,9 @@
       <button id="incrementFetch" data-url="{% url 'ajax_increment' %}" type="button">Increment via fetch</button>
       <button id="incrementXHR" data-url="{% url 'ajax_increment' %}" type="button">Increment via XHR</button>
     </p>
+    {% comment %}
     <button id="asyncRequest" data-url="{% url 'async_db_view' %}" type="button">Make async call</button>
+    {% endcomment %}
 
   <script>
     const incrementFetch = document.querySelector("#incrementFetch");
