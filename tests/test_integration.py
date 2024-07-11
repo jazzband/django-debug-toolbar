@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import unittest
 from unittest.mock import patch
 
@@ -829,6 +830,9 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.get("/ajax/")
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
+        # Sleep a tad to avoid a selenium.common.exceptions.StaleElementReferenceException
+        # when looking for the small text of the history panel
+        time.sleep(0.1)
         # Need to wait until the ajax request is over and json_view is displayed on the toolbar
         self.wait.until(
             lambda selenium: self.selenium.find_element(
