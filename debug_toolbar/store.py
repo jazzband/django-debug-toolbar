@@ -34,8 +34,6 @@ def deserialize(data: str) -> Any:
 
 
 class BaseStore:
-    _config = dt_settings.get_config().copy()
-
     @classmethod
     def request_ids(cls) -> Iterable:
         """The stored request ids"""
@@ -94,7 +92,9 @@ class MemoryStore(BaseStore):
         """Set a request_id in the request store"""
         if request_id not in cls._request_ids:
             cls._request_ids.append(request_id)
-        for _ in range(len(cls._request_ids) - cls._config["RESULTS_CACHE_SIZE"]):
+        for _ in range(
+            len(cls._request_ids) - dt_settings.get_config()["RESULTS_CACHE_SIZE"]
+        ):
             removed_id = cls._request_ids.popleft()
             cls._request_store.pop(removed_id, None)
 
