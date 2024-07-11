@@ -8,7 +8,6 @@ from debug_toolbar.panels.history import HistoryPanel
 from debug_toolbar.store import get_store
 from debug_toolbar.toolbar import DebugToolbar
 
-from .. import settings as test_settings
 from ..base import BaseTestCase, IntegrationTestCase
 
 rf = RequestFactory()
@@ -110,14 +109,17 @@ class HistoryViewsTestCase(IntegrationTestCase):
         request_id = list(get_store().request_ids())[0]
         self.assertEqual(response.headers["djdt-request-id"], request_id)
 
-    @override_settings(
-        DEBUG_TOOLBAR_CONFIG={"OBSERVE_REQUEST_CALLBACK": lambda request: False}
-    )
     def test_history_headers_unobserved(self):
         """Validate the headers aren't injected from the history panel."""
+        with self.settings(
+            DEBUG_TOOLBAR_CONFIG={"OBSERVE_REQUEST_CALLBACK": lambda request: False}
+        ):
+            DebugToolbar.get_observe_request.cache_clear()
+            response = self.client.get("/json_view/")
+            self.assertNotIn("djdt-request-id", response.headers)
+        # Clear it again to avoid conflicting with another test
+        # Specifically, DebugToolbarLiveTestCase.test_ajax_refresh
         DebugToolbar.get_observe_request.cache_clear()
-        response = self.client.get("/json_view/")
-        self.assertNotIn("djdt-request-id", response.headers)
 
     def test_history_sidebar(self):
         """Validate the history sidebar view."""
@@ -145,7 +147,9 @@ class HistoryViewsTestCase(IntegrationTestCase):
             panel_keys,
         )
 
-    @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": False})
+    @override_settings(
+        DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": False, "RESULTS_CACHE_SIZE": 1}
+    )
     def test_history_sidebar_expired_request_id(self):
         """Validate the history sidebar view."""
         self.client.get("/json_view/")
@@ -158,8 +162,7 @@ class HistoryViewsTestCase(IntegrationTestCase):
             self.PANEL_KEYS,
         )
         # Make enough requests to unset the original
-        for _i in range(test_settings.DEBUG_TOOLBAR_CONFIG["RESULTS_CACHE_SIZE"]):
-            self.client.get("/json_view/")
+        self.client.get("/json_view/")
 
         # Querying old request_id should return in empty response
         data = {"request_id": request_id, "exclude_history": True}

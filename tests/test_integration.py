@@ -1,6 +1,5 @@
 import os
 import re
-import time
 import unittest
 from unittest.mock import patch
 
@@ -648,7 +647,7 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         # This should be 2 templates rendered, including base.html See
         # JinjaTemplateTestCase.test_django_jinja2_parent_template_instrumented
         self.assertIn("Templates (1 rendered)", template_panel.text)
-        self.assertIn("base.html", template_panel.text)
+        self.assertIn("basic.jinja", template_panel.text)
 
     @override_settings(
         DEBUG_TOOLBAR_CONFIG={
@@ -831,10 +830,13 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         make_ajax = self.selenium.find_element(By.ID, "click_for_ajax")
         make_ajax.click()
         # Need to wait until the ajax request is over and json_view is displayed on the toolbar
-        time.sleep(2)
-        history_panel = self.wait.until(
-            lambda selenium: self.selenium.find_element(By.ID, "djdt-HistoryPanel")
+        self.wait.until(
+            lambda selenium: self.selenium.find_element(
+                By.CSS_SELECTOR, "#djdt-HistoryPanel a.HistoryPanel small"
+            ).text
+            == "/json_view/"
         )
+        history_panel = self.selenium.find_element(By.ID, "djdt-HistoryPanel")
         self.assertNotIn("/ajax/", history_panel.text)
         self.assertIn("/json_view/", history_panel.text)
 

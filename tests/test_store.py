@@ -64,15 +64,12 @@ class MemoryStoreTestCase(TestCase):
         self.assertEqual(list(self.store.request_ids()), ["foo"])
 
     def test_set_max_size(self):
-        existing = self.store._config["RESULTS_CACHE_SIZE"]
-        self.store._config["RESULTS_CACHE_SIZE"] = 1
-        self.store.save_panel("foo", "foo.panel", "foo.value")
-        self.store.save_panel("bar", "bar.panel", {"a": 1})
-        self.assertEqual(list(self.store.request_ids()), ["bar"])
-        self.assertEqual(self.store.panel("foo", "foo.panel"), {})
-        self.assertEqual(self.store.panel("bar", "bar.panel"), {"a": 1})
-        # Restore the existing config setting since this config is shared.
-        self.store._config["RESULTS_CACHE_SIZE"] = existing
+        with self.settings(DEBUG_TOOLBAR_CONFIG={"RESULTS_CACHE_SIZE": 1}):
+            self.store.save_panel("foo", "foo.panel", "foo.value")
+            self.store.save_panel("bar", "bar.panel", {"a": 1})
+            self.assertEqual(list(self.store.request_ids()), ["bar"])
+            self.assertEqual(self.store.panel("foo", "foo.panel"), {})
+            self.assertEqual(self.store.panel("bar", "bar.panel"), {"a": 1})
 
     def test_clear(self):
         self.store.save_panel("bar", "bar.panel", {"a": 1})
