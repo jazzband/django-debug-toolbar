@@ -1,3 +1,6 @@
+import asyncio
+
+from asgiref.sync import sync_to_async
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponseRedirect, JsonResponse
@@ -8,6 +11,16 @@ from django.views.decorators.cache import cache_page
 
 def execute_sql(request):
     list(User.objects.all())
+    return render(request, "base.html")
+
+
+async def async_execute_sql(request):
+    await sync_to_async(list)(User.objects.all())
+    return render(request, "base.html")
+
+
+async def async_execute_sql_concurrently(request):
+    await asyncio.gather(sync_to_async(list)(User.objects.all()), User.objects.acount())
     return render(request, "base.html")
 
 

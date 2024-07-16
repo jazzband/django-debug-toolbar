@@ -18,6 +18,7 @@ INTERNAL_IPS = ["127.0.0.1", "::1"]
 # Application definition
 
 INSTALLED_APPS = [
+    *(["daphne"] if os.getenv("ASYNC_SERVER", False) else []),  # noqa: FBT003
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -66,6 +67,7 @@ TEMPLATES = [
 USE_TZ = True
 
 WSGI_APPLICATION = "example.wsgi.application"
+ASGI_APPLICATION = "example.asgi.application"
 
 
 # Cache and database
@@ -102,7 +104,6 @@ if os.environ.get("DB_BACKEND", "").lower() == "mysql":
     }
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "example", "static")]
-
 
 # Only enable the toolbar when we're in debug mode and we're
 # not running tests. Django will change DEBUG to be False for

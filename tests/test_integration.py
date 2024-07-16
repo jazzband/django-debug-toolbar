@@ -250,6 +250,24 @@ class DebugToolbarTestCase(BaseTestCase):
         )
         self.assertIn("Please reload the page and retry.", response.json()["content"])
 
+    def test_sql_page(self):
+        response = self.client.get("/execute_sql/")
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1
+        )
+
+    def test_async_sql_page(self):
+        response = self.client.get("/async_execute_sql/")
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1
+        )
+
+    def test_concurrent_async_sql_page(self):
+        response = self.client.get("/async_execute_sql_concurrently/")
+        self.assertEqual(
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2
+        )
+
 
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(IntegrationTestCase):
@@ -843,3 +861,29 @@ class DebugToolbarLiveTestCase(StaticLiveServerTestCase):
         self.get("/regular/basic/")
         toolbar = self.selenium.find_element(By.ID, "djDebug")
         self.assertEqual(toolbar.get_attribute("data-theme"), "light")
+
+    def test_async_sql_action(self):
+        self.get("/async_execute_sql/")
+        self.selenium.find_element(By.ID, "SQLPanel")
+        self.selenium.find_element(By.ID, "djDebugWindow")
+
+        # Click to show the SQL panel
+        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+
+        # SQL panel loads
+        self.wait.until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
+        )
+
+    def test_concurrent_async_sql_action(self):
+        self.get("/async_execute_sql_concurrently/")
+        self.selenium.find_element(By.ID, "SQLPanel")
+        self.selenium.find_element(By.ID, "djDebugWindow")
+
+        # Click to show the SQL panel
+        self.selenium.find_element(By.CLASS_NAME, "SQLPanel").click()
+
+        # SQL panel loads
+        self.wait.until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".remoteCall"))
+        )

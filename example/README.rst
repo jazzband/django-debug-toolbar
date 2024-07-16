@@ -46,3 +46,13 @@ environment variable::
 
     $ DB_BACKEND=postgresql python example/manage.py migrate
     $ DB_BACKEND=postgresql python example/manage.py runserver
+
+Using an asynchronous (ASGI) server:
+
+Install [Daphne](https://pypi.org/project/daphne/) first:
+
+    $ python -m pip install daphne
+
+Then run the Django development server:
+
+    $ ASYNC_SERVER=true python example/manage.py runserver
