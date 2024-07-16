@@ -173,7 +173,11 @@ class Panel:
         """
         Store data gathered by the panel. ``stats`` is a :class:`dict`.
 
-        Each call to ``record_stats`` updates the statistics dictionary.
+        Each call to ``record_stats`` updates the store's data for
+        the panel.
+
+        To support backwards compatibility, it will also update the
+        panel's statistics dictionary.
         """
         self.toolbar.stats.setdefault(self.panel_id, {}).update(stats)
         self.toolbar.store.save_panel(
