@@ -245,8 +245,8 @@ Django Channels & Async
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 The Debug Toolbar currently doesn't support Django Channels or async projects.
-If you are using Django channels and you are having issues getting panels to load,
-please review the documentation for the configuration option
+If you are using Django channels and you are having issues getting panels to
+load, please review the documentation for the configuration option
 :ref:`RENDER_PANELS <RENDER_PANELS>`.
 
 
