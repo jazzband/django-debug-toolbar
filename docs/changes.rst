@@ -4,6 +4,9 @@ Change log
 Pending
 -------
 
+* Fixed internal toolbar requests being instrumented if the Django setting
+  ``FORCE_SCRIPT_NAME`` was set.
+
 4.4.6 (2024-07-10)
 ------------------
 

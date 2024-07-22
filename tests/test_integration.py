@@ -244,6 +244,23 @@ class DebugToolbarTestCase(BaseTestCase):
         self.request.path = "/__debug__/render_panel/"
         self.assertTrue(self.toolbar.is_toolbar_request(self.request))
 
+    @patch("debug_toolbar.toolbar.get_script_prefix", return_value="/path/")
+    def test_is_toolbar_request_with_script_prefix(self, mocked_get_script_prefix):
+        """
+        Test cases when Django is running under a path prefix, such as via the
+        FORCE_SCRIPT_NAME setting.
+        """
+        self.request.path = "/path/__debug__/render_panel/"
+        self.assertTrue(self.toolbar.is_toolbar_request(self.request))
+
+        self.request.path = "/path/invalid/__debug__/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
+        self.request.path = "/path/render_panel/"
+        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+
+        self.assertEqual(mocked_get_script_prefix.call_count, 3)
+
     def test_data_gone(self):
         response = self.client.get(
             "/__debug__/render_panel/?store_id=GONE&panel_id=RequestPanel"
