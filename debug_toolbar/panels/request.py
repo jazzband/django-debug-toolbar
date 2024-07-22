@@ -41,7 +41,7 @@ class RequestPanel(Panel):
             "view_urlname": "None",
         }
         try:
-            match = resolve(request.path)
+            match = resolve(request.path_info)
             func, args, kwargs = match
             view_info["view_func"] = get_name_from_obj(func)
             view_info["view_args"] = args
