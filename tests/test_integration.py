@@ -128,10 +128,10 @@ class DebugToolbarTestCase(BaseTestCase):
 
     def _resolve_stats(self, path):
         # takes stats from Request panel
-        self.request.path = path
+        request = rf.get(path)
         panel = self.toolbar.get_panel_by_id("RequestPanel")
-        response = panel.process_request(self.request)
-        panel.generate_stats(self.request, response)
+        response = panel.process_request(request)
+        panel.generate_stats(request, response)
         return panel.get_stats()
 
     def test_url_resolving_positional(self):
@@ -215,51 +215,47 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 0)
 
     def test_is_toolbar_request(self):
-        self.request.path = "/__debug__/render_panel/"
-        self.assertTrue(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/__debug__/render_panel/")
+        self.assertTrue(self.toolbar.is_toolbar_request(request))
 
-        self.request.path = "/invalid/__debug__/render_panel/"
-        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/invalid/__debug__/render_panel/")
+        self.assertFalse(self.toolbar.is_toolbar_request(request))
 
-        self.request.path = "/render_panel/"
-        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/render_panel/")
+        self.assertFalse(self.toolbar.is_toolbar_request(request))
 
     @override_settings(ROOT_URLCONF="tests.urls_invalid")
     def test_is_toolbar_request_without_djdt_urls(self):
         """Test cases when the toolbar urls aren't configured."""
-        self.request.path = "/__debug__/render_panel/"
-        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/__debug__/render_panel/")
+        self.assertFalse(self.toolbar.is_toolbar_request(request))
 
-        self.request.path = "/render_panel/"
-        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/render_panel/")
+        self.assertFalse(self.toolbar.is_toolbar_request(request))
 
     @override_settings(ROOT_URLCONF="tests.urls_invalid")
     def test_is_toolbar_request_override_request_urlconf(self):
         """Test cases when the toolbar URL is configured on the request."""
-        self.request.path = "/__debug__/render_panel/"
-        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/__debug__/render_panel/")
+        self.assertFalse(self.toolbar.is_toolbar_request(request))
 
         # Verify overriding the urlconf on the request is valid.
-        self.request.urlconf = "tests.urls"
-        self.request.path = "/__debug__/render_panel/"
-        self.assertTrue(self.toolbar.is_toolbar_request(self.request))
+        request.urlconf = "tests.urls"
+        self.assertTrue(self.toolbar.is_toolbar_request(request))
 
-    @patch("debug_toolbar.toolbar.get_script_prefix", return_value="/path/")
-    def test_is_toolbar_request_with_script_prefix(self, mocked_get_script_prefix):
+    def test_is_toolbar_request_with_script_prefix(self):
         """
         Test cases when Django is running under a path prefix, such as via the
         FORCE_SCRIPT_NAME setting.
         """
-        self.request.path = "/path/__debug__/render_panel/"
-        self.assertTrue(self.toolbar.is_toolbar_request(self.request))
+        request = rf.get("/__debug__/render_panel/", SCRIPT_NAME="/path/")
+        self.assertTrue(self.toolbar.is_toolbar_request(request))
 
-        self.request.path = "/path/invalid/__debug__/render_panel/"
+        request = rf.get("/invalid/__debug__/render_panel/", SCRIPT_NAME="/path/")
+        self.assertFalse(self.toolbar.is_toolbar_request(request))
+
+        request = rf.get("/render_panel/", SCRIPT_NAME="/path/")
         self.assertFalse(self.toolbar.is_toolbar_request(self.request))
-
-        self.request.path = "/path/render_panel/"
-        self.assertFalse(self.toolbar.is_toolbar_request(self.request))
-
-        self.assertEqual(mocked_get_script_prefix.call_count, 3)
 
     def test_data_gone(self):
         response = self.client.get(

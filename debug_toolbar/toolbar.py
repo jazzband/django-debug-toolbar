@@ -13,7 +13,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import Signal
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
-from django.urls import get_script_prefix, include, path, re_path, resolve
+from django.urls import include, path, re_path, resolve
 from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
 from django.utils.translation import get_language, override as lang_override
@@ -165,8 +165,7 @@ class DebugToolbar:
         # not have resolver_match set.
         try:
             resolver_match = request.resolver_match or resolve(
-                request.path.replace(get_script_prefix(), "/", 1),
-                getattr(request, "urlconf", None),
+                request.path_info, getattr(request, "urlconf", None)
             )
         except Resolver404:
             return False
