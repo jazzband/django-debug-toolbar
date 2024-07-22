@@ -58,7 +58,8 @@ class SQLPanelTestCase(BaseTestCase):
     def test_recording(self):
         self.assertEqual(len(self.panel._queries), 0)
 
-        sql_call()
+        with self.assertNumQueries(1):
+            sql_call()
 
         # ensure query was logged
         self.assertEqual(len(self.panel._queries), 1)
