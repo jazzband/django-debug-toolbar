@@ -12,7 +12,11 @@ from debug_toolbar.panels import Panel
 from debug_toolbar.panels.sql import views
 from debug_toolbar.panels.sql.forms import SQLSelectForm
 from debug_toolbar.panels.sql.tracking import wrap_cursor
-from debug_toolbar.panels.sql.utils import contrasting_color_generator, reformat_sql
+from debug_toolbar.panels.sql.utils import (
+    contrasting_color_generator,
+    is_select_query,
+    reformat_sql,
+)
 from debug_toolbar.utils import render_stacktrace
 
 
@@ -266,9 +270,7 @@ class SQLPanel(Panel):
                     query["sql"] = reformat_sql(query["sql"], with_toggle=True)
 
                 query["is_slow"] = query["duration"] > sql_warning_threshold
-                query["is_select"] = (
-                    query["raw_sql"].lower().lstrip().startswith("select")
-                )
+                query["is_select"] = is_select_query(query["raw_sql"])
 
                 query["rgb_color"] = self._databases[alias]["rgb_color"]
                 try:

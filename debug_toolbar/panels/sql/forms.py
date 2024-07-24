@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import connections
 from django.utils.functional import cached_property
 
-from debug_toolbar.panels.sql.utils import reformat_sql
+from debug_toolbar.panels.sql.utils import is_select_query, reformat_sql
 
 
 class SQLSelectForm(forms.Form):
@@ -27,7 +27,7 @@ class SQLSelectForm(forms.Form):
     def clean_raw_sql(self):
         value = self.cleaned_data["raw_sql"]
 
-        if not value.lower().strip().startswith("select"):
+        if not is_select_query(value):
             raise ValidationError("Only 'select' queries are allowed.")
 
         return value

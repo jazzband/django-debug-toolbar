@@ -3,6 +3,7 @@ Change log
 
 Pending
 -------
+* Support select and explain buttons for ``UNION`` queries on PostgreSQL.
 
 4.4.6 (2024-07-10)
 ------------------
