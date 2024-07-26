@@ -435,7 +435,10 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
-    def test_sql_explain_union_query(self):
+    def test_sql_explain_postgres_union_query(self):
+        """
+        Confirm select queries that start with a parenthesis can be explained.
+        """
         url = "/__debug__/sql_explain/"
         data = {
             "signed": SignedDataForm.sign(
