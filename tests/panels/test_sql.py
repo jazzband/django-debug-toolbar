@@ -729,6 +729,13 @@ class SQLPanelTestCase(BaseTestCase):
         self.assertNotEqual(queries[0]["similar_color"], queries[3]["similar_color"])
         self.assertNotEqual(queries[0]["duplicate_color"], queries[3]["similar_color"])
 
+    def test_explain_with_union(self):
+        list(User.objects.filter(id__lt=20).union(User.objects.filter(id__gt=10)))
+        response = self.panel.process_request(self.request)
+        self.panel.generate_stats(self.request, response)
+        query = self.panel._queries[0]
+        self.assertTrue(query["is_select"])
+
 
 class SQLPanelMultiDBTestCase(BaseMultiDBTestCase):
     panel_id = "SQLPanel"

@@ -448,6 +448,29 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
     @unittest.skipUnless(
         connection.vendor == "postgresql", "Test valid only on PostgreSQL"
     )
+    def test_sql_explain_postgres_union_query(self):
+        """
+        Confirm select queries that start with a parenthesis can be explained.
+        """
+        url = "/__debug__/sql_explain/"
+        data = {
+            "signed": SignedDataForm.sign(
+                {
+                    "sql": "(SELECT * FROM auth_user) UNION (SELECT * from auth_user)",
+                    "raw_sql": "(SELECT * FROM auth_user) UNION (SELECT * from auth_user)",
+                    "params": "{}",
+                    "alias": "default",
+                    "duration": "0",
+                }
+            )
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+
+    @unittest.skipUnless(
+        connection.vendor == "postgresql", "Test valid only on PostgreSQL"
+    )
     def test_sql_explain_postgres_json_field(self):
         url = "/__debug__/sql_explain/"
         base_query = (
