@@ -203,8 +203,7 @@ class Panel:
         """
         Asynchronous version of process_request.
 
-        Additional asynchronous logic for Panels during the request/response
-        phase that could be needed to make the panel async compatible.
+        Write panel logic related to async operations for async capable panels.
 
         :param request: The current request as an ASGIRequest object.
 
