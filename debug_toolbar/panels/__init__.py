@@ -199,6 +199,18 @@ class Panel:
 
     # Standard middleware methods
 
+    async def aprocess_request(self, request):
+        """
+        Asynchronous version of process_request.
+
+        Additional asynchronous logic for Panels during the request/response
+        phase that could be needed to make the panel async capable.
+
+        :param request: The current request as an ASGIRequest object.
+
+        Return the existing response or overwrite it.
+        """
+
     def process_request(self, request):
         """
         Like __call__ in Django's middleware.
