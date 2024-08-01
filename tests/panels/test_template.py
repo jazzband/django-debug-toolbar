@@ -98,7 +98,8 @@ class TemplatesPanelTestCase(BaseTestCase):
         )
 
     def test_disabled(self):
-        config = {"DISABLE_PANELS": {"debug_toolbar.panels.templates.TemplatesPanel"}}
+        config = {"DISABLE_PANELS": {
+            "debug_toolbar.panels.templates.TemplatesPanel"}}
         self.assertTrue(self.panel.enabled)
         with self.settings(DEBUG_TOOLBAR_CONFIG=config):
             self.assertFalse(self.panel.enabled)

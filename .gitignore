@@ -14,3 +14,4 @@ geckodriver.log
 coverage.xml
 .direnv/
 .envrc
+venv
