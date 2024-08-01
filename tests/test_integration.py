@@ -53,6 +53,7 @@ class BuggyPanel(Panel):
     def content(self):
         raise Exception
 
+
 @override_settings(DEBUG=True)
 class DebugToolbarTestCase(BaseTestCase):
     def test_show_toolbar(self):
