@@ -10,23 +10,19 @@ from html5lib.html5parser import HTMLParser
 from .base import BaseTestCase
 
 
-def _get_ns(element: Element) -> dict[str, str]:
+def _get_ns(element: Element) -> Dict[str, str]:
     """
     Return the default `xmlns`. See
     https://docs.python.org/3/library/xml.etree.elementtree.html#parsing-xml-with-namespaces
     """
     if not element.tag.startswith('{'):
-        return dict()
+        return {}
     return {'': element.tag[1:].split('}', maxsplit=1)[0]}
 
 
 class CspRenderingTestCase(BaseTestCase):
     'Testing if `csp-nonce` renders.'
     panel_id = "StaticFilesPanel"
-
-    # def setUp(self):
-    #     self.factory = RequestFactory()
-    #     self.async_factory = AsyncRequestFactory()
 
     def _fail_if_missing(
             self, root: Element, path: str, namespaces: Dict[str, str],

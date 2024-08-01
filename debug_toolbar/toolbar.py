@@ -4,8 +4,8 @@ The main DebugToolbar class that loads and renders the Toolbar.
 
 import re
 import uuid
-from collections import OrderedDict
 from functools import lru_cache
+from typing import OrderedDict
 
 from django.apps import apps
 from django.conf import settings
@@ -16,9 +16,11 @@ from django.template.loader import render_to_string
 from django.urls import include, path, re_path, resolve
 from django.urls.exceptions import Resolver404
 from django.utils.module_loading import import_string
-from django.utils.translation import get_language, override as lang_override
+from django.utils.translation import get_language
+from django.utils.translation import override as lang_override
 
-from debug_toolbar import APP_NAME, settings as dt_settings
+from debug_toolbar import APP_NAME
+from debug_toolbar import settings as dt_settings
 from debug_toolbar.panels import Panel
 
 
