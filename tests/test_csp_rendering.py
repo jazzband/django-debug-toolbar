@@ -96,8 +96,7 @@ class CspRenderingTestCase(IntegrationTestCase):
         self.assertContains(response, "djDebug")
 
         namespaces = get_namespaces(element=html_root)
-        context: ContextList = \
-            response.context  # pyright: ignore[reportAttributeAccessIssue]
+        context: ContextList = response.context  # pyright: ignore[reportAttributeAccessIssue]
         nonce = str(context["toolbar"].request.csp_nonce)
         self._fail_if_missing(
             root=html_root, path=".//link", namespaces=namespaces, nonce=nonce
