@@ -8,7 +8,7 @@ from html5lib.html5parser import HTMLParser
 
 from debug_toolbar.toolbar import DebugToolbar
 
-from .base import BaseTestCase
+from .base import IntegrationTestCase
 
 
 def get_namespaces(element: Element) -> Dict[str, str]:
@@ -22,10 +22,11 @@ def get_namespaces(element: Element) -> Dict[str, str]:
 
 
 @override_settings(DEBUG=True)
-class CspRenderingTestCase(BaseTestCase):
+class CspRenderingTestCase(IntegrationTestCase):
     """Testing if `csp-nonce` renders."""
 
     def setUp(self):
+        super().setUp()
         self.parser = HTMLParser()
 
     def _fail_if_missing(
