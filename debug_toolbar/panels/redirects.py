@@ -21,7 +21,11 @@ class RedirectsPanel(Panel):
             if redirect_to:
                 status_line = f"{response.status_code} {response.reason_phrase}"
                 cookies = response.cookies
-                context = {"redirect_to": redirect_to, "status_line": status_line}
+                context = {
+                    "redirect_to": redirect_to,
+                    "status_line": status_line,
+                    "toolbar": self.toolbar,
+                }
                 # Using SimpleTemplateResponse avoids running global context processors.
                 response = SimpleTemplateResponse(
                     "debug_toolbar/redirect.html", context
