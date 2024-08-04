@@ -38,12 +38,17 @@ class RedirectsPanel(Panel):
                 response.render()
         return response
 
-    async def aprocess_request(self, request):
-        response = await super().process_request(request)
+    async def aprocess_request(self, request, response_coroutine):
+        """
+        Async version of process_request. used for accessing the response
+        by awaiting it when running in ASGI.
+        """
+
+        response = await response_coroutine
         return self._process_response(response)
 
     def process_request(self, request):
         response = super().process_request(request)
         if iscoroutine(response):
-            return self.aprocess_request(request)
+            return self.aprocess_request(request, response)
         return self._process_response(response)
