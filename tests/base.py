@@ -1,8 +1,11 @@
+from typing import Optional
+
 import html5lib
 from asgiref.local import Local
 from django.http import HttpResponse
 from django.test import Client, RequestFactory, TestCase, TransactionTestCase
 
+from debug_toolbar.panels import Panel
 from debug_toolbar.toolbar import DebugToolbar
 
 
@@ -32,6 +35,7 @@ rf = RequestFactory()
 class BaseMixin:
     client_class = ToolbarTestClient
 
+    panel: Optional[Panel] = None
     panel_id = None
 
     def setUp(self):

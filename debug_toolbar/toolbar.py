@@ -4,8 +4,10 @@ The main DebugToolbar class that loads and renders the Toolbar.
 
 import re
 import uuid
-from collections import OrderedDict
 from functools import lru_cache
+
+# Can be removed when python3.8 is dropped
+from typing import OrderedDict
 
 from django.apps import apps
 from django.conf import settings
@@ -19,6 +21,7 @@ from django.utils.module_loading import import_string
 from django.utils.translation import get_language, override as lang_override
 
 from debug_toolbar import APP_NAME, settings as dt_settings
+from debug_toolbar.panels import Panel
 
 
 class DebugToolbar:
@@ -38,7 +41,7 @@ class DebugToolbar:
         # Use OrderedDict for the _panels attribute so that items can be efficiently
         # removed using FIFO order in the DebugToolbar.store() method.  The .popitem()
         # method of Python's built-in dict only supports LIFO removal.
-        self._panels = OrderedDict()
+        self._panels = OrderedDict[str, Panel]()
         while panels:
             panel = panels.pop()
             self._panels[panel.panel_id] = panel
