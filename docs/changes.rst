@@ -3,10 +3,11 @@ Change log
 
 Pending
 -------
-* Support select and explain buttons for ``UNION`` queries on PostgreSQL.
 
+* Support select and explain buttons for ``UNION`` queries on PostgreSQL.
 * Fixed internal toolbar requests being instrumented if the Django setting
   ``FORCE_SCRIPT_NAME`` was set.
+* Increase opacity of show Debug Toolbar handle to improve accessibility.
 
 4.4.6 (2024-07-10)
 ------------------
