@@ -9,6 +9,9 @@ Pending
   ``FORCE_SCRIPT_NAME`` was set.
 * Increase opacity of show Debug Toolbar handle to improve accessibility.
 * Changed the ``RedirectsPanel`` to be async compatible.
+* Add translations for Bulgarian and Korean.
+* Update translations for several languages.
+* Include new translatable strings for translation.
 
 4.4.6 (2024-07-10)
 ------------------

@@ -172,6 +172,9 @@ Prior to a release, the English ``.po`` file must be updated with ``make
 translatable_strings`` and pushed to Transifex. Once translators have done
 their job, ``.po`` files must be downloaded with ``make update_translations``.
 
+You will need to
+`install the Transifex CLI <https://developers.transifex.com/docs/cli>`_.
+
 To publish a release you have to be a `django-debug-toolbar project lead at
 Jazzband <https://jazzband.co/projects/django-debug-toolbar>`__.
 
