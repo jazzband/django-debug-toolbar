@@ -2,6 +2,7 @@ import copy
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.test import AsyncRequestFactory
 
 from ..base import BaseTestCase
 
@@ -70,3 +71,17 @@ class RedirectsPanelTestCase(BaseTestCase):
         self.assertIsNotNone(response)
         response = self.panel.generate_stats(self.request, redirect)
         self.assertIsNone(response)
+
+    async def test_async_compatibility(self):
+        redirect = HttpResponse(status=302)
+
+        async def get_response(request):
+            return redirect
+
+        await_response = await get_response(self.request)
+        self._get_response = get_response
+
+        self.request = AsyncRequestFactory().get("/")
+        response = await self.panel.process_request(self.request)
+        self.assertIsInstance(response, HttpResponse)
+        self.assertTrue(response is await_response)
