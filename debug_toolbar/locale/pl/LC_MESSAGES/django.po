@@ -3,52 +3,76 @@
 #
 #
 # Translators:
-# Konrad Mosoń <mosonkonrad@gmail.com>, 2013
+# Konrad Mosoń <mosonkonrad@gmail.com>, 2013,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-20 17:23+0100\n"
-"PO-Revision-Date: 2014-04-25 19:53+0000\n"
-"Last-Translator: Aymeric Augustin <aymeric.augustin@m4x.org>\n"
-"Language-Team: Polish (http://www.transifex.com/projects/p/django-debug-"
-"toolbar/language/pl/)\n"
-"Language: pl\n"
+"POT-Creation-Date: 2024-08-06 07:12-0500\n"
+"PO-Revision-Date: 2010-11-30 00:00+0000\n"
+"Last-Translator: Konrad Mosoń <mosonkonrad@gmail.com>, 2013,2015\n"
+"Language-Team: Polish (http://app.transifex.com/django-debug-toolbar/django-debug-toolbar/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: apps.py:15
+#: apps.py:18
 msgid "Debug Toolbar"
+msgstr "Debug Toolbar"
+
+#: panels/alerts.py:67
+#, python-brace-format
+msgid ""
+"Form with id \"{form_id}\" contains file input, but does not have the "
+"attribute enctype=\"multipart/form-data\"."
 msgstr ""
 
-#: panels/cache.py:180
+#: panels/alerts.py:70
+msgid ""
+"Form contains file input, but does not have the attribute "
+"enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:73
+#, python-brace-format
+msgid ""
+"Input element references form with id \"{form_id}\", but the form does not "
+"have the attribute enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:77
+msgid "Alerts"
+msgstr ""
+
+#: panels/cache.py:168
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:186
+#: panels/cache.py:174
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] "%(cache_calls)d wywołanie w %(time).2fms"
 msgstr[1] "%(cache_calls)d wywołania w %(time).2fms"
 msgstr[2] "%(cache_calls)d wywołań w %(time).2fms"
+msgstr[3] "%(cache_calls)d wywołań w %(time).2fms"
 
-#: panels/cache.py:195
+#: panels/cache.py:183
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
 msgstr[0] "Wywołań z cache z %(count)d backendu"
 msgstr[1] "Wywołań z cache z %(count)d backendów"
 msgstr[2] "Wywołań z cache z %(count)d backendów"
+msgstr[3] "Wywołań z cache z %(count)d backendów"
 
 #: panels/headers.py:31
 msgid "Headers"
-msgstr ""
+msgstr "Nagłówki"
 
-#: panels/history/panel.py:18 panels/history/panel.py:19
+#: panels/history/panel.py:19 panels/history/panel.py:20
 msgid "History"
 msgstr ""
 
@@ -56,19 +80,19 @@ msgstr ""
 msgid "Profiling"
 msgstr "Profilowanie"
 
-#: panels/redirects.py:14
+#: panels/redirects.py:17
 msgid "Intercept redirects"
-msgstr ""
+msgstr "Przechwycone przekierowania"
 
 #: panels/request.py:16
 msgid "Request"
-msgstr ""
+msgstr "Zapytania"
 
-#: panels/request.py:36
+#: panels/request.py:38
 msgid "<no view>"
 msgstr "<brak widoku>"
 
-#: panels/request.py:53
+#: panels/request.py:55
 msgid "<unavailable>"
 msgstr "<niedostępny>"
 
@@ -77,10 +101,9 @@ msgid "Settings"
 msgstr "Ustawienia"
 
 #: panels/settings.py:20
-#, fuzzy, python-format
-#| msgid "Settings from <code>%s</code>"
+#, python-format
 msgid "Settings from %s"
-msgstr "Ustawienia z <code>%s</code>"
+msgstr ""
 
 #: panels/signals.py:57
 #, python-format
@@ -89,6 +112,7 @@ msgid_plural "%(num_receivers)d receivers of 1 signal"
 msgstr[0] "%(num_receivers)d orbiorca 1 sygnału"
 msgstr[1] "%(num_receivers)d odbiorców 1 sygnału"
 msgstr[2] "%(num_receivers)d odbiorców 1 sygnału"
+msgstr[3] "%(num_receivers)d odbiorców 1 sygnału"
 
 #: panels/signals.py:62
 #, python-format
@@ -97,161 +121,163 @@ msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
 msgstr[0] "%(num_receivers)d odbiora %(num_signals)d sygnału"
 msgstr[1] "%(num_receivers)d odbiorców %(num_signals)d sygnałów"
 msgstr[2] "%(num_receivers)d odbiorców %(num_signals)d sygnałów"
+msgstr[3] "%(num_receivers)d odbiorców %(num_signals)d sygnałów"
 
 #: panels/signals.py:67
 msgid "Signals"
 msgstr "Sygnały"
 
-#: panels/sql/panel.py:23
-msgid "Autocommit"
-msgstr "Autocommit"
-
-#: panels/sql/panel.py:24
+#: panels/sql/panel.py:30 panels/sql/panel.py:41
 msgid "Read uncommitted"
-msgstr ""
+msgstr "Przeczaj niepopełnione"
 
-#: panels/sql/panel.py:25
+#: panels/sql/panel.py:31 panels/sql/panel.py:43
 msgid "Read committed"
-msgstr ""
+msgstr "Przeczytaj popełnione"
 
-#: panels/sql/panel.py:26
+#: panels/sql/panel.py:32 panels/sql/panel.py:45
 msgid "Repeatable read"
 msgstr ""
 
-#: panels/sql/panel.py:27
+#: panels/sql/panel.py:33 panels/sql/panel.py:47
 msgid "Serializable"
 msgstr ""
 
 #: panels/sql/panel.py:39
-msgid "Idle"
-msgstr ""
+msgid "Autocommit"
+msgstr "Autocommit"
 
-#: panels/sql/panel.py:40
+#: panels/sql/panel.py:61 panels/sql/panel.py:71
+msgid "Idle"
+msgstr "Bezczynny"
+
+#: panels/sql/panel.py:62 panels/sql/panel.py:72
 msgid "Active"
 msgstr "Aktywne"
 
-#: panels/sql/panel.py:41
+#: panels/sql/panel.py:63 panels/sql/panel.py:73
 msgid "In transaction"
 msgstr "W transakcji"
 
-#: panels/sql/panel.py:42
+#: panels/sql/panel.py:64 panels/sql/panel.py:74
 msgid "In error"
 msgstr "W błędzie"
 
-#: panels/sql/panel.py:43
+#: panels/sql/panel.py:65 panels/sql/panel.py:75
 msgid "Unknown"
 msgstr "Nieznane"
 
-#: panels/sql/panel.py:130
+#: panels/sql/panel.py:162
 msgid "SQL"
 msgstr "SQL"
 
-#: panels/sql/panel.py:135
-#, fuzzy, python-format
-#| msgid "%(cache_calls)d call in %(time).2fms"
-#| msgid_plural "%(cache_calls)d calls in %(time).2fms"
+#: panels/sql/panel.py:168
+#, python-format
 msgid "%(query_count)d query in %(sql_time).2fms"
 msgid_plural "%(query_count)d queries in %(sql_time).2fms"
-msgstr[0] "%(cache_calls)d wywołanie w %(time).2fms"
-msgstr[1] "%(cache_calls)d wywołania w %(time).2fms"
-msgstr[2] "%(cache_calls)d wywołań w %(time).2fms"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
-#: panels/sql/panel.py:147
+#: panels/sql/panel.py:180
 #, python-format
 msgid "SQL queries from %(count)d connection"
 msgid_plural "SQL queries from %(count)d connections"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
-#: panels/staticfiles.py:84
+#: panels/staticfiles.py:82
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr ""
+msgstr "Pliki statyczne (znaleziono %(num_found)s, użyto %(num_used)s)"
 
-#: panels/staticfiles.py:105
+#: panels/staticfiles.py:103
 msgid "Static files"
-msgstr ""
+msgstr "Pliki statyczne"
 
-#: panels/staticfiles.py:111
+#: panels/staticfiles.py:109
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(num_used)s użyty plików"
+msgstr[1] "%(num_used)s użyte plików"
+msgstr[2] "%(num_used)s użytych plików"
+msgstr[3] "%(num_used)s użytych plików"
 
-#: panels/templates/panel.py:143
+#: panels/templates/panel.py:101
 msgid "Templates"
 msgstr "Templatki"
 
-#: panels/templates/panel.py:148
+#: panels/templates/panel.py:106
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "Templatki (%(num_templates)s wyrenderowano)"
 
-#: panels/templates/panel.py:180
+#: panels/templates/panel.py:195
 msgid "No origin"
 msgstr ""
 
-#: panels/timer.py:25
+#: panels/timer.py:27
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
 msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
 
-#: panels/timer.py:30
+#: panels/timer.py:32
 #, python-format
 msgid "Total: %0.2fms"
-msgstr ""
+msgstr "Całkowity czas: %0.2fms"
 
-#: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
+#: panels/timer.py:38 templates/debug_toolbar/panels/history.html:9
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
 msgstr "Czas"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 msgid "User CPU time"
 msgstr ""
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 #, python-format
 msgid "%(utime)0.3f msec"
 msgstr "%(utime)0.3f msec"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 msgid "System CPU time"
 msgstr ""
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 #, python-format
 msgid "%(stime)0.3f msec"
 msgstr "%(stime)0.3f msec"
 
-#: panels/timer.py:46
+#: panels/timer.py:48
 msgid "Total CPU time"
 msgstr ""
 
-#: panels/timer.py:46
+#: panels/timer.py:48
 #, python-format
 msgid "%(total)0.3f msec"
 msgstr "%(total)0.3f msec"
 
-#: panels/timer.py:47
+#: panels/timer.py:49
 msgid "Elapsed time"
-msgstr ""
+msgstr "Całkowity czas"
 
-#: panels/timer.py:47
+#: panels/timer.py:49
 #, python-format
 msgid "%(total_time)0.3f msec"
 msgstr "%(total_time)0.3f msec"
 
-#: panels/timer.py:49
+#: panels/timer.py:51
 msgid "Context switches"
-msgstr ""
+msgstr "Przełączenia kontekstu"
 
-#: panels/timer.py:50
+#: panels/timer.py:52
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 msgstr ""
@@ -260,15 +286,19 @@ msgstr ""
 msgid "Versions"
 msgstr "Wersje"
 
-#: templates/debug_toolbar/base.html:22
+#: templates/debug_toolbar/base.html:23
 msgid "Hide toolbar"
-msgstr ""
+msgstr "Ukryj toolbar"
 
-#: templates/debug_toolbar/base.html:22
+#: templates/debug_toolbar/base.html:23
 msgid "Hide"
 msgstr "Ukryj"
 
-#: templates/debug_toolbar/base.html:29
+#: templates/debug_toolbar/base.html:25 templates/debug_toolbar/base.html:26
+msgid "Toggle Theme"
+msgstr ""
+
+#: templates/debug_toolbar/base.html:35
 msgid "Show toolbar"
 msgstr ""
 
@@ -278,6 +308,14 @@ msgstr ""
 
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Enable for next and successive requests"
+msgstr ""
+
+#: templates/debug_toolbar/panels/alerts.html:4
+msgid "Alerts found"
+msgstr ""
+
+#: templates/debug_toolbar/panels/alerts.html:11
+msgid "No alerts found"
 msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:2
@@ -375,10 +413,8 @@ msgid "Path"
 msgstr ""
 
 #: templates/debug_toolbar/panels/history.html:12
-#, fuzzy
-#| msgid "Variable"
 msgid "Request Variables"
-msgstr "Zmienna"
+msgstr ""
 
 #: templates/debug_toolbar/panels/history.html:13
 msgid "Status"
@@ -478,6 +514,7 @@ msgid_plural "%(num)s queries"
 msgstr[0] "%(num)s zapytanie"
 msgstr[1] "%(num)s zapytania"
 msgstr[2] "%(num)s zapytań"
+msgstr[3] "%(num)s zapytań"
 
 #: templates/debug_toolbar/panels/sql.html:8
 #, python-format
@@ -503,11 +540,9 @@ msgid "Timeline"
 msgstr "Oś czasu"
 
 #: templates/debug_toolbar/panels/sql.html:52
-#, fuzzy, python-format
-#| msgid "%(count)s message"
-#| msgid_plural "%(count)s messages"
+#, python-format
 msgid "%(count)s similar queries."
-msgstr "%(count)s wiadomość"
+msgstr ""
 
 #: templates/debug_toolbar/panels/sql.html:58
 #, python-format
@@ -572,6 +607,7 @@ msgid_plural "Static file paths"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:7
 #, python-format
@@ -593,6 +629,7 @@ msgid_plural "Static file apps"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:25
 msgid "Static file"
@@ -600,6 +637,7 @@ msgid_plural "Static files"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:39
 #, python-format
@@ -608,6 +646,7 @@ msgid_plural "%(payload_count)s files"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Location"
@@ -623,6 +662,7 @@ msgid_plural "Template paths"
 msgstr[0] "Ścieżka templatki"
 msgstr[1] "Ścieżki templatek"
 msgstr[2] "Ścieżki templatek"
+msgstr[3] "Ścieżki templatek"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
@@ -630,6 +670,7 @@ msgid_plural "Templates"
 msgstr[0] "Templatki"
 msgstr[1] "Templatki"
 msgstr[2] "Templatki"
+msgstr[3] "Templatki"
 
 #: templates/debug_toolbar/panels/templates.html:22
 #: templates/debug_toolbar/panels/templates.html:40
@@ -642,6 +683,7 @@ msgid_plural "Context processors"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"

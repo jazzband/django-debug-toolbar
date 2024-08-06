@@ -4,7 +4,7 @@
 #
 # Translators:
 # Anthony Jorion <pingax@gmail.com>, 2013
-# Aymeric Augustin <aymeric.augustin@m4x.org>, 2014
+# c1b16e6c929c50740e884a23aafc8829_00449d9 <ec12d7f60c595a45665f74b651aefabe_13279>, 2014
 # Claude Paroz <claude@2xlibre.net>, 2013
 # Colin O'Brien <colin@things.be>, 2021
 # David Paccoud, 2009
@@ -14,44 +14,69 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-20 17:23+0100\n"
-"PO-Revision-Date: 2021-09-30 09:21+0000\n"
-"Last-Translator: Colin O'Brien <colin@things.be>\n"
-"Language-Team: French (http://www.transifex.com/django-debug-toolbar/django-"
-"debug-toolbar/language/fr/)\n"
-"Language: fr\n"
+"POT-Creation-Date: 2024-08-06 07:12-0500\n"
+"PO-Revision-Date: 2010-11-30 00:00+0000\n"
+"Last-Translator: Colin O'Brien <colin@things.be>, 2021\n"
+"Language-Team: French (http://app.transifex.com/django-debug-toolbar/django-debug-toolbar/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: apps.py:15
+#: apps.py:18
 msgid "Debug Toolbar"
 msgstr "Barre d'outils de débogage"
 
-#: panels/cache.py:180
+#: panels/alerts.py:67
+#, python-brace-format
+msgid ""
+"Form with id \"{form_id}\" contains file input, but does not have the "
+"attribute enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:70
+msgid ""
+"Form contains file input, but does not have the attribute "
+"enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:73
+#, python-brace-format
+msgid ""
+"Input element references form with id \"{form_id}\", but the form does not "
+"have the attribute enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:77
+msgid "Alerts"
+msgstr ""
+
+#: panels/cache.py:168
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:186
+#: panels/cache.py:174
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
 msgstr[0] "%(cache_calls)d appel en %(time).2fms"
 msgstr[1] "%(cache_calls)d appels en %(time).2fms"
+msgstr[2] "%(cache_calls)d appels en %(time).2fms"
 
-#: panels/cache.py:195
+#: panels/cache.py:183
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
 msgstr[0] "Appels au cache depuis %(count)d moteur"
 msgstr[1] "Appels au cache depuis %(count)d moteurs"
+msgstr[2] "Appels au cache depuis %(count)d moteurs"
 
 #: panels/headers.py:31
 msgid "Headers"
 msgstr "En-têtes"
 
-#: panels/history/panel.py:18 panels/history/panel.py:19
+#: panels/history/panel.py:19 panels/history/panel.py:20
 msgid "History"
 msgstr "Historique"
 
@@ -59,7 +84,7 @@ msgstr "Historique"
 msgid "Profiling"
 msgstr "Profilage"
 
-#: panels/redirects.py:14
+#: panels/redirects.py:17
 msgid "Intercept redirects"
 msgstr "Interception des redirections"
 
@@ -67,11 +92,11 @@ msgstr "Interception des redirections"
 msgid "Request"
 msgstr "Requête"
 
-#: panels/request.py:36
+#: panels/request.py:38
 msgid "<no view>"
 msgstr "<pas de vue>"
 
-#: panels/request.py:53
+#: panels/request.py:55
 msgid "<unavailable>"
 msgstr "<indisponible>"
 
@@ -90,6 +115,7 @@ msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
 msgstr[0] "%(num_receivers)d receveur d'un signal"
 msgstr[1] "%(num_receivers)d receveurs d'un signal"
+msgstr[2] "%(num_receivers)d receveurs d'un signal"
 
 #: panels/signals.py:62
 #, python-format
@@ -97,156 +123,160 @@ msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
 msgstr[0] "%(num_receivers)d receveur de %(num_signals)d signaux"
 msgstr[1] "%(num_receivers)d receveurs de %(num_signals)d signaux"
+msgstr[2] "%(num_receivers)d receveurs de %(num_signals)d signaux"
 
 #: panels/signals.py:67
 msgid "Signals"
 msgstr "Signaux"
 
-#: panels/sql/panel.py:23
-msgid "Autocommit"
-msgstr "Auto validation"
-
-#: panels/sql/panel.py:24
+#: panels/sql/panel.py:30 panels/sql/panel.py:41
 msgid "Read uncommitted"
 msgstr "Lecture non validée"
 
-#: panels/sql/panel.py:25
+#: panels/sql/panel.py:31 panels/sql/panel.py:43
 msgid "Read committed"
 msgstr "Lecture validée"
 
-#: panels/sql/panel.py:26
+#: panels/sql/panel.py:32 panels/sql/panel.py:45
 msgid "Repeatable read"
 msgstr "Lecture répétable"
 
-#: panels/sql/panel.py:27
+#: panels/sql/panel.py:33 panels/sql/panel.py:47
 msgid "Serializable"
 msgstr "Sérialisable"
 
 #: panels/sql/panel.py:39
+msgid "Autocommit"
+msgstr "Auto validation"
+
+#: panels/sql/panel.py:61 panels/sql/panel.py:71
 msgid "Idle"
 msgstr "Inactif"
 
-#: panels/sql/panel.py:40
+#: panels/sql/panel.py:62 panels/sql/panel.py:72
 msgid "Active"
 msgstr "Actif"
 
-#: panels/sql/panel.py:41
+#: panels/sql/panel.py:63 panels/sql/panel.py:73
 msgid "In transaction"
 msgstr "Transaction en cours"
 
-#: panels/sql/panel.py:42
+#: panels/sql/panel.py:64 panels/sql/panel.py:74
 msgid "In error"
 msgstr "Erreur"
 
-#: panels/sql/panel.py:43
+#: panels/sql/panel.py:65 panels/sql/panel.py:75
 msgid "Unknown"
 msgstr "Indéterminé"
 
-#: panels/sql/panel.py:130
+#: panels/sql/panel.py:162
 msgid "SQL"
 msgstr "SQL"
 
-#: panels/sql/panel.py:135
+#: panels/sql/panel.py:168
 #, python-format
 msgid "%(query_count)d query in %(sql_time).2fms"
 msgid_plural "%(query_count)d queries in %(sql_time).2fms"
 msgstr[0] "%(query_count)d requête en %(sql_time).2f ms"
 msgstr[1] "%(query_count)d requêtes en %(sql_time).2f ms"
+msgstr[2] "%(query_count)d requêtes en %(sql_time).2f ms"
 
-#: panels/sql/panel.py:147
+#: panels/sql/panel.py:180
 #, python-format
 msgid "SQL queries from %(count)d connection"
 msgid_plural "SQL queries from %(count)d connections"
 msgstr[0] "requêtes SQL venant de %(count)d connexion"
 msgstr[1] "Requêtes SQL venant de %(count)d connexions"
+msgstr[2] "Requêtes SQL venant de %(count)d connexions"
 
-#: panels/staticfiles.py:84
+#: panels/staticfiles.py:82
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
 msgstr "Fichiers statiques (%(num_found)s trouvé(s), %(num_used)s utilisé(s))"
 
-#: panels/staticfiles.py:105
+#: panels/staticfiles.py:103
 msgid "Static files"
 msgstr "Fichiers statiques"
 
-#: panels/staticfiles.py:111
+#: panels/staticfiles.py:109
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
 msgstr[0] "%(num_used)s fichier utilisé"
 msgstr[1] "%(num_used)s fichiers utilisés"
+msgstr[2] "%(num_used)s fichiers utilisés"
 
-#: panels/templates/panel.py:143
+#: panels/templates/panel.py:101
 msgid "Templates"
 msgstr "Gabarits"
 
-#: panels/templates/panel.py:148
+#: panels/templates/panel.py:106
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "Gabarits (%(num_templates)s affichés)"
 
-#: panels/templates/panel.py:180
+#: panels/templates/panel.py:195
 msgid "No origin"
 msgstr "Sans Origine"
 
-#: panels/timer.py:25
+#: panels/timer.py:27
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
 msgstr "CPU: %(cum)0.2fms (%(total)0.2fms)"
 
-#: panels/timer.py:30
+#: panels/timer.py:32
 #, python-format
 msgid "Total: %0.2fms"
 msgstr "Total : %0.2fms"
 
-#: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
+#: panels/timer.py:38 templates/debug_toolbar/panels/history.html:9
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
 msgstr "Temps"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 msgid "User CPU time"
 msgstr "Temps CPU de l'utilisateur"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 #, python-format
 msgid "%(utime)0.3f msec"
 msgstr "%(utime)0.3f ms"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 msgid "System CPU time"
 msgstr "Temps CPU du système"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 #, python-format
 msgid "%(stime)0.3f msec"
 msgstr "%(stime)0.3f ms"
 
-#: panels/timer.py:46
+#: panels/timer.py:48
 msgid "Total CPU time"
 msgstr "Temps total du CPU"
 
-#: panels/timer.py:46
+#: panels/timer.py:48
 #, python-format
 msgid "%(total)0.3f msec"
 msgstr "%(total)0.3f ms"
 
-#: panels/timer.py:47
+#: panels/timer.py:49
 msgid "Elapsed time"
 msgstr "Temps écoulé"
 
-#: panels/timer.py:47
+#: panels/timer.py:49
 #, python-format
 msgid "%(total_time)0.3f msec"
 msgstr "%(total_time)0.3f ms"
 
-#: panels/timer.py:49
+#: panels/timer.py:51
 msgid "Context switches"
 msgstr "Basculements de contexte"
 
-#: panels/timer.py:50
+#: panels/timer.py:52
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
 msgstr "%(vcsw)d volontaire, %(ivcsw)d involontaire"
@@ -255,15 +285,19 @@ msgstr "%(vcsw)d volontaire, %(ivcsw)d involontaire"
 msgid "Versions"
 msgstr "Versions"
 
-#: templates/debug_toolbar/base.html:22
+#: templates/debug_toolbar/base.html:23
 msgid "Hide toolbar"
 msgstr "Masquer la barre d'outils"
 
-#: templates/debug_toolbar/base.html:22
+#: templates/debug_toolbar/base.html:23
 msgid "Hide"
 msgstr "Masquer"
 
-#: templates/debug_toolbar/base.html:29
+#: templates/debug_toolbar/base.html:25 templates/debug_toolbar/base.html:26
+msgid "Toggle Theme"
+msgstr ""
+
+#: templates/debug_toolbar/base.html:35
 msgid "Show toolbar"
 msgstr "Afficher la barre d'outils"
 
@@ -274,6 +308,14 @@ msgstr "Désactiver pour les requêtes suivantes"
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Enable for next and successive requests"
 msgstr "Activer pour les requêtes suivantes"
+
+#: templates/debug_toolbar/panels/alerts.html:4
+msgid "Alerts found"
+msgstr ""
+
+#: templates/debug_toolbar/panels/alerts.html:11
+msgid "No alerts found"
+msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
@@ -358,9 +400,7 @@ msgstr "Environnement WSGI"
 msgid ""
 "Since the WSGI environ inherits the environment of the server, only a "
 "significant subset is shown below."
-msgstr ""
-"Comme l'environnement WSGI hérite de celui du serveur, seul un sous-ensemble "
-"pertinent est affiché ci-dessous."
+msgstr "Comme l'environnement WSGI hérite de celui du serveur, seul un sous-ensemble pertinent est affiché ci-dessous."
 
 #: templates/debug_toolbar/panels/history.html:10
 msgid "Method"
@@ -472,24 +512,21 @@ msgid "%(num)s query"
 msgid_plural "%(num)s queries"
 msgstr[0] "%(num)s requête"
 msgstr[1] "%(num)s requêtes"
+msgstr[2] "%(num)s requêtes"
 
 #: templates/debug_toolbar/panels/sql.html:8
 #, python-format
 msgid ""
 "including <abbr title=\"Similar queries are queries with the same SQL, but "
 "potentially different parameters.\">%(count)s similar</abbr>"
-msgstr ""
-"comprenant <abbr title=\"Similar queries are queries with the same SQL, but "
-"potentially different parameters.\">%(count)s similaires</abbr>"
+msgstr "comprenant <abbr title=\"Similar queries are queries with the same SQL, but potentially different parameters.\">%(count)s similaires</abbr>"
 
 #: templates/debug_toolbar/panels/sql.html:12
 #, python-format
 msgid ""
 "and <abbr title=\"Duplicate queries are identical to each other: they "
 "execute exactly the same SQL and parameters.\">%(dupes)s duplicates</abbr>"
-msgstr ""
-"et <abbr title=\"Duplicate queries are identical to each other: they execute "
-"exactly the same SQL and parameters.\">%(dupes)s en double</abbr>"
+msgstr "et <abbr title=\"Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.\">%(dupes)s en double</abbr>"
 
 #: templates/debug_toolbar/panels/sql.html:34
 msgid "Query"
@@ -567,6 +604,7 @@ msgid "Static file path"
 msgid_plural "Static file paths"
 msgstr[0] "Chemin de fichier statique"
 msgstr[1] "Chemins de fichiers statiques"
+msgstr[2] "Chemins de fichiers statiques"
 
 #: templates/debug_toolbar/panels/staticfiles.html:7
 #, python-format
@@ -587,12 +625,14 @@ msgid "Static file app"
 msgid_plural "Static file apps"
 msgstr[0] "Application de fichiers statiques"
 msgstr[1] "Applications de fichiers statiques"
+msgstr[2] "Applications de fichiers statiques"
 
 #: templates/debug_toolbar/panels/staticfiles.html:25
 msgid "Static file"
 msgid_plural "Static files"
 msgstr[0] ""
 msgstr[1] "Fichiers statiques"
+msgstr[2] "Fichiers statiques"
 
 #: templates/debug_toolbar/panels/staticfiles.html:39
 #, python-format
@@ -600,6 +640,7 @@ msgid "%(payload_count)s file"
 msgid_plural "%(payload_count)s files"
 msgstr[0] "%(payload_count)s fichier"
 msgstr[1] "%(payload_count)s fichiers"
+msgstr[2] "%(payload_count)s fichiers"
 
 #: templates/debug_toolbar/panels/staticfiles.html:44
 msgid "Location"
@@ -614,12 +655,14 @@ msgid "Template path"
 msgid_plural "Template paths"
 msgstr[0] ""
 msgstr[1] "Chemin du gabarit"
+msgstr[2] "Chemin du gabarit"
 
 #: templates/debug_toolbar/panels/templates.html:13
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] ""
 msgstr[1] "Gabarit"
+msgstr[2] "Gabarit"
 
 #: templates/debug_toolbar/panels/templates.html:22
 #: templates/debug_toolbar/panels/templates.html:40
@@ -631,6 +674,7 @@ msgid "Context processor"
 msgid_plural "Context processors"
 msgstr[0] "Processeur de contexte"
 msgstr[1] "Processeurs de contexte"
+msgstr[2] "Processeurs de contexte"
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
@@ -673,16 +717,10 @@ msgid ""
 "The Django Debug Toolbar has intercepted a redirect to the above URL for "
 "debug viewing purposes. You can click the above link to continue with the "
 "redirect as normal."
-msgstr ""
-"La barre de débogage Django a intercepté une redirection vers l'URL ci-"
-"dessus afin de permettre la consultation des messages de débogage.  Vous "
-"pouvez cliquer sur le lien ci-dessus pour continuer normalement avec la "
-"redirection."
+msgstr "La barre de débogage Django a intercepté une redirection vers l'URL ci-dessus afin de permettre la consultation des messages de débogage.  Vous pouvez cliquer sur le lien ci-dessus pour continuer normalement avec la redirection."
 
 #: views.py:16
 msgid ""
 "Data for this panel isn't available anymore. Please reload the page and "
 "retry."
-msgstr ""
-"Les données de ce panneau ne sont plus disponibles. Rechargez la page et "
-"essayez à nouveau."
+msgstr "Les données de ce panneau ne sont plus disponibles. Rechargez la page et essayez à nouveau."
