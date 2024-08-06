@@ -1,9 +1,11 @@
 import contextlib
+import uuid
 from contextvars import ContextVar
 from os.path import join, normpath
 
 from django.conf import settings
 from django.contrib.staticfiles import finders, storage
+from django.dispatch import Signal
 from django.utils.functional import LazyObject
 from django.utils.translation import gettext_lazy as _, ngettext
 
@@ -29,7 +31,9 @@ class StaticFile:
 
 
 # This will collect the StaticFile instances across threads.
-used_static_files = ContextVar("djdt_static_used_static_files")
+used_static_files = ContextVar("djdt_static_used_static_files", default=[])
+request_id_context_var = ContextVar("djdt_request_id_store")
+record_static_file_signal = Signal()
 
 
 class DebugConfiguredStorage(LazyObject):
@@ -59,7 +63,12 @@ class DebugConfiguredStorage(LazyObject):
                     # The ContextVar wasn't set yet. Since the toolbar wasn't properly
                     # configured to handle this request, we don't need to capture
                     # the static file.
-                    used_static_files.get().append(StaticFile(path))
+                    request_id = request_id_context_var.get()
+                    record_static_file_signal.send(
+                        sender=self,
+                        staticfile=StaticFile(path),
+                        request_id=request_id,
+                    )
                 return super().url(path)
 
         self._wrapped = DebugStaticFilesStorage()
@@ -73,7 +82,7 @@ class StaticFilesPanel(panels.Panel):
     A panel to display the found staticfiles.
     """
 
-    is_async = False
+    is_async = True
     name = "Static files"
     template = "debug_toolbar/panels/staticfiles.html"
 
@@ -88,12 +97,25 @@ class StaticFilesPanel(panels.Panel):
         super().__init__(*args, **kwargs)
         self.num_found = 0
         self.used_paths = []
+        self.request_id = str(uuid.uuid4())
+
+    def _store_static_files_signal_handler(self, sender, staticfile, **kwargs):
+        with contextlib.suppress(LookupError):
+            # Only record the static file if the request_id matches the one
+            # that was used to create the panel.
+            # as sender of the signal and this handler will have multiple
+            # concurrent connections and we want to avoid storing of same
+            # staticfile from other connections as well.
+            if request_id_context_var.get() == self.request_id:
+                used_static_files.get().append(staticfile)
 
     def enable_instrumentation(self):
         storage.staticfiles_storage = DebugConfiguredStorage()
+        record_static_file_signal.connect(self._store_static_files_signal_handler)
+        request_id_context_var.set(self.request_id)
 
     def disable_instrumentation(self):
-        storage.staticfiles_storage = _original_storage
+        record_static_file_signal.disconnect(self._store_static_files_signal_handler)
 
     @property
     def num_used(self):
@@ -109,18 +131,20 @@ class StaticFilesPanel(panels.Panel):
             "%(num_used)s file used", "%(num_used)s files used", num_used
         ) % {"num_used": num_used}
 
-    def process_request(self, request):
-        reset_token = used_static_files.set([])
-        response = super().process_request(request)
-        # Make a copy of the used paths so that when the
-        # ContextVar is reset, our panel still has the data.
-        self.used_paths = used_static_files.get().copy()
-        # Reset the ContextVar to be empty again, removing the reference
-        # to the list of used files.
-        used_static_files.reset(reset_token)
-        return response
+    # def process_request(self, request):
+    #     reset_token = used_static_files.set([])
+    #     response = super().process_request(request)
+    #     # Make a copy of the used paths so that when the
+    #     # ContextVar is reset, our panel still has the data.
+    #     self.used_paths = used_static_files.get().copy()
+    #     # Reset the ContextVar to be empty again, removing the reference
+    #     # to the list of used files.
+    #     used_static_files.reset(reset_token)
+    #     return response
 
     def generate_stats(self, request, response):
+        self.used_paths = used_static_files.get().copy()
+        used_static_files.get().clear()
         self.record_stats(
             {
                 "num_found": self.num_found,
