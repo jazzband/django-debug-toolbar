@@ -30,8 +30,8 @@ class StaticFile:
         return storage.staticfiles_storage.url(self.path)
 
 
-# This will collect the StaticFile instances across threads.
-used_static_files = ContextVar("djdt_static_used_static_files", default=[])
+# This will record and map the StaticFile instances with its associated
+# request across threads and async concurrent requests state.
 request_id_context_var = ContextVar("djdt_request_id_store")
 record_static_file_signal = Signal()
 
@@ -99,23 +99,26 @@ class StaticFilesPanel(panels.Panel):
         self.used_paths = []
         self.request_id = str(uuid.uuid4())
 
+    @classmethod
+    def ready(cls):
+        storage.staticfiles_storage = DebugConfiguredStorage()
+
     def _store_static_files_signal_handler(self, sender, staticfile, **kwargs):
-        with contextlib.suppress(LookupError):
-            # Only record the static file if the request_id matches the one
-            # that was used to create the panel.
-            # as sender of the signal and this handler will have multiple
-            # concurrent connections and we want to avoid storing of same
-            # staticfile from other connections as well.
-            if request_id_context_var.get() == self.request_id:
-                used_static_files.get().append(staticfile)
+        # Only record the static file if the request_id matches the one
+        # that was used to create the panel.
+        # as sender of the signal and this handler will have multiple
+        # concurrent connections and we want to avoid storing of same
+        # staticfile from other connections as well.
+        if request_id_context_var.get() == self.request_id:
+            self.used_paths.append(staticfile)
 
     def enable_instrumentation(self):
-        storage.staticfiles_storage = DebugConfiguredStorage()
         record_static_file_signal.connect(self._store_static_files_signal_handler)
-        request_id_context_var.set(self.request_id)
+        self.ctx_token = request_id_context_var.set(self.request_id)
 
     def disable_instrumentation(self):
         record_static_file_signal.disconnect(self._store_static_files_signal_handler)
+        request_id_context_var.reset(self.ctx_token)
 
     @property
     def num_used(self):
@@ -131,20 +134,7 @@ class StaticFilesPanel(panels.Panel):
             "%(num_used)s file used", "%(num_used)s files used", num_used
         ) % {"num_used": num_used}
 
-    # def process_request(self, request):
-    #     reset_token = used_static_files.set([])
-    #     response = super().process_request(request)
-    #     # Make a copy of the used paths so that when the
-    #     # ContextVar is reset, our panel still has the data.
-    #     self.used_paths = used_static_files.get().copy()
-    #     # Reset the ContextVar to be empty again, removing the reference
-    #     # to the list of used files.
-    #     used_static_files.reset(reset_token)
-    #     return response
-
     def generate_stats(self, request, response):
-        self.used_paths = used_static_files.get().copy()
-        used_static_files.get().clear()
         self.record_stats(
             {
                 "num_found": self.num_found,
