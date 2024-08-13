@@ -9,7 +9,7 @@ Pending
   ``FORCE_SCRIPT_NAME`` was set.
 * Increase opacity of show Debug Toolbar handle to improve accessibility.
 * Changed the ``RedirectsPanel`` to be async compatible.
-* Fixed the Dark mode text needs higher contrast.
+* Increased the contrast of text with dark mode enabled.
 
 4.4.6 (2024-07-10)
 ------------------
