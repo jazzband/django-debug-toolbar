@@ -11,8 +11,9 @@ class RedirectsPanel(Panel):
     Panel that intercepts redirects and displays a page with debug info.
     """
 
-    is_async = True
     has_content = False
+
+    is_async = True
 
     nav_title = _("Intercept redirects")
 

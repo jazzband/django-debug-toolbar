@@ -14,6 +14,8 @@ class SettingsPanel(Panel):
 
     template = "debug_toolbar/panels/settings.html"
 
+    is_async = True
+
     nav_title = _("Settings")
 
     def title(self):
