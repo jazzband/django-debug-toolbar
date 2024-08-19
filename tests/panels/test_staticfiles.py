@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.shortcuts import render
+from django.test import AsyncRequestFactory
 
 from ..base import BaseTestCase
 
@@ -26,6 +28,17 @@ class StaticFilesPanelTestCase(BaseTestCase):
         self.assertEqual(
             self.panel.get_staticfiles_dirs(), finders.FileSystemFinder().locations
         )
+
+    async def test_store_staticfiles_with_async_context(self):
+        async def get_response(request):
+            # template contains one static file
+            return render(request, "staticfiles/async_static.html")
+
+        self._get_response = get_response
+        async_request = AsyncRequestFactory().get("/")
+        response = await self.panel.process_request(async_request)
+        self.panel.generate_stats(self.request, response)
+        self.assertNotEqual(self.panel.num_used, 0)
 
     def test_insert_content(self):
         """
