@@ -26,4 +26,3 @@ sphinx-rtd-theme>1
 # Other tools
 
 pre-commit
-transifex-client

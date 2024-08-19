@@ -4,48 +4,72 @@
 #
 # Translators:
 # Ali Soltani <alisoltanics@gmail.com>, 2021
+# Elyas Ebrahimpour <eliasebrahimpour@gmail.com>, 2024
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Debug Toolbar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-20 17:23+0100\n"
-"PO-Revision-Date: 2021-09-30 18:42+0000\n"
-"Last-Translator: Ali Soltani <alisoltanics@gmail.com>\n"
-"Language-Team: Persian (http://www.transifex.com/django-debug-toolbar/django-"
-"debug-toolbar/language/fa/)\n"
-"Language: fa\n"
+"POT-Creation-Date: 2024-08-06 07:12-0500\n"
+"PO-Revision-Date: 2010-11-30 00:00+0000\n"
+"Last-Translator: Elyas Ebrahimpour <eliasebrahimpour@gmail.com>, 2024\n"
+"Language-Team: Persian (http://app.transifex.com/django-debug-toolbar/django-debug-toolbar/language/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fa\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:15
+#: apps.py:18
 msgid "Debug Toolbar"
 msgstr "نوار ابزار دیباگ"
 
-#: panels/cache.py:180
+#: panels/alerts.py:67
+#, python-brace-format
+msgid ""
+"Form with id \"{form_id}\" contains file input, but does not have the "
+"attribute enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:70
+msgid ""
+"Form contains file input, but does not have the attribute "
+"enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:73
+#, python-brace-format
+msgid ""
+"Input element references form with id \"{form_id}\", but the form does not "
+"have the attribute enctype=\"multipart/form-data\"."
+msgstr ""
+
+#: panels/alerts.py:77
+msgid "Alerts"
+msgstr ""
+
+#: panels/cache.py:168
 msgid "Cache"
 msgstr "Cache"
 
-#: panels/cache.py:186
+#: panels/cache.py:174
 #, python-format
 msgid "%(cache_calls)d call in %(time).2fms"
 msgid_plural "%(cache_calls)d calls in %(time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cache_calls)d فراخوان در %(time).2f میلی‌ثانیه"
+msgstr[1] "%(cache_calls)d فراخوان در %(time).2f میلی‌ثانیه"
 
-#: panels/cache.py:195
+#: panels/cache.py:183
 #, python-format
 msgid "Cache calls from %(count)d backend"
 msgid_plural "Cache calls from %(count)d backends"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "فراخوان‌های کش از %(count)d بک‌اند"
+msgstr[1] "فراخوان‌های کش از %(count)d بک‌اندها"
 
 #: panels/headers.py:31
 msgid "Headers"
 msgstr "هدر ها"
 
-#: panels/history/panel.py:18 panels/history/panel.py:19
+#: panels/history/panel.py:19 panels/history/panel.py:20
 msgid "History"
 msgstr "تاریخچه"
 
@@ -53,21 +77,21 @@ msgstr "تاریخچه"
 msgid "Profiling"
 msgstr "نمایه سازی"
 
-#: panels/redirects.py:14
+#: panels/redirects.py:17
 msgid "Intercept redirects"
-msgstr ""
+msgstr "رهگیری تغییر مسیرها"
 
 #: panels/request.py:16
 msgid "Request"
 msgstr "ریکوئست"
 
-#: panels/request.py:36
+#: panels/request.py:38
 msgid "<no view>"
-msgstr ""
+msgstr "<بدون نمایش>"
 
-#: panels/request.py:53
+#: panels/request.py:55
 msgid "<unavailable>"
-msgstr ""
+msgstr "<در دسترس نیست>"
 
 #: panels/settings.py:17
 msgid "Settings"
@@ -82,182 +106,186 @@ msgstr "تنظیمات از %s"
 #, python-format
 msgid "%(num_receivers)d receiver of 1 signal"
 msgid_plural "%(num_receivers)d receivers of 1 signal"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_receivers)d گیرنده از 1 سیگنال"
+msgstr[1] "%(num_receivers)d گیرنده از 1 سیگنال"
 
 #: panels/signals.py:62
 #, python-format
 msgid "%(num_receivers)d receiver of %(num_signals)d signals"
 msgid_plural "%(num_receivers)d receivers of %(num_signals)d signals"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_receivers)d گیرنده از %(num_signals)d سیگنال"
+msgstr[1] "%(num_receivers)d گیرنده از %(num_signals)d سیگنال"
 
 #: panels/signals.py:67
 msgid "Signals"
-msgstr "signal ها"
+msgstr "سیگنال‌ها"
 
-#: panels/sql/panel.py:23
-msgid "Autocommit"
-msgstr "کامیت خودکار"
-
-#: panels/sql/panel.py:24
+#: panels/sql/panel.py:30 panels/sql/panel.py:41
 msgid "Read uncommitted"
-msgstr ""
+msgstr "خواندن بدون تاثیر"
 
-#: panels/sql/panel.py:25
+#: panels/sql/panel.py:31 panels/sql/panel.py:43
 msgid "Read committed"
-msgstr ""
+msgstr "خواندن با تاثیر"
 
-#: panels/sql/panel.py:26
+#: panels/sql/panel.py:32 panels/sql/panel.py:45
 msgid "Repeatable read"
-msgstr ""
+msgstr "خواندن تکرارپذیر"
 
-#: panels/sql/panel.py:27
+#: panels/sql/panel.py:33 panels/sql/panel.py:47
 msgid "Serializable"
 msgstr "قابل سریالایز شدن"
 
 #: panels/sql/panel.py:39
+msgid "Autocommit"
+msgstr "کامیت خودکار"
+
+#: panels/sql/panel.py:61 panels/sql/panel.py:71
 msgid "Idle"
 msgstr "IDLE"
 
-#: panels/sql/panel.py:40
+#: panels/sql/panel.py:62 panels/sql/panel.py:72
 msgid "Active"
 msgstr "فعال"
 
-#: panels/sql/panel.py:41
+#: panels/sql/panel.py:63 panels/sql/panel.py:73
 msgid "In transaction"
 msgstr "در تراکنش"
 
-#: panels/sql/panel.py:42
+#: panels/sql/panel.py:64 panels/sql/panel.py:74
 msgid "In error"
 msgstr "در خطا"
 
-#: panels/sql/panel.py:43
+#: panels/sql/panel.py:65 panels/sql/panel.py:75
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: panels/sql/panel.py:130
+#: panels/sql/panel.py:162
 msgid "SQL"
 msgstr "اس کیو ال"
 
-#: panels/sql/panel.py:135
+#: panels/sql/panel.py:168
 #, python-format
 msgid "%(query_count)d query in %(sql_time).2fms"
 msgid_plural "%(query_count)d queries in %(sql_time).2fms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(query_count)d کوئری در %(sql_time).2f میلی‌ثانیه"
+msgstr[1] "%(query_count)d کوئری در %(sql_time).2f میلی‌ثانیه"
 
-#: panels/sql/panel.py:147
+#: panels/sql/panel.py:180
 #, python-format
 msgid "SQL queries from %(count)d connection"
 msgid_plural "SQL queries from %(count)d connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "کوئری‌های SQL از %(count)d اتصال"
+msgstr[1] "کوئری‌های SQL از %(count)d اتصال"
 
-#: panels/staticfiles.py:84
+#: panels/staticfiles.py:82
 #, python-format
 msgid "Static files (%(num_found)s found, %(num_used)s used)"
-msgstr ""
+msgstr "فایل‌های استاتیک (%(num_found)s یافته شده، %(num_used)s استفاده شده)"
 
-#: panels/staticfiles.py:105
+#: panels/staticfiles.py:103
 msgid "Static files"
 msgstr "فایل های استاتیک"
 
-#: panels/staticfiles.py:111
+#: panels/staticfiles.py:109
 #, python-format
 msgid "%(num_used)s file used"
 msgid_plural "%(num_used)s files used"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num_used)s فایل استفاده شده"
+msgstr[1] "%(num_used)s فایل استفاده شده"
 
-#: panels/templates/panel.py:143
+#: panels/templates/panel.py:101
 msgid "Templates"
 msgstr "تمپلیت ها"
 
-#: panels/templates/panel.py:148
+#: panels/templates/panel.py:106
 #, python-format
 msgid "Templates (%(num_templates)s rendered)"
 msgstr "تمپلیت ها (%(num_templates)s rendered)"
 
-#: panels/templates/panel.py:180
+#: panels/templates/panel.py:195
 msgid "No origin"
 msgstr "بدون origin"
 
-#: panels/timer.py:25
+#: panels/timer.py:27
 #, python-format
 msgid "CPU: %(cum)0.2fms (%(total)0.2fms)"
-msgstr ""
+msgstr "پردازنده: %(cum)0.2f میلی‌ثانیه (%(total)0.2f میلی‌ثانیه)"
 
-#: panels/timer.py:30
+#: panels/timer.py:32
 #, python-format
 msgid "Total: %0.2fms"
-msgstr ""
+msgstr "مجموع: %0.2f میلی‌ثانیه"
 
-#: panels/timer.py:36 templates/debug_toolbar/panels/history.html:9
+#: panels/timer.py:38 templates/debug_toolbar/panels/history.html:9
 #: templates/debug_toolbar/panels/sql_explain.html:11
 #: templates/debug_toolbar/panels/sql_profile.html:12
 #: templates/debug_toolbar/panels/sql_select.html:11
 msgid "Time"
 msgstr "زمان"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 msgid "User CPU time"
 msgstr "زمان سی پی یو کاربر"
 
-#: panels/timer.py:44
+#: panels/timer.py:46
 #, python-format
 msgid "%(utime)0.3f msec"
-msgstr ""
+msgstr "%(utime)0.3f میلی‌ثانیه"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 msgid "System CPU time"
 msgstr "زمان CPU سیستم"
 
-#: panels/timer.py:45
+#: panels/timer.py:47
 #, python-format
 msgid "%(stime)0.3f msec"
-msgstr ""
+msgstr "%(stime)0.3f میلی‌ثانیه"
 
-#: panels/timer.py:46
+#: panels/timer.py:48
 msgid "Total CPU time"
 msgstr "زمان کل سی پی یو"
 
-#: panels/timer.py:46
+#: panels/timer.py:48
 #, python-format
 msgid "%(total)0.3f msec"
 msgstr "%(total)0.3f میلی ثانیه"
 
-#: panels/timer.py:47
+#: panels/timer.py:49
 msgid "Elapsed time"
 msgstr "زمان سپری شده"
 
-#: panels/timer.py:47
+#: panels/timer.py:49
 #, python-format
 msgid "%(total_time)0.3f msec"
-msgstr ""
+msgstr "%(total_time)0.3f میلی‌ثانیه"
 
-#: panels/timer.py:49
+#: panels/timer.py:51
 msgid "Context switches"
-msgstr ""
+msgstr "تغییرات زمینه"
 
-#: panels/timer.py:50
+#: panels/timer.py:52
 #, python-format
 msgid "%(vcsw)d voluntary, %(ivcsw)d involuntary"
-msgstr ""
+msgstr "%(vcsw)d اختیاری، %(ivcsw)d غیراختیاری"
 
 #: panels/versions.py:19
 msgid "Versions"
 msgstr "ورژن ها"
 
-#: templates/debug_toolbar/base.html:22
+#: templates/debug_toolbar/base.html:23
 msgid "Hide toolbar"
 msgstr "پنهان کردن toolbar"
 
-#: templates/debug_toolbar/base.html:22
+#: templates/debug_toolbar/base.html:23
 msgid "Hide"
 msgstr "پنهان کردن"
 
-#: templates/debug_toolbar/base.html:29
+#: templates/debug_toolbar/base.html:25 templates/debug_toolbar/base.html:26
+msgid "Toggle Theme"
+msgstr ""
+
+#: templates/debug_toolbar/base.html:35
 msgid "Show toolbar"
 msgstr "نمایش toolbar"
 
@@ -268,6 +296,14 @@ msgstr "غیر فعال کردن برای ریکوئست های پی در پی"
 #: templates/debug_toolbar/includes/panel_button.html:4
 msgid "Enable for next and successive requests"
 msgstr "فعال کردن برای ریکوئست های بعدی و پی در پی"
+
+#: templates/debug_toolbar/panels/alerts.html:4
+msgid "Alerts found"
+msgstr ""
+
+#: templates/debug_toolbar/panels/alerts.html:11
+msgid "No alerts found"
+msgstr ""
 
 #: templates/debug_toolbar/panels/cache.html:2
 msgid "Summary"
@@ -287,9 +323,7 @@ msgstr "Cache hits"
 
 #: templates/debug_toolbar/panels/cache.html:9
 msgid "Cache misses"
-msgstr ""
-"Cache misses\n"
-" "
+msgstr "عدم دسترسی به کش"
 
 #: templates/debug_toolbar/panels/cache.html:21
 msgid "Commands"
@@ -297,7 +331,7 @@ msgstr "دستورات"
 
 #: templates/debug_toolbar/panels/cache.html:39
 msgid "Calls"
-msgstr "call ها"
+msgstr "فراخوانی ها"
 
 #: templates/debug_toolbar/panels/cache.html:43
 #: templates/debug_toolbar/panels/sql.html:36
@@ -354,9 +388,7 @@ msgstr "محیط WSGI"
 msgid ""
 "Since the WSGI environ inherits the environment of the server, only a "
 "significant subset is shown below."
-msgstr ""
-"از آنجا که محیط WSGI محیط سرور را به ارث می برد ، فقط یک زیر مجموعه مهم در "
-"زیر نشان داده شده است."
+msgstr "از آنجا که محیط WSGI محیط سرور را به ارث می برد ، فقط یک زیر مجموعه مهم در زیر نشان داده شده است."
 
 #: templates/debug_toolbar/panels/history.html:10
 msgid "Method"
@@ -524,7 +556,7 @@ msgstr "کوئری SQL ای در این ریکوئست ثبت نشده است"
 
 #: templates/debug_toolbar/panels/sql_explain.html:4
 msgid "SQL explained"
-msgstr ""
+msgstr "توضیح SQL"
 
 #: templates/debug_toolbar/panels/sql_explain.html:9
 #: templates/debug_toolbar/panels/sql_profile.html:10
@@ -548,7 +580,7 @@ msgstr "خطا"
 
 #: templates/debug_toolbar/panels/sql_select.html:4
 msgid "SQL selected"
-msgstr ""
+msgstr "انتخاب شده SQL"
 
 #: templates/debug_toolbar/panels/sql_select.html:36
 msgid "Empty set"
@@ -616,13 +648,13 @@ msgstr[1] ""
 #: templates/debug_toolbar/panels/templates.html:22
 #: templates/debug_toolbar/panels/templates.html:40
 msgid "Toggle context"
-msgstr ""
+msgstr "تغییر متن"
 
 #: templates/debug_toolbar/panels/templates.html:33
 msgid "Context processor"
 msgid_plural "Context processors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "پردازشگر محیط"
+msgstr[1] "پردازشگرهای محیط"
 
 #: templates/debug_toolbar/panels/timer.html:2
 msgid "Resource usage"
@@ -642,7 +674,7 @@ msgstr "ویژگی زمان بندی"
 
 #: templates/debug_toolbar/panels/timer.html:37
 msgid "Milliseconds since navigation start (+length)"
-msgstr ""
+msgstr "میلی‌ثانیه از آغاز ناوبری (+length)"
 
 #: templates/debug_toolbar/panels/versions.html:10
 msgid "Package"
@@ -665,7 +697,7 @@ msgid ""
 "The Django Debug Toolbar has intercepted a redirect to the above URL for "
 "debug viewing purposes. You can click the above link to continue with the "
 "redirect as normal."
-msgstr ""
+msgstr "نوار ابزار اشکال‌زدای Django یک هدایت به URL بالا را به منظور مشاهده اشکال توسط ابزار اشکال‌زدای افزونه کرده است. می‌توانید بر روی پیوند بالا کلیک کنید تا با هدایت به صورت عادی ادامه دهید."
 
 #: views.py:16
 msgid ""

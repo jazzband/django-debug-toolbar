@@ -61,6 +61,7 @@
     --djdt-font-color: #8393a7;
     --djdt-background-color: #1e293bff;
     --djdt-panel-content-background-color: #0f1729ff;
+    --djdt-panel-content-table-background-color: var(--djdt-background-color);
     --djdt-panel-title-background-color: #242432;
     --djdt-djdt-panel-content-table-strip-background-color: #324154ff;
     --djdt--highlighted-background-color: #2c2a7dff;
@@ -301,7 +302,7 @@
     font-size: 22px;
     font-weight: bold;
     background: #000;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 #djDebug #djShowToolBarButton:hover {

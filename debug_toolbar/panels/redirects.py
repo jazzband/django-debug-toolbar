@@ -1,3 +1,5 @@
+from inspect import iscoroutine
+
 from django.template.response import SimpleTemplateResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -9,13 +11,15 @@ class RedirectsPanel(Panel):
     Panel that intercepts redirects and displays a page with debug info.
     """
 
-    is_async = False
+    is_async = True
     has_content = False
 
     nav_title = _("Intercept redirects")
 
-    def process_request(self, request):
-        response = super().process_request(request)
+    def _process_response(self, response):
+        """
+        Common response processing logic.
+        """
         if 300 <= response.status_code < 400:
             redirect_to = response.get("Location")
             if redirect_to:
@@ -33,3 +37,18 @@ class RedirectsPanel(Panel):
                 response.cookies = cookies
                 response.render()
         return response
+
+    async def aprocess_request(self, request, response_coroutine):
+        """
+        Async version of process_request. used for accessing the response
+        by awaiting it when running in ASGI.
+        """
+
+        response = await response_coroutine
+        return self._process_response(response)
+
+    def process_request(self, request):
+        response = super().process_request(request)
+        if iscoroutine(response):
+            return self.aprocess_request(request, response)
+        return self._process_response(response)

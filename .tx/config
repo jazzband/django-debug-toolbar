@@ -1,8 +1,10 @@
 [main]
-host = https://www.transifex.com
-lang_map = sr@latin:sr_Latn
+host     = https://www.transifex.com
+lang_map = sr@latin: sr_Latn
 
-[django-debug-toolbar.main]
-file_filter = debug_toolbar/locale/<lang>/LC_MESSAGES/django.po
-source_file = debug_toolbar/locale/en/LC_MESSAGES/django.po
-source_lang = en
+[o:django-debug-toolbar:p:django-debug-toolbar:r:main]
+file_filter            = debug_toolbar/locale/<lang>/LC_MESSAGES/django.po
+source_file            = debug_toolbar/locale/en/LC_MESSAGES/django.po
+source_lang            = en
+replace_edited_strings = false
+keep_translations      = false
