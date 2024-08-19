@@ -28,6 +28,8 @@ from debug_toolbar.panels import Panel
 class SignalsPanel(Panel):
     template = "debug_toolbar/panels/signals.html"
 
+    is_async = True
+
     SIGNALS = {
         "request_started": request_started,
         "request_finished": request_finished,

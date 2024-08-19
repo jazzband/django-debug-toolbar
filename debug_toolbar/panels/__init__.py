@@ -10,7 +10,7 @@ class Panel:
     Base class for panels.
     """
 
-    is_async = True
+    is_async = False
 
     def __init__(self, toolbar, get_response):
         self.toolbar = toolbar

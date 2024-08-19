@@ -30,6 +30,8 @@ class HeadersPanel(Panel):
 
     title = _("Headers")
 
+    is_async = True
+
     template = "debug_toolbar/panels/headers.html"
 
     def process_request(self, request):

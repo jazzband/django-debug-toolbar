@@ -58,6 +58,8 @@ class CachePanel(Panel):
 
     template = "debug_toolbar/panels/cache.html"
 
+    is_async = True
+
     _context_locals = Local()
 
     def __init__(self, *args, **kwargs):
