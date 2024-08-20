@@ -6,7 +6,7 @@ import re
 import socket
 from functools import lru_cache
 
-from asgiref.sync import iscoroutinefunction, markcoroutinefunction
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction, sync_to_async
 from django.conf import settings
 from django.utils.module_loading import import_string
 
@@ -112,7 +112,10 @@ class DebugToolbarMiddleware:
 
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
-            panel.enable_instrumentation()
+            if panel.panel_id == "SQLPanel":
+                await sync_to_async(panel.enable_instrumentation)()
+            else:
+                panel.enable_instrumentation()
         try:
             # Run panels like Django middleware.
             response = await toolbar.process_request(request)

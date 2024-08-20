@@ -113,7 +113,7 @@ class SQLPanel(Panel):
     the request.
     """
 
-    is_async = False
+    is_async = True
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
