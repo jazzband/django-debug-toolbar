@@ -17,8 +17,6 @@ class TimerPanel(Panel):
     Panel that displays the time a response took in milliseconds.
     """
 
-    is_async = False
-
     def nav_subtitle(self):
         stats = self.get_stats()
         if hasattr(self, "_start_rusage"):

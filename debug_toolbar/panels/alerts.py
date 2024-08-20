@@ -76,6 +76,8 @@ class AlertsPanel(Panel):
 
     title = _("Alerts")
 
+    is_async = True
+
     template = "debug_toolbar/panels/alerts.html"
 
     def __init__(self, *args, **kwargs):
