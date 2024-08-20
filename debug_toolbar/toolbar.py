@@ -12,6 +12,7 @@ from typing import OrderedDict
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.handlers.asgi import ASGIRequest
 from django.dispatch import Signal
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
@@ -106,7 +107,10 @@ class DebugToolbar:
             # incompatible with the toolbar until
             # https://github.com/jazzband/django-debug-toolbar/issues/1430
             # is resolved.
-            render_panels = self.request.META.get("wsgi.multiprocess", True)
+            if isinstance(self.request, ASGIRequest):
+                render_panels = False
+            else:
+                render_panels = self.request.META.get("wsgi.multiprocess", True)
         return render_panels
 
     # Handle storing toolbars in memory and fetching them later on

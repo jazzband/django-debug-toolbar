@@ -16,6 +16,7 @@ from debug_toolbar.panels.history.forms import HistoryStoreForm
 class HistoryPanel(Panel):
     """A panel to display History"""
 
+    is_async = True
     title = _("History")
     nav_title = _("History")
     template = "debug_toolbar/panels/history.html"
