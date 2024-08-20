@@ -12,7 +12,6 @@ from typing import OrderedDict
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.handlers.asgi import ASGIRequest
 from django.dispatch import Signal
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
@@ -102,14 +101,12 @@ class DebugToolbar:
         If False, the panels will be loaded via Ajax.
         """
         if (render_panels := self.config["RENDER_PANELS"]) is None:
-            # If wsgi.multiprocess is true then it is either being served
-            # from ASGI or multithreaded third-party WSGI server eg gunicorn.
-            # we need to make special handling for ASGI for supporting
-            # async context based requests.
-            if isinstance(self.request, ASGIRequest):
-                render_panels = False
-            else:
-                render_panels = self.request.META.get("wsgi.multiprocess", True)
+            # If wsgi.multiprocess isn't in the headers, then it's likely
+            # being served by ASGI. This type of set up is most likely
+            # incompatible with the toolbar until
+            # https://github.com/jazzband/django-debug-toolbar/issues/1430
+            # is resolved.
+            render_panels = self.request.META.get("wsgi.multiprocess", True)
         return render_panels
 
     # Handle storing toolbars in memory and fetching them later on
