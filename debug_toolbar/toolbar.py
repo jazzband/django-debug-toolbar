@@ -102,11 +102,10 @@ class DebugToolbar:
         If False, the panels will be loaded via Ajax.
         """
         if (render_panels := self.config["RENDER_PANELS"]) is None:
-            # If wsgi.multiprocess isn't in the headers, then it's likely
-            # being served by ASGI. This type of set up is most likely
-            # incompatible with the toolbar until
-            # https://github.com/jazzband/django-debug-toolbar/issues/1430
-            # is resolved.
+            # If wsgi.multiprocess is true then it is either being served
+            # from ASGI or multithreaded third-party WSGI server eg gunicorn.
+            # we need to make special check for ASGI for supporting
+            # async context based requests.
             if isinstance(self.request, ASGIRequest):
                 render_panels = False
             else:
