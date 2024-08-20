@@ -113,8 +113,8 @@ class StaticFilesPanel(panels.Panel):
             self.used_paths.append(staticfile)
 
     def enable_instrumentation(self):
-        record_static_file_signal.connect(self._store_static_files_signal_handler)
         self.ctx_token = request_id_context_var.set(self.request_id)
+        record_static_file_signal.connect(self._store_static_files_signal_handler)
 
     def disable_instrumentation(self):
         record_static_file_signal.disconnect(self._store_static_files_signal_handler)

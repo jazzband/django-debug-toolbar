@@ -38,7 +38,7 @@ class StaticFilesPanelTestCase(BaseTestCase):
         async_request = AsyncRequestFactory().get("/")
         response = await self.panel.process_request(async_request)
         self.panel.generate_stats(self.request, response)
-        self.assertNotEqual(self.panel.num_used, 0)
+        self.assertEqual(self.panel.num_used, 1)
 
     def test_insert_content(self):
         """
