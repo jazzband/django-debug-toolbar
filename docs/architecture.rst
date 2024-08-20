@@ -81,7 +81,7 @@ Problematic Parts
   the main benefit of the toolbar
 - Support for async and multi-threading: ``debug_toolbar.middleware.DebugToolbarMiddleware``
   is now async compatible and can process async requests. However certain
-  panels such as ``SQLPanel``, ``TimerPanel``,  ``StaticFilesPanel``,
+  panels such as ``SQLPanel``, ``TimerPanel``,
   ``RequestPanel``, ``HistoryPanel`` and ``ProfilingPanel`` aren't fully
   compatible and currently being worked on. For now, these panels
   are disabled by default when running in async environment.
