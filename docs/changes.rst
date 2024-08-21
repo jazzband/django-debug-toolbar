@@ -13,6 +13,8 @@ Pending
 * Add translations for Bulgarian and Korean.
 * Update translations for several languages.
 * Include new translatable strings for translation.
+* Fixed a crash which happened in the fallback case when session keys cannot be
+  sorted.
 
 4.4.6 (2024-07-10)
 ------------------
