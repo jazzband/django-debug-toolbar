@@ -66,6 +66,6 @@ class RequestPanel(Panel):
             except TypeError:
                 session_list = [
                     (k, request.session.get(k))
-                    for k in request.session.keys()  # noqa: SIM118 (it's not a dict)
+                    for k in request.session.keys()  # (it's not a dict)
                 ]
             self.record_stats({"session": {"list": session_list}})

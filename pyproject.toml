@@ -74,16 +74,14 @@ lint.extend-select = [
   "PGH",    # pygrep-hooks
   "PIE",    # flake8-pie
   "RUF100", # Unused noqa directive
-  "SIM",    # flake8-simplify
   "SLOT",   # flake8-slots
   "UP",     # pyupgrade
   "W",      # pycodestyle warnings
 ]
 lint.extend-ignore = [
-  "B905",   # Allow zip() without strict=
-  "E501",   # Ignore line length violations
-  "SIM108", # Use ternary operator instead of if-else-block
-  "UP031",  # It's not always wrong to use percent-formatting
+  "B905",  # Allow zip() without strict=
+  "E501",  # Ignore line length violations
+  "UP031", # It's not always wrong to use percent-formatting
 ]
 lint.per-file-ignores."*/migrat*/*" = [
   "N806", # Allow using PascalCase model names in migrations
