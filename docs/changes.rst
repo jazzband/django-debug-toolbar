@@ -4,6 +4,7 @@ Change log
 Pending
 -------
 
+* Added Django 5.1 to the CI matrix.
 * Support select and explain buttons for ``UNION`` queries on PostgreSQL.
 * Fixed internal toolbar requests being instrumented if the Django setting
   ``FORCE_SCRIPT_NAME`` was set.
@@ -13,6 +14,8 @@ Pending
 * Add translations for Bulgarian and Korean.
 * Update translations for several languages.
 * Include new translatable strings for translation.
+* Fixed a crash which happened in the fallback case when session keys cannot be
+  sorted.
 
 4.4.6 (2024-07-10)
 ------------------
