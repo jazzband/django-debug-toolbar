@@ -6,7 +6,7 @@ Pympler
 Roboto
 Transifex
 Werkzeug
-aenable_instrumentation
+aenable
 ajax
 asgi
 async
@@ -17,7 +17,6 @@ checkbox
 contrib
 dicts
 django
-enable_instrumentation
 fallbacks
 flamegraph
 flatpages
