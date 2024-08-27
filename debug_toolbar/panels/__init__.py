@@ -156,7 +156,7 @@ class Panel:
         called early in ``DebugToolbarMiddleware``. It should be idempotent.
 
         Add aenable_instrumentation method to the Panel class to support async
-        instrumentation logic
+        instrumentation logic.
         """
 
     def disable_instrumentation(self):
