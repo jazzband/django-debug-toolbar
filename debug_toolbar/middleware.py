@@ -6,7 +6,7 @@ import re
 import socket
 from functools import lru_cache
 
-from asgiref.sync import iscoroutinefunction, markcoroutinefunction, sync_to_async
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.conf import settings
 from django.utils.module_loading import import_string
 
@@ -112,8 +112,8 @@ class DebugToolbarMiddleware:
 
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
-            if panel.panel_id == "SQLPanel":
-                await sync_to_async(panel.enable_instrumentation)()
+            if hasattr(panel, "aenable_instrumentation"):
+                await panel.aenable_instrumentation()
             else:
                 panel.enable_instrumentation()
         try:

@@ -2,6 +2,7 @@ import uuid
 from collections import defaultdict
 from copy import copy
 
+from asgiref.sync import sync_to_async
 from django.db import connections
 from django.urls import path
 from django.utils.translation import gettext_lazy as _, ngettext
@@ -191,6 +192,13 @@ class SQLPanel(Panel):
             path("sql_explain/", views.sql_explain, name="sql_explain"),
             path("sql_profile/", views.sql_profile, name="sql_profile"),
         ]
+
+    async def aenable_instrumentation(self):
+        """
+        Async version of enable_instrumentation.
+        For async-capable panels that has async logic for instrumentation
+        """
+        await sync_to_async(self.enable_instrumentation)()
 
     def enable_instrumentation(self):
         # This is thread-safe because database connections are thread-local.
