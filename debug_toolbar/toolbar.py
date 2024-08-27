@@ -109,7 +109,7 @@ class DebugToolbar:
             if isinstance(self.request, ASGIRequest):
                 render_panels = False
             else:
-                # The wsgi.multiprocess case of being True isn't supported until the 
+                # The wsgi.multiprocess case of being True isn't supported until the
                 # toolbar has resolved the following issue:
                 # This type of set up is most likely
                 # https://github.com/jazzband/django-debug-toolbar/issues/1430
