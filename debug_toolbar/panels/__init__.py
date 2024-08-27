@@ -155,7 +155,7 @@ class Panel:
         Unless the toolbar or this panel is disabled, this method will be
         called early in ``DebugToolbarMiddleware``. It should be idempotent.
 
-        Add ``aenable_instrumentation`` method to the Panel class to support async
+        Add aenable_instrumentation method to the Panel class to support async
         instrumentation logic.
         """
 
