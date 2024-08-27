@@ -17,6 +17,7 @@ checkbox
 contrib
 dicts
 django
+enable_instrumentation
 fallbacks
 flamegraph
 flatpages

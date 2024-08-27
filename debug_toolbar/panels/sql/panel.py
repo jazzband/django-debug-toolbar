@@ -195,8 +195,8 @@ class SQLPanel(Panel):
 
     async def aenable_instrumentation(self):
         """
-        Async version of enable_instrumentation.
-        For async-capable panels that has async logic for instrumentation
+        Async version of enable instrumentation.
+        For async capable panels having async logic for instrumentation.
         """
         await sync_to_async(self.enable_instrumentation)()
 
