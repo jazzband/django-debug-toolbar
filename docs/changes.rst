@@ -4,6 +4,12 @@ Change log
 Pending
 -------
 
+5.0.0-alpha (2024-09-01)
+------------------------
+
+* Support async applications, but not concurrent requests from
+  `Google Summer of Code Project 2024
+  <https://summerofcode.withgoogle.com/programs/2024/projects/iXVvyGYp>`__.
 * Added Django 5.1 to the CI matrix.
 * Support select and explain buttons for ``UNION`` queries on PostgreSQL.
 * Fixed internal toolbar requests being instrumented if the Django setting
