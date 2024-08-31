@@ -23,6 +23,7 @@ flatpages
 frontend
 htmx
 inlining
+instrumentation
 isort
 jQuery
 jinja

@@ -155,8 +155,8 @@ class Panel:
         Unless the toolbar or this panel is disabled, this method will be
         called early in ``DebugToolbarMiddleware``. It should be idempotent.
 
-        Add aenable method in panel class in order
-        to support async logic if required.
+        Add aenable_instrumentation method in panel class if needed in order
+        to support async intrumentation logic.
         """
 
     def disable_instrumentation(self):
