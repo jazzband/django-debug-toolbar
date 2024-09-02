@@ -20,6 +20,7 @@ LOGGING = {  # avoids spurious output in tests
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -29,6 +30,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "tests",
 ]
+
+ASGI_APPLICATION = "tests.asgi.application"
 
 USE_GIS = os.getenv("DB_BACKEND") == "postgis"
 
