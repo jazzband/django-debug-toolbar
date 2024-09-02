@@ -6,7 +6,9 @@ Pympler
 Roboto
 Transifex
 Werkzeug
+aenable
 ajax
+asgi
 async
 backend
 backends
@@ -21,6 +23,7 @@ flatpages
 frontend
 htmx
 inlining
+instrumentation
 isort
 jQuery
 jinja
