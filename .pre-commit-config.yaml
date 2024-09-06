@@ -10,7 +10,7 @@ repos:
     -   id: file-contents-sorter
         files: docs/spelling_wordlist.txt
 -   repo: https://github.com/pycqa/doc8
-    rev: v1.1.1
+    rev: v1.1.2
     hooks:
     -   id: doc8
 -   repo: https://github.com/adamchainz/django-upgrade
@@ -32,7 +32,7 @@ repos:
         args:
         - --trailing-comma=es5
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.9.0
+    rev: v9.9.1
     hooks:
     -   id: eslint
         additional_dependencies:
@@ -44,7 +44,7 @@ repos:
         args:
         - --fix
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.6.1'
+    rev: 'v0.6.3'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]

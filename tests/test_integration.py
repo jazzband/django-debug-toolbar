@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.test import RequestFactory
+from django.test import AsyncRequestFactory, RequestFactory
 from django.test.utils import override_settings
 
 from debug_toolbar.forms import SignedDataForm
@@ -125,6 +125,22 @@ class DebugToolbarTestCase(BaseTestCase):
 
         request.META.pop("wsgi.multiprocess")
         self.assertTrue(toolbar.should_render_panels())
+
+    def test_should_render_panels_asgi(self):
+        """
+        The toolbar not should render the panels on each request when wsgi.multiprocess
+        is True or missing in case of async context rather than multithreaded
+        wsgi.
+        """
+        async_request = AsyncRequestFactory().get("/")
+        # by default ASGIRequest will have wsgi.multiprocess set to True
+        # but we are still assigning this to true cause this could change
+        # and we specifically need to check that method returns false even with
+        # wsgi.multiprocess set to true
+        async_request.META["wsgi.multiprocess"] = True
+        toolbar = DebugToolbar(async_request, self.get_response)
+        toolbar.config["RENDER_PANELS"] = None
+        self.assertFalse(toolbar.should_render_panels())
 
     def _resolve_stats(self, path):
         # takes stats from Request panel
