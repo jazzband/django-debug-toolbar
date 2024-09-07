@@ -264,11 +264,16 @@ class DebugToolbarTestCase(BaseTestCase):
             len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2
         )
 
-    # async def test_concurrent_async_sql_page(self):
-    #     response = await self.async_client.get("/async_execute_sql_concurrently/")
-    #     self.assertEqual(
-    #         len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2
-    #     )
+
+# Concurrent database queries are not fully supported by Django's backend with
+# psycopg2 and psycopg3's async support isn't integrated yet. As a result, in
+# ASGI environments(especially with the Django Debug Toolbar), either
+# deadlocks can occure in certain cases like when running
+# tests/views/async_execute_sql_concurrently in ASGI environment
+# or queries will execute synchronously. Check ou
+# https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
+# https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
+# https://github.com/django/deps/blob/main/accepted/0009-async.rst#the-orm
 
 
 @override_settings(DEBUG=True)
