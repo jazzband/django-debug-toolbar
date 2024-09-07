@@ -102,11 +102,6 @@ class DebugToolbarMiddleware:
         return self._postprocess(request, response, toolbar)
 
     async def __acall__(self, request):
-        #  A flag to check if all the client calls are going through acall
-        # and envirnemnt is truely async
-
-        print("__acall__ ran!")
-
         # Decide whether the toolbar is active for this request.
         show_toolbar = get_show_toolbar()
         if not show_toolbar(request) or DebugToolbar.is_toolbar_request(request):

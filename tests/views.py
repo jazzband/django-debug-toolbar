@@ -15,7 +15,15 @@ def execute_sql(request):
 
 
 async def async_execute_sql(request):
-    await sync_to_async(list)(User.objects.all())
+    list_stor = []
+
+    # make async query filter, which is async compatible with async for.
+    async for user in User.objects.filter(username="test"):
+        list_stor.append(user)
+
+    # make async query aget
+    async_fetched_user = await User.objects.filter(username="test").afirst()
+    list_stor.append(async_fetched_user)
     return render(request, "base.html")
 
 

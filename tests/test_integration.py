@@ -288,7 +288,7 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_async_sql_page(self):
         response = self.client.get("/async_execute_sql/")
         self.assertEqual(
-            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2
         )
 
     def test_concurrent_async_sql_page(self):
@@ -301,15 +301,9 @@ class DebugToolbarTestCase(BaseTestCase):
 @override_settings(DEBUG=True)
 class DebugToolbarIntegrationTestCase(IntegrationTestCase):
     def test_middleware(self):
-        print("testing middleware now")
         response = self.client.get("/execute_sql/")
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "djDebug")
-
-    # async def test_middleware_in_async_mode(self):
-    #     response = await self.async_client.get("/execute_sql/")
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, "djDebug")
 
     @override_settings(DEFAULT_CHARSET="iso-8859-1")
     def test_non_utf8_charset(self):
