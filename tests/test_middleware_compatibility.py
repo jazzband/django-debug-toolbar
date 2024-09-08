@@ -14,7 +14,7 @@ class MiddlewareSyncAsyncCompatibilityTestCase(TestCase):
     @override_settings(DEBUG=True)
     def test_sync_mode(self):
         """
-        test middlware switches to sync (__call__) based on get_response type
+        test middleware switches to sync (__call__) based on get_response type
         """
 
         request = self.factory.get("/")
@@ -30,7 +30,7 @@ class MiddlewareSyncAsyncCompatibilityTestCase(TestCase):
     @override_settings(DEBUG=True)
     async def test_async_mode(self):
         """
-        test middlware switches to async (__acall__) based on get_response type
+        test middleware switches to async (__acall__) based on get_response type
         and returns a coroutine
         """
 
