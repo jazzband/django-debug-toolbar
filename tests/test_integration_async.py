@@ -205,14 +205,17 @@ class DebugToolbarTestCase(BaseTestCase):
 
 
 # Concurrent database queries are not fully supported by Django's backend with
-# current integrated database drivers like psycopg2, mysqlclient etc and
-# support for async drivers like psycopg3's isn't integrated yet.
+# current integrated database drivers like psycopg2
+# (considering postgresql as an example) and
+# support for async drivers like psycopg3 isn't integrated yet.
 # As a result, in ASGI environments(especially with the Django Debug Toolbar),
 # either deadlocks can occure in certain cases like when running
 # tests/views/async_execute_sql_concurrently in ASGI environment
 # or queries will execute synchronously. Check out
 # https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
 # https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
+
+# Work being done so far for asynchrounous database backend
 # https://github.com/django/deps/blob/main/accepted/0009-async.rst#the-orm
 
 
