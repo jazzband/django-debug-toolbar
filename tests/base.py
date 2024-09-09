@@ -43,6 +43,8 @@ class AsyncToolbarTestClient(AsyncClient):
     async def request(self, **request):
         # Use a thread/async task context-local variable to guard against a
         # concurrent _created signal from a different thread/task.
+        # In cases testsuite will have both regular and async tests or
+        # multiple async tests running in an eventloop making async_client calls.
         data_contextvar.set(None)
 
         def handle_toolbar_created(sender, toolbar=None, **kwargs):

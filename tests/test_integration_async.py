@@ -44,12 +44,12 @@ class BuggyPanel(Panel):
 class DebugToolbarTestCase(BaseTestCase):
     _is_async = True
 
-    async def test_show_toolbar(self):
-        self.assertTrue(show_toolbar(self.request))
+    def test_show_toolbar(self):
+        """
+        Just to verify that show_toolbar() works with an ASGIRequest too
+        """
 
-    async def test_show_toolbar_DEBUG(self):
-        with self.settings(DEBUG=False):
-            self.assertFalse(show_toolbar(self.request))
+        self.assertTrue(show_toolbar(self.request))
 
     async def test_show_toolbar_INTERNAL_IPS(self):
         with self.settings(INTERNAL_IPS=[]):
@@ -85,67 +85,6 @@ class DebugToolbarTestCase(BaseTestCase):
             response = await self.async_client.get("/regular/basic/")
             self.assertEqual(response.status_code, 200)
             self.assertContains(response, "djDebug")  # toolbar
-
-    # async def test_should_render_panels_RENDER_PANELS(self):
-    #     """
-    #     The toolbar should force rendering panels on each request
-    #     based on the RENDER_PANELS setting.
-    #     """
-    #     toolbar = DebugToolbar(self.request, self.get_response)
-    #     self.assertFalse(toolbar.should_render_panels())
-    #     toolbar.config["RENDER_PANELS"] = True
-    #     self.assertTrue(toolbar.should_render_panels())
-    #     toolbar.config["RENDER_PANELS"] = None
-    #     self.assertTrue(toolbar.should_render_panels())
-
-    # def test_should_render_panels_multiprocess(self):
-    #     """
-    #     The toolbar should render the panels on each request when wsgi.multiprocess
-    #     is True or missing.
-    #     """
-    #     request = rf.get("/")
-    #     request.META["wsgi.multiprocess"] = True
-    #     toolbar = DebugToolbar(request, self.get_response)
-    #     toolbar.config["RENDER_PANELS"] = None
-    #     self.assertTrue(toolbar.should_render_panels())
-
-    #     request.META["wsgi.multiprocess"] = False
-    #     self.assertFalse(toolbar.should_render_panels())
-
-    #     request.META.pop("wsgi.multiprocess")
-    #     self.assertTrue(toolbar.should_render_panels())
-
-    # def _resolve_stats(self, path):
-    #     # takes stats from Request panel
-    #     request = rf.get(path)
-    #     panel = self.toolbar.get_panel_by_id("RequestPanel")
-    #     response = panel.process_request(request)
-    #     panel.generate_stats(request, response)
-    #     return panel.get_stats()
-
-    # def test_url_resolving_positional(self):
-    #     stats = self._resolve_stats("/resolving1/a/b/")
-    #     self.assertEqual(stats["view_urlname"], "positional-resolving")
-    #     self.assertEqual(stats["view_func"], "tests.views.resolving_view")
-    #     self.assertEqual(stats["view_args"], ("a", "b"))
-    #     self.assertEqual(stats["view_kwargs"], {})
-
-    # def test_url_resolving_named(self):
-    #     stats = self._resolve_stats("/resolving2/a/b/")
-    #     self.assertEqual(stats["view_args"], ())
-    #     self.assertEqual(stats["view_kwargs"], {"arg1": "a", "arg2": "b"})
-
-    # def test_url_resolving_mixed(self):
-    #     stats = self._resolve_stats("/resolving3/a/")
-    #     self.assertEqual(stats["view_args"], ("a",))
-    #     self.assertEqual(stats["view_kwargs"], {"arg2": "default"})
-
-    # def test_url_resolving_bad(self):
-    #     stats = self._resolve_stats("/non-existing-url/")
-    #     self.assertEqual(stats["view_urlname"], "None")
-    #     self.assertEqual(stats["view_args"], "None")
-    #     self.assertEqual(stats["view_kwargs"], "None")
-    #     self.assertEqual(stats["view_func"], "<no view>")
 
     async def test_middleware_response_insertion(self):
         async def get_response(request):
@@ -266,11 +205,12 @@ class DebugToolbarTestCase(BaseTestCase):
 
 
 # Concurrent database queries are not fully supported by Django's backend with
-# psycopg2 and psycopg3's async support isn't integrated yet. As a result, in
-# ASGI environments(especially with the Django Debug Toolbar), either
-# deadlocks can occure in certain cases like when running
+# current integrated database drivers like psycopg2, mysqlclient etc and
+# support for async drivers like psycopg3's isn't integrated yet.
+# As a result, in ASGI environments(especially with the Django Debug Toolbar),
+# either deadlocks can occure in certain cases like when running
 # tests/views/async_execute_sql_concurrently in ASGI environment
-# or queries will execute synchronously. Check ou
+# or queries will execute synchronously. Check out
 # https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
 # https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
 # https://github.com/django/deps/blob/main/accepted/0009-async.rst#the-orm

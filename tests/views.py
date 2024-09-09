@@ -15,15 +15,21 @@ def execute_sql(request):
 
 
 async def async_execute_sql(request):
-    list_stor = []
+    """
+    Some query API can be executed asynchronously but some requires
+    async version of itself.
 
-    # make async query filter, which is async compatible with async for.
+    https://docs.djangoproject.com/en/5.1/topics/db/queries/#asynchronous-queries
+    """
+    list_store = []
+
+    # make async query with filter, which is compatible with async for.
     async for user in User.objects.filter(username="test"):
-        list_stor.append(user)
+        list_store.append(user)
 
-    # make async query aget
+    # make async query with afirst
     async_fetched_user = await User.objects.filter(username="test").afirst()
-    list_stor.append(async_fetched_user)
+    list_store.append(async_fetched_user)
     return render(request, "base.html")
 
 
