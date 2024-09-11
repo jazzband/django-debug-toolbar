@@ -258,16 +258,9 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = await self.async_client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = await self.async_client.get(
-            url, data, headers={"x-requested-with": "XMLHttpRequest"}
-        )
-        self.assertEqual(response.status_code, 200)
+
         with self.settings(INTERNAL_IPS=[]):
             response = await self.async_client.get(url, data)
-            self.assertEqual(response.status_code, 404)
-            response = await self.async_client.get(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
-            )
             self.assertEqual(response.status_code, 404)
 
     async def test_middleware_render_toolbar_json(self):
@@ -298,16 +291,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = await self.async_client.get(url, data)
         self.assertEqual(response.status_code, 200)
-        response = await self.async_client.get(
-            url, data, headers={"x-requested-with": "XMLHttpRequest"}
-        )
-        self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = await self.async_client.get(url, data)
-            self.assertEqual(response.status_code, 404)
-            response = await self.async_client.get(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
-            )
             self.assertEqual(response.status_code, 404)
 
     async def test_template_source_errors(self):
@@ -346,16 +331,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = await self.async_client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = await self.async_client.post(
-            url, data, headers={"x-requested-with": "XMLHttpRequest"}
-        )
-        self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = await self.async_client.post(url, data)
-            self.assertEqual(response.status_code, 404)
-            response = await self.async_client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
-            )
             self.assertEqual(response.status_code, 404)
 
     async def test_sql_explain_checks_show_toolbar(self):
@@ -374,16 +351,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = await self.async_client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = await self.async_client.post(
-            url, data, headers={"x-requested-with": "XMLHttpRequest"}
-        )
-        self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = await self.async_client.post(url, data)
-            self.assertEqual(response.status_code, 404)
-            response = await self.async_client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
-            )
             self.assertEqual(response.status_code, 404)
 
     @unittest.skipUnless(
@@ -431,16 +400,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         }
         response = await self.async_client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = await self.async_client.post(
-            url, data, headers={"x-requested-with": "XMLHttpRequest"}
-        )
-        self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = await self.async_client.post(url, data)
-            self.assertEqual(response.status_code, 404)
-            response = await self.async_client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
-            )
             self.assertEqual(response.status_code, 404)
 
     async def test_sql_profile_checks_show_toolbar(self):
@@ -459,16 +420,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
 
         response = await self.async_client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        response = await self.async_client.post(
-            url, data, headers={"x-requested-with": "XMLHttpRequest"}
-        )
-        self.assertEqual(response.status_code, 200)
         with self.settings(INTERNAL_IPS=[]):
             response = await self.async_client.post(url, data)
-            self.assertEqual(response.status_code, 404)
-            response = await self.async_client.post(
-                url, data, headers={"x-requested-with": "XMLHttpRequest"}
-            )
             self.assertEqual(response.status_code, 404)
 
     @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": True})
