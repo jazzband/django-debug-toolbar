@@ -7,7 +7,7 @@ from django.core.cache import cache
 from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.test import AsyncRequestFactory, RequestFactory
+from django.test import AsyncRequestFactory
 from django.test.utils import override_settings
 
 from debug_toolbar.forms import SignedDataForm
