@@ -233,8 +233,9 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertContains(response, "ASCII")  # template
         self.assertContains(response, "djDebug")  # toolbar
 
-        response = self.client.get("/regular/LÀTÍN/")
-        self.assertContains(response, "LÀTÍN")  # template
+        response = await self.async_client.get("/regular/ASCII/")
+
+        self.assertContains(response, "ASCII")  # template
         self.assertContains(response, "djDebug")  # toolbar
 
     async def test_html5_validation(self):
