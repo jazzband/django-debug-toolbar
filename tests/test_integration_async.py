@@ -18,7 +18,6 @@ from debug_toolbar.toolbar import DebugToolbar
 from .base import BaseTestCase, IntegrationTestCase
 from .views import regular_view
 
-rf = RequestFactory()
 arf = AsyncRequestFactory()
 
 
@@ -26,7 +25,7 @@ def toolbar_store_id():
     def get_response(request):
         return HttpResponse()
 
-    toolbar = DebugToolbar(rf.get("/"), get_response)
+    toolbar = DebugToolbar(arf.get("/"), get_response)
     toolbar.store()
     return toolbar.store_id
 
@@ -143,13 +142,13 @@ class DebugToolbarTestCase(BaseTestCase):
         self.assertEqual(len(response.toolbar.get_panel_by_id("CachePanel").calls), 0)
 
     async def test_is_toolbar_request(self):
-        request = rf.get("/__debug__/render_panel/")
+        request = arf.get("/__debug__/render_panel/")
         self.assertTrue(self.toolbar.is_toolbar_request(request))
 
-        request = rf.get("/invalid/__debug__/render_panel/")
+        request = arf.get("/invalid/__debug__/render_panel/")
         self.assertFalse(self.toolbar.is_toolbar_request(request))
 
-        request = rf.get("/render_panel/")
+        request = arf.get("/render_panel/")
         self.assertFalse(self.toolbar.is_toolbar_request(request))
 
     @override_settings(ROOT_URLCONF="tests.urls_invalid")
@@ -208,14 +207,16 @@ class DebugToolbarTestCase(BaseTestCase):
 # current integrated database drivers like psycopg2
 # (considering postgresql as an example) and
 # support for async drivers like psycopg3 isn't integrated yet.
-# As a result, in ASGI environments(especially with the Django Debug Toolbar),
-# either deadlocks can occure in certain cases like when running
-# tests/views/async_execute_sql_concurrently in ASGI environment
-# or queries will execute synchronously. Check out
-# https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
-# https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
+# As a result, regardless of ASGI/async or WSGI/sync or any other attempts to make
+# concurrent database queries like tests/views/async_db_concurrent,
+# Django will still execute them synchronously.
 
-# Work being done so far for asynchrounous database backend
+# Check out the following links for more information:
+
+# https://forum.djangoproject.com/t/are-concurrent-database-queries-in-asgi-a-thing/24136/2
+# https://github.com/jazzband/django-debug-toolbar/issues/1828
+
+# Work that is done so far for asynchrounous database backend
 # https://github.com/django/deps/blob/main/accepted/0009-async.rst#the-orm
 
 
@@ -519,29 +520,6 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.status_code, 200)
         # Link to LOCATION header.
         self.assertIn(b'href="/regular/redirect/"', response.content)
-
-    # async def test_server_timing_headers(self):
-    #     response = await self.async_client.get("/execute_sql/")
-    #     server_timing = response["Server-Timing"]
-    #     expected_partials = [
-    #         r'TimerPanel_utime;dur=(\d)*(\.(\d)*)?;desc="User CPU time", ',
-    #         r'TimerPanel_stime;dur=(\d)*(\.(\d)*)?;desc="System CPU time", ',
-    #         r'TimerPanel_total;dur=(\d)*(\.(\d)*)?;desc="Total CPU time", ',
-    #         r'TimerPanel_total_time;dur=(\d)*(\.(\d)*)?;desc="Elapsed time", ',
-    #         r'SQLPanel_sql_time;dur=(\d)*(\.(\d)*)?;desc="SQL 1 queries", ',
-    #         r'CachePanel_total_time;dur=0;desc="Cache 0 Calls"',
-    #     ]
-    #     for expected in expected_partials:
-    #         self.assertTrue(re.compile(expected).search(server_timing))
-
-    # @override_settings(DEBUG_TOOLBAR_CONFIG={"RENDER_PANELS": True})
-    # async def test_timer_panel(self):
-    #     response = await self.async_client.get("/regular/basic/")
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(
-    #         response,
-    #         '<script type="module" src="/static/debug_toolbar/js/timer.js" async>',
-    #     )
 
     async def test_auth_login_view_without_redirect(self):
         response = await self.async_client.get("/login_without_redirect/")
