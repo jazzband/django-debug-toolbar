@@ -1,11 +1,13 @@
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 
+from debug_toolbar._compat import login_not_required
 from debug_toolbar.decorators import render_with_toolbar_language, require_show_toolbar
 from debug_toolbar.panels.history.forms import HistoryStoreForm
 from debug_toolbar.toolbar import DebugToolbar
 
 
+@login_not_required
 @require_show_toolbar
 @render_with_toolbar_language
 def history_sidebar(request):
@@ -37,6 +39,7 @@ def history_sidebar(request):
     return HttpResponseBadRequest("Form errors")
 
 
+@login_not_required
 @require_show_toolbar
 @render_with_toolbar_language
 def history_refresh(request):
