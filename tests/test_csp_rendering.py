@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Dict, cast
 from xml.etree.ElementTree import Element
 
@@ -12,7 +14,7 @@ from debug_toolbar.toolbar import DebugToolbar
 from .base import IntegrationTestCase
 
 
-def get_namespaces(element: Element) -> Dict[str, str]:
+def get_namespaces(element: Element) -> dict[str, str]:
     """
     Return the default `xmlns`. See
     https://docs.python.org/3/library/xml.etree.elementtree.html#parsing-xml-with-namespaces
@@ -31,7 +33,7 @@ class CspRenderingTestCase(IntegrationTestCase):
         self.parser = HTMLParser()
 
     def _fail_if_missing(
-        self, root: Element, path: str, namespaces: Dict[str, str], nonce: str
+        self, root: Element, path: str, namespaces: dict[str, str], nonce: str
     ):
         """
         Search elements, fail if a `nonce` attribute is missing on them.
@@ -41,7 +43,7 @@ class CspRenderingTestCase(IntegrationTestCase):
             if item.attrib.get("nonce") != nonce:
                 raise self.failureException(f"{item} has no nonce attribute.")
 
-    def _fail_if_found(self, root: Element, path: str, namespaces: Dict[str, str]):
+    def _fail_if_found(self, root: Element, path: str, namespaces: dict[str, str]):
         """
         Search elements, fail if a `nonce` attribute is found on them.
         """
@@ -56,8 +58,8 @@ class CspRenderingTestCase(IntegrationTestCase):
             default_msg = ["Content is invalid HTML:"]
             lines = content.split(b"\n")
             for position, error_code, data_vars in parser.errors:
-                default_msg.append("  %s" % E[error_code] % data_vars)
-                default_msg.append("    %r" % lines[position[0] - 1])
+                default_msg.append(f"  {E[error_code]}" % data_vars)
+                default_msg.append(f"    {lines[position[0] - 1]!r}")
             msg = self._formatMessage(None, "\n".join(default_msg))
             raise self.failureException(msg)
 

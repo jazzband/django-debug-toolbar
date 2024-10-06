@@ -218,7 +218,7 @@ def debug_toolbar_urls(prefix="__debug__"):
         return []
     return [
         re_path(
-            r"^%s/" % re.escape(prefix.lstrip("/")),
+            r"^{}/".format(re.escape(prefix.lstrip("/"))),
             include("debug_toolbar.urls"),
         ),
     ]

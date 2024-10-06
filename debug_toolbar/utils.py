@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import inspect
 import linecache
 import os.path
@@ -17,7 +19,7 @@ from debug_toolbar import _stubs as stubs, settings as dt_settings
 _local_data = Local()
 
 
-def _is_excluded_frame(frame: Any, excluded_modules: Optional[Sequence[str]]) -> bool:
+def _is_excluded_frame(frame: Any, excluded_modules: Sequence[str] | None) -> bool:
     if not excluded_modules:
         return False
     frame_module = frame.f_globals.get("__name__")
@@ -39,7 +41,7 @@ def _stack_trace_deprecation_warning() -> None:
     )
 
 
-def tidy_stacktrace(stack: List[stubs.InspectStack]) -> stubs.TidyStackTrace:
+def tidy_stacktrace(stack: list[stubs.InspectStack]) -> stubs.TidyStackTrace:
     """
     Clean up stacktrace and remove all entries that are excluded by the
     HIDE_IN_STACKTRACES setting.
@@ -99,7 +101,7 @@ def render_stacktrace(trace: stubs.TidyStackTrace) -> SafeString:
     return mark_safe(html)
 
 
-def get_template_info() -> Optional[Dict[str, Any]]:
+def get_template_info() -> dict[str, Any] | None:
     template_info = None
     cur_frame = sys._getframe().f_back
     try:
@@ -129,7 +131,7 @@ def get_template_info() -> Optional[Dict[str, Any]]:
 
 def get_template_context(
     node: Node, context: stubs.RequestContext, context_lines: int = 3
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     line, source_lines, name = get_template_source_from_exception_info(node, context)
     debug_context = []
     start = max(1, line - context_lines)
@@ -146,7 +148,7 @@ def get_template_context(
 
 def get_template_source_from_exception_info(
     node: Node, context: stubs.RequestContext
-) -> Tuple[int, List[Tuple[int, str]], str]:
+) -> tuple[int, list[tuple[int, str]], str]:
     if context.template.origin == node.origin:
         exception_info = context.template.get_exception_info(
             Exception("DDT"), node.token
@@ -213,8 +215,8 @@ def getframeinfo(frame: Any, context: int = 1) -> inspect.Traceback:
 
 
 def get_sorted_request_variable(
-    variable: Union[Dict[str, Any], QueryDict],
-) -> Dict[str, Union[List[Tuple[str, Any]], Any]]:
+    variable: dict[str, Any] | QueryDict,
+) -> dict[str, list[tuple[str, Any]] | Any]:
     """
     Get a data structure for showing a sorted list of variables from the
     request data.
@@ -228,7 +230,7 @@ def get_sorted_request_variable(
         return {"raw": variable}
 
 
-def get_stack(context=1) -> List[stubs.InspectStack]:
+def get_stack(context=1) -> list[stubs.InspectStack]:
     """
     Get a list of records for a frame and all higher (calling) frames.
 
@@ -286,7 +288,7 @@ class _StackTraceRecorder:
     def get_stack_trace(
         self,
         *,
-        excluded_modules: Optional[Sequence[str]] = None,
+        excluded_modules: Sequence[str] | None = None,
         include_locals: bool = False,
         skip: int = 0,
     ):

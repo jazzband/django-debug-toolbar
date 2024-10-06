@@ -107,8 +107,8 @@ class BaseMixin:
             msg_parts = ["Invalid HTML:"]
             lines = content.split("\n")
             for position, errorcode, datavars in parser.errors:
-                msg_parts.append("  %s" % html5lib.constants.E[errorcode] % datavars)
-                msg_parts.append("    %s" % lines[position[0] - 1])
+                msg_parts.append(f"  {html5lib.constants.E[errorcode]}" % datavars)
+                msg_parts.append(f"    {lines[position[0] - 1]}")
             raise self.failureException("\n".join(msg_parts))
 
 

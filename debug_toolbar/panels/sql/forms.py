@@ -44,7 +44,7 @@ class SQLSelectForm(forms.Form):
         value = self.cleaned_data["alias"]
 
         if value not in connections:
-            raise ValidationError("Database alias '%s' not found" % value)
+            raise ValidationError(f"Database alias '{value}' not found")
 
         return value
 

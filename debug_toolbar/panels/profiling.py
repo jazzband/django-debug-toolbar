@@ -59,7 +59,7 @@ class FunctionCall:
             # special case for built-in functions
             name = func_name[2]
             if name.startswith("<") and name.endswith(">"):
-                return "{%s}" % name[1:-1]
+                return f"{{{name[1:-1]}}}"
             else:
                 return name
         else:

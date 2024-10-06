@@ -18,7 +18,7 @@ def render_panel(request):
             "Data for this panel isn't available anymore. "
             "Please reload the page and retry."
         )
-        content = "<p>%s</p>" % escape(content)
+        content = f"<p>{escape(content)}</p>"
         scripts = []
     else:
         panel = toolbar.get_panel_by_id(request.GET["panel_id"])
