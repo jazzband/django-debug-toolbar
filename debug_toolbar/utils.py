@@ -6,7 +6,7 @@ import os.path
 import sys
 import warnings
 from pprint import PrettyPrinter, pformat
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Sequence
 
 from asgiref.local import Local
 from django.http import QueryDict

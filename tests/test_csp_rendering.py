@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, cast
+from typing import cast
 from xml.etree.ElementTree import Element
 
 from django.conf import settings
