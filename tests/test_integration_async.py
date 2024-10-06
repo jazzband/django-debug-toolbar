@@ -247,8 +247,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             default_msg = ["Content is invalid HTML:"]
             lines = content.split(b"\n")
             for position, errorcode, datavars in parser.errors:
-                default_msg.append("  %s" % html5lib.constants.E[errorcode] % datavars)
-                default_msg.append("    %r" % lines[position[0] - 1])
+                default_msg.append(f"  {html5lib.constants.E[errorcode]}" % datavars)
+                default_msg.append(f"    {lines[position[0] - 1]!r}")
             msg = self._formatMessage(None, "\n".join(default_msg))
             raise self.failureException(msg)
 
