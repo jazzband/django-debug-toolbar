@@ -4,6 +4,8 @@ Change log
 Pending
 -------
 
+* Added support for Python 3.13 and to the CI matrix.
+
 5.0.0-alpha (2024-09-01)
 ------------------------
 
