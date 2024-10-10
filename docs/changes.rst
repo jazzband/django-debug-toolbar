@@ -4,7 +4,8 @@ Change log
 Pending
 -------
 
-* Added support for Python 3.13 and to the CI matrix.
+* Added support for Python 3.13 to the CI matrix.
+* Removed support for Python 3.8 as it is end of life.
 
 5.0.0-alpha (2024-09-01)
 ------------------------
