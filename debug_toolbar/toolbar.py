@@ -4,10 +4,8 @@ The main DebugToolbar class that loads and renders the Toolbar.
 
 import re
 import uuid
+from collections import OrderedDict
 from functools import lru_cache
-
-# Can be removed when python3.8 is dropped
-from typing import OrderedDict
 
 from django.apps import apps
 from django.conf import settings
