@@ -84,8 +84,7 @@ jobs:
             - python-version: '3.12'
               database: psycopg3
             - python-version: '3.13'
-              # psycopg installs version 3+; psycopg3 not found via pip in python 3.13
-              database: psycopg
+              database: psycopg3
 
     services:
       postgres:
