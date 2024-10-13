@@ -73,7 +73,8 @@ jobs:
       fail-fast: false
       max-parallel: 5
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        # Skip 3.13 here, it needs the psycopg3 / postgis3 database
+        python-version: ['3.9', '3.10', '3.11', '3.12']
         database: [postgresql, postgis]
         # Add psycopg3 to our matrix for modern python versions
         include:
@@ -85,6 +86,8 @@ jobs:
               database: psycopg3
             - python-version: '3.13'
               database: psycopg3
+            - python-version: '3.13'
+              database: postgis3
 
     services:
       postgres:
