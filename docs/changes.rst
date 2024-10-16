@@ -6,6 +6,7 @@ Pending
 
 * Added Python 3.13 to the CI matrix.
 * Removed support for Python 3.8 as it has reached end of life.
+* Converted to Django Commons PyPI release process.
 
 5.0.0-alpha (2024-09-01)
 ------------------------
