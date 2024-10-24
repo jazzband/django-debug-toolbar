@@ -59,7 +59,7 @@ class FunctionCall:
             # special case for built-in functions
             name = func_name[2]
             if name.startswith("<") and name.endswith(">"):
-                return "{%s}" % name[1:-1]
+                return f"{{{name[1:-1]}}}"
             else:
                 return name
         else:
@@ -90,7 +90,7 @@ class FunctionCall:
         count = len(self.statobj.all_callees[self.func])
         for i, (func, stats) in enumerate(self.statobj.all_callees[self.func].items()):
             h1 = h + ((i + 1) / count) / (self.depth + 1)
-            s1 = 0 if stats[3] == 0 else s * (stats[3] / self.stats[3])
+            s1 = 0 if self.stats[3] == 0 else s * (stats[3] / self.stats[3])
             yield FunctionCall(
                 self.statobj,
                 func,

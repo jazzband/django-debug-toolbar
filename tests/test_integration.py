@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.db import connection
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.test import RequestFactory
+from django.test import AsyncRequestFactory, RequestFactory
 from django.test.utils import override_settings
 
 from debug_toolbar.forms import SignedDataForm
@@ -125,6 +125,22 @@ class DebugToolbarTestCase(BaseTestCase):
 
         request.META.pop("wsgi.multiprocess")
         self.assertTrue(toolbar.should_render_panels())
+
+    def test_should_render_panels_asgi(self):
+        """
+        The toolbar not should render the panels on each request when wsgi.multiprocess
+        is True or missing in case of async context rather than multithreaded
+        wsgi.
+        """
+        async_request = AsyncRequestFactory().get("/")
+        # by default ASGIRequest will have wsgi.multiprocess set to True
+        # but we are still assigning this to true cause this could change
+        # and we specifically need to check that method returns false even with
+        # wsgi.multiprocess set to true
+        async_request.META["wsgi.multiprocess"] = True
+        toolbar = DebugToolbar(async_request, self.get_response)
+        toolbar.config["RENDER_PANELS"] = None
+        self.assertFalse(toolbar.should_render_panels())
 
     def _resolve_stats(self, path):
         # takes stats from Request panel
@@ -272,7 +288,7 @@ class DebugToolbarTestCase(BaseTestCase):
     def test_async_sql_page(self):
         response = self.client.get("/async_execute_sql/")
         self.assertEqual(
-            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 1
+            len(response.toolbar.get_panel_by_id("SQLPanel").get_stats()["queries"]), 2
         )
 
     def test_concurrent_async_sql_page(self):
@@ -308,8 +324,8 @@ class DebugToolbarIntegrationTestCase(IntegrationTestCase):
             default_msg = ["Content is invalid HTML:"]
             lines = content.split(b"\n")
             for position, errorcode, datavars in parser.errors:
-                default_msg.append("  %s" % html5lib.constants.E[errorcode] % datavars)
-                default_msg.append("    %r" % lines[position[0] - 1])
+                default_msg.append(f"  {html5lib.constants.E[errorcode]}" % datavars)
+                default_msg.append(f"    {lines[position[0] - 1]!r}")
             msg = self._formatMessage(None, "\n".join(default_msg))
             raise self.failureException(msg)
 

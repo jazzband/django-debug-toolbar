@@ -112,7 +112,10 @@ class DebugToolbarMiddleware:
 
         # Activate instrumentation ie. monkey-patch.
         for panel in toolbar.enabled_panels:
-            panel.enable_instrumentation()
+            if hasattr(panel, "aenable_instrumentation"):
+                await panel.aenable_instrumentation()
+            else:
+                panel.enable_instrumentation()
         try:
             # Run panels like Django middleware.
             response = await toolbar.process_request(request)

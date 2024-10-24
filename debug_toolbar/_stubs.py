@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Any, List, NamedTuple, Optional, Tuple
 
 from django import template as dj_template

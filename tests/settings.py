@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "tests",
 ]
 
+
 USE_GIS = os.getenv("DB_BACKEND") == "postgis"
 
 if USE_GIS:

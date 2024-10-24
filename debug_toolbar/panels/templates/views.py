@@ -5,9 +5,11 @@ from django.template.engine import Engine
 from django.template.loader import render_to_string
 from django.utils.html import format_html, mark_safe
 
+from debug_toolbar._compat import login_not_required
 from debug_toolbar.decorators import render_with_toolbar_language, require_show_toolbar
 
 
+@login_not_required
 @require_show_toolbar
 @render_with_toolbar_language
 def template_source(request):
