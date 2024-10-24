@@ -9,7 +9,8 @@ fully functional.
 
 .. warning::
 
-    The Debug Toolbar does not currently support `Django's asynchronous views <https://docs.djangoproject.com/en/dev/topics/async/>`_.
+    The Debug Toolbar now supports `Django's asynchronous views <https://docs.djangoproject.com/en/dev/topics/async/>`_ and ASGI environment, but
+    still lacks the capability for handling concurrent requests.
 
 1. Install the Package
 ^^^^^^^^^^^^^^^^^^^^^^
